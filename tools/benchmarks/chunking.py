@@ -14,8 +14,8 @@ from tools.benchmarks.report import Result
 # One chunk is one call to a benchmark RPC, sized to run for about this long.
 CHUNK_SECONDS = 0.2
 
-# How many chunks to take. The fastest is the estimate and the spread across them says how
-# much the machine got in the way, so a handful is enough for both.
+# The number of chunks to take. The fastest is the estimate and the spread across them shows
+# how much the machine got in the way, so a handful is enough for both.
 REPEATS = 5
 
 # The chunk that sizes the rest. Small, because nothing is known yet about how expensive one

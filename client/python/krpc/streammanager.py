@@ -193,10 +193,10 @@ class StreamManager:
     def update(self, results: Iterable[KRPC.StreamResult]) -> None:
         # The update lock is held only to find the streams and decode their new values, and
         # is released before any stream condition is taken. A thread waiting for an update
-        # holds a condition and then needs the update lock - Event.wait resets the stream
-        # value while holding it, as its documented use requires - so taking the two in the
-        # opposite order here deadlocks. The callbacks are read under the lock for the same
-        # reason: they run below without it held.
+        # holds a condition and then needs the update lock, as Event.wait resets the stream
+        # value while holding it, so taking the two in the opposite order here deadlocks.
+        # The callbacks are read under the lock for the same reason: they run below without
+        # it held.
         decoded = []
         with self._update_lock:
             for result in results:
@@ -223,8 +223,8 @@ class StreamManager:
                 with self._update_lock:
                     # The stream can be removed while its new value is being decoded, in
                     # which case remove() has already stored the error saying so and this
-                    # value must not overwrite it - the stream is gone from the registry,
-                    # so nothing would ever replace it and it would be returned forever.
+                    # value must not overwrite it. The stream is gone from the registry, so
+                    # nothing would ever replace it and it would be returned forever.
                     if stream_id not in self._streams:
                         continue
                     stream.value = value

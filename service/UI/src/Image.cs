@@ -159,9 +159,8 @@ namespace KRPC.UI
             if (data.LongLength != (long)width * height * 4)
                 throw new ArgumentException (
                     "The block needs width * height * 4 bytes, 4 bytes per pixel");
-            // The block is drawn into the texture rather than through the image component,
-            // so the check that the other members get from Internal is made here, before
-            // anything is concluded from what an image the game no longer has is holding.
+            // The block is drawn into the texture and not through the image component, so the
+            // check that the other members get from Internal is made here
             CheckExists ();
             if (!rawPixels || texture == null)
                 throw new InvalidOperationException (
@@ -169,9 +168,9 @@ namespace KRPC.UI
             if (x < 0 || y < 0 ||
                 (long)x + width > texture.width || (long)y + height > texture.height)
                 throw new ArgumentException ("The block does not fit inside the picture");
-            // The block arrives top row first while Unity takes rows bottom first, so
-            // the rows are turned over as they are converted, and the y offset is
-            // measured down from the top while Unity measures up from the bottom.
+            // The block arrives top row first and Unity takes rows bottom first, so the rows are
+            // turned over as they are converted, and the y offset is measured down from the top
+            // where Unity measures up from the bottom
             var pixels = new Color32[width * height];
             for (var row = 0; row < height; row++) {
                 var source = row * width * 4;

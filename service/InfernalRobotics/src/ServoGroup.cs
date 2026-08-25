@@ -15,13 +15,12 @@ namespace KRPC.InfernalRobotics
     [KRPCClass (Service = "InfernalRobotics")]
     public class ServoGroup : Equatable<ServoGroup>, IGameObjectState
     {
-        // The vessel the group belongs to and the name that picks it out among that
-        // vessel's groups, which is what the mod itself groups servos by. Both are fixed for
-        // the object's lifetime: the object store compares and hashes the objects it holds,
-        // so a name that moved would leave two objects naming one group, and the store
-        // unable to tell which entry belongs to which. The group object the mod hands out is
-        // built afresh every time the groups are listed, so holding one would instead leave
-        // two objects for one group comparing unequal.
+        // The vessel the group belongs to and the name that picks it out among that vessel's
+        // groups, which is how the mod itself groups servos. Both are fixed for the object's
+        // lifetime: the object store compares and hashes the objects it holds, so a name that
+        // moved leaves two objects naming one group. The group object the mod hands out is built
+        // afresh every time the groups are listed, so holding one leaves two objects for one
+        // group comparing unequal
         readonly SpaceCenter.Services.Vessel vessel;
         readonly string name;
 
@@ -52,10 +51,10 @@ namespace KRPC.InfernalRobotics
         }
 
         /// <summary>
-        /// What the game holds for the group. It belongs to its vessel, so it is exactly as
-        /// live, dormant or destroyed as the vessel, and destroyed when a vessel that the
-        /// mod can be asked about has no group of the name. The mod not being ready says
-        /// nothing about any group: its controller only ever tracks the active vessel.
+        /// The state of the group. It takes the state of its vessel, and is destroyed once
+        /// a vessel the mod reports on has no group of the name. A mod that has yet to
+        /// start leaves the group dormant, as its controller tracks the active vessel
+        /// alone.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -79,9 +78,8 @@ namespace KRPC.InfernalRobotics
             return null;
         }
 
-        // The group the mod has on the vessel now. Every member reaches the mod through
-        // this, so a group taken before a game state was replaced drives the servos that
-        // stand in its place rather than the ones it was built from.
+        // The group the mod has on the vessel now. Every member reaches the mod through this, so
+        // a group taken before a game state was replaced drives the servos that stand in its place
         IRWrapper.IServoGroup Internal {
             get {
                 var group = Find ();
@@ -105,11 +103,9 @@ namespace KRPC.InfernalRobotics
         /// The name of the group.
         /// </summary>
         /// <remarks>
-        /// Renaming a group renames it for every servo in it. The name is what this object
-        /// names the group by, and is fixed for its lifetime, so every object for the group
-        /// stands for one the vessel no longer has once it is renamed, the object the rename
-        /// was made through included. An object for the group has to be obtained again under
-        /// the new name.
+        /// Renaming a group renames it for every servo in it. This object identifies the
+        /// group by its name, so a rename destroys every object for the group, including the
+        /// one the rename was made through. Obtain the group again under the new name.
         /// </remarks>
         [KRPCProperty]
         public string Name {

@@ -30,8 +30,8 @@ namespace KRPC.UI
             Widgets.AddImage (GameObject, Widgets.Style (skin => skin.scrollView));
 
             var viewport = Widgets.CreateFilling (GameObject, "krpc.scrollView.viewport", 0);
-            // Anything outside the viewport is cut off rather than drawn over the rest of
-            // the interface.
+            // Cut off anything outside the viewport, so it is not drawn over the rest of the
+            // interface
             viewport.AddComponent<UnityEngine.UI.RectMask2D> ();
 
             var contentObject = Widgets.CreateTopLeft (

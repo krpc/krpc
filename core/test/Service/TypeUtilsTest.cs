@@ -402,8 +402,8 @@ namespace KRPC.Test.Service
         }
 
         // Structures whose fields break one of the rules. They do not carry the KRPCStruct
-        // attribute, as the scanner finds every type that does and would report them for every
-        // test in this assembly rather than only here.
+        // attribute, as the scanner finds every type that does and would report them for
+        // every test in this assembly
 
         public struct StructWithoutFields
         {

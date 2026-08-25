@@ -90,7 +90,7 @@ namespace KRPC.Client.Test
                     Write (stream, response);
                     if (Status != ConnectionResponse.Types.Status.Ok)
                         return;
-                    // Every request is answered with an empty result, which is what a call
+                    // Every request is answered with an empty result, the same as a call
                     // returning nothing gets back from a real server
                     while (!stopping) {
                         reader.Read ();
@@ -102,7 +102,7 @@ namespace KRPC.Client.Test
                 }
             } catch (IOException) {
                 // The client has gone, which is how a connection ends here. A malformed
-                // message reports itself as one of these too.
+                // message raises the same exception.
             } catch (SocketException) {
             } catch (ObjectDisposedException) {
             }

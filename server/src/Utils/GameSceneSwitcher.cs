@@ -80,11 +80,10 @@ namespace KRPC.Utils
                 return;
             }
             // Loading the editor scene while it is already the loaded scene leaves the
-            // flight camera unable to target a vessel for the rest of the session, as it
-            // does not expect a scene load to be requested from the editor. The game's
-            // own switch button restarts the editor in place instead, which also carries
-            // the vessel being constructed across. There are only two editors, so a
-            // switch always lands on the one asked for.
+            // flight camera unable to target a vessel for the rest of the session. The
+            // game's own switch button restarts the editor in place, which also carries
+            // the vessel being constructed across. There are only two editors, so a switch
+            // always lands on the one wanted
             var driver = EditorDriver.fetch;
             var logic = EditorLogic.fetch;
             if (driver == null || logic == null || driver.restartingEditor)
@@ -113,12 +112,11 @@ namespace KRPC.Utils
             if ((current & GameScene.SpaceCenter) == 0)
                 throw new InvalidOperationException (
                     "Facilities can only be opened from the space center scene");
-            // Replicate the availability check that the in-game building click
-            // handlers apply (e.g. MissionControlBuilding.OnClicked). Facilities
-            // whose backing system is disabled in the current game mode - such as
-            // mission control, R&D and administration in a sandbox game - cannot be
-            // opened; firing their spawn event regardless makes KSP throw and
-            // wedges the game.
+            // Replicate the availability check that the in-game building click handlers
+            // apply (e.g. MissionControlBuilding.OnClicked). A facility whose backing
+            // system is disabled in the current game mode, such as mission control, R&D
+            // and administration in a sandbox game, cannot be opened. Firing its spawn
+            // event regardless makes KSP throw
             if (!available)
                 throw new InvalidOperationException (
                     "This facility is not available in the current game");

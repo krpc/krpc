@@ -81,8 +81,8 @@ class TestPanel(krpctest.TestCase):
         panel.remove()
 
     def test_bring_to_front(self):
-        # Which panel is drawn on top cannot be read back, so this covers that the
-        # call is accepted, including on a panel that is already at the front.
+        # The panel drawn on top cannot be read back, so this covers only that the call
+        # is accepted, including on a panel that is already at the front.
         older = self.canvas.add_panel()
         newer = self.canvas.add_panel()
         older.bring_to_front()

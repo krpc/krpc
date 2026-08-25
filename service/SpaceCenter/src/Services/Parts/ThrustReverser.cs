@@ -134,10 +134,10 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         public bool Reversed {
             // animSwitch is false when the animation is at, or playing towards, its
-            // deployed end, so this reads the commanded target state rather than the
-            // animation's progress. Reading progress would make the setter
-            // non-idempotent: a set re-issued while the animation is still short of
-            // its midpoint would toggle a second time and cancel the first.
+            // deployed end, so this reads the commanded target state. Reading the
+            // animation's progress would make the setter non-idempotent: a set re-issued
+            // before the animation passes its midpoint would toggle a second time and
+            // cancel the first
             get { return !Animation.animSwitch == reversedWhenDeployed; }
             set { if (value != Reversed) Animation.Toggle (); }
         }

@@ -60,8 +60,7 @@ EXCEPTION_TYPES = {
 
 
 # Every type code a type object can be built for. A definition from a newer server may name
-# a type code that is not among them, which is what makes a definition partly unusable
-# rather than malformed
+# a type code outside this set, which leaves the definition partly unusable
 _KNOWN_TYPE_CODES = (
     set(VALUE_TYPES)
     | set(MESSAGE_TYPES)
@@ -401,9 +400,8 @@ class TypeBase:
     ) -> None:
         self.protobuf_type = protobuf_type
         self.python_type = python_type
-        # The type code, which is what the encoder and decoder select on. Held
-        # here as well as in the protocol buffer type, as reading it from there
-        # is a protocol buffer field access
+        # The type code the encoder and decoder select on. Held here as well as in the
+        # protocol buffer type, as reading it from there is a protocol buffer field access
         self.code = protobuf_type.code
         self._string = string
 

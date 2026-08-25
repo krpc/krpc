@@ -26,10 +26,10 @@ namespace KRPC.InfernalRobotics
         [KRPCProperty (GameScene = GameScene.All)]
         public static bool Available {
             get {
-                // IRWrapper.InitWrapper is only run by the addon when entering the
-                // flight scene. Run it here too so availability is reported correctly
-                // in any scene; it populates the controller type even when the full
-                // flight-only wrapping cannot finish.
+                // IRWrapper.InitWrapper is only run by the addon when entering the flight
+                // scene. Run it here too so availability is reported correctly in any scene.
+                // It populates the controller type even when the full flight-only wrapping
+                // cannot finish
                 if (!IRWrapper.AssemblyExists)
                     IRWrapper.InitWrapper ();
                 return IRWrapper.AssemblyExists;
@@ -44,8 +44,8 @@ namespace KRPC.InfernalRobotics
             get {
                 // The wrapper caches the controller's servo-group list when it first
                 // initializes at flight-scene load, before the mod has populated it.
-                // Re-initialize while the mod is present but not yet ready so readiness
-                // reflects the current state rather than that stale cache.
+                // Re-initialize while the mod is present but not yet ready, so that readiness
+                // reflects the current state and not that cache
                 if (IRWrapper.AssemblyExists && !IRWrapper.APIReady)
                     IRWrapper.InitWrapper ();
                 return IRWrapper.APIReady;

@@ -68,7 +68,7 @@ def _mods_key(item):
 
 def pytest_collection_modifyitems(items):
     # Stable sort keeps definition order within each mod group, so tests are reordered only
-    # as much as needed to keep each mod set contiguous (minimising KSP restarts).
+    # as much as needed to keep each mod set contiguous, minimizing KSP restarts.
     items.sort(key=_mods_key)
 
 

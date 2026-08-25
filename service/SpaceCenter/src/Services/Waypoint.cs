@@ -12,9 +12,9 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Waypoint : Equatable<Waypoint>, IGameObjectState
     {
-        // The identifier the game gives a waypoint when it builds one. Nothing else names
-        // a waypoint: its name is neither unique nor fixed, and its seed and index only
-        // pick out the waypoints of a contract.
+        // The identifier the game gives a waypoint when it builds one. It is the only name
+        // a waypoint has: its name is neither unique nor fixed, and its seed and index only
+        // pick out the waypoints of a contract
         readonly Guid navigationId;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace KRPC.SpaceCenter.Services
                 throw new ArgumentNullException (nameof (body));
             // The waypoint is set up before the game is given it, so this works on it
             // directly: until the game has it, there is nothing for this object to find.
-            // What each line does is what the property of the same name does.
+            // Each line does what the property of the same name does
             var waypoint = new FinePrint.Waypoint ();
             waypoint.name = name;
             waypoint.celestialName = body.Name;
@@ -67,10 +67,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the waypoint. It is live while the game's waypoint
-        /// manager lists it, and destroyed once the manager is there to ask and does not, as
-        /// a waypoint that leaves the list is gone for good. A game with no waypoint manager
-        /// has no waypoints to look through, which says nothing about this one.
+        /// The state of the waypoint. It is live while the game's waypoint manager lists
+        /// it, and destroyed once a running manager stops listing it. A game with no
+        /// waypoint manager leaves the waypoint dormant.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

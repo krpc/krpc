@@ -26,9 +26,9 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// primitives act, making no decisions of their own. <see cref="DiagnosticLogBuffer"/> records a
     /// row per tick.
     ///
-    /// How the control law works — the cascade, the roll-invariant frame, the velocity profile, the
-    /// pole placement behind the auto-tuner and the oscillation mitigation — is documented in
-    /// doc/src/tutorials/autopilot.rst, under "How it works".
+    /// How the control law works is documented in doc/src/tutorials/autopilot.rst, under "How it
+    /// works": the cascade, the roll-invariant frame, the velocity profile, the pole placement
+    /// behind the auto-tuner and the oscillation mitigation.
     /// </summary>
     sealed class AttitudeController
     {
@@ -45,42 +45,41 @@ namespace KRPC.SpaceCenter.AutoPilot
         // the game is paused.
         float lastStepFixedTime = float.NaN;
         // The fixed time the loop was last tried at, whether or not it got to the end. Held
-        // apart from lastStepFixedTime so that a step which fails part way through neither runs
-        // again in the same tick nor leaves the output it did not produce looking recent.
+        // apart from lastStepFixedTime so that a step which fails part way through does not run
+        // again in the same tick, and does not make the output it did not produce look recent.
         float lastAttemptFixedTime = float.NaN;
-        // How long the last output stays usable. The loop runs once per tick, but the tick it is
+        // The time the last output stays usable. The loop runs once per tick, but the tick it is
         // applied in is not always the tick it ran in, and a program driving it by hand may miss
-        // one; holding the last command over a short gap is smoother than dropping to zero.
-        // Past this the command is stale and the auto-pilot contributes nothing, so a program
-        // that stops driving it cannot leave a deflection latched on the vessel.
+        // one. Holding the last command over a short gap is smoother than dropping to zero. Past
+        // this the command is stale and the auto-pilot contributes nothing, so a program that
+        // stops driving it cannot leave a deflection latched on the vessel.
         const float OutputHoldTime = 0.1f;
         public readonly PIDController PitchPID = new PIDController ();
         public readonly PIDController RollPID = new PIDController ();
         public readonly PIDController YawPID = new PIDController ();
 
-        // Target orientation — quaternion is the single source of truth.
-        // rollControlled=false means "suppress roll rotation" (don't hold a specific angle).
-        // targetRotation is the COMMANDED target (what the user set); the public getters and
-        // AutoPilot.Error read it. The control loop instead consumes effectiveRotation, which is
-        // slewed toward the commanded target over TargetSmoothingTime seconds (see Update). When
-        // smoothing is disabled (the default), effectiveRotation == targetRotation every tick.
+        // Target orientation. The quaternion is the single source of truth, and
+        // rollControlled=false suppresses roll rotation instead of holding a specific angle.
+        // targetRotation is the commanded target, which the public getters and AutoPilot.Error
+        // read. The control loop consumes effectiveRotation, slewed toward the commanded target
+        // over TargetSmoothingTime seconds (see Update). With smoothing disabled, the default,
+        // effectiveRotation equals targetRotation every tick.
         QuaternionD targetRotation;
         bool rollControlled;
-        // Persistent roll reference (a direction in the AP reference frame): TargetRoll is measured
-        // as the roll about the nose that aligns the vessel's dorsal ("roof") axis to this vector.
-        // Defaults to the frame's "up" (+x = zenith / radial-out in the surface frame), which
-        // reproduces the historical vertical-plane roll convention away from the vertical. Only
-        // SetTargetDirectionAndUp and the UpReference setter write it; TargetRotation,
-        // TargetDirection and the scalar pitch/heading setters leave it untouched. See the
-        // orientation-API design doc.
+        // Persistent roll reference, a direction in the AP reference frame. TargetRoll is
+        // measured as the roll about the nose that aligns the vessel's dorsal ("roof") axis to
+        // this vector. Defaults to the frame's "up", the zenith or radial-out in the surface
+        // frame, which is the vertical-plane roll convention away from the vertical. Only
+        // SetTargetDirectionAndUp and the UpReference setter write it. TargetRotation,
+        // TargetDirection and the scalar pitch and heading setters leave it untouched.
         Vector3d upReference;
-        // Target smoothing (slew): effectiveRotation is the slewed target the control loop tracks.
-        // Each tick it RotateTowards the commanded targetRotation at slewSpeed (deg/s). slewSpeed is
-        // latched whenever the target changes to (angle between effective and commanded) /
-        // targetSmoothingTime, so an isolated change arrives in exactly targetSmoothingTime seconds
-        // (constant angular rate), while a continuous stream of changes re-latches each tick and
-        // settles into a smooth, bounded lag (~targetSmoothingTime x change-rate) with no freeze at
-        // any update cadence. 0 = instant (no slew). slewPending is set by the (RPC-thread) setters
+        // Target smoothing (slew). effectiveRotation is the slewed target the control loop
+        // tracks. Each tick it RotateTowards the commanded targetRotation at slewSpeed (deg/s).
+        // slewSpeed is latched whenever the target changes, to the angle between effective and
+        // commanded over targetSmoothingTime, so an isolated change arrives in exactly
+        // targetSmoothingTime seconds at a constant angular rate. A continuous stream of changes
+        // re-latches each tick and settles into a smooth, bounded lag at any update cadence. A
+        // smoothing time of zero is instant. slewPending is set by the setters on the RPC thread
         // and consumed in Update, on the physics thread.
         QuaternionD effectiveRotation;
         double targetSmoothingTime;
@@ -92,9 +91,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d timeToPeak;
         Vector3d twiceZetaOmega = Vector3d.zero;
         Vector3d omegaSquared = Vector3d.zero;
-        // One-sided smoothed torque: tracks increases immediately, decays decreases at τ≈0.5s.
-        // Passed to DoAutoTune so a sudden drop (e.g. engine shutdown while a reaction wheel
-        // remains) does not cause a one-tick gain spike that jerks the gimbal.
+        // One-sided smoothed torque: tracks increases immediately, and decays decreases with a
+        // time constant of about 0.5 s. Passed to DoAutoTune so a sudden drop (e.g. engine
+        // shutdown while a reaction wheel remains) does not cause a one-tick gain spike that
+        // jerks the gimbal.
         Vector3d smoothedTorque;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
@@ -111,9 +111,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         // The gating layer: tool routing, latch ramps, and the hold-gated mitigation level
         // (with the oscillation-control back-off). See MitigationPolicy.
         readonly MitigationPolicy policy = new MitigationPolicy ();
-        // Unfloored autotuned proportional gain per axis (2ζω₀·moi/smoothedTorque, recorded by
-        // DoAutoTuneAxis before the bandwidth-floor mitigation is applied). Consumed by
-        // ProfileKp so the velocity profile's linear stopping coefficient never sees the floor.
+        // Unfloored autotuned proportional gain per axis, 2 * zeta * omega0 * moi /
+        // smoothedTorque, recorded by DoAutoTuneAxis before the bandwidth-floor mitigation is
+        // applied. Consumed by ProfileKp so the velocity profile's linear stopping coefficient
+        // never sees the floor.
         readonly double[] unflooredKp = new double[3];
         // Per-group rate-filter mode (pitch/yaw coupled, roll on its own). Automatic routes by
         // the detector latch and the estimated frequency; Off disables rate filtering only (the
@@ -136,31 +137,30 @@ namespace KRPC.SpaceCenter.AutoPilot
         Services.MitigationMode feedforwardMode;
         Services.MitigationMode outputFilterMode;
         // Engagement soft-start: the actuator command is faded in over SoftStartTime seconds from
-        // each Start() so engagement does not deliver a near-max "kick" (large proportional +
-        // acceleration feedforward) that can impulsively excite a structural or in-band limit cycle
-        // — the transient the manual "settle before liftoff" pause avoids. engageFixedTime is the
-        // Time.fixedTime at the last Start(); the ramp is a function of elapsed time from it. While
-        // the craft is held on the launch clamps (PRELAUNCH) Update re-pins it each tick, so the fade
-        // begins at clamp release rather than at engagement.
+        // each Start(), so engagement does not deliver a near-max kick (a large proportional and
+        // acceleration feedforward) that can impulsively excite a structural or in-band limit
+        // cycle. engageFixedTime is the Time.fixedTime at the last Start(), and the ramp is a
+        // function of elapsed time from it. While the craft is held on the launch clamps
+        // (PRELAUNCH) Update re-pins it each tick, so the fade begins at clamp release.
         double softStartTime;
         double engageFixedTime;
-        // Continuity state for the roll-invariant frame. The pointing-only rotation (AP-frame up ->
-        // nose) used to be re-derived each tick as FromToRotation(up, nose), but that is singular when
-        // the nose passes through -up (e.g. due south on the horizon in the surface frame, where the
-        // y-axis is north): the minimal-arc rotation's axis is hypersensitive to transverse motion
-        // there, so a tiny control jitter whips the RI frame ~180 deg over a vanishing arc and the
-        // stateful feedforward/integral turn that into a full-deflection kick. Instead the rotation is
-        // carried forward by the well-conditioned minimal rotation between consecutive nose directions
-        // (the nose cannot reverse in one physics tick), so the frame never sees the antipode
-        // singularity. Seeded once per engage from the fixed reference; reset in Start.
+        // Continuity state for the roll-invariant frame. The pointing-only rotation, from the
+        // AP-frame up to the nose, is carried forward by the minimal rotation between consecutive
+        // nose directions, which is well conditioned because the nose cannot reverse in one
+        // physics tick. Re-deriving it each tick as FromToRotation(up, nose) is singular when the
+        // nose passes through -up, such as due south on the horizon in the surface frame: the
+        // minimal-arc rotation's axis is hypersensitive to transverse motion there, so a tiny
+        // control jitter whips the frame around 180 degrees over a vanishing arc and the stateful
+        // feedforward and integral turn that into a full-deflection kick. Seeded once per engage
+        // from the fixed reference, and reset in Start.
         Vector3d prevPointDirection;
         QuaternionD pointRotation;
         bool pointRotationValid;
-        // Antipodal-flip plane latch (see ResolveAntipodalAxis). When the error enters the antipode
-        // band with enough rotation to define a flip plane, the plane normal is captured once here
-        // and held for the rest of the pass; letting it track the live angular velocity instead
-        // feeds any out-of-plane drift back on itself and the flip tumbles. Cleared on leaving the
-        // band and on re-engage (Start).
+        // Antipodal-flip plane latch (see ResolveAntipodalAxis). When the error enters the
+        // antipode band with enough rotation to define a flip plane, the plane normal is captured
+        // once here and held for the rest of the pass. A normal that tracks the live angular
+        // velocity feeds any out-of-plane drift back on itself and the flip tumbles. Cleared on
+        // leaving the band and on re-engage (Start).
         Vector3d antipodeLatchedNormal;
         bool antipodeLatched;
         // Latched-plane blend weight [0,1] applied this tick (see ResolveAntipodalAxis),
@@ -189,82 +189,80 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Long enough to attenuate the single-tick steps the bang-bang profile's slope
         // discontinuities produce, short enough that the feedforward lag stays negligible.
         const double FeedforwardSmoothTimeConstant = 0.05;
-        // Default per-group mode frequency (Hz): the manual notch/low-pass frequency and the
-        // Automatic-mode estimator seed before acquisition. 1.5 Hz is near the only in-game-measured
-        // low-frequency mode (the Ariane 5's ~1.4 Hz first lateral bending mode), so a freshly
-        // latched low-frequency axis routes to the notch branch and is never momentarily un-suppressed.
+        // Default per-group mode frequency (Hz): the manual notch and low-pass frequency, and the
+        // Automatic-mode estimator seed before acquisition. 1.5 Hz is near the lowest mode measured
+        // in game, the Ariane 5's first lateral bending mode at about 1.4 Hz, so a freshly latched
+        // low-frequency axis routes to the notch branch and stays suppressed throughout.
         const double DefaultOscillationFrequency = 1.5;
-        // Default notch quality factor: a higher Q is a narrower notch (less in-band phase lag but
-        // less tolerance to frequency drift); a lower Q is wider.
+        // Default notch quality factor. A higher Q is a narrower notch, with less in-band phase
+        // lag and less tolerance to frequency drift, and a lower Q is wider.
         const double DefaultNotchQ = 2.5;
         // Default inner-loop bandwidth floor (rad/s) a latched axis is reduced toward. This is the
-        // primary, frequency-independent gain-stabiliser: dropping the rate-loop crossover well below
-        // every structural mode (the stock flexible craft sit at ~1.4–25 Hz) stops the loop driving
-        // any of them, robustly and without needing an accurate mode-frequency estimate. The notch /
-        // low-pass clean the rate feedback on top; output smoothing caps any residual. Only ever
-        // lowers bandwidth (min against the autotuned value), so rigid craft — which never latch —
-        // are untouched. ~1.0 rad/s matches the value validated on the earlier adaptive design.
+        // primary, frequency-independent gain stabilizer: dropping the rate-loop crossover well
+        // below every structural mode, and the stock flexible craft sit between about 1.4 and 25 Hz,
+        // stops the loop driving any of them without an accurate mode-frequency estimate. The notch
+        // and low-pass clean the rate feedback on top, and output smoothing caps any residual. It
+        // only ever lowers bandwidth, taking the minimum against the autotuned value, so a rigid
+        // craft, which never latches, is untouched.
         const double DefaultBandwidthFloor = 1.0;
         // Pointing deadband on the target angular velocity (see DeadbandScale, applied in
-        // ComputePitchYawVelocity / ComputeAxisVelocity). As the error vanishes the commanded velocity
-        // setpoint is scaled linearly to zero — from full at the deadband high angle to zero below this
-        // fraction of it — so the craft coasts to a stop inside the band and the inner rate loop is no
-        // longer commanded to chase sub-band motion, which on a craft with a noisy root-part rate would
-        // dither the actuators. It is applied to the *setpoint* (outer loop), not the inner-loop gains, so
-        // the inner rate loop keeps its full proportional damping and stays well-damped at the hold point
-        // (scaling the inner proportional term instead removes that damping and the hold oscillates). This
-        // replaces the former logistic attenuation with a linear ramp that reaches exactly zero — a clean
-        // deadband rather than a residual tail. The high angle is the public PitchYawAttenuationAngle /
-        // RollAttenuationAngle (formerly the logistic half-width); the low edge is this fraction of it.
+        // ComputePitchYawVelocity and ComputeAxisVelocity). As the error vanishes the commanded
+        // velocity setpoint is scaled linearly to zero, from full at the deadband high angle to zero
+        // below this fraction of it, so the craft coasts to a stop inside the band and the inner
+        // rate loop stops chasing sub-band motion, which on a craft with a noisy root-part rate
+        // dithers the actuators. It is applied to the outer loop's setpoint and not to the
+        // inner-loop gains, so the inner rate loop keeps its full proportional damping and stays
+        // well damped at the hold point. Scaling the inner proportional term instead removes that
+        // damping and the hold oscillates. The high angle is the public PitchYawAttenuationAngle or
+        // RollAttenuationAngle, and the low edge is this fraction of it.
         const double DeadbandLowFraction = 0.5;
-        // Linear speed cone near the target: the commanded profile speed is capped at
-        // ProfileConeFraction·bw·|e_stop| (bw = the unfloored ProfileKp bandwidth, the same source
-        // as the linear stopping coefficient). The √(2α·e) profile has infinite slope at the origin
-        // and on a high-α craft commands speeds at small angles that the inner PI loop cannot
-        // decelerate inside the pointing deadband — the craft coasts through the band and is
-        // symmetrically re-accelerated on the far side, a sustained lossless limit cycle pinned
-        // just outside the band (measured: ±1.3°, ±0.35 rad/s on a α≈39 rad/s² craft). The cone
-        // pins the outer-loop pole at κ·bw, below the inner loop's crossover (cascade separation),
-        // so the command is always trackable down to zero. Sizing: with the stopping coefficient
-        // left at 1/bw the converged cone decay rate is κ·bw/(1+κ); the band-edge arrival speed
-        // r·θ_band must coast-stop within the half-band under PI damping (stop distance ≈ ω/bw),
-        // requiring κ/(1+κ) ≤ 1/2, i.e. κ ≤ 1. κ = 0.5 gives 2–3× margin. Like
-        // DeadbandLowFraction this is a stability-margin constant, not a per-craft tuning knob.
+        // Linear speed cone near the target. The commanded profile speed is capped at
+        // ProfileConeFraction * bw * |e_stop|, where bw is the unfloored ProfileKp bandwidth, the
+        // same source as the linear stopping coefficient. The sqrt(2 * alpha * e) profile has
+        // infinite slope at the origin, and on a high-acceleration craft it commands speeds at
+        // small angles that the inner PI loop cannot decelerate inside the pointing deadband. The
+        // craft then coasts through the band and is symmetrically re-accelerated on the far side, a
+        // sustained lossless limit cycle pinned just outside it, measured at 1.3 degrees and 0.35
+        // rad/s on a craft with an angular acceleration of 39 rad/s^2. The cone pins the outer-loop
+        // pole at k * bw, below the inner loop's crossover, so the command is trackable down to
+        // zero. Sizing: with the stopping coefficient left at 1/bw the converged cone decay rate is
+        // k * bw / (1 + k), and the band-edge arrival speed must coast-stop within the half-band
+        // under PI damping, requiring k <= 1. A k of 0.5 leaves a margin of 2 to 3. Like
+        // DeadbandLowFraction this is a stability-margin constant and not a per-craft tuning knob.
         const double ProfileConeFraction = 0.5;
         // A tick-to-tick change in the raw measured rate larger than this many times the
-        // physically-achievable change (α·dt at full authority) is structural excitation, not
-        // rigid-body response — the latter cannot change the rate faster than the torque allows.
+        // physically achievable change, alpha * dt at full authority, is structural excitation. A
+        // rigid-body response cannot change the rate faster than the torque allows.
         const double DefaultChatterDetectThreshold = 4.0;
         // Below this 2D error magnitude (radians) the joint pitch/yaw profile is skipped.
         const double MinThetaForJointProfile = 1e-10;
-        // Antipodal-flip plane hold (ResolveAntipodalAxis). A large slew toward ~180° (an "antipodal
-        // flip") must ride a single committed plane, but the live geodesic axis
+        // Antipodal-flip plane hold (ResolveAntipodalAxis). A large slew toward 180 degrees, an
+        // antipodal flip, has to ride a single committed plane. The live geodesic axis
         // FromToRotation(current, target) precesses fastest exactly when current and target are
-        // near-antipodal — and the vessel unavoidably crawls through that region while the rate loop
-        // ramps the angular velocity up against inertia. Chasing the precessing axis there pumps the
-        // nose out of plane; the slower the traverse the worse it is, so a from-rest or lightly-seeded
-        // flip (which crawls longest) bows the most, while a fast 90° slew — never near-antipodal — is
-        // untouched. So within AntipodeBlendAngle of antipodal the commanded axis is held to a plane
-        // *latched once* on entering the band, rather than tracking the precessing live axis: fully
-        // (weight 1) within AntipodeHoldAngle of antipodal — covering the crawl/pump region — then
-        // smoothstep-blended back to the live geodesic axis between AntipodeHoldAngle and
-        // AntipodeBlendAngle so the hand-back is continuous and ordinary (< AntipodeBlendAngle) slews
-        // are untouched. The latched plane is a great circle through the current nose and its
-        // antipode = the target, so holding it still carries the nose to the target.
+        // near-antipodal, and the vessel crawls through that region while the rate loop ramps the
+        // angular velocity up against inertia. Chasing the precessing axis there pumps the nose out
+        // of plane, and the slower the traverse the worse it is, so a from-rest or lightly seeded
+        // flip bows the most while a fast 90 degree slew is untouched. Within AntipodeBlendAngle of
+        // antipodal the commanded axis is therefore held to a plane latched once on entering the
+        // band: fully within AntipodeHoldAngle, covering the crawl region, then smoothstep-blended
+        // back to the live geodesic axis between AntipodeHoldAngle and AntipodeBlendAngle so the
+        // hand-back is continuous. The latched plane is a great circle through the current nose and
+        // its antipode, the target, so holding it carries the nose to the target.
         const double AntipodeBlendAngle = 50.0;
         const double AntipodeHoldAngle = 35.0;
         // Perpendicular-rate threshold (rad/s) selecting where the latched plane comes from
-        // (ResolveAntipodalAxis): above it the vessel is already committed to a rotation, so latch its
-        // plane (the cleanest definition of where the flip is going); below it — a from-rest flip —
-        // latch the arbitrary-but-consistent geodesic axis instead. Either way a plane is latched and
-        // held, so even a from-rest flip rides a fixed plane rather than the precessing live axis. Set
-        // well below a real flip's rate but above a settled craft's residual sensor/physics noise
-        // (~1e-4), so a light deliberate seed (~1e-2) still latches its own plane.
+        // (ResolveAntipodalAxis). Above it the vessel is already committed to a rotation, so its
+        // plane is latched, which is the cleanest definition of where the flip is going. Below it,
+        // a from-rest flip, the arbitrary but consistent geodesic axis is latched. Either way a
+        // plane is latched and held, so even a from-rest flip rides a fixed plane. Set well below a
+        // real flip's rate and above a settled craft's residual sensor and physics noise, around
+        // 1e-4, so a light deliberate seed of around 1e-2 still latches its own plane.
         const double AntipodeLeadRate = 0.004;
-        // Default engagement soft-start duration (seconds): the actuator command is faded in over
-        // this window from each engage so the engagement transient cannot kick a fresh, full-authority
-        // gimbal into a limit cycle. ~0.5 s is short enough to be imperceptible on a settled craft yet
-        // long enough to spread the engagement step over many physics ticks. Set to 0 to disable.
+        // Default engagement soft-start duration (seconds). The actuator command is faded in over
+        // this window from each engage, so the engagement transient cannot kick a fresh,
+        // full-authority gimbal into a limit cycle. Half a second is imperceptible on a settled
+        // craft and long enough to spread the engagement step over many physics ticks. Set to 0 to
+        // disable.
         const double DefaultSoftStartTime = 0.5;
 
         public AttitudeController (Vessel vessel)
@@ -276,10 +274,10 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public ReferenceFrame ReferenceFrame { get; set; }
 
-        // Demoted convenience scalars (heading-singular near the vertical). The getters read the
-        // surface-frame Euler decomposition; the setters re-aim the nose by (pitch, heading) while
-        // preserving the current roll relative to the up reference (so a pitch/heading change no
-        // longer perturbs roll near the vertical). See SetTargetDirection.
+        // Convenience scalars, heading-singular near the vertical. The getters read the
+        // surface-frame Euler decomposition. The setters re-aim the nose by pitch and heading while
+        // preserving the current roll relative to the up reference, so a pitch or heading change
+        // leaves roll alone near the vertical. See SetTargetDirection.
         public double TargetPitch {
             get { return targetRotation.PitchHeadingRoll ().x; }
             set { SetTargetDirection (DirectionFromPitchHeading (value, targetRotation.PitchHeadingRoll ().y)); }
@@ -290,10 +288,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             set { SetTargetDirection (DirectionFromPitchHeading (targetRotation.PitchHeadingRoll ().x, value)); }
         }
 
-        // Roll about the nose measured relative to the up reference (roof aligned to the reference =
-        // roll 0), replacing the old pole-singular "roll from the vertical plane". NaN means roll is
-        // suppressed. Setting re-rolls the current target to the given angle (keeping the nose
-        // direction); NaN suppresses roll.
+        // Roll about the nose measured relative to the up reference, with the roof aligned to the
+        // reference at roll 0. NaN means roll is suppressed. Setting re-rolls the current target to
+        // the given angle, keeping the nose direction, and NaN suppresses roll.
         public double TargetRoll {
             get { return rollControlled ? RollRelativeTo (targetRotation, upReference) : double.NaN; }
             set {
@@ -325,9 +322,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return targetRotation; }
         }
 
-        // The effective (slewed) target — what the control loop is currently tracking. Equal to the
-        // commanded target above when smoothing is off; lags it during a slew. rollControlled is
-        // shared with the commanded target (a single mode flag), so the roll readouts match.
+        // The effective, slewed target that the control loop is tracking. Equal to the commanded
+        // target above when smoothing is off, and lagging it during a slew. rollControlled is a
+        // single mode flag shared with the commanded target, so the roll readouts match.
         public double EffectiveTargetPitch {
             get { return effectiveRotation.PitchHeadingRoll ().x; }
         }
@@ -353,9 +350,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             set { targetSmoothingTime = Math.Max (0, value); }
         }
 
-        // Request the slew speed be (re)latched from the current effective-to-commanded gap. Called
-        // after every target change. The latch happens in Update (the physics thread); the setters
-        // may run on the RPC thread.
+        // Request the slew speed be re-latched from the current effective-to-commanded gap. Called
+        // after every target change. The latch happens in Update, on the physics thread, and the
+        // setters may run on the RPC thread.
         void BeginSlew ()
         {
             slewPending = true;
@@ -369,14 +366,14 @@ namespace KRPC.SpaceCenter.AutoPilot
             BeginSlew ();
         }
 
-        // Re-aim the nose to a new direction through the shared primitive, preserving roll relative
-        // to the up reference. When roll is controlled the current roll is kept, so re-aiming the
-        // nose never silently drops a commanded roll; when it is suppressed the target is built
-        // wings-level (roll 0 vs the reference) — matching the historical pitch/heading target and,
-        // crucially, giving consecutive targets a consistent roll so a smoothed slew between them
-        // stays a clean pure-pitch/heading path (FromToRotation's minimal-arc roll varies with
-        // direction and wanders the heading through the slerp). The rollControlled flag is left
-        // unchanged. Backs TargetDirection and the demoted TargetPitch/TargetHeading setters.
+        // Re-aim the nose to a new direction through the shared primitive, preserving roll
+        // relative to the up reference. When roll is controlled the current roll is kept, so
+        // re-aiming the nose keeps a commanded roll. When roll is suppressed the target is built
+        // wings-level, at roll 0 against the reference, which gives consecutive targets a
+        // consistent roll so a smoothed slew between them stays a clean pitch and heading path.
+        // FromToRotation's minimal-arc roll varies with direction and wanders the heading through
+        // the slerp. The rollControlled flag is left unchanged. Backs TargetDirection and the
+        // TargetPitch and TargetHeading setters.
         public void SetTargetDirection (Vector3d direction)
         {
             var roll = rollControlled ? RollRelativeTo (targetRotation, upReference) : 0.0;
@@ -396,7 +393,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// ("roof") axis aligns with <paramref name="up"/> (its component perpendicular to the
         /// nose), then apply an optional <paramref name="roll"/> offset (degrees) about the nose.
         /// Stores <paramref name="up"/> as the persistent roll reference. Well-defined for every
-        /// nose direction except <c>up ∥ direction</c>, where it falls back to direction-only
+        /// nose direction except <c>up -par direction</c>, where it falls back to direction-only
         /// (roll suppressed).
         /// </summary>
         public void SetTargetDirectionAndUp (Vector3d direction, Vector3d up, double roll)
@@ -417,11 +414,11 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// Build a target rotation that points the nose (body +y) along <paramref name="direction"/>
-        /// and rolls so the dorsal axis (body −z) aligns with <paramref name="up"/> projected
+        /// and rolls so the dorsal axis (body -z) aligns with <paramref name="up"/> projected
         /// perpendicular to the nose, plus a <paramref name="roll"/> offset (degrees, positive =
         /// right-wing-down, matching aircraft bank). Falls back to direction-only (roll unanchored)
         /// when <paramref name="up"/> is parallel to <paramref name="direction"/>. The roll offset is
-        /// applied as <c>align − roll</c> about the nose so its sign matches the kRPC roll convention
+        /// applied as <c>align - roll</c> about the nose so its sign matches the kRPC roll convention
         /// (positive roll relative to the reference banks right).
         /// </summary>
         static QuaternionD RotationFromDirectionUpRoll (Vector3d direction, Vector3d up, double roll)
@@ -438,7 +435,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// The signed roll (degrees) of <paramref name="rotation"/> about its nose, measured relative
-        /// to <paramref name="up"/> — the inverse of the roll argument to
+        /// to <paramref name="up"/>, the inverse of the roll argument to
         /// <see cref="RotationFromDirectionUpRoll"/>. 0 when the roof aligns with the reference;
         /// positive banks right. Singular only when <paramref name="up"/> is parallel to the nose.
         /// </summary>
@@ -446,9 +443,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             var nose = (rotation * Vector3d.up).normalized;
             var reference = RotationFromDirectionUpRoll (nose, up, 0);
-            // reference shares the nose, so the residual is a pure rotation about it; its angle,
-            // projected onto the nose, is the roll. Negated to invert RotationFromDirectionUpRoll's
-            // align − roll (positive roll banks right).
+            // reference shares the nose, so the residual is a pure rotation about it, and its
+            // angle projected onto the nose is the roll. Negated to invert
+            // RotationFromDirectionUpRoll's align minus roll, so positive roll banks right.
             var residual = rotation * reference.Inverse ();
             double angle;
             Vector3d axis;
@@ -461,11 +458,11 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public Vector3d MaxAngularVelocity { get; set; }
 
-        // Pointing deadband high angle (degrees) for the roll axis: at/above this error the target roll
-        // velocity is commanded in full; below it the commanded velocity ramps linearly to zero by
-        // DeadbandLowFraction of it, so the craft coasts to a stop and the actuator stops dithering
-        // against measured-rate jitter once pointed. Formerly the logistic attenuation half-width; see the
-        // deadband note by DeadbandLowFraction.
+        // Pointing deadband high angle (degrees) for the roll axis. At or above this error the
+        // target roll velocity is commanded in full. Below it the commanded velocity ramps linearly
+        // to zero by DeadbandLowFraction of it, so the craft coasts to a stop and the actuator
+        // stops dithering against measured-rate jitter once pointed. See the deadband note by
+        // DeadbandLowFraction.
         public double RollAttenuationAngle { get; set; }
 
         // Pointing deadband high angle (degrees) for the coupled pitch/yaw group. As RollAttenuationAngle,
@@ -526,8 +523,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         // About-mean envelope of the delivered command above which a latched axis is treated as
-        // still limit-cycling (drives the policy back-off; exposed for the info window so it can
-        // colour the envelope readout against the engage threshold).
+        // still limit-cycling. Drives the policy back-off, and is exposed so the info window can
+        // color the envelope readout against the engage threshold.
         public double OscillationControlThreshold {
             get { return MitigationPolicy.EnvelopeThreshold; }
         }
@@ -582,12 +579,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return logTargetRi; }
         }
 
-        // Per-axis hold-gated mitigation weight in [0,1] (suppressionRamp · holdFactor): how fully
-        // the latched flexible-craft hold mitigation (bandwidth floor + feedforward cut) is engaged.
-        // Per-tick gate/mitigation state for the in-game info window: the pointing-error hold
-        // factor, the latch ramps, the back-off levels, the applied feedforward-cut fraction,
-        // the output-filter blend weight and the post-floor inner-loop bandwidth (rad/s; stale
-        // when AutoTune is off — the window blanks it there).
+        // Per-axis hold-gated mitigation weight in [0,1], suppressionRamp * holdFactor: the degree
+        // to which the latched flexible-craft hold mitigation, the bandwidth floor and the
+        // feedforward cut, is engaged. Per-tick gate and mitigation state for the in-game info
+        // window: the pointing-error hold factor, the latch ramps, the back-off levels, the applied
+        // feedforward-cut fraction, the output-filter blend weight and the post-floor inner-loop
+        // bandwidth (rad/s, stale when AutoTune is off, where the window blanks it).
         public double PitchYawHoldFactor {
             get { return logHoldFactorPitchYaw; }
         }
@@ -630,8 +627,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             return 0;
         }
 
-        // The chatterLevel at which an axis latches as flexible (see UpdateChatterDetector). Exposed
-        // so the info UI can colour the OscillationLevel readout against the same threshold.
+        // The chatterLevel at which an axis latches as flexible (see UpdateChatterDetector).
+        // Exposed so the info UI can color the OscillationLevel readout against the same threshold.
         public double OscillationLatchThreshold {
             get { return OscillationDetectors.ChatterLatchThreshold; }
         }
@@ -738,25 +735,25 @@ namespace KRPC.SpaceCenter.AutoPilot
             feedforwardMode = Services.MitigationMode.Automatic;
             outputFilterMode = Services.MitigationMode.Automatic;
             Overshoot = new Vector3d (0.01, 0.01, 0.01);
-            // TimeToPeak sets the inner-loop bandwidth via omega0 = pi / (TimeToPeak * sqrt(1 - zeta^2)).
-            // Increasing it lowers the bandwidth, which is the lever for large, structurally flexible
-            // vehicles: when the bandwidth approaches the structural resonance frequency (e.g. the
-            // Ariane rocket, ~10 rad/s) the PID saturates in response to structural angular velocity
-            // oscillations and drives the bending mode. Such craft need a larger TimeToPeak. (The
-            // adaptive flexible-craft handling normally suppresses this automatically; see
-            // UpdateChatterDetector.)
+            // TimeToPeak sets the inner-loop bandwidth through
+            // omega0 = pi / (TimeToPeak * sqrt(1 - zeta^2)). Increasing it lowers the bandwidth,
+            // which is the lever for large, structurally flexible vehicles: when the bandwidth
+            // approaches the structural resonance frequency, around 10 rad/s on the Ariane rocket,
+            // the PID saturates in response to structural angular velocity oscillations and drives
+            // the bending mode. Such craft need a larger TimeToPeak. The adaptive flexible-craft
+            // handling normally suppresses this on its own, see UpdateChatterDetector.
             TimeToPeak = new Vector3d (1, 1, 1);
             SoftStartTime = DefaultSoftStartTime;
             targetSmoothingTime = 0;
             DiagnosticLogging = false;
-            // Default roll reference: the frame's up (+x = zenith in the surface frame), which
-            // makes TargetRoll reproduce the historical vertical-plane roll away from the vertical.
+            // Default roll reference: the frame's up, the zenith in the surface frame, which makes
+            // TargetRoll the vertical-plane roll away from the vertical.
             upReference = new Vector3d (1, 0, 0);
             SetTarget (0, 0, double.NaN);
-            // Reset is the user-facing return to initial conditions, so also clear the state
-            // that deliberately survives Start's per-engagement reset: the persistent chatter
-            // level (kept across engagements so a known-flexible craft re-latches quickly) and
-            // the one-sided smoothed torque (which otherwise decays a stale maximum at τ≈0.5s).
+            // Reset is the user-facing return to initial conditions, so also clear the state that
+            // survives Start's per-engagement reset: the persistent chatter level, kept across
+            // engagements so a known-flexible craft re-latches quickly, and the one-sided smoothed
+            // torque, which otherwise decays a stale maximum over about half a second.
             detectors.ResetChatterLevel ();
             smoothedTorque = Vector3d.zero;
             Start ();
@@ -765,8 +762,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         public void Start ()
         {
             engageFixedTime = Time.fixedTime;
-            // Hold the current commanded target on engage — no phantom slew (engagement transients
-            // are handled separately by the soft-start). Smoothing only applies to later changes.
+            // Hold the current commanded target on engage, so there is no phantom slew.
+            // Engagement transients are handled by the soft-start, and smoothing applies only to
+            // later changes.
             effectiveRotation = targetRotation;
             slewSpeed = 0;
             slewPending = false;
@@ -826,9 +824,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             lastAttemptFixedTime = Time.fixedTime;
             // Everything the loop measures is expressed in the reference frame, and there is no
             // client call here to raise at, so a frame that cannot be measured in makes the loop
-            // wait rather than fail. The frame is a settable property, so the client can point
-            // the auto-pilot at another one, and the output hold time releases the controls in
-            // the meantime.
+            // wait. The frame is a settable property, so the client can point the auto-pilot at
+            // another one, and the output hold time releases the controls in the meantime.
             if (ReferenceFrame.GameObjectState != GameObjectState.Live)
                 return;
             // The auto-pilot fights stock SAS, so hold it off while engaged.
@@ -847,15 +844,15 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             // While the vessel sits on the launch clamps (PRELAUNCH) the autopilot is engaged but
             // must not act. The craft is physically held and the engines are unlit, so available
-            // torque is near-zero; running the loop would autotune enormous gains against that tiny
-            // torque (Kp ∝ moi/torque) and saturate the actuators against sensor jitter or a sub-
-            // degree pointing error — a full-deflection command that is then delivered as a kick the
-            // instant the clamps release and the gains collapse onto the now-large engine torque.
-            // Instead hold the controls at zero and keep the whole control loop in its freshly-
-            // engaged default state (Start re-pins the soft-start clock and clears all loop state),
-            // re-running it each tick so the engagement soft-start fade-in begins at clamp release
-            // rather than at engagement. Holding on the pad is thus equivalent to engaging the moment
-            // the clamps drop.
+            // torque is near zero. Running the loop would autotune enormous gains against that tiny
+            // torque, as Kp scales with moi over torque, and saturate the actuators against sensor
+            // jitter or a sub-degree pointing error. That full-deflection command is then delivered
+            // as a kick the instant the clamps release and the gains collapse onto the now-large
+            // engine torque. Hold the controls at zero and keep the whole control loop in its
+            // freshly engaged default state, with Start re-pinning the soft-start clock and
+            // clearing all loop state, re-running it each tick so the engagement soft-start fade-in
+            // begins at clamp release. Holding on the pad is equivalent to engaging the moment the
+            // clamps drop.
             if (internalVessel.situation == Vessel.Situations.PRELAUNCH) {
                 Start ();
                 state.Pitch = 0;
@@ -866,11 +863,11 @@ namespace KRPC.SpaceCenter.AutoPilot
                 return;
             }
 
-            // Target smoothing: advance the effective target (what the control loop tracks) toward
+            // Target smoothing: advance the effective target that the control loop tracks toward
             // the commanded target. With smoothing enabled, a change to the target ramps the
-            // effective target linearly (constant-rate slerp) over TargetSmoothingTime seconds,
-            // rather than stepping instantly — letting a slow control loop drive a smooth maneuver
-            // (e.g. a gravity turn) without exciting oscillation from stepwise target changes.
+            // effective target linearly over TargetSmoothingTime seconds, so a slow control loop
+            // can drive a smooth maneuver such as a gravity turn without exciting oscillation from
+            // stepwise target changes.
             if (slewPending) {
                 slewSpeed = targetSmoothingTime > 0
                     ? GeometryExtensions.Angle (effectiveRotation, targetRotation) / targetSmoothingTime
@@ -884,10 +881,10 @@ namespace KRPC.SpaceCenter.AutoPilot
                 effectiveRotation = targetRotation;
             }
 
-            // Engagement soft-start: a smoothstep 0→1 over SoftStartTime seconds from the last
-            // Start(). The final actuator command is scaled by this so engagement fades the control
-            // in rather than stepping to a near-max kick. Smoothstep (not a one-pole) has zero slope
-            // at t=0, so the onset is gentlest exactly when the loop is furthest from steady state.
+            // Engagement soft-start: a smoothstep from 0 to 1 over SoftStartTime seconds from the
+            // last Start(). The final actuator command is scaled by this, so engagement fades the
+            // control in. A smoothstep has zero slope at t=0, so the onset is gentlest exactly when
+            // the loop is furthest from steady state.
             var softStartLinear = softStartTime > 0
                 ? Math.Min (1.0, Math.Max (0.0, (Time.fixedTime - engageFixedTime) / softStartTime))
                 : 1.0;
@@ -901,15 +898,15 @@ namespace KRPC.SpaceCenter.AutoPilot
             double phi, cosPhi, sinPhi;
             ComputeRollInvariantFrame (internalVessel, out currentDirection, out phi, out cosPhi, out sinPhi);
 
-            // Measure the raw angular velocity (root-part rigidbody). On a structurally flexible
-            // craft it carries the bending mode on top of the rigid-body rate. The chatter detector
-            // and the frequency trackers always see this raw rate; only the control loops see the
-            // suppressed rate computed below (see the signal-routing note in the design doc).
+            // Measure the raw angular velocity from the root-part rigidbody. On a structurally
+            // flexible craft it carries the bending mode on top of the rigid-body rate. The chatter
+            // detector and the frequency trackers always see this raw rate, and only the control
+            // loops see the suppressed rate computed below.
             var currentRaw = (Vector3d)ComputeCurrentAngularVelocity ();
 
             // Update the structural-chatter detector from the raw rate. In Automatic mode the latch
-            // it produces decides *whether* suppression is applied; the frequency estimator below
-            // decides *which* tool (notch vs low-pass). A rigid craft never latches.
+            // it produces decides whether suppression is applied, and the frequency estimator below
+            // decides which tool, notch or low-pass. A rigid craft never latches.
             detectors.UpdateChatter (currentRaw, torque, moi, dt, DefaultChatterDetectThreshold);
 
             // Feed the frequency trackers the oscillation in the raw rate every tick,
@@ -918,9 +915,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             detectors.UpdateTrackers (currentRaw, dt);
 
             // Select and apply the suppression tool per axis group, producing the rate the control
-            // loops consume. Each axis is notched, low-passed, or passed through — never both — with
-            // the inactive filter's state held reset so a regime change injects no transient. The
-            // per-axis suppressionActiveAxis record written here is read by DoAutoTuneAxis.
+            // loops consume. Each axis is notched, low-passed or passed through, one of the three,
+            // with the inactive filter's state held reset so a regime change injects no transient.
+            // The per-axis suppressionActiveAxis record written here is read by DoAutoTuneAxis.
             int pitchYawTool;
             double pitchYawFreq;
             MitigationPolicy.SelectTool (pitchYawRateFilterMode, detectors.PitchYawLatched,
@@ -938,13 +935,14 @@ namespace KRPC.SpaceCenter.AutoPilot
                 rateFilter.Apply (2, currentRaw.z, pitchYawTool, pitchYawFreq, oscillationNotchQ,
                     MitigationPolicy.LowPassSeparation, MitigationPolicy.LowPassCornerMin, dt));
 
-            // Light measured-rate low-pass on a detector-firing but *unlatched* axis (see
-            // DetectorRateFilterTimeConstant). The suppression above only runs on a latched axis; here the
-            // axis passed through, but its rate still carries the root-part jitter that the full-bandwidth
-            // inner loop turns into actuator chatter and that the stopping-distance term re-injects into
-            // the feedforward. Blend a lightly low-passed copy in by chatterLevel — rigid axes (level ~0)
-            // untouched, latched axes skipped (the heavier suppression handles them) — so both the inner
-            // loop and the outer stopping term below act on a quieter rate.
+            // Light measured-rate low-pass on a detector-firing but unlatched axis (see
+            // DetectorRateFilterTimeConstant). The suppression above runs only on a latched axis,
+            // and an axis that passed through still carries the root-part jitter that the
+            // full-bandwidth inner loop turns into actuator chatter and that the stopping-distance
+            // term re-injects into the feedforward. Blend a lightly low-passed copy in by
+            // chatterLevel, leaving rigid axes untouched and skipping latched axes, which the
+            // heavier suppression handles, so both the inner loop and the outer stopping term below
+            // act on a quieter rate.
             var inputBlend = Vector3d.zero;
             for (int i = 0; i < 3; i++) {
                 var w = detectors.ChatterLatched (i) ? 0.0 : detectors.ChatterLevel [i];
@@ -952,9 +950,10 @@ namespace KRPC.SpaceCenter.AutoPilot
                 current [i] = rateFilter.BlendInput (i, current [i], w, dt);
             }
 
-            // Ramp the latched bandwidth reduction and output smoothing in/out per axis (gated on
-            // suppression being active — the persistent latch, not the decaying chatterLevel — so
-            // they hold for as long as the craft is treated as flexible and do not step at engage).
+            // Ramp the latched bandwidth reduction and output smoothing in and out per axis, gated
+            // on suppression being active, which is the persistent latch and not the decaying
+            // chatterLevel, so they hold for as long as the craft is treated as flexible and do not
+            // step at engage.
             policy.UpdateRamps (rateFilter, dt);
 
 
@@ -965,29 +964,30 @@ namespace KRPC.SpaceCenter.AutoPilot
             var target = ComputeTargetAngularVelocity (torque, moi, current, currentDirection,
                 cosPhi, sinPhi, out pySampleFull, out rollSampleFull);
 
-            // Roll setpoint is already weighted to zero inside ComputeTargetAngularVelocity when the
-            // vessel is far from the direction target; clear the integral there to prevent windup.
+            // Roll setpoint is already weighted to zero inside ComputeTargetAngularVelocity when
+            // the vessel is far from the direction target, so clear the integral there to prevent
+            // windup.
             if (!rollControlled) {
                 target.y = 0;
             } else {
                 ClearRollWindupIfDisengaged (currentDirection);
             }
 
-            // Continuous hold gate: 1 while holding (error ≤ HoldErrorFull), 0 while slewing
-            // (≥ HoldErrorNone), linear between. Combined with suppressionRamp it gives the per-axis
-            // mitigation weight — only a latched axis that is also holding is floored and has its
-            // feedforward cut. (The linear stopping coefficient is computed from the unfloored gain
-            // — see ProfileKp — so the setpoint needs no separate hold-time profile.)
-            // The hold factor is per axis group: pitch/yaw key on the pointing error; roll keys on
-            // the LARGER of the pointing error and the roll error. Keying roll on the pointing
-            // error alone left a latched roll axis floored (with its feedforward cut) through a
-            // pure roll maneuver — the pointing error stays ~0 there, so the mitigation never
-            // released and the floored integrator crawled through the turn (measured in-game: a
-            // 20° roll's tail creeping once roll latched mid-slew). Taking the max means roll also
-            // releases during a pointing slew, exactly as before. logAngles.y is the roll residual
-            // the profile acts on (degrees; ≡ 0 when roll is not controlled, so behaviour there is
-            // unchanged). A pure roll maneuver does NOT release latched pitch/yaw — they really
-            // are holding.
+            // Continuous hold gate: 1 while holding, at or below HoldErrorFull, 0 while slewing,
+            // at or above HoldErrorNone, and linear between. Combined with suppressionRamp it gives
+            // the per-axis mitigation weight, so only a latched axis that is also holding is
+            // floored and has its feedforward cut. The linear stopping coefficient is computed from
+            // the unfloored gain (see ProfileKp), so the setpoint needs no separate hold-time
+            // profile.
+            //
+            // The hold factor is per axis group. Pitch and yaw key on the pointing error, and roll
+            // keys on the larger of the pointing error and the roll error. The pointing error stays
+            // near zero through a pure roll maneuver, so keying roll on it alone leaves a latched
+            // roll axis floored, with its feedforward cut, and the floored integrator crawls
+            // through the turn. Taking the larger of the two means roll also releases during a
+            // pointing slew. logAngles.y is the roll residual the profile acts on, in degrees, and
+            // is zero when roll is not controlled. A pure roll maneuver does not release latched
+            // pitch and yaw, which really are holding.
             var pointingError = Vector3.Angle (currentDirection, EffectiveTargetDirection);
             var holdFactorPitchYaw = OscillationDetectors.HoldFactor (pointingError);
             var rollErrorDeg = Math.Abs (logAngles.y);
@@ -995,14 +995,14 @@ namespace KRPC.SpaceCenter.AutoPilot
                 OscillationDetectors.HoldFactor (Math.Max (pointingError, rollErrorDeg));
             logHoldFactorPitchYaw = holdFactorPitchYaw;
             logHoldFactorRoll = holdFactorRoll;
-            // Oscillation-control back-off, OR'd into the hold gate via max() below: lets the latched
-            // mitigation engage independent of pointing error — the hold gate's blind spot during a
-            // maneuver, where a released gate restores the feedforward that re-drives the bending mode.
-            // The trigger is the about-mean envelope of the delivered command (built by the detectors
-            // from the previous tick, since this tick's command does not exist yet): a sustained limit
-            // cycle has a large envelope while a steady slew (one-sign ramp, tracked by the trim mean)
-            // does not. It rises fast / decays slow so a one-shot transient does not pin it, and only
-            // a latched axis can trigger.
+            // Oscillation-control back-off, combined into the hold gate with max() below. It lets
+            // the latched mitigation engage independent of pointing error, covering the hold gate's
+            // blind spot during a maneuver, where a released gate restores the feedforward that
+            // re-drives the bending mode. The trigger is the about-mean envelope of the delivered
+            // command, built by the detectors from the previous tick since this tick's command does
+            // not exist yet: a sustained limit cycle has a large envelope, and a steady one-sign
+            // ramp tracked by the trim mean does not. It rises fast and decays slow, so a one-shot
+            // transient does not pin it, and only a latched axis can trigger it.
             detectors.UpdateControlEnvelope (dt);
             var gate = policy.UpdateGate (detectors, dt, holdFactorPitchYaw, holdFactorRoll);
 
@@ -1010,11 +1010,10 @@ namespace KRPC.SpaceCenter.AutoPilot
             logTargetRi = target;
 
             // Analytic acceleration feedforward: the profile's planned acceleration computed
-            // algebraically from the ProfileSamples — no finite differencing, so none of the
-            // 1/(dt·α)-amplified measured-rate jitter or setpoint-direction whip spikes the
-            // numeric form carries (measured in-game: the numeric form spikes to ~92× full scale
-            // in the transverse-nudge regime during the transition comparison; the analytic form
-            // stays bounded ~1.5).
+            // algebraically from the ProfileSamples, with no finite differencing. A numeric form
+            // amplifies measured-rate jitter by 1 / (dt * alpha) and whips with the setpoint
+            // direction, and was measured spiking to about 92 times full scale in the
+            // transverse-nudge regime, where the analytic form stays bounded around 1.5.
             var slewActive = targetSmoothingTime > 0
                 && GeometryExtensions.Angle (effectiveRotation, targetRotation) > 1e-9;
             var slewRateRad = slewActive ? GeometryExtensions.ToRadians (slewSpeed) : 0.0;
@@ -1024,21 +1023,22 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (!rollControlled)
                 ffAnalyticRi.y = 0;
 
-            // Low-pass filter the feedforward. The analytic value steps by a bounded amount at
-            // the profile's branch seams — the min()/max() switches (velocity cap, quad/linear
-            // stopping term) and the sign flip through the target — and, summed with the PID
-            // output and clamped, a step would briefly saturate the actuators. A short
-            // first-order filter smears these few genuine transitions over ~3 physics ticks; the
-            // resulting lag is small and the PI loop absorbs it.
+            // Low-pass filter the feedforward. The analytic value steps by a bounded amount at the
+            // profile's branch seams, the min() and max() switches for the velocity cap and the
+            // quadratic and linear stopping terms, and the sign flip through the target. Summed
+            // with the PID output and clamped, such a step would briefly saturate the actuators. A
+            // short first-order filter smears these few genuine transitions over about three
+            // physics ticks, and the PI loop absorbs the small lag.
             var ffBeta = 1.0 - Math.Exp (-dt / FeedforwardSmoothTimeConstant);
             smoothedFfRi = new Vector3d (
                 smoothedFfRi.x + ffBeta * (ffAnalyticRi.x - smoothedFfRi.x),
                 smoothedFfRi.y + ffBeta * (ffAnalyticRi.y - smoothedFfRi.y),
                 smoothedFfRi.z + ffBeta * (ffAnalyticRi.z - smoothedFfRi.z));
-            // Cut the feedforward by the hold gate: it is an open-loop plant inversion (gain ∝
-            // frequency) and is the loop path most able to drive a flexible mode once the bandwidth is
-            // floored, but only a holding flexible axis needs it gone — while slewing the axis keeps
-            // its feedforward to track the manoeuvre, and a rigid axis keeps it throughout.
+            // Cut the feedforward by the hold gate. It is an open-loop plant inversion, with gain
+            // proportional to frequency, and is the loop path most able to drive a flexible mode
+            // once the bandwidth is floored. Only a holding flexible axis needs it gone: a slewing
+            // axis keeps its feedforward to track the maneuver, and a rigid axis keeps it
+            // throughout.
             var ffScale = new Vector3d (
                 FeedforwardScale (gate.x), FeedforwardScale (gate.y), FeedforwardScale (gate.z));
             logFfCut = new Vector3d (1.0 - ffScale.x, 1.0 - ffScale.y, 1.0 - ffScale.z);
@@ -1053,12 +1053,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (AutoTune)
                 DoAutoTune (smoothedTorque, moi);
 
-            // Zero the integral terms throughout the engagement soft-start (the on-pad PRELAUNCH
-            // case is handled by the early return above). During the fade the scaled-down command
-            // under-drives the plant, so the error persists and the integrator would wind up — then
-            // deliver the very kick the soft-start removes the moment the ramp completes. Holding it
-            // cleared means integration starts from zero exactly at softStart == 1, with no step (the
-            // proportional/feedforward output is faded too).
+            // Zero the integral terms throughout the engagement soft-start. The on-pad PRELAUNCH
+            // case is handled by the early return above. During the fade the scaled-down command
+            // under-drives the plant, so the error persists and the integrator winds up, then
+            // delivers the kick the soft-start removes the moment the ramp completes. Held clear,
+            // integration starts from zero exactly at a soft-start of 1, with no step, and the
+            // proportional and feedforward output is faded too.
             if (softStart < 1.0) {
                 PitchPID.ClearIntegralTerm ();
                 RollPID.ClearIntegralTerm ();
@@ -1066,8 +1066,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
 
             // Inner rate loop (the inner stage of the cascade). The outer loop above turned the
-            // attitude error into a target angular velocity; this stage drives the *suppressed*
-            // measured rate (currentRi) onto that target. Each PI is physics-normalised — its
+            // attitude error into a target angular velocity, and this stage drives the suppressed
+            // measured rate (currentRi) onto that target. Each PI is physics-normalized, and its
             // autotuned gains carry the moi/torque factor, so the closed rate-loop bandwidth is set
             // by TimeToPeak/Overshoot and is independent of the craft's authority. Because it tracks
             // the suppressed rate, the loop has no gain at the bending frequency and cannot excite a
@@ -1083,7 +1083,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var virtualYaw = (pidOut.z + ffRi.z).Clamp (-1, 1);
             var bodyControl = FromRollInvariant (new Vector3d (virtualPitch, 0, virtualYaw), cosPhi, sinPhi);
 
-            // Gyroscopic feedforward: the per-axis plant model (τ = I·ω̇) ignores the ω×(Iω) term in
+            // Gyroscopic feedforward: the per-axis plant model (tau = I*omega-dot) ignores the omega x (Iomega) term in
             // Euler's rigid-body equation. Add a control fraction that cancels it, in the body frame
             // where the inertia and available torque are per-axis, then sum with the control and
             // clamp to [-1, 1].
@@ -1110,8 +1110,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                     pySampleFull, rollSampleFull, ffAnalyticRi, ffRi, ffDiag, gyro, pidOut,
                     new Vector3d (uPitch, uRoll, uYaw), softStart,
                     slewActive ? slewSpeed : 0.0, pitchYawFreq, rollFreq, inputBlend);
-                // The log is capped (one minute at 50 Hz); when full, logging switches itself
-                // off — the buffer holds the window following the enable, and memory is bounded.
+                // The log is capped at one minute at 50 Hz. When full, logging switches itself
+                // off, so the buffer holds the window following the enable and memory is bounded.
                 if (diagnosticLog.Full)
                     diagnosticLogging = false;
             }
@@ -1206,7 +1206,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// Roll error (degrees, unsigned) between the vessel's current attitude and the given target,
         /// measured about the nose axis. Well-defined near the vertical singularity, unlike a
         /// pitch/heading/roll Euler subtraction: it is the roll component of the rotation left after
-        /// the pointing error is removed, projected onto the nose axis — the same quantity the control
+        /// the pointing error is removed, projected onto the nose axis, the same quantity the control
         /// loop acts on in <see cref="ComputeTargetAngularVelocity"/>, but ungated by the roll blend
         /// weight so it is a valid readout regardless of pointing error.
         /// </summary>
@@ -1231,7 +1231,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// The per-axis attitude error (pitch, yaw, roll) in degrees between the vessel's current
-        /// attitude and the given target, from one residual decomposition — the same singularity-free
+        /// attitude and the given target, from one residual decomposition, the same singularity-free
         /// machinery as <see cref="RollErrorTo"/>. All three components stay well-defined near the
         /// vertical, unlike a pitch/heading/roll Euler subtraction. Pitch and yaw are the direction
         /// error resolved onto the vessel's body pitch axis (x) and yaw axis (z); roll is the
@@ -1245,12 +1245,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             var currentRotation = ReferenceFrame.RotationFromWorldSpace (internalVessel.ReferenceTransform.rotation);
             var currentDirection = ReferenceFrame.DirectionFromWorldSpace (internalVessel.ReferenceTransform.up);
 
-            // Pitch/yaw: the direction error's minimum-arc axis (⊥ the nose, so no roll component),
-            // expressed in the vessel body frame — body x is the pitch axis, body z the yaw axis
-            // (matching the control-input mapping). Body frame, not the roll-invariant frame: this is
-            // a readout about the vessel's actual pitch/yaw control axes, whereas the roll-invariant
-            // frame's axes carry the pointing rotation's own twist and would swap pitch↔yaw depending
-            // on where the nose points.
+            // Pitch and yaw: the direction error's minimum-arc axis, perpendicular to the nose so
+            // it has no roll component, expressed in the vessel body frame. Body x is the pitch axis
+            // and body z the yaw axis, matching the control-input mapping. This is a readout about
+            // the vessel's actual pitch and yaw control axes, where the roll-invariant frame's axes
+            // carry the pointing rotation's own twist and would swap pitch and yaw depending on
+            // where the nose points.
             var dirRotation = GeometryExtensions.FromToRotation (currentDirection, targetDirection);
             double dirAngle;
             Vector3d dirAxis;
@@ -1275,7 +1275,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// Update the one-sided torque smoothing: track increases immediately (gains going down is
-        /// safe) but decay decreases at τ≈0.5s so a sudden torque drop (e.g. engine shutdown while a
+        /// safe) but decay decreases at tauabout 0.5s so a sudden torque drop (e.g. engine shutdown while a
         /// small reaction wheel keeps torque > 0) does not cause a single-tick gain spike. The
         /// velocity profile still uses the actual torque so the setpoint immediately reflects the
         /// reduced authority.
@@ -1359,7 +1359,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 antipodeLatched ? antipodeLatchedNormal : Vector3d.zero, "F3");
 
             // Measured state: vessel roll relative to the RI frame, the raw and suppressed
-            // rates (RI frame, rad/s), and the plant model (raw and smoothed torque, MoI, α).
+            // rates (RI frame, rad/s), and the plant model (raw and smoothed torque, MoI, alpha).
             log.Add ("phi", phi * 180.0 / Math.PI, "F2");
             log.AddVector ("omega_raw", logRawOmegaRi, "F4");
             log.AddVector ("omega_ri", currentRi, "F4");
@@ -1382,9 +1382,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 PitchPID.IntegralTerm, RollPID.IntegralTerm, YawPID.IntegralTerm), "F4");
 
             // Outer loop: the target angular velocity and the velocity profile's decisions per
-            // axis group — branch (cone/cap/linear/quad/idle), speed, deadband scale, pure and
-            // ω-corrected error magnitudes (rad), cone slope, linear-branch bandwidth and the
-            // stopping-point direction ŝ.
+            // axis group: branch (cone/cap/linear/quad/idle), speed, deadband scale, pure and
+            // omega-corrected error magnitudes (rad), cone slope, linear-branch bandwidth and the
+            // stopping-point direction s-hat.
             log.AddVector ("tgt_omega_ri", logTargetRi, "F4");
             log.Add ("roll_weight", rollControlled ? RollWeight (dirErr) : 0.0, "F2");
             log.Add ("prof.py", ProfileBranchTag (pySample));
@@ -1399,7 +1399,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             log.Add ("prof_s.r", rollSample.SPitch, "F3");
             log.Add ("prof_s.y", pySample.SYaw, "F3");
 
-            // Feedforward pipeline: the gates and planned rate ġ, then the raw analytic value,
+            // Feedforward pipeline: the gates and planned rate g-dot, then the raw analytic value,
             // the low-passed copy, the applied (post hold-gate cut) value and the gyroscopic
             // term.
             log.AddGroup ("ff_track", ffDiag.PitchYawTracking, ffDiag.RollTracking, "F3");
@@ -1417,7 +1417,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             log.AddVector ("ctrl", new Vector3d (state.Pitch, state.Roll, state.Yaw), "F3");
 
             // Oscillation detectors (info window: STRUC / CTRL / FREQ): chatter level and the
-            // raw per-tick trigger margin (≥1 fires), the control-output envelope, and the
+            // raw per-tick trigger margin (>=1 fires), the control-output envelope, and the
             // held/live frequency estimates with acquisition progress.
             log.AddVector ("chatter", detectors.ChatterLevel, "F3");
             log.AddVector ("chatter_margin", detectors.ChatterMargin, "F2");
@@ -1484,10 +1484,10 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// Output smoothing (see OutputFilter): the policy decision of blend weight and corner. A
-        /// latched axis uses the ramped suppression weight and the heavier (2 Hz) corner — the
+        /// latched axis uses the ramped suppression weight and the heavier 2 Hz corner, and the
         /// flexible-craft path. An unlatched axis whose detector is firing (the noisy-but-
         /// controllable craft) blends by chatterLevel at the lighter corner, smoothing the
-        /// delivered command without the phase cost of the 2 Hz filter destabilising the
+        /// delivered command without the phase cost of the 2 Hz filter destabilizing the
         /// full-bandwidth loop. A rigid axis (chatterLevel ~0, never latched) gets weight 0 and
         /// passes through.
         /// </summary>
@@ -1511,7 +1511,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// The feedforward-cut mitigation: the scale applied to the acceleration feedforward on
-        /// one axis. Automatic follows the hold gate (1−gate: cut only on a latched, holding
+        /// one axis. Automatic follows the hold gate (1-gate: cut only on a latched, holding
         /// axis); Off never cuts; Forced always cuts fully.
         /// </summary>
         double FeedforwardScale (double gateComponent)
@@ -1527,16 +1527,16 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// Gyroscopic feedforward in the body frame, returned as a per-axis control fraction.
         /// </summary>
         /// <remarks>
-        /// The PID controllers and the autotuner model the plant as τ = I·ω̇ independently per axis,
-        /// but the rigid-body equation of motion is τ = I·ω̇ + ω×(Iω). The cross term ω×(Iω) is a
+        /// The PID controllers and the autotuner model the plant as tau = I*omega-dot independently per axis,
+        /// but the rigid-body equation of motion is tau = I*omega-dot + omega x (Iomega). The cross term omega x (Iomega) is a
         /// torque the controller would otherwise have to reject as a disturbance. This returns the
-        /// control fraction that cancels it: -(ω×(Iω))ᵢ / τ_max,ᵢ per axis (a diagonal inertia is
-        /// assumed, matching the rest of the controller). The term is quadratic in ω, so it is
-        /// negligible at the low rates of normal attitude holding — including structural bending
-        /// oscillation — and only matters for fast slews or strongly asymmetric inertia.
+        /// control fraction that cancels it: -(omega x (Iomega))_i / tau_max_i per axis (a diagonal inertia is
+        /// assumed, matching the rest of the controller). The term is quadratic in omega, so it is
+        /// negligible at the low rates of normal attitude holding, structural bending oscillation
+        /// included, and only matters for fast slews or strongly asymmetric inertia.
         ///
-        /// ω is passed in the controller's negated sign convention (see ComputeCurrentAngularVelocity),
-        /// but ω×(Iω) is quadratic in ω and so is invariant under that negation — it gives the correct
+        /// omega is passed in the controller's negated sign convention (see ComputeCurrentAngularVelocity),
+        /// but omega x (Iomega) is quadratic in omega and so is invariant under that negation, and gives the correct
         /// body-frame gyroscopic torque either way.
         /// </remarks>
         Vector3d GyroscopicFeedforward (Vector3d omega, Vector3d moi, Vector3d torque)
@@ -1550,14 +1550,14 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Resolve the direction-error rotation axis through the 180° (antipodal) singularity.
+        /// Resolve the direction-error rotation axis through the 180 degrees (antipodal) singularity.
         /// </summary>
         /// <remarks>
         /// <c>FromToRotation(current, target)</c> returns an arbitrary axis when the target is
         /// directly behind the nose (the minimum-arc rotation's plane is undefined), so a flip there
         /// would tumble in a random plane. When the vessel enters the antipode band already rotating,
-        /// <em>latch</em> the flip-plane normal once — from the angular velocity perpendicular to the
-        /// nose at that moment — and hold it for the rest of the pass. The commanded axis is then
+        /// latch the flip-plane normal once, from the angular velocity perpendicular to the nose at
+        /// that moment, and hold it for the rest of the pass. The commanded axis is then
         /// rebuilt each tick from that fixed plane, not from the live angular velocity: tracking the
         /// live rate instead lets any out-of-plane drift the inner loop introduces feed back on
         /// itself (the axis follows the drifting rate, which drives more drift), and the flip tumbles.
@@ -1567,7 +1567,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// Active only within <see cref="AntipodeBlendAngle"/> of antipodal. The plane is latched from
         /// the perpendicular rate when the vessel is already turning, else from
         /// <paramref name="fromToAxis"/> for a from-rest flip; either way a plane is held rather than
-        /// tracking the precessing live axis. The commanded axis is rebuilt as nose × tangent from a
+        /// tracking the precessing live axis. The commanded axis is rebuilt as nose x tangent from a
         /// blend of the geodesic tangent (toward the target) and the latched-plane tangent, weighted
         /// fully to the latched plane within <see cref="AntipodeHoldAngle"/> (the crawl/pump region)
         /// and smoothstep-blended to pure geodesic by <see cref="AntipodeBlendAngle"/>, so the
@@ -1586,8 +1586,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             // Latch the flip-plane normal the first time we enter the band. Once latched it is held
             // (never re-read from the live rate) until the error leaves the band. If the vessel is
             // already committed to a rotation, latch its plane (from the perpendicular rate); a
-            // from-rest flip has no committed plane, so latch the arbitrary-but-consistent geodesic
-            // axis instead — either way the flip then rides a fixed plane, not the precessing live axis.
+            // from-rest flip has no committed plane, so latch the arbitrary but consistent
+            // geodesic axis. Either way the flip rides a fixed plane and not the precessing axis.
             if (!antipodeLatched) {
                 var worldOmega = vessel.InternalVessel.WorldAngularVelocity ();
                 Vector3d omegaAp = ReferenceFrame.AngularVelocityFromWorldSpace (worldOmega);
@@ -1598,8 +1598,8 @@ namespace KRPC.SpaceCenter.AutoPilot
                 antipodeLatched = true;
             }
 
-            // Latched-plane weight: fully held (1) within AntipodeHoldAngle of antipodal — spanning
-            // the crawl/pump region — then smoothstep down to 0 (pure live geodesic) by
+            // Latched-plane weight: fully held at 1 within AntipodeHoldAngle of antipodal, which
+            // spans the crawl region, then smoothstep down to a pure live geodesic by
             // AntipodeBlendAngle, so the hand-back to normal tracking is continuous.
             double wAngle;
             if (fromAntipode <= AntipodeHoldAngle) {
@@ -1611,7 +1611,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             logAntipodeWeight = wAngle;
 
             // Tangents perpendicular to the nose: toward the target (the geodesic) and forward in the
-            // latched plane. nose × tangent rebuilds the rotation axis; at wAngle = 0 (band edge) this
+            // latched plane. nose x tangent rebuilds the rotation axis; at wAngle = 0 (band edge) this
             // is exactly fromToAxis, at wAngle = 1 (the held region) it is the fixed latched plane.
             var tTarget = targetDirection - Vector3d.Dot (targetDirection, currentDirection) * currentDirection;
             var tLatched = Vector3d.Cross (antipodeLatchedNormal, currentDirection);
@@ -1626,56 +1626,56 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <summary>
         /// One velocity-profile evaluation for an axis group (pitch/yaw jointly, or roll alone),
         /// recording which branches the profile arithmetic took together with the quantities the
-        /// acceleration feedforward needs — so the feedforward can be derived from the profile's
+        /// acceleration feedforward needs, so the feedforward can be derived from the profile's
         /// own decisions rather than re-derived from thresholds (which would disagree at the
         /// seams) or numerically differenced (which amplifies measured-rate jitter by 1/dt).
         /// </summary>
         struct ProfileSample
         {
-            // Unit stopping-point direction ŝ = e_stop/|e_stop| in the roll-invariant xz-plane;
-            // the command is ω_ref = −ŝ·Speed·Deadband. For roll (1D) SPitch carries sign(θ_ff)
-            // — the same convention — and SYaw is 0.
+            // Unit stopping-point direction s-hat = e_stop/|e_stop| in the roll-invariant xz-plane;
+            // the command is omega_ref = -s-hat*Speed*Deadband. For roll (1D) SPitch carries sign(theta_ff)
+            // in the same convention, and SYaw is 0.
             public double SPitch;
             public double SYaw;
-            // Signed pure pointing error (rad, before the ω-dependent stopping correction):
+            // Signed pure pointing error (rad, before the omega-dependent stopping correction):
             // the vector (ThetaPitch, ThetaYaw) for pitch/yaw, the scalar in ThetaPitch for roll.
             // Theta below is its magnitude. Used for the deadband-slope term of the feedforward
-            // (d|θ|/dt needs the direction of θ, which |θ| alone does not carry).
+            // (d|theta|/dt needs the direction of theta, which |theta| alone does not carry).
             public double ThetaPitch;
             public double ThetaYaw;
             // Commanded speed before the deadband scale (rad/s, >= 0).
             public double Speed;
-            // Full-authority acceleration α the profile used, projected along ŝ (rad/s²).
+            // Full-authority acceleration alpha the profile used, projected along s-hat (rad/s^2).
             public double Alpha;
-            // PID bandwidth (projected along ω̂) when the linear stopping coefficient won the
+            // PID bandwidth (projected along omega-hat) when the linear stopping coefficient won the
             // max() against the quadratic one; 0 otherwise.
             public double Bandwidth;
             // The velocity cap (MaxAngularVelocity), not the sqrt profile, set the speed.
             public bool CapActive;
-            // The linear speed cone (ProfileConeFraction·bw·|e_stop|) set the speed. Mutually
-            // exclusive with CapActive — exactly one of {cone, cap, sqrt} owns the branch, so the
+            // The linear speed cone (ProfileConeFraction*bw*|e_stop|) set the speed. Mutually
+            // exclusive with CapActive: exactly one of {cone, cap, sqrt} owns the branch, so the
             // feedforward closed forms never double count.
             public bool ConeActive;
-            // Cone slope c = ProfileConeFraction·bw (1/s), recorded whenever a bandwidth is
-            // available (0 otherwise). Uses the ŝ-projected bandwidth — the speed map lives along
-            // ŝ — while Bandwidth below stays ω̂-projected (the brake path lives along ω̂),
-            // mirroring how α is projected for each use. Deliberate, not an inconsistency.
+            // Cone slope c = ProfileConeFraction*bw (1/s), recorded whenever a bandwidth is
+            // available, 0 otherwise. Uses the s-hat-projected bandwidth, as the speed map lives
+            // along s-hat, while Bandwidth below stays omega-hat-projected, as the brake path lives
+            // along omega-hat, mirroring how alpha is projected for each use.
             public double ConeSlope;
-            // The linear (1/bandwidth) stopping coefficient beat the quadratic (ω/2α) one.
+            // The linear (1/bandwidth) stopping coefficient beat the quadratic (omega/2alpha) one.
             public bool LinearActive;
-            // Pointing-deadband scale D(θ) in [0,1] applied to the setpoint.
+            // Pointing-deadband scale D(theta) in [0,1] applied to the setpoint.
             public double Deadband;
-            // |θ| (pure pointing error, rad) the deadband was keyed on.
+            // |theta| (pure pointing error, rad) the deadband was keyed on.
             public double Theta;
-            // |e_stop| (rad): the ω-corrected error magnitude the speed profile was keyed on.
+            // |e_stop| (rad): the omega-corrected error magnitude the speed profile was keyed on.
             public double EStop;
             // False when the profile commanded nothing (no authority, or the e_stop guard).
             public bool Valid;
         }
 
         /// <summary>
-        /// Per-tick internals of the analytic feedforward, per axis group — the tracking
-        /// fraction and overshoot gate that scale it and the planned command-magnitude rate ġ
+        /// Per-tick internals of the analytic feedforward, per axis group: the tracking
+        /// fraction and overshoot gate that scale it and the planned command-magnitude rate g-dot
         /// they scale. Computed inside <see cref="PitchYawAnalyticFf"/> /
         /// <see cref="RollAnalyticFf"/> and surfaced only for the diagnostic log.
         /// </summary>
@@ -1705,7 +1705,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // Direction error: FromToRotation gives a minimum-arc rotation whose axis is
             // perpendicular to both currentDirection and targetDirection. Because the vessel's
             // nose IS currentDirection (body y-axis), this rotation axis has no y-component in
-            // body frame — it carries pure pitch/yaw, no roll.
+            // body frame, so it carries pure pitch and yaw.
             QuaternionD dirRotation = GeometryExtensions.FromToRotation (currentDirection, targetDirection);
 
             double angle;
@@ -1713,12 +1713,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             GeometryExtensions.ToAngleAxis (dirRotation, out angle, out axis);
             angle = GeometryExtensions.ClampAngle180 (angle);
 
-            // Resolve the error axis through the 180° (antipodal) singularity, where FromToRotation's
+            // Resolve the error axis through the 180 degrees (antipodal) singularity, where FromToRotation's
             // axis is arbitrary: if the vessel is already rotating, continue in that plane.
             axis = ResolveAntipodalAxis (axis, angle, currentDirection, targetDirection);
 
             // Transform direction error from AP frame to body frame, then to roll-invariant frame.
-            // The y-component is ~0 by construction (direction error ⊥ nose) and is forced to zero
+            // The y-component is ~0 by construction (direction error perpendicular to nose) and is forced to zero
             // so only x and z carry pitch/yaw.
             var dirAnglesBody = ApToBody (axis * angle);
             var anglesRI = ToRollInvariant (dirAnglesBody, cosPhi, sinPhi);
@@ -1727,8 +1727,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             // Roll error: computed separately from the roll residual after direction alignment,
             // projected onto the body y-axis (nose = roll axis). Mixing roll residual into the
             // direction-error vector contaminates pitch/yaw because the residual axis is not
-            // aligned with the nose when direction error is large — causing a curved path and
-            // roll oscillations. Projecting onto the y-axis extracts the pure roll component.
+            // aligned with the nose when the direction error is large, which curves the path and
+            // brings roll oscillations. Projecting onto the y-axis extracts the pure roll component.
             if (rollControlled) {
                 var dirError = Vector3d.Angle (currentDirection, targetDirection);
                 var rollWeight = RollWeight (dirError);
@@ -1756,7 +1756,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var result = Vector3d.zero;
 
             // Roll: 1D per-axis (y-axis is unchanged by the roll-invariant rotation). The linear
-            // stopping coefficient uses the unfloored gain — see the note in ComputePitchYawVelocity.
+            // stopping coefficient uses the unfloored gain, see the note in ComputePitchYawVelocity.
             var rollBandwidth = moi [1] > 0 ? ProfileKp (1, RollPID) * torque [1] / moi [1] : 0.0;
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
                 MaxAngularVelocity [1], RollAttenuationAngle, rollBandwidth, out rollSample);
@@ -1777,29 +1777,29 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// </summary>
         /// <remarks>
         /// Predict where the nose coasts to if the current angular velocity is braked at full
-        /// authority — the stopping point as a *vector* — and command the profile straight at it:
+        /// authority, the stopping point as a vector, and command the profile straight at it:
         /// <code>
-        ///   e_stop = θ + coeff·ω          (coeff·ω is the full-authority stopping displacement)
-        ///   ŝ      = e_stop / |e_stop|
-        ///   ω_ref  = -ŝ · speed(|e_stop|)
+        /// e_stop = theta + coeff*omega (coeff*omega is the full-authority stopping displacement)
+        /// s-hat = e_stop / |e_stop|
+        /// omega_ref = -s-hat * speed(|e_stop|)
         /// </code>
-        /// Tangential damping emerges from the geometry: a sideways drift gives <c>coeff·ω</c> an
-        /// off-axis component, tilting <c>e_stop</c> and rotating <c>ŝ</c> so the command acquires a
-        /// component opposing the drift. No separate <c>-ω⊥</c> term is needed — the controller leads
-        /// the turn to place the predicted stopping point on the target instead of correcting the
-        /// orbit after the fact.
+        /// Tangential damping emerges from the geometry: a sideways drift gives <c>coeff*omega</c> an
+        /// off-axis component, tilting <c>e_stop</c> and rotating <c>s-hat</c> so the command acquires a
+        /// component opposing the drift. No separate perpendicular damping term is needed: the
+        /// controller leads the turn to place the predicted stopping point on the target, and does
+        /// not correct the orbit after the fact.
         ///
-        /// When ω is purely radial (ω⊥ = 0) the command reduces to a pure 1D bang-bang profile along
-        /// the error direction: with ω = ω∥·ê, <c>coeff·ω = ½ω∥|ω∥|/α · ê</c>, so
-        /// <c>e_stop = θ_ff·ê</c>, <c>ŝ = sign(θ_ff)·ê</c> and great-circle slews and radial settling
-        /// are a straight-line speed profile. The off-axis behaviour appears only when ω⊥ ≠ 0 — the
-        /// nudge/orbit regime. The stopping displacement is C1 in ω (no radial/tangential seam, no
-        /// <c>-ω⊥</c> step), so the acceleration feedforward does not step.
+        /// When omega is purely radial, with no perpendicular component, the command reduces to a pure
+        /// the error direction: with omega = omega-par * e-hat, <c>coeff*omega = omega-par*|omega-par| / (2*alpha) * e-hat</c>, so
+        /// <c>e_stop = theta_ff * e-hat</c>, <c>s-hat = sign(theta_ff) * e-hat</c> and great-circle slews and radial settling
+        /// are a straight-line speed profile. The off-axis behavior appears only when omega has a
+        /// perpendicular component, the nudge and orbit regime. The stopping displacement is C1 in
+        /// omega, with no radial or tangential seam, so the acceleration feedforward does not step.
         ///
-        /// Anisotropy (design §6, option b): project α (and the PID bandwidth) along ω̂ for the
-        /// prediction and along ŝ for the speed profile. Projecting the prediction along ω̂ rather
-        /// than ê is what makes <c>e_stop</c> well-defined even at θ = 0, and it coincides with ê
-        /// when ω is radial, so the radial reduction above is preserved.
+        /// Anisotropy: project alpha, and the PID bandwidth, along omega-hat for the
+        /// prediction and along s-hat for the speed profile. Projecting the prediction along omega-hat rather
+        /// than e-hat makes <c>e_stop</c> well-defined even at theta = 0, and it coincides with e-hat
+        /// when omega is radial, so the radial reduction above is preserved.
         /// </remarks>
         void ComputePitchYawVelocity (Vector3d anglesRI, Vector3d currentOmegaRi, Vector3d torque,
             Vector3d moi, out double pitchVelocity, out double yawVelocity,
@@ -1815,22 +1815,22 @@ namespace KRPC.SpaceCenter.AutoPilot
             var alphaPitch = moi [0] > 0 ? torque [0] / moi [0] : 0.0;
             var alphaYaw = moi [2] > 0 ? torque [2] / moi [2] : 0.0;
 
-            // Stopping-displacement coefficient (>= 0): e_stop = θ + coeff·ω. The quadratic
-            // (bang-bang, ω²/2α) and linear (PID-lag, ω/bandwidth) stopping displacements are both
-            // collinear with ω, so taking the larger collapses to a scalar max of their coefficients.
-            // α and the bandwidth are projected along ω̂ (the brake path is along ω); this coincides
-            // with the error-direction projection when ω is radial, preserving the legacy reduction,
-            // and stays defined as θ → 0.
+            // Stopping-displacement coefficient (>= 0): e_stop = theta + coeff*omega. The quadratic
+            // (bang-bang, omega^2/2alpha) and linear (PID-lag, omega/bandwidth) stopping displacements are both
+            // collinear with omega, so taking the larger collapses to a scalar max of their coefficients.
+            // alpha and the bandwidth are projected along omega-hat (the brake path is along omega); this coincides
+            // with the error-direction projection when omega is radial, preserving that reduction,
+            // and stays defined as theta -> 0.
             var omegaPitch = currentOmegaRi.x;
             var omegaYaw = currentOmegaRi.z;
             var omegaMag = Math.Sqrt (omegaPitch * omegaPitch + omegaYaw * omegaYaw);
 
-            // Per-axis UNFLOORED bandwidths (ProfileKp): used by both the linear stopping
-            // coefficient (projected along ω̂ below) and the speed cone (projected along ŝ). The
-            // bandwidth floor lowers the loop gain but must never inflate 1/bw or deflate the cone
-            // here — at the floored bandwidth the stopping coefficient would balloon ~5× and
-            // re-inject the residual measured-rate jitter into the setpoint at large gain (the
-            // limit cycle the old dual "nominal target" machinery existed to avoid).
+            // Per-axis unfloored bandwidths (ProfileKp), used by both the linear stopping
+            // coefficient, projected along omega-hat below, and the speed cone, projected along
+            // s-hat. The bandwidth floor lowers the loop gain, and must not inflate 1/bw or deflate
+            // the cone here: at the floored bandwidth the stopping coefficient balloons about
+            // fivefold and re-injects the residual measured-rate jitter into the setpoint at large
+            // gain, which is a limit cycle.
             var bw0 = moi [0] > 0 ? ProfileKp (0, PitchPID) * torque [0] / moi [0] : 0.0;
             var bw2 = moi [2] > 0 ? ProfileKp (2, YawPID) * torque [2] / moi [2] : 0.0;
 
@@ -1857,8 +1857,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             var eStopYaw = thetaYaw + coeff * omegaYaw;
             var eStopMag = Math.Sqrt (eStopPitch * eStopPitch + eStopYaw * eStopYaw);
 
-            // Singularity guard on |e_stop| (not θ): both the error and the predicted drift must
-            // vanish before there is nothing to command. If e_stop ≈ 0 the nose is predicted to
+            // Singularity guard on |e_stop| (not theta): both the error and the predicted drift must
+            // vanish before there is nothing to command. If e_stop is near 0 the nose is predicted to
             // coast exactly to the target, so commanding zero is correct.
             if (eStopMag <= MinThetaForJointProfile)
                 return;
@@ -1866,8 +1866,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             var sPitch = eStopPitch / eStopMag;
             var sYaw = eStopYaw / eStopMag;
 
-            // Speed profile along the stopping-point direction ŝ: project α and the max-velocity
-            // constraint ellipse along ŝ.
+            // Speed profile along the stopping-point direction s-hat: project alpha and the max-velocity
+            // constraint ellipse along s-hat.
             var alpha2d = sPitch * sPitch * alphaPitch + sYaw * sYaw * alphaYaw;
 
             var maxVPitch = MaxAngularVelocity [0];
@@ -1877,11 +1877,11 @@ namespace KRPC.SpaceCenter.AutoPilot
                 : Math.Min (maxVPitch, maxVYaw);
 
             // Linear speed cone (see ProfileConeFraction): cap the command at what the inner PI
-            // loop can track down to zero. Bandwidth projected along ŝ, like α and the velocity
-            // cap — the speed map lives along ŝ (the stopping coefficient above stays ω̂-projected;
-            // the brake path lives along ω̂). Computed unconditionally (not inside the ω-dependent
-            // stopping block): the cone must be live at ω = 0, where a limit cycle's turnaround
-            // re-acceleration happens.
+            // loop can track down to zero. Bandwidth projected along s-hat, like alpha and the
+            // velocity cap, as the speed map lives along s-hat, where the stopping coefficient above
+            // stays omega-hat-projected because the brake path lives along omega-hat. Computed
+            // unconditionally, outside the omega-dependent stopping block, as the cone has to be
+            // live at omega = 0, where a limit cycle's turnaround re-acceleration happens.
             var bwS = sPitch * sPitch * bw0 + sYaw * sYaw * bw2;
             var coneSlope = ProfileConeFraction * bwS;
 
@@ -1899,15 +1899,17 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             // Command toward the stopping point, scaled by the linear pointing deadband (see
             // DeadbandScale): the commanded speed fades to zero as the predicted stopping point
-            // approaches the target, so the craft coasts to a stop inside the band rather than the inner
-            // loop chasing sub-band jitter into the actuators. Applied to the *setpoint* (outer loop), so
+            // approaches the target, so the craft coasts to a stop inside the band and the inner
+            // loop does not chase sub-band jitter into the actuators. Applied to the outer loop's setpoint, so
             // the inner rate loop keeps its full proportional rate damping and stays well-damped at the
-            // hold point. The leading minus defines the controller's positive angular-velocity direction
-            // (left-handed sense; matched to the negation in ComputeCurrentAngularVelocity), exactly as
-            // the legacy -Math.Sign(θ_ff) did.
-            // Key the deadband on the pure pointing error θ, not e_stop: e_stop = θ + coeff·ω carries the
-            // measured rate ω, so scaling by it would feed the ±mrad/s rate jitter through the ramp's
-            // slope into the setpoint and feedforward. θ is jitter-free, so the deadband edge is quiet.
+            // hold point. The leading minus defines the controller's positive angular-velocity
+            // direction, the left-handed sense, matched to the negation in
+            // ComputeCurrentAngularVelocity.
+            //
+            // The deadband is keyed on the pure pointing error theta. e_stop = theta + coeff * omega
+            // carries the measured rate, so keying on it would feed the rate jitter through the
+            // ramp's slope into the setpoint and feedforward. theta is jitter-free, so the deadband
+            // edge is quiet.
             var thetaMag = Math.Sqrt (thetaPitch * thetaPitch + thetaYaw * thetaYaw);
             var deadband = DeadbandScale (thetaMag, PitchYawAttenuationAngle);
             sample.SPitch = sPitch;
@@ -1932,10 +1934,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <summary>
         /// Linear pointing-deadband scale in [0,1] applied to the target angular velocity: 1 at and above
         /// the high angle, ramping linearly to 0 at <see cref="DeadbandLowFraction"/> of it, and 0 below.
-        /// Replaces the former logistic attenuation — same role (drive the velocity setpoint to zero as
-        /// the error vanishes so the craft coasts to a stop without the inner loop chasing sub-band jitter
-        /// into the actuators) but with a linear ramp that reaches exactly zero, giving a clean deadband
-        /// rather than a residual tail. <paramref name="errorRad"/> and the returned band are in radians /
+        /// It drives the velocity setpoint to zero as the error vanishes, so the craft coasts to a
+        /// stop without the inner loop chasing sub-band jitter into the actuators. The ramp reaches
+        /// exactly zero, giving a clean deadband with no residual tail.
+        /// <paramref name="errorRad"/> and the returned band are in radians /
         /// degrees respectively.
         /// </summary>
         static double DeadbandScale (double errorRad, double highAngleDeg)
@@ -1973,15 +1975,15 @@ namespace KRPC.SpaceCenter.AutoPilot
             // the left-handed sense about the axis; it is the matched partner of the negation in
             // ComputeCurrentAngularVelocity. Flip one without the other and the PI loop diverges.
             // Linear pointing deadband on the target velocity (see DeadbandScale), keyed on the pure error
-            // thetaPure (not the ω-corrected theta) so the measured-rate jitter is not fed through the
+            // thetaPure (not the omega-corrected theta) so the measured-rate jitter is not fed through the
             // ramp slope: the commanded speed fades to zero as the error approaches the target, so the
             // craft coasts to a stop inside the band. Applied to the setpoint, so the inner rate loop keeps
             // full damping.
             var speedUnclamped = maxAcceleration > 0
                 ? Math.Sqrt (2.0 * Math.Abs (theta) * maxAcceleration) : 0.0;
             var speed = Math.Min (maxVelocity, speedUnclamped);
-            // Linear speed cone (see ProfileConeFraction), keyed on the ω-corrected error — the
-            // 1D analogue of |e_stop| in ComputePitchYawVelocity.
+            // Linear speed cone (see ProfileConeFraction), keyed on the omega-corrected error, the
+            // one-dimensional analog of |e_stop| in ComputePitchYawVelocity.
             var coneSlope = ProfileConeFraction * pidBandwidth;
             var coneActive = false;
             if (maxAcceleration > 0 && coneSlope > 0 && coneSlope * Math.Abs (theta) < speed) {
@@ -2008,33 +2010,33 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Rate of change ġ (rad/s²) of one profile sample's commanded magnitude
-        /// g = Speed·Deadband, from the profile's own branch decisions — the planned
+        /// Rate of change g-dot (rad/s^2) of one profile sample's commanded magnitude
+        /// g = Speed*Deadband, from the profile's own branch decisions: the planned
         /// acceleration magnitude of the analytic feedforward. No finite differencing: every
         /// term is an algebraic product of current state with bounded coefficients, so the
         /// measured-rate jitter is never amplified by 1/dt.
         /// </summary>
         /// <remarks>
-        /// d(speed)/dt = (α/speed)·ė with speed = √(2eα), and ė per branch:
+        /// d(speed)/dt = (alpha/speed)*e-dot with speed = sqrt(2ealpha), and e-dot per branch:
         /// <list type="bullet">
-        /// <item>quadratic stopping (bang-bang): on-profile ė = −speed/2, giving the
-        /// self-consistent d(speed)/dt = −α/2. The stopping term sits <em>inside</em> e_stop,
-        /// so the converged trajectory is the half-authority curve ω = √(αθ), not the
-        /// full-authority one — this matches what numerically differentiating the setpoint
+        /// <item>quadratic stopping (bang-bang): on-profile e-dot = -speed/2, giving the
+        /// self-consistent d(speed)/dt = -alpha/2. The stopping term sits <em>inside</em> e_stop,
+        /// so the converged trajectory is the half-authority curve omega = sqrt(alphatheta), not the
+        /// full-authority one, which matches what numerically differentiating the setpoint
         /// measures during a steady brake (~0.5, not 1.0).</item>
-        /// <item>linear stopping (1/bw won the max): ė = −bw·speed²/(bw·speed + α), giving
-        /// d(speed)/dt → −bw·speed as speed → 0 — the PID-lag exponential the linear term
+        /// <item>linear stopping (1/bw won the max): e-dot = -bw*speed^2/(bw*speed + alpha), giving
+        /// d(speed)/dt -> -bw*speed as speed -> 0, the PID-lag exponential the linear term
         /// models.</item>
         /// <item>velocity cap: d(speed)/dt = 0.</item>
-        /// <item>speed cone (c·|e_stop| won the min): d(speed)/dt = c·ė with the constant cone
-        /// slope c, and ė = −speed·bw/(bw+c) (linear stopping) or −speed·α/(α+c·speed)
-        /// (quadratic) — the same self-consistent on-profile forms with d(speed)/de = c
-        /// substituted for α/speed.</item>
+        /// <item>speed cone (c*|e_stop| won the min): d(speed)/dt = c*e-dot with the constant cone
+        /// slope c, and e-dot = -speed*bw/(bw+c) (linear stopping) or -speed*alpha/(alpha+c*speed)
+        /// (quadratic), the same self-consistent on-profile forms with d(speed)/de = c
+        /// substituted for alpha/speed.</item>
         /// </list>
-        /// A slewing target (TargetSmoothingTime) grows e at ≈ the slew rate, added to ė. The
-        /// deadband factor contributes speed·D′·θ̇ on the ramp (D′ = 1/(high−low), constant);
-        /// the pure-error rate θ̇ is passed in by the caller, which knows the direction of θ.
-        /// The branch seams (cap↔brake, quad↔linear) step the value by a bounded amount; the
+        /// A slewing target (TargetSmoothingTime) grows e at about the slew rate, added to e-dot. The
+        /// deadband factor contributes speed*D'*theta-dot on the ramp (D' = 1/(high-low), constant);
+        /// the pure-error rate theta-dot is passed in by the caller, which knows the direction of theta.
+        /// The branch seams (cap and brake, quad and linear) step the value by a bounded amount; the
         /// feedforward low-pass in Update smears those few genuine transitions over ~3 ticks.
         /// </remarks>
         double ProfileMagnitudeRate (ProfileSample s, double thetaDotPure, double slewRateRad,
@@ -2042,30 +2044,31 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             double speedRate = 0.0;
             if (s.ConeActive && s.Speed > 1e-9) {
-                // Cone branch: the profile slope is the constant c = ConeSlope (not α/speed), so
-                // d(speed)/dt = c·ė. On-profile ė with the stopping correction folded in once
+                // Cone branch: the profile slope is the constant c = ConeSlope (not alpha/speed), so
+                // d(speed)/dt = c*e-dot. On-profile e-dot with the stopping correction folded in once
                 // (same self-consistency convention as the sqrt branches below):
-                //   linear stopping (e = θ − ω/bw):   ė = −speed·bw/(bw + c)
-                //   quadratic stopping (e = θ − ω²/2α): ė = −speed·α/(α + c·speed)
-                // Both bounded, ≤ 0, → −speed in the infinite-authority limit. The sqrt↔cone seam
-                // at e* = 2α/c² steps ġ by ≲ 0.17 of authority — smaller than the cap↔brake seam
-                // below — and is smeared over ~3 ticks by the feedforward low-pass, same treatment.
+                // linear stopping (e = theta - omega/bw): e-dot = -speed*bw/(bw + c)
+                // quadratic stopping (e = theta - omega^2/2alpha): e-dot = -speed*alpha/(alpha + c*speed)
+                // Both bounded, <= 0, and tend to -speed in the infinite-authority limit. The sqrt
+                // and cone seam at e* = 2alpha/c^2 steps g-dot by at most 0.17 of authority, smaller
+                // than the cap and brake seam below, and is smeared over about three ticks by the
+                // feedforward low-pass.
                 var eDotTrack = s.LinearActive
                     ? -s.Speed * s.Bandwidth / (s.Bandwidth + s.ConeSlope)
                     : -s.Speed * s.Alpha / (s.Alpha + s.ConeSlope * s.Speed);
                 speedRate = s.ConeSlope * (eDotTrack * trackingFraction + slewRateRad);
             } else if (!s.CapActive && s.Speed > 1e-9) {
-                // The closed forms below are the ON-PROFILE accelerations — valid only while the
-                // craft is actually tracking the profile down toward the target. Off-profile
-                // (maneuver start: ω ≈ 0, far below the commanded speed) the planned braking is
-                // fiction, and on the linear branch it evaluates to −bw·s/(bw·s+α) ≈ −0.95 of
-                // full authority on a low-α axis — measured in-game fighting the saturated PI to
-                // a ~5%-authority crawl through most of a 20° roll maneuver. Scale the braking
-                // terms by the caller's trackingFraction (attained fraction of the commanded
-                // speed along the command direction, clamped to [0,1]): ~0 at spin-up (the
-                // saturated PI provides the bang-bang acceleration phase; the feedforward stays
-                // a braking-anticipation device), → 1 when tracking, where the closed forms are
-                // exact. Continuous and stateless, so no seam is introduced.
+                // The closed forms below are on-profile accelerations, valid only while the craft
+                // is tracking the profile down toward the target. Off profile, at a maneuver start
+                // where omega is near 0 and far below the commanded speed, the planned braking is
+                // fiction: on the linear branch it evaluates to about -0.95 of full authority on a
+                // low-alpha axis, which fights the saturated PI down to a 5% authority crawl through
+                // most of a 20 degree roll maneuver. Scale the braking terms by the caller's
+                // trackingFraction, the attained fraction of the commanded speed along the command
+                // direction clamped to [0,1]. It is near 0 at spin-up, where the saturated PI
+                // provides the bang-bang acceleration phase and the feedforward stays a
+                // braking-anticipation device, and 1 when tracking, where the closed forms are
+                // exact. Continuous and stateless, so it introduces no seam.
                 var eDotTrack = s.LinearActive
                     ? -(s.Bandwidth * s.Speed * s.Speed) / (s.Bandwidth * s.Speed + s.Alpha)
                     : -0.5 * s.Speed;
@@ -2075,17 +2078,17 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (s.Deadband > 0.0 && s.Deadband < 1.0) {
                 var high = GeometryExtensions.ToRadians (deadbandHighDeg);
                 var low = DeadbandLowFraction * high;
-                // The ramp slope is an on-profile value too: it is the acceleration needed for ω
-                // to follow the collapsing command g = speed·D through the band, meaningful only
-                // while ω is actually tracking the command. Off-profile it is worse than the
-                // braking terms — when a fast crossing flips ŝ (e_stop past the target) the
-                // measured θ̇ is large and ω is ANTI-parallel to the command, so −ŝ·ġ points
-                // along ω, across the target: a full-authority kick per crossing that pumps a
-                // limit cycle on a high-α craft (the residual test_nudge_mid_slew failure after
-                // the overshoot gate, which is 1 for ω∥ ≤ 0 by design and so exempts exactly
-                // this regime). Scale by the tracking fraction like the braking terms: 1 on a
-                // steady in-band brake or slew-track (θ̇ ≈ −ω∥), 0 once ω opposes the command,
-                // handing the recovery to the (well-damped, saturating) PI.
+                // The ramp slope is an on-profile value too: it is the acceleration needed for omega
+                // to follow the collapsing command g = speed*D through the band, meaningful only
+                // while omega is tracking the command. Off profile it is worse than the braking
+                // terms: when a fast crossing flips s-hat, with e_stop past the target, the measured
+                // theta-dot is large and omega is anti-parallel to the command, so -s-hat * g-dot
+                // points along omega and across the target. That is a full-authority kick per
+                // crossing, which pumps a limit cycle on a high-alpha craft. The overshoot gate is 1
+                // for omega-par <= 0 by design, and so exempts exactly this regime. Scale by the
+                // tracking fraction like the braking terms: 1 on a steady in-band brake or slew
+                // track, 0 once omega opposes the command, handing the recovery to the well-damped,
+                // saturating PI.
                 if (high > low)
                     deadbandRate = s.Speed * (1.0 / (high - low)) * thetaDotPure
                         * trackingFraction;
@@ -2095,8 +2098,8 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// Per-axis analytic feedforward control fractions for the pitch/yaw group from one
-        /// profile sample: FF_i = −ŝ_i·ġ/α_i. The rotation of ŝ itself (ŝ̇·speed) is neglected
-        /// — it matters only in the nudge/orbit regime and near an antipodal flip, and the
+        /// profile sample: FF_i = -s-hat_i * g-dot / alpha_i. The rotation of s-hat itself is neglected
+        /// It matters only in the nudge and orbit regime and near an antipodal flip, and the
         /// deadband caps it near the hold point (validated against the numeric feedforward in
         /// the transition logs; see the redesign design doc).
         /// </summary>
@@ -2111,28 +2114,29 @@ namespace KRPC.SpaceCenter.AutoPilot
             gDotOut = 0.0;
             if (!s.Valid)
                 return;
-            // d|θ|/dt = θ̂·ω in the controller's sign convention (the negated measurement makes
-            // the error shrink along +ω; see ComputeCurrentAngularVelocity), plus slew growth.
+            // d|theta|/dt = theta-hat*omega in the controller's sign convention (the negated measurement makes
+            // the error shrink along +omega; see ComputeCurrentAngularVelocity), plus slew growth.
             var thetaDot = slewRateRad;
             if (s.Theta > 1e-12)
                 thetaDot += (s.ThetaPitch * omegaRi.x + s.ThetaYaw * omegaRi.z) / s.Theta;
-            // Attained fraction of the commanded speed along the command direction −ŝ
+            // Attained fraction of the commanded speed along the command direction -s-hat
             // (see the off-profile note in ProfileMagnitudeRate).
             var omegaAlongCommand = -(s.SPitch * omegaRi.x + s.SYaw * omegaRi.z);
             var tracking = s.Speed > 1e-9
                 ? Math.Min (1.0, Math.Max (0.0, omegaAlongCommand / s.Speed)) : 0.0;
             var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, tracking,
                 PitchYawAttenuationAngle);
-            // Overshoot gate — the on-trajectory-gating lesson of c3522a052 applied to the OTHER
+            // Overshoot gate, the same on-trajectory gating applied to the other
             // side. trackingFraction attenuates the FF when the craft is slower than the profile
-            // (spin-up); this attenuates it when the craft is FASTER (overshoot). When the profile
-            // speed collapses near the target but the craft is still crossing fast, e_stop flips ŝ
+            // at spin-up, and this attenuates it when the craft is faster, an overshoot. When the profile
+            // speed collapses near the target but the craft is still crossing fast, e_stop flips s-hat
             // toward the overshoot side and the whole analytic FF (dominated by the deadband slope
-            // speed·D′·θ̇) then feeds the overshoot forward at near-full authority, pumping a limit
-            // cycle on a high-authority craft. Scaling by speed/ω∥ lets the (stable) PI + setpoint
-            // do the braking instead. ≈1 on-profile (ω∥ ≈ speed) and when moving away (ω∥ ≤ 0), so
-            // normal slews, holds and the floored-hold FF authority are untouched; continuous and
-            // stateless like trackingFraction.
+            // speed*D'*theta-dot) then feeds the overshoot forward at near-full authority, pumping a limit
+            // cycle on a high-authority craft. Scaling by speed/omega-par lets the (stable) PI + setpoint
+            // do the braking instead. It is near 1 on profile, where omega-par is near the speed,
+            // and when moving away, where omega-par <= 0, so normal slews, holds and the
+            // floored-hold feedforward authority are untouched. Continuous and stateless, like
+            // trackingFraction.
             var overshootScale = s.Speed > 1e-9
                 ? Math.Min (1.0, s.Speed / Math.Max (s.Speed, omegaAlongCommand)) : 1.0;
             if (alphaPitch > 0)
@@ -2158,7 +2162,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var thetaDot = slewRateRad;
             if (s.Theta > 1e-12)
                 thetaDot += Math.Sign (s.ThetaPitch) * omegaRollRi;
-            // Attained fraction of the commanded speed along the command direction −ŝ
+            // Attained fraction of the commanded speed along the command direction -s-hat
             // (see the off-profile note in ProfileMagnitudeRate).
             var omegaAlongCommand = -(s.SPitch * omegaRollRi);
             var tracking = s.Speed > 1e-9
@@ -2167,7 +2171,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 RollAttenuationAngle);
             // Overshoot gate (see PitchYawAnalyticFf): attenuate the FF when the roll rate along
             // the command exceeds the commanded profile speed, so a fast crossing is not fed
-            // forward into an overshoot. ≈1 on-profile and when moving away.
+            // forward into an overshoot. Near 1 on profile and when moving away.
             var overshootScale = s.Speed > 1e-9
                 ? Math.Min (1.0, s.Speed / Math.Max (s.Speed, omegaAlongCommand)) : 1.0;
             trackingOut = tracking;
@@ -2209,7 +2213,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// The proportional gain the velocity profile's linear stopping coefficient is computed
         /// from: the UNFLOORED autotuned gain (recorded by DoAutoTuneAxis before the
         /// bandwidth-floor mitigation), so flooring the loop can never inflate the 1/bw
-        /// coefficient. With auto-tuning off the live pid gain is used — it is never floored
+        /// coefficient. With auto-tuning off the live pid gain is used, and it is never floored
         /// (the floor only applies inside DoAutoTuneAxis).
         /// </summary>
         double ProfileKp (int index, PIDController pid)
@@ -2228,13 +2232,14 @@ namespace KRPC.SpaceCenter.AutoPilot
             unflooredKp [index] = twiceZetaOmega [index] * accelerationInv;
 
             // Latched bandwidth reduction: a latched (flexible) axis has its rate-loop bandwidth
-            // (2ζω₀ = twiceZetaOmega, since Kp·α = 2ζω₀) pulled down toward oscillationBandwidthFloor,
-            // the primary gain-stabiliser — dropping the crossover well below every structural mode so
-            // the loop cannot drive any of them. It only ever lowers bandwidth (min against the
-            // autotuned value). It is gated on the hold-gated mitigationLevel (latch · holdFactor), so
-            // the axis is floored only while *holding* and runs at full bandwidth while *slewing* —
-            // the notch/low-pass keeps the slew responsive, while the floor quiets the hold. ω₀ scales
-            // with the bandwidth, so Kp scales linearly and Ki quadratically and the damping ratio ζ
+            // 2 * zeta * omega0 = twiceZetaOmega, since Kp * alpha = 2 * zeta * omega0, pulled down
+            // toward oscillationBandwidthFloor, the primary gain stabilizer, dropping the crossover
+            // well below every structural mode so the loop cannot drive any of them. It only ever
+            // lowers bandwidth, taking the minimum against the autotuned value. It is gated on the
+            // hold-gated mitigationLevel, latch * holdFactor, so the axis is floored only while
+            // holding and runs at full bandwidth while slewing: the notch and low-pass keep the slew
+            // responsive, and the floor quiets the hold. omega0 scales
+            // with the bandwidth, so Kp scales linearly and Ki quadratically and the damping ratio zeta
             // (the overshoot target) is preserved. A rigid craft never latches, so keeps full bandwidth.
             // The bandwidth-floor mitigation mode: Automatic follows the hold-gated mitigation
             // level; Off never floors; Forced floors fully regardless of the detector.

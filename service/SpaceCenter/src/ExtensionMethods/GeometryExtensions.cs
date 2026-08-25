@@ -320,7 +320,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             if (dot >= 1.0 - 1e-10)
                 return QuaternionD.identity;
             if (dot <= -1.0 + 1e-10) {
-                // 180° rotation — pick an arbitrary perpendicular axis
+                // A 180 degree rotation, so pick an arbitrary perpendicular axis
                 var perp = Math.Abs (from.x) < 0.9 ? Vector3d.Cross (from, Vector3d.right) : Vector3d.Cross (from, Vector3d.up);
                 perp.Normalize ();
                 return new QuaternionD (perp.x, perp.y, perp.z, 0);
@@ -343,7 +343,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
 
         /// <summary>
         /// The signed angle, in degrees, to rotate <paramref name="from"/> onto <paramref name="to"/>
-        /// about <paramref name="axis"/> (right-handed: positive when <c>from × to</c> points along
+        /// about <paramref name="axis"/> (right-handed: positive when <c>from x to</c> points along
         /// <paramref name="axis"/>). Both vectors are projected onto the plane perpendicular to the
         /// axis first; returns 0 if either projection vanishes.
         /// </summary>
@@ -379,8 +379,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Canonicalize a rotation quaternion's sign so that <c>q</c> and <c>-q</c> — which are the
-        /// same rotation — decompose identically. <see cref="ToAngleAxis"/> maps them to opposite
+        /// Canonicalize a rotation quaternion's sign so that <c>q</c> and <c>-q</c>, which are the
+        /// same rotation, decompose identically. <see cref="ToAngleAxis"/> maps them to opposite
         /// axes at exactly 180 degrees (where w is zero), which flips the sign of the decomposed
         /// axis*angle vector. Choose w &gt;= 0, and at w == 0 make the largest-magnitude component
         /// positive, so the axis is deterministic and does not flip under noise in a minor component.

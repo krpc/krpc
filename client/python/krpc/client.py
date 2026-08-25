@@ -52,7 +52,7 @@ def _stub_definitions(
         if len(struct.fields) < len(field_names):
             # Fields are only ever appended to a structure, so a server that declares fewer
             # of them than the stubs is an older one. Its values cannot be built as the stub
-            # type, so a plain named tuple of the fields it does declare is used instead
+            # type, so use a plain named tuple of the fields it does declare
             warnings.warn(
                 "Reading the struct %s.%s as a plain named tuple, as the server declares "
                 "fewer fields for it than this client was generated against"
@@ -84,9 +84,9 @@ def _stub_definitions(
             [],
             register_enumeration(enum_name, python_type),
         )
-    # The field types of a structure come from the service definition rather than from the
-    # stubs, so that the same code decodes a structure whether its stubs were generated
-    # ahead of time or not. Only the type a value is built as comes from the stubs
+    # The field types of a structure come from the service definition, so that the same code
+    # decodes a structure whether its stubs were generated ahead of time or not. Only the
+    # type a value is built as comes from the stubs
     structs = service._structs  # type: ignore[attr-defined]
     for struct in service_info.structs:
         python_type = structs.get(struct.name)
@@ -170,12 +170,11 @@ class Client(krpc.services.Client):
         self._rpc_connection.close()
         if self._stream_thread is not None:
             self._stream_thread_stop.set()
-            # Callbacks run on the update thread, so a client closed from one would be
-            # joining the thread it is running on, which raises
+            # Callbacks run on the update thread, so a client closed from one would join the
+            # thread it is running on, which raises
             if threading.current_thread() is not self._stream_thread:
                 self._stream_thread.join()
-        # No further updates will arrive, so wake anything waiting for one rather than
-        # leaving it blocked for good
+        # No further updates will arrive, so wake anything waiting for one
         self._stream_manager.notify_closed()
 
     def __enter__(self) -> Client:
@@ -283,8 +282,8 @@ class Client(krpc.services.Client):
     ) -> object:
         """Execute an RPC"""
 
-        # Build the request. A request carries exactly one call, so the call is
-        # filled in where it belongs rather than built on its own and copied in
+        # Build the request. A request carries exactly one call, so the call is filled in
+        # where it belongs
         request = KRPC.Request()
         self._encode_call(request.calls.add(), service, procedure, args, param_types)
 
@@ -367,8 +366,8 @@ class Client(krpc.services.Client):
             type_name = error.name
             # The service is missing here if it is not one this client knows about, and the
             # type is missing if it is not one the service declares as an exception. Report
-            # the error itself, named by its type on the server, rather than the failure to
-            # build an exception for it, which would say nothing about what went wrong.
+            # the error itself, named by its type on the server, so that the failure to build
+            # an exception for it does not hide it.
             if not hasattr(self, service_name):
                 return RPCError(
                     "%s.%s: %s" % (error.service, type_name, self._error_message(error))

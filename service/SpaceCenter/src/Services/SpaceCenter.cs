@@ -39,9 +39,9 @@ namespace KRPC.SpaceCenter.Services
         public static IList<string> Expansions {
             get {
                 // KSP ships exactly two expansions, tracked by these fixed names in
-                // ExpansionsLoader's installed set. The public supportedExpansions array is only
-                // populated from expansion master-config files and is empty at runtime, so query
-                // each known name directly — this is how KSP's own code checks for them.
+                // ExpansionsLoader's installed set. The public supportedExpansions array is
+                // only populated from expansion master-config files and is empty at runtime,
+                // so query each known name directly, as KSP's own code does
                 var result = new List<string>();
                 foreach (var name in new[] { "MakingHistory", "Serenity" }) {
                     if (global::Expansions.ExpansionsLoader.IsExpansionInstalled(name))
@@ -417,7 +417,7 @@ namespace KRPC.SpaceCenter.Services
         /// <item><description>Otherwise, the named Kerbals are placed in the craft in the order
         /// given: the first name takes the first seat, the second name the next seat, and so on,
         /// scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
-        /// An exception is thrown, without launching, if a name does not match an available Kerbal
+        /// Throws an exception, without launching, if a name does not match an available Kerbal
         /// or the craft has too few seats for the requested crew.</description></item>
         /// </list>
         /// Throws an exception if any of the games pre-flight checks fail.

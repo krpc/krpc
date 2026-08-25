@@ -24,33 +24,33 @@ namespace KRPC.SpaceCenter.AutoPilot
         // but well above any transient a rigid craft produces.
         internal const double ChatterLatchThreshold = 0.6;
         // Time constant of the slow mean subtracted from the raw rate to high-pass it for the
-        // frequency trackers (~0.5 Hz corner): well below the structural modes (≥1 Hz) so they
+        // frequency trackers (~0.5 Hz corner): well below the structural modes (>=1 Hz) so they
         // pass, but high enough to remove DC and slew trends.
         const double FrequencyHighpassTimeConstant = 0.3;
-        // Time constant of the slow per-axis envelope of |high-passed ω| used to pick the
+        // Time constant of the slow per-axis envelope of |high-passed omega| used to pick the
         // stronger transverse axis for the pitch/yaw group estimate.
         const double AbsHighpassEnvelopeTimeConstant = 0.5;
         // Time constant of the slow "trim" mean subtracted from the delivered command to form
         // the about-mean envelope: long enough to track a steady slew (so a one-sign ramp is not
         // counted as oscillation) yet shorter than the limit-cycle period (~0.7 s).
         const double OscControlMeanTimeConstant = 0.5;
-        // Time constant smoothing the |command − trim| envelope (a few cycles).
+        // Time constant smoothing the |command - trim| envelope (a few cycles).
         const double OscControlEnvelopeTimeConstant = 0.3;
         // Pointing-error band (degrees) for the continuous hold factor: 1 while holding
-        // (error ≤ HoldErrorFull), 0 while slewing (≥ HoldErrorNone), linear between.
+        // (error <= HoldErrorFull), 0 while slewing (>= HoldErrorNone), linear between.
         const double HoldErrorFull = 1.0;
         const double HoldErrorNone = 2.5;
 
         // Chatter-detector state. chatterLevel is a per-axis [0,1] measure of how strongly an
         // axis is in a structural limit cycle; chatterLatched is the per-engagement memory that
         // "this craft is flexible" (cleared only in Reset; the level persists across
-        // re-engagements, decaying at τ = 30 s).
+        // re-engagements, decaying at tau = 30 s).
         Vector3d prevDetectorOmega;
         bool prevDetectorOmegaValid;
         Vector3d chatterLevel = Vector3d.zero;
         readonly bool[] chatterLatched = new bool[3];
-        // Per-axis trigger margin of the last chatter sample: |Δω| / (threshold·α·dt), the
-        // ratio the detector fires on (≥ 1 counts as excitation). Recorded for the diagnostic
+        // Per-axis trigger margin of the last chatter sample: |deltaomega| / (threshold*alpha*dt), the
+        // ratio the detector fires on (>= 1 counts as excitation). Recorded for the diagnostic
         // log so how close each tick came to firing is visible, not just the smoothed level.
         Vector3d chatterMargin = Vector3d.zero;
         // Online frequency estimators, fed the high-passed rate every tick, and the sticky held
@@ -60,7 +60,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         readonly FrequencyTracker rollFreqTracker = new FrequencyTracker ();
         double pitchYawHeldHz = double.NaN;
         double rollHeldHz = double.NaN;
-        // High-pass bookkeeping for the trackers (slow mean of ω, envelope of |high-passed ω|).
+        // High-pass bookkeeping for the trackers (slow mean of omega, envelope of |high-passed omega|).
         Vector3d emaOmega;
         bool emaOmegaValid;
         Vector3d emaAbsHp = Vector3d.zero;
@@ -103,7 +103,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         // The trackers' live estimates (NaN whenever the mode is not currently acquired) and
-        // acquisition progress, alongside the sticky held values above — for the diagnostic
+        // acquisition progress, alongside the sticky held values above, for the diagnostic
         // log, so acquisition/loss dynamics are visible.
         public double PitchYawLiveHz {
             get { return pitchYawFreqTracker.EstimatedHz; }
@@ -126,8 +126,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Reset per-engagement state. chatterLevel is deliberately NOT reset — the level
-        /// persists across re-engagements (decaying at τ = 30 s); only the latch is
+        /// Reset per-engagement state. chatterLevel is deliberately kept, as the level
+        /// persists across re-engagements (decaying at tau = 30 s); only the latch is
         /// per-engagement. A full reset clears the level too, via
         /// <see cref="ResetChatterLevel"/>.
         /// </summary>
@@ -154,12 +154,12 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <remarks>
         /// The signature of a bending-mode limit cycle is the measured rate (sampled at the root
         /// part) changing tick-to-tick by more than the available torque could physically
-        /// produce: rigid-body motion is bounded by <c>α·dt</c> at full authority, so a jump
+        /// produce: rigid-body motion is bounded by <c>alpha*dt</c> at full authority, so a jump
         /// several times larger is structural oscillation, not a response to the controller.
         /// Gain-independent and maneuver-independent. The level rises quickly and decays slowly;
         /// crossing <see cref="ChatterLatchThreshold"/> latches the axis as flexible for the
         /// engagement. A heavy, low-authority craft *can* latch on benign measurement jitter
-        /// (the bound k·α·dt is authority-relative) and no measured signal separates that from a
+        /// (the bound k*alpha*dt is authority-relative) and no measured signal separates that from a
         /// genuine bending mode (see the latch-discrimination design doc), so the latch is
         /// deliberately permissive and the latched mitigation itself is required to be benign on
         /// a craft that did not need it. Pitch (0) and yaw (2) latch together: a long vehicle's
@@ -194,7 +194,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// <summary>
         /// Clear the persistent chatter level, on top of what <see cref="Reset"/> clears. Kept
         /// out of Reset so the level survives re-engagements (a craft known to be flexible
-        /// re-latches quickly); called only by the full controller reset — the user-facing
+        /// re-latches quickly). Called only by the full controller reset, the user-facing
         /// return to initial conditions.
         /// </summary>
         public void ResetChatterLevel ()
@@ -214,10 +214,10 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Feed the frequency trackers the oscillation in the raw rate — unconditionally, so an
+        /// Feed the frequency trackers the oscillation in the raw rate, unconditionally, so an
         /// estimate is always warm the moment an axis latches. The rate is high-passed (slow
         /// mean subtracted) so the trackers see the structural oscillation without DC or slew
-        /// trends, and without the high-frequency bias a raw Δω (derivative) would impose. The
+        /// trends, and without the high-frequency bias a raw deltaomega (derivative) would impose. The
         /// pitch/yaw tracker is fed whichever transverse axis currently carries more oscillation
         /// (larger envelope, the lateral mode being ~axisymmetric); roll is fed directly. The
         /// held estimates latch the last acquired value.
@@ -249,8 +249,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Continuous hold factor: 1 while holding (pointing error ≤ HoldErrorFull), 0 while
-        /// slewing (≥ HoldErrorNone), linear between. A smooth function of error — no
+        /// Continuous hold factor: 1 while holding, at or below HoldErrorFull, and 0 while
+        /// slewing, at or above HoldErrorNone, linear between. A smooth function of error, with no
         /// hysteresis state machine.
         /// </summary>
         public static double HoldFactor (double pointingErrorDeg)

@@ -142,9 +142,8 @@ namespace KRPC.Server.LocalSocket
             Logger.WriteLine ("LocalSocketServer: starting", Logger.Severity.Debug);
             if (string.IsNullOrEmpty (ListenPath))
                 throw new ServerException ("Socket path is empty");
-            // Bind reports a path that does not fit in the kernel's address structure as
-            // nothing more specific than an invalid argument, so check it here and say
-            // what is actually wrong
+            // Bind reports a path too long for the kernel's address structure as an invalid
+            // argument, so check the length here and report what is wrong
             var pathLength = PathLength (ListenPath);
             if (pathLength > MaximumPathLength)
                 throw new ServerException (
@@ -198,15 +197,15 @@ namespace KRPC.Server.LocalSocket
             if (!error.HasValue)
                 throw new ServerException (
                     "Another server is already listening on " + ListenPath);
-            // Only a refusal means nothing is there to answer. Anything else leaves the
-            // question open, and a path that cannot be asked is not one to delete.
+            // Only a refusal means nothing is listening. Any other error leaves that
+            // unknown, so the path is left alone
             if (error.Value != SocketError.ConnectionRefused)
                 throw new ServerException (
                     "Could not find out whether a server is listening on " + ListenPath +
                     "; connecting to it reported '" + error.Value + "'");
-            // A socket carries no content, so a path holding some is not one and belongs to
-            // whoever put it there. A symbolic link counts as holding the path it names, so
-            // one is reported rather than followed to whatever is on the end of it.
+            // A socket carries no content, so a path with content belongs to something
+            // else. A symbolic link holds the path it names, and is reported without
+            // being followed
             if (new FileInfo (ListenPath).Length > 0)
                 throw new ServerException (
                     ListenPath + " already exists and is not a socket");

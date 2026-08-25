@@ -7,9 +7,8 @@ from krpc import winsock
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
 
-# Size of a socket read. Reads are made a block at a time and buffered, rather
-# than exactly the number of bytes wanted, so that a message costs one read
-# rather than one per byte of its size prefix plus one for its body.
+# Size of a socket read. Reads are made a block at a time and buffered, so that a message
+# costs one read and not one per byte of its size prefix plus one for its body.
 _READ_SIZE = 8192
 
 
@@ -31,7 +30,7 @@ class Connection:
         """Open a socket to the server. Everything above this is transport agnostic,
         so a different transport only has to replace this."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # A network that drops a connection attempt rather than refusing it leaves the
+        # A network that drops a connection attempt instead of refusing it leaves the
         # client waiting, so bound the wait where one was asked for.
         sock.settimeout(self._timeout)
         sock.connect((self._address, self._port))

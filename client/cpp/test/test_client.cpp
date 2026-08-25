@@ -26,10 +26,10 @@
 
 class test_client : public server_test {};
 
-// The version is three dot separated runs of digits. It is checked by hand
-// rather than against a regular expression because gtest falls back to a syntax
-// of its own where it cannot use POSIX ones, and the two have no spelling of a
-// digit in common: [0-9] is only understood by the former, \d only by the latter.
+// The version is three dot separated runs of digits, checked by hand. gtest falls back to
+// a regular expression syntax of its own where it cannot use POSIX ones, and the two have
+// no spelling of a digit in common: [0-9] is only understood by the former, \d only by the
+// latter.
 static bool is_version(const char* value) {
   int parts = 1;
   int digits = 0;
@@ -447,7 +447,7 @@ TEST_F(test_client, test_test_service_enum_members) {
 }
 
 // An error naming a service whose generated header was never instantiated has no registered
-// thrower, and must be reported rather than looked up past the end of the map. This client
+// thrower, and must be reported and not looked up past the end of the map. This client
 // deliberately never constructs the TestService object, so nothing registers its exceptions.
 TEST_F(test_client, test_unknown_exception_type) {
   krpc::Client client = connect("C++ClientTestUnknownExceptionType");

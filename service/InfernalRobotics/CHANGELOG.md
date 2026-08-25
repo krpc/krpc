@@ -1,16 +1,12 @@
 ## [v0.7.0] - unreleased
 
-- Fix `Servo` and `ServoGroup` objects accumulating for the rest of the session, one per
-  servo or group per call that lists any, and the same servo or group obtained twice
-  comparing unequal (#1051)
-- A servo and a servo group keep working across a quickload, driving what the game rebuilt
-  rather than what they were obtained from, and raise `KRPC.ObjectDestroyedException` once
-  the part or the vessel they belong to is gone. A servo is named by the part it is on, and
-  a group by its vessel and the group's name, so renaming a group leaves every object for
-  it, the one the rename was made through included, standing for a group that no longer
-  exists; an object for the group has to be obtained again under the new name (#1051)
-- `ServoGroup.Vessel` is the vessel the group was obtained for, and is no longer `null` when
-  Infernal Robotics does not report one (#1051)
+- Fix `Servo` and `ServoGroup` objects accumulating for the rest of the session, and the same
+  servo or group obtained twice comparing unequal (#1051)
+- A servo and a servo group keep working across a quickload, and raise
+  `KRPC.ObjectDestroyedException` once the part or the vessel they belong to is gone (#1051)
+- Renaming a servo group destroys every object for it, and the group has to be obtained again
+  under the new name (#1051)
+- `ServoGroup.Vessel` is the vessel the group was obtained for (#1051)
 
 ## [v0.6.0]
 - Add to `Servo`: `UID`, `Mode` (with a new `ServoMode` enum), `TargetPosition`, `TargetSpeed`,

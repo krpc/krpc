@@ -113,18 +113,17 @@ namespace KRPC.UI
         [KRPCProperty (Nullable = true)]
         public ToggleGroup Group {
             get {
-                // A group that has been removed is dropped as it is found, so that the
-                // toggle does not hand out a group that is no longer there.
+                // Drop a group that has been removed as it is found, so that the toggle does
+                // not hand out a torn down group
                 if (group != null && !group.Exists)
                     group = null;
                 return group;
             }
             set {
-                // Unity tells the listeners of a group's toggles when a checked toggle
-                // joins it, which is not a change the user made. So the toggle leaves the
-                // group it is in and joins the new one unchecked, and is checked again
-                // once it is a member: that unchecks the rest of the new group, as it
-                // would had the toggle been checked while already a member of it.
+                // Unity notifies the listeners of a group's toggles when a checked toggle
+                // joins it, which the user did not do. The toggle therefore leaves the group it
+                // is in and joins the new one unchecked, then is checked again once it is a
+                // member, which unchecks the rest of the new group
                 var wasChecked = Checked;
                 Checked = false;
                 var current = Group;

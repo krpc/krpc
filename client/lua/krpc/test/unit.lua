@@ -1,5 +1,5 @@
--- What the client does regardless of the transport it talks over, and without a server
--- to talk to: encoding and decoding values, the types they are carried as, and reading a
+-- The behavior the client has whatever transport it talks over, and without a server to
+-- talk to: encoding and decoding values, the types they are carried as, and reading a
 -- service definition.
 local luaunit = require 'luaunit'
 

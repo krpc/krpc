@@ -7,8 +7,7 @@ namespace KRPC.Test
 {
     // A client whose requests are handed over one at a time, and only once the server has
     // polled for them often enough. Polling stands in for the time a real client spends
-    // deciding what to call next, so that what is measured is how many updates the calls
-    // are spread over rather than how long anything took.
+    // between calls, so the measurement is how many updates the calls are spread over
     sealed class ScriptedClient : IClient<Request,Response>
     {
         sealed class ScriptedStream : IStream<Request,Response>
@@ -32,8 +31,8 @@ namespace KRPC.Test
 
             public bool DataAvailable {
                 get {
-                    // Counted here, since polling for a request is what the server does
-                    // while it waits for one.
+                    // Counted here, since the server polls for a request while it waits
+                    // for one
                     polls++;
                     if (pollsBeforeGone > 0 && polls > pollsBeforeGone)
                         onPollsBeforeGone ();

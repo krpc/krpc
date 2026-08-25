@@ -20,19 +20,16 @@ namespace KRPC.SpaceCenter.Services
         readonly Vessel ownerVessel;
         readonly CelestialBody ownerBody;
         readonly Node ownerNode;
-        // The KSP orbit, held only where it is not the orbit of the thing the object
-        // belongs to and so cannot be asked for again: a patch, or an orbit a caller
-        // handed in. An orbit that has an owner is looked up on it instead, because the
-        // game builds a new one whenever it builds the owner, and the object has to read
-        // the loaded game rather than the state it was made in.
+        // The KSP orbit, held only for an orbit that cannot be looked up again: a patch, or
+        // an orbit a caller handed in. An orbit that has an owner is looked up on the
+        // owner, because the game builds a new one whenever it builds the owner, and the
+        // object has to read the loaded game
         readonly global::Orbit patch;
-        // Whether a client asked for the orbit to be built, rather than it being the
-        // orbit of something in the game or a patch of one.
+        // Whether a client asked for the orbit to be built
         bool constructed;
-        // Whether the orbit has been let go of. A constructed orbit is as valid on the
-        // last frame of the session as on the first, so it stands for nothing the game
-        // can destroy, and the client removing it or going is the only thing that can
-        // say the object is finished with.
+        // Whether the orbit has been let go of. A constructed orbit is as valid on the last
+        // frame of the session as on the first, so only the client removing it or going
+        // marks the object as finished with
         bool released;
 
         internal Orbit (Vessel vessel)
@@ -80,9 +77,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the thing the orbit belongs to. An orbit built from a KSP
-        /// orbit alone has no owner to ask, so it is kept, and an orbit constructed for a
-        /// client is kept until it is removed or that client goes.
+        /// The state of the object the orbit belongs to. An orbit built from a KSP orbit
+        /// alone has no owner, and stays live. An orbit constructed for a client stays live
+        /// until it is removed or that client disconnects.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -110,14 +107,12 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// Only an orbit created by <see cref="CreateFromPositionAndVelocity"/> or
-        /// <see cref="CreateFromOrbitalElements"/> can be removed. Every other orbit is
-        /// the orbit of something in the game, which is what says when it is finished
-        /// with, and the server holds one of each however often it is asked for.
+        /// <see cref="CreateFromOrbitalElements"/> can be removed. Every other orbit
+        /// belongs to something in the game, and the server holds one of each.
         ///
         /// Any further use of this object throws an exception, as does use of a
-        /// reference frame defined against it. An orbit is removed for the client that
-        /// created it and is not shared with any other, and one whose client disconnects
-        /// is removed with it.
+        /// reference frame defined against it. An orbit belongs to the client that
+        /// created it, and is removed when that client disconnects.
         /// </remarks>
         [KRPCMethod]
         public void Remove ()
@@ -127,9 +122,9 @@ namespace KRPC.SpaceCenter.Services
                 throw new InvalidOperationException (
                     "Only an orbit created by CreateFromPositionAndVelocity or " +
                     "CreateFromOrbitalElements can be removed");
-            // The addon holds the orbit on its client's behalf and has nothing left to
-            // do for one the client has finished with. Taking it out is also what asks
-            // for the sweep that drops it from the object store.
+            // The addon holds the orbit on its client's behalf and has nothing left to do
+            // for one the client has finished with. Taking it out also requests the sweep
+            // that drops it from the object store
             ConstructedOrbitsAddon.Remove (this);
             released = true;
         }
@@ -273,9 +268,9 @@ namespace KRPC.SpaceCenter.Services
             get { return ownerVessel; }
         }
 
-        // The celestial body this orbit belongs to (the orbiting body, not the parent
-        // it orbits — that is Body), or null if it belongs to something else or the
-        // owner is unknown.
+        // The celestial body this orbit belongs to (the orbiting body, not the parent it
+        // orbits, which is Body), or null if it belongs to something else or the owner is
+        // unknown.
         internal CelestialBody OwnerBody {
             get { return ownerBody; }
         }
@@ -499,25 +494,22 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
         /// <paramref name="body"/>.</param>
         /// <remarks>
-        /// The orbit is a single conic around <paramref name="body"/>. Nothing else acts on
-        /// it: it never changes sphere of influence, so <see cref="NextOrbit"/> is
-        /// <c>null</c> however far it travels from the body, and it is not slowed by an
-        /// atmosphere. A vessel held on rails follows its own orbit exactly, while one
-        /// inside the physics bubble is simulated and drifts from it a little.
+        /// The orbit is a single conic around <paramref name="body"/>. It never changes
+        /// sphere of influence, so <see cref="NextOrbit"/> is <c>null</c>, and no
+        /// atmosphere slows it. A vessel held on rails follows its own orbit exactly,
+        /// while one inside the physics bubble is simulated and drifts from it a little.
         ///
-        /// The members that describe where the orbit has got to -- <see cref="Radius"/>,
-        /// <see cref="Speed"/>, <see cref="TrueAnomaly"/>, <see cref="TimeToApoapsis"/>
-        /// and the like -- describe it at <paramref name="ut"/> and stay there, as
-        /// nothing is moving along it. Use <see cref="RadiusAt"/>,
+        /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="TrueAnomaly"/>,
+        /// <see cref="TimeToApoapsis"/> and the like describe the orbit at
+        /// <paramref name="ut"/> and stay there. Use <see cref="RadiusAt"/>,
         /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
-        /// <see cref="TrueAnomalyAtUT"/> to ask where it is at another time.
-        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
+        /// <see cref="TrueAnomalyAtUT"/> for another time, and
+        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> to follow
         /// the orbit as time passes.
         ///
-        /// The orbit that is returned is kept until <see cref="Remove"/> is called on
-        /// it or the client that created it disconnects, so a script that creates one
-        /// repeatedly, for example once per update, should remove each one when it is
-        /// finished with it.
+        /// The orbit is held until <see cref="Remove"/> is called on it or the client
+        /// that created it disconnects. Remove each one created by a script that creates
+        /// them repeatedly, for example once per update.
         /// </remarks>
         [KRPCMethod]
         public static Orbit CreateFromPositionAndVelocity (
@@ -547,9 +539,8 @@ namespace KRPC.SpaceCenter.Services
             orbit.UpdateFromStateVectors (
                 relativePosition.SwapYZ (), relativeVelocity.SwapYZ (), internalBody, ut);
             // Init derives the mean motion, period and anomalies that the orbit is
-            // propagated from; without it the orbit only carries its shape. Stepping it
-            // to the epoch then fills in where along the orbit it has got to, which
-            // nothing else will do for an orbit that no object is following.
+            // propagated from, and without it the orbit only carries its shape. Stepping it
+            // to the epoch then fills in where along the orbit it has got to
             orbit.Init ();
             orbit.UpdateFromUT (ut);
             if (!IsFinite (orbit.semiMajorAxis) || !IsFinite (orbit.eccentricity))
@@ -584,30 +575,27 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="epoch">The universal time, in seconds, that
         /// <paramref name="meanAnomalyAtEpoch"/> is measured at.</param>
         /// <remarks>
-        /// The orbit is a single conic around <paramref name="body"/>. Nothing else acts
-        /// on it: it never changes sphere of influence, so <see cref="NextOrbit"/> is
-        /// <c>null</c> however far it travels from the body, and it is not slowed by an
-        /// atmosphere.
+        /// The orbit is a single conic around <paramref name="body"/>. It never changes
+        /// sphere of influence, so <see cref="NextOrbit"/> is <c>null</c>, and no
+        /// atmosphere slows it.
         ///
-        /// The angles are measured against the same reference plane and direction that
+        /// The angles are measured against the reference plane and direction that
         /// <see cref="Inclination"/>, <see cref="LongitudeOfAscendingNode"/> and
-        /// <see cref="ArgumentOfPeriapsis"/> report them against, which
+        /// <see cref="ArgumentOfPeriapsis"/> report them against.
         /// <see cref="ReferencePlaneNormal"/> and <see cref="ReferencePlaneDirection"/>
-        /// give as vectors in a reference frame.
+        /// give these as vectors in a reference frame.
         ///
-        /// The members that describe where the orbit has got to -- <see cref="Radius"/>,
-        /// <see cref="Speed"/>, <see cref="TrueAnomaly"/>, <see cref="TimeToApoapsis"/>
-        /// and the like -- describe it at <paramref name="epoch"/> and stay there, as
-        /// nothing is moving along it. Use <see cref="RadiusAt"/>,
+        /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="TrueAnomaly"/>,
+        /// <see cref="TimeToApoapsis"/> and the like describe the orbit at
+        /// <paramref name="epoch"/> and stay there. Use <see cref="RadiusAt"/>,
         /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
-        /// <see cref="TrueAnomalyAtUT"/> to ask where it is at another time.
-        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
+        /// <see cref="TrueAnomalyAtUT"/> for another time, and
+        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> to follow
         /// the orbit as time passes.
         ///
-        /// The orbit that is returned is kept until <see cref="Remove"/> is called on
-        /// it or the client that created it disconnects, so a script that creates one
-        /// repeatedly, for example once per update, should remove each one when it is
-        /// finished with it.
+        /// The orbit is held until <see cref="Remove"/> is called on it or the client
+        /// that created it disconnects. Remove each one created by a script that creates
+        /// them repeatedly, for example once per update.
         /// </remarks>
         [KRPCMethod]
         public static Orbit CreateFromOrbitalElements (
@@ -640,17 +628,16 @@ namespace KRPC.SpaceCenter.Services
                 throw new ArgumentException (
                     "An eccentricity above one is a hyperbola, which needs a negative " +
                     "semi-major axis, got " + semiMajorAxis);
-            // The game states the three orientation angles in degrees, and the mean
-            // anomaly in radians, which is what this reports them in.
+            // The game states the three orientation angles in degrees, and the mean anomaly
+            // in radians, and they are reported the same way
             var orbit = new global::Orbit (
                 GeometryExtensions.ToDegrees (inclination), eccentricity, semiMajorAxis,
                 GeometryExtensions.ToDegrees (longitudeOfAscendingNode),
                 GeometryExtensions.ToDegrees (argumentOfPeriapsis), meanAnomalyAtEpoch,
                 epoch, body.InternalBody);
-            // The constructor derives the mean motion, period and anomalies that the
-            // orbit is propagated from. Stepping it to the epoch then fills in where
-            // along the orbit it has got to, which nothing else will do for an orbit
-            // that no object is following.
+            // The constructor derives the mean motion, period and anomalies that the orbit
+            // is propagated from. Stepping it to the epoch then fills in where along the
+            // orbit it has got to
             orbit.UpdateFromUT (epoch);
             // Nothing solved a following patch for this orbit, and a sphere-of-influence
             // change is reported as one in the past. Zero, the value an orbit is built
@@ -661,9 +648,8 @@ namespace KRPC.SpaceCenter.Services
 
         // The object for an orbit a client asked to be built, recorded as the client's so
         // that it is let go of when the client is. An orbit read off a vessel, a body or a
-        // maneuver node is not recorded: it is named by the thing whose orbit it is, so
-        // the object store gives back one object for it however often it is asked for,
-        // and dropping it when one client goes would take it away from the others.
+        // maneuver node is not recorded: it is named by the thing whose orbit it is, so the
+        // object store gives back one object for it, shared by every client
         static Orbit Constructed (global::Orbit orbit)
         {
             var result = new Orbit (orbit);

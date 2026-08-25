@@ -32,14 +32,13 @@ _pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defin
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
 
 # protobuf's zigzag encoder carries no types, so it is bound here with the type it does
-# have rather than described again at every call. A call carrying a collection reaches it
-# once per value, so this also saves looking it up on its module that many times
+# have. A call carrying a collection reaches it once per value, so this also saves looking
+# it up on its module that many times
 _pb_zigzag_encode: Callable[[int], int] = protobuf_wire_format.ZigZagEncode
 
-# The one byte encoding of every value that fits in one. A varint below 128 is
-# the byte itself, and message sizes and the length prefixes of strings and
-# bytes almost always are, so the common case is a lookup rather than a loop
-# that builds a list and joins it
+# The one byte encoding of every value that fits in one. A varint below 128 is the byte
+# itself, and message sizes and the length prefixes of strings and bytes almost always
+# are, so the common case is a lookup
 _SINGLE_BYTE_VARINTS = tuple(bytes((value,)) for value in range(128))
 
 
@@ -52,8 +51,8 @@ class Encoder:
     @classmethod
     def encode(cls, x: object, typ: TypeBase) -> bytes:
         """Encode a message or value of the given protocol buffer type"""
-        # The value types come first: they are what most arguments are, and this is
-        # on the hot path of every remote procedure call
+        # The value types come first, as most arguments are one, and this is on the hot
+        # path of every remote procedure call
         if isinstance(typ, ValueType):
             return cls._encode_value(x, typ)
         if isinstance(typ, MessageType):
@@ -189,7 +188,7 @@ class _ValueEncoder:
         value = _pb_zigzag_encode(value)
         if value < 128:
             return _SINGLE_BYTE_VARINTS[value]
-        # Two bytes carry a value up to 16383, which is most of what is not one byte, and
+        # Two bytes carry a value up to 16383, which covers most values above one byte, and
         # writing them costs one call where protobuf's encoder builds a list and joins it.
         # A collection reaches this once per value it carries.
         if value < 16384:
@@ -225,10 +224,9 @@ class _ValueEncoder:
         return b"".join([cls._encode_varint(len(value)), value])
 
 
-# The encoder for each value type, looked up by type code rather than found by
-# comparing against each code in turn, as this is on the hot path of every
-# remote procedure call. The signed integer types share an encoder, named for
-# what it writes rather than for one of the types that write it
+# The encoder for each value type, looked up by type code, as this is on the hot path of
+# every remote procedure call. The signed integer types share an encoder, named for what
+# it writes
 _VALUE_ENCODERS: Mapping[KRPC.Type.TypeCode, Callable[[Any], bytes]] = {
     KRPC.Type.SINT32: _ValueEncoder._encode_signed_varint,
     KRPC.Type.SINT64: _ValueEncoder._encode_signed_varint,

@@ -52,9 +52,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the subject. It belongs to the game state it was taken
-        /// from, so it is destroyed once another state is loaded, with no dormant state to
-        /// return to.
+        /// The state of the subject. It belongs to the game state it was taken from, and is
+        /// destroyed once another state is loaded. It has no dormant state.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

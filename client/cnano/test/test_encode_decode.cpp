@@ -427,10 +427,9 @@ void test_tuple_int32_bool(const krpc_tuple_int32_bool_t& decoded, std::string e
   }
 }
 
-// Which payload std::numeric_limits gives a signalling NaN is left to the
-// implementation, so there is no one encoding to expect it to produce. What the
-// codec has to get right is that it comes back a NaN rather than an infinity or
-// a number, so check the round trip and not the bytes it goes through.
+// The payload std::numeric_limits gives a signaling NaN is implementation defined, so there
+// is no one encoding to expect. The codec has to bring it back as a NaN, so check the round
+// trip and not the bytes it goes through.
 void test_nan_double(double decoded) {
   uint8_t data[8];
   pb_ostream_t ostream = create_ostream(data, sizeof(data));

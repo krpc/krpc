@@ -126,11 +126,81 @@ General guidance:
    Legitimate unknown words → `doc/src/dictionary.txt`.
  * No "Authored by" / `Co-Authored-By` lines.
 
-## Comments and docs
+### Sentences
 
- * Explain what the code does now and why; must make sense to someone who never saw the old version.
- * **Never reference what a change replaced** — no "replaces X", "instead of the old Y", "previously",
-   "no longer needed", no migration/phase references. That belongs in the commit message and changelog.
+Average 14 words per sentence and under half a comma. Long comma-chained sentences are the main
+way writing here goes wrong.
+
+ * **One idea per sentence, two clauses at most.** A fact and its consequence make a sentence.
+   Never chain with `, so ..., and ...` or `, which ..., so ...`.
+ * **Say what a thing is, not what it is not.** Negate only to correct a misreading the reader is
+   likely to arrive with, and only attached to a positive statement. "rather than", "no longer",
+   "nothing" and "not a" are the tells.
+ * **Name the thing.** No "the thing", "nothing", "whatever", "anything". The subject of a
+   sentence is a definite noun.
+ * **No anthropomorphism.** The game and the server do not say, ask, see, hear or refuse, and are
+   never finished with anything. State the mechanism.
+ * **No setup and payoff, and no editorializing.** A sentence that only frames the next one is cut.
+ * **Paragraphs run one to three sentences**, about 30 words. Past four it is two paragraphs, or a
+   list.
+
+### Documentation
+
+ * **Lead with the example.** The unit of explanation is one or two sentences of setup ending in a
+   colon, then the code, then any explanation of it. A section that explains a feature without
+   showing it is the wrong shape.
+ * Examples live in `doc/src/scripts/` and are pulled in with `.. literalinclude::` inside a
+   `.. tabs::` block, one tab per client language. An inline `.. code-block::` is for a fragment.
+ * **Address the reader**: "you" in the client guides, "we" when walking through a script. Do not
+   write about an abstract "a client" or "a program".
+ * Reuse the stock forms already in the docs.
+ * Headings are short Title Case noun phrases, not clauses with verbs.
+ * `.. note::` in block form with a one or two sentence body for a caveat, `.. seealso::` for a
+   cross-reference. Never hang a paragraph off an inline `.. note::`.
+ * Say what something does. Why it is implemented that way belongs in the code.
+
+### XML documentation comments
+
+These generate the API reference, so they are user-facing prose. Keep them terse. A
+`[KRPCProperty]` or `[KRPCMethod]` gets a sentence. Internal comments are covered under *Code
+comments* below.
+
+ * `<summary>` is one sentence, usually a noun phrase under ten words, with the unit inline.
+ * Openers are "The ...", "Whether ..." and, for a combined getter and setter, "Returns X, and
+   sets Y." Never "What" or "How".
+ * One exception formula, appended last: "Throws an exception if ...".
+ * `<remarks>` is rare, and is a sentence or two carrying a cross-reference or a caveat, never a
+   design rationale.
+ * Keep `<returns>` on methods that return a value, and keep `<param>` to a short noun phrase.
+   `e.g.` and `i.e.` are used in this codebase.
+
+### Code comments
+
+Comments in the source that are not `///` documentation. They carry the constraint the code itself
+cannot.
+
+ * **Size the comment to the code it describes.** A line or two of code gets a fragment naming the
+   step, a method a sentence, a file or a mechanism not recoverable from the code a paragraph. A
+   paragraph over a one-line statement is the usual failure.
+ * **The default form is a label**: a fragment above the lines it covers, sentence case, no
+   trailing period. A long method is often a run of these.
+ * **Comment the surprise**: a game quirk, a workaround, an ordering constraint, a unit, a sign
+   convention. Code that reads plainly gets no comment, and never one that restates the line below.
+ * **State the constraint, do not argue the alternative.** A comment that proves a case, or names
+   what would break, is arguing.
+ * **Never reference what a change replaced.** A comment explains the code as it stands, to someone
+   who never saw the old version. How a value was arrived at belongs in the commit message and the
+   PR, though a measurement that sizes a constant is part of what it means.
+ * **Name the thing, and use "we".** Openers are "The ...", "Whether ..." and a verb, as in the XML
+   comments. Do not nominalize to avoid the first person.
+ * **Write what the code names.** ASCII only, and no symbol that appears nowhere in the source.
+   `--` is an emdash by another spelling. American English, as everywhere else.
+ * **One comment per place.** Do not clone a comment across sibling files with the noun swapped.
+ * `// Note:` prefixes a one-sentence caveat attached to the line below. It is the only marker in
+   use, and an open question is a GitHub issue.
+ * Trailing comments are rare and short, and are not padded into aligned columns. Do not split a
+   comment into paragraphs, or mark up `*emphasis*`.
+ * The **Sentences** rules apply in full. Anthropomorphism is the one comments break most.
 
 ## Commits
 
@@ -168,6 +238,8 @@ Add entries under that header, creating it if needed, only for components actual
 
  * Be concise and high level. Size the entry to the diff. Keep your audience in mind: these are read by
    the end user, not a developer. The PR/issue link provides the detail, not the changelog text.
+ * Verb-first and one clause. An entry over 30 words is nearly always two entries, or one entry
+   plus detail that belongs in the PR. No rationale, and no analogy to what the game does.
  * **Before a branch is pushed, consolidate into a dedicated final commit** (single-commit PRs
    excepted) — every PR touches these files. On an unpushed local branch this is relaxed: you may
    commit changelog entries freely, e.g. alongside the change they describe. Squash them into that

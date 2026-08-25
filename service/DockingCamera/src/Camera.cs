@@ -14,8 +14,8 @@ namespace KRPC.DockingCamera
     [KRPCClass(Service = "DockingCamera")]
     public class Camera : Equatable<Camera>, IGameObjectState
     {
-        // The module that makes a part a camera. The mod's API takes the part rather than the
-        // module, so the part is what identifies this and all it has to reach.
+        // The module that makes a part a camera. The mod's API takes the part, so the part
+        // identifies the camera
         const string moduleName = "PartCameraModule";
 
         internal static bool Is(SpaceCenter.Services.Parts.Part part)
@@ -24,9 +24,8 @@ namespace KRPC.DockingCamera
         }
 
         /// <summary>
-        /// What the game holds for the camera. It belongs to its part, so it is exactly as
-        /// live, dormant or destroyed as the part, and destroyed when a part that is there
-        /// to look at no longer carries the module.
+        /// The state of the camera. It takes the state of its part, and is destroyed once a
+        /// live part no longer carries the module.
         /// </summary>
         public GameObjectState GameObjectState
         {

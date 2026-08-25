@@ -12,7 +12,7 @@
 #include <thread>
 
 // A read that returns fewer bytes than requested must resume at the point the previous one
-// finished, rather than restarting at the beginning of the buffer.
+// finished, and not restart at the beginning of the buffer.
 TEST(test_communication, test_read_partial) {
   int fds[2];
   ASSERT_EQ(0, pipe(fds));

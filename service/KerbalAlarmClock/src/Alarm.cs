@@ -16,10 +16,9 @@ namespace KRPC.KerbalAlarmClock
     [KRPCClass (Service = "KerbalAlarmClock")]
     public class Alarm : Equatable<Alarm>, IGameObjectState
     {
-        // The identifier the mod knows the alarm by, which is what it creates and deletes
-        // alarms with. The alarm object the mod hands out is built afresh every time the
-        // alarms are listed, and belongs to the game state it was listed in, so holding one
-        // would leave this reading an alarm the mod no longer has.
+        // The identifier the mod creates and deletes alarms with. The alarm object the mod hands
+        // out is built afresh every time the alarms are listed, and belongs to the game state it
+        // was listed in, so the object itself is not held
         readonly string id;
 
         internal Alarm (KACWrapper.KACAPI.KACAlarm innerAlarm)
@@ -47,10 +46,9 @@ namespace KRPC.KerbalAlarmClock
         }
 
         /// <summary>
-        /// What the game holds for the alarm. It is live while Kerbal Alarm Clock lists an
-        /// alarm with the identifier, and destroyed once the mod is there to ask and lists
-        /// none, as an alarm that is removed is gone for good. The mod not being ready says
-        /// nothing about any alarm.
+        /// The state of the alarm. It is live while Kerbal Alarm Clock lists an alarm with
+        /// the identifier, and destroyed once a running mod lists none. A mod that has yet
+        /// to start leaves the alarm dormant.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -170,9 +168,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public double Remaining {
-            // Computed from the alarm time rather than read through the wrapper:
-            // the mod stores its remaining time as a KSPTimeSpan object, which the
-            // wrapper cannot unbox to a double.
+            // Computed from the alarm time. The mod stores its remaining time as a KSPTimeSpan
+            // object, which the wrapper cannot unbox to a double
             get { return Internal.AlarmTime - Planetarium.GetUniversalTime (); }
         }
 

@@ -215,8 +215,8 @@ namespace KRPC.UI
 
         static GameObject NewObject (GameObject parent, string name)
         {
-            // Creating the object with a rect transform, rather than adding one afterwards,
-            // avoids it being given the plain transform that a bare game object gets.
+            // Create the object with a rect transform, so that it does not get the plain
+            // transform a bare game object gets
             var obj = new GameObject (name, typeof(UnityEngine.RectTransform));
             obj.transform.SetParent (parent.transform, false);
             return obj;
@@ -244,8 +244,8 @@ namespace KRPC.UI
             var sprite = Background (style, style == null ? null : select (style));
             if (sprite != null) {
                 image.sprite = sprite;
-                // The skin's sprites carry borders, so they are stretched by their edges
-                // rather than as a whole and controls can be resized without distortion.
+                // The skin's sprites carry borders, so they are stretched by their edges and
+                // controls can be resized without distortion
                 image.type = UnityEngine.UI.Image.Type.Sliced;
             }
             return image;

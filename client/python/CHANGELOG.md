@@ -1,34 +1,19 @@
 ## [v0.7.0] - unreleased
-- Support structure types, which a service defines as a compound value with named fields. A
-  value of one is a named tuple, so its fields can be read by name and it is also the tuple of
-  their values; a tuple or list with one element per field is accepted where one is expected.
-  It compares, orders and hashes as the tuple of its field values does (#1066)
-- A service definition that names a type this client does not know about, as one from a newer
-  server may, now skips the member that names it with a warning, rather than failing to
-  connect (#1066)
+- Support structure types. A value is a named tuple, and a tuple or list with one element per
+  field is accepted where one is expected (#1066)
+- A service definition naming an unknown type skips the member that names it with a warning,
+  instead of failing to connect (#1066)
 - **Breaking:** Support `None` for any nullable type (#1017)
 - Fix a service failing to load when one of its procedures defaults to a member of an
-  enumeration defined by a service that had not been loaded yet (#1044)
-- Add `krpc.limits`, naming the extremes of the numeric types kRPC carries over the wire,
-  such as `krpc.limits.SINT32_MAX` and `krpc.limits.DOUBLE_LOWEST`. Python names none of
-  them itself, and a generated stub whose parameter defaults to one now names the constant
-  rather than writing out the decimal value (#1045)
-- Reduce the cost of a remote procedure call. Type objects are cached by the arguments
-  naming them and their python type and type code read as plain attributes, values are
-  encoded and decoded through a lookup on their type code rather than a chain of
-  comparisons, floats and doubles are packed directly and short varints without going
-  through protobuf's varint routines, a request is built as a single message, a response
-  is read in one system call and taken out of the read buffer in one pass, a service
-  reaches its procedures by ordinary attribute lookup, and the client connections disable
-  Nagle's algorithm. A collection works out how to encode and decode its items once for
-  the collection rather than once for every item (#1056)
+  enumeration from a service that had not been loaded yet (#1044)
+- Add `krpc.limits`, naming the extremes of the numeric types kRPC carries over the wire, such
+  as `krpc.limits.SINT32_MAX` (#1045)
+- Reduce the cost of a remote procedure call, caching type objects, dispatching on the type
+  code, and reading a response in one system call (#1056)
 - Add `krpc.connect_local`, which connects to a server on the same machine over a unix domain
-  socket rather than TCP/IP. The connection behaves identically once established. Windows is
-  supported as well as Linux and macOS, even though python names no unix domain address family
-  there (#1065)
-- Add a `timeout` parameter to `krpc.connect`, bounding how long a connection is waited for. A
-  network that drops a connection attempt rather than refusing it otherwise leaves the client
-  waiting indefinitely (#1065)
+  socket (#1065)
+- Add a `timeout` parameter to `krpc.connect`, bounding how long a connection is waited for
+  (#1065)
 
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+ (#837)

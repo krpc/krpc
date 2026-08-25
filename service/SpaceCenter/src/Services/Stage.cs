@@ -70,7 +70,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the vessel the stage belongs to.
+        /// The state of the vessel the stage belongs to.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

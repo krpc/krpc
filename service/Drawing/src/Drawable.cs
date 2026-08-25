@@ -13,9 +13,9 @@ namespace KRPC.Drawing
     public abstract class Drawable<T> : IDrawable
     {
         readonly Renderer renderer;
-        // Whether the drawable has been taken out of the scene. The game tears a game
-        // object down at the end of the frame, so this records that it is on its way out,
-        // and an object removed and read again in the same frame reports it gone.
+        // Whether the drawable has been taken out of the scene. The game tears a game object
+        // down at the end of the frame, so this records that it is going, and an object removed
+        // and read again in the same frame reports it gone
         bool removed;
 
         /// <summary>
@@ -50,11 +50,10 @@ namespace KRPC.Drawing
         public GameObject GameObject { get; private set; }
 
         /// <summary>
-        /// What the game holds for the drawable. The drawable is the game object it was
-        /// made with, so it is live while the game still has that object, and destroyed
-        /// once it does not, which is what removing it, clearing the drawing objects,
-        /// disconnecting the client that made it and leaving the scene all do. Nothing
-        /// builds a client's drawing again, so there is no dormant state.
+        /// The state of the drawable, which is the game object it was made with. Removing
+        /// it, clearing the drawing objects, disconnecting the client that made it and
+        /// leaving the scene each destroy that object. A client's drawing is never built
+        /// again, so it has no dormant state.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

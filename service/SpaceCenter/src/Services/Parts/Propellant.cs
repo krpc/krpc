@@ -22,7 +22,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the part this belongs to.
+        /// The state of the part this belongs to.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return new Part (partId).GameObjectState; }

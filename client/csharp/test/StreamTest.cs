@@ -448,10 +448,10 @@ namespace KRPC.Client.Test
         [Test]
         public void TestRemoveWhileWaitingOnCondition () {
             // The update thread must not hold the update lock while waiting for a stream's
-            // condition. A caller holding that condition -- which is how waiting for an
-            // update is documented to work -- otherwise blocks forever on anything needing
-            // the update lock, and the update thread blocks on the condition, deadlocking
-            // both. Run on a thread so a regression fails here instead of hanging the suite.
+            // condition. A caller holding that condition, which is how waiting for an update
+            // is documented to work, otherwise blocks forever on anything needing the update
+            // lock, and the update thread blocks on the condition, deadlocking both. Run on a
+            // thread so a regression fails here instead of hanging the suite.
             var done = new ManualResetEvent (false);
             var thread = new Thread (() => {
                 var s = Connection.AddStream (
@@ -519,9 +519,8 @@ namespace KRPC.Client.Test
             stop.WaitOne ();
             s.Remove();
             var elapsed = timer.ElapsedMilliseconds;
-            // Lower bound checks the rate limit was honoured; the upper bound is
-            // a generous hang detector, kept loose so the test does not flake
-            // under parallel load.
+            // Lower bound checks the rate limit was honored. The upper bound is a generous
+            // hang detector, kept loose so the test does not flake under parallel load.
             Assert.Greater(elapsed, 1000);
             Assert.Less(elapsed, 3000);
             Assert.False(error);

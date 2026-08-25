@@ -48,9 +48,9 @@ The following example demonstrates how to invoke remote procedures using the Pyt
 
 .. literalinclude:: /scripts/client/python/RemoteProcedures.py
 
-Many procedures return an object standing for something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for what those objects do
-when a game is loaded or the thing they stand for is destroyed.
+Many procedures return an object identifying something in the game, such as a vessel or
+a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
+behaves when a game is loaded or what it identifies is destroyed.
 
 All of the functionality provided by the ``SpaceCenter`` service is accessible via
 ``conn.space_center``. To explore the functionality provided by a service, you can use the
@@ -225,8 +225,8 @@ Client API Reference
 
    Use this when the script runs on the same machine as the game and the server is configured to
    use the local socket protocol. A script that makes many calls in quick succession completes
-   more of them per physics update this way; one that makes a call and then waits sees no
-   difference, as the wait is governed by the game's update rate.
+   more of them per physics update. A script that makes a call and then waits runs at the game's
+   update rate either way.
 
    Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server
    2019 or later. Python's socket module does not expose the address family on Windows, so the
@@ -426,11 +426,10 @@ Client API Reference
 Numeric Limits
 --------------
 
-The ``krpc.limits`` module names the extremes of the numeric types that kRPC carries over the
-wire. Python names none of them itself: its integers are unbounded, so there is no largest
-``int``, and its floats are C doubles, so the standard library describes ``DOUBLE`` but says
-nothing about the 32-bit ``FLOAT``. A service can declare one of these as a parameter's default
-value, in which case the generated stub names the constant here.
+The ``krpc.limits`` module names the extremes of the numeric types kRPC carries over the wire.
+Python integers are unbounded, and Python floats are C doubles, so the standard library covers
+``DOUBLE`` alone. A service can declare one of these limits as a parameter's default value, and
+the generated stub then names the constant from this module.
 
 The minimum of an unsigned type is ``0``, so it has no constant.
 

@@ -18,9 +18,9 @@ namespace KRPC.UI
         /// with what they belong to.
         /// </summary>
         readonly bool removable;
-        // Whether the element has been taken out of the interface. The game tears a game
-        // object down at the end of the frame, so this records that it is on its way out,
-        // and an element removed and read again in the same frame reports it gone.
+        // Whether the element has been taken out of the interface. The game tears a game object
+        // down at the end of the frame, so this records that it is going, and an element removed
+        // and read again in the same frame reports it gone
         bool removed;
 
         /// <summary>
@@ -29,11 +29,10 @@ namespace KRPC.UI
         protected GameObject GameObject { get; private set; }
 
         /// <summary>
-        /// What the game holds for the element. The element is the game object it was made
-        /// with, so it is live while the game still has that object, and destroyed once it
-        /// does not, which is what removing it, clearing the interface elements,
-        /// disconnecting the client that made it and leaving the scene all do. Nothing
-        /// builds a client's element again, so there is no dormant state.
+        /// The state of the element, which is the game object it was made with. Removing
+        /// it, clearing the interface elements, disconnecting the client that made it and
+        /// leaving the scene each destroy that object. A client's element is never built
+        /// again, so it has no dormant state.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -110,8 +109,8 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            // The game object's identity hash rather than its own, so that nothing the
-            // game does to it can change it while a client holds this object.
+            // The game object's identity hash, so that nothing the game does to it changes it
+            // while a client holds this object
             return RuntimeHelpers.GetHashCode (GameObject);
         }
 
@@ -152,10 +151,9 @@ namespace KRPC.UI
         [KRPCProperty]
         public LayoutElement LayoutElement {
             get {
-                // The component is added the first time it is asked for, so asking must be
-                // refused for an object that would keep it for good. The stock canvas is
-                // the game's own, and kRPC never destroys it, so a component added to it
-                // would be left there for the rest of the session.
+                // The component is added the first time it is read, so an object that would keep
+                // it for good is refused. The stock canvas is the game's own and kRPC never
+                // destroys it, so a component added to it stays for the rest of the session
                 if (!CanHaveLayoutElement)
                     throw new InvalidOperationException (
                         "A canvas is not inside a layout, so it has no layout element");

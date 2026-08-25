@@ -163,8 +163,8 @@ public final class Benchmark {
         }
       }
     }
-    // However many chunks it got through, which is fewer than a settle compares where a single
-    // one of them ran longer than the whole timeout.
+    // The chunks it got through, which is fewer than a settle compares when a single chunk ran
+    // longer than the whole timeout.
     int taken = Math.max(chunks.size() - SETTLE_CHUNKS, 0);
     return new Settled(smallest(chunks.subList(taken, chunks.size())), false);
   }

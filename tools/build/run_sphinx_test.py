@@ -24,7 +24,7 @@ import sys
 # regular file, and Bazel stages a source as a read-only symlink.
 DICTIONARY = "dictionary.txt"
 
-# Where the link checker lists the links it could not follow.
+# The file the link checker lists the links it could not follow in.
 LINKCHECK_REPORT = "output.txt"
 
 

@@ -30,7 +30,7 @@ def main():
     # Under `bazel run` the process starts in the runfiles tree. Work in the directory bazel
     # was invoked from instead, so that a path given on the command line means what it would
     # for a bare pytest, and so that the framework's nested bazel calls and the scripts' craft
-    # fixtures resolve against the repository rather than a tree of symlinks.
+    # fixtures resolve against the repository and not a tree of symlinks.
     workspace = os.environ.get("BUILD_WORKSPACE_DIRECTORY")
     if not workspace:
         sys.exit("This tool must be run via `bazel run //tools/benchmarks:server`.")
@@ -39,7 +39,7 @@ def main():
 
     options, forwarded = arguments()
     # -s so the table reaches the terminal: pytest captures output by default, and the report
-    # is the point of the run rather than a detail of a failure.
+    # is the point of the run and not a detail of a failure.
     args = ["-p", "krpctest.pytest_plugin", "-s"]
     if options.json:
         args += ["--json", options.json]

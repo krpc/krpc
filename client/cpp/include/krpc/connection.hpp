@@ -66,12 +66,12 @@ class Connection {
 
   const std::string address;
   const unsigned int port;
-  // How long to wait for the connection to be made. Zero waits indefinitely.
+  // The time to wait for the connection to be made. Zero waits indefinitely.
   const std::chrono::milliseconds timeout;
   asio::ip::tcp::resolver resolver;
   // Data read from the socket, how much of it there is and how much has been consumed. Reads
-  // are made a block at a time rather than exactly the bytes wanted, so that a message costs
-  // one read rather than one per byte of its size prefix plus one for its body.
+  // are made a block at a time, so that a message costs one read and not one per byte of its
+  // size prefix plus one for its body.
   std::vector<char> buffer;
   size_t filled = 0;
   size_t consumed = 0;

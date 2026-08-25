@@ -43,8 +43,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the resource harvester: the state of the part
-        /// carrying it, or destroyed once that part no longer has the module.
+        /// The state of the part carrying the resource harvester, or destroyed once that
+        /// part loses the module.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return harvesterRef.StateOn (Part); }
@@ -129,9 +129,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return InternalHarvester.IsActivated; }
             set {
                 if (!Deployed) {
-                    // The converter cannot start until the deploy animation has
-                    // finished; defer the requested state until then rather than
-                    // silently dropping it.
+                    // The converter cannot start until the deploy animation has finished,
+                    // so defer the requested state until then
                     if (State == DeployableState.Deploying)
                         ResourceHarvesterAddon.Request (InternalHarvester, InternalAnimator, value);
                     return;

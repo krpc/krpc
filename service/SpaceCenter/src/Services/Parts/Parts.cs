@@ -38,7 +38,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the vessel this belongs to.
+        /// The state of the vessel this belongs to.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -102,8 +102,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public Part Root {
             get {
-                // Walk up the parent links rather than reading the vessel's root part, as
-                // a vessel in the editor has no equivalent of it.
+                // Walk up the parent links, as a vessel in the editor has no equivalent of
+                // the vessel's root part
                 var parts = InternalShipConstruct.Parts;
                 if (parts.Count == 0)
                     throw new InvalidOperationException ("The vessel has no parts.");

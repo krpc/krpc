@@ -24,15 +24,14 @@ namespace KRPC.RemoteTech
         }
 
         /// <summary>
-        /// What the game holds for the vessel these communications belong to.
+        /// The state of the vessel these communications belong to.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return vessel.GameObjectState; }
         }
 
-        // The id of the vessel, which the mod's API takes, resolved first so that a vessel
-        // the game no longer has says so rather than the mod answering for an id that names
-        // nothing.
+        // The id of the vessel, which the mod's API takes. Resolved first, so that a vessel the
+        // game has dropped raises here and not inside the mod
         Guid VesselId {
             get { return vessel.InternalVessel.id; }
         }

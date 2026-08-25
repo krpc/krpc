@@ -12,10 +12,10 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class CommLink : Equatable<CommLink>, IGameObjectState
     {
-        // A link is a hop in one vessel's control path, and the two nodes it joins are what
-        // identify it: the game builds the path again, out of new link objects, every time
-        // it works out the vessel's connection, so a link object stands for the state of
-        // one hop at one moment rather than for the hop itself.
+        // A link is a hop in one vessel's control path, identified by the two nodes it
+        // joins. The game builds the path again, out of new link objects, every time it
+        // works out the vessel's connection, so a link object stands for one hop at one
+        // moment
         readonly Guid vesselId;
         readonly CommNode start;
         readonly CommNode end;
@@ -46,11 +46,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the link. It is live while the vessel's control path
-        /// still runs through the two nodes, and destroyed once the vessel is gone. A path
-        /// that no longer takes the hop has lost contact rather than destroyed anything,
-        /// and takes it again when the two are in range of each other, so the link is
-        /// dormant.
+        /// The state of the link. It is live while the vessel's control path runs through
+        /// the two nodes, and destroyed once the vessel is destroyed. A path that drops the
+        /// hop leaves the link dormant, and takes it again once the two nodes are in range
+        /// of each other.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

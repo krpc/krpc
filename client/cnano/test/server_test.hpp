@@ -32,8 +32,8 @@ inline server_test::~server_test() {
   if (KRPC_OK != krpc_close(conn)) exit(1);
 }
 
-// Where the server the test harness started is listening, in whatever form the transport this
-// build uses opens a connection from.
+// The address the server the test harness started is listening on, in whatever form the
+// transport this build uses opens a connection from.
 #ifdef KRPC_COMMUNICATION_TCP
 inline krpc_connection_config_t server_address() {
   // The port the test harness passes in, or the server's default when the binary is run directly

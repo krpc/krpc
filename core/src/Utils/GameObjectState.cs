@@ -1,7 +1,7 @@
 namespace KRPC.Utils
 {
     /// <summary>
-    /// What the game holds for the thing that a service object stands for.
+    /// The state of the game object that a service object identifies.
     /// </summary>
     /// <remarks>
     /// The values are ordered from most to least alive, so that an object built on
@@ -14,23 +14,23 @@ namespace KRPC.Utils
         /// </summary>
         Live,
         /// <summary>
-        /// The game object does not exist, but the game still holds what it needs to
-        /// build it again, so the thing the service object stands for is intact.
+        /// The game object does not exist, and the game holds what it needs to build it
+        /// again. What the service object identifies is intact.
         /// </summary>
         Dormant,
         /// <summary>
-        /// The game holds nothing for it. It can never be used again.
+        /// The game object is gone. It can never be used again.
         /// </summary>
         Destroyed
     }
 
     /// <summary>
-    /// Combines the states of the things a service object is built on.
+    /// Combines the states of the objects a service object is built on.
     /// </summary>
     public static class GameObjectStates
     {
         /// <summary>
-        /// The state of an object that needs both of the things it is built on, which is
+        /// The state of an object that needs both of the objects it is built on, which is
         /// the less alive of their two states.
         /// </summary>
         public static GameObjectState LeastAlive (this GameObjectState state, GameObjectState other)
@@ -39,7 +39,7 @@ namespace KRPC.Utils
         }
 
         /// <summary>
-        /// The state of an object that either of the things it is built on is enough for,
+        /// The state of an object that either of the objects it is built on is enough for,
         /// which is the more alive of their two states.
         /// </summary>
         public static GameObjectState MostAlive (this GameObjectState state, GameObjectState other)

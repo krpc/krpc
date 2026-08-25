@@ -90,11 +90,11 @@ namespace KRPC.Benchmarks
         }
 
         // Bytes allocated so far, for the allocation figures. GC.GetAllocatedBytesForCurrentThread
-        // is exact and unaffected by collections, but is not guaranteed to exist on the runtime KSP
-        // ships, so fall back to the size of the heap: coarse per operation, and meaningless if a
-        // collection happens inside the window (memory was freed as well as allocated), but over a
-        // large enough loop it still answers the question these numbers are for, which is whether a
-        // path allocates at all. Which one was used is reported alongside the figure.
+        // is exact and unaffected by collections, but is not guaranteed to exist on the runtime
+        // KSP ships, so fall back to the size of the heap. That is coarse per operation, and
+        // meaningless if a collection happens inside the window, but over a large enough loop it
+        // still shows whether a path allocates at all. The one used is reported alongside the
+        // figure.
         static long AllocatedBytes ()
         {
             return allocatedBytes != null ? allocatedBytes () : GC.GetTotalMemory (false);

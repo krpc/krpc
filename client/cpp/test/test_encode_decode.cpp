@@ -45,10 +45,9 @@ void test_double(double decoded, std::string encoded) {
     ASSERT_TRUE(std::isnan(value));
 }
 
-// Which payload std::numeric_limits gives a signalling NaN is left to the
-// implementation, so there is no one encoding to expect it to produce. What the
-// codec has to get right is that it comes back a NaN rather than an infinity or
-// a number, so check the round trip and not the bytes it goes through.
+// The payload std::numeric_limits gives a signaling NaN is implementation defined, so
+// there is no one encoding to expect. The codec has to bring it back as a NaN, so check
+// the round trip and not the bytes it goes through.
 template <typename T>
 void test_nan(T decoded) {
   T value = 0;

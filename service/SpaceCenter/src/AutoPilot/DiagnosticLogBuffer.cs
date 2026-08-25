@@ -7,7 +7,7 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// <summary>
     /// The attitude controller's diagnostic log: CSV, one data row per physics tick, first row a
     /// header naming every column. Vector-valued channels occupy one column per component,
-    /// suffixed <c>.p/.r/.y</c> (pitch, roll, yaw — the controller's x, y, z axes); axis-group
+    /// suffixed <c>.p/.r/.y</c> (pitch, roll, yaw, the controller's x, y and z axes). Axis-group
     /// channels (pitch/yaw coupled, roll separate) are suffixed <c>.py/.roll</c>. Values use the
     /// invariant culture so the output is valid CSV regardless of the OS locale.
     ///
@@ -88,7 +88,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// One column per component, named <c>name.p/.r/.y</c> (pitch, roll, yaw — the
+        /// One column per component, named <c>name.p/.r/.y</c> (pitch, roll, yaw, the
         /// vector's x, y, z components in the controller's axis convention).
         /// </summary>
         public void AddVector (string name, Vector3d value, string format)

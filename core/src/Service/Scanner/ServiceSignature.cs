@@ -154,9 +154,9 @@ namespace KRPC.Service.Scanner
 
         void AddPropertyProcedure (PropertyInfo property, MethodInfo method, bool nullable, bool isSetter)
         {
-            // For a getter the nullable flag makes the return value nullable; for a setter it makes
-            // the synthesized value parameter nullable, since that parameter cannot itself carry
-            // the [KRPCNullable] attribute.
+            // For a getter the nullable flag makes the return value nullable. For a setter it
+            // makes the synthesized value parameter nullable, which cannot carry the attribute
+            // itself
             var handler = new ProcedureHandler (method, isSetter ? false : nullable);
             if (isSetter && nullable)
                 handler.SetValueParameterNullable ();
@@ -295,9 +295,9 @@ namespace KRPC.Service.Scanner
 
         void AddClassPropertyMethod (string cls, Type classType, PropertyInfo property, MethodInfo method, bool nullable, bool isSetter)
         {
-            // For a getter the nullable flag makes the return value nullable; for a setter it makes
-            // the synthesized value parameter nullable, since that parameter cannot itself carry
-            // the [KRPCNullable] attribute.
+            // For a getter the nullable flag makes the return value nullable. For a setter it
+            // makes the synthesized value parameter nullable, which cannot carry the attribute
+            // itself
             var handler = new ClassMethodHandler (classType, method, isSetter ? false : nullable);
             if (isSetter && nullable)
                 handler.SetValueParameterNullable ();

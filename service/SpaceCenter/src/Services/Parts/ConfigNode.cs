@@ -37,8 +37,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            // The node's identity hash rather than its own: a config node's contents are
-            // not what this object stands for, and a hash must not move under the store.
+            // The node's identity hash: this object stands for the node and not for its
+            // contents, and a hash must not move under the store
             return RuntimeHelpers.GetHashCode (node);
         }
 

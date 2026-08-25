@@ -64,8 +64,8 @@ def measure(server, suite, client, client_localsocket=None):
         cases, version, settings = run(server, program, transport)
         results += [record(suite, scenario(transport), case) for case in cases]
         environment.setdefault("server", version)
-        # What the server was told is the same whichever transport it serves, so the first one
-        # measured says it for the run.
+        # The server settings are the same whichever transport it serves, so the first one
+        # measured records them for the run.
         environment.setdefault("measured against", settings)
     return results, environment
 
@@ -96,8 +96,8 @@ def run(server, client, transport=testserver.TCP):
     with testserver.running(
         server, frame_pacing=False, transport=transport
     ) as endpoint:
-        # On a connection of our own, closed again before the program runs, so that what is
-        # measured is one client talking to the server, as it was before the warmup.
+        # On a connection of our own, closed again before the program runs, so that the
+        # measurement is one client talking to the server, as it was before the warmup.
         with testserver.connect("benchmark_warmup", endpoint) as conn:
             testserver.warm_up(conn)
         cases = parse(execute(client, endpoint))["results"]

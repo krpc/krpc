@@ -365,8 +365,8 @@ public class ConnectionTest {
     assertEquals("value=bob", list.get(1).getValue());
   }
 
-  // A method name is matched by value, so one assembled at runtime resolves the same as a
-  // literal, which is interned and so happened to work when the two were compared by identity.
+  // A method name is matched by value, so one assembled at runtime resolves the same as an
+  // interned literal.
   @Test
   public void testGetCallWithNonInternedMethodName() throws RPCException {
     String name = new StringBuilder("floatToString").toString();
@@ -375,8 +375,8 @@ public class ConnectionTest {
         connection.getCall(TestService.class, name, 3.14159f));
   }
 
-  // Arguments of the wrong type do not match, rather than any method of the same name taking
-  // the same number of arguments.
+  // Arguments of the wrong type do not match, so a method of the same name taking the same
+  // number of arguments is not resolved.
   @Test
   public void testGetCallWithWrongArgumentType() {
     RPCException e = assertThrows(RPCException.class,
@@ -384,8 +384,8 @@ public class ConnectionTest {
     assertTrue(e.getMessage().contains("not found"));
   }
 
-  // An error naming a type this client has no stubs for still reports what went wrong, rather
-  // than failing while trying to construct the exception for it.
+  // An error naming a type this client has no stubs for still reports what went wrong, and
+  // does not fail while constructing the exception for it.
   @Test
   public void testUnknownExceptionType() {
     Error error = Error.newBuilder()

@@ -58,10 +58,9 @@ namespace KRPC.SpaceCenter
                     (lastShip == null || !ReferenceEquals (lastShip.Target, ship))) {
                     lastShip = new WeakReference (ship);
                     // An undo or a redo hands back a vessel object of its own, built from
-                    // the game's backup, so the object changing is not on its own a new
-                    // vessel. The parts it builds carry the craft ids they had, so what
-                    // a part object names is unchanged; one whose part the undo took away
-                    // is simply no longer there to be found.
+                    // the game's backup, so a changed object is not on its own a new
+                    // vessel. The parts it builds carry the craft ids they had, so a part
+                    // object still names the same part
                     var wasRestored = restoredShip != null &&
                                       ReferenceEquals (restoredShip.Target, ship);
                     restoredShip = null;
@@ -73,10 +72,9 @@ namespace KRPC.SpaceCenter
         }
 
         // The vessel the editor last restored from its own backup, held weakly. Set from
-        // EditorShipAddon, which hears the game say so. It is the vessel rather than the
-        // fact that one was restored, because a vessel is only adopted once and nothing
-        // says when that has happened: a flag would still be set when the next craft was
-        // loaded, and would take that craft for the vessel the editor already had.
+        // EditorShipAddon. A vessel is adopted once, and nothing marks when that has
+        // happened, so this holds the vessel and not a flag: a flag would still be set
+        // when the next craft was loaded
         static WeakReference restoredShip;
 
         /// <summary>
@@ -89,11 +87,10 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// What the game holds for the vessel in the editor. The editor holds one vessel
-        /// while it is open and takes it with it when it is left, so anything named
-        /// against that vessel is live until the game leaves the editor, and gone
-        /// afterwards. An editor that is still starting up has no vessel yet, and nothing
-        /// is concluded from that.
+        /// The state of the vessel in the editor. The editor holds one vessel while it is
+        /// open and destroys it on leaving, so anything identified against that vessel is
+        /// live until the game leaves the editor. An editor that is still starting up
+        /// leaves the vessel dormant.
         /// </summary>
         public static GameObjectState ShipState {
             get {

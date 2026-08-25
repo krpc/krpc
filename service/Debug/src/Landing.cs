@@ -18,11 +18,10 @@ namespace KRPC.Debug
             if (body.pqsController == null)
                 throw new ArgumentException ("Cannot land on " + body.bodyName + ", it has no terrain");
 
-            // Distance from the center of mass down to the vessel's lowest point, measured
-            // now while the craft is loaded and its colliders are valid. The game classifies a
-            // craft teleported onto a near-surface orbit as landed wherever we place it (it
-            // does not re-seat it on the terrain), so we must place the lowest point on the
-            // ground ourselves rather than dropping it from a height.
+            // Distance from the center of mass down to the vessel's lowest point, measured now
+            // while the craft is loaded and its colliders are valid. The game classifies a craft
+            // teleported onto a near-surface orbit as landed wherever we place it, and does not
+            // re-seat it on the terrain, so we place the lowest point on the ground ourselves
             var clearance = GroundClearance (internalVessel);
 
             // Ideal (PQS) terrain height above sea level, clamped so we never target a

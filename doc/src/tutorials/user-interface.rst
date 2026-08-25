@@ -3,11 +3,10 @@ User Interface
 
 The following script demonstrates how to use the UI service to display text and
 handle basic user input. It adds a panel to the left side of the screen, which
-the user can drag around with the mouse. A vertical layout arranges the panel's
-contents in a column, so nothing needs positioning by hand: a button that sets
-the throttle to maximum, with a tooltip shown while the mouse rests on it, a
-slider that sets the throttle directly, and text displaying the current thrust
-produced by the vessel.
+can be dragged with the mouse. A vertical layout arranges its contents in a
+column: a button that sets the throttle to maximum, a slider that sets it
+directly, and text showing the current thrust produced by the vessel. A tooltip
+is shown while the mouse rests on the button.
 
 .. tabs::
 

@@ -17,9 +17,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         Vector3 force;
         Vector3 position;
         ReferenceFrame frame;
-        // Whether the force has been taken off the part. The object goes on standing for
-        // an instruction the game is no longer given, so it says it is gone rather than
-        // reporting a force that is not being applied.
+        // Whether the force has been taken off the part. The object outlives the force it
+        // stands for, so this marks it as gone
         bool removed;
 
         internal Force (Part part, Tuple3 forceVector, Tuple3 forcePosition, ReferenceFrame referenceFrame)
@@ -37,11 +36,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Part Part { get; private set; }
 
         /// <summary>
-        /// What the game holds for the force. A force is applied to a part, so it is
-        /// exactly as live, dormant or destroyed as that part: a part the game has
-        /// destroyed can never be pushed again, and one it has merely unloaded has no
-        /// rigidbody to push until it is loaded. A force the client has taken off its
-        /// part is gone whatever the part is doing, as nothing applies it again.
+        /// The state of the force. A force is applied to a part and takes that part's
+        /// state: a destroyed part can never be pushed again, and an unloaded part has no
+        /// rigidbody to push until it is loaded. A force the client has removed is
+        /// destroyed whatever its part's state.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return removed ? GameObjectState.Destroyed : Part.GameObjectState; }

@@ -6,7 +6,7 @@ using KRPC.Service;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Shared logic for the RPCs that split a vessel in two — decoupling and undocking — each of
+    /// Shared logic for the RPCs that split a vessel in two, decoupling and undocking, each of
     /// which returns the newly created vessel.
     /// </summary>
     static class PartSeparation
@@ -23,13 +23,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Yields until the separation has completed (<paramref name="separated"/> returns true) and
         /// the settle margin has elapsed, then returns the vessel that <c>FlightGlobals.Vessels</c>
-        /// gained relative to <paramref name="preVesselIds"/> — the snapshot of vessel ids taken
+        /// gained relative to <paramref name="preVesselIds"/>, the snapshot of vessel ids taken
         /// before the separation was triggered.
         ///
         /// A separation usually produces one new vessel, but an omni-decoupler detaches at every
         /// node at once: it separates the vessel beyond it and is itself left on a vessel of its
         /// own, so two appear. The one to return is the vessel that was separated, which is the one
-        /// <paramref name="part"/> — the decoupler or docking port that was fired — did not end up
+        /// <paramref name="part"/>, the decoupler or docking port that was fired, did not end up
         /// on. It is looked up once the wait is over, and by identifier, so that it resolves to
         /// the right object however the separation rearranged the parts in the meantime.
         /// </summary>

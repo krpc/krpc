@@ -177,7 +177,7 @@ def overshoot(samples):
 
 def path_deviation(samples):
     # Max perpendicular distance of the (pitch_error, yaw_error) trajectory from the straight
-    # line between its start and the origin, normalised by the initial error magnitude. Zero
+    # line between its start and the origin, normalized by the initial error magnitude. Zero
     # for a perfect great-circle slew; grows as the path curves.
     if not samples:
         return 0.0
@@ -205,10 +205,10 @@ def feedforward_spikes(samples, threshold=0.5):
 
 
 def control_spikes(samples, threshold=0.5):
-    # Number of ticks where any *actual control* axis (post-clamp, in [-1, 1]) jumps by more than
-    # threshold in one step. Unlike feedforward_spikes -- which looks at the pre-clamp acceleration
-    # feedforward, where a setpoint discontinuity legitimately produces a large impulse that the
-    # [-1, 1] clamp then absorbs -- this measures the jerk actually commanded to the actuators.
+    # Number of ticks where a post-clamp control axis, in [-1, 1], jumps by more than threshold
+    # in one step. This measures the jerk commanded to the actuators, where feedforward_spikes
+    # looks at the pre-clamp acceleration feedforward, in which a setpoint discontinuity
+    # legitimately produces a large impulse that the clamp absorbs.
     count = 0
     for cur, nxt in zip(samples, samples[1:]):
         if cur.ctrl is None or nxt.ctrl is None:
@@ -220,10 +220,10 @@ def control_spikes(samples, threshold=0.5):
 
 def control_reversal_rate(samples, floor=0.3):
     # Fraction of adjacent ticks on which a large-magnitude control axis (pitch or yaw) flips sign.
-    # This is the signature of a structural / bending-mode limit cycle (test plan §11.9): the
-    # actuators slam ±full deflection every tick or two, so the net torque averages to ~0. Only
-    # pairs where at least one side exceeds `floor` are counted, so the small, slowly-varying
-    # corrections of a settled rigid craft (which never approach full deflection) do not register.
+    # This is the signature of a structural or bending-mode limit cycle: the actuators slam
+    # full deflection either way every tick or two, so the net torque averages to zero. Only
+    # pairs where at least one side exceeds `floor` are counted, so the small, slowly varying
+    # corrections of a settled rigid craft do not register.
     # Returns the worst of the pitch and yaw axes; roll is handled separately and rarely flexes.
     worst = 0.0
     for axis in (0, 2):

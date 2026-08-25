@@ -16,8 +16,7 @@ namespace KRPC.SpaceCenter.Services
     {
         // The guid the game gives a contract, which it writes into the save and reads back,
         // so it names the contract across a load. The contract system builds new contract
-        // objects for a game it loads, so holding one would leave this reading a contract
-        // out of a game state that is no longer loaded.
+        // objects for a game it loads, so the contract object itself is not held
         readonly Guid contractGuid;
 
         /// <summary>
@@ -45,10 +44,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the contract. It is live while the contract system
-        /// lists it, running or finished, and destroyed once the system is there to ask and
-        /// does not. A game with no contract system has no contracts to look through, which
-        /// says nothing about this one.
+        /// The state of the contract. It is live while the contract system lists it,
+        /// running or finished, and destroyed once a running system stops listing it. A
+        /// game with no contract system leaves the contract dormant.
         /// </summary>
         public GameObjectState GameObjectState
         {

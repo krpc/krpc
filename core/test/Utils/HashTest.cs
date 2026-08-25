@@ -17,8 +17,8 @@ namespace KRPC.Test.Utils
         [Test]
         public void EqualFieldsDoNotCancel ()
         {
-            // What an exclusive-or gets wrong: a pair of fields holding the same value
-            // must not leave the hash where it would have been without them.
+            // An exclusive-or gets this wrong: a pair of fields holding the same value must
+            // not leave the hash where it would have been without them
             Assert.AreNotEqual (Hash.Of ("a").And ("a").Value, Hash.Of ("b").And ("b").Value);
             Assert.AreNotEqual (Hash.Of ("a").And ("a").Value, Hash.Of (0).And (0).Value);
         }
@@ -50,8 +50,8 @@ namespace KRPC.Test.Utils
         [Test]
         public void AHashIsItsOwnHashCode ()
         {
-            // Every use of Hash is inside a GetHashCode, where asking a hash for its own
-            // one instead of reading it is an easy slip to make.
+            // Every use of Hash is inside a GetHashCode, where calling GetHashCode on the
+            // hash instead of reading its value is an easy slip
             var hash = Hash.Of ("a").And (2);
             Assert.AreEqual (hash.Value, hash.GetHashCode ());
             Assert.AreEqual (hash, Hash.Of ("a").And (2));

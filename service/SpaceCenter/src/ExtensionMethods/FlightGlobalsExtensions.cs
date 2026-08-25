@@ -34,10 +34,10 @@ namespace KRPC.SpaceCenter
             var active = FlightGlobals.ActiveVessel;
             if (active != null && active.id == id)
                 return active;
-            // A game that is not listing vessels has none to find. Answering that, rather
-            // than raising, is what leaves VesselsKnown to say what the absence means, and
-            // it has to be an answer: the object store asks every vessel it holds for its
-            // state in one pass, and one that raises must not stop the rest being checked.
+            // A game that is not listing vessels has none to find. Return an empty list,
+            // which leaves VesselsKnown to say what the absence means: the object store
+            // checks every vessel it holds in one pass, and one that raises must not stop
+            // the rest
             var vessels = FlightGlobals.Vessels;
             if (vessels == null)
                 return null;
@@ -48,11 +48,9 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// What the game holds for the vessel with the given id. A vessel is either there
-        /// to be found, loaded or not, or it is gone for good; it has no unloaded form
-        /// that the game can bring back. A game that does not currently know what vessels
-        /// exist says nothing about any of them, so a vessel it cannot find then is
-        /// dormant, and nothing standing for one is dropped on the strength of it.
+        /// The state of the vessel with the given id. A vessel is live whether it is loaded
+        /// or not, and destroyed once the game holds no vessel with the id. A game between
+        /// states holds no list of vessels, and leaves the vessel dormant.
         /// </summary>
         public static GameObjectState VesselState (Guid id)
         {

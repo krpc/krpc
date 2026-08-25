@@ -95,9 +95,9 @@ namespace KRPC.Test
         [Test]
         public void TheEventsBracketTheCallsThatTheUpdateExecutes ()
         {
-            // How many of the script's calls had been answered each time an event was raised.
-            // The update that runs the script must raise the first before any of them and the
-            // second after all of them.
+            // The number of the script's calls answered each time an event was raised. The
+            // update that runs the script must raise the first before any of them and the
+            // second after all of them
             var answeredAtBefore = new List<int> ();
             var answeredAtAfter = new List<int> ();
             ScriptedClient client = null;

@@ -29,9 +29,8 @@ namespace KRPC.UI
             Hide ();
             if (string.IsNullOrEmpty (Text))
                 return;
-            // The tooltip is parented to the canvas rather than the control, so that it
-            // is drawn over the control's neighbors and is not cut off by the viewport
-            // of a scroll view.
+            // The tooltip is parented to the canvas, so that it is drawn over the control's
+            // neighbors and is not cut off by the viewport of a scroll view
             var canvas = GetComponentInParent<UnityEngine.Canvas> ();
             if (canvas == null)
                 return;

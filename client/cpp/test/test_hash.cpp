@@ -56,7 +56,7 @@ TEST(test_hash, nested_collections) {
 }
 
 TEST(test_hash, as_a_container_hash) {
-  // What the hash is for: a standard container keyed by a type the standard library does not
+  // The use the hash is for: a standard container keyed by a type the standard library does not
   // hash on its own
   std::unordered_set<std::tuple<double, double, double>, krpc::hash> points;
   points.insert(std::make_tuple(1.0, 2.0, 3.0));

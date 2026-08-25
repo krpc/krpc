@@ -220,7 +220,7 @@ namespace TestingTools
         /// Reassign every crew member of the given vessel (default: the active vessel) to the Pilot
         /// profession at full experience level. The save's auto-crew fills the pod with whichever
         /// kerbal is next in the roster (often an engineer/scientist), which leaves the vessel on
-        /// "partial control" — no in-game SAS and, after a rails warp, an unreliable control source.
+        /// "partial control": no in-game SAS and, after a rails warp, an unreliable control source.
         /// Overwriting the trait to Pilot gives deterministic full control for every test run without
         /// changing the craft (a kerbal's mass is the same for any profession, so the calibrated MOI
         /// and torque are unaffected).

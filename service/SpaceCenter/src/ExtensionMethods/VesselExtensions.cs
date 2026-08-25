@@ -8,7 +8,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
     {
         /// <summary>
         /// The angular velocity of the vessel in world space, in radians per second.
-        /// The vessel behaviour is attached to the root part's game object, so the
+        /// The vessel behavior is attached to the root part's game object, so the
         /// vessel's rigidbody is the root part's, available from its cached rb field
         /// without a GetComponent lookup.
         /// </summary>

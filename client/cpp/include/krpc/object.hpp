@@ -18,8 +18,8 @@ class Object {
   friend bool operator==(const Object<U>&, const Object<U>&);
   template <typename U>
   friend bool operator<(const Object<U>&, const Object<U>&);
-  // Public because the encoder and decoder need them; they cannot be granted access with 'friend'
-  // without introducing a circular dependency between this header and theirs.
+  // Public because the encoder and decoder need them. Granting access with 'friend' would
+  // introduce a circular dependency between this header and theirs.
   Client* _client;
   uint64_t _id;
 

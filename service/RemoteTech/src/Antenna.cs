@@ -12,9 +12,8 @@ namespace KRPC.RemoteTech
     [KRPCClass (Service = "RemoteTech")]
     public class Antenna : Equatable<Antenna>, IGameObjectState
     {
-        // The module that makes a part an antenna. An antenna is a part carrying it, so the
-        // part is what identifies the antenna, and the mod's API takes the part rather than
-        // the module.
+        // The module that makes a part an antenna. The mod's API takes the part, so the part
+        // identifies the antenna
         const string moduleName = "ModuleRTAntenna";
 
         readonly SpaceCenter.Services.Parts.Part part;
@@ -48,9 +47,8 @@ namespace KRPC.RemoteTech
         }
 
         /// <summary>
-        /// What the game holds for the antenna. It belongs to its part, so it is exactly as
-        /// live, dormant or destroyed as the part, and destroyed when a part that is there
-        /// to look at no longer carries the antenna module.
+        /// The state of the antenna. It takes the state of its part, and is destroyed once
+        /// a live part no longer carries the antenna module.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

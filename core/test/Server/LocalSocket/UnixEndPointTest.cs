@@ -89,9 +89,8 @@ namespace KRPC.Test.Server.LocalSocket
         [Platform (Exclude = "Win", Reason = "the directory it falls back to is one only POSIX has")]
         public void DefaultPathFallsBackToAFixedDirectory ()
         {
-            // A client works the same path out in a process of its own, where TMPDIR may
-            // well say something else, so the fallback cannot be whichever temporary
-            // directory this process was pointed at
+            // A client works the same path out in a process of its own, where TMPDIR may say
+            // something else, so the fallback is a fixed directory
             var runtimeDirectory = Environment.GetEnvironmentVariable ("XDG_RUNTIME_DIR");
             var temporaryDirectory = Environment.GetEnvironmentVariable ("TMPDIR");
             try {

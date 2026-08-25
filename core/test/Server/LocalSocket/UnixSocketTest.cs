@@ -43,9 +43,8 @@ namespace KRPC.Test.Server.LocalSocket
         {
             using (var listener = NewSocket ()) {
                 UnixSocket.BindAndListenThroughWinsock (listener, path, 1);
-                // Reaching it is what shows the socket is bound to that path and listening on
-                // it, and takes nothing from the runtime this test is running on, which cannot
-                // accept on a socket it did not bind itself
+                // Connecting shows the socket is bound to that path and listening on it,
+                // without relying on the runtime to accept on a socket it did not bind
                 using (var client = NewSocket ()) {
                     client.Connect (new UnixEndPoint (path));
                     Assert.IsTrue (client.Connected);

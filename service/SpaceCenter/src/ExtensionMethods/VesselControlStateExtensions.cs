@@ -30,7 +30,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// What is controlling a vessel, from its control level and, where the level does not
         /// say, its parts. KSP records whether partial control comes from a kerbal or a probe,
         /// but not for full control, so that case is decided by whether any part that is a
-        /// control source has crew aboard — a kerbal takes precedence over a probe core, as it
+        /// control source has crew aboard. A kerbal takes precedence over a probe core, as it
         /// does in KSP's own control state.
         /// </summary>
         public static ControlSource ToControlSource (

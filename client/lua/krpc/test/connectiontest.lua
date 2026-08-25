@@ -6,7 +6,7 @@ local schema = require 'krpc.schema.KRPC'
 
 -- A stand-in for a kRPC server, which sends back whatever it is sent. These tests are
 -- about how a transport moves bytes, so nothing above the transport has to be understood
--- to answer them. It is driven by the test rather than by a thread of its own: the client
+-- to answer them. It is driven by the test and not by a thread of its own: the client
 -- sends, then the test tells the server how much to echo back.
 local EchoServer = class()
 
@@ -31,7 +31,7 @@ function EchoServer:close()
   self._listener:close()
 end
 
--- What a connection to a server does regardless of what carries it. Only opening the
+-- The behavior a connection to a server has whatever carries it. Only opening the
 -- connection differs between the transports, so each of them supplies a server to talk to
 -- and a connection reaching it, and shares these.
 local ConnectionTest = class()
@@ -66,8 +66,8 @@ function ConnectionTest:test_long_send_receive()
 end
 
 function ConnectionTest:test_send_receive_in_pieces()
-  -- What is received need not line up with what was sent, as the transport carries a
-  -- stream of bytes rather than the messages put into it
+  -- A receive need not line up with a send, as the transport carries a stream of bytes
+  -- and not the messages put into it
   self.conn:send('foobar')
   self.server:echo(6)
   luaunit.assertEquals(self.conn:receive(3), 'foo')
@@ -91,9 +91,9 @@ function ConnectionTest:test_receive_on_closed_connection()
 end
 
 -- A TCP listener on a port the system picks, and the address a client reaches it at.
--- The loopback address is given rather than a name, so that the listener is on the
--- address family the connection under test opens a socket for: 'localhost' resolves to
--- the IPv6 loopback first on some platforms, and a connection is IPv4.
+-- The loopback address is given, and not a name, so that the listener is on the address
+-- family the connection under test opens a socket for: 'localhost' resolves to the IPv6
+-- loopback first on some platforms, and a connection is IPv4.
 local function tcpip_listener()
   local listener = assert(socket.bind('127.0.0.1', 0))
   local address, port = listener:getsockname()

@@ -29,9 +29,8 @@ namespace KRPC.Utils
         where TEntry : ClientOwnedEntry
     {
         readonly IDictionary<TKey, TEntry> entries = new Dictionary<TKey, TEntry> ();
-        // A list rather than a dictionary: a detach while an earlier detach is still
-        // waiting to be released must hold both entries, even for the same key, or the
-        // earlier override would never be released.
+        // A detach while an earlier detach is still waiting to be released must hold both
+        // entries, even for the same key, so these are a list and not a dictionary
         readonly List<KeyValuePair<TKey, TEntry>> detached =
             new List<KeyValuePair<TKey, TEntry>> ();
         readonly Func<TKey, TEntry> install;

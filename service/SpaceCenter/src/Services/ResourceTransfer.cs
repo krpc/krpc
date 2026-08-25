@@ -12,18 +12,17 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class ResourceTransfer : IGameObjectState
     {
-        // The resource's definition comes from the game's part database rather than from any
-        // craft, so unlike the parts it is not something the game tears down.
+        // The resource's definition comes from the game's part database and not from any
+        // craft, so the game does not tear it down with the parts
         readonly PartResourceDefinition internalResource;
         readonly float transferRate;
         // The game state the transfer was started in. A transfer is let go of when the
-        // flight it runs in is left as much as when its client removes it, and the two
-        // look the same to the object, so the state having moved on is what tells them
-        // apart when there is a client left to say it to.
+        // flight it runs in is left as much as when its client removes it, and the
+        // generation moving on tells the two apart
         readonly uint generation = GameState.Generation;
         // Whether the client has removed the transfer. A finished transfer moves nothing
-        // and goes on standing for a pair of parts the game may keep for hours, so the
-        // client saying it is done with it is the only thing that can retire the object.
+        // and stands for a pair of parts the game may keep for hours, so only the client
+        // retires the object
         bool removed;
         bool complete;
         float amount;
@@ -42,9 +41,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the transfer, which needs both of the parts it runs
-        /// between and so is as alive as the less alive of them. A transfer the client
-        /// has removed is gone whatever the parts are doing.
+        /// The state of the transfer. It needs both of the parts it runs between, and takes
+        /// the less alive of their two states. A transfer the client has removed is
+        /// destroyed whatever the parts' states.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -165,9 +164,9 @@ namespace KRPC.SpaceCenter.Services
         public void Remove ()
         {
             CheckExists ();
-            // The addon runs the transfer and has nothing left to do for one the client
-            // is finished with. Taking it out is also what asks for the sweep that drops
-            // it from the object store.
+            // The addon runs the transfer and has nothing left to do for one the client is
+            // finished with. Taking it out also requests the sweep that drops it from the
+            // object store
             ResourceTransferAddon.Remove (this);
             Release ();
         }
@@ -202,11 +201,11 @@ namespace KRPC.SpaceCenter.Services
         {
             if (complete)
                 return;
-            // A transfer runs from the game's fixed update, so it has to decide for itself
-            // what to do about a part it can no longer reach rather than raise the error a
-            // call would get. A destroyed part ends the transfer, as nothing can move into
-            // or out of it again. A part whose vessel the game has unloaded is not gone and
-            // is not being simulated either, so the transfer waits for it to come back.
+            // A transfer runs from the game's fixed update, so it handles a part it can no
+            // longer reach itself, without the error a call would raise. A destroyed part
+            // ends the transfer, as nothing can move into or out of it again. A part whose
+            // vessel the game has unloaded is still there and is not being simulated, so
+            // the transfer waits for it
             var fromState = FromPart.GameObjectState;
             var toState = ToPart.GameObjectState;
             if (fromState == GameObjectState.Destroyed || toState == GameObjectState.Destroyed) {

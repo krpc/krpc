@@ -31,9 +31,8 @@ if TYPE_CHECKING:
 
 
 # protobuf's varint reader and zigzag decoder are internal and carry no types, so they are
-# bound here with the types they do have rather than described again at every call. A call
-# carrying a collection reaches them once per value, so this also saves looking them up on
-# their module that many times
+# bound here with the types they do have. A call carrying a collection reaches them once
+# per value, so this also saves looking them up on their module that many times
 _pb_decode_varint: Callable[[bytes, int], Tuple[int, int]] = (
     protobuf_decoder._DecodeVarint  # type: ignore[attr-defined]
 )
@@ -79,8 +78,8 @@ class Decoder:
     @classmethod
     def decode(cls, client: Optional[Client], data: bytes, typ: TypeBase) -> object:
         """Given a python type, and serialized data, decode the value"""
-        # The value types come first: they are what most results are, and this is on
-        # the hot path of every remote procedure call
+        # The value types come first, as most results are one, and this is on the hot path
+        # of every remote procedure call
         if isinstance(typ, ValueType):
             return cls._decode_value(data, typ)
         if isinstance(typ, MessageType):
@@ -192,13 +191,11 @@ class _ValueDecoder:
 
     @classmethod
     def _decode_signed_varint(cls, data: bytes) -> int:
-        # The zigzag payload is an unsigned varint. Reading it as a signed one would sign
-        # extend it as two's complement first, which corrupts anything from 2**62 up once
-        # the payload sets bit 63 - long.MaxValue would decode as -1.
-        #
-        # The single byte case is read here rather than through _decode_varint, which is the
-        # general form of it: a collection reaches this once per value it carries, and a
-        # value from -64 to 63 is one byte.
+        # The zigzag payload is an unsigned varint. Reading it as a signed one sign extends
+        # it as two's complement first, which corrupts anything from 2**62 up once the
+        # payload sets bit 63, where long.MaxValue decodes as -1. The single byte case is
+        # read here and not through the general _decode_varint: a collection reaches this
+        # once per value it carries, and a value from -64 to 63 is one byte.
         first = data[0]
         if first < 128:
             return _pb_zigzag_decode(first)
@@ -281,10 +278,9 @@ class _ValueDecoder:
         return data[position : position + size]
 
 
-# The decoder for each value type, looked up by type code rather than found by
-# comparing against each code in turn, as this is on the hot path of every
-# remote procedure call. The signed and unsigned integer types share a decoder
-# apiece, named for what it reads rather than for one of the types that read it
+# The decoder for each value type, looked up by type code, as this is on the hot path of
+# every remote procedure call. The signed and unsigned integer types share a decoder
+# apiece, named for what it reads
 _VALUE_DECODERS: Mapping[KRPC.Type.TypeCode, Callable[[bytes], object]] = {
     KRPC.Type.SINT32: _ValueDecoder._decode_signed_varint,
     KRPC.Type.SINT64: _ValueDecoder._decode_signed_varint,

@@ -33,9 +33,9 @@ def main():
     for name, client in [(PYTHON, None)] + args.client:
         measured, version, settings = measure(args, name, client)
         results += measured
-        # One line for the lot rather than one per client: they are measured against servers
-        # started the same way, and a table whose columns ran under different settings would
-        # be reporting two things at once.
+        # One line for the lot, not one per client: they are measured against servers started
+        # the same way, and a table whose columns ran under different settings would be
+        # reporting two things at once.
         environment.setdefault("server", version)
         environment.setdefault("measured against", settings)
     runner.report(results, SUITE, environment, args.json, render=report.by_suite)

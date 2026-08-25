@@ -40,8 +40,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the control surface: the state of the part
-        /// carrying it, or destroyed once that part no longer has the module.
+        /// The state of the part carrying the control surface, or destroyed once that part
+        /// loses the module.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return controlSurfaceRef.StateOn (Part); }
@@ -173,7 +173,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var torque = InternalControlSurface.GetPotentialTorque ();
                 // ModuleControlSurface.GetPotentialTorque negates the roll (y) axis of both the
                 // positive and negative torque vectors, unlike other ITorqueProvider
-                // implementations. Normalise to the kRPC convention (positive torque >= 0,
+                // implementations. Normalize to the kRPC convention (positive torque >= 0,
                 // negative torque <= 0) with Math.Abs, matching ITorqueProviderExtensions.Sum.
                 return new TupleV3 (
                     new Vector3d (Math.Abs (torque.Item1.x), Math.Abs (torque.Item1.y), Math.Abs (torque.Item1.z)),

@@ -39,8 +39,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the docking port: the state of the part
-        /// carrying it, or destroyed once that part no longer has the module.
+        /// The state of the part carrying the docking port, or destroyed once that part
+        /// loses the module.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return portRef.StateOn (Part); }
@@ -188,9 +188,9 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // Don't do anything if we are aren't in a state where the shield can be opened or closed
                 if (state != DockingPortState.Shielded && state != DockingPortState.Ready)
                     return;
-                // A single event toggles the shield open or closed. It is looked up by id -- the
-                // name of the method implementing it -- which the game does not translate, unlike
-                // the display name shown on the button.
+                // A single event toggles the shield open or closed. It is looked up by id,
+                // the name of the method implementing it, which the game does not translate,
+                // unlike the display name shown on the button
                 if (value != Shielded)
                     InternalShield.Events ["Toggle"].Invoke ();
             }

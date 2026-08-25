@@ -1,27 +1,17 @@
 ## [v0.7.0] - unreleased
-- Support structure types, which a service defines as a compound value with named fields. One
-  is generated as a `struct` carrying its fields as properties, with a constructor taking them
-  in the order the structure declares them. It implements `IEquatable` and `IComparable` and
-  carries the equality and relational operators, ordering by its fields in turn as a
-  `System.Tuple` of the same values does (#1066)
+- Support structure types, a compound value with named fields a service defines, generated as
+  a `struct` with a constructor, `IEquatable`, `IComparable` and the comparison operators over
+  its fields (#1066)
 - Stream expressions can be multiplied by a constant (#1062)
 - **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
   form (`int?`) (#1017)
 - Add `Connection.ConnectLocal`, which connects to a server on the same machine over unix
-  domain sockets rather than TCP/IP. The connection behaves identically once established
-  (#1065)
+  domain sockets (#1065)
 - Add a `timeout` parameter to the `Connection` constructor, bounding how long a connection is
-  waited for. A network that drops a connection attempt rather than refusing it otherwise leaves
-  the client waiting indefinitely (#1065)
-- Reduce the cost of a remote procedure call. A value is encoded and decoded without a
-  protobuf stream of its own, its bytes are written into a buffer of their own rather than one
-  the thread keeps, a response is read a block at a time and parsed straight out of the read
-  buffer, the request a call is built into is kept from one call to the next, and the client
-  connections disable Nagle's algorithm (#1056)
-- Reduce the cost of a call that returns a collection or an object. What kind of value a type
-  carries, and how to build one, is worked out the first time the type is seen rather than for
-  every value encoded or decoded, and a collection works out how to encode and decode its
-  items once for the collection rather than once for every item (#1056)
+  waited for (#1065)
+- Reduce the cost of a remote procedure call, encoding and decoding without a protobuf stream
+  and parsing a response straight out of the read buffer (#1056)
+- Reduce the cost of a call that returns a collection or an object (#1056)
 
 ## [v0.6.0]
 - **Breaking:** Requires .NET Framework 4.7.2 or later (#948)

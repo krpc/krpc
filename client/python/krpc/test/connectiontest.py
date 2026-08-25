@@ -9,9 +9,8 @@ import krpc.schema.KRPC_pb2 as KRPC
 from krpc.connection import Connection
 
 # The unix domain address family, where the socket module has it. It is absent on Windows,
-# so it is read once here rather than reached for through the module, which lets the code
-# below name the family on every platform. The tests that listen on one are skipped where
-# it is missing.
+# so it is read once here, which lets the code below name the family on every platform.
+# The tests that listen on one are skipped where it is missing.
 AF_UNIX = getattr(socket, "AF_UNIX", None)
 
 
@@ -129,9 +128,9 @@ class ConnectionTest(unittest.TestCase):
         self.assertRaises(socket.error, conn.partial_receive, 1)
 
     def test_receive_message_on_remote_closed_connection(self) -> None:
-        # The loop reading the message size must give up rather than retry a closed
-        # connection at full speed forever. Run on a thread so a regression fails here
-        # instead of hanging the suite.
+        # The loop reading the message size must give up on a closed connection instead of
+        # retrying at full speed forever. Run on a thread so a regression fails here instead
+        # of hanging the suite.
         conn = self.connect()
         self.server_close_connection(conn)
         raised: List[BaseException] = []

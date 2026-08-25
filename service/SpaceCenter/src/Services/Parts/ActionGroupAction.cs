@@ -24,8 +24,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the module the action belongs to, or for its part
-        /// where the action has no module.
+        /// The state of the module the action belongs to, or of its part where the action
+        /// has no module.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return module != null ? module.GameObjectState : part.GameObjectState; }

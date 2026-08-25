@@ -23,33 +23,33 @@ from tools.benchmarks.report import Result
 SUITE = "client, python"
 SCENARIO = "round trips"
 
-# What a round trip's figure counts, for the report to work its reciprocal out from.
+# The unit a round trip's figure counts, for the report to work its reciprocal out from.
 RATE = "calls/s"
 
-# How long one timed loop should run for. Long enough that the clock and a stray scheduling
+# Duration of one timed loop. Long enough that the clock and a stray scheduling
 # delay do not decide the answer, short enough that a whole run stays in seconds.
 TARGET_SECONDS = 0.2
 
-# How many timed loops to take. More than the server-side suites take, because a round trip
+# The number of timed loops to take. More than the server-side suites take, as a round trip
 # crosses a socket and a scheduler as well as the server, and every one of those can only make
 # a sample slower.
 SAMPLES = 9
 
-# How long one discarded chunk of calls runs for while a case is being settled, and how many
+# The duration of one discarded chunk of calls while a case is being settled, and how many
 # of them at a time are asked whether it has stopped getting faster.
 SETTLE_CHUNK_SECONDS = 0.1
 SETTLE_CHUNKS = 3
 
-# How much better the last few chunks have to be than everything before them for a case to
-# count as still improving. Below this it has stopped going anywhere and can be measured.
+# The margin the last few chunks have to beat for a case to count as still improving. Below
+# this it has stopped moving and can be measured.
 SETTLE_TOLERANCE = 0.02
 
-# How long to keep settling one case before measuring it anyway. Reaching this means the
-# figure is whatever the case had reached rather than what it costs, so it is reported.
+# The time to keep settling one case before measuring it anyway. Reaching this means the
+# figure is where the case had reached and not its cost, so the report says so.
 SETTLE_TIMEOUT_SECONDS = 10.0
 
-# How many values the collection case sends and gets back. A call carries a value at a time, so
-# what one costs to encode and decode is lost in the round trip it arrives in; a list makes that
+# The number of values the collection case sends and gets back. A call carries one value at a
+# time, so the cost of encoding and decoding it is lost in the round trip. A list makes that
 # per-value cost most of what the case measures. The same count for every client, so that the
 # figures can be read against each other.
 LIST_VALUES = 100
@@ -77,8 +77,8 @@ def measure(server):
             testserver.warm_up(conn)
             results += measure_calls(conn, transport)
             environment.setdefault("server", conn.krpc.get_status().version)
-            # What the server was told is the same whichever transport it serves, so the first
-            # one measured says it for the run.
+            # The server settings are the same whichever transport it serves, so the first one
+            # measured records them for the run.
             environment.setdefault(
                 "measured against", testserver.settings(conn, pacing)
             )

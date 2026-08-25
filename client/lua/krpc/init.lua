@@ -15,10 +15,10 @@ krpc.limits = limits
 local DEFAULT_ADDRESS = '127.0.0.1'
 local DEFAULT_RPC_PORT = 50000
 
--- A default path for a socket of the given name, matching the one the server uses unless
--- it was configured with another. Windows has no runtime directory for this, so its
--- per-user application data directory stands in. The fallback names a fixed directory
--- rather than the temporary one, which TMPDIR moves for the client and not the server.
+-- A default path for a socket of the given name, matching the server's own default. Windows
+-- has no runtime directory for this, so its per-user application data directory stands in.
+-- The fallback names a fixed directory, as TMPDIR moves the temporary one for the client and
+-- not for the server.
 local function default_path(name)
   local windows = package.config:sub(1, 1) == '\\'
   local separator = windows and '\\' or '/'
@@ -32,8 +32,8 @@ local function default_path(name)
     temporary = os.getenv('TMP') or os.getenv('TEMP') or '.'
     user = os.getenv('USERNAME')
   end
-  -- Lua has the environment and nothing else to ask, and a path without a user name in it
-  -- would be shared between accounts rather than belonging to this one
+  -- Lua can only read the environment, and a path without a user name in it would be shared
+  -- between accounts
   if user == nil or user == '' then
     error('Could not work out which user this is, so there is no default socket path to ' ..
           'connect to; pass rpc_path instead')
@@ -67,8 +67,8 @@ function krpc.connect(name, address, rpc_port)
   return connect_using(Connection(address, rpc_port), name)
 end
 
--- Connect to a server on the same machine, over a unix domain socket named by the
--- given path rather than over TCP. The path defaults to the one the server uses.
+-- Connect to a server on the same machine, over a unix domain socket named by the given
+-- path. The path defaults to the one the server uses.
 function krpc.connect_local(name, rpc_path)
   rpc_path = rpc_path or default_path('rpc')
   return connect_using(LocalConnection(rpc_path), name)

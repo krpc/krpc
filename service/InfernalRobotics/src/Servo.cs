@@ -15,10 +15,10 @@ namespace KRPC.InfernalRobotics
     [KRPCClass (Service = "InfernalRobotics")]
     public class Servo : Equatable<Servo>, IGameObjectState
     {
-        // The part the servo is on, which is what identifies it: a servo is a module the mod
-        // adds to a part, and the mod names one by its part. The wrapper the mod hands out
-        // is built afresh every time a servo is listed, so holding one would leave two
-        // objects for one servo comparing unequal, and would keep a destroyed part alive.
+        // The part the servo is on, which identifies it: a servo is a module the mod adds to a
+        // part, and the mod names one by its part. The wrapper the mod hands out is built afresh
+        // every time a servo is listed, so holding one leaves two objects for one servo comparing
+        // unequal, and keeps a destroyed part alive
         readonly SpaceCenter.Services.Parts.Part part;
 
         internal Servo (SpaceCenter.Services.Parts.Part servoPart)
@@ -50,9 +50,8 @@ namespace KRPC.InfernalRobotics
         }
 
         /// <summary>
-        /// What the game holds for the servo. It belongs to its part, so it is exactly as
-        /// live, dormant or destroyed as the part, and destroyed when a part that is there
-        /// to look at no longer carries the servo module.
+        /// The state of the servo. It takes the state of its part, and is destroyed once a
+        /// live part no longer carries the servo module.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -64,9 +63,8 @@ namespace KRPC.InfernalRobotics
             }
         }
 
-        // The servo the mod has on the part now. Every member reaches the mod through this,
-        // so a servo taken before a game state was replaced reads the one that stands in
-        // its place rather than the one it was built from.
+        // The servo the mod has on the part now. Every member reaches the mod through this, so a
+        // servo taken before a game state was replaced reads the one that stands in its place
         IRWrapper.IServo Internal {
             get {
                 var servo = IRWrapper.ServoOnPart (part.InternalPart);

@@ -78,8 +78,8 @@ namespace KRPC.Server.ProtocolBuffers
                 return null; // The length prefix has not been fully received yet.
             if (data.Length < prefixLength + size)
                 return null; // The message body has not been fully received yet.
-            // Parse the message body straight out of the buffer, with no copy or intermediate stream,
-            // reading exactly the message's own bytes.
+            // Parse the message body straight out of the buffer, with no copy or intermediate
+            // stream
             var message = new T ();
             message.MergeFrom (data.GetBuffer (), prefixLength, size);
             return message;
@@ -100,9 +100,8 @@ namespace KRPC.Server.ProtocolBuffers
             var totalSize = prefixLength + size;
             if (length < totalSize)
                 return 0; // The message body has not been fully received yet.
-            // Parse the message body straight out of the buffer. This copies no payload bytes and
-            // allocates no intermediate stream, and reads exactly the message's own bytes, so a
-            // following message in the same buffer is left untouched.
+            // Parse the message body straight out of the buffer, reading exactly the message's
+            // own bytes so that a following message in the buffer is left untouched
             message = parser.ParseFrom (data, offset + prefixLength, size);
             return totalSize;
         }

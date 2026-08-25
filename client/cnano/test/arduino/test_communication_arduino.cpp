@@ -14,7 +14,7 @@ TEST(test_communication_arduino, test_read) {
 }
 
 // A read that returns fewer bytes than requested must resume at the point the previous one
-// finished, rather than restarting at the beginning of the buffer.
+// finished, and not restart at the beginning of the buffer.
 TEST(test_communication_arduino, test_read_partial) {
   const size_t chunks[] = {3, 5};
   HardwareSerial serial(data, sizeof(data), chunks, 2);
@@ -25,7 +25,7 @@ TEST(test_communication_arduino, test_read_partial) {
 }
 
 // A read that returns nothing means the serial timeout elapsed without a single byte
-// arriving, which is as close to a disconnect as a serial link gets. It must fail rather than
+// arriving, which is as close to a disconnect as a serial link gets. It must fail, and not
 // retry forever.
 TEST(test_communication_arduino, test_read_timeout) {
   const size_t chunks[] = {2, 0};

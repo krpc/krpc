@@ -1,9 +1,7 @@
 ## [v0.7.0] - unreleased
 
-- An `Antenna` whose part the game has destroyed, or that is no longer an antenna, and a
-  `Comms` whose vessel is gone, raise `KRPC.ObjectDestroyedException` rather than reaching
-  into what is no longer there, and are freed rather than kept for the rest of the session
-  (#1051)
+- An `Antenna` whose part is destroyed, or that is no longer an antenna, and a `Comms` whose
+  vessel is gone, raise `KRPC.ObjectDestroyedException` (#1051)
 
 ## [v0.6.0]
 - Fix `RemoteTech.Available` incorrectly reporting false in game scenes other than flight (#937)

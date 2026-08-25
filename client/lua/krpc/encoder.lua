@@ -5,15 +5,15 @@ local Types = require 'krpc.types'
 
 local encoder = {}
 
--- Where the routines below leave the bytes they produce. They are handed to a writer, and one
+-- The buffer the routines below leave their bytes in. They are handed to a writer, and one
 -- writer shared by all of them costs nothing per value, where a closure made for the value
--- would be allocated and thrown away again for every one encoded.
+-- would be allocated and thrown away for every one encoded.
 local _written
 local function _write(data)
   _written = data
 end
 
--- What pb.struct_pack calls a single precision and a double precision number.
+-- The pb.struct_pack format codes for a single precision and a double precision number.
 local FLOAT_FORMAT = string.byte('f')
 local DOUBLE_FORMAT = string.byte('d')
 
@@ -49,9 +49,8 @@ local function _encode_double(value)
   return _written
 end
 
--- How to encode a value, by the code of the type it has. Which of these a type wants is the
--- first thing encoding a value asks, and a table says so in one lookup where asking a type what
--- class it is walks its ancestry once per question.
+-- The encoder for each value type, by type code. Encoding a value starts here, and a table
+-- resolves it in one lookup, where testing a type's class walks its ancestry every time.
 local _value_encoders = {
   [Types.DOUBLE] = _encode_double,
   [Types.FLOAT] = _encode_float,
@@ -174,10 +173,10 @@ end
 --- Encode the request carrying one procedure call, prefixed by its size, ready to send.
 --
 -- The arguments are the already encoded value of each, in order, with Types.none where a call
--- passes nothing. Written here rather than built as a protocol buffer message and serialized:
--- the message layer allocates a table of fields and a pair of listeners for each of the three
--- messages a call needs, and then walks all of them twice, once to size them and once to write
--- them. That costs an order of magnitude more than the bytes it produces.
+-- passes nothing. Written here and not built as a protocol buffer message: the message layer
+-- allocates a table of fields and a pair of listeners for each of the three messages a call
+-- needs, then walks all of them twice, once to size them and once to write them. That costs an
+-- order of magnitude more than the bytes it produces.
 function encoder.encode_request(service, procedure, arguments)
   local parts = { _delimited(_CALL_SERVICE, service), _delimited(_CALL_PROCEDURE, procedure) }
   local count = 2

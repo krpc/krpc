@@ -77,7 +77,7 @@ namespace KRPC.Client
             if (timeout == TimeSpan.Zero) {
                 socket.Connect (address, port);
             } else {
-                // A network that drops a connection attempt rather than refusing it leaves the
+                // A network that drops a connection attempt instead of refusing it leaves the
                 // client waiting, so bound the wait where one was asked for.
                 var pending = socket.BeginConnect (address, port, null, null);
                 if (!pending.AsyncWaitHandle.WaitOne (timeout)) {
@@ -87,8 +87,7 @@ namespace KRPC.Client
                 socket.EndConnect (pending);
             }
             // A call writes a request and then waits for its response, so there is never a
-            // second small write for Nagle's algorithm to hold the first one back for. Left on,
-            // it can only delay a request the server is already waiting for.
+            // second small write for Nagle's algorithm to hold the first one back for.
             socket.NoDelay = true;
             return socket;
         }
@@ -198,11 +197,10 @@ namespace KRPC.Client
                     rpcSocket.Close ();
                     if (streamSocket != null)
                         streamSocket.Close ();
-                    // Join the update thread, so that it has ended by the time this returns
-                    // rather than at some later point of its own choosing. This has to come
-                    // after the sockets are closed: the thread spends its time blocked in a
-                    // read that does not observe the stop event, and closing the socket
-                    // underneath it is what releases it.
+                    // Join the update thread, so that it has ended by the time this returns.
+                    // This has to come after the sockets are closed: the thread spends its time
+                    // blocked in a read that does not observe the stop event, and closing the
+                    // socket underneath it releases the read.
                     if (StreamManager != null)
                         StreamManager.Dispose ();
                 }
@@ -487,9 +485,8 @@ namespace KRPC.Client
                 System.Type exnType;
                 if (!exceptionTypes.TryGetValue (key, out exnType)) {
                     // The type is unknown here if the service it belongs to was never
-                    // registered. Report the error itself, named by its type on the server,
-                    // rather than the failure to build an exception for it, which would say
-                    // nothing about what actually went wrong.
+                    // registered. Report the error itself, named by its type on the server, so
+                    // that the failure to build an exception for it does not hide it.
                     return new RPCException (key + ": " + message);
                 }
                 return (System.Exception)Activator.CreateInstance (exnType, new [] { message });

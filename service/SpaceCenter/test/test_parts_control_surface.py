@@ -157,7 +157,7 @@ class TestPartsControlSurface(krpctest.TestCase):
     def test_available_torque(self):
         # Not verified here: that authority_limiter scales available_torque proportionally
         # (mirrors test_authority_limiter in test_parts_reaction_wheel.py). This
-        # requires the vessel to be in motion — GetPotentialTorque() returns zero
+        # requires the vessel to be in motion, as GetPotentialTorque() returns zero
         # at rest with no airspeed, so the scaling cannot be exercised here.
         self.assertAlmostEqual((0, 0, 0), self.ctrlsrf.available_torque[0], places=3)
         self.assertAlmostEqual((0, 0, 0), self.winglet.available_torque[1], places=3)

@@ -6,13 +6,13 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// A second-order (biquad) notch filter, implemented with bilinear-transform coefficients and
     /// a Direct Form II Transposed state. Used by <see cref="AttitudeController"/> to reject a
     /// low-frequency structural bending mode from the measured angular velocity while staying
-    /// transparent everywhere outside its narrow rejection band — so it can sit permanently on a
+    /// transparent everywhere outside its narrow rejection band, so it can sit permanently on a
     /// latched axis without smearing the sub-Hz control band the way a broadband low-pass would.
     /// </summary>
     /// <remarks>
-    /// The notch has unity gain at DC and at the Nyquist frequency and zero gain at f₀; Q controls
+    /// The notch has unity gain at DC and at the Nyquist frequency and zero gain at f0; Q controls
     /// the width (higher Q is narrower: less in-band phase lag but less tolerance to frequency
-    /// drift). Because the coefficient <c>K = tan(π·f₀·dt)</c> diverges as f₀ approaches Nyquist and
+    /// drift). Because the coefficient <c>K = tan(pi*f0*dt)</c> diverges as f0 approaches Nyquist and
     /// the filter has unity gain at Nyquist by construction, a notch cannot reject a near-Nyquist
     /// mode; the controller routes those to a low-pass instead.
     /// </remarks>
@@ -43,7 +43,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Compute the biquad coefficients for the given centre frequency, quality factor and
+        /// Compute the biquad coefficients for the given center frequency, quality factor and
         /// sampling period. Does not touch the running state, so a live filter can be retuned to
         /// track a slowly drifting mode without a reset (only the coefficients change).
         /// </summary>
@@ -71,7 +71,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             if (!seeded) {
                 // Steady state for a constant input x (notch has unity DC gain): s1 = 0 since
-                // b1 == a1, and s2 = (b2 - a2)·x.
+                // b1 == a1, and s2 = (b2 - a2)*x.
                 s1 = 0;
                 s2 = (b2 - a2) * x;
                 seeded = true;
@@ -93,12 +93,12 @@ namespace KRPC.SpaceCenter.AutoPilot
 
     /// <summary>
     /// Online estimator of a structural oscillation frequency, tracked from the interval between
-    /// sign changes of the tick-to-tick rate change (Δω). One instance per axis group (pitch/yaw,
-    /// roll). It is fed every physics tick regardless of whether suppression is engaged — it costs
-    /// only a handful of adds — so an estimate is always warm the moment an axis is deemed flexible.
+    /// sign changes of the tick-to-tick rate change (deltaomega). One instance per axis group (pitch/yaw,
+    /// roll). It is fed every physics tick whether or not suppression is engaged, at a cost of a
+    /// handful of adds, so an estimate is always warm the moment an axis is deemed flexible.
     /// </summary>
     /// <remarks>
-    /// Δω changes sign at each extremum of ω — twice per oscillation cycle — so the interval between
+    /// deltaomega changes sign at each extremum of omega, twice per oscillation cycle, so the interval between
     /// accepted sign flips is a *half* period and the full period is twice that. A hysteresis
     /// deadband on the zero crossing rejects jitter around an extremum; a plausibility gate rejects
     /// slew transients (too slow) and single-tick noise (too fast); and the estimate stays NaN until
@@ -106,16 +106,16 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// </remarks>
     sealed class FrequencyTracker
     {
-        // Deadband as a fraction of the smoothed |Δω| (κ): a crossing must exceed this to count.
+        // Deadband as a fraction of the smoothed |deltaomega| (kappa): a crossing must exceed this to count.
         const double DeadbandFactor = 0.25;
-        // EMA time constant for the smoothed |Δω| that sets the deadband, and for the period.
+        // EMA time constant for the smoothed |deltaomega| that sets the deadband, and for the period.
         const double AbsDeltaTimeConstant = 0.5;
         const double PeriodTimeConstant = 0.5;
         // Plausibility gate (Hz). f_min rejects slew transients (too slow). The upper bound is
         // Nyquist (0.5/dt, = 25 Hz at 50 Hz physics), computed per tick from dt: a near-Nyquist
         // structural mode (e.g. the every-other-tick ~25 Hz chatter of a craft with tip-mounted
-        // actuators) alternates Δω every tick, giving a one-tick half-period at exactly Nyquist, so
-        // the cap must include it — it is then acquired and routed to the low-pass branch. Single-
+        // actuators) alternates deltaomega every tick, giving a one-tick half-period at exactly Nyquist, so
+        // the cap must include it, and it is then acquired and routed to the low-pass branch. Single-
         // tick noise also reads at Nyquist but is rejected by the AcquireCount agreement gate.
         const double MinFrequency = 0.5;
         // Consecutive accepted half-periods that must agree (within AgreeTolerance) before the
@@ -160,7 +160,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
-        /// Feed one tick's Δω (the raw, pre-suppression rate change on the tracked axis).
+        /// Feed one tick's deltaomega (the raw, pre-suppression rate change on the tracked axis).
         /// </summary>
         public void Update (double delta, double dt)
         {

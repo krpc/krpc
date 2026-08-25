@@ -16,26 +16,23 @@ import statistics
 # block, since a number that unsteady is not one to draw a conclusion from.
 NOISY_SPREAD = 0.25
 
-# What a figure has to be measured in for its reciprocal to be a rate a second, and how many of
-# that unit go into a second. A case measured in anything else reports no rate.
+# The units whose reciprocal is a rate per second, and how many of each go into a second. A
+# case measured in anything else reports no rate.
 PER_SECOND = {"s": 1.0, "ms": 1e3, "us": 1e6, "ns": 1e9, "ns/op": 1e9}
 
 # Every figure in a table of one suite per column is printed to the same number of places, so
-# that a column of them reads down as a column. The significant digits of a client's round trip
-# in milliseconds are the last of these; a table of one suite still prints as many as its
-# figures are worth and no more.
+# that a column of them reads down as a column. The last of these places are the significant
+# digits of a client's round trip in milliseconds. A table of one suite still prints as many
+# as its figures are worth.
 FIGURE = "%.5f"
 
-# A case whose samples moved this much between the start of the measurement and the end, on top
-# of however far they scattered, is called out under its block. Drift and noise both widen the
-# spread but mean opposite things: noise says the estimate is uncertain, drift says the case was
-# still going somewhere while it was measured and the number is wherever it had got to. The
-# second is worth another run.
-#
-# The spread is part of the threshold because the two ends being compared are each the middle of
-# a few samples, and samples that scatter widely give middles that differ by about as much on
-# their own. A case has only gone somewhere when it went further than its own scatter would have
-# carried it; below that it is a noisy case, which is what the spread column already says.
+# A case whose samples moved this much between the start of the measurement and the end, on
+# top of however far they scattered, is called out under its block. Drift and noise both widen
+# the spread but mean opposite things: noise makes the estimate uncertain, where drift means
+# the case was still moving while it was measured and the number is wherever it had got to.
+# The spread is part of the threshold because the two ends being compared are each the middle
+# of a few samples, and samples that scatter widely give middles that differ by about as much
+# on their own.
 DRIFT = 0.10
 
 
@@ -79,18 +76,17 @@ class Result:
         self.exact_allocations = exact_allocations
         self.iterations = iterations
         self.note = note
-        # A row that is there to explain the others rather than to be concluded from - the
-        # cost of the empty loop, say, which is subtracted from every case beside it. Still
-        # worth comparing between runs, but not worth warning that it wobbled.
+        # A row that explains the others, such as the cost of the empty loop, which is
+        # subtracted from every case beside it. Still worth comparing between runs, and not
+        # worth warning that it wobbled.
         self.context = context
         # Whether the case had stopped getting faster before it was measured. Where it had
-        # not, the figure is where it had reached rather than what the case costs, which is
-        # said beside it rather than left for the reader to notice.
+        # not, the figure is where it had reached and not the cost of the case, and the report
+        # says so beside it.
         self.settled = settled
-        # What one of whatever this case does is called, for a figure worth reading as a rate
-        # as well as a cost: a round trip measured in milliseconds is also so many calls a
-        # second. Naming the thing counted is the measurement's to do; working the rate out
-        # and phrasing it is not.
+        # The name of one operation, for a figure worth reading as a rate as well as a cost: a
+        # round trip measured in milliseconds is also so many calls a second. The measurement
+        # names the thing counted, and the report works the rate out.
         self.rate = rate
 
     @property
@@ -313,7 +309,7 @@ def _columns(scenario, suites, results):
         lines.append("")
         lines.extend(block(_rate, heading=_counted(results)))
 
-    # What each suite costs against the one that measured the case fastest, which is the
+    # The cost of each suite against the one that measured the case fastest, which is the
     # comparison a table of several of them is read for: the figures above it hold for the
     # machine and the session that took them, and these hold wherever they were taken.
     if len(suites) > 1:
@@ -386,7 +382,7 @@ def _scenarios(results):
 
 
 def _block(scenario, results):
-    # Only show the allocation columns for a suite that measured allocations; a client
+    # Only show the allocation columns for a suite that measured allocations. A client
     # benchmark, which times a round trip from outside the server, has nothing to put there.
     allocations = any(x.bytes_per_op is not None for x in results)
     case_width = max([len("case")] + [len(x.case) for x in results])

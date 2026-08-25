@@ -23,9 +23,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the crew member, who is live while the game still
-        /// has them on its roster. A game that has not been loaded has no roster to look
-        /// in, which says nothing about anyone.
+        /// The state of the crew member, who is live while the game holds them on its
+        /// roster. A game that has yet to be loaded has no roster, and leaves the crew
+        /// member dormant.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -233,8 +233,7 @@ namespace KRPC.SpaceCenter.Services
         static Vessel WaitForEVA (KerbalEVA eva, int tick)
         {
             // The game brings the kerbal into being over the following frames and then
-            // switches to it, so wait for it to be flyable rather than hand back a vessel
-            // that cannot yet be controlled.
+            // switches to it, so wait for the vessel to be flyable
             if (eva == null || eva.vessel == null)
                 throw new InvalidOperationException ("The kerbal was destroyed while leaving the vessel");
             if (FlightGlobals.ActiveVessel == eva.vessel && eva.vessel.loaded && !eva.vessel.packed)

@@ -32,8 +32,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the solar panel: the state of the part
-        /// carrying it, or destroyed once that part no longer has the module.
+        /// The state of the part carrying the solar panel, or destroyed once that part
+        /// loses the module.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return panelRef.StateOn (Part); }

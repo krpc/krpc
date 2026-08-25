@@ -445,10 +445,9 @@ namespace KRPC.Client.Test
         [Test]
         public void StructEqualityOfACollectionFieldIsByContents ()
         {
-            // A collection field is equal to one holding the same items, whatever object
-            // each of them is
-            // Asserted through Equals rather than through Assert.AreEqual, which compares
-            // collections structurally with a comparer of NUnit's own
+            // A collection field is equal to one holding the same items, whatever object each
+            // of them is. Asserted through Equals, as Assert.AreEqual compares collections
+            // structurally with a comparer of NUnit's own
             var x = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 1 });
             var y = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 1 });
             var z = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 2 });
@@ -484,7 +483,7 @@ namespace KRPC.Client.Test
         public void UnknownExceptionType ()
         {
             // An error naming a type this client has no registered types for still reports
-            // what went wrong, rather than failing while constructing the exception for it
+            // what went wrong, and does not fail while constructing the exception for it
             var error = new KRPC.Schema.KRPC.Error {
                 Service = "NotAService",
                 Name = "NotAnException",

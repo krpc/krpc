@@ -83,9 +83,9 @@ namespace KRPC.Server.LocalSocket
         {
             if (socketAddress == null)
                 throw new ArgumentNullException (nameof (socketAddress));
-            // Accepting a connection writes the address of the peer into the address this
-            // endpoint serialized to, and reports the size the system wrote whether or not it
-            // was given that much room, so no more of it is read than was there to write into
+            // Accepting a connection writes the peer address into the address this endpoint
+            // serialized to, and reports the size it wrote whether or not it was given that
+            // much room
             int written = Math.Min (
                 socketAddress.Size,
                 SerializedLength (Encoding.UTF8.GetByteCount (path)));

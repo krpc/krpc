@@ -17,29 +17,24 @@ namespace KRPC.Server.SerialIO
     /// </summary>
     sealed class BufferedPort
     {
-        // How often the read thread checks the port for received data. Reads are only issued for
-        // data the port already holds, so that they return promptly without engaging the port's
-        // timeout handling: a read left waiting for data that arrives just as the read gives up
-        // can lose that data, depending on the port implementation.
+        // Interval at which the read thread checks the port for received data. Reads are
+        // only issued for data the port already holds, so that they return without engaging
+        // the port's timeout handling, which can lose data that arrives as a read gives up
         const int pollInterval = 10;
-        // How long a read is allowed to take before it fails with TimeoutException. Reads are only
-        // issued for data the port already holds, so this is a guard against a port that
-        // misreports how much it has, which would otherwise leave the read thread stuck in a read
-        // that never returns.
+        // Time a read is allowed to take before it fails with TimeoutException. This guards
+        // against a port that misreports how much data it holds, which would leave the read
+        // thread stuck in a read that never returns
         const int readTimeout = 100;
-        // How long Close waits for each background thread to finish before abandoning it.
+        // Time Close waits for each background thread to finish before abandoning it.
         const int shutdownTimeout = 500;
         // Number of bytes transferred to or from the port at a time.
         const int chunkSize = 4096;
-        // Amount of unread received data at which reading from the port pauses, so that a client
-        // sending faster than the game reads cannot grow the buffer without limit. The data stays
-        // in the port's own buffer until the game catches up.
+        // Amount of unread received data at which reading from the port pauses, so that a
+        // client sending faster than the game reads cannot grow the buffer without limit
         const int receiveLimit = 1024 * 1024;
-        // Amount of unsent written data at which the port is failed. A caller that writes faster
-        // than the configured baud rate for long enough would otherwise grow the buffer without
-        // limit, while the data waiting in it grows ever staler. Unlike reading, which can pause
-        // and leave data with the port, written data has nowhere else to live, so the connection
-        // is dropped instead.
+        // Amount of unsent written data at which the port is failed. A caller writing faster
+        // than the configured baud rate would otherwise grow the buffer without limit, and
+        // written data has nowhere else to wait
         const int sendLimit = 1024 * 1024;
 
         readonly IPort port;
@@ -113,9 +108,9 @@ namespace KRPC.Server.SerialIO
                 Monitor.PulseAll (receivedLock);
             lock (sendingLock)
                 Monitor.PulseAll (sendingLock);
-            // Wait for the write thread first, so that it gets the chance to send what is left in
-            // the send buffer. A thread that does not finish in time is left to the port being
-            // closed under it, which fails its transfer and ends it.
+            // Wait for the write thread first, so that it can send what is left in the send
+            // buffer. A thread that does not finish in time fails its transfer when the port
+            // is closed under it
             JoinThread (writeThread);
             JoinThread (readThread);
             writeThread = null;
@@ -136,8 +131,8 @@ namespace KRPC.Server.SerialIO
             CheckFailed ();
             lock (receivedLock) {
                 var read = received.Take (buffer, offset, size);
-                // Reading may have taken the buffer back below the limit at which the read thread
-                // pauses, so let it know there is room again.
+                // Reading may have taken the buffer back below the limit at which the read
+                // thread pauses, so signal that there is room again
                 if (read > 0)
                     Monitor.PulseAll (receivedLock);
                 return read;
@@ -169,8 +164,8 @@ namespace KRPC.Server.SerialIO
         {
             var thread = new Thread (body);
             thread.Name = "kRPC SerialIO " + role + " " + port.PortName;
-            // The threads only move data for a server that the game owns, so they must never be
-            // what keeps the process alive.
+            // The threads only move data for a server that the game owns, so they must not
+            // keep the process alive
             thread.IsBackground = true;
             thread.Start ();
             return thread;
@@ -207,8 +202,8 @@ namespace KRPC.Server.SerialIO
                     return;
                 }
                 if (size <= 0) {
-                    // The port reports itself readable but has nothing to give, which means the
-                    // other end has gone. Wait rather than ask again immediately.
+                    // The port reports itself readable but has nothing to give, so the other
+                    // end has gone. Wait before polling again
                     Thread.Sleep (readTimeout);
                     continue;
                 }

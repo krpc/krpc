@@ -22,15 +22,14 @@ function Connection:_open()
   -- Open a socket to the server, and set whatever options it takes. Everything above this is
   -- transport agnostic, so a different transport only has to replace this.
   --
-  -- The server listens on IPv4, so the socket is opened for that family rather than for
-  -- whichever one an address resolves to first: a name commonly resolves to the IPv6
-  -- loopback ahead of the IPv4 one, and the attempt on it is slow to give up.
+  -- The server listens on IPv4, so the socket is opened for that family. A name commonly
+  -- resolves to the IPv6 loopback ahead of the IPv4 one, and the attempt on it is slow to
+  -- give up.
   self._socket = socket.tcp4()
   local result, err = self._socket:connect(self._address, self._port)
   if result ~= nil then
-    -- A call writes a request and then waits for its response, so there is never a second small
-    -- write for Nagle's algorithm to hold the first one back for. Left on, it can only delay a
-    -- request the server is already waiting for.
+    -- A call writes a request and then waits for its response, so there is never a second
+    -- small write for Nagle's algorithm to hold the first one back for.
     self._socket:setoption('tcp-nodelay', true)
   end
   return result, err
@@ -73,11 +72,10 @@ function Connection:send_message(message)
 end
 
 function Connection:receive_message(typ)
-  -- Receive a protobuf message. Its size arrives in front of it as a varint, and how long that
-  -- varint is is only known once its last byte has arrived, so it is read a byte at a time.
-  -- Reading the size itself, rather than handing what has arrived so far to a decoder that
-  -- raises an error until the whole of it has, saves a protected call for every one of those
-  -- bytes.
+  -- Receive a protobuf message. Its size arrives in front of it as a varint, whose length is
+  -- only known once its last byte has arrived, so it is read a byte at a time. Reading the
+  -- size here saves a protected call per byte, which handing the bytes so far to a decoder
+  -- that raises until the whole of it has arrived would cost.
   local size = 0
   local shift = 1
   -- A message size is a 32 bit value, so five bytes carry the whole of it. A varint that has

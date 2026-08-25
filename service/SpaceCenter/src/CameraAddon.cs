@@ -45,16 +45,14 @@ namespace KRPC.SpaceCenter
             public int SettledFrames;
         }
 
-        // Consecutive frames the live value must hold on its own (no re-apply needed)
-        // before the write is considered settled and cleared. Long enough to outlast the
-        // brief snap-backs during a transition, short enough to release promptly once the
-        // camera settles. Update runs on the render tick, so this is rendered frames.
+        // Consecutive frames the live value must hold on its own before the write is
+        // considered settled and cleared, long enough to outlast the brief snap-backs
+        // during a transition. Update runs on the render tick, so these are rendered frames
         const int SettleFrames = 30;
 
-        // Overall budget to keep re-applying a write before giving up, comfortably longer
-        // than the longest mode-switch settle. Guards a value the camera never accepts
-        // (e.g. requested out of range) or a target mode that never arrives because the
-        // script switched again, so neither can pin a write forever.
+        // Overall budget to keep re-applying a write before giving up, longer than the
+        // longest mode-switch settle. Guards a value the camera never accepts (e.g.
+        // requested out of range), or a target mode that never arrives
         const int RetryFrames = 1200;
 
         static readonly Dictionary<CameraProperty, PendingWrite> pending =
@@ -119,8 +117,7 @@ namespace KRPC.SpaceCenter
                 try {
                     // The live value is read before re-applying, so it reflects whether
                     // the previous frame's write survived the camera's own updates. Once
-                    // it has held on its own for the settle window the camera has stopped
-                    // overwriting it and the write is done; until then, re-apply it.
+                    // it has held for the settle window the write is done
                     if (Camera.Converged (property, entry.Value)) {
                         if (++entry.SettledFrames >= SettleFrames)
                             pending.Remove (property);

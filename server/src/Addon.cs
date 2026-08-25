@@ -9,17 +9,16 @@ namespace KRPC
     /// <summary>
     /// Main KRPC addon. Contains the kRPC core, config and UI.
     /// </summary>
-    // Ordered ahead of the game's own scripts so that the server executes a tick's calls before
-    // the game collects control inputs for it. Without that the order is Unity's default, which
-    // puts the control input first, and a value written by a call in one tick is not acted on
-    // until the next.
+    // Ordered ahead of the game's own scripts, so that the server executes a tick's calls
+    // before the game collects control inputs for it. Under Unity's default order a value
+    // written by a call in one tick is not acted on until the next
     [DefaultExecutionOrder (-100)]
     [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
     public sealed class Addon : MonoBehaviour
     {
-        // A new addon instance is created on every scene change (KSPAddon.AllGameScenes
-        // with once: false), so state that must survive scene switches — the loaded
-        // configuration, the running server core and cached button textures — is static.
+        // A new addon instance is created on every scene change (KSPAddon.AllGameScenes with
+        // once: false), so state that must survive scene switches is static: the loaded
+        // configuration, the running server core and the cached button textures
         internal static ConfigurationFile config;
         static Core core;
         static Texture textureOnline;
@@ -284,9 +283,9 @@ namespace KRPC
         void OnEditorShipModified(ShipConstruct ship)
         {
             // Anything no longer in the vessel under construction is gone, as the editor
-            // holds no other vessel it could be in. The game raises no part-died event in
-            // the editor, and fires this for every change to the vessel, a part deleted
-            // and a different craft loaded included.
+            // holds no other vessel. The game raises no part-died event in the editor, and
+            // fires this for every change to the vessel, including a deleted part and a
+            // newly loaded craft
             Service.GameState.RequestSweep();
         }
 
@@ -428,9 +427,9 @@ namespace KRPC
             GUILayoutExtensions.OnGUI ();
         }
 
-        // What the game had on the previous update of the sweep that is pending now: the
-        // number of vessels, or in an editor the number of parts in the vessel it has open.
-        // -1 means nothing counted yet.
+        // The count the game had on the previous update of the pending sweep: the number of
+        // vessels, or in an editor the number of parts in the vessel it has open. -1 means
+        // nothing counted yet
         static int lastCount = -1;
 
         /// <summary>
@@ -471,9 +470,8 @@ namespace KRPC
             if (settled) {
                 Service.GameState.Sweep ();
                 // After the store, so that the objects are classified with the game state
-                // settled, which is what the sweep itself records. A collection that drops
-                // something asks for a sweep, as letting go of an object always does, so
-                // this costs one further pass that finds nothing and asks for no more.
+                // settled. A collection that drops something requests a sweep, so this
+                // costs one further pass that finds nothing
                 ClientOwnedState.RemoveDestroyed ();
             }
         }

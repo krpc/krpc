@@ -76,8 +76,8 @@ namespace KRPC.UI
         readonly object stopBitsComboId = new object ();
 
         // Names for the fields whose value is too long for the field it is edited in, unique
-        // in the same way and for the same reason, and how far each has been scrolled
-        // sideways. The field is a window onto its value that follows the caret.
+        // in the same way, and how far each has been scrolled sideways. The field is a
+        // window onto its value that follows the caret
         readonly string rpcPathFieldName;
         readonly string streamPathFieldName;
         readonly string portNameFieldName;

@@ -27,11 +27,10 @@ namespace KRPC.SpaceCenter.Services
         public CommNet.CommNode InternalNode { get; private set; }
 
         /// <summary>
-        /// What the game holds for the thing the node hangs off. The game gives nothing to
-        /// identify a node by, so the node itself is held; what can be checked is the
-        /// transform it was built with, which the game tears down with the vessel. A node
-        /// that never had one, such as a ground station, says nothing either way and is
-        /// therefore kept.
+        /// The state of the object the node hangs off. The game offers no identifier for a
+        /// node, so the node itself is held and the transform it was built with is what can
+        /// be read. The game tears that transform down with the vessel, and a node built
+        /// without one, such as a ground station, stays live.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -55,8 +54,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            // The node's identity hash rather than its own, so that nothing the game does to
-            // the node can change it while a client holds this object.
+            // The node's identity hash, so that nothing the game does to the node changes
+            // it while a client holds this object
             return RuntimeHelpers.GetHashCode (InternalNode);
         }
 

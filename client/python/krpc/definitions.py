@@ -41,7 +41,7 @@ _KIND_FROM_CODE = {
     KRPC.Type.STRUCT: STRUCT,
 }
 
-# What identifies a definition, and therefore what a reference to one resolves against
+# The key a definition is identified by, and that a reference to one resolves against
 Key = Tuple[str, str, str]
 
 Node = TypeVar("Node")

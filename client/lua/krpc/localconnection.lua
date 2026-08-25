@@ -10,9 +10,8 @@ function LocalConnection:_init(path)
 end
 
 -- luasocket carries its unix domain sockets in a module of its own, which it builds
--- everywhere but Windows, where it comes from a rock of its own. It is asked for when a
--- socket is opened rather than when this module is loaded, so that an installation
--- without it can still connect over TCP/IP.
+-- everywhere but Windows, where it comes from a rock of its own. It is loaded when a socket
+-- is opened, so that an installation without it can still connect over TCP/IP.
 local function unix_socket()
   local found, unix = pcall(require, 'socket.unix')
   if not found then

@@ -72,8 +72,8 @@ class StandInServer implements AutoCloseable {
   }
 
   private void serve(SocketChannel channel) {
-    // A message is a size varint followed by the message itself, which is what protobuf's
-    // delimited form is, so the messages are read and written through that
+    // A message is a size varint followed by the message itself, the same as protobuf's
+    // delimited form, so the messages are read and written through that
     try (SocketChannel socket = channel) {
       InputStream input = Channels.newInputStream(socket);
       OutputStream output = Channels.newOutputStream(socket);
@@ -88,7 +88,7 @@ class StandInServer implements AutoCloseable {
       if (status != KRPC.ConnectionResponse.Status.OK) {
         return;
       }
-      // Every request is answered with an empty result, which is what a call returning
+      // Every request is answered with an empty result, the same as a call returning
       // nothing gets back from a real server
       while (!stopping) {
         if (KRPC.Request.parseDelimitedFrom(input) == null) {

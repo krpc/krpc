@@ -41,10 +41,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the alarm. It is live while an alarm with the id is in
-        /// the game's alarm clock, and destroyed once the alarm clock is there to ask and
-        /// has none, as an alarm that is removed is gone for good. A game that has no alarm
-        /// clock running has no alarms to look through, which says nothing about this one.
+        /// The state of the alarm. It is live while an alarm with the id is in the game's
+        /// alarm clock, and destroyed once a running alarm clock has none. A game with no
+        /// alarm clock running leaves the alarm dormant.
         /// </summary>
         public GameObjectState GameObjectState
         {
@@ -399,8 +398,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Remove()
         {
-            // Resolve first, so that removing an alarm the game does not have reports that
-            // rather than passing an id the alarm clock knows nothing about.
+            // Resolve first, so that removing an alarm the game does not have is reported
+            // here, and not as an unknown id from the alarm clock
             var alarm = InternalAlarm;
             AlarmClockScenario.DeleteAlarm(alarm.Id);
         }

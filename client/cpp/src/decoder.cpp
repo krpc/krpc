@@ -28,7 +28,7 @@ const size_t MAX_VARINT_LENGTH = 10;
 // not hold a whole one yet. A varint carries seven bits of the value in each byte, with the
 // top bit saying whether another byte follows.
 //
-// Read here rather than through a coded stream. A value is a few bytes long, and a collection
+// Read here and not through a coded stream. A value is a few bytes long, and a collection
 // arrives a value at a time, so setting a stream up to read one costs more than reading it.
 size_t read_varint(const char* data, size_t length, uint64_t* value) {
   uint64_t result = 0;

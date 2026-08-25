@@ -43,9 +43,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the radiator. A part carries an active radiator
-        /// module, a deployable one, or both, and either is enough for the radiator, so
-        /// it is as alive as the more alive of them.
+        /// The state of the radiator. A part carries an active radiator module, a
+        /// deployable one, or both, and either is enough, so the radiator takes the more
+        /// alive of their states.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return activeRadiatorRef.StateOn (Part).MostAlive (deployableRadiatorRef.StateOn (Part)); }

@@ -231,10 +231,10 @@ namespace KRPC.SpaceCenter.Services
             if (settled < SettleFrames)
                 throw new YieldException<Action> (() => StartVesselLoad (path, settled + 1));
             EditorLogic.LoadShipFromFile (path);
-            // The game leaves itself set to read this file again the next time the
-            // editor starts up, which would spring the vessel on a later entry into the
-            // editor that did not ask for it. Point it back at the vessel the editor is
-            // holding, as it is when a vessel is edited in place.
+            // The game leaves itself set to read this file again the next time the editor
+            // starts up, which would load the vessel on a later entry into the editor.
+            // Point it back at the vessel the editor is holding, as it is when a vessel is
+            // edited in place
             EditorDriver.StartupBehaviour = EditorDriver.StartupBehaviours.LOAD_FROM_CACHE;
         }
     }

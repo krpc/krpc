@@ -26,13 +26,13 @@ import lib
 # draft is exactly the state that leaves the bot with nothing to pull.
 RELEASE_API = 'https://api.github.com/repos/krpc/krpc/releases/tags/{tag}'
 
-# Where the NetKAN bot writes kRPC's generated metadata, one file per version.
+# The directory the NetKAN bot writes kRPC's generated metadata to, one file per version.
 # The CKAN version comes from the KSP-AVC file, whose 3-part MAJOR.MINOR.PATCH
 # matches the release version, so the file is named for the tag: kRPC-v0.6.0.ckan.
 CKAN_META = ('https://raw.githubusercontent.com/KSP-CKAN/CKAN-meta/master/'
              'kRPC/kRPC-{tag}.ckan')
 
-# How long to wait for the metadata, and how often to look. Inflation is usually
+# The time to wait for the metadata, and how often to look. Inflation is usually
 # minutes but can lag; override the wait with CKAN_POLL_MINUTES for a longer sit.
 POLL_SECONDS = 30
 DEFAULT_POLL_MINUTES = 20

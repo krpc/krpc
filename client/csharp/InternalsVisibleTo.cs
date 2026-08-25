@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-// For the Visual Studio solution / dotnet build. The Bazel build injects this
-// via rules_dotnet's internals_visible_to attr instead, so this file lives
-// outside src/ (which Bazel globs) to avoid a duplicate attribute.
+// For the Visual Studio solution and the dotnet build. The Bazel build injects the
+// attribute through rules_dotnet, so this file sits outside the src/ directory that
+// Bazel globs.
 [assembly: InternalsVisibleTo("KRPC.Client.Test")]

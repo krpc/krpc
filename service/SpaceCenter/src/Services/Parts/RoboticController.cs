@@ -35,8 +35,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the robotic controller: the state of the part
-        /// carrying it, or destroyed once that part no longer has the module.
+        /// The state of the part carrying the robotic controller, or destroyed once that
+        /// part loses the module.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return controllerRef.StateOn (Part); }

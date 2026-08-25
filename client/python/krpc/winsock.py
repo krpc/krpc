@@ -11,12 +11,12 @@ import ctypes
 import socket
 import sys
 
-# What winsock calls the address family, and the size of the path in the address structure. Both
-# are as they are on every other platform: Windows kept the layout so that the same code works.
+# The winsock address family, and the size of the path in the address structure. Both are as
+# they are on every other platform: Windows kept the layout so that the same code works.
 AF_UNIX = 1
 UNIX_PATH_MAX = 108
 
-# What winsock returns from a call that failed.
+# The value winsock returns from a call that failed.
 SOCKET_ERROR = -1
 
 

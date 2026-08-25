@@ -19,9 +19,8 @@ namespace KRPC.UI
     [KRPCClass (Service = "UI")]
     public class Layout : Equatable<Layout>, IGameObjectState
     {
-        // The game's layout group, which is what this stands for: it belongs to the
-        // interface element it was taken from and lives exactly as long as that
-        // element, and the game gives it nothing else to be named by.
+        // The game's layout group. It belongs to the interface element it was taken from and
+        // lives exactly as long as that element, and the game gives it no other name
         readonly UnityEngine.UI.LayoutGroup layout;
 
         internal Layout (UnityEngine.UI.LayoutGroup innerLayout)
@@ -43,15 +42,14 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            // The layout's identity hash rather than its own, so that nothing the game
-            // does to it can change it while a client holds this object.
+            // The layout's identity hash, so that nothing the game does to it changes it
+            // while a client holds this object
             return RuntimeHelpers.GetHashCode (layout);
         }
 
         /// <summary>
-        /// What the game holds for the layout. It belongs to the interface element it was
-        /// taken from, and the game destroys it with that element, which nothing builds
-        /// again.
+        /// The state of the layout. It belongs to the interface element it was taken from,
+        /// and the game destroys it with that element. The layout is never built again.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -173,9 +171,7 @@ namespace KRPC.UI
         public int ConstraintCount {
             get { return Grid.constraintCount; }
             set {
-                // Unity moves a count below one up to one, so a client that asked for
-                // fewer would be left reading back a count it did not set and no way to
-                // tell that it had happened.
+                // Unity moves a count below one up to one, so check the range here and report it
                 if (value < 1)
                     throw new ArgumentOutOfRangeException (
                         nameof (value), "A grid must have at least one column or row");

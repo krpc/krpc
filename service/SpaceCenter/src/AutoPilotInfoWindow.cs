@@ -15,14 +15,14 @@ namespace KRPC.SpaceCenter
     /// </summary>
     public class AutoPilotInfoWindow : Window
     {
-        // Panel colours, matched to the stock navball's speed display: the register text and the
-        // ENGAGED lamp use the navball's readout green, amber is the caution colour.
+        // Panel colors, matched to the stock navball's speed display: the register text and the
+        // ENGAGED lamp use the navball's readout green, amber is the caution color.
         static readonly Color green = new Color (0.00f, 1.00f, 0.00f);
         static readonly Color amber = new Color (1.00f, 0.72f, 0.10f);
-        // Background of the digital registers, and the unlit lamp colour, so an off lamp matches a
-        // register cell — the dark grey behind the navball's speed text (#3A3A3F).
+        // Background of the digital registers, and the unlit lamp color, so an off lamp matches
+        // a register cell: the dark gray behind the navball's speed text (#3A3A3F).
         static readonly Color registerBackground = new Color (0.227f, 0.227f, 0.247f);
-        // Text colour of an unlit status lamp (and of a data lamp that is not live): faint grey
+        // Text color of an unlit status lamp (and of a data lamp that is not live): faint gray
         // "engraved" text on the dark lamp background.
         static readonly Color engravedGrey = new Color (0.55f, 0.55f, 0.55f);
 
@@ -40,21 +40,19 @@ namespace KRPC.SpaceCenter
         Font monoFont;
 
         // Description of the row currently under the mouse (or null), and that row's rect, which
-        // the tooltip is anchored to — a row's tooltip always appears in the same place, rather
-        // than following the mouse around. Captured by RowTooltip as the rows are drawn each
-        // Repaint pass and rendered by DrawTooltip at the end of the pass, so the tooltip box
-        // draws on top of the panel.
+        // the tooltip is anchored to, so a row's tooltip always appears in the same place.
+        // Captured by RowTooltip as the rows are drawn each Repaint pass and rendered by
+        // DrawTooltip at the end of the pass, so the tooltip box draws on top of the panel.
         string activeTooltip;
         Rect activeTooltipRow;
 
-        // The panel body is a grid of 4 equal-width columns filling the window: every cell is
+        // The panel body is a grid of 4 equal-width columns filling the window. Every cell is
         // fixed to a whole number of columns (spanOptions [n] sizes an n-column cell), so cells
-        // line up vertically across rows regardless of how many cells each row has — a per-axis
-        // row is label + 3 values, a PCH/YAW+RLL group row is label + a 2-column cell + 1, the
-        // engagement lamp spans all 4. Fixed widths (rather than stretch weights) are needed
-        // because IMGUI distributes surplus width in proportion to each cell's content-derived
-        // size, which would let wider text steal width and break the vertical alignment.
-        // Rebuilt by ComputeGrid on rescale.
+        // line up vertically across rows however many cells each row has: a per-axis row is
+        // label + 3 values, a PCH/YAW+RLL group row is label + a 2-column cell + 1, and the
+        // engagement lamp spans all 4. The widths are fixed because IMGUI distributes surplus
+        // width in proportion to each cell's content-derived size, which would let wider text
+        // steal width and break the vertical alignment. Rebuilt by ComputeGrid on rescale.
         GUILayoutOption[][] spanOptions;
 
         // The horizontal gap IMGUI leaves between adjacent cells and at the row edges: the cells'
@@ -70,7 +68,7 @@ namespace KRPC.SpaceCenter
             return texture;
         }
 
-        // A 3×3 texture with a 1px border colour around a fill colour. Drawn with a style whose
+        // A 3x3 texture with a 1px border color around a fill color. Drawn with a style whose
         // border is 1px, the edge pixels become a crisp 1px outline at any box size (point
         // filtering stops the border bleeding into the fill when stretched).
         static Texture2D BorderedTexture (Color border, Color fill)
@@ -93,8 +91,8 @@ namespace KRPC.SpaceCenter
 
             lampTexture = FlatTexture (Color.white);
             registerTexture = FlatTexture (registerBackground);
-            // Darker than the registers so the floating tooltip reads as a layer above them, with
-            // a grey outline to separate it from whatever it happens to overlap.
+            // Darker than the registers so the floating tooltip reads as a layer above them,
+            // with a gray outline to separate it from whatever it overlaps.
             tooltipTexture = BorderedTexture (new Color (0.55f, 0.55f, 0.55f), new Color (0.10f, 0.10f, 0.12f));
 
             lampStyle = new GUIStyle (skin.box) {
@@ -114,11 +112,11 @@ namespace KRPC.SpaceCenter
                 stretchWidth = true
             };
             registerStyle.normal.background = registerTexture;
-            // Registers carry data, not status, so they read in plain white — status is the
-            // lamps' job.
+            // Registers carry data, and the lamps carry status, so the registers read in plain
+            // white.
             registerStyle.normal.textColor = Color.white;
 
-            // Centre-aligned register, for cells whose content reads better centred than
+            // Center-aligned register, for cells whose content reads better centered than
             // right-aligned (the resolved tool name, the percentage readouts).
             registerCenterStyle = new GUIStyle (registerStyle) {
                 alignment = TextAnchor.MiddleCenter
@@ -169,10 +167,10 @@ namespace KRPC.SpaceCenter
 
             ComputeGrid ();
 
-            // Use a fixed-width (monospace) font across the whole panel so the digital readouts and
-            // columns line up. Several common OS monospace fonts are listed so it resolves on both
-            // Windows and Linux. The title bar is unaffected: it is drawn with the window Style, which
-            // keeps the stock font.
+            // Use a fixed-width (monospace) font across the whole panel so the digital readouts
+            // and columns line up. Several common OS monospace fonts are listed so it resolves on
+            // both Windows and Linux. The title bar is unaffected: it is drawn with the window
+            // Style, which keeps the stock font.
             monoFont = Font.CreateDynamicFontFromOSFont (
                 new[] { "Consolas", "Courier New", "DejaVu Sans Mono", "Liberation Mono", "monospace" },
                 (int) (BodyFontSize * GameSettings.UI_SCALE));
@@ -183,10 +181,10 @@ namespace KRPC.SpaceCenter
             ApplyFontSizes (GameSettings.UI_SCALE);
         }
 
-        // Recomputes the 4-column grid from the window's current fixed width: the column width is
-        // what makes 4 columns, the 3 gaps between them and the 2 edge gaps exactly fill the
-        // window's content area. The row-label style is pinned to one column so plain
-        // registerLabelStyle labels land on the grid too.
+        // Recomputes the 4-column grid from the window's current fixed width. The column width
+        // makes 4 columns, the 3 gaps between them and the 2 edge gaps exactly fill the window's
+        // content area. The row-label style is pinned to one column so plain registerLabelStyle
+        // labels land on the grid too.
         void ComputeGrid ()
         {
             float contentWidth = Style.fixedWidth - Style.padding.left - Style.padding.right;
@@ -243,12 +241,11 @@ namespace KRPC.SpaceCenter
             GUILayout.EndHorizontal ();
             RowTooltip ("Auto-pilot engagement. HELD: engaged but held inert on the launch clamps.");
 
-            // Target: axis column headers, then the current target (CURRENT, what the auto-pilot
-            // is tracking right now) and below it the commanded target (COMMAND, what was
-            // requested). COMMAND is shown only while smoothing is active (TargetSmoothingTime
-            // > 0); without smoothing CURRENT always equals the command, so the whole COMMAND
-            // row is blanked. RLL is blank when no
-            // specific roll is held. Values carry a degree symbol, so the section needs no unit label.
+            // Target: axis column headers, then the target the auto-pilot is tracking right now
+            // (CURRENT) and below it the commanded target (COMMAND). COMMAND is shown only while
+            // smoothing is active (TargetSmoothingTime > 0), as CURRENT always equals the command
+            // without it. RLL is blank when no specific roll is held. Values carry a degree
+            // symbol, so the section needs no unit label.
             bool showCmd = engaged && ap.TargetSmoothingTime > 0;
             Header ("TARGET", null);
             AxisColumnHeader ("PCH", "HDG", "RLL");
@@ -267,10 +264,10 @@ namespace KRPC.SpaceCenter
             GUILayout.EndHorizontal ();
             RowTooltip ("Commanded (requested) target; shown while target smoothing is still slewing CURRENT toward it.");
 
-            // Attitude error: the four axis column headers on one row, error lamps on the next, each
-            // dim within the AutoPilot.Wait() stopping angle threshold and amber outside it. These
-            // are errors to the CURRENT (tracked) target, not the commanded one, so they stay small
-            // while a smoothed change is being slewed in (the craft is tracking CURRENT, not COMMAND).
+            // Attitude error: the four axis column headers on one row, error lamps on the next,
+            // each dim within the AutoPilot.Wait() stopping angle threshold and amber outside it.
+            // These are errors to the CURRENT (tracked) target, so they stay small while a
+            // smoothed change is being slewed in.
             Header ("ATTITUDE ERROR", null);
             GUILayout.BeginHorizontal ();
             ColumnHead ("TOT");
@@ -312,13 +309,12 @@ namespace KRPC.SpaceCenter
             GUILayout.EndHorizontal ();
             RowTooltip ("Inner rate-loop integral gain (set by the autotuner each tick when auto-tune is on).");
 
-            // Oscillation handling, mirroring the controller's detector → gates → mitigations
-            // structure. DETECTOR: what the runtime observes (per-axis structural level, the
-            // post-floor loop bandwidth, the estimated mode frequency and the control-output
-            // envelope). GATES: the [0,1] weights that decide how strongly the mitigations
-            // engage. MITIGATIONS: one combined mode+engagement lamp per individually
-            // controllable mitigation — dim whenever the mitigation is not acting (manually Off
-            // or automatically idle), amber when engaged.
+            // Oscillation handling, mirroring the controller's detector, gates and mitigations
+            // structure. DETECTOR: the per-axis structural level, the post-floor loop bandwidth,
+            // the estimated mode frequency and the control-output envelope. GATES: the [0,1]
+            // weights that decide how strongly the mitigations engage. MITIGATIONS: one combined
+            // mode and engagement lamp per individually controllable mitigation, dim whenever the
+            // mitigation is not acting (manually Off or automatically idle), amber when engaged.
             Header ("OSCILLATION", null);
             var level = engaged ? ap.OscillationLevel : null;
             // Beyond reach of a level of 0 when disengaged, so the lamp stays green while not engaged.
@@ -335,8 +331,9 @@ namespace KRPC.SpaceCenter
 
             TwoColumnHeader ("PCH/YAW", "RLL");
 
-            // Control-output oscillation envelope per group: the about-mean amplitude of the delivered
-            // command that drives the back-off gate, lit amber at/above the engage threshold.
+            // Control-output oscillation envelope per group: the about-mean amplitude of the
+            // delivered command that drives the back-off gate, lit amber at or above the engage
+            // threshold.
             var oscThreshold = engaged ? ap.OscillationControlThreshold : double.PositiveInfinity;
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("CTRL", registerLabelStyle);
@@ -356,7 +353,7 @@ namespace KRPC.SpaceCenter
             // The gates: HOLD (the pointing-error hold factor, global), LATCH (the detector's
             // persistent flexible-craft verdict), RAMP (the eased latch weight), BACKOFF (the
             // limit-cycle back-off) and GATE (the net hold-gated mitigation level,
-            // ramp · max(hold, bko), which drives the floor and the feedforward cut).
+            // ramp * max(hold, bko), which drives the floor and the feedforward cut).
             Header ("GATES", null);
             var ramp = engaged ? ap.SuppressionRamp : null;
             var backoff = engaged ? ap.OscillationBackoff : null;
@@ -393,10 +390,10 @@ namespace KRPC.SpaceCenter
             GUILayout.EndHorizontal ();
             RowTooltip ("Net mitigation level, RAMP × max(HOLD, BACKOFF); drives FLOOR and FFCUT.");
 
-            // The mitigations, one combined mode+engagement lamp each. FILTER is the rate filter
-            // (per group, showing the tool Automatic routed to, or the forced tool); FLOOR the
-            // bandwidth-floor engagement; FFCUT the applied feedforward-cut fraction; SMOOTH the
-            // output-smoothing blend weight.
+            // The mitigations, one combined mode and engagement lamp each. FILTER is the rate
+            // filter, per group, showing the tool Automatic routed to or the forced tool. FLOOR is
+            // the bandwidth-floor engagement, FFCUT the applied feedforward-cut fraction, and
+            // SMOOTH the output-smoothing blend weight.
             Header ("MITIGATIONS", null);
             var ffCut = engaged ? ap.FeedforwardCut : null;
             var outWeight = engaged ? ap.OutputFilterWeight : null;
@@ -449,7 +446,7 @@ namespace KRPC.SpaceCenter
             var row = GUILayoutUtility.GetLastRect ();
             // Grow the hit area past the 1px margins between rows, so a slow vertical sweep of
             // the mouse does not drop the tooltip on the seam where neither row is hit. Adjacent
-            // grown rects overlap slightly; the later (lower) row wins, since it overwrites.
+            // grown rects overlap slightly, and the later (lower) row overwrites the earlier one.
             row.yMin -= 2f;
             row.yMax += 2f;
             if (row.Contains (Event.current.mousePosition)) {
@@ -459,11 +456,10 @@ namespace KRPC.SpaceCenter
         }
 
         // Draws the captured tooltip anchored to the hovered row: just below it, or just above it
-        // when too close to the window's bottom edge. Anchoring to the row (never the mouse)
-        // keeps the tooltip still while the mouse moves around within the row. The tooltip is
-        // drawn with GUI (not GUILayout) so it overlays the panel without affecting the window's
-        // auto-layout height, and stays inside the window rect because GUI.Window clips its
-        // contents.
+        // when too close to the window's bottom edge. Anchoring to the row keeps the tooltip still
+        // while the mouse moves within the row. The tooltip is drawn with GUI, so it overlays the
+        // panel without affecting the window's auto-layout height, and stays inside the window
+        // rect because GUI.Window clips its contents.
         void DrawTooltip ()
         {
             if (activeTooltip == null || Event.current.type != EventType.Repaint)
@@ -480,19 +476,18 @@ namespace KRPC.SpaceCenter
         }
 
         // Draws one square backlit annunciator lamp spanning the given number of grid columns.
-        // When unlit, the lamp shows the register background with faint grey "engraved" text;
-        // when lit, the full colour with black text. The lamp is purely informational (drawn as
-        // a box, never interactive).
+        // When unlit, the lamp shows the register background with faint gray "engraved" text.
+        // When lit, it shows the full color with black text. The lamp is purely informational,
+        // drawn as a box and never interactive.
         void Lamp (string label, bool lit, Color colour, int span = 1)
         {
             Lamp (label, lit, colour, engravedGrey, span);
         }
 
-        // Lamp variant for cells that carry a data readout as well as a status colour (attitude
-        // error, STRUC, CTRL): the unlit text stays plain white — the value must remain readable
-        // when the status is nominal — rather than the engraved grey of a pure status lamp.
-        // Callers blank the label when there is no live value (auto-pilot disengaged), so white
-        // never shows a stale or placeholder reading.
+        // Lamp variant for cells that carry a data readout as well as a status color (attitude
+        // error, STRUC, CTRL). The unlit text stays plain white, so the value remains readable
+        // when the status is nominal. Callers blank the label when there is no live value
+        // (auto-pilot disengaged), so white never shows a stale or placeholder reading.
         void DataLamp (string label, bool lit, Color colour, int span = 1)
         {
             Lamp (label, lit, colour, Color.white, span);
@@ -505,36 +500,34 @@ namespace KRPC.SpaceCenter
             lampStyle.normal.textColor = lit ? Color.black : unlitText;
             // A box with no measurable content picks up a slightly different line height, so a
             // blank lamp (e.g. RLL when no roll is held) would render taller than its lit
-            // neighbours. A plain space does not fix this: IMGUI trims trailing whitespace when
-            // measuring, so it still measures as empty. A non-breaking space is measured as a
-            // real glyph, keeping the box geometry identical to a populated cell while still
-            // reading as blank.
+            // neighbors. IMGUI trims trailing whitespace when measuring, so a plain space still
+            // measures as empty. A non-breaking space is measured as a real glyph, keeping the
+            // box geometry identical to a populated cell while still reading as blank.
             GUILayout.Box (string.IsNullOrEmpty (label) ? NonBreakingSpace : label, lampStyle, spanOptions [span]);
             GUI.backgroundColor = prevBg;
         }
 
-        // One control-oscillation envelope lamp (matching the structural LevelLamp): lit amber
-        // at/above the engage threshold, green below, dim when disengaged.
+        // One control-oscillation envelope lamp, matching the structural LevelLamp: lit amber at
+        // or above the engage threshold, green below, dim when disengaged.
         void OscCell (bool engaged, double level, double threshold, int span = 1)
         {
             DataLamp (engaged ? Percent (level) : Blank, engaged && level >= threshold, amber, span);
         }
 
         // Attitude-error lamp: green when the axis error is within the AutoPilot.Wait() stopping
-        // angle threshold, amber when outside it. Dim/blank when not shown (disengaged, or roll on an
-        // axis whose roll is not held).
+        // angle threshold, amber when outside it. Dim and blank when not shown (disengaged, or
+        // roll on an axis whose roll is not held).
         void ErrorLamp (bool show, float error, float threshold)
         {
             DataLamp (show ? Deg (error) : Blank, show && Math.Abs (error) > threshold, amber);
         }
 
         // Heading-error lamp. Heading is a coordinate singularity at the poles: near vertical
-        // (pitch → ±90°) swinging the heading barely moves where the craft actually points, so a
-        // negligible pointing error shows up as a huge heading-angle error and would pin the lamp
-        // permanently lit. Gate on the heading error's true contribution to the pointing error,
-        // error·cos(pitch), rather than the raw error — this widens the allowed heading error as
-        // the craft nears vertical and drops it to zero exactly at the pole. The displayed value
-        // is still the raw heading error.
+        // pitch, swinging the heading barely moves where the craft points, so a negligible
+        // pointing error shows up as a huge heading-angle error and would pin the lamp
+        // permanently lit. Gate on the heading error's contribution to the pointing error,
+        // error * cos(pitch), which widens the allowed heading error as the craft nears vertical
+        // and drops it to zero at the pole. The displayed value is still the raw heading error.
         void HeadingErrorLamp (bool show, float error, float threshold, float pitch)
         {
             double effective = Math.Abs (error) * Math.Abs (Math.Cos (pitch * Math.PI / 180.0));
@@ -542,8 +535,8 @@ namespace KRPC.SpaceCenter
         }
 
         // Frequency lamp: green showing the detected structural frequency once the tracker has a
-        // lock, amber em dash until then (and dim when disengaged). A single glyph so it fits the
-        // one-column RLL cell without word-wrapping the way "NO LOCK" did.
+        // lock, amber em dash until then, and dim when disengaged. A single glyph, so it fits the
+        // one-column RLL cell without word-wrapping.
         static string FreqText (double freq)
         {
             return double.IsNaN (freq) ? "—" : string.Format ("{0:F1}Hz", freq);
@@ -552,13 +545,13 @@ namespace KRPC.SpaceCenter
         // The axis is identified by the PCH/YAW/RLL column header, so the lamp shows only the level value.
         void LevelLamp (bool engaged, double level, bool latched, double latchThreshold)
         {
-            // Amber once the level reaches the controller's latch threshold (so it is in the range
-            // that triggers the latch), or the axis has already latched; dim below.
+            // Amber once the level reaches the controller's latch threshold, so it is in the
+            // range that triggers the latch, or the axis has already latched. Dim below.
             DataLamp (engaged ? Percent (level) : Blank, engaged && (latched || level >= latchThreshold), amber);
         }
 
-        // Latch lamp: amber ENGAGED once the axis group has latched as flexible; blank (not
-        // engraved) when unlatched or disengaged, so the word only ever appears lit.
+        // Latch lamp: amber ENGAGED once the axis group has latched as flexible, and blank when
+        // unlatched or disengaged, so the word only ever appears lit.
         void LatchLamp (bool latched, int span)
         {
             Lamp (latched ? "ENGAGED" : Blank, latched, amber, span);
@@ -570,10 +563,10 @@ namespace KRPC.SpaceCenter
             Lamp (engaged ? Percent (level) : Blank, engaged && level > 0.01, amber, span);
         }
 
-        // Combined mode + engagement lamp for one mitigation cell: dim whenever the mitigation
-        // is not acting (manually Off, or automatically idle at ~0), amber when engaged. The
+        // Combined mode and engagement lamp for one mitigation cell: dim whenever the mitigation
+        // is not acting (manually Off, or automatically idle at about 0), amber when engaged. The
         // label carries the mode (OFF) or the engagement level. Forced pins the mitigation fully
-        // on, so its lamp reads 100% regardless of the gate.
+        // on, so its lamp reads 100% whatever the gate.
         void MitigationLamp (bool engaged, Services.MitigationMode mode, double level, int span = 1)
         {
             if (engaged && mode == Services.MitigationMode.Off) {
@@ -585,9 +578,9 @@ namespace KRPC.SpaceCenter
             Lamp (engaged ? Percent (level) : Blank, engaged && level > 0.01, amber, span);
         }
 
-        // Combined mode + engagement lamp for the rate filter on one axis group: dim when Off or
-        // while Automatic has no tool engaged, amber with the tool name whenever a filter is
-        // actually running (automatic-routed or forced).
+        // Combined mode and engagement lamp for the rate filter on one axis group: dim when Off
+        // or while Automatic has no tool engaged, amber with the tool name whenever a filter is
+        // running, automatic-routed or forced.
         void RateFilterLamp (bool engaged, Services.RateFilterMode mode, int tool, int span = 1)
         {
             if (engaged && mode == Services.RateFilterMode.Off) {
@@ -635,7 +628,7 @@ namespace KRPC.SpaceCenter
             GUILayout.Label (value, registerStyle, spanOptions [span]);
         }
 
-        // As Register, but the content is centred rather than right-aligned.
+        // As Register, but the content is centered and not right-aligned.
         void RegisterCentered (string value, int span = 1)
         {
             GUILayout.Label (value, registerCenterStyle, spanOptions [span]);
@@ -679,9 +672,9 @@ namespace KRPC.SpaceCenter
             GUILayout.EndHorizontal ();
         }
 
-        // Rounds to the displayed number of decimals and normalises negative zero to positive zero,
-        // so a value dithering either side of zero settles on a single displayed form (e.g. "+0.000",
-        // "0.0°") instead of flickering its sign between frames.
+        // Rounds to the displayed number of decimals and normalizes negative zero to positive
+        // zero, so a value dithering either side of zero settles on a single displayed form (e.g.
+        // "+0.000") and keeps its sign between frames.
         static double Stable (double value, int decimals)
         {
             double rounded = Math.Round (value, decimals);
@@ -700,10 +693,10 @@ namespace KRPC.SpaceCenter
             return string.Format ("{0:0.0}", Stable (value, 1));
         }
 
-        // A 0–1 fraction (oscillation level, control-output envelope, hold-mitigation weight) shown
-        // as a whole-number percentage. The number is left-padded to three figure-spaces (U+2007,
-        // digit-width) so the trailing "%" stays in a fixed position as the value gains or loses a
-        // digit (e.g. 10% -> 9%) even when the cell is centre-aligned.
+        // A fraction from 0 to 1 (oscillation level, control-output envelope, hold-mitigation
+        // weight) shown as a whole-number percentage. The number is left-padded to three
+        // figure-spaces (U+2007, digit-width) so the trailing "%" stays in a fixed position as the
+        // value gains or loses a digit (e.g. 10% to 9%) even when the cell is center-aligned.
         static string Percent (double value)
         {
             return ((int) Math.Round (value * 100.0)).ToString ().PadLeft (3, ' ') + "%";
@@ -721,8 +714,8 @@ namespace KRPC.SpaceCenter
             }
         }
 
-        // Empty cells are drawn blank (no placeholder glyphs) — less visually distracting than a
-        // dashed filler in every disengaged/unset readout.
+        // Empty cells are drawn blank, with no placeholder glyph in every disengaged or unset
+        // readout.
         const string Blank = "";
 
         // U+00A0 non-breaking space. Used as the content of a blank lamp box: a plain space is
@@ -730,12 +723,12 @@ namespace KRPC.SpaceCenter
         // not stretch to fill its column, but a non-breaking space measures as a real glyph.
         const string NonBreakingSpace = " ";
 
-        // An angle readout that is blank for an unset (NaN) roll target, otherwise the degrees. Roll
-        // (unlike pitch and heading) can reach ±180, and "-100.0°" is 7 glyphs — one too many for the
-        // one-column RLL cell, which wraps it the way "12.3 Hz" wrapped before it lost its space. Drop
-        // the fractional degree once past ±100° so the readout stays inside the cell; the cutoff is on
-        // the magnitude so both signs are shown the same way, and the common sub-100° case keeps its
-        // 0.1° resolution.
+        // An angle readout that is blank for an unset (NaN) roll target, otherwise the degrees.
+        // Roll, unlike pitch and heading, can reach 180 degrees, and "-100.0" with its degree sign
+        // is 7 glyphs, one too many for the one-column RLL cell, which wraps it. Drop the
+        // fractional degree once past 100 degrees so that the readout stays inside the cell. The
+        // cutoff is on the magnitude, so both signs are shown the same way and the common case
+        // keeps its 0.1 degree resolution.
         static string DegOrBlank (float value)
         {
             if (float.IsNaN (value))

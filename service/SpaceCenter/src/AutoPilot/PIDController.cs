@@ -23,7 +23,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// The accumulated integral term (already scaled by Ki, clamped to the output range).
-        /// Read-only observability for the diagnostic log — windup and integral creep are
+        /// Read-only observability for the diagnostic log. Windup and integral creep are
         /// otherwise invisible from outside.
         /// </summary>
         public double IntegralTerm {

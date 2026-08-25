@@ -88,8 +88,7 @@ namespace TestingTools
                 } else
                     // A "--krpctest-" argument matching no known option: a typo, an empty
                     // value like "--krpctest-load-game=", or a flag we do not handle. Fail
-                    // loudly rather than silently ignoring it and doing something other than
-                    // what was asked.
+                    // loudly, so nothing other than what was asked for happens.
                     throw Fatal.Error(
                         "Unrecognized or empty TestingTools argument \"" + arg + "\". Valid arguments: " +
                         GameArgument + "<folder>, " + SaveArgument + "<name>, " +

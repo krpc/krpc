@@ -1,31 +1,24 @@
 ## [v0.7.0] - unreleased
 - Generate and document the structure types a service defines, for every client (#1066)
-- **Breaking:** A generator module given to `krpc-clientgen` by path is constructed with
-  the definitions of every service that was loaded, rather than with those of the single
-  service it generates (#1044)
+- **Breaking:** A generator module given to `krpc-clientgen` by path is constructed with the
+  definitions of every service that was loaded, rather than those of the single service it
+  generates (#1044)
 - Support for nullable values across all types (#1017)
 - Generate an enumeration default value as the member it names, instead of a cast of its
   integer value (#1044)
-- Fix generating a default value whose type contains an enumeration, such as a list of
-  them, failing (#1044)
-- Fix Lua documentation writing default values in Python's syntax rather than Lua's
-  (#1044)
-- Fix C++ documentation writing a collection default value as a constructor call rather
-  than a braced initializer list, so `std::vector<int32_t>(1, 2, 3)` named a constructor
-  that builds something else entirely (#1044)
-- A default value naming an undeclared enumeration value, or one whose enumeration no
-  supplied service defines, is now reported naming the service, procedure and parameter
-  it came from (#1044)
+- Fix generating a default value whose type contains an enumeration, such as a list of them,
+  failing (#1044)
+- Fix Lua documentation writing default values in Python's syntax rather than Lua's (#1044)
+- Fix C++ documentation writing a collection default value as a constructor call rather than a
+  braced initializer list (#1044)
+- A default value naming an undeclared enumeration value is reported naming the service,
+  procedure and parameter it came from (#1044)
 - The special values of the numeric types - NaN, the infinities and the extremes of the
-  integer and floating point ranges - can now be used as parameter default values.
-  Generated code and documentation name them as the target language does, such as
-  `double.NaN` in C# and `(std::numeric_limits<int32_t>::max)()` in C++, rather than
-  writing a decimal literal that does not compile. Neither Python nor Lua has a name of its
-  own for the finite extremes, so both name the new `krpc.limits` constants (#1045)
-- Fix a 32-bit float default value being written as the full decimal expansion of the
-  double it widens to, so `0.1f` read as `0.10000000149011612`, in Python, C# and C++
-  code and in the Python, C#, C++ and Lua documentation. C++ also writes it as a float
-  literal now, rather than a double one (#1045)
+  integer and floating point ranges - can be used as parameter default values. Generated code
+  and documentation name them as the target language does, such as `double.NaN` in C#. Python
+  and Lua name the new `krpc.limits` constants (#1045)
+- Fix a 32-bit float default value being written as the full decimal expansion of the double
+  it widens to, so `0.1f` read as `0.10000000149011612` (#1045)
 
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+

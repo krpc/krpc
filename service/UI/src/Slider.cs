@@ -92,9 +92,8 @@ namespace KRPC.UI
         public float Value {
             get { return Internal.value; }
             set {
-                // Unity moves a value outside the range to the nearest end of it, so a
-                // client that set the wrong value would be left reading back one it did
-                // not set and no way to tell that it had happened.
+                // Unity moves a value outside the range to the nearest end of it, so check
+                // the range here and report it
                 if (value < Internal.minValue || value > Internal.maxValue)
                     throw new ArgumentOutOfRangeException (
                         nameof (value), "The value is outside the range of the slider");
@@ -130,9 +129,8 @@ namespace KRPC.UI
         /// </summary>
         void SetRange (float min, float max)
         {
-            // A range with its ends crossed refuses every value, including the one the
-            // slider is showing, so it is refused rather than handed to Unity to make
-            // something of.
+            // A range with its ends crossed accepts no value, including the one the slider is
+            // showing, so it is refused here
             if (min > max)
                 throw new ArgumentException (
                     "The minimum of the range must not be greater than the maximum");

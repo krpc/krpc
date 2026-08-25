@@ -36,8 +36,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the fairing. The module objects it is built from
-        /// find their part modules again on each access, so this follows them.
+        /// The state of the fairing. The module objects it is built from look their part
+        /// modules up on each access, and this follows them.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return (fairing ?? proceduralFairing).GameObjectState; }
@@ -77,9 +77,9 @@ namespace KRPC.SpaceCenter.Services.Parts
                     fairing.TriggerVisibleEventById("DeployFairing");
                 } else {
                     // Older versions of ProceduralFairings have the "Jettison" event, newer
-                    // versions have the "Jettison Fairing" event. These match the display name
-                    // rather than the event id, as the mod's method names are not known here;
-                    // the mod does not appear to translate them.
+                    // versions have the "Jettison Fairing" event. These match the display
+                    // name, as the mod's method names are not known here, and the mod does
+                    // not appear to translate them
                     foreach (var e in proceduralFairing.VisibleEventNames) {
                         if (e == "Jettison")
                             proceduralFairing.TriggerVisibleEvent("Jettison");
@@ -101,9 +101,9 @@ namespace KRPC.SpaceCenter.Services.Parts
                     return !fairing.HasVisibleEventById("DeployFairing");
                 } else {
                     // Older versions of ProceduralFairings have the "Jettison" event, newer
-                    // versions have the "Jettison Fairing" event. These match the display name
-                    // rather than the event id, as the mod's method names are not known here;
-                    // the mod does not appear to translate them.
+                    // versions have the "Jettison Fairing" event. These match the display
+                    // name, as the mod's method names are not known here, and the mod does
+                    // not appear to translate them
                     return !(proceduralFairing.HasVisibleEvent("Jettison") ||
                              proceduralFairing.HasVisibleEvent("Jettison Fairing"));
                 }

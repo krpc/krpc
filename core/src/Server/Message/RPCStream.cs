@@ -141,8 +141,8 @@ namespace KRPC.Server.Message
                 throw;
             } catch (RequestDecodeException e) {
                 // The request arrived in full and only what it names is wrong, so drop the
-                // bytes it occupied before letting the error be reported. The connection is
-                // then still in step with the client, which can carry on making calls.
+                // bytes it occupied before reporting the error. The connection stays in step
+                // with the client
                 ConsumeReceiveBuffer (e.BytesRead);
                 throw;
             }

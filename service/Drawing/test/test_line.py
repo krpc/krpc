@@ -31,8 +31,8 @@ class TestLine(krpctest.TestCase):
     def test_reading_a_removed_line_raises(self):
         line = self.add_line()
         line.remove()
-        # What raises is what reaches into the game. The start, the end and the color are
-        # the line's own configuration, and answer as they always did.
+        # A member that reaches into the game raises. The start, the end and the color are
+        # the line's own configuration, and still answer.
         self.assertEqual((0, 0, 0), line.start)
         self.assertRaises(self.destroyed, getattr, line, "material")
         self.assertRaises(self.destroyed, setattr, line, "thickness", 1)

@@ -50,7 +50,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the vessel this belongs to.
+        /// The state of the vessel this belongs to.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return FlightGlobalsExtensions.VesselState (vesselId); }
@@ -755,9 +755,9 @@ namespace KRPC.SpaceCenter.Services
                     InputLockManager.SetControlLock(ControlTypes.STAGING, "manualStageLock");
                 else
                     InputLockManager.RemoveControlLock("manualStageLock");
-                // Alt+L toggles this flag alongside the input lock, and decides from it whether the
-                // next press locks or unlocks. Setting it keeps the keybinding in step, so the next
-                // press does the opposite of what was set here rather than repeating it.
+                // Alt+L toggles this flag alongside the input lock, and decides from it
+                // whether the next press locks or unlocks. Setting it keeps the keybinding
+                // in step, so the next press does the opposite of what was set here
                 if (FlightInputHandler.fetch != null)
                     FlightInputHandler.fetch.stageLock = value;
             }
@@ -1009,7 +1009,7 @@ namespace KRPC.SpaceCenter.Services
             if (eva == null || eva.vessel == null || !eva.OnALadder)
                 return;
             // A kerbal that has just taken hold of a ladder is still swinging onto it, and
-            // cannot let go again until it is on, so wait for it rather than refuse.
+            // cannot let go again until it is on, so wait for it
             if (!eva.fsm.Started || !eva.fsm.CurrentState.IsValid (eva.On_ladderLetGo)) {
                 if (tick > 200)
                     throw new InvalidOperationException (
