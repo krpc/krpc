@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import cast, Callable, Generator, Iterable, Iterator, Optional, Type
+from typing import cast, Any, Callable, Generator, Iterable, Iterator, Optional, Type
 from types import TracebackType
 from contextlib import contextmanager
 import sys
@@ -248,6 +248,81 @@ class Client(krpc.services.Client):
             yield stream
         finally:
             stream.remove()
+
+    def add_function_stream(self, function: Any) -> Stream:
+        """Add a stream to the server that evaluates a server side function
+        (a KRPC.Expression object) on each update and streams the value it
+        evaluates to. The type of the stream's values is reported by the
+        server, from the function's return type. The function may also be
+        given as a python function or lambda taking no arguments, which is
+        compiled using compile_function."""
+        if self._stream_connection is None:
+            raise StreamError("Not connected to stream server")
+        if callable(function):
+            function = self.compile_function(function)
+        return_type = self._expression_return_type(function)
+        if return_type is None:
+            raise StreamError("The function does not evaluate to a value")
+        stream = self.krpc.add_function_stream(function, False)
+        return krpc.stream.Stream.from_stream_id(
+            self, stream.id, self._types.as_type(return_type)
+        )
+
+    def run_function(self, function: Any) -> Any:
+        """Run a function on the server, within a single physics tick, and
+        return the value it produces. None for a function with no result, and
+        for one whose value is null. The function may be given as a
+        KRPC.Expression object, or as a python function or lambda taking no
+        arguments, which is compiled using compile_function."""
+        if callable(function):
+            function = self.compile_function(function)
+        data = self.krpc.run_function(function)
+        # A null value is signaled out of band by is_null, which the stub reports
+        # as no data at all
+        if data is None:
+            return None
+        return_type = self._expression_return_type(function)
+        if return_type is None:
+            return None
+        return Decoder.decode(self, data, self._types.as_type(return_type))
+
+    @contextmanager
+    def function_stream(self, function: Any) -> Iterator[Stream]:
+        """'with' support for add_function_stream"""
+        stream = self.add_function_stream(function)
+        try:
+            yield stream
+        finally:
+            stream.remove()
+
+    def _expression_return_type(self, expression: Any) -> Optional[KRPC.Type]:
+        """Build the protocol buffer type message describing the type of the
+        values a server side function evaluates to, by introspecting its
+        return type on the server. None for an expression that evaluates to no
+        value at all.
+
+        Introspecting a type is a round trip per property of every type it is
+        built from, and an expression's return type does not change, so the
+        message built for an expression is kept and reused."""
+        object_id = expression._object_id
+        if object_id in self._expression_return_types:
+            return self._expression_return_types[object_id]
+
+        def build(remote_type: Any) -> KRPC.Type:
+            typ = KRPC.Type()
+            typ.code = remote_type.code.value
+            service = remote_type.service
+            if service:
+                typ.service = service
+                typ.name = remote_type.name
+            typ.types.extend([build(t) for t in remote_type.types])
+            return typ
+
+        return_type = (
+            build(expression.return_type) if expression.has_return_type else None
+        )
+        self._expression_return_types[object_id] = return_type
+        return return_type
 
     @property
     def stream_update_condition(self) -> threading.Condition:
