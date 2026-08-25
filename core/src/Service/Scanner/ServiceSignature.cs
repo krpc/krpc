@@ -255,7 +255,7 @@ namespace KRPC.Service.Scanner
                 throw new ServiceException ("Service " + Name + " contains duplicate exceptions " + name);
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (exnType, out deprecatedReason);
-            Exceptions [name] = new ExceptionSignature (Name, name, exnType.GetDocumentation (), deprecated, deprecatedReason);
+            Exceptions [name] = new ExceptionSignature (Name, name, exnType, exnType.GetDocumentation (), deprecated, deprecatedReason);
             return name;
         }
 
