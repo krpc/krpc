@@ -71,8 +71,7 @@ namespace KRPC.Client
             if (socketAddress == null)
                 throw new ArgumentNullException (nameof (socketAddress));
             // A call handed the address this endpoint serialized to writes into it and reports
-            // the size it wrote whether or not it was given that much room, so no more of it is
-            // read than was there to write into
+            // the size it wrote whether or not it was given that much room
             int written = Math.Min (
                 socketAddress.Size,
                 SerializedLength (Encoding.UTF8.GetByteCount (path)));

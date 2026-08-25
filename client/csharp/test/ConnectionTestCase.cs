@@ -56,8 +56,8 @@ namespace KRPC.Client.Test
         [Test]
         public void CarriesACall ()
         {
-            // The stand-in answers every request, so this is the request reaching it and the
-            // response coming back rather than anything the call means
+            // The stand-in answers every request, so this measures the request reaching it and
+            // the response coming back, and not what the call means
             using (var connection = Connect ("CSharpConnectionTest")) {
                 Assert.IsNotNull (connection.Invoke ("TestService", "TestProcedure"));
             }
@@ -67,7 +67,7 @@ namespace KRPC.Client.Test
         public void CarriesManyCalls ()
         {
             // A response is taken out of a buffer that reads fill a block at a time, so a run
-            // of calls covers the buffer being refilled and reused rather than only its first use
+            // of calls covers the buffer being refilled and reused, and not only its first use
             using (var connection = Connect ("CSharpConnectionTest")) {
                 for (int i = 0; i < 100; i++)
                     Assert.IsNotNull (connection.Invoke ("TestService", "TestProcedure"));

@@ -19,28 +19,26 @@ namespace KRPC.Client.Benchmark
     /// </summary>
     static class Benchmark
     {
-        // How long one timed loop should run for. Long enough that the clock and a stray
-        // scheduling delay do not decide the answer, short enough that a whole run stays in
-        // seconds.
+        // Duration of one timed loop. Long enough that the clock and a stray scheduling delay
+        // do not decide the answer, and short enough that a whole run stays in seconds.
         const double TargetSeconds = 0.2;
 
-        // How many timed loops to take.
+        // The number of timed loops to take.
         const int Samples = 9;
 
-        // How long one discarded chunk of calls runs for while a case is being settled, how
-        // many of them at a time are asked whether it has stopped getting faster, and how much
-        // better the last few have to be than everything before them for it to count as still
-        // improving.
+        // The duration of one discarded chunk of calls while a case is being settled, the
+        // number of them compared at a time, and the margin the last few have to beat for the
+        // case to count as still improving.
         const double SettleChunkSeconds = 0.1;
         const int SettleChunks = 3;
         const double SettleTolerance = 0.02;
 
-        // How long to keep settling one case before measuring it anyway.
+        // The time to keep settling one case before measuring it anyway.
         const double SettleTimeoutSeconds = 10.0;
 
-        // How many values the collection case sends and gets back. A call carries a value at a
-        // time, so what one costs to encode and decode is lost in the round trip it arrives in;
-        // a list makes that per-value cost most of what the case measures. The same count for
+        // The number of values the collection case sends and gets back. A call carries one
+        // value at a time, so the cost of encoding and decoding it is lost in the round trip.
+        // A list makes that per-value cost most of what the case measures. The same count for
         // every client, so that the figures can be read against each other.
         const int ListValues = 100;
 
@@ -53,7 +51,7 @@ namespace KRPC.Client.Benchmark
             public string Note { get; set; }
 
             // Whether the case had settled before it was measured. See
-            // tools/benchmarks/run_client.py for what the runner does with it.
+            // tools/benchmarks/run_client.py for how the runner uses it.
             public bool Settled { get; set; } = true;
         }
 
@@ -65,7 +63,7 @@ namespace KRPC.Client.Benchmark
             public bool Settled { get; set; }
         }
 
-        // What one call costs once a case has stopped getting faster, and whether it got there.
+        // The cost of one call once a case has stopped getting faster, and whether it got there.
         sealed class Settled
         {
             public double PerCall { get; set; }
@@ -80,9 +78,8 @@ namespace KRPC.Client.Benchmark
             return value != null && ushort.TryParse (value, out port) ? port : fallback;
         }
 
-        // Connect over whichever transport the runner started the server with, which it names
-        // by socket path or by port. Both are measured, since which one carries a call is part
-        // of what it costs.
+        // Connect over whichever transport the runner started the server with, named by socket
+        // path or by port. Both are measured, as the transport is part of what a call costs.
         static Connection Connect ()
         {
             var rpcPath = Environment.GetEnvironmentVariable ("RPC_PATH");
@@ -138,8 +135,8 @@ namespace KRPC.Client.Benchmark
                         return new Settled { PerCall = recent, Reached = true };
                 }
             }
-            // However many chunks it got through, which is fewer than a settle compares where
-            // a single one of them ran longer than the whole timeout.
+            // The chunks it got through, which is fewer than a settle compares when a single
+            // chunk ran longer than the whole timeout.
             return new Settled {
                 PerCall = chunks.Skip (Math.Max (chunks.Count - SettleChunks, 0)).Min (),
                 Reached = false

@@ -20,7 +20,7 @@ namespace KRPC.Client
         // Big enough that anything a server sends arrives in one read.
         const int InitialSize = 1024 * 1024;
 
-        // How much more room to make when a message does not fit in the buffer.
+        // The extra room to make when a message does not fit in the buffer.
         const int IncreaseSize = 512 * 1024;
 
         // A length prefix is a varint, and one that does not end within five bytes cannot be the
@@ -30,7 +30,7 @@ namespace KRPC.Client
         readonly Stream stream;
         byte[] buffer = new byte [InitialSize];
 
-        // What has been read but not yet handed out, as the half open range [start, end) of the
+        // The bytes read but not yet handed out, as the half open range [start, end) of the
         // buffer.
         int start;
         int end;

@@ -464,9 +464,8 @@ namespace KRPC.Client
         const int VarintSize = 10;
 
         // A value's bytes are written into a buffer of their own, made where they are written.
-        // Keeping one buffer per thread instead was measured and is far worse: reaching a
-        // thread's own static costs several times what making a buffer this small costs, and it
-        // is reached once for every value written.
+        // Reaching a per-thread static costs several times what making a buffer this small
+        // costs, and it is reached once for every value written.
 
         static ByteString Varint (ulong value)
         {
