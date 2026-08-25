@@ -72,6 +72,10 @@ KRPC.Expression.Break
 KRPC.Expression.Continue
 KRPC.Expression.Return
 KRPC.Expression.ReturnNothing
+KRPC.Expression.Throw
+KRPC.Expression.TryCatch
+KRPC.Expression.TryCatchAll
+KRPC.Expression.TryFinally
 KRPC.Expression.CreateTuple
 KRPC.Expression.CreateStruct
 KRPC.Expression.CreateList

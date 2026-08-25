@@ -100,8 +100,34 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// The CLR exception types that a kRPC exception, named by the service it is
+        /// declared in and its name, reaches a client as.
+        /// </summary>
+        /// <remarks>
+        /// This is the exception's own type together with every type mapped onto it by
+        /// <see cref="Attributes.KRPCExceptionAttribute.MappedException"/>. Services throw
+        /// the CLR exception types rather than the kRPC ones, and
+        /// <see cref="HandleException"/> applies the mapping as the exception leaves, so
+        /// catching only the kRPC type would miss the exceptions a procedure actually
+        /// throws while the client still saw them under this name.
+        /// </remarks>
+        public IList<Type> GetExceptionTypes (string service, string name)
         {
+            ServiceSignature signature;
+            if (!Signatures.TryGetValue (service, out signature))
+                throw new KRPC.ArgumentException ("Service \"" + service + "\" not found");
+            ExceptionSignature exception;
+            if (!signature.Exceptions.TryGetValue (name, out exception))
+                throw new KRPC.ArgumentException (
+                    "Exception \"" + name + "\" not found in service \"" + service + "\"");
+            var type = exception.UnderlyingType;
+            var types = new List<Type> { type };
+            types.AddRange (MappedExceptionTypes
+                .Where (x => x.Value == type && x.Key != type)
+                .Select (x => x.Key));
+            return types;
         }
+
         /// <summary>
         /// Executes a procedure call and returns the result.
         /// Throws YieldException, containing a continuation, if the call yields.
@@ -167,6 +193,18 @@ namespace KRPC.Service
         {
             if ((CallContext.GameScene & procedure.GameScene) == 0)
                 throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
+        }
+
+        /// <summary>
+        /// Whether a caught exception reaches a client under the given kRPC exception
+        /// type. Called from a compiled server side function, at the top of a catch
+        /// block naming an exception. A catch for a CLR exception type also catches its
+        /// subclasses, and <see cref="HandleException"/> maps each type on its own, so
+        /// the subclasses arrive at the client under their own names or under none.
+        /// </summary>
+        public static bool ExpressionExceptionIsNamed (System.Exception exn, Type name)
+        {
+            return Instance.GetMappedExceptionType (exn.GetType ()) == name;
         }
 
         /// <summary>

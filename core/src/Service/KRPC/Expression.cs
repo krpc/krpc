@@ -1444,6 +1444,7 @@ namespace KRPC.Service.KRPC
             return new Expression (LinqExpression.Property (
                 arg, typeof (string).GetProperty ("Length")));
         }
+
         /// <summary>
         /// The character at the given position in a string, as a string of length one.
         /// </summary>
@@ -1459,6 +1460,7 @@ namespace KRPC.Service.KRPC
                 arg, typeof (string).GetMethod ("Substring", new [] { typeof (int), typeof (int) }),
                 index, LinqExpression.Constant (1)));
         }
+
         /// <summary>
         /// Part of a string.
         /// </summary>
@@ -1476,6 +1478,7 @@ namespace KRPC.Service.KRPC
                 arg, typeof (string).GetMethod ("Substring", new [] { typeof (int), typeof (int) }),
                 start, length));
         }
+
         /// <summary>
         /// The position of the first occurrence of one string within another.
         /// </summary>
@@ -1487,6 +1490,7 @@ namespace KRPC.Service.KRPC
         {
             return new Expression (OrdinalIndexOf (arg, value));
         }
+
         /// <summary>
         /// Determine whether one string occurs within another.
         /// </summary>
@@ -1499,6 +1503,7 @@ namespace KRPC.Service.KRPC
             return new Expression (LinqExpression.GreaterThanOrEqual (
                 OrdinalIndexOf (arg, value), LinqExpression.Constant (0)));
         }
+
         /// <summary>
         /// Determine whether a string starts with another.
         /// </summary>
@@ -1510,6 +1515,7 @@ namespace KRPC.Service.KRPC
         {
             return new Expression (OrdinalStringCall ("StartsWith", arg, value));
         }
+
         /// <summary>
         /// Determine whether a string ends with another.
         /// </summary>
@@ -1521,6 +1527,7 @@ namespace KRPC.Service.KRPC
         {
             return new Expression (OrdinalStringCall ("EndsWith", arg, value));
         }
+
         /// <summary>
         /// Convert a string to upper case, independently of the game's language.
         /// </summary>
@@ -1533,6 +1540,7 @@ namespace KRPC.Service.KRPC
             return new Expression (LinqExpression.Call (
                 arg, typeof (string).GetMethod ("ToUpperInvariant", System.Type.EmptyTypes)));
         }
+
         /// <summary>
         /// Convert a string to lower case, independently of the game's language.
         /// </summary>
@@ -1545,6 +1553,7 @@ namespace KRPC.Service.KRPC
             return new Expression (LinqExpression.Call (
                 arg, typeof (string).GetMethod ("ToLowerInvariant", System.Type.EmptyTypes)));
         }
+
         /// <summary>
         /// Remove white space from both ends of a string.
         /// </summary>
@@ -1555,6 +1564,7 @@ namespace KRPC.Service.KRPC
         {
             return new Expression (TrimCall ("Trim", arg));
         }
+
         /// <summary>
         /// Remove white space from the start of a string.
         /// </summary>
@@ -1565,6 +1575,7 @@ namespace KRPC.Service.KRPC
         {
             return new Expression (TrimCall ("TrimStart", arg));
         }
+
         /// <summary>
         /// Remove white space from the end of a string.
         /// </summary>
@@ -1575,6 +1586,7 @@ namespace KRPC.Service.KRPC
         {
             return new Expression (TrimCall ("TrimEnd", arg));
         }
+
         /// <summary>
         /// Replace every occurrence of one string within another.
         /// </summary>
@@ -1592,10 +1604,12 @@ namespace KRPC.Service.KRPC
                 arg, typeof (string).GetMethod ("Replace", new [] { typeof (string), typeof (string) }),
                 oldValue, newValue));
         }
+
         internal static IList<string> StringSplitHelper (string value, string separator)
         {
             return value.Split (new [] { separator }, StringSplitOptions.None);
         }
+
         /// <summary>
         /// Split a string into the parts separated by another string.
         /// </summary>
@@ -1611,6 +1625,7 @@ namespace KRPC.Service.KRPC
                 nameof (StringSplitHelper), BindingFlags.Static | BindingFlags.NonPublic);
             return new Expression (LinqExpression.Call (method, arg, separator));
         }
+
         /// <summary>
         /// Join strings together, separated by another string.
         /// </summary>
@@ -1629,6 +1644,7 @@ namespace KRPC.Service.KRPC
                 "Join", new [] { typeof (string), typeof (IEnumerable<string>) });
             return new Expression (LinqExpression.Call (join, separator, values));
         }
+
         // Removing from a collection and emptying one. They pair with ListAdd,
         // SetAdd and DictionarySet
 
@@ -2090,6 +2106,7 @@ namespace KRPC.Service.KRPC
                     "Expected a string for " + name + "; " +
                     "use ConvertToString to convert a value to one");
         }
+
         static void CheckIsAnInt (Expression expression, string name)
         {
             if (ReferenceEquals (expression, null))
@@ -2098,6 +2115,7 @@ namespace KRPC.Service.KRPC
                 throw new InvalidOperationException (
                     "Expected an integer for " + name + "; use a cast to convert a value to one");
         }
+
         /// <summary>
         /// A call of a string method comparing with another string, done by ordinal
         /// value so that the result does not depend on the game's language.
@@ -2111,10 +2129,12 @@ namespace KRPC.Service.KRPC
             return LinqExpression.Call (
                 arg, method, value, LinqExpression.Constant (StringComparison.Ordinal));
         }
+
         static LinqExpression OrdinalIndexOf (Expression arg, Expression value)
         {
             return OrdinalStringCall ("IndexOf", arg, value);
         }
+
         /// <summary>
         /// A call of one of the trim methods. Each takes the characters to trim, and
         /// trims white space when given none.
@@ -2599,6 +2619,141 @@ namespace KRPC.Service.KRPC
                 LinqExpression.TryFinally (loop, dispose)));
         }
 
+
+        /// <summary>
+        /// A throw statement. Raises the named exception, which the client receives
+        /// as an error from the function, or as an error on the stream or event
+        /// evaluating it.
+        /// </summary>
+        /// <param name="service">The name of the service the exception is defined in.</param>
+        /// <param name="name">The name of the exception.</param>
+        /// <param name="message">The message to raise the exception with.</param>
+        [KRPCMethod]
+        public static Expression Throw (string service, string name, Expression message)
+        {
+            if (ReferenceEquals (message, null))
+                throw new ArgumentNullException (nameof (message));
+            if (message.Type != typeof (string))
+                throw new InvalidOperationException (
+                    "The message of an exception must be a string; " +
+                    "use ConvertToString to convert a value to one");
+            var type = Services.Instance.GetExceptionTypes (service, name) [0];
+            var constructor = type.GetConstructor (new [] { typeof (string) });
+            if (constructor == null)
+                throw new InvalidOperationException (
+                    "Exception \"" + name + "\" in service \"" + service + "\" " +
+                    "cannot be raised, as it cannot be constructed from a message");
+            return new Expression (LinqExpression.Throw (
+                LinqExpression.New (constructor, message.internalExpression)));
+        }
+
+        /// <summary>
+        /// A try-catch statement. Evaluates the body, and evaluates the handler
+        /// instead if the body raises the named exception.
+        /// </summary>
+        /// <remarks>
+        /// Only an exception a service declares can be named, which is the same set
+        /// <see cref="Throw"/> can raise. Use <see cref="TryCatchAll"/> to handle any
+        /// exception, including the ones an expression itself produces.
+        /// </remarks>
+        /// <param name="body">The statement to evaluate.</param>
+        /// <param name="service">The name of the service the exception is defined in.</param>
+        /// <param name="name">The name of the exception.</param>
+        /// <param name="message">
+        /// A string variable, created with <see cref="Variable"/>, that the caught
+        /// exception's message is assigned to before the handler is evaluated. May be
+        /// null, when the handler does not use the message.
+        /// </param>
+        /// <param name="handler">The statement to evaluate when the exception is caught.</param>
+        [KRPCMethod]
+        public static Expression TryCatch (Expression body, string service, string name, [KRPCNullable] Expression message, Expression handler)
+        {
+            var types = Services.Instance.GetExceptionTypes (service, name);
+            // A service throws the CLR exception types, which are mapped onto the
+            // kRPC type as the exception leaves. Catching by the kRPC name therefore
+            // catches every type the client would see under it, and only those
+            return new Expression (LinqExpression.TryCatch (
+                AsStatement (body),
+                types.Select (x => BuildCatchBlock (x, types [0], message, handler)).ToArray ()));
+        }
+
+        /// <summary>
+        /// A try-catch statement that handles any exception. Evaluates the body, and
+        /// evaluates the handler instead if the body raises an exception.
+        /// </summary>
+        /// <param name="body">The statement to evaluate.</param>
+        /// <param name="message">
+        /// A string variable, created with <see cref="Variable"/>, that the caught
+        /// exception's message is assigned to before the handler is evaluated. May be
+        /// null, when the handler does not use the message.
+        /// </param>
+        /// <param name="handler">The statement to evaluate when an exception is caught.</param>
+        [KRPCMethod]
+        public static Expression TryCatchAll (Expression body, [KRPCNullable] Expression message, Expression handler)
+        {
+            // A procedure that pauses execution unwinds by throwing YieldException.
+            // This handler runs ahead of the catch-all and rethrows it, so the stream
+            // or event evaluating the expression still reports the pause
+            var yielded = LinqExpression.Catch (
+                LinqExpression.Parameter (typeof (YieldException), "yielded"),
+                LinqExpression.Rethrow (typeof (void)));
+            return new Expression (LinqExpression.TryCatch (
+                AsStatement (body),
+                yielded,
+                BuildCatchBlock (typeof (System.Exception), null, message, handler)));
+        }
+
+        /// <summary>
+        /// A try-finally statement. Evaluates the body, and evaluates the finalizer
+        /// afterwards whether the body completed or raised an exception.
+        /// </summary>
+        /// <param name="body">The statement to evaluate.</param>
+        /// <param name="finalizer">The statement to evaluate afterwards.</param>
+        [KRPCMethod]
+        public static Expression TryFinally (Expression body, Expression finalizer)
+        {
+            return new Expression (LinqExpression.TryFinally (
+                AsStatement (body), AsStatement (finalizer)));
+        }
+
+        /// <summary>
+        /// A catch block for the given exception type, assigning the caught
+        /// exception's message to the given variable before evaluating the handler.
+        /// The exception itself is never exposed, which keeps exceptions out of the
+        /// value algebra entirely.
+        /// </summary>
+        /// <param name="type">The CLR exception type to catch.</param>
+        /// <param name="name">The kRPC exception type the catch names, or null to
+        /// handle every exception. A catch for a CLR type also catches its subclasses,
+        /// which a client sees under their own names, so those are rethrown.</param>
+        /// <param name="message">A string variable to assign the message to, or null.</param>
+        /// <param name="handler">The statement to evaluate.</param>
+        static CatchBlock BuildCatchBlock (System.Type type, System.Type name, Expression message, Expression handler)
+        {
+            var body = AsStatement (handler);
+            if (ReferenceEquals (message, null) && name == null)
+                return LinqExpression.Catch (type, body);
+            if (!ReferenceEquals (message, null) &&
+                (!(message.internalExpression is ParameterExpression) ||
+                 message.Type != typeof (string)))
+                throw new ArgumentException (
+                    "The message of a catch must be a string variable");
+            var caught = LinqExpression.Parameter (type, "caught");
+            var statements = new List<LinqExpression> ();
+            if (name != null)
+                statements.Add (LinqExpression.IfThen (
+                    LinqExpression.Not (LinqExpression.Call (
+                        typeof (Services).GetMethod (nameof (Services.ExpressionExceptionIsNamed)),
+                        caught, LinqExpression.Constant (name, typeof (System.Type)))),
+                    LinqExpression.Rethrow (typeof (void))));
+            if (!ReferenceEquals (message, null))
+                statements.Add (LinqExpression.Assign (
+                    message, LinqExpression.Property (
+                        caught, typeof (System.Exception).GetProperty ("Message"))));
+            statements.Add (body);
+            return LinqExpression.Catch (
+                caught, LinqExpression.Block (typeof (void), statements));
+        }
         static void CheckIsEnumerable (Expression collection)
         {
             if (!typeof (IEnumerable).IsAssignableFrom (collection.Type))
