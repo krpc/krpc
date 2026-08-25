@@ -32,7 +32,7 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (82, service.Procedures.Count);
+            Assert.AreEqual (83, service.Procedures.Count);
             Assert.AreEqual (3, service.Classes.Count);
             Assert.AreEqual (2, service.Enumerations.Count);
             Assert.AreEqual (3, service.Structs.Count);
@@ -228,6 +228,12 @@ namespace KRPC.Test.Service
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasNullableParameter (proc, 0, typeof(int), "x");
                     MessageAssert.HasReturnType (proc, typeof(int), true);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoNullableDouble") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasNullableParameter (proc, 0, typeof(double), "x");
+                    MessageAssert.HasReturnType (proc, typeof(double), true);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "EchoNullableEnum") {
@@ -620,8 +626,8 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (82, foundProcedures);
-            Assert.AreEqual (82, service.Procedures.Count);
+            Assert.AreEqual (83, foundProcedures);
+            Assert.AreEqual (83, service.Procedures.Count);
         }
 
         [Test]

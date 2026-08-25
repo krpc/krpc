@@ -39,6 +39,8 @@ namespace KRPC.Test.Service
 
         int? EchoNullableInt (int? x);
 
+        double? EchoNullableDouble (double? x);
+
         TestService.TestEnum? EchoNullableEnum (TestService.TestEnum? x);
 
         IList<string> EchoNullableList (IList<string> l);

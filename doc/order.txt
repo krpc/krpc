@@ -5,6 +5,7 @@ KRPC.Clients
 KRPC.GetStatus
 KRPC.GetServices
 KRPC.AddStream
+KRPC.AddFunctionStream
 KRPC.RemoveStream
 KRPC.StartStream
 KRPC.SetStreamRate
@@ -26,6 +27,7 @@ KRPC.GameScene.Administration
 KRPC.CurrentGameScene
 KRPC.Paused
 KRPC.Expression
+KRPC.Expression.ReturnType
 KRPC.Expression.ConstantDouble
 KRPC.Expression.ConstantFloat
 KRPC.Expression.ConstantInt

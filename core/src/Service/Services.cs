@@ -437,7 +437,8 @@ namespace KRPC.Service
                 exn = exn.InnerException;
             var message = exn.Message;
             var verboseErrors = Configuration.Instance.VerboseErrors;
-            var stackTrace = verboseErrors ? exn.StackTrace : string.Empty;
+            // An exception that was never thrown has no stack trace
+            var stackTrace = verboseErrors ? exn.StackTrace ?? string.Empty : string.Empty;
             if (Logger.ShouldLog (Logger.Severity.Debug)) {
                 Logger.WriteLine (message, Logger.Severity.Debug);
                 if (verboseErrors)

@@ -124,6 +124,12 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
+        public static double? EchoNullableDouble (double? x)
+        {
+            return Service.EchoNullableDouble (x);
+        }
+
+        [KRPCProcedure]
         public static TestEnum? EchoNullableEnum (TestEnum? x)
         {
             return Service.EchoNullableEnum (x);

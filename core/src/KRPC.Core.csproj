@@ -121,6 +121,7 @@
     <Compile Include="Service\DocumentationUtils.cs" />
     <Compile Include="Service\Event.cs" />
     <Compile Include="Service\EventStream.cs" />
+    <Compile Include="Service\FunctionStream.cs" />
     <Compile Include="Service\GameScene.cs" />
     <Compile Include="Service\GameState.cs" />
     <Compile Include="Service\IProcedureHandler.cs" />
