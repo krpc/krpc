@@ -7,6 +7,7 @@
 #include "krpc/encoder.hpp"
 #include "krpc/krpc.pb.hpp"
 #include "krpc/platform.hpp"
+#include "krpc/services/krpc.hpp"
 #include "services/test_service.hpp"
 
 TEST(test_encoder, test_encode_message) {

@@ -64,15 +64,16 @@ namespace KRPC.Client.Services.TestService
         internal static readonly global::KRPC.Client.TypeSpec Spec26 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>));
         internal static readonly global::KRPC.Client.TypeSpec Spec27 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<string>));
         internal static readonly global::KRPC.Client.TypeSpec Spec28 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec29 = global::KRPC.Client.TypeSpec.For (typeof(uint));
-        internal static readonly global::KRPC.Client.TypeSpec Spec30 = global::KRPC.Client.TypeSpec.For (typeof(ulong));
-        internal static readonly global::KRPC.Client.TypeSpec Spec31 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.DeprecatedClass));
-        internal static readonly global::KRPC.Client.TypeSpec Spec32 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<double>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec33 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<float>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec34 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<long>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec35 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Event));
-        internal static readonly global::KRPC.Client.TypeSpec Spec36 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<uint>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec37 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<ulong>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec29 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.Expression));
+        internal static readonly global::KRPC.Client.TypeSpec Spec30 = global::KRPC.Client.TypeSpec.For (typeof(uint));
+        internal static readonly global::KRPC.Client.TypeSpec Spec31 = global::KRPC.Client.TypeSpec.For (typeof(ulong));
+        internal static readonly global::KRPC.Client.TypeSpec Spec32 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.DeprecatedClass));
+        internal static readonly global::KRPC.Client.TypeSpec Spec33 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<double>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec34 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<float>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec35 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<long>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec36 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Event));
+        internal static readonly global::KRPC.Client.TypeSpec Spec37 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<uint>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec38 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<ulong>));
 
         // The procedures whose values a C# type cannot describe on its own, which a call
         // built from an expression looks up by name
@@ -267,7 +268,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (lowest, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("TestService", "DoubleSpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<double>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec32, connection);
+            return (global::System.Collections.Generic.IList<double>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec33, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DoubleToString", typeof(TypeSpecs))]
@@ -277,6 +278,21 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("TestService", "DoubleToString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
+        }
+
+        /// <summary>
+        /// Returns a dump of the expression tree of the given server side expression,
+        /// as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+        /// verify the trees that the expression API generates.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DumpExpressionTree", typeof(TypeSpecs))]
+        public string DumpExpressionTree (global::KRPC.Client.Services.KRPC.Expression expression)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (expression, TypeSpecs.Spec29)
+            };
+            var _result = connection.Invoke ("TestService", "DumpExpressionTree", _args);
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
@@ -451,7 +467,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (fraction, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("TestService", "FloatSpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<float>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec33, connection);
+            return (global::System.Collections.Generic.IList<float>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec34, connection);
         }
 
         /// <summary>
@@ -562,7 +578,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (minimum, TypeSpecs.Spec3)
             };
             var _result = connection.Invoke ("TestService", "Int64SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<long>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec34, connection);
+            return (global::System.Collections.Generic.IList<long>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec35, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int64ToString", typeof(TypeSpecs))]
@@ -619,21 +635,21 @@ namespace KRPC.Client.Services.TestService
         public global::KRPC.Client.Event OnTimer (uint milliseconds, uint repeats = 1)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec29),
-                global::KRPC.Client.Encoder.Encode (repeats, TypeSpecs.Spec29)
+                global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec30),
+                global::KRPC.Client.Encoder.Encode (repeats, TypeSpecs.Spec30)
             };
             var _result = connection.Invoke ("TestService", "OnTimer", _args);
-            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec35, connection);
+            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec36, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OnTimerUsingLambda", typeof(TypeSpecs))]
         public global::KRPC.Client.Event OnTimerUsingLambda (uint milliseconds)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec29)
+                global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec30)
             };
             var _result = connection.Invoke ("TestService", "OnTimerUsingLambda", _args);
-            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec35, connection);
+            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec36, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OptionalArguments", typeof(TypeSpecs))]
@@ -792,10 +808,10 @@ namespace KRPC.Client.Services.TestService
         public global::System.Collections.Generic.IList<uint> Uint32SpecialDefaults (uint maximum = uint.MaxValue)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec29)
+                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec30)
             };
             var _result = connection.Invoke ("TestService", "Uint32SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<uint>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec36, connection);
+            return (global::System.Collections.Generic.IList<uint>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec37, connection);
         }
 
         /// <summary>
@@ -805,10 +821,10 @@ namespace KRPC.Client.Services.TestService
         public global::System.Collections.Generic.IList<ulong> Uint64SpecialDefaults (ulong maximum = ulong.MaxValue)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec30)
+                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec31)
             };
             var _result = connection.Invoke ("TestService", "Uint64SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<ulong>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec37, connection);
+            return (global::System.Collections.Generic.IList<ulong>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec38, connection);
         }
 
         /// <summary>
@@ -1652,7 +1668,7 @@ namespace KRPC.Client.Services.TestService
         public string DeprecatedMethod ()
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec31)
+                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec32)
             };
             var _result = connection.Invoke ("TestService", "DeprecatedClass_DeprecatedMethod", _args);
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);

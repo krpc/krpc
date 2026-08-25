@@ -15,6 +15,7 @@
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/platform.hpp"
+#include "krpc/services/krpc.hpp"
 #include "services/test_service.hpp"
 
 template <typename T>

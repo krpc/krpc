@@ -130,6 +130,13 @@ class TestService : public Service {
 
   std::string double_to_string(double value);
 
+  /**
+   * Returns a dump of the expression tree of the given server side expression,
+   * as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+   * verify the trees that the expression API generates.
+   */
+  std::string dump_expression_tree(KRPC::Expression expression);
+
   std::map<std::string, std::optional<TestService::TestClass> > echo_dictionary_of_nullable_objects(std::map<std::string, std::optional<TestService::TestClass> > d);
 
   std::vector<std::optional<int32_t> > echo_list_of_nullable_ints(std::vector<std::optional<int32_t> > l);
@@ -317,6 +324,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::string> double_to_string_stream(double value);
 
+  ::krpc::Stream<std::string> dump_expression_tree_stream(KRPC::Expression expression);
+
   ::krpc::Stream<std::map<std::string, std::optional<TestService::TestClass> >> echo_dictionary_of_nullable_objects_stream(std::map<std::string, std::optional<TestService::TestClass> > d);
 
   ::krpc::Stream<std::vector<std::optional<int32_t> >> echo_list_of_nullable_ints_stream(std::vector<std::optional<int32_t> > l);
@@ -452,6 +461,8 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall double_special_defaults_call(double nan, double infinity, double negative_infinity, double maximum, double lowest);
 
   ::krpc::schema::ProcedureCall double_to_string_call(double value);
+
+  ::krpc::schema::ProcedureCall dump_expression_tree_call(KRPC::Expression expression);
 
   ::krpc::schema::ProcedureCall echo_dictionary_of_nullable_objects_call(std::map<std::string, std::optional<TestService::TestClass> > d);
 
@@ -1362,6 +1373,17 @@ inline std::string TestService::double_to_string(double value) {
   return _result;
 }
 
+inline std::string TestService::dump_expression_tree(KRPC::Expression expression) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(expression));
+  auto _data = this->_client->invoke("TestService", "DumpExpressionTree", _args);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::map<std::string, std::optional<TestService::TestClass> > TestService::echo_dictionary_of_nullable_objects(std::map<std::string, std::optional<TestService::TestClass> > d) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -2085,6 +2107,13 @@ inline ::krpc::Stream<std::string> TestService::double_to_string_stream(double v
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "DoubleToString", _args));
 }
 
+inline ::krpc::Stream<std::string> TestService::dump_expression_tree_stream(KRPC::Expression expression) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(expression));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "DumpExpressionTree", _args));
+}
+
 inline ::krpc::Stream<std::map<std::string, std::optional<TestService::TestClass> >> TestService::echo_dictionary_of_nullable_objects_stream(std::map<std::string, std::optional<TestService::TestClass> > d) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -2543,6 +2572,13 @@ inline ::krpc::schema::ProcedureCall TestService::double_to_string_call(double v
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return this->_client->build_call("TestService", "DoubleToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::dump_expression_tree_call(KRPC::Expression expression) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(expression));
+  return this->_client->build_call("TestService", "DumpExpressionTree", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::echo_dictionary_of_nullable_objects_call(std::map<std::string, std::optional<TestService::TestClass> > d) {
