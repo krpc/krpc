@@ -71,6 +71,28 @@ namespace KRPC.Test.Service.KRPC
             return global::KRPC.Service.ObjectStore.Instance.AddInstance (obj);
         }
 
+        /// <summary>
+        /// An expression constructing a TestStruct whose object field is the instance
+        /// with the given identifier, with a value in every other field.
+        /// </summary>
+        static Expression BuildTestStruct (ulong objectId)
+        {
+            return Expression.CreateStruct (
+                Type.StructType ("TestService", "TestStruct"),
+                new List<Expression> {
+                    Expression.ConstantInt (42),
+                    Expression.ConstantString ("bar"),
+                    Expression.Cast (
+                        Expression.ConstantInt (1),
+                        Type.EnumerationType ("TestService", "TestEnum")),
+                    Expression.ConstantObject (objectId),
+                    Expression.CreateList (new List<Expression> {
+                        Expression.ConstantString ("a"),
+                        Expression.ConstantString ("b")
+                    })
+                });
+        }
+
         static ProcedureCall BuildProcedureCall (string procedure, params Argument[] args)
         {
             var call = new ProcedureCall ("TestService", procedure);
@@ -432,6 +454,64 @@ namespace KRPC.Test.Service.KRPC
                     Expression.Count (seen)
                 });
             Assert.AreEqual (1, Eval<int> (setExpr));
+        }
+
+        [Test]
+        public void CollectionElementsAreWidenedNotNarrowed ()
+        {
+            var values = Expression.Variable ("values", Type.ListType (Type.Double ()));
+            var widened = Expression.BlockWithVariables (
+                new List<Expression> { values },
+                new List<Expression> {
+                    Expression.Assign (values, Expression.CreateEmptyList (Type.Double ())),
+                    Expression.ListAdd (values, Expression.ConstantInt (1)),
+                    values
+                });
+            CollectionAssert.AreEqual (new [] { 1.0 }, Eval<IList<double>> (widened));
+
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.ListAdd (
+                    Expression.CreateEmptyList (Type.Int ()),
+                    Expression.ConstantDouble (1.5)));
+            StringAssert.Contains ("No implicit conversion", exn.Message);
+
+            var numbers = Expression.Variable ("numbers", Type.ListType (Type.Int ()));
+            var narrowed = Expression.BlockWithVariables (
+                new List<Expression> { numbers },
+                new List<Expression> {
+                    Expression.Assign (numbers, Expression.CreateEmptyList (Type.Int ())),
+                    Expression.ListAdd (numbers, Expression.Cast (
+                        Expression.ConstantDouble (2.5), Type.Int ())),
+                    numbers
+                });
+            CollectionAssert.AreEqual (new [] { 2 }, Eval<IList<int>> (narrowed));
+        }
+
+        [Test]
+        public void AssignedValuesAreWidenedNotNarrowed ()
+        {
+            var total = Expression.Variable ("total", Type.Double ());
+            var widened = Expression.BlockWithVariables (
+                new List<Expression> { total },
+                new List<Expression> {
+                    Expression.Assign (total, Expression.ConstantInt (1)),
+                    total
+                });
+            Assert.AreEqual (1.0, Eval<double> (widened));
+
+            var count = Expression.Variable ("count", Type.Int ());
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Assign (count, Expression.ConstantDouble (1.5)));
+            StringAssert.Contains ("No implicit conversion", exn.Message);
+
+            var narrowed = Expression.BlockWithVariables (
+                new List<Expression> { count },
+                new List<Expression> {
+                    Expression.Assign (count, Expression.Cast (
+                        Expression.ConstantDouble (2.5), Type.Int ())),
+                    count
+                });
+            Assert.AreEqual (2, Eval<int> (narrowed));
         }
 
         [Test]
@@ -890,7 +970,7 @@ namespace KRPC.Test.Service.KRPC
         {
             var x = Expression.Parameter ("x", Type.Int ());
             var y = Expression.Parameter ("y", Type.Int ());
-            var func = Expression.Function (
+            var func = Expression.Lambda (
                 new List<Expression> { x, y },
                 Expression.Divide (x, y));
             var call = Expression.Invoke (func, new Dictionary<string, Expression> {
@@ -904,6 +984,97 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (
                 System.Tuple.Create (1, false),
                 Eval<System.Tuple<int, bool>> (tuple));
+        }
+
+        [Test]
+        public void CreateStruct ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var value = Eval<global::KRPC.Test.Service.TestService.TestStruct> (
+                BuildTestStruct (AddInstance (obj)));
+            Assert.AreEqual (42, value.IntField);
+            Assert.AreEqual ("bar", value.StringField);
+            Assert.AreEqual (global::KRPC.Test.Service.TestService.TestEnum.Y, value.EnumField);
+            Assert.AreSame (obj, value.ObjectField);
+            Assert.AreEqual (new List<string> { "a", "b" }, value.ListField);
+        }
+
+        [Test]
+        public void CreateStructWithTheWrongNumberOfFieldValues ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateStruct (
+                    Type.StructType ("TestService", "TestStruct"),
+                    new List<Expression> { Expression.ConstantInt (42) }));
+        }
+
+        [Test]
+        public void CreateStructWithAFieldValueOfTheWrongType ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.CreateStruct (
+                    Type.StructType ("TestService", "TestNestedStruct"),
+                    new List<Expression> {
+                        Expression.ConstantString ("not a structure"),
+                        Expression.ConstantInt (1)
+                    }));
+        }
+
+        [Test]
+        public void CreateStructOfATypeThatIsNotAStructure ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateStruct (
+                    Type.Int (), new List<Expression> { Expression.ConstantInt (42) }));
+        }
+
+        [Test]
+        public void GetField ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var value = BuildTestStruct (AddInstance (obj));
+            Assert.AreEqual (42, Eval<int> (Expression.GetField (value, "IntField")));
+            Assert.AreEqual ("bar", Eval<string> (Expression.GetField (value, "StringField")));
+            Assert.AreSame (
+                obj,
+                Eval<global::KRPC.Test.Service.TestService.TestClass> (
+                    Expression.GetField (value, "ObjectField")));
+        }
+
+        [Test]
+        public void GetFieldOfANestedStruct ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var nested = Expression.CreateStruct (
+                Type.StructType ("TestService", "TestNestedStruct"),
+                new List<Expression> {
+                    BuildTestStruct (AddInstance (obj)),
+                    Expression.ConstantInt (7)
+                });
+            Assert.AreEqual (
+                "bar",
+                Eval<string> (Expression.GetField (
+                    Expression.GetField (nested, "StructField"), "StringField")));
+            Assert.AreEqual (7, Eval<int> (Expression.GetField (nested, "IntField")));
+        }
+
+        [Test]
+        public void GetFieldTheStructureDoesNotHave ()
+        {
+            var value = BuildTestStruct (AddInstance (
+                new global::KRPC.Test.Service.TestService.TestClass ("foo")));
+            // NotAField is a property of the C# struct, but is not marked as a field of it
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.GetField (value, "NotAField"));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.GetField (value, "NoSuchField"));
+        }
+
+        [Test]
+        public void GetFieldOfAValueThatIsNotAStructure ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.GetField (tuple, "IntField"));
         }
 
         [Test]
@@ -950,6 +1121,14 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void GetTupleWithAComputedIndex ()
+        {
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.Get (tuple, Expression.Add (
+                    Expression.ConstantInt (0), Expression.ConstantInt (1))));
+            StringAssert.Contains ("constant integer", exn.Message);
+        }
+
         public void GetList ()
         {
             Assert.AreEqual (1, Eval<int> (Expression.Get (list, Expression.ConstantInt (0))));
