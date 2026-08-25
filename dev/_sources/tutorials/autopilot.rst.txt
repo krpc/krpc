@@ -156,6 +156,51 @@ Reading the state back
      angles and are ill-defined near the vertical. Use **rotation** / **direction** or the
      error readouts above instead.
 
+.. _autopilot-update-mode:
+
+When the control loop runs
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The control loop runs once per physics tick, and **update mode** chooses where in the tick
+it runs relative to the calls a program makes in that tick:
+
+* **after calls** (the default) runs it once the server has executed the tick's calls, so a
+  target set during a tick is flown on that tick.
+
+* **before calls** runs it before the server executes any of them, so the attitude error and
+  control output read during a tick are the ones computed for that tick, one tick behind the
+  target.
+
+* **manual** does not run it at all. Calling **update** runs it, so a program places it
+  among its own calls.
+
+For a control loop this matters most together with :ref:`holding a tick <holding-a-tick>`,
+which puts a whole read, compute and write inside one tick. Manual mode then gives complete
+control of the order: everything before **update** is what the loop will fly the tick with,
+and everything after it can read what the loop just did.
+
+.. code-block:: python
+
+   ap.update_mode = conn.space_center.AutoPilotUpdateMode.manual
+   while True:
+       conn.krpc.hold_tick()
+       try:
+           ap.target_pitch_and_heading(control_law(vessel.flight().pitch), 90)
+           ap.update()
+           record(ap.error, vessel.control.pitch)
+       finally:
+           conn.krpc.release_tick()
+
+In manual mode the vessel is only flown on the ticks the loop is run on. On a tick it is not
+run on the vessel keeps the control output of the last tick it did run on, and after a tenth
+of a second of that the autopilot stops contributing any control input at all, so a program
+that stops calling **update** leaves the vessel coasting rather than holding a deflection.
+**wait** cannot be used in manual mode: it takes several ticks and blocks the program for
+all of them, so the loop would never run.
+
+Calling **update** more than once in a tick runs the loop once. The control law assumes one
+run per tick, so running it twice would advance its filters and gains at twice the rate.
+
 Tuning the AutoPilot
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -608,7 +653,8 @@ extend it.
 The control cascade
 ^^^^^^^^^^^^^^^^^^^
 
-Each physics tick the autopilot does the following:
+Each physics tick, at the point chosen by the update mode described above, the autopilot
+does the following:
 
 #. It compares the current rotation with the target rotation to compute the
    :ref:`target angular velocity <target-angular-velocity>` needed to rotate

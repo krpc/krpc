@@ -50,6 +50,37 @@ AutoPilot
       :Attribute: Can be read or written
       :rtype: boolean
 
+   .. attribute:: update_mode: SpaceCenter.AutoPilotUpdateMode
+
+      When the auto-pilot's control loop runs within a server update, relative to the
+      calls the update executes. Defaults to
+      :attr:`SpaceCenter.AutoPilotUpdateMode.after_calls`.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.AutoPilotUpdateMode`
+
+      .. note::
+
+         The loop runs once per physics tick; this chooses where in the tick that is.
+         Together with ``KRPC.HoldTick`` it lets a program place the loop exactly within
+         its own read, compute and write. When no server is running the loop runs at the
+         point the game takes control inputs at, whatever the mode, so a vessel is never left
+         without control input.
+
+   .. method:: update()
+
+      Run one tick of the auto-pilot's control loop now. Does nothing if it has already run
+      on this physics tick. Throws an exception if the auto-pilot is not engaged.
+
+
+      .. note::
+
+         For :attr:`SpaceCenter.AutoPilotUpdateMode.manual`, where the loop runs only when this is
+         called. In the other modes this runs it early; either way it runs once per tick. On a
+         tick it is not called for, the vessel keeps the control output of the last tick it did
+         run on, and after a tenth of a second of that the auto-pilot stops contributing any
+         control input at all.
+
    .. attribute:: show_info_ui: boolean
 
       Whether an in-game window showing the auto-pilot's state (engagement, attitude error,
@@ -745,6 +776,32 @@ AutoPilot
 
       :Attribute: Read-only, cannot be set
       :rtype: string
+
+
+
+
+.. class:: AutoPilotUpdateMode
+
+   When the auto-pilot's control loop runs within a server update, relative to the calls
+   the update executes. See :attr:`SpaceCenter.AutoPilot.update_mode`.
+
+
+   .. data:: after_calls
+
+      The default. The control loop runs once the update has executed the calls it
+      received, so a target set during a tick is flown on that tick.
+
+
+   .. data:: before_calls
+
+      The control loop runs before the update executes any calls, so calls made during a
+      tick see the attitude error and control output it computed for that tick.
+
+
+   .. data:: manual
+
+      The control loop runs only when :meth:`SpaceCenter.AutoPilot.update` is called, so a
+      program chooses where among its own calls it runs.
 
 
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Object Lifetime &#8212; kRPC vdev documentation</title>
+    <title>Control Loops &#8212; kRPC vdev documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/object-lifetime';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/control-loops';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
@@ -54,11 +54,11 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/object-lifetime.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/control-loops.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Control Loops" href="control-loops.html" />
-    <link rel="prev" title="User Interface" href="user-interface.html" />
+    <link rel="next" title="AutoPilot" href="autopilot.html" />
+    <link rel="prev" title="Object Lifetime" href="object-lifetime.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -547,8 +547,8 @@
 <li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
 </ul>
 </div>
@@ -593,7 +593,7 @@
     
     <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Object Lifetime</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Control Loops</span></li>
   </ul>
 </nav>
 </div>
@@ -610,137 +610,137 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="object-lifetime">
-<h1>Object Lifetime<a class="headerlink" href="#object-lifetime" title="Link to this heading">#</a></h1>
-<p>Many remote procedures return an object: a vessel, a part, a part module, a maneuver node, a
-reference frame. Such an object is a <em>name</em> for something in the game, not a copy of it and
-not a pointer into the game’s memory. Every call made through it looks the thing up in the
-game again, which is what lets an object outlive the game tearing down and rebuilding what it
-names, and what lets the server say clearly when the thing is gone.</p>
-<section id="objects-follow-the-game">
-<h2>Objects follow the game<a class="headerlink" href="#objects-follow-the-game" title="Link to this heading">#</a></h2>
-<p>Loading a save, quickloading and reverting all replace the game’s own objects, and the game
-also rebuilds a vessel’s parts whenever it comes back into range. An object obtained before
-any of that keeps working afterwards, provided the thing it names still exists, and reads the
-state of the loaded game rather than the state it was obtained in.</p>
-<p>So a script can hold onto a vessel or a part across a quickload. In Python, for example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-<span class="n">parachute</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s1">&#39;parachuteSingle&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parachute</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">quickload</span><span class="p">()</span>
-<span class="c1"># after the load, this reads the parachute of the game that was loaded</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">parachute</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+  <section id="control-loops">
+<span id="tutorial-control-loops"></span><h1>Control Loops<a class="headerlink" href="#control-loops" title="Link to this heading">#</a></h1>
+<p>A control loop reads the game state, computes something from it and writes the result back,
+over and over. The game runs its physics on a fixed step, 50 times a second, and a loop that
+flies a vessel wants to do its reading and writing once per step, with the values it writes
+acting on the state it read them from.</p>
+<p>That is not what a plain loop gets. This tutorial explains why, and what to do about it.</p>
+<section id="why-a-plain-loop-falls-behind">
+<h2>Why a plain loop falls behind<a class="headerlink" href="#why-a-plain-loop-falls-behind" title="Link to this heading">#</a></h2>
+<p>The server executes calls inside the game’s physics update, and waits only a short while for
+a client’s next call before giving up on it and letting the game move on. That wait is the
+<strong>receive timeout</strong>, one millisecond by default.</p>
+<p>A control loop spends its time between the calls, not during them: it reads, then computes,
+then writes. If the computing takes longer than a millisecond, which is easy in Python or
+Lua, the client is not waiting when the server looks for it, so each call lands in a
+different physics tick. An iteration of five calls costs five ticks, and by the time the last
+write lands the state it was computed from is five ticks old.</p>
+<p>Raising the receive timeout is not the answer. It is a global setting, and it costs the
+server that much time on every idle update for every client.</p>
+</section>
+<section id="holding-a-tick">
+<span id="id1"></span><h2>Holding a tick<a class="headerlink" href="#holding-a-tick" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">hold_tick</span></code> holds the game on its current physics tick, and <code class="docutils literal notranslate"><span class="pre">release_tick</span></code> lets it move
+on. Every call made in between is executed before the game advances, so a whole read, compute
+and write happens in the state of one tick:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">hold_tick</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pitch</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">pitch</span>
+        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="n">control_law</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>Release the tick even when the code in between fails, as the <code class="docutils literal notranslate"><span class="pre">finally</span></code> above does. Until
+the hold is released the game is waiting, so a program that leaves one behind stops the game
+until the hold times out.</p>
 </section>
-<section id="objects-that-are-gone">
-<h2>Objects that are gone<a class="headerlink" href="#objects-that-are-gone" title="Link to this heading">#</a></h2>
-<p>When the thing an object names no longer exists, every member of that object that reads the
-game raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> instead of returning a value. A part raises it
-once it has been destroyed, or its vessel destroyed or recovered; a vessel raises it once it
-has been recovered or destroyed; a maneuver node raises it once it has been removed from the
-vessel’s flight plan, which includes every node the vessel had before a game was loaded; a
-science subject raises it once the game state it was read from has been replaced.</p>
-<p>An object can also become gone because of what a client itself does. A crew member is named
-by the kerbal’s name, which is what the game keeps its roster under, so renaming a kerbal by
-setting <code class="docutils literal notranslate"><span class="pre">CrewMember.Name</span></code> leaves every object for that kerbal standing for a kerbal the
-roster no longer has, including the one the rename was made through. They all raise the
-exception from then on, and an object for the renamed kerbal has to be obtained again under
-the new name.</p>
-<p>The other case is an object a client asks the server to build, which names nothing in the
-game. Nothing the game does ever finishes with such an object, so the server holds it until
-the client says it is done with it: <code class="docutils literal notranslate"><span class="pre">ReferenceFrame.Remove</span></code> for a frame built with
-<code class="docutils literal notranslate"><span class="pre">ReferenceFrame.CreateRelative</span></code> or <code class="docutils literal notranslate"><span class="pre">ReferenceFrame.CreateHybrid</span></code>, <code class="docutils literal notranslate"><span class="pre">Orbit.Remove</span></code> for an
-orbit built with <code class="docutils literal notranslate"><span class="pre">Orbit.CreateFromPositionAndVelocity</span></code> or
-<code class="docutils literal notranslate"><span class="pre">Orbit.CreateFromOrbitalElements</span></code>, and <code class="docutils literal notranslate"><span class="pre">ResourceTransfer.Remove</span></code> for a transfer between
-parts. Whatever was built on what is removed goes with it, having nothing left to be
-evaluated against: a frame defined against a removed frame or orbit, and the flight
-information measured in a removed frame.</p>
-<p>Each of these belongs to the client that asked for it: two clients that build the same
-reference frame are given one each, so a frame one of them removes leaves the other’s alone,
-and anything a client has not removed goes when it disconnects.</p>
-<p>A few members read nothing and so raise nothing: those that hand back what the object was
-built from, such as the part a part module belongs to, or the name of a field. They answer as
-they always did, and what they hand back raises the exception itself as soon as it is used.</p>
-<p>The exception is documented in the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> API reference for each client language, alongside
-the other exceptions the server can raise, and is caught like any other exception the client
-library defines. In Python:</p>
+<section id="taking-every-tick">
+<h2>Taking every tick<a class="headerlink" href="#taking-every-tick" title="Link to this heading">#</a></h2>
+<p>That loop gets whole ticks, but not consecutive ones. The <code class="docutils literal notranslate"><span class="pre">hold_tick</span></code> that opens an
+iteration is itself a call the server has to be waiting for, so a program that spends longer
+than the receive timeout between releasing one tick and asking for the next is not there when
+the server looks, and the game runs on without it. The loop still works, but it skips ticks,
+and it cannot tell which ones.</p>
+<p><code class="docutils literal notranslate"><span class="pre">next_tick</span></code> closes that gap. It releases the tick being held and holds the one immediately
+after it, in a single call, so the game runs no tick the loop has not held:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">part</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
-<span class="k">except</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">ObjectDestroyedException</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;that part is gone&#39;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">next_tick</span><span class="p">()</span>
+        <span class="n">pitch</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">pitch</span>
+        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="n">control_law</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The server also stops holding an object once the thing it names is gone, which it does when a
-game is loaded. Using such an object afterwards raises the same exception, so a client cannot
-tell whether the server still had the object or had already let go of it. That is deliberate:
-either way, the answer is that the thing is gone and a fresh object has to be obtained from
-the vessel, its parts, or wherever the first one came from.</p>
+<p>The call returns when the next tick has been held, so the loop runs at exactly one iteration
+per physics tick and the game advances one tick per call and no faster. When no tick is being
+held <code class="docutils literal notranslate"><span class="pre">next_tick</span></code> holds the soonest one it can, so it is the only call the loop needs to
+open with, and <code class="docutils literal notranslate"><span class="pre">release_tick</span></code> at the end is what lets the game go.</p>
 </section>
-<section id="objects-that-are-not-loaded">
-<h2>Objects that are not loaded<a class="headerlink" href="#objects-that-are-not-loaded" title="Link to this heading">#</a></h2>
-<p>A vessel far enough from the active vessel is <em>unloaded</em>: the game keeps it as orbital data
-and a description of its parts, and instantiates the parts again when it comes back into
-range. The vessel itself is unaffected and can be read normally, but its parts do not exist to
-be read, so using one raises an error saying that the part is not loaded.</p>
-<p>That is not the same as the part being destroyed, and it is temporary. The part works again
-once the game loads the vessel, and the object stays valid throughout. <code class="docutils literal notranslate"><span class="pre">Vessel.Loaded</span></code>
-reports whether a vessel’s parts are there to be used.</p>
-<p>Anything the game cannot currently answer for reports itself the same way, rather than
-claiming to be gone. A maneuver node of a vessel the game is not computing a flight plan for
-is one case, and a call that arrives while the game is between states, part way through
-loading one, is another.</p>
+<section id="a-worked-example">
+<h2>A worked example<a class="headerlink" href="#a-worked-example" title="Link to this heading">#</a></h2>
+<p>Holding a vessel’s pitch with a proportional controller, one iteration per tick:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;pitch hold&#39;</span><span class="p">)</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">target_pitch</span> <span class="o">=</span> <span class="mi">45</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">next_tick</span><span class="p">()</span>
+        <span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">target_pitch</span> <span class="o">-</span> <span class="n">flight</span><span class="o">.</span><span class="n">pitch</span>
+        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">error</span><span class="p">))</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
+    <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Every iteration reads the pitch of one tick and writes a command that acts on that same tick,
+and the 500 iterations cover 500 consecutive ticks, ten seconds of game time. Written without
+the hold, the same loop would take two calls per iteration in two different ticks, and would
+skip an unknown number of ticks between one iteration and the next.</p>
+<p>This is a demonstration, not a recommendation: to actually fly a vessel, use the
+<a class="reference internal" href="autopilot.html#using-the-autopilot"><span class="std std-ref">autopilot</span></a>, which implements a far better control law than the
+one above.</p>
 </section>
-<section id="objects-in-the-editor">
-<h2>Objects in the editor<a class="headerlink" href="#objects-in-the-editor" title="Link to this heading">#</a></h2>
-<p>The vessel under construction in the VAB or the SPH follows the same rules, with one
-difference: nothing there has an unloaded form. The editor holds exactly one vessel, so a part
-that is no longer in it is gone for good rather than waiting to be loaded, and using it raises
-<code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code>.</p>
-<p>Loading a craft into the editor starts a new vessel, and the parts of the vessel it replaced
-are gone. That is so whether or not the craft loaded is the one the editor already had: a
-part in the editor is named by an identifier that is only unique within one vessel, and a
-craft file saved from another carries those identifiers over, so a part of the old vessel
-cannot be told apart from the part of the new one that answers to the same identifier. Rather
-than hand back a part of a vessel that was never asked for, both raise
-<code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code>.</p>
-<p>Undo and redo are not a new vessel. They rebuild the one the editor already has, and the
-parts they rebuild keep the identifiers they had, so objects for the parts an undo leaves
-alone go on working. An object for a part that an undo takes away raises
-<code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code>, as one for any part no longer in the vessel does. An
-object is not expected to survive an undo followed by a redo.</p>
-<p>Leaving the editor destroys the vessel it had open, and with it every object reached through
-<code class="docutils literal notranslate"><span class="pre">SpaceCenter.Editor</span></code>: its parts, their part modules, its stages and its resources. A script
-that returns to the editor has to obtain them again.</p>
+<section id="where-the-autopilot-fits">
+<h2>Where the autopilot fits<a class="headerlink" href="#where-the-autopilot-fits" title="Link to this heading">#</a></h2>
+<p>The autopilot’s own control loop also runs once per physics tick. By default it runs after
+the calls of that tick, so a target set inside a held tick is flown on that tick.</p>
+<p>For finer control, <code class="docutils literal notranslate"><span class="pre">AutoPilot.update_mode</span></code> chooses where in the tick the loop runs, and its
+manual mode hands the decision to the program: everything before <code class="docutils literal notranslate"><span class="pre">update</span></code> is what the loop
+flies the tick with, and everything after it can read what the loop just did. See
+<a class="reference internal" href="autopilot.html#autopilot-update-mode"><span class="std std-ref">when the control loop runs</span></a>.</p>
 </section>
-<section id="objects-in-other-services">
-<h2>Objects in other services<a class="headerlink" href="#objects-in-other-services" title="Link to this heading">#</a></h2>
-<p>The same rules hold for every service, not only <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code>.</p>
-<p>An object a client makes itself follows what the game does with it. A line or a marker from
-the <code class="docutils literal notranslate"><span class="pre">Drawing</span></code> service, a panel or a button from <code class="docutils literal notranslate"><span class="pre">UI</span></code>, and a force from <code class="docutils literal notranslate"><span class="pre">Part.AddForce</span></code>
-are all gone once they are removed, once the service’s <code class="docutils literal notranslate"><span class="pre">Clear</span></code> is called, or once the scene
-changes, and using one then raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code>. The server also removes
-what a client made when that client disconnects. A force is applied to a part, so it also
-stops, and is gone, once that part is destroyed.</p>
-<p>An object that stands for something on a part or a vessel is exactly as alive as the part or
-the vessel. A RemoteTech antenna, an Infernal Robotics servo, a LaserDist laser and a docking
-camera all raise the exception once their part is destroyed, or once the part no longer
-carries the module that made it one of those things. An Infernal Robotics servo group is named
-by its vessel and the group’s name, so renaming a group leaves every object for it standing
-for a group the vessel no longer has, exactly as renaming a kerbal does, and an object for the
-group has to be obtained again under the new name.</p>
-<p>An object that stands for a record the game keeps finds that record again on every call, so it
-goes on working when the game rebuilds it and raises the exception once the game no longer has
-it. An alarm, a contract and its parameters, and a Kerbal Alarm Clock alarm all keep working
-across a load; removing an alarm or a waypoint leaves the object for it gone. A waypoint a
-client creates is not written into the save, so it does not outlive the game state it was
-created in.</p>
-<p>A comm link is a hop in a vessel’s control path, and reports that path as it is now rather
-than as it was when the object was obtained. A path that no longer takes the hop has lost
-contact rather than destroyed anything, so the link reports itself as not currently connected,
-which is the not-loaded case above, and works again if the path takes it again.</p>
-<p>Where a mod is not installed, or is not ready to be asked, its objects report themselves as
-unavailable rather than gone, for the same reason a part that is not loaded does: nothing that
-can be asked has said the thing is not there.</p>
+<section id="what-it-costs">
+<h2>What it costs<a class="headerlink" href="#what-it-costs" title="Link to this heading">#</a></h2>
+<p>Real time. The game renders no frame, takes no input and runs no physics while a tick is
+held, so a hold of five milliseconds costs five milliseconds of every update it happens in,
+and a hold of a hundred leaves the game running at about ten frames a second. A loop using
+<code class="docutils literal notranslate"><span class="pre">next_tick</span></code> holds every tick, so the game runs at the rate of the loop for as long as the
+loop runs.</p>
+<p>What it does not cost is the simulation. Physics runs on a fixed time step, so a game whose
+ticks are held runs slower than real time rather than differently. Nothing is skipped and
+nothing is caught up afterwards.</p>
+<p>For a control loop that is usually the right trade. Keep the held section short, and keep
+anything that does not need the tick, such as logging or plotting, outside it.</p>
+</section>
+<section id="rules-worth-knowing">
+<h2>Rules worth knowing<a class="headerlink" href="#rules-worth-knowing" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>A hold ends by itself after the <strong>tick hold timeout</strong>, one second by default, and when the
+client disconnects. The timeout is a server setting, in the advanced section of the server
+window, because it bounds how long the server’s owner has their game frozen.</p></li>
+<li><p>Only one client can hold the tick at a time, and only a client making a call can hold it. A
+second client’s attempt is refused, as is a hold attempted from a stream or an event.</p></li>
+<li><p>Streams do not update while a tick is held, because the server sends stream updates after
+it has finished executing calls. Read with calls inside a hold, and never wait for a stream
+or an event there: it cannot arrive until the hold has ended, so the wait runs out the
+timeout.</p></li>
+<li><p>Calling a procedure that takes more than one tick to finish, such as staging or warping,
+ends the hold. Such a call can only finish in the tick the hold is holding back.</p></li>
+<li><p>A tick lost to the timeout is not reported. The next <code class="docutils literal notranslate"><span class="pre">next_tick</span></code> takes whatever tick it
+lands on, so a loop that has to know whether it kept up must check the game’s own clock,
+through <code class="docutils literal notranslate"><span class="pre">SpaceCenter.ut</span></code>.</p></li>
+<li><p>A hold gains nothing while the game is paused, since physics is not advancing anyway, and
+it blocks the pause menu for as long as it lasts.</p></li>
+</ul>
 </section>
 </section>
 
@@ -755,20 +755,20 @@ can be asked has said the thing is not there.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="user-interface.html"
+       href="object-lifetime.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">User Interface</p>
+        <p class="prev-next-title">Object Lifetime</p>
       </div>
     </a>
     <a class="right-next"
-       href="control-loops.html"
+       href="autopilot.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Control Loops</p>
+        <p class="prev-next-title">AutoPilot</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -791,18 +791,20 @@ can be asked has said the thing is not there.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objects-follow-the-game">Objects follow the game</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objects-that-are-gone">Objects that are gone</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objects-that-are-not-loaded">Objects that are not loaded</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objects-in-the-editor">Objects in the editor</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objects-in-other-services">Objects in other services</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-plain-loop-falls-behind">Why a plain loop falls behind</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#holding-a-tick">Holding a tick</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#taking-every-tick">Taking every tick</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example">A worked example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-the-autopilot-fits">Where the autopilot fits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-it-costs">What it costs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rules-worth-knowing">Rules worth knowing</a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/tutorials/object-lifetime.rst.txt">
+    <a href="../_sources/tutorials/control-loops.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

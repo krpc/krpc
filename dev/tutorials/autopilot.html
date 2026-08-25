@@ -59,7 +59,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="C-nano" href="../cnano.html" />
-    <link rel="prev" title="Object Lifetime" href="object-lifetime.html" />
+    <link rel="prev" title="Control Loops" href="control-loops.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -549,6 +549,7 @@
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">AutoPilot</a></li>
 </ul>
 </div>
@@ -746,6 +747,43 @@ error readouts above instead.</p>
 </li>
 </ul>
 </section>
+</section>
+<section id="when-the-control-loop-runs">
+<span id="autopilot-update-mode"></span><h3>When the control loop runs<a class="headerlink" href="#when-the-control-loop-runs" title="Link to this heading">#</a></h3>
+<p>The control loop runs once per physics tick, and <strong>update mode</strong> chooses where in the tick
+it runs relative to the calls a program makes in that tick:</p>
+<ul class="simple">
+<li><p><strong>after calls</strong> (the default) runs it once the server has executed the tick’s calls, so a
+target set during a tick is flown on that tick.</p></li>
+<li><p><strong>before calls</strong> runs it before the server executes any of them, so the attitude error and
+control output read during a tick are the ones computed for that tick, one tick behind the
+target.</p></li>
+<li><p><strong>manual</strong> does not run it at all. Calling <strong>update</strong> runs it, so a program places it
+among its own calls.</p></li>
+</ul>
+<p>For a control loop this matters most together with <a class="reference internal" href="control-loops.html#holding-a-tick"><span class="std std-ref">holding a tick</span></a>,
+which puts a whole read, compute and write inside one tick. Manual mode then gives complete
+control of the order: everything before <strong>update</strong> is what the loop will fly the tick with,
+and everything after it can read what the loop just did.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span><span class="o">.</span><span class="n">update_mode</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">AutoPilotUpdateMode</span><span class="o">.</span><span class="n">manual</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">hold_tick</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ap</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="n">control_law</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">pitch</span><span class="p">),</span> <span class="mi">90</span><span class="p">)</span>
+        <span class="n">ap</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">record</span><span class="p">(</span><span class="n">ap</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In manual mode the vessel is only flown on the ticks the loop is run on. On a tick it is not
+run on the vessel keeps the control output of the last tick it did run on, and after a tenth
+of a second of that the autopilot stops contributing any control input at all, so a program
+that stops calling <strong>update</strong> leaves the vessel coasting rather than holding a deflection.
+<strong>wait</strong> cannot be used in manual mode: it takes several ticks and blocks the program for
+all of them, so the loop would never run.</p>
+<p>Calling <strong>update</strong> more than once in a tick runs the loop once. The control law assumes one
+run per tick, so running it twice would advance its filters and gains at twice the rate.</p>
 </section>
 <section id="tuning-the-autopilot">
 <h3>Tuning the AutoPilot<a class="headerlink" href="#tuning-the-autopilot" title="Link to this heading">#</a></h3>
@@ -1128,7 +1166,8 @@ autopilot, but is useful if you want a deeper understanding of how it works, or 
 extend it.</p>
 <section id="the-control-cascade">
 <h3>The control cascade<a class="headerlink" href="#the-control-cascade" title="Link to this heading">#</a></h3>
-<p>Each physics tick the autopilot does the following:</p>
+<p>Each physics tick, at the point chosen by the update mode described above, the autopilot
+does the following:</p>
 <ol class="arabic simple">
 <li><p>It compares the current rotation with the target rotation to compute the
 <a class="reference internal" href="#target-angular-velocity"><span class="std std-ref">target angular velocity</span></a> needed to rotate
@@ -1887,12 +1926,12 @@ is safe to leave always on.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="object-lifetime.html"
+       href="control-loops.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Object Lifetime</p>
+        <p class="prev-next-title">Control Loops</p>
       </div>
     </a>
     <a class="right-next"
@@ -1930,6 +1969,7 @@ is safe to leave always on.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-the-state-back">Reading the state back</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-the-control-loop-runs">When the control loop runs</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tuning-the-autopilot">Tuning the AutoPilot</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smoothing-target-changes">Smoothing target changes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flexible-craft">Flexible craft</a><ul class="nav section-nav flex-column">

@@ -760,6 +760,45 @@ Setting to <code class="docutils literal notranslate"><span class="pre">True</sp
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.update_mode">
+<span class="sig-name descname"><span class="pre">update_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.AutoPilotUpdateMode</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.update_mode" title="Link to this definition">#</a></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the
+calls the update executes. Defaults to
+<a class="reference internal" href="#SpaceCenter.AutoPilotUpdateMode.after_calls" title="SpaceCenter.AutoPilotUpdateMode.after_calls"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilotUpdateMode.after_calls</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.AutoPilotUpdateMode" title="SpaceCenter.AutoPilotUpdateMode"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilotUpdateMode</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The loop runs once per physics tick; this chooses where in the tick that is.
+Together with <code class="docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code> it lets a program place the loop exactly within
+its own read, compute and write. When no server is running the loop runs at the
+point the game takes control inputs at, whatever the mode, so a vessel is never left
+without control input.</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="SpaceCenter.AutoPilot.update">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.AutoPilot.update" title="Link to this definition">#</a></dt>
+<dd><p>Run one tick of the auto-pilot’s control loop now. Does nothing if it has already run
+on this physics tick. Throws an exception if the auto-pilot is not engaged.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For <a class="reference internal" href="#SpaceCenter.AutoPilotUpdateMode.manual" title="SpaceCenter.AutoPilotUpdateMode.manual"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilotUpdateMode.manual</span></code></a>, where the loop runs only when this is
+called. In the other modes this runs it early; either way it runs once per tick. On a
+tick it is not called for, the vessel keeps the control output of the last tick it did
+run on, and after a tenth of a second of that the auto-pilot stops contributing any
+control input at all.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.show_info_ui">
 <span class="sig-name descname"><span class="pre">show_info_ui</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.show_info_ui" title="Link to this definition">#</a></dt>
 <dd><p>Whether an in-game window showing the auto-pilot’s state (engagement, attitude error,
@@ -1864,6 +1903,34 @@ not been enabled or no ticks have occurred.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="SpaceCenter.AutoPilotUpdateMode">
+<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">AutoPilotUpdateMode</span></span><a class="headerlink" href="#SpaceCenter.AutoPilotUpdateMode" title="Link to this definition">#</a></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the calls
+the update executes. See <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.update_mode" title="SpaceCenter.SpaceCenter.AutoPilot.update_mode"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.update_mode</span></code></a>.</p>
+<dl class="lua data">
+<dt class="sig sig-object lua" id="SpaceCenter.AutoPilotUpdateMode.after_calls">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">after_calls</span></span><a class="headerlink" href="#SpaceCenter.AutoPilotUpdateMode.after_calls" title="Link to this definition">#</a></dt>
+<dd><p>The default. The control loop runs once the update has executed the calls it
+received, so a target set during a tick is flown on that tick.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="SpaceCenter.AutoPilotUpdateMode.before_calls">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">before_calls</span></span><a class="headerlink" href="#SpaceCenter.AutoPilotUpdateMode.before_calls" title="Link to this definition">#</a></dt>
+<dd><p>The control loop runs before the update executes any calls, so calls made during a
+tick see the attitude error and control output it computed for that tick.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="SpaceCenter.AutoPilotUpdateMode.manual">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">manual</span></span><a class="headerlink" href="#SpaceCenter.AutoPilotUpdateMode.manual" title="Link to this definition">#</a></dt>
+<dd><p>The control loop runs only when <a class="reference internal" href="#SpaceCenter.AutoPilot.update" title="SpaceCenter.AutoPilot.update"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.update()</span></code></a> is called, so a
+program chooses where among its own calls it runs.</p>
 </dd></dl>
 
 </dd></dl>

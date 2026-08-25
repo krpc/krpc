@@ -766,6 +766,52 @@ Setting to <code class="docutils literal notranslate"><span class="pre">true</sp
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getUpdateMode()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a> <span class="sig-name descname"><span class="pre">getUpdateMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpdateMode()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setUpdateMode(AutoPilotUpdateMode)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setUpdateMode</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setUpdateMode(AutoPilotUpdateMode)" title="Link to this definition">#</a></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the
+calls the update executes. Defaults to
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.AFTER_CALLS" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.AFTER_CALLS"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilotUpdateMode.AFTER_CALLS</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The loop runs once per physics tick; this chooses where in the tick that is.
+Together with <code class="docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code> it lets a program place the loop exactly within
+its own read, compute and write. When no server is running the loop runs at the
+point the game takes control inputs at, whatever the mode, so a vessel is never left
+without control input.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.update()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.update()" title="Link to this definition">#</a></dt>
+<dd><p>Run one tick of the auto-pilot’s control loop now. Does nothing if it has already run
+on this physics tick. Throws an exception if the auto-pilot is not engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.MANUAL" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.MANUAL"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilotUpdateMode.MANUAL</span></code></a>, where the loop runs only when this is
+called. In the other modes this runs it early; either way it runs once per tick. On a
+tick it is not called for, the vessel keeps the control output of the last tick it did
+run on, and after a tenth of a second of that the auto-pilot stops contributing any
+control input at all.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getShowInfoUI()">
  <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getShowInfoUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getShowInfoUI()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -1883,6 +1929,34 @@ not been enabled or no ticks have occurred.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilotUpdateMode">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">AutoPilotUpdateMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="Link to this definition">#</a></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the calls
+the update executes. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpdateMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpdateMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpdateMode()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.AFTER_CALLS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a> <span class="sig-name descname"><span class="pre">AFTER_CALLS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.AFTER_CALLS" title="Link to this definition">#</a></dt>
+<dd><p>The default. The control loop runs once the update has executed the calls it
+received, so a target set during a tick is flown on that tick.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.BEFORE_CALLS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a> <span class="sig-name descname"><span class="pre">BEFORE_CALLS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.BEFORE_CALLS" title="Link to this definition">#</a></dt>
+<dd><p>The control loop runs before the update executes any calls, so calls made during a
+tick see the attitude error and control output it computed for that tick.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.MANUAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a> <span class="sig-name descname"><span class="pre">MANUAL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.MANUAL" title="Link to this definition">#</a></dt>
+<dd><p>The control loop runs only when <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.update()" title="krpc.client.services.SpaceCenter.AutoPilot.update()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.update()</span></code></a> is called, so a
+program chooses where among its own calls it runs.</p>
 </dd></dl>
 
 </dd></dl>

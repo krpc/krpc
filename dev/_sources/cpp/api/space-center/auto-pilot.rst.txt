@@ -52,6 +52,41 @@ AutoPilot
 
       :Game Scenes: Flight
 
+   .. function:: AutoPilotUpdateMode update_mode()
+   .. function:: void set_update_mode(AutoPilotUpdateMode value)
+
+      When the auto-pilot's control loop runs within a server update, relative to the
+      calls the update executes. Defaults to
+      :enumerator:`AutoPilotUpdateMode::after_calls`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The loop runs once per physics tick; this chooses where in the tick that is.
+         Together with ``KRPC.HoldTick`` it lets a program place the loop exactly within
+         its own read, compute and write. When no server is running the loop runs at the
+         point the game takes control inputs at, whatever the mode, so a vessel is never left
+         without control input.
+
+   .. function:: void update()
+
+      Run one tick of the auto-pilot's control loop now. Does nothing if it has already run
+      on this physics tick. Throws an exception if the auto-pilot is not engaged.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For :enumerator:`AutoPilotUpdateMode::manual`, where the loop runs only when this is
+         called. In the other modes this runs it early; either way it runs once per tick. On a
+         tick it is not called for, the vessel keeps the control output of the last tick it did
+         run on, and after a tenth of a second of that the auto-pilot stops contributing any
+         control input at all.
+
    .. function:: bool show_info_ui()
    .. function:: void set_show_info_ui(bool value)
 
@@ -757,6 +792,33 @@ AutoPilot
       not been enabled or no ticks have occurred.
 
       :Game Scenes: Flight
+
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: AutoPilotUpdateMode
+
+   When the auto-pilot's control loop runs within a server update, relative to the calls
+   the update executes. See :func:`AutoPilot::update_mode`.
+
+
+   .. enumerator:: after_calls
+
+      The default. The control loop runs once the update has executed the calls it
+      received, so a target set during a tick is flown on that tick.
+
+
+   .. enumerator:: before_calls
+
+      The control loop runs before the update executes any calls, so calls made during a
+      tick see the attitude error and control output it computed for that tick.
+
+
+   .. enumerator:: manual
+
+      The control loop runs only when :func:`AutoPilot::update` is called, so a
+      program chooses where among its own calls it runs.
 
 
 

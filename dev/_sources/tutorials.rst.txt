@@ -15,4 +15,5 @@ of kRPC.
    tutorials/docking-guidance
    tutorials/user-interface
    tutorials/object-lifetime
+   tutorials/control-loops
    tutorials/autopilot

@@ -751,6 +751,47 @@ Setting to <code class="docutils literal notranslate"><span class="pre">true</sp
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpdateMode">
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode" title="KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode enum"><span class="pre">AutoPilotUpdateMode</span></a> <span class="sig-name descname"><span class="pre">UpdateMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpdateMode" title="Link to this definition">#</a></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the
+calls the update executes. Defaults to
+<a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.AfterCalls" title="KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.AfterCalls value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">AutoPilotUpdateMode.AfterCalls</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The loop runs once per physics tick; this chooses where in the tick that is.
+Together with <code class="docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code> it lets a program place the loop exactly within
+its own read, compute and write. When no server is running the loop runs at the
+point the game takes control inputs at, whatever the mode, so a vessel is never left
+without control input.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.AutoPilot.Update">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Update</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.Update" title="Link to this definition">#</a></dt>
+<dd><p>Run one tick of the auto-pilot’s control loop now. Does nothing if it has already run
+on this physics tick. Throws an exception if the auto-pilot is not engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.Manual" title="KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.Manual value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">AutoPilotUpdateMode.Manual</span></code></a>, where the loop runs only when this is
+called. In the other modes this runs it early; either way it runs once per tick. On a
+tick it is not called for, the vessel keeps the control output of the last tick it did
+run on, and after a tenth of a second of that the auto-pilot stops contributing any
+control input at all.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.ShowInfoUI">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">ShowInfoUI</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.ShowInfoUI" title="Link to this definition">#</a></dt>
 <dd><p>Whether an in-game window showing the auto-pilot’s state (engagement, attitude error,
@@ -1703,6 +1744,34 @@ not been enabled or no ticks have occurred.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="csharp enum">
+<dt class="sig sig-object csharp" id="enum-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode">
+<span class="sig-name descname"><span class="pre">enum</span> <span class="pre">AutoPilotUpdateMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode" title="Link to this definition">#</a></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the calls
+the update executes. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpdateMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpdateMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpdateMode</span></code></a>.</p>
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.AfterCalls">
+<span class="sig-name descname"><span class="pre">AfterCalls</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.AfterCalls" title="Link to this definition">#</a></dt>
+<dd><p>The default. The control loop runs once the update has executed the calls it
+received, so a target set during a tick is flown on that tick.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.BeforeCalls">
+<span class="sig-name descname"><span class="pre">BeforeCalls</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.BeforeCalls" title="Link to this definition">#</a></dt>
+<dd><p>The control loop runs before the update executes any calls, so calls made during a
+tick see the attitude error and control output it computed for that tick.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.Manual">
+<span class="sig-name descname"><span class="pre">Manual</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.AutoPilotUpdateMode.Manual" title="Link to this definition">#</a></dt>
+<dd><p>The control loop runs only when <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.Update" title="KRPC.Client.Services.SpaceCenter.AutoPilot.Update method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.Update</span></code></a> is called, so a
+program chooses where among its own calls it runs.</p>
 </dd></dl>
 
 </dd></dl>

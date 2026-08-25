@@ -766,6 +766,52 @@ Setting to <code class="docutils literal notranslate"><span class="pre">true</sp
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9AutoPilot11update_modeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter9AutoPilot11update_modeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter9AutoPilot11update_modeEv"></span><span id="krpc::services::SpaceCenter::AutoPilot::update_mode"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateModeE" title="krpc::services::SpaceCenter::AutoPilotUpdateMode"><span class="n"><span class="pre">AutoPilotUpdateMode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">update_mode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9AutoPilot11update_modeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9AutoPilot15set_update_modeE19AutoPilotUpdateMode">
+<span id="_CPPv3N4krpc8services11SpaceCenter9AutoPilot15set_update_modeE19AutoPilotUpdateMode"></span><span id="_CPPv2N4krpc8services11SpaceCenter9AutoPilot15set_update_modeE19AutoPilotUpdateMode"></span><span id="krpc::services::SpaceCenter::AutoPilot::set_update_mode__AutoPilotUpdateMode"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_update_mode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateModeE" title="krpc::services::SpaceCenter::AutoPilotUpdateMode"><span class="n"><span class="pre">AutoPilotUpdateMode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9AutoPilot15set_update_modeE19AutoPilotUpdateMode" title="Link to this definition">#</a><br /></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the
+calls the update executes. Defaults to
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateMode11after_callsE" title="krpc::services::SpaceCenter::AutoPilotUpdateMode::after_calls"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">AutoPilotUpdateMode::after_calls</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The loop runs once per physics tick; this chooses where in the tick that is.
+Together with <code class="docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code> it lets a program place the loop exactly within
+its own read, compute and write. When no server is running the loop runs at the
+point the game takes control inputs at, whatever the mode, so a vessel is never left
+without control input.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9AutoPilot6updateEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter9AutoPilot6updateEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter9AutoPilot6updateEv"></span><span id="krpc::services::SpaceCenter::AutoPilot::update"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">update</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9AutoPilot6updateEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Run one tick of the auto-pilot’s control loop now. Does nothing if it has already run
+on this physics tick. Throws an exception if the auto-pilot is not engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateMode6manualE" title="krpc::services::SpaceCenter::AutoPilotUpdateMode::manual"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">AutoPilotUpdateMode::manual</span></code></a>, where the loop runs only when this is
+called. In the other modes this runs it early; either way it runs once per tick. On a
+tick it is not called for, the vessel keeps the control output of the last tick it did
+run on, and after a tenth of a second of that the auto-pilot stops contributing any
+control input at all.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9AutoPilot12show_info_uiEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter9AutoPilot12show_info_uiEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter9AutoPilot12show_info_uiEv"></span><span id="krpc::services::SpaceCenter::AutoPilot::show_info_ui"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">show_info_ui</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9AutoPilot12show_info_uiEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -1883,6 +1929,34 @@ not been enabled or no ticks have occurred.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateModeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter19AutoPilotUpdateModeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter19AutoPilotUpdateModeE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AutoPilotUpdateMode</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateModeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the calls
+the update executes. See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AutoPilot11update_modeEv" title="krpc::services::SpaceCenter::AutoPilot::update_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AutoPilot::update_mode()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateMode11after_callsE">
+<span id="_CPPv3N4krpc8services11SpaceCenter19AutoPilotUpdateMode11after_callsE"></span><span id="_CPPv2N4krpc8services11SpaceCenter19AutoPilotUpdateMode11after_callsE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">after_calls</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateMode11after_callsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The default. The control loop runs once the update has executed the calls it
+received, so a target set during a tick is flown on that tick.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateMode12before_callsE">
+<span id="_CPPv3N4krpc8services11SpaceCenter19AutoPilotUpdateMode12before_callsE"></span><span id="_CPPv2N4krpc8services11SpaceCenter19AutoPilotUpdateMode12before_callsE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">before_calls</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateMode12before_callsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The control loop runs before the update executes any calls, so calls made during a
+tick see the attitude error and control output it computed for that tick.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateMode6manualE">
+<span id="_CPPv3N4krpc8services11SpaceCenter19AutoPilotUpdateMode6manualE"></span><span id="_CPPv2N4krpc8services11SpaceCenter19AutoPilotUpdateMode6manualE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">manual</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter19AutoPilotUpdateMode6manualE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The control loop runs only when <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AutoPilot6updateEv" title="krpc::services::SpaceCenter::AutoPilot::update"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AutoPilot::update()</span></code></a> is called, so a
+program chooses where among its own calls it runs.</p>
 </dd></dl>
 
 </dd></dl>

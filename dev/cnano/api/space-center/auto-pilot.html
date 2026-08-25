@@ -766,6 +766,52 @@ Setting to <code class="docutils literal notranslate"><span class="pre">true</sp
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_UpdateMode">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_UpdateMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilotUpdateMode_t" title="krpc_SpaceCenter_AutoPilotUpdateMode_t"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilotUpdateMode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_UpdateMode" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_UpdateMode">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_set_UpdateMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilotUpdateMode_t" title="krpc_SpaceCenter_AutoPilotUpdateMode_t"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilotUpdateMode_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_UpdateMode" title="Link to this definition">#</a><br /></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the
+calls the update executes. Defaults to
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_AFTERCALLS</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The loop runs once per physics tick; this chooses where in the tick that is.
+Together with <code class="docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code> it lets a program place the loop exactly within
+its own read, compute and write. When no server is running the loop runs at the
+point the game takes control inputs at, whatever the mode, so a vessel is never left
+without control input.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_Update">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_Update</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_Update" title="Link to this definition">#</a><br /></dt>
+<dd><p>Run one tick of the auto-pilot’s control loop now. Does nothing if it has already run
+on this physics tick. Throws an exception if the auto-pilot is not engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_MANUAL</span></code>, where the loop runs only when this is
+called. In the other modes this runs it early; either way it runs once per tick. On a
+tick it is not called for, the vessel keeps the control output of the last tick it did
+run on, and after a tenth of a second of that the auto-pilot stops contributing any
+control input at all.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_ShowInfoUI">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_ShowInfoUI</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_ShowInfoUI" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -1883,6 +1929,34 @@ not been enabled or no ticks have occurred.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilotUpdateMode_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilotUpdateMode_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilotUpdateMode_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the calls
+the update executes. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_UpdateMode()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_AFTERCALLS">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_AFTERCALLS</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_AFTERCALLS" title="Link to this definition">#</a><br /></dt>
+<dd><p>The default. The control loop runs once the update has executed the calls it
+received, so a target set during a tick is flown on that tick.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_BEFORECALLS">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_BEFORECALLS</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_BEFORECALLS" title="Link to this definition">#</a><br /></dt>
+<dd><p>The control loop runs before the update executes any calls, so calls made during a
+tick see the attitude error and control output it computed for that tick.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_MANUAL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_MANUAL</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilotUpdateMode_t.KRPC_SPACECENTER_AUTOPILOTUPDATEMODE_MANUAL" title="Link to this definition">#</a><br /></dt>
+<dd><p>The control loop runs only when <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_Update()</span></code> is called, so a
+program chooses where among its own calls it runs.</p>
 </dd></dl>
 
 </dd></dl>
