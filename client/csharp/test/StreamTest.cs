@@ -103,10 +103,6 @@ namespace KRPC.Client.Test
             }
             Assert.AreNotEqual (
                 Connection.AddStream (() => obj.IntProperty), x);
-            Assert.AreEqual (
-                Connection.AddStream (() => obj.IntProperty * 2), x);
-            Assert.AreEqual (
-                Connection.AddStream (() => 2 * obj.IntProperty), x);
         }
 
         [Test]
@@ -137,9 +133,11 @@ namespace KRPC.Client.Test
         {
             var obj = Connection.TestService ().CreateTestObject ("jeb");
             obj.IntProperty = 42;
-            var exn = Assert.Throws<ArgumentException> (
-                          () => Connection.AddStream (() => obj.IntProperty * obj.IntProperty));
-            Assert.That (exn.Message, Does.Contain ("Cannot multiply two remote calls"));
+            var x = Connection.AddStream (() => obj.IntProperty * obj.IntProperty);
+            for (int i = 0; i < 5; i++) {
+                Assert.AreEqual (42 * 42, x.Get ());
+                Wait ();
+            }
         }
 
         [Test]
@@ -147,13 +145,14 @@ namespace KRPC.Client.Test
         {
             var obj = Connection.TestService ().CreateTestObject ("jeb");
             obj.IntProperty = 42;
-            int n = 1;
-            var exn = Assert.Throws<ArgumentException> (
-                          () => Connection.AddStream (() => obj.IntProperty * n));
-            Assert.That (exn.Message, Does.Contain ("The factor must be a constant"));
-            n = 2;
-            Assert.Throws<ArgumentException> (
-                () => Connection.AddStream (() => obj.IntProperty * n));
+            int n = 2;
+            var x = Connection.AddStream (() => obj.IntProperty * n);
+            // The variable is captured when the stream is created
+            n = 3;
+            for (int i = 0; i < 5; i++) {
+                Assert.AreEqual (84, x.Get ());
+                Wait ();
+            }
         }
 
         [Test]
