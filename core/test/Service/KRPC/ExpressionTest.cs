@@ -402,6 +402,295 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void SkipAndTake ()
+        {
+            var expr = Expression.ToList (Expression.Take (
+                Expression.Skip (list, Expression.ConstantInt (2)),
+                Expression.ConstantInt (2)));
+            CollectionAssert.AreEqual (new [] { 3, 4 }, Eval<List<int>> (expr));
+        }
+
+        [Test]
+        public void SelectManyOp ()
+        {
+            var param = Expression.Parameter ("x", Type.Int ());
+            var func = Expression.Lambda (
+                new List<Expression> { param },
+                Expression.CreateList (new List<Expression> {
+                    param, Expression.Multiply (param, Expression.ConstantInt (10))
+                }));
+            var expr = Expression.ToList (Expression.SelectMany (list, func));
+            CollectionAssert.AreEqual (
+                new [] { 1, 10, 2, 20, 3, 30, 4, 40, 5, 50 }, Eval<List<int>> (expr));
+        }
+
+        [Test]
+        public void BuildDictionaryOp ()
+        {
+            var param = Expression.Parameter ("x", Type.Int ());
+            var keyFunc = Expression.Lambda (
+                new List<Expression> { param }, Expression.ConvertToString (param));
+            var valueFunc = Expression.Lambda (
+                new List<Expression> { param },
+                Expression.Multiply (param, Expression.ConstantInt (2)));
+            var expr = Expression.BuildDictionary (list, keyFunc, valueFunc);
+            var dictionary = Eval<Dictionary<string, int>> (expr);
+            Assert.AreEqual (5, dictionary.Count);
+            Assert.AreEqual (2, dictionary ["1"]);
+            Assert.AreEqual (10, dictionary ["5"]);
+        }
+
+        [Test]
+        public void Strings ()
+        {
+            Assert.AreEqual ("1.5", Eval<string> (
+                Expression.ConvertToString (Expression.ConstantDouble (1.5))));
+            Assert.AreEqual ("42", Eval<string> (
+                Expression.ConvertToString (Expression.ConstantInt (42))));
+            Assert.AreEqual ("a2", Eval<string> (Expression.StringConcat (
+                new List<Expression> {
+                    Expression.ConstantString ("a"),
+                    Expression.ConvertToString (Expression.ConstantInt (2))
+                })));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.StringConcat (new List<Expression> {
+                    Expression.ConstantString ("a"), Expression.ConstantInt (2)
+                }));
+        }
+
+
+        [Test]
+        public void ConstantEnum ()
+        {
+            var value = Eval<global::KRPC.Test.Service.TestService.TestEnum> (
+                Expression.ConstantEnum ("TestService", "TestEnum", 1));
+            Assert.AreEqual (global::KRPC.Test.Service.TestService.TestEnum.Y, value);
+            // Naming a member is the same value as casting its number to the type
+            Assert.AreSame (
+                Expression.ConstantEnum ("TestService", "TestEnum", 1),
+                Expression.ConstantEnum ("TestService", "TestEnum", 1));
+        }
+
+        [Test]
+        public void ConstantEnumErrors ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantEnum ("NoSuchService", "TestEnum", 0));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantEnum ("TestService", "NoSuchEnum", 0));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantEnum ("TestService", "TestEnum", 99));
+        }
+
+        [Test]
+        public void ListRemoval ()
+        {
+            var values = Expression.Variable ("values", Type.ListType (Type.Int ()));
+            Expression Build (Expression removal)
+            {
+                return Expression.BlockWithVariables (
+                    new List<Expression> { values },
+                    new List<Expression> {
+                        Expression.Assign (values, Expression.CreateList (
+                            new List<Expression> {
+                                Expression.ConstantInt (1),
+                                Expression.ConstantInt (2),
+                                Expression.ConstantInt (3)
+                            })),
+                        removal,
+                        values
+                    });
+            }
+            CollectionAssert.AreEqual (
+                new List<int> { 1, 3 },
+                Eval<IList<int>> (Build (
+                    Expression.ListRemove (values, Expression.ConstantInt (2)))));
+            CollectionAssert.AreEqual (
+                new List<int> { 2, 3 },
+                Eval<IList<int>> (Build (
+                    Expression.ListRemoveAt (values, Expression.ConstantInt (0)))));
+            CollectionAssert.IsEmpty (
+                Eval<IList<int>> (Build (Expression.ListClear (values))));
+            Assert.IsFalse (Eval<bool> (Expression.ListRemove (
+                list, Expression.ConstantInt (99))));
+        }
+
+        [Test]
+        public void SetRemoval ()
+        {
+            var values = Expression.Variable ("values", Type.SetType (Type.Int ()));
+            Expression Build (Expression removal)
+            {
+                return Expression.BlockWithVariables (
+                    new List<Expression> { values },
+                    new List<Expression> {
+                        Expression.Assign (values, Expression.CreateSet (
+                            new HashSet<Expression> {
+                                Expression.ConstantInt (1),
+                                Expression.ConstantInt (2)
+                            })),
+                        removal,
+                        Expression.Count (values)
+                    });
+            }
+            Assert.AreEqual (1, Eval<int> (Build (
+                Expression.SetRemove (values, Expression.ConstantInt (2)))));
+            Assert.AreEqual (0, Eval<int> (Build (Expression.SetClear (values))));
+        }
+
+        [Test]
+        public void DictionaryRemoval ()
+        {
+            var values = Expression.Variable (
+                "values", Type.DictionaryType (Type.String (), Type.Int ()));
+            Expression Build (Expression removal)
+            {
+                return Expression.BlockWithVariables (
+                    new List<Expression> { values },
+                    new List<Expression> {
+                        Expression.Assign (values, Expression.CreateDictionary (
+                            new List<Expression> {
+                                Expression.ConstantString ("a"),
+                                Expression.ConstantString ("b")
+                            },
+                            new List<Expression> {
+                                Expression.ConstantInt (1),
+                                Expression.ConstantInt (2)
+                            })),
+                        removal,
+                        Expression.Count (values)
+                    });
+            }
+            Assert.AreEqual (1, Eval<int> (Build (
+                Expression.DictionaryRemove (values, Expression.ConstantString ("a")))));
+            Assert.AreEqual (0, Eval<int> (Build (Expression.DictionaryClear (values))));
+        }
+
+        [Test]
+        public void DictionaryKeysAndValues ()
+        {
+            CollectionAssert.AreEquivalent (
+                new List<string> { "a", "b", "c" },
+                Eval<IList<string>> (Expression.DictionaryKeys (dictionary)));
+            CollectionAssert.AreEquivalent (
+                new List<int> { 1, 2, 3 },
+                Eval<IList<int>> (Expression.DictionaryValues (dictionary)));
+            // A dictionary cannot be iterated over, so its keys are what a loop reads
+            Assert.AreEqual (3, Eval<int> (
+                Expression.Count (Expression.DictionaryKeys (dictionary))));
+        }
+
+        [Test]
+        public void ElementSelection ()
+        {
+            Assert.AreEqual (1, Eval<int> (Expression.First (list)));
+            Assert.AreEqual (5, Eval<int> (Expression.Last (list)));
+            Assert.AreEqual (3, Eval<int> (
+                Expression.ElementAt (list, Expression.ConstantInt (2))));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.ElementAt (list, Expression.ConstantDouble (2)));
+        }
+
+        [Test]
+        public void MinAndMaxByKey ()
+        {
+            // The value furthest from three, so the largest key belongs to the
+            // smallest value and vice versa
+            var x = Expression.Parameter ("x", Type.Int ());
+            var distance = Expression.Lambda (
+                new List<Expression> { x },
+                Expression.Multiply (
+                    Expression.Subtract (x, Expression.ConstantInt (3)),
+                    Expression.Subtract (x, Expression.ConstantInt (3))));
+            Assert.AreEqual (3, Eval<int> (Expression.MinBy (list, distance)));
+            Assert.AreEqual (1, Eval<int> (Expression.MaxBy (list, distance)));
+        }
+
+        [Test]
+        public void Reshaping ()
+        {
+            var duplicated = Expression.CreateList (new List<Expression> {
+                Expression.ConstantInt (1),
+                Expression.ConstantInt (2),
+                Expression.ConstantInt (1)
+            });
+            var other = Expression.CreateList (new List<Expression> {
+                Expression.ConstantInt (2),
+                Expression.ConstantInt (3)
+            });
+            CollectionAssert.AreEqual (
+                new List<int> { 1, 2 },
+                Eval<IList<int>> (Expression.ToList (Expression.Distinct (duplicated))));
+            CollectionAssert.AreEqual (
+                new List<int> { 1, 2, 1 },
+                Eval<IList<int>> (Expression.ToList (
+                    Expression.Reverse (Expression.Reverse (duplicated)))));
+            CollectionAssert.AreEqual (
+                new List<int> { 5, 4, 3, 2, 1 },
+                Eval<IList<int>> (Expression.ToList (Expression.Reverse (list))));
+            CollectionAssert.AreEqual (
+                new List<int> { 1, 2, 3 },
+                Eval<IList<int>> (Expression.ToList (
+                    Expression.Union (duplicated, other))));
+            CollectionAssert.AreEqual (
+                new List<int> { 2 },
+                Eval<IList<int>> (Expression.ToList (
+                    Expression.Intersect (duplicated, other))));
+            CollectionAssert.AreEqual (
+                new List<int> { 1 },
+                Eval<IList<int>> (Expression.ToList (
+                    Expression.Except (duplicated, other))));
+        }
+
+        [Test]
+        public void ZipTwoCollections ()
+        {
+            var other = Expression.CreateList (new List<Expression> {
+                Expression.ConstantInt (10),
+                Expression.ConstantInt (20)
+            });
+            var x = Expression.Parameter ("x", Type.Int ());
+            var y = Expression.Parameter ("y", Type.Int ());
+            var add = Expression.Lambda (
+                new List<Expression> { x, y }, Expression.Add (x, y));
+            CollectionAssert.AreEqual (
+                new List<int> { 11, 22 },
+                Eval<IList<int>> (Expression.ToList (Expression.Zip (list, other, add))));
+        }
+
+        [Test]
+        public void GroupByKey ()
+        {
+            var x = Expression.Parameter ("x", Type.Int ());
+            var isEven = Expression.Lambda (
+                new List<Expression> { x },
+                Expression.Equal (
+                    Expression.Modulo (x, Expression.ConstantInt (2)),
+                    Expression.ConstantInt (0)));
+            var groups = Eval<IDictionary<bool, IList<int>>> (
+                Expression.GroupBy (list, isEven));
+            CollectionAssert.AreEqual (new List<int> { 2, 4 }, groups [true]);
+            CollectionAssert.AreEqual (new List<int> { 1, 3, 5 }, groups [false]);
+        }
+
+        [Test]
+        public void CollectionOperationErrors ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Union (list, Expression.CreateList (
+                    new List<Expression> { Expression.ConstantString ("a") })));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.DictionaryKeys (list));
+            foreach (var build in new List<TestDelegate> {
+                () => Expression.First (Expression.ConstantString ("abc")),
+                () => Expression.Distinct (Expression.ConstantString ("abc")),
+                () => Expression.ListClear (Expression.ConstantString ("abc"))
+            }) {
+                var exn = Assert.Catch (build);
+                StringAssert.Contains ("string is not a collection", exn.Message);
+            }
+        }
+        [Test]
         public void BuildListInLoop ()
         {
             // result = []; for x in [1..5]: result.add(x * 2)
@@ -1129,6 +1418,7 @@ namespace KRPC.Test.Service.KRPC
             StringAssert.Contains ("constant integer", exn.Message);
         }
 
+        [Test]
         public void GetList ()
         {
             Assert.AreEqual (1, Eval<int> (Expression.Get (list, Expression.ConstantInt (0))));
@@ -1152,6 +1442,35 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (5, Eval<int> (Expression.Count (list)));
             Assert.AreEqual (4, Eval<int> (Expression.Count (set)));
             Assert.AreEqual (3, Eval<int> (Expression.Count (dictionary)));
+        }
+
+        [Test]
+        public void CountOfACollectionInterface ()
+        {
+            var values = Expression.Variable ("values", Type.ListType (Type.Int ()));
+            Assert.AreEqual (5, Eval<int> (Expression.BlockWithVariables (
+                new List<Expression> { values },
+                new List<Expression> {
+                    Expression.Assign (values, list),
+                    Expression.Count (values)
+                })));
+            var entries = Expression.Variable (
+                "entries", Type.DictionaryType (Type.String (), Type.Int ()));
+            Assert.AreEqual (3, Eval<int> (Expression.BlockWithVariables (
+                new List<Expression> { entries },
+                new List<Expression> {
+                    Expression.Assign (entries, dictionary),
+                    Expression.Count (entries)
+                })));
+        }
+
+        [Test]
+        public void CountOfALazySequence ()
+        {
+            var lazy = Expression.Skip (list, Expression.ConstantInt (1));
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Count (lazy));
+            StringAssert.Contains ("lazily evaluated sequence", exn.Message);
         }
 
         [Test]
@@ -1186,7 +1505,7 @@ namespace KRPC.Test.Service.KRPC
         public void Select ()
         {
             var x = Expression.Parameter ("x", Type.Int ());
-            var func = Expression.Function (
+            var func = Expression.Lambda (
                 new List<Expression> { x },
                 Expression.Multiply (Expression.ConstantInt (2), x));
             Assert.AreEqual (new List<int> { 2, 4, 6, 8, 10 },
@@ -1197,7 +1516,7 @@ namespace KRPC.Test.Service.KRPC
         public void Where ()
         {
             var x = Expression.Parameter ("x", Type.Int ());
-            var func = Expression.Function (
+            var func = Expression.Lambda (
                 new List<Expression> { x },
                 Expression.LessThan (x, Expression.ConstantInt (3)));
             Assert.AreEqual (new List<int> { 1, 2 },
@@ -1213,6 +1532,13 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (
                 false,
                 Eval<bool> (Expression.Contains (list, Expression.ConstantInt (10))));
+            var doubles = Expression.CreateList (new List<Expression> {
+                Expression.ConstantDouble (1.5),
+                Expression.ConstantDouble (2)
+            });
+            Assert.AreEqual (
+                true,
+                Eval<bool> (Expression.Contains (doubles, Expression.ConstantInt (2))));
         }
 
         [Test]
@@ -1220,7 +1546,7 @@ namespace KRPC.Test.Service.KRPC
         {
             var x = Expression.Parameter ("x", Type.Int ());
             var y = Expression.Parameter ("y", Type.Int ());
-            var func = Expression.Function (
+            var func = Expression.Lambda (
                 new List<Expression> { x, y },
                 Expression.Multiply (x, y));
             Assert.AreEqual (1 * 2 * 3 * 4 * 5,
@@ -1232,7 +1558,7 @@ namespace KRPC.Test.Service.KRPC
         {
             var x = Expression.Parameter ("x", Type.Int ());
             var y = Expression.Parameter ("y", Type.Int ());
-            var func = Expression.Function (
+            var func = Expression.Lambda (
                 new List<Expression> { x, y },
                 Expression.Multiply (x, y));
             var seed = Expression.ConstantInt (42);
@@ -1252,7 +1578,7 @@ namespace KRPC.Test.Service.KRPC
         public void OrderBy ()
         {
             var x = Expression.Parameter ("x", Type.Int ());
-            var func = Expression.Function (
+            var func = Expression.Lambda (
                 new List<Expression> { x },
                 Expression.Subtract (Expression.ConstantInt (0), x)
             );
@@ -1266,13 +1592,13 @@ namespace KRPC.Test.Service.KRPC
         {
             var x = Expression.Parameter ("x", Type.Int ());
             {
-                var func = Expression.Function (
+                var func = Expression.Lambda (
                     new List<Expression> { x },
                     Expression.LessThan (x, Expression.ConstantInt (2)));
                 Assert.AreEqual (false, Eval<bool> (Expression.All (list, func)));
             }
             {
-                var func = Expression.Function (
+                var func = Expression.Lambda (
                     new List<Expression> { x },
                     Expression.LessThan (x, Expression.ConstantInt (100)));
                 Assert.AreEqual (true, Eval<bool> (Expression.All (list, func)));
@@ -1284,19 +1610,19 @@ namespace KRPC.Test.Service.KRPC
         {
             var x = Expression.Parameter ("x", Type.Int ());
             {
-                var func = Expression.Function (
+                var func = Expression.Lambda (
                     new List<Expression> { x },
                     Expression.LessThan (x, Expression.ConstantInt (2)));
                 Assert.AreEqual (true, Eval<bool> (Expression.Any (list, func)));
             }
             {
-                var func = Expression.Function (
+                var func = Expression.Lambda (
                     new List<Expression> { x },
                     Expression.LessThan (x, Expression.ConstantInt (100)));
                 Assert.AreEqual (true, Eval<bool> (Expression.Any (list, func)));
             }
             {
-                var func = Expression.Function (
+                var func = Expression.Lambda (
                     new List<Expression> { x },
                     Expression.GreaterThan (x, Expression.ConstantInt (100)));
                 Assert.AreEqual (false, Eval<bool> (Expression.Any (list, func)));
