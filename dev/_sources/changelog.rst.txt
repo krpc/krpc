@@ -15,30 +15,30 @@ v0.7.0 - unreleased
 Core
 ^^^^
 
-* Add structure types: a compound value with named fields, whose value is sent to the client in full rather than as a reference to an object that stays on the server. A structure is declared with ``KRPCStruct`` on a C# ``struct``, its fields are the properties annotated with ``KRPCProperty``, and its value is encoded as the values of those fields in the order the structure declares them (:issue:`1066`)
-* Add a communication protocol carrying protocol buffer messages over a unix domain socket, for clients running on the same machine as the game. It carries the same messages as the TCP/IP protocol over a cheaper path: a client that makes many calls in quick succession completes around 20% more of them per physics update, and around 35% more when the values are large. A client that makes one call and then waits is unaffected, as the wait is governed by the game's update rate. Available on Linux, macOS, and Windows 10 1803 and later (:issue:`1065`)
-* Add ``KRPC.HoldTick`` and ``KRPC.ReleaseTick``, which hold the game on its current physics tick so that a program can read the game state, compute with it and write the result back without the game advancing in between. Intended for control loops, which are otherwise served one RPC per tick whenever they spend longer than the receive timeout between calls. The game runs no physics and draws no frame while a tick is held, and a hold ends by itself after ``TickHoldTimeout`` (:issue:`1070`)
-* Add ``KRPC.NextTick``, which releases the tick being held and holds the one after it, so that a loop acts on consecutive physics ticks. A release and a hold made as two calls leave the server free to advance between them; this closes that gap (:issue:`1070`)
-* Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are now read and written on their own threads rather than on the thread that runs the game. Data waiting to be sent is buffered up to 1 MB, beyond which the connection is dropped (:issue:`1035`)
+* Add structure types: a compound value with named fields, declared with ``KRPCStruct`` on a C# ``struct`` and sent to the client in full (:issue:`1066`)
+* Add a communication protocol carrying protocol buffer messages over a unix domain socket, for clients running on the same machine as the game (:issue:`1065`)
+* Add ``KRPC.HoldTick`` and ``KRPC.ReleaseTick``, which hold the game on its current physics tick so a control loop can read, compute and write within one tick (:issue:`1070`)
+* Add ``KRPC.NextTick``, which releases the tick being held and holds the one after it (:issue:`1070`)
+* Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are read and written on their own threads (:issue:`1035`)
 * Add ``KRPC.ObjectDestroyedException``, raised when the game object that an object refers to no longer exists (:issue:`1051`)
-* Objects whose game objects the game no longer has are removed from the object store when a game state is loaded, and using an object that has been removed raises ``KRPC.ObjectDestroyedException`` rather than an argument error (:issue:`1051`)
+* Objects whose game objects the game no longer has are removed from the object store when a game state is loaded (:issue:`1051`)
 * Fix one server stopping emptying the object store that every server shares, which invalidated the objects held by clients of the servers still running (:issue:`1020`)
 * Support for nullable values across all types (:issue:`1017`)
-* :breaking:`Breaking` Null values are now signaled by an ``is_null`` field rather than by an object id of 0, and nullability is enforced uniformly for every type. Class-typed arguments are no longer implicitly nullable (:issue:`1017`)
-* Fix a request that names an object the server no longer has leaving the connection stuck, with every later call failing; the failure is now reported to the client as the error it is (:issue:`1019`)
+* :breaking:`Breaking` Null values are signaled by an ``is_null`` field rather than by an object id of 0. Class-typed arguments are no longer implicitly nullable (:issue:`1017`)
+* Fix a request that names an object the server no longer has leaving the connection stuck (:issue:`1019`)
 
 
 Server
 ^^^^^^
 
-* Add the ``TickHoldTimeout`` setting, which bounds how long a client may hold the game on one physics tick using ``KRPC.HoldTick`` (:issue:`1070`)
-* The server now updates before the game collects control inputs, so a control input written by a call takes effect on the tick the call is made in rather than on the tick after (:issue:`1070`)
-* :breaking:`Breaking` KSP 1.12.5 is the minimum supported version, matching the maximum. Compatibility code for older versions of the game has been removed (:issue:`1048`)
-* Servers can now use the local socket protocol, chosen in the server window like any other. The RPC and stream sockets default to paths in a directory belonging to the user running the game, and no network port is opened (:issue:`1065`)
-* Fix the end of a long serial port name being neither visible nor editable in the server window; the field now scrolls sideways to follow the caret (:issue:`1065`)
-* The server is stopped whenever no game is loaded, so a client is disconnected when the player quits to the main menu rather than being left waiting on a call that never returns. It starts again with the next game if it is set to start automatically. State held for clients is released at the same time, so user interface elements no longer stay on the screen for the whole of the main menu (:issue:`1041`)
-* Fix setting ``KRPC.GameScene`` from one editor straight to the other leaving the flight camera unable to follow a vessel for the rest of the session. The switch also keeps the vessel that is being constructed now, as the game's own switch editor button does (:issue:`1038`)
-* Sweep objects whose game objects no longer exist out of the object store when the game loads, quickloads or reverts a game state, or changes scene, when it destroys a part or a vessel, and when a client removes something it owns such as a drawing, a user interface element or a force, so an object that has become useless is let go of promptly rather than at the next load (:issue:`1051`)
+* Add the ``TickHoldTimeout`` setting, which bounds how long a client may hold the game on one physics tick (:issue:`1070`)
+* The server updates before the game collects control inputs, so a control input takes effect on the tick the call is made in (:issue:`1070`)
+* :breaking:`Breaking` KSP 1.12.5 is the minimum supported version, matching the maximum (:issue:`1048`)
+* Servers can use the local socket protocol, chosen in the server window like any other. No network port is opened (:issue:`1065`)
+* Fix the end of a long serial port name being neither visible nor editable in the server window (:issue:`1065`)
+* The server is stopped whenever no game is loaded, so a client is disconnected when the player quits to the main menu (:issue:`1041`)
+* Fix setting ``KRPC.GameScene`` from one editor straight to the other leaving the flight camera unable to follow a vessel for the rest of the session (:issue:`1038`)
+* Sweep objects whose game objects no longer exist out of the object store when the game loads, changes scene or destroys a part or a vessel (:issue:`1051`)
 
 
 SpaceCenter service
@@ -46,300 +46,305 @@ SpaceCenter service
 
 * Space center
 
-  * :breaking:`Breaking` ``SpaceCenter.LaunchVessel`` takes its ``crew`` parameter as an exact instruction, and the parameter is optional again. A ``null`` crew (the default) uses the craft's default crew assignments; an empty list, which previously also used the default assignments, launches with no crew; and a populated list seats exactly the named Kerbals, in the order given. An unknown or unavailable Kerbal name, or a craft with too few seats, raises an exception without launching (:issue:`1017`)
-  * :breaking:`Breaking` ``SpaceCenter.Parts.Controlling`` returns ``null`` when the vessel has no control point, rather than its root part. A vessel separated from another one is given a control point only when one of its parts is a command module with crew aboard, so a vessel that the game merely orients by its root part is now distinguishable from one that is deliberately controlled from it (:issue:`1043`)
-  * ``SpaceCenter.Control.State``, ``SpaceCenter.Control.Source`` and the members of ``SpaceCenter.Comms`` no longer throw for a vessel that has no node in the communication network, such as the debris a decoupler leaves behind. They report no control and no communications instead. ``Comms.Power`` is zero for a vessel whose antennas supply no power, including one that carries none (:issue:`1043`)
-  * ``SpaceCenter.Control.Source`` is ``None`` whenever ``SpaceCenter.Control.State`` is ``None``. A vessel whose only command module is a command pod with no crew aboard reported that it was controlled by a kerbal, because KSP reports the kind of command module the vessel carries separately from whether it is giving any control (:issue:`1043`)
-  * ``SpaceCenter.Control.State`` and ``SpaceCenter.Control.Source`` are taken from the control level that KSP gates a vessel's control on, rather than from the vessel's node in the communication network. The network describes a vessel only while CommNet is enabled, so with CommNet switched off both properties described a game rule that was not in use (:issue:`1043`)
-  * ``SpaceCenter.Decoupler.Decouple`` returns the separated vessel when it fires an omni-decoupler such as a stack separator. Such a decoupler detaches at every node at once, leaving itself on a vessel of its own as well as the vessel it separated, and the two vessels this produced raised an exception (:issue:`1043`)
-  * Working with many stages, vessel resources, communication links or resource converters no longer slows the server down. Two such objects could share a hash code, and the server then searched them one by one (:issue:`1071`)
+  * :breaking:`Breaking` ``SpaceCenter.LaunchVessel`` takes its ``crew`` parameter as an exact instruction, and the parameter is optional again. A ``null`` crew uses the craft's default assignments, an empty list launches with no crew, and a populated list seats the named Kerbals in order (:issue:`1017`)
+  * :breaking:`Breaking` ``SpaceCenter.Parts.Controlling`` returns ``null`` when the vessel has no control point, rather than its root part (:issue:`1043`)
+  * ``SpaceCenter.Control.State``, ``SpaceCenter.Control.Source`` and the members of ``SpaceCenter.Comms`` report no control and no communications for a vessel with no node in the communication network, rather than throwing (:issue:`1043`)
+  * ``SpaceCenter.Control.Source`` is ``None`` whenever ``SpaceCenter.Control.State`` is ``None`` (:issue:`1043`)
+  * ``SpaceCenter.Control.State`` and ``SpaceCenter.Control.Source`` are taken from the control level that KSP gates a vessel's control on, rather than from its node in the communication network (:issue:`1043`)
+  * ``SpaceCenter.Decoupler.Decouple`` returns the separated vessel when it fires an omni-decoupler such as a stack separator (:issue:`1043`)
+  * Working with many stages, vessel resources, communication links or resource converters no longer slows the server down (:issue:`1071`)
 
 * Editor
 
-  * Add ``SpaceCenter.Editor``, available in the vehicle assembly building and the space plane hangar, for inspecting the vessel that is being constructed. ``Editor.Vessel`` gives its name, description, editor, size, mass, cost and crew capacity, and ``Editor.LoadVessel`` loads a craft file into the open editor (:issue:`1038`)
-  * ``Editor.LaunchVessel`` launches the vessel that is being constructed, from a given launch site and with the same crew, recovery and mission flag options as ``SpaceCenter.LaunchVessel``. The vessel is written to the editor's auto-saved craft file and launched from there, as the game's own launch button does, leaving the craft file it was loaded from alone (:issue:`1038`)
-  * ``EditorVessel.Parts`` gives the parts tree of the vessel under construction, as ``Vessel.Parts`` does in flight. The members of ``Part`` and of the part-type classes that describe the design are available; those that need a vessel in flight or running physics, such as the thermal members, remain restricted to the flight scene. ``Engine.ThrustLimit`` can be read and set from the editor (:issue:`1038`)
-  * ``EditorVessel.Stages``, ``EditorVessel.StageAt``, ``EditorVessel.DecoupleStages`` and ``EditorVessel.DecoupleStageAt`` give the vessel's stages, with the same stock delta-v, thrust, TWR, specific impulse and mass figures that ``Stage`` reports in flight, along with ``EditorVessel.DeltaV``, ``VacuumDeltaV``, ``SeaLevelDeltaV`` and ``BurnTime`` for the whole vessel. ``Editor.DeltaVBody``, ``Editor.DeltaVAltitude`` and ``Editor.DeltaVSituation`` set the situation those figures assume, as the game's own delta-v app does. The figures are recalculated in the background after any change to the vessel or the situation; ``EditorVessel.DeltaVReady`` reports whether they are current, and reading them before they are raises rather than returning a stale figure (:issue:`1038`)
-  * ``EditorVessel.Resources``, ``Part.Resources`` and ``Stage.Resources`` report the resources the vessel under construction can hold, per vessel, per part and per stage, as they do for a vessel in flight (:issue:`1038`)
-  * A part of the vessel under construction raises ``KRPC.ObjectDestroyedException`` once it is no longer in that vessel, and once the editor has loaded any vessel over it. A part in the editor is named by an identifier that is only unique within one vessel, so a part of a vessel that has been replaced cannot be told from the part of the new one that answers to the same identifier. An undo or a redo rebuilds the vessel the editor already has rather than loading a new one, so a part it leaves alone keeps working. Leaving the editor destroys the vessel it had open, and everything reached through it (:issue:`1051`)
-  * Add ``EditorVessel.CenterOfMass``, ``EditorVessel.MomentOfInertia`` and ``EditorVessel.InertiaTensor``, which report how the mass of the vessel under construction is distributed, as ``Vessel`` does in flight. A part's inertia is not available from physics in the editor, so it is worked out from the part's colliders. ``Part.MomentOfInertia`` and ``Part.InertiaTensor`` are available in the editor as well (:issue:`1059`)
-  * ``Part.Mass`` and ``Part.DryMass`` no longer report 1000 kg for every part in the editor. The rigidbody the game attaches there is an unconfigured placeholder weighing Unity's default of one tonne, and the mass is now taken from the part itself, including crew (:issue:`1059`)
-  * ``Part.Position``, ``Part.CenterOfMass``, ``Part.ReferenceFrame`` and ``Part.CenterOfMassReferenceFrame`` are available in the editor, so the center of mass of a design can be related to the parts it is made of (:issue:`1064`)
+  * Add ``SpaceCenter.Editor``, available in the vehicle assembly building and the space plane hangar, for inspecting the vessel that is being constructed. ``Editor.LoadVessel`` loads a craft file into the open editor (:issue:`1038`)
+  * ``Editor.LaunchVessel`` launches the vessel that is being constructed, with the same crew, recovery and mission flag options as ``SpaceCenter.LaunchVessel`` (:issue:`1038`)
+  * ``EditorVessel.Parts`` gives the parts tree of the vessel under construction. The members of ``Part`` and the part-type classes that describe the design are available (:issue:`1038`)
+  * ``EditorVessel.Stages``, ``EditorVessel.StageAt``, ``EditorVessel.DecoupleStages`` and ``EditorVessel.DecoupleStageAt`` give the vessel's stages, with the same figures that ``Stage`` reports in flight (:issue:`1038`)
+  * Add ``EditorVessel.DeltaV``, ``VacuumDeltaV``, ``SeaLevelDeltaV`` and ``BurnTime`` for the whole vessel, and ``EditorVessel.DeltaVReady``, which reports whether the figures are current (:issue:`1038`)
+  * ``Editor.DeltaVBody``, ``Editor.DeltaVAltitude`` and ``Editor.DeltaVSituation`` set the situation those figures assume (:issue:`1038`)
+  * ``EditorVessel.Resources``, ``Part.Resources`` and ``Stage.Resources`` report the resources the vessel under construction can hold (:issue:`1038`)
+  * A part of the vessel under construction raises ``KRPC.ObjectDestroyedException`` once it is no longer in that vessel, and once the editor has loaded any vessel over it (:issue:`1051`)
+  * Add ``EditorVessel.CenterOfMass``, ``EditorVessel.MomentOfInertia`` and ``EditorVessel.InertiaTensor``. ``Part.MomentOfInertia`` and ``Part.InertiaTensor`` are available in the editor as well (:issue:`1059`)
+  * ``Part.Mass`` and ``Part.DryMass`` no longer report 1000 kg for every part in the editor (:issue:`1059`)
+  * ``Part.Position``, ``Part.CenterOfMass``, ``Part.ReferenceFrame`` and ``Part.CenterOfMassReferenceFrame`` are available in the editor (:issue:`1064`)
 
 * Vessels and crew
 
-  * ``Vessel.InertiaTensor`` is restricted to the flight scene, as ``Vessel.MomentOfInertia`` already is. Outside flight it summed the parts' rigidbodies and returned zeros (:issue:`1059`)
+  * ``Vessel.InertiaTensor`` is restricted to the flight scene, as ``Vessel.MomentOfInertia`` already is. Outside flight it returned zeros (:issue:`1059`)
   * Add ``CrewMember.EVA``, which sends a Kerbal outside through the hatch of the part it is in and returns the vessel it becomes (:issue:`319`)
-  * Add ``Vessel.Terminate``, which removes a vessel and its parts from the game without recovering anything, as terminating it from the tracking station does. Its crew are reported missing. The active vessel cannot be terminated (:issue:`1034`)
-  * ``Vessel.Recover`` now recovers non-active vessels without switching to the space center scene, and the mission completion dialog is auto-closed. (:issue:`1021`)
-  * Add ``Vessel.OrbitSpeedReferenceFrame``, ``Vessel.SurfaceSpeedReferenceFrame`` and ``Vessel.TargetSpeedReferenceFrame``, one per navball speed mode. The velocity of the vessel in one of these frames is the velocity the navball shows in that mode, and its magnitude the speed displayed. Each frame is oriented with the prograde/normal/radial directions the navball marks in that mode, arranged as in ``Vessel.OrbitalReferenceFrame``, so a direction of (0,1,0) in the frame is prograde (:issue:`1029`)
-  * Using a vessel that no longer exists raises ``KRPC.ObjectDestroyedException``, saying that the vessel is gone, rather than an argument error (:issue:`1051`)
-  * A ``CrewMember`` is named by the kerbal's name and looks them up on the game's roster on every call, so the same kerbal obtained twice is the same object and one obtained before a load goes on working. A kerbal the roster no longer has raises ``KRPC.ObjectDestroyedException``. Renaming a kerbal by setting ``CrewMember.Name`` renames them on the roster, so every object for that kerbal, the one renamed through included, stands for a kerbal that no longer exists; a fresh object has to be obtained under the new name (:issue:`1051`)
+  * Add ``Vessel.Terminate``, which removes a vessel and its parts from the game without recovering anything (:issue:`1034`)
+  * ``Vessel.Recover`` recovers non-active vessels without switching to the space center scene, and the mission completion dialog is auto-closed (:issue:`1021`)
+  * Add ``Vessel.OrbitSpeedReferenceFrame``, ``Vessel.SurfaceSpeedReferenceFrame`` and ``Vessel.TargetSpeedReferenceFrame``, one per navball speed mode. The velocity of the vessel in one of these is the velocity the navball shows in that mode (:issue:`1029`)
+  * Using a vessel that no longer exists raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
+  * A ``CrewMember`` looks the kerbal up on the game's roster on every call, so one obtained before a load goes on working (:issue:`1051`)
+  * Renaming a kerbal destroys every object for them, which have to be obtained again under the new name (:issue:`1051`)
 
 * Staging
 
-  * Fix stages from ``Vessel.Stages``, ``Vessel.StageAt``, ``Vessel.DecoupleStages`` and ``Vessel.DecoupleStageAt`` breaking after a Revert to Launch, reporting that delta-v had not been calculated for the vessel. Stages requested after the revert were affected too, so the game had to be restarted to get working stages back (:issue:`1023`)
+  * Fix stages from ``Vessel.Stages``, ``Vessel.StageAt``, ``Vessel.DecoupleStages`` and ``Vessel.DecoupleStageAt`` breaking after a Revert to Launch (:issue:`1023`)
 
 * Autopilot
 
-  * Setting ``AutoPilot.TargetDirection`` keeps the target roll, rather than clearing it. It re-aims the nose and nothing else, holding the commanded roll relative to ``AutoPilot.UpReference`` as the scalar ``TargetPitch`` and ``TargetHeading`` setters do, so tracking a moving direction such as prograde no longer drops the roll on every update (:issue:`1054`)
-  * The auto-pilot's control loop runs at a defined point in the server's update rather than wherever the game happened to collect control inputs, so a target set during a tick is flown on that tick instead of the next one. ``AutoPilot.UpdateMode`` chooses that point, and in its manual mode ``AutoPilot.Update`` runs the loop, letting a program place it among its own calls inside a held tick (:issue:`1070`)
-  * Fix an engaged auto-pilot failing on every physics tick once the vessel or part its ``AutoPilot.ReferenceFrame`` is defined against is gone. The loop now waits for a frame it can measure in, and releases the controls in the meantime, so pointing it at another frame picks it back up (:issue:`1070`)
+  * Setting ``AutoPilot.TargetDirection`` keeps the target roll, rather than clearing it (:issue:`1054`)
+  * The auto-pilot's control loop runs at a defined point in the server's update, so a target set during a tick is flown on that tick. ``AutoPilot.UpdateMode`` chooses that point (:issue:`1070`)
+  * Fix an engaged auto-pilot failing on every physics tick once the vessel or part its ``AutoPilot.ReferenceFrame`` is defined against is gone (:issue:`1070`)
 
 * Orbits, nodes and bodies
 
-  * An ``Orbit`` reads the orbit of the vessel, celestial body or maneuver node it belongs to as it is now, rather than the one the game had when it was obtained, so it keeps working across a load instead of reporting the orbit of a game state that has been replaced. Asking the same thing for its orbit again gives back the same object rather than a second one (:issue:`764`)
-  * A ``ClosestApproach`` is freed once either of the orbits it describes is gone, rather than being kept for the rest of the session (:issue:`1051`)
-  * Add ``CelestialBody.SurfaceNormal``, ``CelestialBody.BedrockNormal`` and ``CelestialBody.MSLNormal`` to get the slope of the terrain at a given latitude and longitude, as a unit vector normal to the surface, to the sea-bed, or to the sphere at sea level (:issue:`1030`)
-  * Fix ``ClosestApproach.Velocity`` and ``ClosestApproach.TargetVelocity``, which were both offset by the velocity of the frame the active vessel's reference body moves in, some 9284 m/s for a vessel in orbit around Kerbin. ``ClosestApproach.RelativeVelocity`` and ``ClosestApproach.RelativeSpeed`` are the difference of the two and were unaffected (:issue:`1047`)
-  * Add ``Orbit.CreateFromPositionAndVelocity``, which builds the orbit that passes through a given position at a given velocity, and ``Orbit.CreateFromOrbitalElements``, which builds the orbit with a given semi-major axis, eccentricity, inclination, longitude of ascending node, argument of periapsis and mean anomaly at an epoch. Either way the orbit coasts freely under gravity, so it describes where an object left to fall from that state would be at any later time, without there being such an object in the game. (:issue:`1046`)
-  * Add ``Orbit.ReferenceFrame`` and ``Orbit.OrbitalReferenceFrame``, centered on the point an orbit has reached at the current time. The first is oriented in a fixed direction and the second with the orbital prograde/normal/radial directions. Together with a constructed orbit these give a reference frame that follows a coasting object that need not exist (:issue:`1046`)
-  * Add ``Orbit.Remove``, which releases the memory the server holds for an orbit created by ``Orbit.CreateFromPositionAndVelocity`` or ``Orbit.CreateFromOrbitalElements``. Such an orbit stands for nothing in the game, so nothing else says when it is finished with; one that is not removed is held until the client that created it disconnects. A reference frame defined against a removed orbit goes with it (:issue:`1072`)
-  * :breaking:`Breaking` A ``ClosestApproach`` reads the two orbits as they are now rather than describing the moment it was created, so its estimate follows them as the game runs. Asking for the same approach again gives back the same object; the server previously kept a separate one per call, so a script polling the approach to a target filled its memory (:issue:`1072`)
-  * Add ``Orbit.VelocityAt``, giving the velocity at a given time in a given reference frame, alongside the existing ``Orbit.PositionAt`` (:issue:`1046`)
+  * An ``Orbit`` reads the orbit of the vessel, celestial body or maneuver node it belongs to as it is now, so it keeps working across a load (:issue:`764`)
+  * A ``ClosestApproach`` is freed once either of the orbits it describes is gone (:issue:`1051`)
+  * Add ``CelestialBody.SurfaceNormal``, ``CelestialBody.BedrockNormal`` and ``CelestialBody.MSLNormal``, the slope of the terrain at a given latitude and longitude (:issue:`1030`)
+  * Fix ``ClosestApproach.Velocity`` and ``ClosestApproach.TargetVelocity`` being offset by the velocity of the frame the active vessel's reference body moves in (:issue:`1047`)
+  * Add ``Orbit.CreateFromPositionAndVelocity`` and ``Orbit.CreateFromOrbitalElements``, which build an orbit that coasts freely under gravity without an object in the game to follow (:issue:`1046`)
+  * Add ``Orbit.ReferenceFrame`` and ``Orbit.OrbitalReferenceFrame``, centered on the point an orbit has reached at the current time (:issue:`1046`)
+  * Add ``Orbit.Remove``, which releases the memory the server holds for a created orbit (:issue:`1072`)
+  * :breaking:`Breaking` A ``ClosestApproach`` reads the two orbits as they are now, so its estimate follows them as the game runs. Asking for the same approach again gives the same object (:issue:`1072`)
+  * Add ``Orbit.VelocityAt``, giving the velocity at a given time in a given reference frame (:issue:`1046`)
   * ``Orbit.Epoch`` is documented as the universal time at which the mean anomaly at epoch is measured. It was described as the time since that point (:issue:`1046`)
 
 * Maneuver nodes
 
-  * Using a maneuver node that has been removed raises ``KRPC.ObjectDestroyedException`` rather than reporting the call as invalid. Loading a game replaces the vessel's maneuver nodes, so nodes obtained before the load are also gone (:issue:`1051`)
+  * Using a maneuver node that has been removed raises ``KRPC.ObjectDestroyedException``. Loading a game replaces the vessel's maneuver nodes (:issue:`1051`)
   * Fix removing a maneuver node leaking the object for the rest of the session (:issue:`771`)
 
 * Reference frames
 
-  * Add ``ReferenceFrame.Remove``, which releases the memory the server holds for a frame created by ``ReferenceFrame.CreateRelative`` or ``ReferenceFrame.CreateHybrid``. Such a frame stands for nothing in the game, so nothing else says when it is finished with, and a script creating one repeatedly needed a reload of the game to get the memory back. One that is not removed is held until the client that created it disconnects (:issue:`1072`)
-  * ``ReferenceFrame.CreateRelative`` and ``ReferenceFrame.CreateHybrid`` return a new frame on each call, rather than one object shared by every client that asks for the same frame. A frame is now each client's own to remove (:issue:`1072`)
-  * ``ReferenceFrame.CreateRelative`` and ``ReferenceFrame.CreateHybrid`` raise an error when given no frame to be defined against, rather than returning one that fails with a ``NullReferenceException`` on first use (:issue:`1072`)
-  * Creating many hybrid reference frames no longer slows the server down. A frame given the same frame for two of its components, which the defaults of ``ReferenceFrame.CreateHybrid`` do on their own, hashed the same as every other such frame, and the server searched them one by one whenever a frame was passed to it or returned (:issue:`1071`)
-  * A reference frame taken from a docking port keeps working across a quickload, and says the port is gone rather than failing with a null reference once its part is destroyed (:issue:`885`, :issue:`764`)
+  * Add ``ReferenceFrame.Remove``, which releases the memory the server holds for a created frame (:issue:`1072`)
+  * ``ReferenceFrame.CreateRelative`` and ``ReferenceFrame.CreateHybrid`` return a new frame on each call, which is the creating client's own to remove (:issue:`1072`)
+  * ``ReferenceFrame.CreateRelative`` and ``ReferenceFrame.CreateHybrid`` raise an error when given no frame to be defined against (:issue:`1072`)
+  * Creating many hybrid reference frames no longer slows the server down (:issue:`1071`)
+  * A reference frame taken from a docking port keeps working across a quickload (:issue:`885`, :issue:`764`)
 
 * Flight and aerodynamics
 
-  * Add ``Flight.SurfaceNormal`` to get the slope of the terrain under a vessel, as a unit vector normal to the surface (:issue:`1030`)
-  * Fix ``Flight.AerodynamicForce`` and ``Flight.AerodynamicAcceleration`` turning with the roll of the vessel when Ferram Aerospace Research is installed. They were rebuilt from FAR's lift and drag coefficients, which are scalars measured against the vessel's own axes, and now report the force FAR applies to the vessel (:issue:`1032`)
-  * Add ``Flight.SideForce``, the part of ``Flight.AerodynamicForce`` that acts across the air stream and out of the vessel's side, which the air exerts on a vessel flying with sideslip. ``Flight.Lift``, ``Flight.SideForce`` and ``Flight.Drag`` are mutually perpendicular and sum to ``Flight.AerodynamicForce`` (:issue:`1032`)
-  * Fix ``Flight.Lift`` and ``Flight.LiftAcceleration`` reporting a force scaled by the cosine squared of the sideslip angle, from a lift direction that was never normalized. A vessel flying with no sideslip was unaffected; one flying at 20 degrees of sideslip had its lift reported 12% low (:issue:`1032`)
-  * ``Flight.AerodynamicTorque`` now works with Ferram Aerospace Research installed, reporting the torque FAR applies about the vessel's center of mass. It previously refused, reporting that it was unavailable (:issue:`1032`)
-  * Fix ``Flight.SimulateAerodynamicForceAt``, ``Flight.SimulateAerodynamicTorqueAt`` and ``Flight.SimulateAerodynamicWrenchAt`` returning ``NaN`` with Ferram Aerospace Research installed when asked for a state with no relative airflow. They now report no force and no torque, as they do without FAR (:issue:`1032`)
-  * Fix ``Flight.StallFraction`` returning ``NaN`` for a vessel with no lifting surfaces, which has nothing that can stall; it now reports no stall (:issue:`1032`)
+  * Add ``Flight.SurfaceNormal``, the slope of the terrain under a vessel (:issue:`1030`)
+  * Fix ``Flight.AerodynamicForce`` and ``Flight.AerodynamicAcceleration`` turning with the roll of the vessel when Ferram Aerospace Research is installed (:issue:`1032`)
+  * Add ``Flight.SideForce``, the part of ``Flight.AerodynamicForce`` that acts across the air stream and out of the vessel's side (:issue:`1032`)
+  * Fix ``Flight.Lift`` and ``Flight.LiftAcceleration`` reporting a force scaled by the cosine squared of the sideslip angle (:issue:`1032`)
+  * ``Flight.AerodynamicTorque`` works with Ferram Aerospace Research installed (:issue:`1032`)
+  * Fix ``Flight.SimulateAerodynamicForceAt``, ``Flight.SimulateAerodynamicTorqueAt`` and ``Flight.SimulateAerodynamicWrenchAt`` returning ``NaN`` with Ferram Aerospace Research installed when there is no relative airflow (:issue:`1032`)
+  * Fix ``Flight.StallFraction`` returning ``NaN`` for a vessel with no lifting surfaces (:issue:`1032`)
 
 * Control
 
-  * A Kerbal on EVA can now be driven through ``Vessel.Control``. ``Control.Forward`` and ``Control.Right`` walk it about, relative to the direction it is facing, and all three translation inputs fly its jetpack once deployed. ``Control.Yaw`` steers it as it walks, and the rotation inputs turn its jetpack, at a rate proportional to the input. ``Control.RCS`` deploys and stows the jetpack, and ``Control.Lights`` switches the helmet lamp (:issue:`319`)
-  * Add ``Control.Board``, which climbs a Kerbal on EVA into the part whose hatch it is standing at, and ``Control.Airlock``, which reports that part. Add ``Control.GrabLadder`` and ``Control.ReleaseLadder`` for the ladder it is alongside, and ``Control.Ladder``, which reports the ladder it is holding (:issue:`319`)
-  * Setting ``Control.StageLock`` now leaves the in-game Alt+L shortcut in step with it, so the next press of Alt+L locks or unlocks staging rather than being absorbed (:issue:`1022`)
+  * A Kerbal on EVA can be driven through ``Vessel.Control``. The translation inputs walk it about and fly its jetpack, ``Control.RCS`` deploys and stows the jetpack, and ``Control.Lights`` switches the helmet lamp (:issue:`319`)
+  * Add ``Control.Board`` and ``Control.Airlock``, for the part whose hatch a Kerbal on EVA is standing at, and ``Control.GrabLadder``, ``Control.ReleaseLadder`` and ``Control.Ladder`` for the ladder it is alongside (:issue:`319`)
+  * Setting ``Control.StageLock`` leaves the in-game Alt+L shortcut in step with it (:issue:`1022`)
 
 * Parts
 
-  * ``Decoupler.IsOmniDecoupler`` reports what the part is configured as for every decoupler, including radial ones and any that a mod derives from the stock modules. It was false for all of them regardless of their configuration. The stage a part is assigned to follows the same value, so a vessel carrying such a decoupler can be staged differently (:issue:`1048`)
-  * A force added with ``Part.AddForce`` stops being applied, and is freed, once its part is destroyed. It previously failed on every physics update for the rest of the session. A force on a part the game has unloaded, or measured in a reference frame that is defined against something that is gone, waits rather than being applied (:issue:`1051`)
-  * ``Force.Remove`` leaves the object gone, so using one afterwards raises ``KRPC.ObjectDestroyedException`` and the object is freed. A removed force previously went on reporting the force it was applying, and was kept for the rest of the session (:issue:`1051`)
-  * ``Part.BoundingBox`` and ``Vessel.BoundingBox`` now measure only the meshes of a part's own model. The boxes no longer take in the models of physicsless child parts, nor any object another mod has attached to a part, which could stretch a box to an arbitrary size (:issue:`1024`)
+  * ``Decoupler.IsOmniDecoupler`` reports what the part is configured as for every decoupler, including radial ones. It was false for all of them (:issue:`1048`)
+  * A force added with ``Part.AddForce`` stops being applied, and is freed, once its part is destroyed (:issue:`1051`)
+  * ``Force.Remove`` leaves the object gone, so using one afterwards raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
+  * ``Part.BoundingBox`` and ``Vessel.BoundingBox`` measure only the meshes of a part's own model, leaving out physicsless child parts and objects another mod has attached (:issue:`1024`)
   * Computing a bounding box no longer duplicates the meshes of every part it measures (:issue:`1024`)
-  * Add support for [RealFuels](https://forum.kerbalspaceprogram.com/index.php?/topic/58236-\*). ``SpaceCenter.RealFuelsAvailable`` reports whether it is installed. On an engine it manages (``Engine.HasRealFuels``), ``Engine.Ignitions`` and ``Engine.IgnitionResources`` give the ignitions left and what each one consumes; ``Engine.HasUllage``, ``Engine.PropellantStability`` and ``Engine.PropellantReliability`` give how settled the propellant is; and ``Engine.PressureFed`` and ``Engine.HasFeedPressure`` give whether the engine needs tank pressure and whether it has it. On a tank it manages (``Part.HasRealFuelsTank``), ``Part.HighlyPressurized`` and ``Part.BoiloffRate`` give the tank's pressurization and how fast its cryogenic contents are boiling off (:issue:`1039`)
+  * Add support for [RealFuels](https://forum.kerbalspaceprogram.com/index.php?/topic/58236-\*), reported by ``SpaceCenter.RealFuelsAvailable``. On an engine it manages, ``Engine.Ignitions``, ``Engine.IgnitionResources``, ``Engine.HasUllage``, ``Engine.PropellantStability``, ``Engine.PropellantReliability``, ``Engine.PressureFed`` and ``Engine.HasFeedPressure`` are available; on a tank, ``Part.HighlyPressurized`` and ``Part.BoiloffRate`` (:issue:`1039`)
   * Fix ``ReactionWheel.AvailableTorque``, and the vessel level torque properties that include it, being scaled by the square of the wheel's authority limiter when KSPCommunityFixes is installed (:issue:`1042`)
-  * Fix ``Decoupler`` objects accumulating for the rest of the session, one per call to ``Part.Decoupler``, and the same decoupler obtained twice comparing unequal (:issue:`1051`)
-  * A ``Decoupler`` finds its part's decoupler module again on every call, so it keeps working across a quickload. One obtained before a load previously read the module the load replaced, reporting the impulse and fired state it had beforehand and failing outright when fired, while reporting itself as still there (:issue:`1051`)
+  * Fix ``Decoupler`` objects accumulating for the rest of the session, and the same decoupler obtained twice comparing unequal (:issue:`1051`)
+  * A ``Decoupler`` finds its part's decoupler module again on every call, so it keeps working across a quickload (:issue:`1051`)
   * Using a part that has been destroyed raises ``KRPC.ObjectDestroyedException`` instead of failing with a null reference (:issue:`885`)
-  * Using a part module, or any of the objects built on one such as ``Engine``, ``Parachute``, ``Antenna`` or ``SolarPanel``, after its part has been destroyed raises ``KRPC.ObjectDestroyedException`` instead of failing with a null reference (:issue:`885`)
-  * Part modules, and the objects built on them, read the modules of the loaded game rather than those of a game state that has been replaced, so they keep working across a quickload instead of returning readings from before it (:issue:`764`)
-  * Using a part of a vessel that the game has unloaded raises an error saying that the part is not loaded. The part works again once the game loads the vessel, and is not treated as destroyed in the meantime (:issue:`1051`)
-  * The fields, events and actions of a part module read the loaded game's module rather than one belonging to a replaced game state, and say the module is gone when it is (:issue:`764`)
-  * A ``ScienceSubject`` belongs to the game state it was read from, and using one after that state has been replaced raises ``KRPC.ObjectDestroyedException`` rather than returning the replaced game's science. Reading ``Experiment.ScienceSubject`` repeatedly no longer adds a new object for each read, and reads the science the game has banked against the subject since the first of those reads (:issue:`771`)
-  * Fix ``ScienceSubject.Science`` and ``ScienceSubject.ScienceCap`` scaling by the science gain multiplier that was in force when the object was read, rather than the current one (:issue:`1051`)
+  * Using a part module, or an object built on one such as ``Engine`` or ``Parachute``, after its part has been destroyed raises ``KRPC.ObjectDestroyedException`` (:issue:`885`)
+  * Part modules, and the objects built on them, read the modules of the loaded game, so they keep working across a quickload (:issue:`764`)
+  * Using a part of a vessel that the game has unloaded raises an error saying that the part is not loaded (:issue:`1051`)
+  * The fields, events and actions of a part module read the loaded game's module (:issue:`764`)
+  * A ``ScienceSubject`` belongs to the game state it was read from, and using one after that state has been replaced raises ``KRPC.ObjectDestroyedException`` (:issue:`771`)
+  * Fix ``Experiment.ScienceSubject`` adding a new object for every read (:issue:`771`)
+  * Fix ``ScienceSubject.Science`` and ``ScienceSubject.ScienceCap`` scaling by the science gain multiplier that was in force when the object was read (:issue:`1051`)
 
 * Resources
 
-  * Add ``ResourceTransfer.Cancel`` to stop a transfer before it finishes; no more of the resource is moved and the transfer is marked as complete (:issue:`1028`)
-  * Fix a resource transfer failing on every update, and never completing, once one of the parts it runs between is destroyed; the transfer is now canceled. A transfer whose vessel the game unloads waits for it rather than failing (:issue:`1051`)
-  * Add ``ResourceTransfer.Remove``, which stops a transfer and releases the memory the server holds for it. A transfer that is left is held for as long as the game holds the two parts it runs between, which may be the rest of the flight (:issue:`1072`)
+  * Add ``ResourceTransfer.Cancel`` to stop a transfer before it finishes (:issue:`1028`)
+  * Fix a resource transfer failing on every update, and never completing, once one of the parts it runs between is destroyed (:issue:`1051`)
+  * Add ``ResourceTransfer.Remove``, which stops a transfer and releases the memory the server holds for it (:issue:`1072`)
 
 * Camera
 
-  * ``Camera.NextCamera`` and ``Camera.PreviousCamera`` now move the IVA view between the crew of the active vessel without ever dropping out of IVA mode, and pass over crew that the game has not placed in an interior. Previously, moving to the crew member already in view, as happens on a vessel with a single crew member, switched to the flight camera instead (:issue:`1031`)
-  * Setting ``Camera.FocussedCrewMember`` to the crew member already in view no longer switches to the flight camera. Setting it to a crew member who is not in the active vessel, or who is not in the interior of a part, now raises an error rather than being ignored or failing with a ``NullReferenceException``, as does setting it to ``null`` (:issue:`1031`)
-  * ``Camera.FocussedCrewMember`` returns ``null`` when no crew member is in view, instead of failing with a ``NullReferenceException`` (:issue:`1031`)
+  * ``Camera.NextCamera`` and ``Camera.PreviousCamera`` move the IVA view between the crew of the active vessel without dropping out of IVA mode (:issue:`1031`)
+  * Setting ``Camera.FocussedCrewMember`` to the crew member already in view no longer switches to the flight camera. Setting it to one who is not in view of a part interior raises an error (:issue:`1031`)
+  * ``Camera.FocussedCrewMember`` returns ``null`` when no crew member is in view (:issue:`1031`)
 
 * Alarms, contracts and waypoints
 
-  * ``SpaceCenter.Alarm``, ``Contract``, ``ContractParameter`` and ``Waypoint`` objects find what they stand for again on every call, rather than holding what the game gave them. They keep working when the game rebuilds it, and never read a record belonging to a game state that has since been replaced. One that the game no longer has raises ``KRPC.ObjectDestroyedException``, which is what ``Alarm.Remove`` and ``Waypoint.Remove`` leave behind, and is freed rather than kept for the rest of the session (:issue:`1051`)
+  * ``SpaceCenter.Alarm``, ``Contract``, ``ContractParameter`` and ``Waypoint`` objects look their record up on every call, so they keep working when the game rebuilds it. One the game no longer has raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
 
 * Communications
 
-  * A ``CommLink`` is named by the two nodes it joins and reports the link between them as it is now. A link over which contact has been lost reports that the two nodes are not connected, rather than the signal strength the link had when contact was lost, and one whose nodes are gone raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
+  * A ``CommLink`` is identified by the two nodes it joins and reports the link between them as it is now. One whose nodes are gone raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
 
 
 
 Drawing service
 ^^^^^^^^^^^^^^^
 
-* :breaking:`Breaking` Removing a drawing object another client created, or one the server no longer holds, reports that it is not among those this client created, rather than a bad argument. Every other object a client asks the server to build already refused it that way (:issue:`1072`)
-* Line, polygon, text and navball marker objects raise ``KRPC.ObjectDestroyedException`` once the object they draw is gone, which removing it, ``Drawing.Clear``, the client that made it disconnecting and leaving the flight scene all do. They previously failed on a destroyed game object, and were kept for the rest of the session (:issue:`1051`)
+* :breaking:`Breaking` Removing a drawing object another client created, or one the server no longer holds, reports that it is not among those this client created (:issue:`1072`)
+* Line, polygon, text and navball marker objects raise ``KRPC.ObjectDestroyedException`` once the object they draw is gone, and are freed (:issue:`1051`)
 * A drawing object whose reference frame is defined against something the game has destroyed is not drawn, rather than failing on every frame (:issue:`1051`)
-* Add ``Drawing.AddNavballMarker``, which draws a marker on the navball pointing in a given direction, for example to show a script's target attitude while the player flies the vessel. The marker's icon, color and size can be changed, and it hides and fades as the navball's own markers do (:issue:`1037`)
+* Add ``Drawing.AddNavballMarker``, which draws a marker on the navball pointing in a given direction. Its icon, color and size can be changed (:issue:`1037`)
 
 
 User Interface service
 ^^^^^^^^^^^^^^^^^^^^^^
 
-* :breaking:`Breaking` Removing a user interface element another client created, or one the server no longer holds, reports that it is not among those this client created, rather than a bad argument. Every other object a client asks the server to build already refused it that way (:issue:`1072`)
-* :breaking:`Breaking` Colors are given as ``(red, green, blue, alpha)`` rather than ``(red, green, blue)``, so that an element can be drawn translucent. Affects ``Text.Color`` and the color of a ``UI.Message`` (:issue:`1040`)
-* :breaking:`Breaking` ``InputField.Changed`` is only set when the user types in the field, and no longer when a client sets ``InputField.Value``. ``Changed`` on the controls added in this release behaves the same way (:issue:`1040`)
-* :breaking:`Breaking` User interface elements are drawn using the skin that the game draws its own interface in, so the size and color that ``Text`` starts out with are no longer fixed values (:issue:`1040`)
-* :breaking:`Breaking` ``Visible`` is the element's own setting, rather than whether it and everything it is inside are visible. An element is only drawn when everything it is inside is visible as well, so an interface can be built with its parts visible, inside a panel that is not, and shown all at once (:issue:`1040`)
-* User interface elements can be created in every game scene, not just flight (:issue:`1040`)
+* :breaking:`Breaking` Removing a user interface element another client created, or one the server no longer holds, reports that it is not among those this client created (:issue:`1072`)
+* :breaking:`Breaking` Colors are given as ``(red, green, blue, alpha)`` rather than ``(red, green, blue)``, so an element can be drawn translucent. Affects ``Text.Color`` and the color of a ``UI.Message`` (:issue:`1040`)
+* :breaking:`Breaking` ``InputField.Changed`` is only set when the user types in the field (:issue:`1040`)
+* :breaking:`Breaking` User interface elements are drawn using the skin the game draws its own interface in, so the size and color that ``Text`` starts out with are not fixed values (:issue:`1040`)
+* :breaking:`Breaking` ``Visible`` is the element's own setting. An element is drawn when everything it is inside is visible as well, so an interface can be built inside a hidden panel and shown all at once (:issue:`1040`)
+* User interface elements can be created in every game scene (:issue:`1040`)
 * User interface elements are removed when the game scene changes (:issue:`1040`)
-* Add ``Interactable`` to every control, to gray one out and stop it responding to the user without hiding it (:issue:`1040`)
-* Add ``Toggle``, a check box, and ``ToggleGroup``, which makes a set of toggles behave as radio buttons. A group refers to its toggles rather than containing them, so they can be grouped independently of how they are laid out (:issue:`1040`)
-* Add ``Layout`` to arrange the contents of a ``Panel`` in a row, a column or a grid, rather than positioning every element by hand. ``Panel.AddHorizontalLayout``, ``Panel.AddVerticalLayout`` and ``Panel.AddGridLayout`` create one (:issue:`1040`)
+* Add ``Interactable`` to every control, to gray one out and stop it responding to the user (:issue:`1040`)
+* Add ``Toggle``, a check box, and ``ToggleGroup``, which makes a set of toggles behave as radio buttons. A group refers to its toggles rather than containing them (:issue:`1040`)
+* Add ``Layout`` to arrange the contents of a ``Panel`` in a row, a column or a grid. ``Panel.AddHorizontalLayout``, ``Panel.AddVerticalLayout`` and ``Panel.AddGridLayout`` create one (:issue:`1040`)
 * Add ``Slider``, ``Dropdown`` and ``Image``. An image shows the contents of a PNG or JPEG file, or a plain colored rectangle (:issue:`1040`)
-* Add ``Panel.Style``, to draw a panel as a box rather than a window, and ``Panel.Color``. A box with a ``Text`` caption makes a group box (:issue:`1040`)
+* Add ``Panel.Style``, to draw a panel as a box rather than a window, and ``Panel.Color`` (:issue:`1040`)
 * Add ``Panel.Draggable``, so a panel can be moved by the user and used as a window (:issue:`1040`)
-* Add ``ScrollView``, a view onto a panel larger than the space available for it, with scroll bars to move around it (:issue:`1040`)
-* Add ``LayoutElement``, on every user interface object, for how much space it asks a layout for, and ``Panel.SizeFitter``, for sizing a panel to fit what it contains (:issue:`1040`)
+* Add ``ScrollView``, a view onto a panel larger than the space available for it (:issue:`1040`)
+* Add ``LayoutElement``, for how much space a user interface object asks a layout for, and ``Panel.SizeFitter``, for sizing a panel to fit what it contains (:issue:`1040`)
 * Add ``InputField.Placeholder``, the hint drawn in an input field while it is empty (:issue:`1040`)
-* Add ``InputField.ContentType``, filtering what the user can type into a field as they type it, so a numeric field never shows text a client has to reject, along with ``InputField.CharacterLimit`` and ``InputField.ReadOnly`` (:issue:`1040`)
-* Add ``Color`` to every control, tinting the sprite it is drawn with so a script can show a state of its own, an engaged autopilot for instance, by color (:issue:`1040`)
+* Add ``InputField.ContentType``, filtering what the user can type into a field as they type it, along with ``InputField.CharacterLimit`` and ``InputField.ReadOnly`` (:issue:`1040`)
+* Add ``Color`` to every control, tinting the sprite it is drawn with (:issue:`1040`)
 * Add ``Tooltip`` to every control, a short piece of text shown beside the pointer while it rests on the control (:issue:`1040`)
-* Add ``Panel.BringToFront``, to draw a panel in front of the elements beside it. A draggable panel also brings itself to the front when the user presses it, the way a window comes to the front when clicked (:issue:`1040`)
+* Add ``Panel.BringToFront``, to draw a panel in front of the elements beside it. A draggable panel also brings itself to the front when the user presses it (:issue:`1040`)
 * ``AddSlider`` can create a vertical slider, running from bottom to top (:issue:`1040`)
-* Add ``Button.Pressed``, true while the user is holding the button down, so a script can repeat an action for as long as it is held (:issue:`1040`)
-* Add ``Text.WordWrap``, so a value label can be kept to one line rather than wrapping and reflowing its layout as the value changes (:issue:`1040`)
-* Add ``Image.SetPixels``, drawing a picture from raw pixels rather than a file, so a script can draw a graph, or anything else, and redraw it as often as it likes. ``Image.UpdatePixels`` redraws a block of the picture and leaves the rest, so a picture that changes a little at a time only sends what changed (:issue:`1040`)
-* Two user interface objects that refer to the same element now compare equal, so a client can tell whether it already has an element without keeping track of it (:issue:`1040`)
-* A canvas added with ``UI.AddCanvas`` follows the interface scale the player has set, as the stock canvas does, so the same interface is the same size on either (:issue:`1040`)
-* Fix ``Text.Font`` making a font of its own every time it is set, and leaving it behind when the label went. A font of a given name is made once and shared by the labels using it (:issue:`1040`)
-* A user interface object raises ``KRPC.ObjectDestroyedException`` once the element it stands for is gone, which removing it, ``UI.Clear``, the client that made it disconnecting and changing scene all do. They previously failed on a destroyed game object, and were kept for the rest of the session (:issue:`1051`)
-* ``RectTransform``, ``Layout``, ``LayoutElement`` and ``SizeFitter`` do the same once the element they were taken from is gone, and are dropped with it rather than being kept for the rest of the session (:issue:`1051`)
-* Fix ``RectTransform`` objects accumulating for the rest of the session, one for every read of any object's ``RectTransform``. Reading the same one twice now gives the same object (:issue:`1051`)
+* Add ``Button.Pressed``, true while the user is holding the button down (:issue:`1040`)
+* Add ``Text.WordWrap``, so a value label can be kept to one line (:issue:`1040`)
+* Add ``Image.SetPixels``, drawing a picture from raw pixels rather than a file. ``Image.UpdatePixels`` redraws a block of the picture and leaves the rest (:issue:`1040`)
+* Two user interface objects that refer to the same element compare equal (:issue:`1040`)
+* A canvas added with ``UI.AddCanvas`` follows the interface scale the player has set, as the stock canvas does (:issue:`1040`)
+* Fix ``Text.Font`` making a font of its own every time it is set, and leaving it behind when the label went. A font of a given name is made once and shared (:issue:`1040`)
+* A user interface object raises ``KRPC.ObjectDestroyedException`` once its element is gone, which removing it, ``UI.Clear``, the client that made it disconnecting and changing scene all do (:issue:`1051`)
+* ``RectTransform``, ``Layout``, ``LayoutElement`` and ``SizeFitter`` do the same once the element they were taken from is gone, and are dropped with it (:issue:`1051`)
+* Fix ``RectTransform`` objects accumulating for the rest of the session. Reading the same one twice gives the same object (:issue:`1051`)
 
 
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Fix ``Servo`` and ``ServoGroup`` objects accumulating for the rest of the session, one per servo or group per call that lists any, and the same servo or group obtained twice comparing unequal (:issue:`1051`)
-* A servo and a servo group keep working across a quickload, driving what the game rebuilt rather than what they were obtained from, and raise ``KRPC.ObjectDestroyedException`` once the part or the vessel they belong to is gone. A servo is named by the part it is on, and a group by its vessel and the group's name, so renaming a group leaves every object for it, the one the rename was made through included, standing for a group that no longer exists; an object for the group has to be obtained again under the new name (:issue:`1051`)
-* ``ServoGroup.Vessel`` is the vessel the group was obtained for, and is no longer ``null`` when Infernal Robotics does not report one (:issue:`1051`)
+* Fix ``Servo`` and ``ServoGroup`` objects accumulating for the rest of the session, and the same servo or group obtained twice comparing unequal (:issue:`1051`)
+* A servo and a servo group keep working across a quickload, and raise ``KRPC.ObjectDestroyedException`` once the part or the vessel they belong to is gone (:issue:`1051`)
+* Renaming a servo group destroys every object for it, and the group has to be obtained again under the new name (:issue:`1051`)
+* ``ServoGroup.Vessel`` is the vessel the group was obtained for (:issue:`1051`)
 
 
 KerbalAlarmClock service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* An alarm keeps working across a quickload, reading the alarm Kerbal Alarm Clock rebuilt rather than the one it was obtained from, and raises ``KRPC.ObjectDestroyedException`` once the mod no longer has an alarm with its id, which is what ``Alarm.Remove`` leaves behind. It reports that it is unavailable, rather than gone, while the mod is not ready. Alarm objects are freed rather than kept for the rest of the session (:issue:`1051`)
+* An alarm keeps working across a quickload, and raises ``KRPC.ObjectDestroyedException`` once the mod no longer has an alarm with its id (:issue:`1051`)
 
 
 RemoteTech service
 ^^^^^^^^^^^^^^^^^^
 
-* An ``Antenna`` whose part the game has destroyed, or that is no longer an antenna, and a ``Comms`` whose vessel is gone, raise ``KRPC.ObjectDestroyedException`` rather than reaching into what is no longer there, and are freed rather than kept for the rest of the session (:issue:`1051`)
+* An ``Antenna`` whose part is destroyed, or that is no longer an antenna, and a ``Comms`` whose vessel is gone, raise ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
 
 
 LiDAR service
 ^^^^^^^^^^^^^
 
-* A ``Laser`` whose part the game has destroyed, or that is no longer a laser, raises ``KRPC.ObjectDestroyedException`` rather than reaching into a part that is gone, and is freed rather than kept for the rest of the session (:issue:`1051`)
+* A ``Laser`` whose part is destroyed, or that is no longer a laser, raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
 
 
 DockingCamera service
 ^^^^^^^^^^^^^^^^^^^^^
 
-* A ``Camera`` whose part the game has destroyed, or that is no longer a camera, raises ``KRPC.ObjectDestroyedException`` rather than reaching into a part that is gone, and is freed rather than kept for the rest of the session (:issue:`1051`)
+* A ``Camera`` whose part is destroyed, or that is no longer a camera, raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
 
 
 Debug service
 ^^^^^^^^^^^^^
 
-* Initial version. Provides RPCs to modify the state of the simulation directly: teleporting a vessel onto an orbit, onto the surface or into atmospheric flight, setting its position, velocity, attitude and angular velocity, and filling its resource tanks. Also exposes the game's debug menu cheats: the cheat option toggles, the gravity multiplier, and the career cheats for funds, science, reputation, the technology tree, facility upgrades and kerbal experience (:issue:`1033`)
+* Initial version. Provides RPCs to modify the state of the simulation directly: teleporting a vessel, setting its position, velocity and attitude, filling its resource tanks, and the game's debug menu cheats (:issue:`1033`)
 
 
 C-nano client
 ^^^^^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. One is generated as a C struct with a member per field, named for the field it carries (:issue:`1066`)
+* Support structure types, generated as a C struct with a member per field (:issue:`1066`)
 * :breaking:`Breaking` Support null for any nullable type; a nullable non-class return adds a ``bool* returnValueIsNull`` out-parameter and a nullable argument is a pointer (:issue:`1017`)
-* Add ``KRPC_COMMUNICATION_TCP``, which builds the library to communicate with a server over TCP/IP rather than over a serial port, leaving the server on its default protocol. A connection is opened with the address and port the server is listening on, held in a ``krpc_connection_config_t``, in place of the name of a port. CMake builds of the library ask for it with ``-DKRPC_COMMUNICATION_TCP=ON``, which also links the winsock library it needs on Windows (:issue:`1055`)
-* Add a ``tcp`` feature to the vcpkg port, which installs the library built to communicate over TCP/IP; ``vcpkg install "krpc-cnano[tcp]"`` (:issue:`1055`)
-* Add ``KRPC_COMMUNICATION_LOCALSOCKET``, which builds the library to communicate over a unix domain socket with a server on the same machine, opened with the path of the server's RPC socket in place of a serial port name. CMake builds of the library ask for it with ``-DKRPC_COMMUNICATION_LOCALSOCKET=ON``, which also links the winsock library it needs on Windows, and the vcpkg port with the ``localsocket`` feature; ``vcpkg install "krpc-cnano[localsocket]"`` (:issue:`1065`)
-* Add ``KRPC_SINGLE_CONNECTION``, for a ``KRPC_COMMUNICATION_CUSTOM`` communication mechanism that opens a connection of its own to each server. Messages are then sent as they are, rather than wrapped in the multiplexed message a serial port needs to say which of the connections it carries a message belongs to (:issue:`1055`)
-* Reduce the cost of a remote procedure call. A message is sent and received through a buffer rather than a piece at a time, taking a call from tens of reads and writes down to one write and two reads, and a message is measured as it is encoded rather than by a pass over it first (:issue:`1056`)
-* Add ``KRPC_BUFFER_SIZE``, how much of a message to hold in memory while it is written to or read from the connection. It bounds the memory a call costs and never the size of a message, but a message that fits is cheaper to send, so it is worth setting above the largest call a program makes. Defaults to 1024 bytes, and to 128 on Arduino (:issue:`1056`)
+* Add ``KRPC_COMMUNICATION_TCP``, building the library to communicate over TCP/IP. A connection is opened with a ``krpc_connection_config_t`` in place of a port name (:issue:`1055`)
+* Add a ``tcp`` feature to the vcpkg port; ``vcpkg install "krpc-cnano[tcp]"`` (:issue:`1055`)
+* Add ``KRPC_COMMUNICATION_LOCALSOCKET`` and a ``localsocket`` vcpkg feature, building the library to communicate over a unix domain socket (:issue:`1065`)
+* Add ``KRPC_SINGLE_CONNECTION``, for a ``KRPC_COMMUNICATION_CUSTOM`` mechanism that opens its own connection to each server (:issue:`1055`)
+* Reduce the cost of a remote procedure call, from tens of reads and writes to one write and two reads (:issue:`1056`)
+* Add ``KRPC_BUFFER_SIZE``, how much of a message to hold in memory while it is sent or received. Defaults to 1024 bytes, and to 128 on Arduino (:issue:`1056`)
 
 
 C# client
 ^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. One is generated as a ``struct`` carrying its fields as properties, with a constructor taking them in the order the structure declares them. It implements ``IEquatable`` and ``IComparable`` and carries the equality and relational operators, ordering by its fields in turn as a ``System.Tuple`` of the same values does (:issue:`1066`)
+* Support structure types, a compound value with named fields a service defines, generated as a ``struct`` with a constructor, ``IEquatable``, ``IComparable`` and the comparison operators over its fields (:issue:`1066`)
 * Stream expressions can be multiplied by a constant (:issue:`1062`)
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the nullable form (``int?``) (:issue:`1017`)
-* Add ``Connection.ConnectLocal``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
-* Add a ``timeout`` parameter to the ``Connection`` constructor, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
-* Reduce the cost of a remote procedure call. A value is encoded and decoded without a protobuf stream of its own, its bytes are written into a buffer of their own rather than one the thread keeps, a response is read a block at a time and parsed straight out of the read buffer, the request a call is built into is kept from one call to the next, and the client connections disable Nagle's algorithm (:issue:`1056`)
-* Reduce the cost of a call that returns a collection or an object. What kind of value a type carries, and how to build one, is worked out the first time the type is seen rather than for every value encoded or decoded, and a collection works out how to encode and decode its items once for the collection rather than once for every item (:issue:`1056`)
+* Add ``Connection.ConnectLocal``, which connects to a server on the same machine over unix domain sockets (:issue:`1065`)
+* Add a ``timeout`` parameter to the ``Connection`` constructor, bounding how long a connection is waited for (:issue:`1065`)
+* Reduce the cost of a remote procedure call, encoding and decoding without a protobuf stream and parsing a response straight out of the read buffer (:issue:`1056`)
+* Reduce the cost of a call that returns a collection or an object (:issue:`1056`)
 
 
 C++ client
 ^^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. One is generated as a ``struct`` carrying its fields as members, with a constructor taking them in the order the structure declares them, and equality, ordering and a ``std::hash`` over them, comparing its fields in turn as a ``std::tuple`` of the same values does (:issue:`1066`)
-* Add ``krpc::hash_value`` and the ``krpc::hash`` function object, which hash any type the client carries. The standard library hashes neither ``std::tuple`` nor its containers, which is what a kRPC tuple and the collection types are, so a tuple could not be the key of an unordered container: ``std::unordered_set<std::tuple<double, double, double>, krpc::hash>`` now can be (:issue:`1067`)
+* Support structure types, a compound value with named fields a service defines, generated as a ``struct`` with a constructor, equality, ordering and a ``std::hash`` over its fields (:issue:`1066`)
+* Add ``krpc::hash_value`` and the ``krpc::hash`` function object, which hash any type the client carries, so a tuple or a collection can key an unordered container (:issue:`1067`)
 * :breaking:`Breaking` Support null for any nullable type; nullable non-class values use ``std::optional``, changing generated signatures (:issue:`1017`)
-* Add ``krpc::connect_local``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
-* Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
+* Add ``krpc::connect_local``, which connects to a server on the same machine over unix domain sockets (:issue:`1065`)
+* Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for (:issue:`1065`)
 * Fix a service with a collection of enumerations in a procedure signature failing to compile (:issue:`1044`)
-* Fix ``krpc::Connection::close`` failing to link; it was declared but never defined (:issue:`1065`)
-* Reduce the cost of a remote procedure call. A response is read a block at a time and parsed straight out of the read buffer, the request a call is built into and the response it is answered by are kept from one call to the next, the arguments of a call are sized up front, and the client connections disable Nagle's algorithm. ``Client::invoke``, ``Client::build_request`` and ``Client::build_call`` name a service and a procedure with ``std::string_view``, so a call no longer builds a string for either (:issue:`1056`)
-* Reduce the cost of a call that carries a collection. A value is read without setting up a protobuf stream for it, the message a collection is carried in is kept from one call to the next rather than allocated and freed for each, and a list is given room for its values up front (:issue:`1056`)
+* Fix ``krpc::Connection::close`` failing to link (:issue:`1065`)
+* Reduce the cost of a remote procedure call, reusing the request and response messages and parsing a response straight out of the read buffer (:issue:`1056`)
+* Reduce the cost of a call that carries a collection (:issue:`1056`)
 
 
 Java client
 ^^^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. One is generated as a class carrying its fields, with a constructor taking them in the order the structure declares them, getters, ``equals``, ``hashCode`` and ``Comparable``, comparing its fields in turn as a javatuples tuple of the same values does (:issue:`1066`)
-* :breaking:`Breaking` Requires Java 17 or later, up from Java 9, for the unix domain sockets the local socket protocol is carried over (:issue:`1065`)
+* Support structure types, a compound value with named fields a service defines, generated as a class with a constructor, getters, ``equals``, ``hashCode`` and ``Comparable`` over its fields (:issue:`1066`)
+* :breaking:`Breaking` Requires Java 17 or later, up from Java 9, for unix domain sockets (:issue:`1065`)
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the boxed type (``Integer``, ``Double``, …) (:issue:`1017`)
-* Add ``Connection.newLocalInstance``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
-* Add ``Connection.newInstance`` overloads taking a ``timeout``, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
+* Add ``Connection.newLocalInstance``, which connects to a server on the same machine over unix domain sockets (:issue:`1065`)
+* Add ``Connection.newInstance`` overloads taking a ``timeout``, bounding how long a connection is waited for (:issue:`1065`)
 
 
 Lua client
 ^^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. A value of one is built from the values of its fields in order and gives them named access; a list with one element per field is accepted where one is expected. It compares for equality and orders by its fields in turn (:issue:`1066`)
-* A service definition that names a type this client does not know about, as one from a newer server may, now skips the member that names it with a warning, rather than failing to connect (:issue:`1066`)
+* Support structure types, built from their field values in order and giving them named access (:issue:`1066`)
+* A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (:issue:`1066`)
 * :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
-* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket rather than TCP/IP. The connection behaves identically once established. On Windows this needs luasocket's ``socket.unix`` module, which luasocket does not build there, so the client now depends on the ``luasocket-unix-windows`` rock as well (:issue:`1065`)
-* Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
-* Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` and ``krpc.limits.DOUBLE_LOWEST``. Lua names none of them itself, as ``math.maxinteger`` and ``math.mininteger`` need Lua 5.3, and a parameter that defaults to one is now documented as the constant rather than the decimal value (:issue:`1045`)
-* Reduce the cost of a remote procedure call. The request carrying a call is written as the bytes it comes to, rather than built as a protocol buffer message and serialized, and so are the lists, sets, tuples and dictionaries a call carries, which are read back the same way. A value is encoded and decoded by looking up its type code rather than by asking the type what class it is, a float or a double is packed without building a protobuf field encoder for it, the size of a message is read directly rather than by handing each byte to a decoder until it stops raising an error, and the client connection disables Nagle's algorithm (:issue:`1056`)
+* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket. On Windows this needs the ``luasocket-unix-windows`` rock, now a dependency (:issue:`1065`)
+* Fix a service failing to load when one of its procedures defaults to a member of an enumeration from a service that had not been loaded yet (:issue:`1044`)
+* Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` (:issue:`1045`)
+* Reduce the cost of a remote procedure call, writing and reading messages as bytes rather than as protocol buffer messages (:issue:`1056`)
 * Require luasocket 3.0 or later (:issue:`1060`)
-* Fix a type occasionally being built a second time rather than reused, which could leave an enumeration or class type in a service unusable (:issue:`1068`)
+* Fix a type occasionally being built a second time, leaving an enumeration or class type in a service unusable (:issue:`1068`)
 
 
 Python client
 ^^^^^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. A value of one is a named tuple, so its fields can be read by name and it is also the tuple of their values; a tuple or list with one element per field is accepted where one is expected. It compares, orders and hashes as the tuple of its field values does (:issue:`1066`)
-* A service definition that names a type this client does not know about, as one from a newer server may, now skips the member that names it with a warning, rather than failing to connect (:issue:`1066`)
+* Support structure types. A value is a named tuple, and a tuple or list with one element per field is accepted where one is expected (:issue:`1066`)
+* A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (:issue:`1066`)
 * :breaking:`Breaking` Support ``None`` for any nullable type (:issue:`1017`)
-* Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
-* Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` and ``krpc.limits.DOUBLE_LOWEST``. Python names none of them itself, and a generated stub whose parameter defaults to one now names the constant rather than writing out the decimal value (:issue:`1045`)
-* Reduce the cost of a remote procedure call. Type objects are cached by the arguments naming them and their python type and type code read as plain attributes, values are encoded and decoded through a lookup on their type code rather than a chain of comparisons, floats and doubles are packed directly and short varints without going through protobuf's varint routines, a request is built as a single message, a response is read in one system call and taken out of the read buffer in one pass, a service reaches its procedures by ordinary attribute lookup, and the client connections disable Nagle's algorithm. A collection works out how to encode and decode its items once for the collection rather than once for every item (:issue:`1056`)
-* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket rather than TCP/IP. The connection behaves identically once established. Windows is supported as well as Linux and macOS, even though python names no unix domain address family there (:issue:`1065`)
-* Add a ``timeout`` parameter to ``krpc.connect``, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
+* Fix a service failing to load when one of its procedures defaults to a member of an enumeration from a service that had not been loaded yet (:issue:`1044`)
+* Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` (:issue:`1045`)
+* Reduce the cost of a remote procedure call, caching type objects, dispatching on the type code, and reading a response in one system call (:issue:`1056`)
+* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
+* Add a ``timeout`` parameter to ``krpc.connect``, bounding how long a connection is waited for (:issue:`1065`)
 
 
 krpctools
 ^^^^^^^^^
 
 * Generate and document the structure types a service defines, for every client (:issue:`1066`)
-* :breaking:`Breaking` A generator module given to ``krpc-clientgen`` by path is constructed with the definitions of every service that was loaded, rather than with those of the single service it generates (:issue:`1044`)
+* :breaking:`Breaking` A generator module given to ``krpc-clientgen`` by path is constructed with the definitions of every service that was loaded, rather than those of the single service it generates (:issue:`1044`)
 * Support for nullable values across all types (:issue:`1017`)
 * Generate an enumeration default value as the member it names, instead of a cast of its integer value (:issue:`1044`)
 * Fix generating a default value whose type contains an enumeration, such as a list of them, failing (:issue:`1044`)
 * Fix Lua documentation writing default values in Python's syntax rather than Lua's (:issue:`1044`)
-* Fix C++ documentation writing a collection default value as a constructor call rather than a braced initializer list, so ``std::vector<int32_t>(1, 2, 3)`` named a constructor that builds something else entirely (:issue:`1044`)
-* A default value naming an undeclared enumeration value, or one whose enumeration no supplied service defines, is now reported naming the service, procedure and parameter it came from (:issue:`1044`)
-* The special values of the numeric types - NaN, the infinities and the extremes of the integer and floating point ranges - can now be used as parameter default values. Generated code and documentation name them as the target language does, such as ``double.NaN`` in C# and ``(std::numeric_limits<int32_t>::max)()`` in C++, rather than writing a decimal literal that does not compile. Neither Python nor Lua has a name of its own for the finite extremes, so both name the new ``krpc.limits`` constants (:issue:`1045`)
-* Fix a 32-bit float default value being written as the full decimal expansion of the double it widens to, so ``0.1f`` read as ``0.10000000149011612``, in Python, C# and C++ code and in the Python, C#, C++ and Lua documentation. C++ also writes it as a float literal now, rather than a double one (:issue:`1045`)
+* Fix C++ documentation writing a collection default value as a constructor call rather than a braced initializer list (:issue:`1044`)
+* A default value naming an undeclared enumeration value is reported naming the service, procedure and parameter it came from (:issue:`1044`)
+* The special values of the numeric types - NaN, the infinities and the extremes of the integer and floating point ranges - can be used as parameter default values. Generated code and documentation name them as the target language does, such as ``double.NaN`` in C#. Python and Lua name the new ``krpc.limits`` constants (:issue:`1045`)
+* Fix a 32-bit float default value being written as the full decimal expansion of the double it widens to, so ``0.1f`` read as ``0.10000000149011612`` (:issue:`1045`)
 
 
 v0.6.0

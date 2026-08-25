@@ -411,12 +411,12 @@ to add functionality to the kRPC server.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a
    ``struct``. It adds the structure and its fields to the server. A structure is a compound value
-   with named fields, whose value is sent to the client in full rather than as a reference to an
-   object that stays on the server.
+   with named fields. Its value is sent to the client in full, where a class sends a reference to
+   an object held on the server.
 
    The fields of the structure are its ``public`` instance properties that are annotated with
    :csharp:attr:`KRPCProperty` and have both a getter and a setter, in the order they are declared.
-   A property that is not annotated is not a field, and is not visible to a client.
+   An unannotated property is invisible to a client.
 
    A :csharp:attr:`KRPCStruct` must be part of a service, just like a
    :csharp:attr:`KRPCClass`. Similarly, a :csharp:attr:`KRPCStruct` can be declared outside of a
@@ -441,15 +441,14 @@ to add functionality to the kRPC server.
    * The structure must not contain itself, whether directly or through the fields of another
      structure that it contains.
 
-   Fields may only be **appended** to a structure. Reordering them, removing one or changing the
-   type of one is a breaking change for clients generated against the previous definition, as the
-   value of a structure is sent as the values of its fields in order.
+   Fields may only be **appended** to a structure. A structure's value is sent as the values of its
+   fields in order, so reordering them, removing one, or changing the type of one breaks clients
+   generated against the previous definition.
 
    **Choosing between a structure and a class.** A structure sends the values of all of its fields
-   whenever it is sent, in a single procedure call. Use one for compound data whose fields are
-   almost always wanted together, such as a position and a velocity. Use a
-   :csharp:attr:`KRPCClass` for something with mutable state, or whose members are expensive enough
-   that a client should be able to ask for them one at a time.
+   in a single procedure call. Use one for compound data whose fields are almost always wanted
+   together, such as a position and a velocity. Use a :csharp:attr:`KRPCClass` for something with
+   mutable state, or whose members are expensive enough to read one at a time.
 
    **Examples**
 
@@ -647,8 +646,7 @@ A **return value** is nullable if the ``Nullable`` parameter of its :csharp:attr
 is ``Nullable<T>``. For a property, ``Nullable = true`` makes the getter's return value *and* the
 setter's argument nullable.
 
-Whether a procedure returns ``null`` cannot necessarily be statically determined from its code, so
-return nullability must always be declared -- kRPC never infers it from the method body.
+Return nullability is always declared, as kRPC reads the attribute rather than the method body.
 
 .. _service-api-nullable-value-types:
 
@@ -659,13 +657,13 @@ A parameter or return value of type ``Nullable<T>`` -- ``int?``, ``float?``, ``b
 ``enum?`` and so on -- is automatically nullable; it needs neither :csharp:attr:`KRPCNullable` nor
 ``Nullable = true``. To clients it appears as an ordinary value of type ``T`` that may be null.
 
-Only value types can be ``Nullable<T>``. Reference types -- ``string``, :csharp:attr:`KRPCClass`
-types and collections such as ``IList<T>`` -- cannot be, so a `nullable reference type
-<https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references>`_ annotation like ``string?``
-or ``IList<int>?`` is **not** recognized: it is a compile-time annotation only and does not change
-the runtime type, so the ``?`` is erased before kRPC sees the type and the parameter or return value
-is treated as non-nullable. Use :csharp:attr:`KRPCNullable` or ``Nullable = true`` to make a
-reference-typed parameter or return value nullable.
+Only value types can be ``Nullable<T>``. A `nullable reference type
+<https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references>`_ annotation such as
+``string?`` or ``IList<int>?`` is a compile-time annotation, and the ``?`` is erased before kRPC
+reads the type. Such a parameter or return value is treated as non-nullable.
+
+Use :csharp:attr:`KRPCNullable` or ``Nullable = true`` to make a reference-typed parameter or
+return value nullable.
 
 Events
 ^^^^^^

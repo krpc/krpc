@@ -63,14 +63,14 @@ CelestialBody
    .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_RotationAngle(krpc_connection_t connection, double * result)
 
       The current rotation angle of the body, in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_InitialRotation(krpc_connection_t connection, double * result)
 
       The initial rotation angle of the body (at UT 0), in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
    
 

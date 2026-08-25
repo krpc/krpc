@@ -142,8 +142,9 @@ Flight
 
       .. note::
 
-         An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-         ±90°), where heading and roll become ambiguous. For an always-defined attitude use
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°), where heading and roll become ambiguous. For an always-defined
+         attitude use
          :func:`krpc_SpaceCenter_Flight_Rotation` or :func:`krpc_SpaceCenter_Flight_Direction`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_Heading(krpc_connection_t connection, float * result)
@@ -156,8 +157,9 @@ Flight
 
       .. note::
 
-         An absolute Euler angle, undefined when the vessel points near vertical (pitch → ±90°).
-         For an always-defined attitude use :func:`krpc_SpaceCenter_Flight_Rotation` or :func:`krpc_SpaceCenter_Flight_Direction`.
+         An absolute Euler angle, undefined when the vessel points near vertical (a pitch near
+         -90° or +90°). For an always-defined attitude use :func:`krpc_SpaceCenter_Flight_Rotation` or
+         :func:`krpc_SpaceCenter_Flight_Direction`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_Roll(krpc_connection_t connection, float * result)
 
@@ -169,8 +171,9 @@ Flight
 
       .. note::
 
-         An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-         ±90°), where the vertical-plane reference vanishes. For an always-defined attitude use
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°), where the vertical-plane reference vanishes. For an always-defined
+         attitude use
          :func:`krpc_SpaceCenter_Flight_Rotation`; for a well-defined roll use the auto-pilot's
          ``TargetRoll`` / ``RollError`` against a chosen up reference.
 
@@ -260,7 +263,7 @@ Flight
 
       The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
       strength of the aerodynamic forces. It is equal to
-      ½ · air density · velocity².
+      :math:`\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2`.
       It is commonly denoted :math:`Q`.
 
       :Game Scenes: Flight

@@ -54,9 +54,8 @@ Text
    .. attribute:: word_wrap: boolean
 
       Whether the text wraps onto further lines when it is wider than the space it
-      has. When wrapping is off, the text carries on past the edge instead, and a
-      label asked for its preferred size asks for a single line, so a value that
-      changes does not reflow a layout.
+      has. Text that does not wrap carries on past the edge, and its preferred size
+      is that of a single line, so a changing value leaves a layout in place.
 
       :Attribute: Can be read or written
       :rtype: boolean

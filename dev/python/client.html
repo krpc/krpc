@@ -745,9 +745,9 @@ properties etc. to call them.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">flight_info</span><span class="o">.</span><span class="n">mean_altitude</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Many procedures return an object standing for something in the game, such as a vessel or
-a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for what those objects do
-when a game is loaded or the thing they stand for is destroyed.</p>
+<p>Many procedures return an object identifying something in the game, such as a vessel or
+a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
+behaves when a game is loaded or what it identifies is destroyed.</p>
 <p>All of the functionality provided by the <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service is accessible via
 <code class="docutils literal notranslate"><span class="pre">conn.space_center</span></code>. To explore the functionality provided by a service, you can use the
 <code class="docutils literal notranslate"><span class="pre">help()</span></code> function from an interactive terminal. For example, running <code class="docutils literal notranslate"><span class="pre">help(conn.space_center)</span></code>
@@ -996,8 +996,8 @@ domain sockets rather than TCP/IP. It returns a <a class="reference internal" hr
 <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> does, and the connection behaves identically thereafter.</p>
 <p>Use this when the script runs on the same machine as the game and the server is configured to
 use the local socket protocol. A script that makes many calls in quick succession completes
-more of them per physics update this way; one that makes a call and then waits sees no
-difference, as the wait is governed by the game’s update rate.</p>
+more of them per physics update. A script that makes a call and then waits runs at the game’s
+update rate either way.</p>
 <p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server
 2019 or later. Python’s socket module does not expose the address family on Windows, so the
 client opens the socket through winsock itself.</p>
@@ -1248,11 +1248,10 @@ should be a function that takes zero arguments.</p>
 </section>
 <section id="numeric-limits">
 <h2>Numeric Limits<a class="headerlink" href="#numeric-limits" title="Link to this heading">#</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types that kRPC carries over the
-wire. Python names none of them itself: its integers are unbounded, so there is no largest
-<code class="docutils literal notranslate"><span class="pre">int</span></code>, and its floats are C doubles, so the standard library describes <code class="docutils literal notranslate"><span class="pre">DOUBLE</span></code> but says
-nothing about the 32-bit <code class="docutils literal notranslate"><span class="pre">FLOAT</span></code>. A service can declare one of these as a parameter’s default
-value, in which case the generated stub names the constant here.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types kRPC carries over the wire.
+Python integers are unbounded, and Python floats are C doubles, so the standard library covers
+<code class="docutils literal notranslate"><span class="pre">DOUBLE</span></code> alone. A service can declare one of these limits as a parameter’s default value, and
+the generated stub then names the constant from this module.</p>
 <p>The minimum of an unsigned type is <code class="docutils literal notranslate"><span class="pre">0</span></code>, so it has no constant.</p>
 <dl class="py data">
 <dt class="sig sig-object py" id="krpc.limits.DOUBLE_MAX">

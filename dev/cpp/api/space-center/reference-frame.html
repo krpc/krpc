@@ -770,13 +770,11 @@ when it is finished with it.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Only a frame created by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame15create_relativeER6Client14ReferenceFrameNSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEENSt5tupleIdddEE" title="krpc::services::SpaceCenter::ReferenceFrame::create_relative"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ReferenceFrame::create_relative()</span></code></a> or
-<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame13create_hybridER6Client14ReferenceFrame14ReferenceFrame14ReferenceFrame14ReferenceFrame" title="krpc::services::SpaceCenter::ReferenceFrame::create_hybrid"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ReferenceFrame::create_hybrid()</span></code></a> can be removed. Every other frame is named by
-something in the game, which is what says when it is finished with, and the
-server holds one of each however often it is asked for.</p>
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame13create_hybridER6Client14ReferenceFrame14ReferenceFrame14ReferenceFrame14ReferenceFrame" title="krpc::services::SpaceCenter::ReferenceFrame::create_hybrid"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ReferenceFrame::create_hybrid()</span></code></a> can be removed. Every other frame belongs to
+something in the game, and the server holds one of each.</p>
 <p>Any further use of this object throws an exception, as does use of a frame
-built on it, which cannot be evaluated without it. A frame is removed for the
-client that created it and is not shared with any other, and one whose client
-disconnects is removed with it.</p>
+built on it, which cannot be evaluated without it. A frame belongs to the
+client that created it, and is removed when that client disconnects.</p>
 </div>
 </dd></dl>
 

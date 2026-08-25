@@ -717,11 +717,9 @@ in the InfernalRobotics UI.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Renaming a group renames it for every servo in it. The name is what this object
-names the group by, and is fixed for its lifetime, so every object for the group
-stands for one the vessel no longer has once it is renamed, the object the rename
-was made through included. An object for the group has to be obtained again under
-the new name.</p>
+<p>Renaming a group renames it for every servo in it. This object identifies the
+group by its name, so a rename destroys every object for the group, including the
+one the rename was made through. Obtain the group again under the new name.</p>
 </div>
 </dd></dl>
 

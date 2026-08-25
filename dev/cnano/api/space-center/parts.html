@@ -2036,7 +2036,7 @@ The remaining properties in this section are only available when it is.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_HighlyPressurized">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_HighlyPressurized</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_HighlyPressurized" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
-draw from (see <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_PressureFed()</span></code>). Raises an exception if the part is
+draw from (see <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_PressureFed()</span></code>). Throws an exception if the part is
 not a RealFuels fuel tank (see <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_HasRealFuelsTank" title="krpc_SpaceCenter_Part_HasRealFuelsTank"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_HasRealFuelsTank()</span></code></a>).</p>
 </dd></dl>
 
@@ -2048,7 +2048,7 @@ second of in-game time, measured over the last update RealFuels computed it in.
 The contents keep boiling off under time warp, where that update covers a much
 longer span of in-game time than a physics frame does. The rate is zero for a
 tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
-temperature RealFuels holds down instead, and in the editor. Raises an exception
+temperature RealFuels holds down instead, and in the editor. Throws an exception
 if the part is not a RealFuels fuel tank (see <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_HasRealFuelsTank" title="krpc_SpaceCenter_Part_HasRealFuelsTank"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_HasRealFuelsTank()</span></code></a>).</p>
 </dd></dl>
 
@@ -4517,7 +4517,7 @@ standard way to detect one.</p>
 direction of thrust. While the reverser is still moving, this reports
 the state it is moving to, so a read immediately after a set returns
 the value that was set and setting the same value again has no effect.
-Raises an exception if the engine does not have a thrust reverser
+Throws an exception if the engine does not have a thrust reverser
 (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_CanReverseThrust" title="krpc_SpaceCenter_Engine_CanReverseThrust"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_CanReverseThrust()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -4529,7 +4529,7 @@ Raises an exception if the engine does not have a thrust reverser
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_ToggleThrustReversal">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_ToggleThrustReversal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_ToggleThrustReversal" title="Link to this definition">#</a><br /></dt>
-<dd><p>Toggle the engine’s thrust reverser. Raises an exception if the engine
+<dd><p>Toggle the engine’s thrust reverser. Throws an exception if the engine
 does not have a thrust reverser (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_CanReverseThrust" title="krpc_SpaceCenter_Engine_CanReverseThrust"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_CanReverseThrust()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -4555,7 +4555,7 @@ The remaining properties in this section are only available when it is.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_Ignitions">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_Ignitions</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_Ignitions" title="Link to this definition">#</a><br /></dt>
 <dd><p>The number of times the engine can still be ignited, or -1 if it can be ignited an
-unlimited number of times. Raises an exception if the engine is not managed by
+unlimited number of times. Throws an exception if the engine is not managed by
 RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasRealFuels" title="krpc_SpaceCenter_Engine_HasRealFuels"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_HasRealFuels()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -4569,7 +4569,7 @@ RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_IgnitionResources</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_dictionary_string_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_IgnitionResources" title="Link to this definition">#</a><br /></dt>
 <dd><p>The resources the engine consumes each time it ignites, keyed by resource name, with
 the amount of each that is required. The engine uses up an ignition and fails to
-light if they are not available. Raises an exception if the engine is not managed by
+light if they are not available. Throws an exception if the engine is not managed by
 RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasRealFuels" title="krpc_SpaceCenter_Engine_HasRealFuels"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_HasRealFuels()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -4582,7 +4582,7 @@ RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasUllage">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_HasUllage</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasUllage" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the engine’s propellant is subject to ullage, so that it must be settled
-before the engine will run reliably. Raises an exception if the engine is not
+before the engine will run reliably. Throws an exception if the engine is not
 managed by RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasRealFuels" title="krpc_SpaceCenter_Engine_HasRealFuels"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_HasRealFuels()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -4596,7 +4596,7 @@ managed by RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCente
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_PropellantStability</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_PropellantStability" title="Link to this definition">#</a><br /></dt>
 <dd><p>How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
 (fully settled). Acceleration along the engine’s thrust axis settles it, and
-coasting and rotation unsettle it. Raises an exception if the engine is not managed
+coasting and rotation unsettle it. Throws an exception if the engine is not managed
 by RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasRealFuels" title="krpc_SpaceCenter_Engine_HasRealFuels"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_HasRealFuels()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -4611,7 +4611,7 @@ by RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine
 <dd><p>The probability that the propellant feeding the engine behaves normally, from 0 to 1.
 This is <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_PropellantStability" title="krpc_SpaceCenter_Engine_PropellantStability"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_PropellantStability()</span></code></a> scaled by the game’s ullage difficulty
 setting, and is the value RealFuels itself tests against when deciding whether the
-engine runs. Raises an exception if the engine is not managed by RealFuels
+engine runs. Throws an exception if the engine is not managed by RealFuels
 (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasRealFuels" title="krpc_SpaceCenter_Engine_HasRealFuels"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_HasRealFuels()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -4624,7 +4624,7 @@ engine runs. Raises an exception if the engine is not managed by RealFuels
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_PressureFed">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_PressureFed</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_PressureFed" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the engine is fed by tank pressure rather than by a pump, and so needs to
-draw from a highly pressurized tank. Raises an exception if the engine is not
+draw from a highly pressurized tank. Throws an exception if the engine is not
 managed by RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasRealFuels" title="krpc_SpaceCenter_Engine_HasRealFuels"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_HasRealFuels()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -4637,7 +4637,7 @@ managed by RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCente
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasFeedPressure">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_HasFeedPressure</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasFeedPressure" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the tanks feeding the engine supply the pressure it needs. Always
-<code class="docutils literal notranslate"><span class="pre">true</span></code> for an engine that is not pressure fed. Raises an exception if the
+<code class="docutils literal notranslate"><span class="pre">true</span></code> for an engine that is not pressure fed. Throws an exception if the
 engine is not managed by RealFuels (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_HasRealFuels" title="krpc_SpaceCenter_Engine_HasRealFuels"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_HasRealFuels()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>

@@ -613,28 +613,26 @@
   <section id="control-loops">
 <span id="tutorial-control-loops"></span><h1>Control Loops<a class="headerlink" href="#control-loops" title="Link to this heading">#</a></h1>
 <p>A control loop reads the game state, computes something from it and writes the result back,
-over and over. The game runs its physics on a fixed step, 50 times a second, and a loop that
-flies a vessel wants to do its reading and writing once per step, with the values it writes
-acting on the state it read them from.</p>
-<p>That is not what a plain loop gets. This tutorial explains why, and what to do about it.</p>
-<section id="why-a-plain-loop-falls-behind">
-<h2>Why a plain loop falls behind<a class="headerlink" href="#why-a-plain-loop-falls-behind" title="Link to this heading">#</a></h2>
-<p>The server executes calls inside the game’s physics update, and waits only a short while for
-a client’s next call before giving up on it and letting the game move on. That wait is the
-<strong>receive timeout</strong>, one millisecond by default.</p>
-<p>A control loop spends its time between the calls, not during them: it reads, then computes,
-then writes. If the computing takes longer than a millisecond, which is easy in Python or
-Lua, the client is not waiting when the server looks for it, so each call lands in a
-different physics tick. An iteration of five calls costs five ticks, and by the time the last
-write lands the state it was computed from is five ticks old.</p>
-<p>Raising the receive timeout is not the answer. It is a global setting, and it costs the
-server that much time on every idle update for every client.</p>
+over and over. The game runs its physics on a fixed step, 50 times a second. A loop that flies
+a vessel needs to read and write once per step, acting on the state it read.</p>
+<section id="the-receive-timeout">
+<h2>The Receive Timeout<a class="headerlink" href="#the-receive-timeout" title="Link to this heading">#</a></h2>
+<p>The server executes calls inside the game’s physics update, and waits a short while between
+them for a client’s next call. That wait is the <strong>receive timeout</strong>, one millisecond by
+default.</p>
+<p>A control loop spends its time between the calls: it reads, then computes, then writes.
+Computing for longer than a millisecond is easy in Python or Lua, and each call then lands in
+a different physics tick.</p>
+<p>An iteration of five calls therefore costs five ticks, and the state the last write was
+computed from is five ticks old.</p>
+<p>The receive timeout is a server-wide setting, and the server spends it on every idle update
+for every client.</p>
 </section>
 <section id="holding-a-tick">
-<span id="id1"></span><h2>Holding a tick<a class="headerlink" href="#holding-a-tick" title="Link to this heading">#</a></h2>
+<span id="id1"></span><h2>Holding a Tick<a class="headerlink" href="#holding-a-tick" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">hold_tick</span></code> holds the game on its current physics tick, and <code class="docutils literal notranslate"><span class="pre">release_tick</span></code> lets it move
-on. Every call made in between is executed before the game advances, so a whole read, compute
-and write happens in the state of one tick:</p>
+on. Every call made in between is executed before the game advances. A whole read, compute and
+write then happens in the state of one tick:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">hold_tick</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
@@ -644,19 +642,17 @@ and write happens in the state of one tick:</p>
         <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Release the tick even when the code in between fails, as the <code class="docutils literal notranslate"><span class="pre">finally</span></code> above does. Until
-the hold is released the game is waiting, so a program that leaves one behind stops the game
-until the hold times out.</p>
+<p>Release the tick even when the code in between fails, as the <code class="docutils literal notranslate"><span class="pre">finally</span></code> above does. The game
+stays on the held tick until the hold is released or times out.</p>
 </section>
-<section id="taking-every-tick">
-<h2>Taking every tick<a class="headerlink" href="#taking-every-tick" title="Link to this heading">#</a></h2>
-<p>That loop gets whole ticks, but not consecutive ones. The <code class="docutils literal notranslate"><span class="pre">hold_tick</span></code> that opens an
-iteration is itself a call the server has to be waiting for, so a program that spends longer
-than the receive timeout between releasing one tick and asking for the next is not there when
-the server looks, and the game runs on without it. The loop still works, but it skips ticks,
-and it cannot tell which ones.</p>
+<section id="consecutive-ticks">
+<h2>Consecutive Ticks<a class="headerlink" href="#consecutive-ticks" title="Link to this heading">#</a></h2>
+<p>That loop gets whole ticks, but not consecutive ones. The <code class="docutils literal notranslate"><span class="pre">hold_tick</span></code> opening an iteration
+is itself a call the server has to be waiting for. A program that spends longer than the
+receive timeout between releasing one tick and holding the next skips ticks, and cannot tell
+which ones.</p>
 <p><code class="docutils literal notranslate"><span class="pre">next_tick</span></code> closes that gap. It releases the tick being held and holds the one immediately
-after it, in a single call, so the game runs no tick the loop has not held:</p>
+after it, in a single call. The game then runs no tick the loop has not held:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">next_tick</span><span class="p">()</span>
@@ -666,13 +662,12 @@ after it, in a single call, so the game runs no tick the loop has not held:</p>
     <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The call returns when the next tick has been held, so the loop runs at exactly one iteration
-per physics tick and the game advances one tick per call and no faster. When no tick is being
-held <code class="docutils literal notranslate"><span class="pre">next_tick</span></code> holds the soonest one it can, so it is the only call the loop needs to
-open with, and <code class="docutils literal notranslate"><span class="pre">release_tick</span></code> at the end is what lets the game go.</p>
+<p>The call returns once the next tick is held. The loop therefore runs at one iteration per
+physics tick, and the game advances one tick per call. With no tick held, <code class="docutils literal notranslate"><span class="pre">next_tick</span></code> holds
+the soonest one it can, and is the only call the loop needs to open with.</p>
 </section>
 <section id="a-worked-example">
-<h2>A worked example<a class="headerlink" href="#a-worked-example" title="Link to this heading">#</a></h2>
+<h2>A Worked Example<a class="headerlink" href="#a-worked-example" title="Link to this heading">#</a></h2>
 <p>Holding a vessel’s pitch with a proportional controller, one iteration per tick:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
@@ -691,55 +686,48 @@ open with, and <code class="docutils literal notranslate"><span class="pre">rele
     <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
-<p>Every iteration reads the pitch of one tick and writes a command that acts on that same tick,
-and the 500 iterations cover 500 consecutive ticks, ten seconds of game time. Written without
-the hold, the same loop would take two calls per iteration in two different ticks, and would
-skip an unknown number of ticks between one iteration and the next.</p>
-<p>This is a demonstration, not a recommendation: to actually fly a vessel, use the
-<a class="reference internal" href="autopilot.html#using-the-autopilot"><span class="std std-ref">autopilot</span></a>, which implements a far better control law than the
-one above.</p>
+<p>Every iteration reads the pitch of one tick and writes a command that acts on that same tick.
+The 500 iterations cover 500 consecutive ticks, ten seconds of game time.</p>
+<p>To actually fly a vessel, use the <a class="reference internal" href="autopilot.html#using-the-autopilot"><span class="std std-ref">autopilot</span></a>, which implements a
+far better control law than the one above.</p>
 </section>
-<section id="where-the-autopilot-fits">
-<h2>Where the autopilot fits<a class="headerlink" href="#where-the-autopilot-fits" title="Link to this heading">#</a></h2>
-<p>The autopilot’s own control loop also runs once per physics tick. By default it runs after
-the calls of that tick, so a target set inside a held tick is flown on that tick.</p>
-<p>For finer control, <code class="docutils literal notranslate"><span class="pre">AutoPilot.update_mode</span></code> chooses where in the tick the loop runs, and its
-manual mode hands the decision to the program: everything before <code class="docutils literal notranslate"><span class="pre">update</span></code> is what the loop
-flies the tick with, and everything after it can read what the loop just did. See
-<a class="reference internal" href="autopilot.html#autopilot-update-mode"><span class="std std-ref">when the control loop runs</span></a>.</p>
+<section id="the-autopilot">
+<h2>The AutoPilot<a class="headerlink" href="#the-autopilot" title="Link to this heading">#</a></h2>
+<p>The autopilot’s own control loop also runs once per physics tick. By default it runs after the
+calls of that tick, so a target set inside a held tick is flown on that tick.</p>
+<p><code class="docutils literal notranslate"><span class="pre">AutoPilot.update_mode</span></code> chooses where in the tick the loop runs. Its manual mode splits the
+tick at <code class="docutils literal notranslate"><span class="pre">update</span></code>: calls before it set what the loop flies the tick with, and calls after it
+read what the loop did. See <a class="reference internal" href="autopilot.html#autopilot-update-mode"><span class="std std-ref">when the control loop runs</span></a>.</p>
 </section>
-<section id="what-it-costs">
-<h2>What it costs<a class="headerlink" href="#what-it-costs" title="Link to this heading">#</a></h2>
-<p>Real time. The game renders no frame, takes no input and runs no physics while a tick is
-held, so a hold of five milliseconds costs five milliseconds of every update it happens in,
-and a hold of a hundred leaves the game running at about ten frames a second. A loop using
-<code class="docutils literal notranslate"><span class="pre">next_tick</span></code> holds every tick, so the game runs at the rate of the loop for as long as the
-loop runs.</p>
-<p>What it does not cost is the simulation. Physics runs on a fixed time step, so a game whose
-ticks are held runs slower than real time rather than differently. Nothing is skipped and
-nothing is caught up afterwards.</p>
-<p>For a control loop that is usually the right trade. Keep the held section short, and keep
-anything that does not need the tick, such as logging or plotting, outside it.</p>
+<section id="the-cost-of-a-hold">
+<h2>The Cost of a Hold<a class="headerlink" href="#the-cost-of-a-hold" title="Link to this heading">#</a></h2>
+<p>A hold costs real time. The game renders no frame, takes no input and runs no physics while a
+tick is held. A hold of five milliseconds costs five milliseconds of the update it happens in,
+and a hold of a hundred leaves the game running at about ten frames a second.</p>
+<p>A loop using <code class="docutils literal notranslate"><span class="pre">next_tick</span></code> holds every tick, and the game runs at the rate of the loop for as
+long as the loop runs. Physics runs on a fixed time step. A game whose ticks are held runs
+slower than real time and simulates every tick in turn.</p>
+<p>Keep the held section short, and keep anything that does not need the tick, such as logging or
+plotting, outside it.</p>
 </section>
-<section id="rules-worth-knowing">
-<h2>Rules worth knowing<a class="headerlink" href="#rules-worth-knowing" title="Link to this heading">#</a></h2>
+<section id="limits-of-a-hold">
+<h2>Limits of a Hold<a class="headerlink" href="#limits-of-a-hold" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>A hold ends by itself after the <strong>tick hold timeout</strong>, one second by default, and when the
 client disconnects. The timeout is a server setting, in the advanced section of the server
-window, because it bounds how long the server’s owner has their game frozen.</p></li>
-<li><p>Only one client can hold the tick at a time, and only a client making a call can hold it. A
-second client’s attempt is refused, as is a hold attempted from a stream or an event.</p></li>
-<li><p>Streams do not update while a tick is held, because the server sends stream updates after
-it has finished executing calls. Read with calls inside a hold, and never wait for a stream
-or an event there: it cannot arrive until the hold has ended, so the wait runs out the
-timeout.</p></li>
+window, as it bounds how long the server’s owner has their game frozen.</p></li>
+<li><p>One client holds the tick at a time, and only a client making a call can hold it. A second
+client’s attempt is refused, as is a hold attempted from a stream or an event.</p></li>
+<li><p>Streams do not update while a tick is held, as the server sends stream updates once it has
+finished executing calls. Read with calls inside a hold. A wait for a stream or an event
+there runs the hold out to its timeout.</p></li>
 <li><p>Calling a procedure that takes more than one tick to finish, such as staging or warping,
 ends the hold. Such a call can only finish in the tick the hold is holding back.</p></li>
 <li><p>A tick lost to the timeout is not reported. The next <code class="docutils literal notranslate"><span class="pre">next_tick</span></code> takes whatever tick it
-lands on, so a loop that has to know whether it kept up must check the game’s own clock,
-through <code class="docutils literal notranslate"><span class="pre">SpaceCenter.ut</span></code>.</p></li>
-<li><p>A hold gains nothing while the game is paused, since physics is not advancing anyway, and
-it blocks the pause menu for as long as it lasts.</p></li>
+lands on, so a loop that has to know whether it kept up reads the game’s own clock through
+<code class="docutils literal notranslate"><span class="pre">SpaceCenter.ut</span></code>.</p></li>
+<li><p>A hold gains nothing while the game is paused, since physics is not advancing, and it blocks
+the pause menu for as long as it lasts.</p></li>
 </ul>
 </section>
 </section>
@@ -791,13 +779,13 @@ it blocks the pause menu for as long as it lasts.</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-a-plain-loop-falls-behind">Why a plain loop falls behind</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#holding-a-tick">Holding a tick</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#taking-every-tick">Taking every tick</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example">A worked example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-the-autopilot-fits">Where the autopilot fits</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-it-costs">What it costs</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rules-worth-knowing">Rules worth knowing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-receive-timeout">The Receive Timeout</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#holding-a-tick">Holding a Tick</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consecutive-ticks">Consecutive Ticks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example">A Worked Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-autopilot">The AutoPilot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cost-of-a-hold">The Cost of a Hold</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limits-of-a-hold">Limits of a Hold</a></li>
 </ul>
   </nav></div>
 

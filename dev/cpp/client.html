@@ -807,9 +807,9 @@ its altitude:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Many procedures return an object standing for something in the game, such as a vessel or
-a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for what those objects do
-when a game is loaded or the thing they stand for is destroyed.</p>
+<p>Many procedures return an object identifying something in the game, such as a vessel or
+a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
+behaves when a game is loaded or what it identifies is destroyed.</p>
 </section>
 <section id="streaming-data">
 <span id="cpp-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
@@ -1366,7 +1366,7 @@ added.</p>
 <dd><p>Returns a hash of a value of any type the client carries: the arithmetic types, strings,
 enumerations, class objects, tuples, and the list, set and dictionary collection types,
 nested however deeply. A structure is also hashed by this function, and is given a
-<code class="docutils literal notranslate"><span class="pre">std::hash</span></code> of its own, so an unordered container keyed by one needs nothing further.</p>
+<code class="docutils literal notranslate"><span class="pre">std::hash</span></code> of its own, so an unordered container can be keyed by one directly.</p>
 </dd></dl>
 
 <dl class="cpp class">

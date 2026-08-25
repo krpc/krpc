@@ -1123,7 +1123,7 @@ Part
 
 
       Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
-      draw from (see :meth:`Engine.getPressureFed()`). Raises an exception if the part is
+      draw from (see :meth:`Engine.getPressureFed()`). Throws an exception if the part is
       not a RealFuels fuel tank (see :meth:`Part.getHasRealFuelsTank()`).
 
    
@@ -1136,7 +1136,7 @@ Part
       The contents keep boiling off under time warp, where that update covers a much
       longer span of in-game time than a physics frame does. The rate is zero for a
       tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
-      temperature RealFuels holds down instead, and in the editor. Raises an exception
+      temperature RealFuels holds down instead, and in the editor. Throws an exception
       if the part is not a RealFuels fuel tank (see :meth:`Part.getHasRealFuelsTank()`).
 
    
@@ -2856,14 +2856,14 @@ Engine
       direction of thrust. While the reverser is still moving, this reports
       the state it is moving to, so a read immediately after a set returns
       the value that was set and setting the same value again has no effect.
-      Raises an exception if the engine does not have a thrust reverser
+      Throws an exception if the engine does not have a thrust reverser
       (see :meth:`Engine.getCanReverseThrust()`).
 
       :Game Scenes: Flight
 
    .. method:: void toggleThrustReversal()
 
-      Toggle the engine's thrust reverser. Raises an exception if the engine
+      Toggle the engine's thrust reverser. Throws an exception if the engine
       does not have a thrust reverser (see :meth:`Engine.getCanReverseThrust()`).
 
       :Game Scenes: Flight
@@ -2881,7 +2881,7 @@ Engine
 
 
       The number of times the engine can still be ignited, or -1 if it can be ignited an
-      unlimited number of times. Raises an exception if the engine is not managed by
+      unlimited number of times. Throws an exception if the engine is not managed by
       RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2891,7 +2891,7 @@ Engine
 
       The resources the engine consumes each time it ignites, keyed by resource name, with
       the amount of each that is required. The engine uses up an ignition and fails to
-      light if they are not available. Raises an exception if the engine is not managed by
+      light if they are not available. Throws an exception if the engine is not managed by
       RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2900,7 +2900,7 @@ Engine
 
 
       Whether the engine's propellant is subject to ullage, so that it must be settled
-      before the engine will run reliably. Raises an exception if the engine is not
+      before the engine will run reliably. Throws an exception if the engine is not
       managed by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2910,7 +2910,7 @@ Engine
 
       How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
       (fully settled). Acceleration along the engine's thrust axis settles it, and
-      coasting and rotation unsettle it. Raises an exception if the engine is not managed
+      coasting and rotation unsettle it. Throws an exception if the engine is not managed
       by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight
@@ -2921,7 +2921,7 @@ Engine
       The probability that the propellant feeding the engine behaves normally, from 0 to 1.
       This is :meth:`Engine.getPropellantStability()` scaled by the game's ullage difficulty
       setting, and is the value RealFuels itself tests against when deciding whether the
-      engine runs. Raises an exception if the engine is not managed by RealFuels
+      engine runs. Throws an exception if the engine is not managed by RealFuels
       (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight
@@ -2930,7 +2930,7 @@ Engine
 
 
       Whether the engine is fed by tank pressure rather than by a pump, and so needs to
-      draw from a highly pressurized tank. Raises an exception if the engine is not
+      draw from a highly pressurized tank. Throws an exception if the engine is not
       managed by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2939,7 +2939,7 @@ Engine
 
 
       Whether the tanks feeding the engine supply the pressure it needs. Always
-      ``true`` for an engine that is not pressure fed. Raises an exception if the
+      ``true`` for an engine that is not pressure fed. Throws an exception if the
       engine is not managed by RealFuels (see :meth:`Engine.getHasRealFuels()`).
 
       :Game Scenes: Flight

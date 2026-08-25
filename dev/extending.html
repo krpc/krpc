@@ -1011,11 +1011,11 @@ structure is added to the service that contains its definition.</p></li>
 </dl>
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to a
 <code class="docutils literal notranslate"><span class="pre">struct</span></code>. It adds the structure and its fields to the server. A structure is a compound value
-with named fields, whose value is sent to the client in full rather than as a reference to an
-object that stays on the server.</p>
+with named fields. Its value is sent to the client in full, where a class sends a reference to
+an object held on the server.</p>
 <p>The fields of the structure are its <code class="docutils literal notranslate"><span class="pre">public</span></code> instance properties that are annotated with
 <a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> and have both a getter and a setter, in the order they are declared.
-A property that is not annotated is not a field, and is not visible to a client.</p>
+An unannotated property is invisible to a client.</p>
 <p>A <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> must be part of a service, just like a
 <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. Similarly, a <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> can be declared outside of a
 service if it has its <code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter set to the name of the service that it is part of.</p>
@@ -1032,14 +1032,13 @@ attribute may be set.</p></li>
 <li><p>The structure must not contain itself, whether directly or through the fields of another
 structure that it contains.</p></li>
 </ul>
-<p>Fields may only be <strong>appended</strong> to a structure. Reordering them, removing one or changing the
-type of one is a breaking change for clients generated against the previous definition, as the
-value of a structure is sent as the values of its fields in order.</p>
+<p>Fields may only be <strong>appended</strong> to a structure. A structure’s value is sent as the values of its
+fields in order, so reordering them, removing one, or changing the type of one breaks clients
+generated against the previous definition.</p>
 <p><strong>Choosing between a structure and a class.</strong> A structure sends the values of all of its fields
-whenever it is sent, in a single procedure call. Use one for compound data whose fields are
-almost always wanted together, such as a position and a velocity. Use a
-<a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> for something with mutable state, or whose members are expensive enough
-that a client should be able to ask for them one at a time.</p>
+in a single procedure call. Use one for compound data whose fields are almost always wanted
+together, such as a position and a velocity. Use a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> for something with
+mutable state, or whose members are expensive enough to read one at a time.</p>
 <p><strong>Examples</strong></p>
 <ul>
 <li><p>Declare a structure with three fields:</p>
@@ -1221,19 +1220,17 @@ itself a declaration that <code class="docutils literal notranslate"><span class
 <a class="reference internal" href="#attribute-KRPCMethod" title="KRPCMethod attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCMethod</span></code></a> or <a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute is set to true, or if its type
 is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. For a property, <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code> makes the getter’s return value <em>and</em> the
 setter’s argument nullable.</p>
-<p>Whether a procedure returns <code class="docutils literal notranslate"><span class="pre">null</span></code> cannot necessarily be statically determined from its code, so
-return nullability must always be declared – kRPC never infers it from the method body.</p>
+<p>Return nullability is always declared, as kRPC reads the attribute rather than the method body.</p>
 <section id="nullable-value-types">
 <span id="service-api-nullable-value-types"></span><h4>Nullable Value Types<a class="headerlink" href="#nullable-value-types" title="Link to this heading">#</a></h4>
 <p>A parameter or return value of type <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> – <code class="docutils literal notranslate"><span class="pre">int?</span></code>, <code class="docutils literal notranslate"><span class="pre">float?</span></code>, <code class="docutils literal notranslate"><span class="pre">bool?</span></code>, an
 <code class="docutils literal notranslate"><span class="pre">enum?</span></code> and so on – is automatically nullable; it needs neither <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> nor
 <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code>. To clients it appears as an ordinary value of type <code class="docutils literal notranslate"><span class="pre">T</span></code> that may be null.</p>
-<p>Only value types can be <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. Reference types – <code class="docutils literal notranslate"><span class="pre">string</span></code>, <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>
-types and collections such as <code class="docutils literal notranslate"><span class="pre">IList&lt;T&gt;</span></code> – cannot be, so a <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references">nullable reference type</a> annotation like <code class="docutils literal notranslate"><span class="pre">string?</span></code>
-or <code class="docutils literal notranslate"><span class="pre">IList&lt;int&gt;?</span></code> is <strong>not</strong> recognized: it is a compile-time annotation only and does not change
-the runtime type, so the <code class="docutils literal notranslate"><span class="pre">?</span></code> is erased before kRPC sees the type and the parameter or return value
-is treated as non-nullable. Use <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code> to make a
-reference-typed parameter or return value nullable.</p>
+<p>Only value types can be <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. A <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references">nullable reference type</a> annotation such as
+<code class="docutils literal notranslate"><span class="pre">string?</span></code> or <code class="docutils literal notranslate"><span class="pre">IList&lt;int&gt;?</span></code> is a compile-time annotation, and the <code class="docutils literal notranslate"><span class="pre">?</span></code> is erased before kRPC
+reads the type. Such a parameter or return value is treated as non-nullable.</p>
+<p>Use <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code> to make a reference-typed parameter or
+return value nullable.</p>
 </section>
 </section>
 <section id="events">

@@ -78,11 +78,9 @@ ReferenceFrame
       .. note::
 
          Only a frame created by :func:`krpc_SpaceCenter_ReferenceFrame_CreateRelative` or
-         :func:`krpc_SpaceCenter_ReferenceFrame_CreateHybrid` can be removed. Every other frame is named by
-         something in the game, which is what says when it is finished with, and the
-         server holds one of each however often it is asked for.
+         :func:`krpc_SpaceCenter_ReferenceFrame_CreateHybrid` can be removed. Every other frame belongs to
+         something in the game, and the server holds one of each.
 
          Any further use of this object throws an exception, as does use of a frame
-         built on it, which cannot be evaluated without it. A frame is removed for the
-         client that created it and is not shared with any other, and one whose client
-         disconnects is removed with it.
+         built on it, which cannot be evaluated without it. A frame belongs to the
+         client that created it, and is removed when that client disconnects.

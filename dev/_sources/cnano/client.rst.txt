@@ -48,7 +48,7 @@ The C-nano client is available from `vcpkg <https://vcpkg.io>`_. It can be insta
 
          vcpkg install krpc-cnano:x64-windows
 
-The library communicates over a serial port unless a transport feature is asked for. The ``tcp``
+The library communicates over a serial port unless a transport feature is given. The ``tcp``
 feature builds it to communicate over TCP/IP instead:
 
 .. tabs::
@@ -137,38 +137,35 @@ argument to the compiler.
     serial communication mechanisms. The Arduino platform will be auto-detected so you do not need
     to specify this manually.
   * ``KRPC_COMMUNICATION_TCP`` -- Specifies that the library should be built to communicate over
-    TCP/IP with a server reachable over the network. A serial port remains the usual choice for the
-    devices this client is written for, so this is never auto-detected and has to be specified.
-    CMake builds of the library should ask for it with ``-DKRPC_COMMUNICATION_TCP=ON``, and vcpkg
-    installs with the ``tcp`` feature, rather than by defining it directly, so that programs
-    linking the library are built for the same transport and, on Windows, are linked against
-    winsock along with it.
+    TCP/IP with a server reachable over the network. A serial port is the usual choice for the
+    devices this client is written for, so this is specified rather than auto-detected. Use
+    ``-DKRPC_COMMUNICATION_TCP=ON`` for a CMake build and the ``tcp`` feature for a vcpkg install.
+    These build a program linking the library for the same transport, and on Windows link it
+    against winsock.
   * ``KRPC_COMMUNICATION_LOCALSOCKET`` -- Specifies that the library should be built to
-    communicate over a unix domain socket, for a server running on the same machine. The
+    communicate over a unix domain socket, with a server running on the same machine. The
     connection is opened with the path of the server's RPC socket in place of a serial port
-    name. Not auto-detected, as a serial port is the usual choice on the platforms that
-    provide both. CMake builds of the library should ask for it with
-    ``-DKRPC_COMMUNICATION_LOCALSOCKET=ON``, and vcpkg installs with the ``localsocket``
-    feature, rather than by defining it directly, so that programs linking the library are
-    built for the same transport.
+    name. A serial port is the usual choice on the platforms providing both, so this is
+    specified rather than auto-detected. Use ``-DKRPC_COMMUNICATION_LOCALSOCKET=ON`` for a
+    CMake build and the ``localsocket`` feature for a vcpkg install, so that a program linking
+    the library is built for the same transport.
   * ``KRPC_COMMUNICATION_CUSTOM`` -- Allows you to provide your own implementation for the
     communication mechanism.
   * ``KRPC_SINGLE_CONNECTION`` -- Only meaningful alongside ``KRPC_COMMUNICATION_CUSTOM``. A serial
-    port carries the RPC and stream connections over the one link, so every message sent over it is
-    wrapped in a multiplexed message saying which connection it belongs to. A custom communication
-    mechanism is assumed to work the same way; define this if yours instead opens a connection of
-    its own to each server, as a socket does, and the messages are sent unwrapped.
+    port carries the RPC and stream connections over one link, so each message is wrapped in a
+    multiplexed message naming the connection it belongs to. Define this when a custom
+    communication mechanism opens a connection to each server, as a socket does, and sends
+    messages unwrapped.
 
 * Memory allocation
 
   * ``KRPC_BUFFER_SIZE`` -- How much of a message to hold in memory while it is written to or read
-    from the connection, defaulting to 1024 bytes, and to 128 bytes when building for Arduino where
-    a kilobyte is a large share of the memory there is. A message larger than this is carried in as
-    many passes as it takes, so this bounds the memory a call costs and never the size of a message
-    it can carry. A message that fits is also cheaper to send, as its size can be written in front
-    of it rather than found by a pass over it first, so it is worth setting this above the largest
-    call a program makes. Two buffers of this size are used, one for a message being sent and one
-    for a message being received, and neither outlives the call it is made for.
+    from the connection. The default is 1024 bytes, and 128 bytes when building for Arduino, where
+    a kilobyte is a large share of the memory available. A larger message is carried in as many
+    passes as it takes, so this bounds the memory a call costs rather than the size of a message.
+    A message that fits is cheaper to send, as its size is written in front of it instead of found
+    by a first pass over it. Two buffers of this size are used, one for sending and one for
+    receiving, and neither outlives the call it is made for.
   * ``KRPC_ALLOC_BLOCK_SIZE`` -- The size of collections (lists, sets, etc.) are not know ahead of
     time, so when they are received from the server they are decoded into dynamically allocated
     memory on the heap. This option controls how many items to increase the capacity of the
@@ -201,11 +198,12 @@ server left on its default protocol. A connection is then opened with the addres
 server is listening on rather than the name of a port.
 
 .. note:: A serial port carries data far more slowly than the game produces it, and the server
-          drops a connection that produces more data than the port can carry for a sustained
-          period. See :ref:`communication-protocol-serialio-buffering` for the limits and how to
-          stay within them. This does not apply over TCP/IP. The client blocks while waiting for
-          data from the server, with no timeout, so a call that is never answered, for example
-          because the connection was dropped, never returns.
+          drops a connection that sustains more data than the port can carry. See
+          :ref:`communication-protocol-serialio-buffering` for the limits and how to stay within
+          them.
+
+.. note:: The client blocks while waiting for data from the server, with no timeout. A call left
+          unanswered, after a dropped connection for example, never returns.
 
 Linking
 ^^^^^^^
@@ -260,9 +258,9 @@ The following example demonstrates how to invoke remote procedures using the Cna
 
 .. literalinclude:: /scripts/client/cnano/RemoteProcedures.c
 
-Many procedures return an object standing for something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for what those objects do
-when a game is loaded or the thing they stand for is destroyed.
+Many procedures return an object identifying something in the game, such as a vessel or
+a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
+behaves when a game is loaded or what it identifies is destroyed.
 
 .. _cnano-client-streams:
 .. _cnano-client-events:
@@ -294,10 +292,9 @@ Client API Reference
    ``krpc_open(&conn, "COM1")``.
 
    When the library is built using ``KRPC_COMMUNICATION_TCP`` calling this function connects to the
-   server over TCP/IP. *arg* is a pointer to a structure of type ``krpc_connection_config_t``
-   holding the address of the machine the server is running on and the port its RPC server is
-   listening on. The address may be a host name or an address literal, and every endpoint it
-   resolves to is tried until one accepts the connection. For example:
+   server over TCP/IP. *arg* is a pointer to a ``krpc_connection_config_t`` holding the address of
+   the machine running the server and the port its RPC server listens on. The address may be a host
+   name or an address literal, and each endpoint it resolves to is tried in turn. For example:
 
    .. code-block:: c
 

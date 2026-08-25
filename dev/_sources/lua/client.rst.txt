@@ -56,9 +56,9 @@ InfernalRobotics service is accessible via ``conn.infernal_robotics``.
 Calling methods, getting or setting properties, etc. are mapped to remote
 procedure calls and passed to the server by the lua client.
 
-Many procedures return an object standing for something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for what those objects do
-when a game is loaded or the thing they stand for is destroyed.
+Many procedures return an object identifying something in the game, such as a vessel or
+a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
+behaves when a game is loaded or what it identifies is destroyed.
 
 Streams and Events
 ------------------
@@ -148,10 +148,10 @@ Reference
 Numeric Limits
 --------------
 
-The ``krpc.limits`` module names the extremes of the numeric types that kRPC carries over the
-wire. Lua names none of them itself, as ``math.maxinteger`` and ``math.mininteger`` arrive in
-Lua 5.3 and this client targets 5.1 and 5.2. A service can declare one of these as a
-parameter's default value, in which case it is documented as the constant here.
+The ``krpc.limits`` module names the extremes of the numeric types kRPC carries over the wire.
+Lua gained ``math.maxinteger`` and ``math.mininteger`` in 5.3, and this client targets 5.1 and
+5.2. A service can declare one of these limits as a parameter's default value, and it is then
+documented as the constant here.
 
 The minimum of an unsigned type is ``0``, so it has no constant.
 

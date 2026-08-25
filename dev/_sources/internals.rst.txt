@@ -56,36 +56,33 @@ This behavior is enabled by the **blocking receives** option. **Receive
 timeout** sets the maximum amount of time the server will wait for a new RPC
 from a client.
 
-The receive timeout decides how much work a client may do between calls before
-it stops being waited for. A client that takes longer than the timeout to send
-its next call is not waiting when the server looks, so the server returns from
-the FixedUpdate and that call is executed in the next one: the client is served
-one RPC per update, however many it makes. The default timeout is one
-millisecond, which is easy for a program written in Python or Lua to exceed.
+The receive timeout bounds the work a client may do between calls. A client
+that takes longer than the timeout to send its next call has that call executed
+in the following FixedUpdate. It is then served one RPC per update, however many
+it makes. The default timeout is one millisecond, which a program written in
+Python or Lua exceeds easily.
 
-Holding a tick
+Holding a Tick
 --------------
 
-A client can hold the game on its current physics tick, so that every call it makes is
-executed before the game advances. That is what lets a control loop read the game
-state, compute with it and write the result back within one tick, rather than being
-served one RPC per update whenever it spends longer than the receive timeout between
-calls. See :ref:`the control loops tutorial <tutorial-control-loops>` for how a program
-uses it.
+A client can hold the game on its current physics tick, so every call it makes is
+executed before the game advances. A control loop can then read the game state,
+compute with it and write the result back within one tick. See :ref:`the control
+loops tutorial <tutorial-control-loops>` for how a program uses it.
 
 What a hold means for the server:
 
-* **Tick hold timeout** sets how long a client may hold a tick before the server takes
-  it back, one second by default. It bounds how long the game can be made to appear
-  frozen, which is why the server owns it rather than the client. A hold also ends when
-  the client disconnects.
-* The maximum time per update and one RPC per update settings do not apply while a tick
-  is held, and an update that held one is not counted by adaptive rate control, which
-  would otherwise read the client's own work as the server spending too long on RPCs and
-  wind the limit down for every other client.
-* The game renders no frame, takes no input and runs no physics while a tick is held.
-  What it does not cost is the simulation: physics runs on a fixed time step, so a game
-  whose ticks are held runs slower than real time rather than differently.
-* Streams do not update inside a hold, since stream updates are sent once the update has
-  finished executing calls, and new connections are not accepted, since the servers are
-  polled between updates.
+* **Tick hold timeout** sets how long a client may hold a tick, one second by
+  default. It bounds how long the game can be made to appear frozen, and the
+  server owns it rather than the client. A hold also ends when the client
+  disconnects.
+* The maximum time per update and one RPC per update settings do not apply while
+  a tick is held. Adaptive rate control skips an update that held one, which
+  would otherwise count the client's own work as time the server spent on RPCs
+  and wind the limit down for every client.
+* The game renders no frame, takes no input and runs no physics while a tick is
+  held. Physics runs on a fixed time step, so a game whose ticks are held runs
+  slower than real time and simulates every tick in turn.
+* Streams do not update inside a hold, as stream updates are sent once the update
+  has finished executing calls. New connections are not accepted either, as the
+  servers are polled between updates.

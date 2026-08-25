@@ -116,9 +116,9 @@ its altitude:
 
 .. literalinclude:: /scripts/client/cpp/RemoteProcedures.cpp
 
-Many procedures return an object standing for something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for what those objects do
-when a game is loaded or the thing they stand for is destroyed.
+Many procedures return an object identifying something in the game, such as a vessel or
+a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
+behaves when a game is loaded or what it identifies is destroyed.
 
 .. _cpp-client-streams:
 
@@ -511,7 +511,7 @@ Client API Reference
    Returns a hash of a value of any type the client carries: the arithmetic types, strings,
    enumerations, class objects, tuples, and the list, set and dictionary collection types,
    nested however deeply. A structure is also hashed by this function, and is given a
-   ``std::hash`` of its own, so an unordered container keyed by one needs nothing further.
+   ``std::hash`` of its own, so an unordered container can be keyed by one directly.
 
 .. class:: hash
 

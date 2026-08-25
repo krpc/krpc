@@ -105,7 +105,7 @@ AutoPilot
 
       Disengages the auto-pilot and resets all configuration parameters to their defaults.
       Also resets the target pitch, heading and roll, and clears all internal controller
-      state, including the oscillation detector's structural level — which otherwise
+      state, including the oscillation detector's structural level, which otherwise
       persists across engagements so that a craft known to be flexible re-latches quickly.
 
       :Game Scenes: Flight
@@ -142,7 +142,7 @@ AutoPilot
       .. note::
 
          A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
-         the nose is near vertical (pitch → ±90°); near the vertical prefer
+         the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
          :attr:`AutoPilot.target_direction` or :meth:`AutoPilot.set_direction_and_up`. The setter preserves the
          current roll relative to :attr:`AutoPilot.up_reference`.
 
@@ -158,7 +158,8 @@ AutoPilot
       .. note::
 
          A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
-         (pitch → ±90°) — see :attr:`AutoPilot.target_pitch`. The setter preserves the current roll
+         (a pitch near -90° or +90°). See :attr:`AutoPilot.target_pitch`. The setter preserves the
+         current roll
          relative to :attr:`AutoPilot.up_reference`.
 
    .. attribute:: target_roll
@@ -174,13 +175,13 @@ AutoPilot
 
       .. note::
 
-         When left unset (``NaN``) the auto-pilot suppresses roll rotation — it drives the roll
-         rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+         When left unset (``NaN``) the auto-pilot suppresses roll rotation, driving the roll
+         rate to zero instead of holding a specific roll angle. Setting a value re-rolls the
          current target to that angle relative to the up reference while keeping the nose direction.
-         With the default reference (the frame's up) this reproduces the historical roll away from
-         the vertical, and is ill-defined only when the nose points along the reference (near
-         straight up or down). To hold a well-defined roll through the vertical — for example a
-         gravity turn — set the up reference off the flight path (see
+         With the default reference (the frame's up) this is the roll away from the vertical, and
+         is ill-defined only when the nose points along the reference (near straight up or down).
+         To hold a well-defined roll through the vertical, such as through a gravity turn, set
+         the up reference off the flight path (see
          :meth:`AutoPilot.set_direction_and_up` / :attr:`AutoPilot.up_reference`).
 
    .. attribute:: up_reference
@@ -221,7 +222,8 @@ AutoPilot
       .. note::
 
          A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
-         vertical (pitch → ±90°), so near the vertical prefer :attr:`AutoPilot.target_direction` or
+         vertical (a pitch near -90° or +90°), so near the vertical prefer
+         :attr:`AutoPilot.target_direction` or
          :meth:`AutoPilot.set_direction_and_up`. Preserves the current roll relative to
          :attr:`AutoPilot.up_reference`.
 
@@ -260,14 +262,14 @@ AutoPilot
       specified by :attr:`AutoPilot.reference_frame`.
 
       :param tuple direction: The direction to point the nose in.
-      :param tuple up: The reference direction the roof is rolled towards. Need not be normalized or perpendicular to *direction* — its component perpendicular to the nose is used. Stored as the :attr:`AutoPilot.up_reference`.
+      :param tuple up: The reference direction the roof is rolled towards. Need not be normalized or perpendicular to *direction*, as its component perpendicular to the nose is used. Stored as the :attr:`AutoPilot.up_reference`.
       :param float roll: An additional roll about the nose, in degrees (positive banks right). Defaults to 0.
       :Game Scenes: Flight
 
 
       .. note::
 
-         This is the way to hold a well-defined orientation through a maneuver — for example a
+         This is the way to hold a well-defined orientation through a maneuver such as a
          gravity turn: pass a fixed *up* (say north) and the roll stays defined the
          whole way, with no singularity at the vertical. It is well-defined for every nose direction
          except *up* parallel to *direction* (asking the roof to
@@ -281,7 +283,7 @@ AutoPilot
       The current target pitch the auto-pilot is tracking, in degrees. When
       :attr:`AutoPilot.target_smoothing_time` is non-zero this lags the commanded
       :attr:`AutoPilot.target_pitch` while a change is slewed in; otherwise the two are equal.
-      A convenience scalar, ill-defined near the vertical — see :attr:`AutoPilot.target_pitch`.
+      A convenience scalar, ill-defined near the vertical. See :attr:`AutoPilot.target_pitch`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -292,7 +294,7 @@ AutoPilot
       The current target heading the auto-pilot is tracking, in degrees. When
       :attr:`AutoPilot.target_smoothing_time` is non-zero this lags the commanded
       :attr:`AutoPilot.target_heading` while a change is slewed in; otherwise the two are equal.
-      A convenience scalar, ill-defined near the vertical — see :attr:`AutoPilot.target_heading`.
+      A convenience scalar, ill-defined near the vertical. See :attr:`AutoPilot.target_heading`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -400,8 +402,8 @@ AutoPilot
 
       .. note::
 
-         The pitch component of :attr:`AutoPilot.attitude_error` — the pitch part of the direction error
-         resolved in the roll-invariant frame, well-defined near the vertical.
+         The pitch component of :attr:`AutoPilot.attitude_error`, the pitch part of the direction
+         error resolved in the roll-invariant frame, well-defined near the vertical.
 
    .. attribute:: heading_error
 
@@ -415,9 +417,9 @@ AutoPilot
 
       .. note::
 
-         The yaw component of :attr:`AutoPilot.attitude_error` — the yaw part of the direction error
-         resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
-         heading, which is undefined at the pole).
+         The yaw component of :attr:`AutoPilot.attitude_error`, the yaw part of the direction error
+         resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
+         heading is undefined at the pole.
 
    .. attribute:: roll_error
 
@@ -432,7 +434,7 @@ AutoPilot
       .. note::
 
          Measured about the vessel's nose axis, so it stays well-defined near the vertical
-         singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+         singularity. A subtraction of pitch, heading and roll angles has a roll term that is
          ill-conditioned when the vessel points close to straight up or down.
 
    .. attribute:: current_error
@@ -451,7 +453,7 @@ AutoPilot
    .. attribute:: current_attitude_error
 
       The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
-      attitude and the target the auto-pilot is currently tracking (the slewed target — see
+      attitude and the target the auto-pilot is currently tracking (the slewed target, see
       :attr:`AutoPilot.current_target_rotation`). Like :attr:`AutoPilot.attitude_error` but relative to the
       current target, so it stays small while a smoothed change (see
       :attr:`AutoPilot.target_smoothing_time`) is fed in; equal to :attr:`AutoPilot.attitude_error` when
@@ -505,7 +507,7 @@ AutoPilot
       .. note::
 
          Measured about the vessel's nose axis, so it stays well-defined near the vertical
-         singularity — see :attr:`AutoPilot.roll_error`.
+         singularity. See :attr:`AutoPilot.roll_error`.
 
    .. attribute:: roll_start_angle
 
@@ -665,8 +667,8 @@ AutoPilot
       :attr:`RateFilterMode.automatic` (the default) the auto-pilot detects the
       oscillation at runtime, estimates its frequency and routes it to the appropriate tool
       (a notch filter for a low-frequency mode near the control band, a low-pass for a
-      high-frequency mode). :attr:`RateFilterMode.off` disables rate filtering only —
-      the other oscillation mitigations are unaffected. :attr:`RateFilterMode.notch`
+      high-frequency mode). :attr:`RateFilterMode.off` disables rate filtering only,
+      leaving the other oscillation mitigations unaffected. :attr:`RateFilterMode.notch`
       and :attr:`RateFilterMode.low_pass` force the respective tool unconditionally at
       :attr:`AutoPilot.pitch_yaw_oscillation_frequency`, for a vessel known in advance to be
       flexible.
@@ -720,7 +722,7 @@ AutoPilot
    .. attribute:: oscillation_bandwidth_floor_mode
 
       Controls the bandwidth-floor mitigation: the reduction of the inner control loop
-      bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+      bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
       :attr:`MitigationMode.automatic` (the default) it engages on a latched axis
       while holding (and during a detected limit cycle). :attr:`MitigationMode.off`
       never reduces the bandwidth; :attr:`MitigationMode.forced` keeps it fully
@@ -896,7 +898,7 @@ AutoPilot
 
 .. class:: RateFilterMode
 
-   Controls the auto-pilot's rate-feedback filtering for an axis group — the mitigation that
+   Controls the auto-pilot's rate-feedback filtering for an axis group, the mitigation that
    removes a structural oscillation (wobble) from the measured angular velocity before the
    control loops consume it.
    See :attr:`AutoPilot.pitch_yaw_rate_filter_mode` and :attr:`AutoPilot.roll_rate_filter_mode`.

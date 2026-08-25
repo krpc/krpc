@@ -754,9 +754,8 @@ once by making that panel visible.</p>
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI4Text13set_word_wrapEb">
 <span id="_CPPv3N4krpc8services2UI4Text13set_word_wrapEb"></span><span id="_CPPv2N4krpc8services2UI4Text13set_word_wrapEb"></span><span id="krpc::services::UI::Text::set_word_wrap__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_word_wrap</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI4Text13set_word_wrapEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the text wraps onto further lines when it is wider than the space it
-has. When wrapping is off, the text carries on past the edge instead, and a
-label asked for its preferred size asks for a single line, so a value that
-changes does not reflow a layout.</p>
+has. Text that does not wrap carries on past the edge, and its preferred size
+is that of a single line, so a changing value leaves a layout in place.</p>
 </dd></dl>
 
 <dl class="cpp function">

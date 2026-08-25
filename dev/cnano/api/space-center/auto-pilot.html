@@ -835,7 +835,7 @@ hidden when the game is restarted.</p>
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_Reset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_Reset" title="Link to this definition">#</a><br /></dt>
 <dd><p>Disengages the auto-pilot and resets all configuration parameters to their defaults.
 Also resets the target pitch, heading and roll, and clears all internal controller
-state, including the oscillation detector’s structural level — which otherwise
+state, including the oscillation detector’s structural level, which otherwise
 persists across engagements so that a craft known to be flexible re-latches quickly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -887,7 +887,7 @@ both change. Set the frame first, then the target.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
-the nose is near vertical (pitch → ±90°); near the vertical prefer
+the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetDirection" title="krpc_SpaceCenter_AutoPilot_TargetDirection"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetDirection()</span></code></a> or <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_SetDirectionAndUp" title="krpc_SpaceCenter_AutoPilot_SetDirectionAndUp"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_SetDirectionAndUp()</span></code></a>. The setter preserves the
 current roll relative to <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_UpReference" title="krpc_SpaceCenter_AutoPilot_UpReference"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_UpReference()</span></code></a>.</p>
 </div>
@@ -910,7 +910,8 @@ current roll relative to <a class="reference internal" href="#c.krpc_SpaceCenter
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
-(pitch → ±90°) — see <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetPitch" title="krpc_SpaceCenter_AutoPilot_TargetPitch"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetPitch()</span></code></a>. The setter preserves the current roll
+(a pitch near -90° or +90°). See <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetPitch" title="krpc_SpaceCenter_AutoPilot_TargetPitch"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetPitch()</span></code></a>. The setter preserves the
+current roll
 relative to <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_UpReference" title="krpc_SpaceCenter_AutoPilot_UpReference"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_UpReference()</span></code></a>.</p>
 </div>
 </dd></dl>
@@ -933,13 +934,13 @@ positive roll banks right). <code class="docutils literal notranslate"><span cla
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation — it drives the roll
-rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation, driving the roll
+rate to zero instead of holding a specific roll angle. Setting a value re-rolls the
 current target to that angle relative to the up reference while keeping the nose direction.
-With the default reference (the frame’s up) this reproduces the historical roll away from
-the vertical, and is ill-defined only when the nose points along the reference (near
-straight up or down). To hold a well-defined roll through the vertical — for example a
-gravity turn — set the up reference off the flight path (see
+With the default reference (the frame’s up) this is the roll away from the vertical, and
+is ill-defined only when the nose points along the reference (near straight up or down).
+To hold a well-defined roll through the vertical, such as through a gravity turn, set
+the up reference off the flight path (see
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_SetDirectionAndUp" title="krpc_SpaceCenter_AutoPilot_SetDirectionAndUp"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_SetDirectionAndUp()</span></code></a> / <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_UpReference" title="krpc_SpaceCenter_AutoPilot_UpReference"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_UpReference()</span></code></a>).</p>
 </div>
 </dd></dl>
@@ -994,7 +995,8 @@ the roll afterwards, or set both at once with <a class="reference internal" href
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
-vertical (pitch → ±90°), so near the vertical prefer <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetDirection" title="krpc_SpaceCenter_AutoPilot_TargetDirection"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetDirection()</span></code></a> or
+vertical (a pitch near -90° or +90°), so near the vertical prefer
+<a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetDirection" title="krpc_SpaceCenter_AutoPilot_TargetDirection"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetDirection()</span></code></a> or
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_SetDirectionAndUp" title="krpc_SpaceCenter_AutoPilot_SetDirectionAndUp"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_SetDirectionAndUp()</span></code></a>. Preserves the current roll relative to
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_UpReference" title="krpc_SpaceCenter_AutoPilot_UpReference"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_UpReference()</span></code></a>.</p>
 </div>
@@ -1053,7 +1055,7 @@ specified by <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>direction</strong> – The direction to point the nose in.</p></li>
-<li><p><strong>up</strong> – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em> — its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_UpReference" title="krpc_SpaceCenter_AutoPilot_UpReference"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_UpReference()</span></code></a>.</p></li>
+<li><p><strong>up</strong> – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em>, as its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_UpReference" title="krpc_SpaceCenter_AutoPilot_UpReference"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_UpReference()</span></code></a>.</p></li>
 <li><p><strong>roll</strong> – An additional roll about the nose, in degrees (positive banks right). Defaults to 0.</p></li>
 </ul>
 </dd>
@@ -1063,7 +1065,7 @@ specified by <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is the way to hold a well-defined orientation through a maneuver — for example a
+<p>This is the way to hold a well-defined orientation through a maneuver such as a
 gravity turn: pass a fixed <em>up</em> (say north) and the roll stays defined the
 whole way, with no singularity at the vertical. It is well-defined for every nose direction
 except <em>up</em> parallel to <em>direction</em> (asking the roof to
@@ -1080,7 +1082,7 @@ Equivalent to setting <a class="reference internal" href="#c.krpc_SpaceCenter_Au
 <dd><p>The current target pitch the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetSmoothingTime" title="krpc_SpaceCenter_AutoPilot_TargetSmoothingTime"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetSmoothingTime()</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetPitch" title="krpc_SpaceCenter_AutoPilot_TargetPitch"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetPitch()</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetPitch" title="krpc_SpaceCenter_AutoPilot_TargetPitch"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetPitch()</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetPitch" title="krpc_SpaceCenter_AutoPilot_TargetPitch"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetPitch()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1094,7 +1096,7 @@ A convenience scalar, ill-defined near the vertical — see <a class="reference 
 <dd><p>The current target heading the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetSmoothingTime" title="krpc_SpaceCenter_AutoPilot_TargetSmoothingTime"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetSmoothingTime()</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetHeading" title="krpc_SpaceCenter_AutoPilot_TargetHeading"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetHeading()</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetHeading" title="krpc_SpaceCenter_AutoPilot_TargetHeading"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetHeading()</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetHeading" title="krpc_SpaceCenter_AutoPilot_TargetHeading"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetHeading()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1243,8 +1245,8 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The pitch component of <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AttitudeError" title="krpc_SpaceCenter_AutoPilot_AttitudeError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_AttitudeError()</span></code></a> — the pitch part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical.</p>
+<p>The pitch component of <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AttitudeError" title="krpc_SpaceCenter_AutoPilot_AttitudeError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_AttitudeError()</span></code></a>, the pitch part of the direction
+error resolved in the roll-invariant frame, well-defined near the vertical.</p>
 </div>
 </dd></dl>
 
@@ -1260,9 +1262,9 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The yaw component of <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AttitudeError" title="krpc_SpaceCenter_AutoPilot_AttitudeError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_AttitudeError()</span></code></a> — the yaw part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
-heading, which is undefined at the pole).</p>
+<p>The yaw component of <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AttitudeError" title="krpc_SpaceCenter_AutoPilot_AttitudeError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_AttitudeError()</span></code></a>, the yaw part of the direction error
+resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
+heading is undefined at the pole.</p>
 </div>
 </dd></dl>
 
@@ -1279,7 +1281,7 @@ Throws an exception if the auto-pilot has not been engaged or no target roll is 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+singularity. A subtraction of pitch, heading and roll angles has a roll term that is
 ill-conditioned when the vessel points close to straight up or down.</p>
 </div>
 </dd></dl>
@@ -1304,7 +1306,7 @@ auto-pilot has not been engaged.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentAttitudeError">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_CurrentAttitudeError</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentAttitudeError" title="Link to this definition">#</a><br /></dt>
 <dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
-attitude and the target the auto-pilot is currently tracking (the slewed target — see
+attitude and the target the auto-pilot is currently tracking (the slewed target, see
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentTargetRotation" title="krpc_SpaceCenter_AutoPilot_CurrentTargetRotation"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_CurrentTargetRotation()</span></code></a>). Like <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AttitudeError" title="krpc_SpaceCenter_AutoPilot_AttitudeError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_AttitudeError()</span></code></a> but relative to the
 current target, so it stays small while a smoothed change (see
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_TargetSmoothingTime" title="krpc_SpaceCenter_AutoPilot_TargetSmoothingTime"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_TargetSmoothingTime()</span></code></a>) is fed in; equal to <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AttitudeError" title="krpc_SpaceCenter_AutoPilot_AttitudeError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_AttitudeError()</span></code></a> when
@@ -1364,7 +1366,7 @@ auto-pilot has not been engaged or no target roll is set.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — see <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_RollError" title="krpc_SpaceCenter_AutoPilot_RollError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_RollError()</span></code></a>.</p>
+singularity. See <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_RollError" title="krpc_SpaceCenter_AutoPilot_RollError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_RollError()</span></code></a>.</p>
 </div>
 </dd></dl>
 
@@ -1633,8 +1635,8 @@ angular velocity) for the pitch and yaw axes of a structurally flexible vessel. 
 <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_RATEFILTERMODE_AUTOMATIC</span></code> (the default) the auto-pilot detects the
 oscillation at runtime, estimates its frequency and routes it to the appropriate tool
 (a notch filter for a low-frequency mode near the control band, a low-pass for a
-high-frequency mode). <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_RATEFILTERMODE_OFF</span></code> disables rate filtering only —
-the other oscillation mitigations are unaffected. <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_RATEFILTERMODE_NOTCH</span></code>
+high-frequency mode). <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_RATEFILTERMODE_OFF</span></code> disables rate filtering only,
+leaving the other oscillation mitigations unaffected. <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_RATEFILTERMODE_NOTCH</span></code>
 and <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_RATEFILTERMODE_LOWPASS</span></code> force the respective tool unconditionally at
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_PitchYawOscillationFrequency" title="krpc_SpaceCenter_AutoPilot_PitchYawOscillationFrequency"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_PitchYawOscillationFrequency()</span></code></a>, for a vessel known in advance to be
 flexible.</p>
@@ -1728,7 +1730,7 @@ advanced tuning parameter.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloorMode">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloorMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_SpaceCenter_MitigationMode_t" title="krpc_SpaceCenter_MitigationMode_t"><span class="n"><span class="pre">krpc_SpaceCenter_MitigationMode_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloorMode" title="Link to this definition">#</a><br /></dt>
 <dd><p>Controls the bandwidth-floor mitigation: the reduction of the inner control loop
-bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
 <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC</span></code> (the default) it engages on a latched axis
 while holding (and during a detected limit cycle). <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_MITIGATIONMODE_OFF</span></code>
 never reduces the bandwidth; <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_MITIGATIONMODE_FORCED</span></code> keeps it fully
@@ -1964,7 +1966,7 @@ program chooses where among its own calls it runs.</p>
 <dl class="c type">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_RateFilterMode_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RateFilterMode_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_RateFilterMode_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group — the mitigation that
+<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group, the mitigation that
 removes a structural oscillation (wobble) from the measured angular velocity before the
 control loops consume it.
 See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_PitchYawRateFilterMode()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_RollRateFilterMode()</span></code>.</p>

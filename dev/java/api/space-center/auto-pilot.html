@@ -835,7 +835,7 @@ hidden when the game is restarted.</p>
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.reset()" title="Link to this definition">#</a></dt>
 <dd><p>Disengages the auto-pilot and resets all configuration parameters to their defaults.
 Also resets the target pitch, heading and roll, and clears all internal controller
-state, including the oscillation detector’s structural level — which otherwise
+state, including the oscillation detector’s structural level, which otherwise
 persists across engagements so that a craft known to be flexible re-latches quickly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -887,7 +887,7 @@ both change. Set the frame first, then the target.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
-the nose is near vertical (pitch → ±90°); near the vertical prefer
+the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetDirection()</span></code></a> or <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a>. The setter preserves the
 current roll relative to <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p>
 </div>
@@ -910,7 +910,8 @@ current roll relative to <a class="reference internal" href="#krpc.client.servic
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
-(pitch → ±90°) — see <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a>. The setter preserves the current roll
+(a pitch near -90° or +90°). See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a>. The setter preserves the
+current roll
 relative to <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p>
 </div>
 </dd></dl>
@@ -933,13 +934,13 @@ positive roll banks right). <code class="docutils literal notranslate"><span cla
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation — it drives the roll
-rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation, driving the roll
+rate to zero instead of holding a specific roll angle. Setting a value re-rolls the
 current target to that angle relative to the up reference while keeping the nose direction.
-With the default reference (the frame’s up) this reproduces the historical roll away from
-the vertical, and is ill-defined only when the nose points along the reference (near
-straight up or down). To hold a well-defined roll through the vertical — for example a
-gravity turn — set the up reference off the flight path (see
+With the default reference (the frame’s up) this is the roll away from the vertical, and
+is ill-defined only when the nose points along the reference (near straight up or down).
+To hold a well-defined roll through the vertical, such as through a gravity turn, set
+the up reference off the flight path (see
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a> / <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>).</p>
 </div>
 </dd></dl>
@@ -994,7 +995,8 @@ the roll afterwards, or set both at once with <a class="reference internal" href
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
-vertical (pitch → ±90°), so near the vertical prefer <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetDirection()</span></code></a> or
+vertical (a pitch near -90° or +90°), so near the vertical prefer
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetDirection()</span></code></a> or
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a>. Preserves the current roll relative to
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p>
 </div>
@@ -1053,7 +1055,7 @@ specified by <a class="reference internal" href="#krpc.client.services.SpaceCent
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>direction</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – The direction to point the nose in.</p></li>
-<li><p><strong>up</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em> — its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p></li>
+<li><p><strong>up</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em>, as its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p></li>
 <li><p><strong>roll</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – An additional roll about the nose, in degrees (positive banks right). Defaults to 0.</p></li>
 </ul>
 </dd>
@@ -1063,7 +1065,7 @@ specified by <a class="reference internal" href="#krpc.client.services.SpaceCent
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is the way to hold a well-defined orientation through a maneuver — for example a
+<p>This is the way to hold a well-defined orientation through a maneuver such as a
 gravity turn: pass a fixed <em>up</em> (say north) and the roll stays defined the
 whole way, with no singularity at the vertical. It is well-defined for every nose direction
 except <em>up</em> parallel to <em>direction</em> (asking the roof to
@@ -1080,7 +1082,7 @@ Equivalent to setting <a class="reference internal" href="#krpc.client.services.
 <dd><p>The current target pitch the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetSmoothingTime()</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1094,7 +1096,7 @@ A convenience scalar, ill-defined near the vertical — see <a class="reference 
 <dd><p>The current target heading the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetSmoothingTime()</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetHeading()</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetHeading()</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetHeading()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1243,8 +1245,8 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The pitch component of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a> — the pitch part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical.</p>
+<p>The pitch component of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a>, the pitch part of the direction
+error resolved in the roll-invariant frame, well-defined near the vertical.</p>
 </div>
 </dd></dl>
 
@@ -1260,9 +1262,9 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The yaw component of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a> — the yaw part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
-heading, which is undefined at the pole).</p>
+<p>The yaw component of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a>, the yaw part of the direction error
+resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
+heading is undefined at the pole.</p>
 </div>
 </dd></dl>
 
@@ -1279,7 +1281,7 @@ Throws an exception if the auto-pilot has not been engaged or no target roll is 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+singularity. A subtraction of pitch, heading and roll angles has a roll term that is
 ill-conditioned when the vessel points close to straight up or down.</p>
 </div>
 </dd></dl>
@@ -1304,7 +1306,7 @@ auto-pilot has not been engaged.</p>
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getCurrentAttitudeError()">
  <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCurrentAttitudeError</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentAttitudeError()" title="Link to this definition">#</a></dt>
 <dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
-attitude and the target the auto-pilot is currently tracking (the slewed target — see
+attitude and the target the auto-pilot is currently tracking (the slewed target, see
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRotation()" title="krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRotation()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getCurrentTargetRotation()</span></code></a>). Like <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a> but relative to the
 current target, so it stays small while a smoothed change (see
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetSmoothingTime()</span></code></a>) is fed in; equal to <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a> when
@@ -1364,7 +1366,7 @@ auto-pilot has not been engaged or no target roll is set.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — see <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getRollError()" title="krpc.client.services.SpaceCenter.AutoPilot.getRollError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getRollError()</span></code></a>.</p>
+singularity. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getRollError()" title="krpc.client.services.SpaceCenter.AutoPilot.getRollError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getRollError()</span></code></a>.</p>
 </div>
 </dd></dl>
 
@@ -1633,8 +1635,8 @@ angular velocity) for the pitch and yaw axes of a structurally flexible vessel. 
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.AUTOMATIC" title="krpc.client.services.SpaceCenter.RateFilterMode.AUTOMATIC"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.AUTOMATIC</span></code></a> (the default) the auto-pilot detects the
 oscillation at runtime, estimates its frequency and routes it to the appropriate tool
 (a notch filter for a low-frequency mode near the control band, a low-pass for a
-high-frequency mode). <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.OFF" title="krpc.client.services.SpaceCenter.RateFilterMode.OFF"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.OFF</span></code></a> disables rate filtering only —
-the other oscillation mitigations are unaffected. <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.NOTCH" title="krpc.client.services.SpaceCenter.RateFilterMode.NOTCH"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.NOTCH</span></code></a>
+high-frequency mode). <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.OFF" title="krpc.client.services.SpaceCenter.RateFilterMode.OFF"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.OFF</span></code></a> disables rate filtering only,
+leaving the other oscillation mitigations unaffected. <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.NOTCH" title="krpc.client.services.SpaceCenter.RateFilterMode.NOTCH"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.NOTCH</span></code></a>
 and <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.LOW_PASS" title="krpc.client.services.SpaceCenter.RateFilterMode.LOW_PASS"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.LOW_PASS</span></code></a> force the respective tool unconditionally at
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getPitchYawOscillationFrequency()" title="krpc.client.services.SpaceCenter.AutoPilot.getPitchYawOscillationFrequency()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getPitchYawOscillationFrequency()</span></code></a>, for a vessel known in advance to be
 flexible.</p>
@@ -1728,7 +1730,7 @@ advanced tuning parameter.</p>
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setOscillationBandwidthFloorMode(MitigationMode)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setOscillationBandwidthFloorMode</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.MitigationMode" title="krpc.client.services.SpaceCenter.MitigationMode"><span class="pre">MitigationMode</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setOscillationBandwidthFloorMode(MitigationMode)" title="Link to this definition">#</a></dt>
 <dd><p>Controls the bandwidth-floor mitigation: the reduction of the inner control loop
-bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.MitigationMode.AUTOMATIC" title="krpc.client.services.SpaceCenter.MitigationMode.AUTOMATIC"><code class="xref java java-meth docutils literal notranslate"><span class="pre">MitigationMode.AUTOMATIC</span></code></a> (the default) it engages on a latched axis
 while holding (and during a detected limit cycle). <a class="reference internal" href="#krpc.client.services.SpaceCenter.MitigationMode.OFF" title="krpc.client.services.SpaceCenter.MitigationMode.OFF"><code class="xref java java-meth docutils literal notranslate"><span class="pre">MitigationMode.OFF</span></code></a>
 never reduces the bandwidth; <a class="reference internal" href="#krpc.client.services.SpaceCenter.MitigationMode.FORCED" title="krpc.client.services.SpaceCenter.MitigationMode.FORCED"><code class="xref java java-meth docutils literal notranslate"><span class="pre">MitigationMode.FORCED</span></code></a> keeps it fully
@@ -1964,7 +1966,7 @@ program chooses where among its own calls it runs.</p>
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RateFilterMode">
 <span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">RateFilterMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RateFilterMode" title="Link to this definition">#</a></dt>
-<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group — the mitigation that
+<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group, the mitigation that
 removes a structural oscillation (wobble) from the measured angular velocity before the
 control loops consume it.
 See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getPitchYawRateFilterMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getPitchYawRateFilterMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getPitchYawRateFilterMode()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getRollRateFilterMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getRollRateFilterMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getRollRateFilterMode()</span></code></a>.</p>

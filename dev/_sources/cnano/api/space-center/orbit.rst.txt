@@ -31,25 +31,22 @@ Orbit
 
       .. note::
 
-         The orbit is a single conic around *body*. Nothing else acts on
-         it: it never changes sphere of influence, so :func:`krpc_SpaceCenter_Orbit_NextOrbit` is
-         ``nullptr`` however far it travels from the body, and it is not slowed by an
-         atmosphere. A vessel held on rails follows its own orbit exactly, while one
-         inside the physics bubble is simulated and drifts from it a little.
+         The orbit is a single conic around *body*. It never changes
+         sphere of influence, so :func:`krpc_SpaceCenter_Orbit_NextOrbit` is ``nullptr``, and no
+         atmosphere slows it. A vessel held on rails follows its own orbit exactly,
+         while one inside the physics bubble is simulated and drifts from it a little.
 
-         The members that describe where the orbit has got to -- :func:`krpc_SpaceCenter_Orbit_Radius`,
-         :func:`krpc_SpaceCenter_Orbit_Speed`, :func:`krpc_SpaceCenter_Orbit_TrueAnomaly`, :func:`krpc_SpaceCenter_Orbit_TimeToApoapsis`
-         and the like -- describe it at *ut* and stay there, as
-         nothing is moving along it. Use :func:`krpc_SpaceCenter_Orbit_RadiusAt`,
+         :func:`krpc_SpaceCenter_Orbit_Radius`, :func:`krpc_SpaceCenter_Orbit_Speed`, :func:`krpc_SpaceCenter_Orbit_TrueAnomaly`,
+         :func:`krpc_SpaceCenter_Orbit_TimeToApoapsis` and the like describe the orbit at
+         *ut* and stay there. Use :func:`krpc_SpaceCenter_Orbit_RadiusAt`,
          :func:`krpc_SpaceCenter_Orbit_PositionAt`, :func:`krpc_SpaceCenter_Orbit_VelocityAt` and
-         :func:`krpc_SpaceCenter_Orbit_TrueAnomalyAtUT` to ask where it is at another time.
-         :func:`krpc_SpaceCenter_Orbit_ReferenceFrame` and :func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame` follow
+         :func:`krpc_SpaceCenter_Orbit_TrueAnomalyAtUT` for another time, and
+         :func:`krpc_SpaceCenter_Orbit_ReferenceFrame` and :func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame` to follow
          the orbit as time passes.
 
-         The orbit that is returned is kept until :func:`krpc_SpaceCenter_Orbit_Remove` is called on
-         it or the client that created it disconnects, so a script that creates one
-         repeatedly, for example once per update, should remove each one when it is
-         finished with it.
+         The orbit is held until :func:`krpc_SpaceCenter_Orbit_Remove` is called on it or the client
+         that created it disconnects. Remove each one created by a script that creates
+         them repeatedly, for example once per update.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_CreateFromOrbitalElements(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * result, krpc_SpaceCenter_CelestialBody_t body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
 
@@ -73,30 +70,27 @@ Orbit
 
       .. note::
 
-         The orbit is a single conic around *body*. Nothing else acts
-         on it: it never changes sphere of influence, so :func:`krpc_SpaceCenter_Orbit_NextOrbit` is
-         ``nullptr`` however far it travels from the body, and it is not slowed by an
-         atmosphere.
+         The orbit is a single conic around *body*. It never changes
+         sphere of influence, so :func:`krpc_SpaceCenter_Orbit_NextOrbit` is ``nullptr``, and no
+         atmosphere slows it.
 
-         The angles are measured against the same reference plane and direction that
+         The angles are measured against the reference plane and direction that
          :func:`krpc_SpaceCenter_Orbit_Inclination`, :func:`krpc_SpaceCenter_Orbit_LongitudeOfAscendingNode` and
-         :func:`krpc_SpaceCenter_Orbit_ArgumentOfPeriapsis` report them against, which
+         :func:`krpc_SpaceCenter_Orbit_ArgumentOfPeriapsis` report them against.
          :func:`krpc_SpaceCenter_Orbit_ReferencePlaneNormal` and :func:`krpc_SpaceCenter_Orbit_ReferencePlaneDirection`
-         give as vectors in a reference frame.
+         give these as vectors in a reference frame.
 
-         The members that describe where the orbit has got to -- :func:`krpc_SpaceCenter_Orbit_Radius`,
-         :func:`krpc_SpaceCenter_Orbit_Speed`, :func:`krpc_SpaceCenter_Orbit_TrueAnomaly`, :func:`krpc_SpaceCenter_Orbit_TimeToApoapsis`
-         and the like -- describe it at *epoch* and stay there, as
-         nothing is moving along it. Use :func:`krpc_SpaceCenter_Orbit_RadiusAt`,
+         :func:`krpc_SpaceCenter_Orbit_Radius`, :func:`krpc_SpaceCenter_Orbit_Speed`, :func:`krpc_SpaceCenter_Orbit_TrueAnomaly`,
+         :func:`krpc_SpaceCenter_Orbit_TimeToApoapsis` and the like describe the orbit at
+         *epoch* and stay there. Use :func:`krpc_SpaceCenter_Orbit_RadiusAt`,
          :func:`krpc_SpaceCenter_Orbit_PositionAt`, :func:`krpc_SpaceCenter_Orbit_VelocityAt` and
-         :func:`krpc_SpaceCenter_Orbit_TrueAnomalyAtUT` to ask where it is at another time.
-         :func:`krpc_SpaceCenter_Orbit_ReferenceFrame` and :func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame` follow
+         :func:`krpc_SpaceCenter_Orbit_TrueAnomalyAtUT` for another time, and
+         :func:`krpc_SpaceCenter_Orbit_ReferenceFrame` and :func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame` to follow
          the orbit as time passes.
 
-         The orbit that is returned is kept until :func:`krpc_SpaceCenter_Orbit_Remove` is called on
-         it or the client that created it disconnects, so a script that creates one
-         repeatedly, for example once per update, should remove each one when it is
-         finished with it.
+         The orbit is held until :func:`krpc_SpaceCenter_Orbit_Remove` is called on it or the client
+         that created it disconnects. Remove each one created by a script that creates
+         them repeatedly, for example once per update.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Remove(krpc_connection_t connection)
 
@@ -108,14 +102,12 @@ Orbit
       .. note::
 
          Only an orbit created by :func:`krpc_SpaceCenter_Orbit_CreateFromPositionAndVelocity` or
-         :func:`krpc_SpaceCenter_Orbit_CreateFromOrbitalElements` can be removed. Every other orbit is
-         the orbit of something in the game, which is what says when it is finished
-         with, and the server holds one of each however often it is asked for.
+         :func:`krpc_SpaceCenter_Orbit_CreateFromOrbitalElements` can be removed. Every other orbit
+         belongs to something in the game, and the server holds one of each.
 
          Any further use of this object throws an exception, as does use of a
-         reference frame defined against it. An orbit is removed for the client that
-         created it and is not shared with any other, and one whose client disconnects
-         is removed with it.
+         reference frame defined against it. An orbit belongs to the client that
+         created it, and is removed when that client disconnects.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Body(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
 

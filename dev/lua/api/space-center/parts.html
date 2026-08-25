@@ -2751,7 +2751,7 @@ The remaining properties in this section are only available when it is.</p>
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Part.highly_pressurized">
 <span class="sig-name descname"><span class="pre">highly_pressurized</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Part.highly_pressurized" title="Link to this definition">#</a></dt>
 <dd><p>Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
-draw from (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.pressure_fed" title="SpaceCenter.SpaceCenter.Engine.pressure_fed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.pressure_fed</span></code></a>). Raises an exception if the part is
+draw from (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.pressure_fed" title="SpaceCenter.SpaceCenter.Engine.pressure_fed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.pressure_fed</span></code></a>). Throws an exception if the part is
 not a RealFuels fuel tank (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.has_real_fuels_tank" title="SpaceCenter.SpaceCenter.Part.has_real_fuels_tank"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.has_real_fuels_tank</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -2771,7 +2771,7 @@ second of in-game time, measured over the last update RealFuels computed it in.
 The contents keep boiling off under time warp, where that update covers a much
 longer span of in-game time than a physics frame does. The rate is zero for a
 tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
-temperature RealFuels holds down instead, and in the editor. Raises an exception
+temperature RealFuels holds down instead, and in the editor. Throws an exception
 if the part is not a RealFuels fuel tank (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.has_real_fuels_tank" title="SpaceCenter.SpaceCenter.Part.has_real_fuels_tank"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.has_real_fuels_tank</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -5598,7 +5598,7 @@ standard way to detect one.</p>
 direction of thrust. While the reverser is still moving, this reports
 the state it is moving to, so a read immediately after a set returns
 the value that was set and setting the same value again has no effect.
-Raises an exception if the engine does not have a thrust reverser
+Throws an exception if the engine does not have a thrust reverser
 (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.can_reverse_thrust" title="SpaceCenter.SpaceCenter.Engine.can_reverse_thrust"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.can_reverse_thrust</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -5613,7 +5613,7 @@ Raises an exception if the engine does not have a thrust reverser
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.Engine.toggle_thrust_reversal">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">toggle_thrust_reversal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Engine.toggle_thrust_reversal" title="Link to this definition">#</a></dt>
-<dd><p>Toggle the engine’s thrust reverser. Raises an exception if the engine
+<dd><p>Toggle the engine’s thrust reverser. Throws an exception if the engine
 does not have a thrust reverser (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.can_reverse_thrust" title="SpaceCenter.SpaceCenter.Engine.can_reverse_thrust"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.can_reverse_thrust</span></code></a>).</p>
 </dd></dl>
 
@@ -5637,7 +5637,7 @@ The remaining properties in this section are only available when it is.</p>
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Engine.ignitions">
 <span class="sig-name descname"><span class="pre">ignitions</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Engine.ignitions" title="Link to this definition">#</a></dt>
 <dd><p>The number of times the engine can still be ignited, or -1 if it can be ignited an
-unlimited number of times. Raises an exception if the engine is not managed by
+unlimited number of times. Throws an exception if the engine is not managed by
 RealFuels (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.has_real_fuels" title="SpaceCenter.SpaceCenter.Engine.has_real_fuels"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.has_real_fuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -5654,7 +5654,7 @@ RealFuels (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engi
 <span class="sig-name descname"><span class="pre">ignition_resources</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Map</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Engine.ignition_resources" title="Link to this definition">#</a></dt>
 <dd><p>The resources the engine consumes each time it ignites, keyed by resource name, with
 the amount of each that is required. The engine uses up an ignition and fails to
-light if they are not available. Raises an exception if the engine is not managed by
+light if they are not available. Throws an exception if the engine is not managed by
 RealFuels (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.has_real_fuels" title="SpaceCenter.SpaceCenter.Engine.has_real_fuels"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.has_real_fuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -5670,7 +5670,7 @@ RealFuels (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engi
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Engine.has_ullage">
 <span class="sig-name descname"><span class="pre">has_ullage</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Engine.has_ullage" title="Link to this definition">#</a></dt>
 <dd><p>Whether the engine’s propellant is subject to ullage, so that it must be settled
-before the engine will run reliably. Raises an exception if the engine is not
+before the engine will run reliably. Throws an exception if the engine is not
 managed by RealFuels (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.has_real_fuels" title="SpaceCenter.SpaceCenter.Engine.has_real_fuels"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.has_real_fuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -5687,7 +5687,7 @@ managed by RealFuels (see <a class="reference internal" href="#SpaceCenter.Space
 <span class="sig-name descname"><span class="pre">propellant_stability</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Engine.propellant_stability" title="Link to this definition">#</a></dt>
 <dd><p>How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
 (fully settled). Acceleration along the engine’s thrust axis settles it, and
-coasting and rotation unsettle it. Raises an exception if the engine is not managed
+coasting and rotation unsettle it. Throws an exception if the engine is not managed
 by RealFuels (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.has_real_fuels" title="SpaceCenter.SpaceCenter.Engine.has_real_fuels"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.has_real_fuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -5705,7 +5705,7 @@ by RealFuels (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.E
 <dd><p>The probability that the propellant feeding the engine behaves normally, from 0 to 1.
 This is <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.propellant_stability" title="SpaceCenter.SpaceCenter.Engine.propellant_stability"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.propellant_stability</span></code></a> scaled by the game’s ullage difficulty
 setting, and is the value RealFuels itself tests against when deciding whether the
-engine runs. Raises an exception if the engine is not managed by RealFuels
+engine runs. Throws an exception if the engine is not managed by RealFuels
 (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.has_real_fuels" title="SpaceCenter.SpaceCenter.Engine.has_real_fuels"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.has_real_fuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -5721,7 +5721,7 @@ engine runs. Raises an exception if the engine is not managed by RealFuels
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Engine.pressure_fed">
 <span class="sig-name descname"><span class="pre">pressure_fed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Engine.pressure_fed" title="Link to this definition">#</a></dt>
 <dd><p>Whether the engine is fed by tank pressure rather than by a pump, and so needs to
-draw from a highly pressurized tank. Raises an exception if the engine is not
+draw from a highly pressurized tank. Throws an exception if the engine is not
 managed by RealFuels (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.has_real_fuels" title="SpaceCenter.SpaceCenter.Engine.has_real_fuels"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.has_real_fuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -5737,7 +5737,7 @@ managed by RealFuels (see <a class="reference internal" href="#SpaceCenter.Space
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Engine.has_feed_pressure">
 <span class="sig-name descname"><span class="pre">has_feed_pressure</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Engine.has_feed_pressure" title="Link to this definition">#</a></dt>
 <dd><p>Whether the tanks feeding the engine supply the pressure it needs. Always
-<code class="docutils literal notranslate"><span class="pre">True</span></code> for an engine that is not pressure fed. Raises an exception if the
+<code class="docutils literal notranslate"><span class="pre">True</span></code> for an engine that is not pressure fed. Throws an exception if the
 engine is not managed by RealFuels (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Engine.has_real_fuels" title="SpaceCenter.SpaceCenter.Engine.has_real_fuels"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Engine.has_real_fuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>

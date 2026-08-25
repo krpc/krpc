@@ -725,7 +725,7 @@ that they are built using the C++ compiler. This allows the library to use the C
 </pre></div>
 </div>
 </div></div>
-<p>The library communicates over a serial port unless a transport feature is asked for. The <code class="docutils literal notranslate"><span class="pre">tcp</span></code>
+<p>The library communicates over a serial port unless a transport feature is given. The <code class="docutils literal notranslate"><span class="pre">tcp</span></code>
 feature builds it to communicate over TCP/IP instead:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Linux</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;krpc-cnano[tcp]&quot;</span>
@@ -799,39 +799,36 @@ not need to specify this manually.</p></li>
 serial communication mechanisms. The Arduino platform will be auto-detected so you do not need
 to specify this manually.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code> – Specifies that the library should be built to communicate over
-TCP/IP with a server reachable over the network. A serial port remains the usual choice for the
-devices this client is written for, so this is never auto-detected and has to be specified.
-CMake builds of the library should ask for it with <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_TCP=ON</span></code>, and vcpkg
-installs with the <code class="docutils literal notranslate"><span class="pre">tcp</span></code> feature, rather than by defining it directly, so that programs
-linking the library are built for the same transport and, on Windows, are linked against
-winsock along with it.</p></li>
+TCP/IP with a server reachable over the network. A serial port is the usual choice for the
+devices this client is written for, so this is specified rather than auto-detected. Use
+<code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_TCP=ON</span></code> for a CMake build and the <code class="docutils literal notranslate"><span class="pre">tcp</span></code> feature for a vcpkg install.
+These build a program linking the library for the same transport, and on Windows link it
+against winsock.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_LOCALSOCKET</span></code> – Specifies that the library should be built to
-communicate over a unix domain socket, for a server running on the same machine. The
+communicate over a unix domain socket, with a server running on the same machine. The
 connection is opened with the path of the server’s RPC socket in place of a serial port
-name. Not auto-detected, as a serial port is the usual choice on the platforms that
-provide both. CMake builds of the library should ask for it with
-<code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_LOCALSOCKET=ON</span></code>, and vcpkg installs with the <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>
-feature, rather than by defining it directly, so that programs linking the library are
-built for the same transport.</p></li>
+name. A serial port is the usual choice on the platforms providing both, so this is
+specified rather than auto-detected. Use <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_LOCALSOCKET=ON</span></code> for a
+CMake build and the <code class="docutils literal notranslate"><span class="pre">localsocket</span></code> feature for a vcpkg install, so that a program linking
+the library is built for the same transport.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> – Allows you to provide your own implementation for the
 communication mechanism.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_SINGLE_CONNECTION</span></code> – Only meaningful alongside <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code>. A serial
-port carries the RPC and stream connections over the one link, so every message sent over it is
-wrapped in a multiplexed message saying which connection it belongs to. A custom communication
-mechanism is assumed to work the same way; define this if yours instead opens a connection of
-its own to each server, as a socket does, and the messages are sent unwrapped.</p></li>
+port carries the RPC and stream connections over one link, so each message is wrapped in a
+multiplexed message naming the connection it belongs to. Define this when a custom
+communication mechanism opens a connection to each server, as a socket does, and sends
+messages unwrapped.</p></li>
 </ul>
 </li>
 <li><p>Memory allocation</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_BUFFER_SIZE</span></code> – How much of a message to hold in memory while it is written to or read
-from the connection, defaulting to 1024 bytes, and to 128 bytes when building for Arduino where
-a kilobyte is a large share of the memory there is. A message larger than this is carried in as
-many passes as it takes, so this bounds the memory a call costs and never the size of a message
-it can carry. A message that fits is also cheaper to send, as its size can be written in front
-of it rather than found by a pass over it first, so it is worth setting this above the largest
-call a program makes. Two buffers of this size are used, one for a message being sent and one
-for a message being received, and neither outlives the call it is made for.</p></li>
+from the connection. The default is 1024 bytes, and 128 bytes when building for Arduino, where
+a kilobyte is a large share of the memory available. A larger message is carried in as many
+passes as it takes, so this bounds the memory a call costs rather than the size of a message.
+A message that fits is cheaper to send, as its size is written in front of it instead of found
+by a first pass over it. Two buffers of this size are used, one for sending and one for
+receiving, and neither outlives the call it is made for.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ALLOC_BLOCK_SIZE</span></code> – The size of collections (lists, sets, etc.) are not know ahead of
 time, so when they are received from the server they are decoded into dynamically allocated
 memory on the heap. This option controls how many items to increase the capacity of the
@@ -865,11 +862,14 @@ server is listening on rather than the name of a port.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A serial port carries data far more slowly than the game produces it, and the server
-drops a connection that produces more data than the port can carry for a sustained
-period. See <a class="reference internal" href="../communication-protocols/serialio.html#communication-protocol-serialio-buffering"><span class="std std-ref">Buffering and Data Rates</span></a> for the limits and how to
-stay within them. This does not apply over TCP/IP. The client blocks while waiting for
-data from the server, with no timeout, so a call that is never answered, for example
-because the connection was dropped, never returns.</p>
+drops a connection that sustains more data than the port can carry. See
+<a class="reference internal" href="../communication-protocols/serialio.html#communication-protocol-serialio-buffering"><span class="std std-ref">Buffering and Data Rates</span></a> for the limits and how to stay within
+them.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The client blocks while waiting for data from the server, with no timeout. A call left
+unanswered, after a dropped connection for example, never returns.</p>
 </div>
 </section>
 <section id="linking">
@@ -967,9 +967,9 @@ SpaceCenter service is contained in the header file <code class="docutils litera
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Many procedures return an object standing for something in the game, such as a vessel or
-a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for what those objects do
-when a game is loaded or the thing they stand for is destroyed.</p>
+<p>Many procedures return an object identifying something in the game, such as a vessel or
+a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
+behaves when a game is loaded or what it identifies is destroyed.</p>
 </section>
 <section id="streams-and-events">
 <span id="cnano-client-events"></span><span id="cnano-client-streams"></span><h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
@@ -993,10 +993,9 @@ platform is detected) calling this function opens a serial port using the port n
 calling this function opens the serial port named by <em>arg</em> using the Windows API, for example
 <code class="docutils literal notranslate"><span class="pre">krpc_open(&amp;conn,</span> <span class="pre">&quot;COM1&quot;)</span></code>.</p>
 <p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code> calling this function connects to the
-server over TCP/IP. <em>arg</em> is a pointer to a structure of type <code class="docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code>
-holding the address of the machine the server is running on and the port its RPC server is
-listening on. The address may be a host name or an address literal, and every endpoint it
-resolves to is tried until one accepts the connection. For example:</p>
+server over TCP/IP. <em>arg</em> is a pointer to a <code class="docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code> holding the address of
+the machine running the server and the port its RPC server listens on. The address may be a host
+name or an address literal, and each endpoint it resolves to is tried in turn. For example:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
 <span class="n">krpc_connection_config_t</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
 <span class="n">config</span><span class="p">.</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">;</span>

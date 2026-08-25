@@ -810,7 +810,7 @@ hidden when the game is restarted.</p>
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">Reset</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.Reset" title="Link to this definition">#</a></dt>
 <dd><p>Disengages the auto-pilot and resets all configuration parameters to their defaults.
 Also resets the target pitch, heading and roll, and clears all internal controller
-state, including the oscillation detector’s structural level — which otherwise
+state, including the oscillation detector’s structural level, which otherwise
 persists across engagements so that a craft known to be flexible re-latches quickly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -852,7 +852,7 @@ both change. Set the frame first, then the target.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
-the nose is near vertical (pitch → ±90°); near the vertical prefer
+the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetDirection</span></code></a> or <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp" title="KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.SetDirectionAndUp</span></code></a>. The setter preserves the
 current roll relative to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>.</p>
 </div>
@@ -870,7 +870,8 @@ current roll relative to <a class="reference internal" href="#property-KRPC.Clie
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
-(pitch → ±90°) — see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetPitch</span></code></a>. The setter preserves the current roll
+(a pitch near -90° or +90°). See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetPitch</span></code></a>. The setter preserves the
+current roll
 relative to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>.</p>
 </div>
 </dd></dl>
@@ -888,13 +889,13 @@ positive roll banks right). <code class="docutils literal notranslate"><span cla
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation — it drives the roll
-rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation, driving the roll
+rate to zero instead of holding a specific roll angle. Setting a value re-rolls the
 current target to that angle relative to the up reference while keeping the nose direction.
-With the default reference (the frame’s up) this reproduces the historical roll away from
-the vertical, and is ill-defined only when the nose points along the reference (near
-straight up or down). To hold a well-defined roll through the vertical — for example a
-gravity turn — set the up reference off the flight path (see
+With the default reference (the frame’s up) this is the roll away from the vertical, and
+is ill-defined only when the nose points along the reference (near straight up or down).
+To hold a well-defined roll through the vertical, such as through a gravity turn, set
+the up reference off the flight path (see
 <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp" title="KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.SetDirectionAndUp</span></code></a> / <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>).</p>
 </div>
 </dd></dl>
@@ -944,7 +945,8 @@ the roll afterwards, or set both at once with <a class="reference internal" href
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
-vertical (pitch → ±90°), so near the vertical prefer <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetDirection</span></code></a> or
+vertical (a pitch near -90° or +90°), so near the vertical prefer
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetDirection property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetDirection</span></code></a> or
 <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp" title="KRPC.Client.Services.SpaceCenter.AutoPilot.SetDirectionAndUp method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">AutoPilot.SetDirectionAndUp</span></code></a>. Preserves the current roll relative to
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>.</p>
 </div>
@@ -993,7 +995,7 @@ specified by <a class="reference internal" href="#property-KRPC.Client.Services.
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>direction</strong> – The direction to point the nose in.</p></li>
-<li><p><strong>up</strong> – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em> — its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>.</p></li>
+<li><p><strong>up</strong> – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em>, as its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference" title="KRPC.Client.Services.SpaceCenter.AutoPilot.UpReference property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code></a>.</p></li>
 <li><p><strong>roll</strong> – An additional roll about the nose, in degrees (positive banks right). Defaults to 0.</p></li>
 </ul>
 </dd>
@@ -1003,7 +1005,7 @@ specified by <a class="reference internal" href="#property-KRPC.Client.Services.
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is the way to hold a well-defined orientation through a maneuver — for example a
+<p>This is the way to hold a well-defined orientation through a maneuver such as a
 gravity turn: pass a fixed <em>up</em> (say north) and the roll stays defined the
 whole way, with no singularity at the vertical. It is well-defined for every nose direction
 except <em>up</em> parallel to <em>direction</em> (asking the roof to
@@ -1020,7 +1022,7 @@ Equivalent to setting <a class="reference internal" href="#property-KRPC.Client.
 <dd><p>The current target pitch the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetPitch</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetPitch</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetPitch property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetPitch</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1034,7 +1036,7 @@ A convenience scalar, ill-defined near the vertical — see <a class="reference 
 <dd><p>The current target heading the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetHeading</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetHeading</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetHeading property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetHeading</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1173,8 +1175,8 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The pitch component of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a> — the pitch part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical.</p>
+<p>The pitch component of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a>, the pitch part of the direction
+error resolved in the roll-invariant frame, well-defined near the vertical.</p>
 </div>
 </dd></dl>
 
@@ -1190,9 +1192,9 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The yaw component of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a> — the yaw part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
-heading, which is undefined at the pole).</p>
+<p>The yaw component of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a>, the yaw part of the direction error
+resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
+heading is undefined at the pole.</p>
 </div>
 </dd></dl>
 
@@ -1209,7 +1211,7 @@ Throws an exception if the auto-pilot has not been engaged or no target roll is 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+singularity. A subtraction of pitch, heading and roll angles has a roll term that is
 ill-conditioned when the vessel points close to straight up or down.</p>
 </div>
 </dd></dl>
@@ -1234,7 +1236,7 @@ auto-pilot has not been engaged.</p>
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">CurrentAttitudeError</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError" title="Link to this definition">#</a></dt>
 <dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
-attitude and the target the auto-pilot is currently tracking (the slewed target — see
+attitude and the target the auto-pilot is currently tracking (the slewed target, see
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRotation" title="KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRotation property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentTargetRotation</span></code></a>). Like <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a> but relative to the
 current target, so it stays small while a smoothed change (see
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime" title="KRPC.Client.Services.SpaceCenter.AutoPilot.TargetSmoothingTime property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.TargetSmoothingTime</span></code></a>) is fed in; equal to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a> when
@@ -1294,7 +1296,7 @@ auto-pilot has not been engaged or no target roll is set.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollError</span></code></a>.</p>
+singularity. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollError" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollError property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollError</span></code></a>.</p>
 </div>
 </dd></dl>
 
@@ -1493,8 +1495,8 @@ angular velocity) for the pitch and yaw axes of a structurally flexible vessel. 
 <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Automatic" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Automatic value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Automatic</span></code></a> (the default) the auto-pilot detects the
 oscillation at runtime, estimates its frequency and routes it to the appropriate tool
 (a notch filter for a low-frequency mode near the control band, a low-pass for a
-high-frequency mode). <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Off" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Off value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Off</span></code></a> disables rate filtering only —
-the other oscillation mitigations are unaffected. <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Notch</span></code></a>
+high-frequency mode). <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Off" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Off value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Off</span></code></a> disables rate filtering only,
+leaving the other oscillation mitigations unaffected. <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.Notch value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.Notch</span></code></a>
 and <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.RateFilterMode.LowPass" title="KRPC.Client.Services.SpaceCenter.RateFilterMode.LowPass value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">RateFilterMode.LowPass</span></code></a> force the respective tool unconditionally at
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawOscillationFrequency property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawOscillationFrequency</span></code></a>, for a vessel known in advance to be
 flexible.</p>
@@ -1563,7 +1565,7 @@ advanced tuning parameter.</p>
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloorMode">
 <a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.MitigationMode" title="KRPC.Client.Services.SpaceCenter.MitigationMode enum"><span class="pre">MitigationMode</span></a> <span class="sig-name descname"><span class="pre">OscillationBandwidthFloorMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloorMode" title="Link to this definition">#</a></dt>
 <dd><p>Controls the bandwidth-floor mitigation: the reduction of the inner control loop
-bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
 <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Automatic value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Automatic</span></code></a> (the default) it engages on a latched axis
 while holding (and during a detected limit cycle). <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Off" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Off value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Off</span></code></a>
 never reduces the bandwidth; <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.MitigationMode.Forced" title="KRPC.Client.Services.SpaceCenter.MitigationMode.Forced value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">MitigationMode.Forced</span></code></a> keeps it fully
@@ -1779,7 +1781,7 @@ program chooses where among its own calls it runs.</p>
 <dl class="csharp enum">
 <dt class="sig sig-object csharp" id="enum-KRPC.Client.Services.SpaceCenter.RateFilterMode">
 <span class="sig-name descname"><span class="pre">enum</span> <span class="pre">RateFilterMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.RateFilterMode" title="Link to this definition">#</a></dt>
-<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group — the mitigation that
+<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group, the mitigation that
 removes a structural oscillation (wobble) from the measured angular velocity before the
 control loops consume it.
 See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawRateFilterMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchYawRateFilterMode</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.RollRateFilterMode" title="KRPC.Client.Services.SpaceCenter.AutoPilot.RollRateFilterMode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">AutoPilot.RollRateFilterMode</span></code></a>.</p>

@@ -158,8 +158,8 @@ Reading the state back
 
 .. _autopilot-update-mode:
 
-When the control loop runs
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Update modes
+^^^^^^^^^^^^
 
 The control loop runs once per physics tick, and **update mode** chooses where in the tick
 it runs relative to the calls a program makes in that tick:
@@ -171,13 +171,12 @@ it runs relative to the calls a program makes in that tick:
   control output read during a tick are the ones computed for that tick, one tick behind the
   target.
 
-* **manual** does not run it at all. Calling **update** runs it, so a program places it
-  among its own calls.
+* **manual** runs it only when **update** is called, so a program places it among its own
+  calls.
 
-For a control loop this matters most together with :ref:`holding a tick <holding-a-tick>`,
-which puts a whole read, compute and write inside one tick. Manual mode then gives complete
-control of the order: everything before **update** is what the loop will fly the tick with,
-and everything after it can read what the loop just did.
+This matters most for a control loop that :ref:`holds a tick <holding-a-tick>`, putting a
+whole read, compute and write inside one tick. Manual mode then fixes the order: calls before
+**update** set what the loop flies the tick with, and calls after it read what the loop did.
 
 .. code-block:: python
 
@@ -191,12 +190,13 @@ and everything after it can read what the loop just did.
        finally:
            conn.krpc.release_tick()
 
-In manual mode the vessel is only flown on the ticks the loop is run on. On a tick it is not
-run on the vessel keeps the control output of the last tick it did run on, and after a tenth
-of a second of that the autopilot stops contributing any control input at all, so a program
-that stops calling **update** leaves the vessel coasting rather than holding a deflection.
-**wait** cannot be used in manual mode: it takes several ticks and blocks the program for
-all of them, so the loop would never run.
+In manual mode the vessel is flown only on the ticks the loop runs on. On any other tick the
+vessel keeps the control output of the last run, and after a tenth of a second the autopilot
+stops contributing control input. A program that stops calling **update** therefore leaves the
+vessel coasting.
+
+**wait** cannot be used in manual mode. It takes several ticks and blocks the program for all
+of them, so the loop would never run.
 
 Calling **update** more than once in a tick runs the loop once. The control law assumes one
 run per tick, so running it twice would advance its filters and gains at twice the rate.

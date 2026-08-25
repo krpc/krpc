@@ -925,8 +925,9 @@ A value between -90° and +90°.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-±90°), where heading and roll become ambiguous. For an always-defined attitude use
+<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+near -90° or +90°), where heading and roll become ambiguous. For an always-defined
+attitude use
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight8rotationEv" title="krpc::services::SpaceCenter::Flight::rotation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::rotation()</span></code></a> or <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight9directionEv" title="krpc::services::SpaceCenter::Flight::direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::direction()</span></code></a>.</p>
 </div>
 </dd></dl>
@@ -943,8 +944,9 @@ A value between 0° and 360°.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An absolute Euler angle, undefined when the vessel points near vertical (pitch → ±90°).
-For an always-defined attitude use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight8rotationEv" title="krpc::services::SpaceCenter::Flight::rotation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::rotation()</span></code></a> or <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight9directionEv" title="krpc::services::SpaceCenter::Flight::direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::direction()</span></code></a>.</p>
+<p>An absolute Euler angle, undefined when the vessel points near vertical (a pitch near
+-90° or +90°). For an always-defined attitude use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight8rotationEv" title="krpc::services::SpaceCenter::Flight::rotation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::rotation()</span></code></a> or
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight9directionEv" title="krpc::services::SpaceCenter::Flight::direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::direction()</span></code></a>.</p>
 </div>
 </dd></dl>
 
@@ -960,8 +962,9 @@ A value between -180° and +180°.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-±90°), where the vertical-plane reference vanishes. For an always-defined attitude use
+<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+near -90° or +90°), where the vertical-plane reference vanishes. For an always-defined
+attitude use
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight8rotationEv" title="krpc::services::SpaceCenter::Flight::rotation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::rotation()</span></code></a>; for a well-defined roll use the auto-pilot’s
 <code class="docutils literal notranslate"><span class="pre">TargetRoll</span></code> / <code class="docutils literal notranslate"><span class="pre">RollError</span></code> against a chosen up reference.</p>
 </div>
@@ -1113,7 +1116,7 @@ in the reference frame <a class="reference internal" href="reference-frame.html#
 <span id="_CPPv3N4krpc8services11SpaceCenter6Flight16dynamic_pressureEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight16dynamic_pressureEv"></span><span id="krpc::services::SpaceCenter::Flight::dynamic_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dynamic_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight16dynamic_pressureEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
 strength of the aerodynamic forces. It is equal to
-½ · air density · velocity².
+<span class="math notranslate nohighlight">\(\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2\)</span>.
 It is commonly denoted <span class="math notranslate nohighlight">\(Q\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>

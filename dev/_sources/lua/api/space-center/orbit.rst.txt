@@ -28,25 +28,22 @@ Orbit
 
       .. note::
 
-         The orbit is a single conic around *body*. Nothing else acts on
-         it: it never changes sphere of influence, so :attr:`SpaceCenter.Orbit.next_orbit` is
-         ``nil`` however far it travels from the body, and it is not slowed by an
-         atmosphere. A vessel held on rails follows its own orbit exactly, while one
-         inside the physics bubble is simulated and drifts from it a little.
+         The orbit is a single conic around *body*. It never changes
+         sphere of influence, so :attr:`SpaceCenter.Orbit.next_orbit` is ``nil``, and no
+         atmosphere slows it. A vessel held on rails follows its own orbit exactly,
+         while one inside the physics bubble is simulated and drifts from it a little.
 
-         The members that describe where the orbit has got to -- :attr:`SpaceCenter.Orbit.radius`,
-         :attr:`SpaceCenter.Orbit.speed`, :attr:`SpaceCenter.Orbit.true_anomaly`, :attr:`SpaceCenter.Orbit.time_to_apoapsis`
-         and the like -- describe it at *ut* and stay there, as
-         nothing is moving along it. Use :meth:`SpaceCenter.Orbit.radius_at`,
+         :attr:`SpaceCenter.Orbit.radius`, :attr:`SpaceCenter.Orbit.speed`, :attr:`SpaceCenter.Orbit.true_anomaly`,
+         :attr:`SpaceCenter.Orbit.time_to_apoapsis` and the like describe the orbit at
+         *ut* and stay there. Use :meth:`SpaceCenter.Orbit.radius_at`,
          :meth:`SpaceCenter.Orbit.position_at`, :meth:`SpaceCenter.Orbit.velocity_at` and
-         :meth:`SpaceCenter.Orbit.true_anomaly_at_ut` to ask where it is at another time.
-         :attr:`SpaceCenter.Orbit.reference_frame` and :attr:`SpaceCenter.Orbit.orbital_reference_frame` follow
+         :meth:`SpaceCenter.Orbit.true_anomaly_at_ut` for another time, and
+         :attr:`SpaceCenter.Orbit.reference_frame` and :attr:`SpaceCenter.Orbit.orbital_reference_frame` to follow
          the orbit as time passes.
 
-         The orbit that is returned is kept until :meth:`SpaceCenter.Orbit.remove` is called on
-         it or the client that created it disconnects, so a script that creates one
-         repeatedly, for example once per update, should remove each one when it is
-         finished with it.
+         The orbit is held until :meth:`SpaceCenter.Orbit.remove` is called on it or the client
+         that created it disconnects. Remove each one created by a script that creates
+         them repeatedly, for example once per update.
 
    .. staticmethod:: create_from_orbital_elements(body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node, argument_of_periapsis, mean_anomaly_at_epoch, epoch)
 
@@ -67,30 +64,27 @@ Orbit
 
       .. note::
 
-         The orbit is a single conic around *body*. Nothing else acts
-         on it: it never changes sphere of influence, so :attr:`SpaceCenter.Orbit.next_orbit` is
-         ``nil`` however far it travels from the body, and it is not slowed by an
-         atmosphere.
+         The orbit is a single conic around *body*. It never changes
+         sphere of influence, so :attr:`SpaceCenter.Orbit.next_orbit` is ``nil``, and no
+         atmosphere slows it.
 
-         The angles are measured against the same reference plane and direction that
+         The angles are measured against the reference plane and direction that
          :attr:`SpaceCenter.Orbit.inclination`, :attr:`SpaceCenter.Orbit.longitude_of_ascending_node` and
-         :attr:`SpaceCenter.Orbit.argument_of_periapsis` report them against, which
+         :attr:`SpaceCenter.Orbit.argument_of_periapsis` report them against.
          :meth:`SpaceCenter.Orbit.reference_plane_normal` and :meth:`SpaceCenter.Orbit.reference_plane_direction`
-         give as vectors in a reference frame.
+         give these as vectors in a reference frame.
 
-         The members that describe where the orbit has got to -- :attr:`SpaceCenter.Orbit.radius`,
-         :attr:`SpaceCenter.Orbit.speed`, :attr:`SpaceCenter.Orbit.true_anomaly`, :attr:`SpaceCenter.Orbit.time_to_apoapsis`
-         and the like -- describe it at *epoch* and stay there, as
-         nothing is moving along it. Use :meth:`SpaceCenter.Orbit.radius_at`,
+         :attr:`SpaceCenter.Orbit.radius`, :attr:`SpaceCenter.Orbit.speed`, :attr:`SpaceCenter.Orbit.true_anomaly`,
+         :attr:`SpaceCenter.Orbit.time_to_apoapsis` and the like describe the orbit at
+         *epoch* and stay there. Use :meth:`SpaceCenter.Orbit.radius_at`,
          :meth:`SpaceCenter.Orbit.position_at`, :meth:`SpaceCenter.Orbit.velocity_at` and
-         :meth:`SpaceCenter.Orbit.true_anomaly_at_ut` to ask where it is at another time.
-         :attr:`SpaceCenter.Orbit.reference_frame` and :attr:`SpaceCenter.Orbit.orbital_reference_frame` follow
+         :meth:`SpaceCenter.Orbit.true_anomaly_at_ut` for another time, and
+         :attr:`SpaceCenter.Orbit.reference_frame` and :attr:`SpaceCenter.Orbit.orbital_reference_frame` to follow
          the orbit as time passes.
 
-         The orbit that is returned is kept until :meth:`SpaceCenter.Orbit.remove` is called on
-         it or the client that created it disconnects, so a script that creates one
-         repeatedly, for example once per update, should remove each one when it is
-         finished with it.
+         The orbit is held until :meth:`SpaceCenter.Orbit.remove` is called on it or the client
+         that created it disconnects. Remove each one created by a script that creates
+         them repeatedly, for example once per update.
 
    .. method:: remove()
 
@@ -100,14 +94,12 @@ Orbit
       .. note::
 
          Only an orbit created by :meth:`SpaceCenter.Orbit.create_from_position_and_velocity` or
-         :meth:`SpaceCenter.Orbit.create_from_orbital_elements` can be removed. Every other orbit is
-         the orbit of something in the game, which is what says when it is finished
-         with, and the server holds one of each however often it is asked for.
+         :meth:`SpaceCenter.Orbit.create_from_orbital_elements` can be removed. Every other orbit
+         belongs to something in the game, and the server holds one of each.
 
          Any further use of this object throws an exception, as does use of a
-         reference frame defined against it. An orbit is removed for the client that
-         created it and is not shared with any other, and one whose client disconnects
-         is removed with it.
+         reference frame defined against it. An orbit belongs to the client that
+         created it, and is removed when that client disconnects.
 
    .. attribute:: body: SpaceCenter.CelestialBody
 

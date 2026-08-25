@@ -105,7 +105,7 @@ AutoPilot
 
       Disengages the auto-pilot and resets all configuration parameters to their defaults.
       Also resets the target pitch, heading and roll, and clears all internal controller
-      state, including the oscillation detector's structural level — which otherwise
+      state, including the oscillation detector's structural level, which otherwise
       persists across engagements so that a craft known to be flexible re-latches quickly.
 
       :Game Scenes: Flight
@@ -142,7 +142,7 @@ AutoPilot
       .. note::
 
          A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
-         the nose is near vertical (pitch → ±90°); near the vertical prefer
+         the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
          :meth:`AutoPilot.getTargetDirection()` or :meth:`AutoPilot.setDirectionAndUp(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, float)`. The setter preserves the
          current roll relative to :meth:`AutoPilot.getUpReference()`.
 
@@ -158,7 +158,8 @@ AutoPilot
       .. note::
 
          A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
-         (pitch → ±90°) — see :meth:`AutoPilot.getTargetPitch()`. The setter preserves the current roll
+         (a pitch near -90° or +90°). See :meth:`AutoPilot.getTargetPitch()`. The setter preserves the
+         current roll
          relative to :meth:`AutoPilot.getUpReference()`.
 
    .. method:: float getTargetRoll()
@@ -174,13 +175,13 @@ AutoPilot
 
       .. note::
 
-         When left unset (``NaN``) the auto-pilot suppresses roll rotation — it drives the roll
-         rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+         When left unset (``NaN``) the auto-pilot suppresses roll rotation, driving the roll
+         rate to zero instead of holding a specific roll angle. Setting a value re-rolls the
          current target to that angle relative to the up reference while keeping the nose direction.
-         With the default reference (the frame's up) this reproduces the historical roll away from
-         the vertical, and is ill-defined only when the nose points along the reference (near
-         straight up or down). To hold a well-defined roll through the vertical — for example a
-         gravity turn — set the up reference off the flight path (see
+         With the default reference (the frame's up) this is the roll away from the vertical, and
+         is ill-defined only when the nose points along the reference (near straight up or down).
+         To hold a well-defined roll through the vertical, such as through a gravity turn, set
+         the up reference off the flight path (see
          :meth:`AutoPilot.setDirectionAndUp(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, float)` / :meth:`AutoPilot.getUpReference()`).
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getUpReference()
@@ -221,7 +222,8 @@ AutoPilot
       .. note::
 
          A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
-         vertical (pitch → ±90°), so near the vertical prefer :meth:`AutoPilot.getTargetDirection()` or
+         vertical (a pitch near -90° or +90°), so near the vertical prefer
+         :meth:`AutoPilot.getTargetDirection()` or
          :meth:`AutoPilot.setDirectionAndUp(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, float)`. Preserves the current roll relative to
          :meth:`AutoPilot.getUpReference()`.
 
@@ -260,14 +262,14 @@ AutoPilot
       specified by :meth:`AutoPilot.getReferenceFrame()`.
 
       :param org.javatuples.Triplet<Double,Double,Double> direction: The direction to point the nose in.
-      :param org.javatuples.Triplet<Double,Double,Double> up: The reference direction the roof is rolled towards. Need not be normalized or perpendicular to *direction* — its component perpendicular to the nose is used. Stored as the :meth:`AutoPilot.getUpReference()`.
+      :param org.javatuples.Triplet<Double,Double,Double> up: The reference direction the roof is rolled towards. Need not be normalized or perpendicular to *direction*, as its component perpendicular to the nose is used. Stored as the :meth:`AutoPilot.getUpReference()`.
       :param float roll: An additional roll about the nose, in degrees (positive banks right). Defaults to 0.
       :Game Scenes: Flight
 
 
       .. note::
 
-         This is the way to hold a well-defined orientation through a maneuver — for example a
+         This is the way to hold a well-defined orientation through a maneuver such as a
          gravity turn: pass a fixed *up* (say north) and the roll stays defined the
          whole way, with no singularity at the vertical. It is well-defined for every nose direction
          except *up* parallel to *direction* (asking the roof to
@@ -282,7 +284,7 @@ AutoPilot
       The current target pitch the auto-pilot is tracking, in degrees. When
       :meth:`AutoPilot.getTargetSmoothingTime()` is non-zero this lags the commanded
       :meth:`AutoPilot.getTargetPitch()` while a change is slewed in; otherwise the two are equal.
-      A convenience scalar, ill-defined near the vertical — see :meth:`AutoPilot.getTargetPitch()`.
+      A convenience scalar, ill-defined near the vertical. See :meth:`AutoPilot.getTargetPitch()`.
 
       :Game Scenes: Flight
 
@@ -292,7 +294,7 @@ AutoPilot
       The current target heading the auto-pilot is tracking, in degrees. When
       :meth:`AutoPilot.getTargetSmoothingTime()` is non-zero this lags the commanded
       :meth:`AutoPilot.getTargetHeading()` while a change is slewed in; otherwise the two are equal.
-      A convenience scalar, ill-defined near the vertical — see :meth:`AutoPilot.getTargetHeading()`.
+      A convenience scalar, ill-defined near the vertical. See :meth:`AutoPilot.getTargetHeading()`.
 
       :Game Scenes: Flight
 
@@ -392,8 +394,8 @@ AutoPilot
 
       .. note::
 
-         The pitch component of :meth:`AutoPilot.getAttitudeError()` — the pitch part of the direction error
-         resolved in the roll-invariant frame, well-defined near the vertical.
+         The pitch component of :meth:`AutoPilot.getAttitudeError()`, the pitch part of the direction
+         error resolved in the roll-invariant frame, well-defined near the vertical.
 
    .. method:: float getHeadingError()
 
@@ -406,9 +408,9 @@ AutoPilot
 
       .. note::
 
-         The yaw component of :meth:`AutoPilot.getAttitudeError()` — the yaw part of the direction error
-         resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
-         heading, which is undefined at the pole).
+         The yaw component of :meth:`AutoPilot.getAttitudeError()`, the yaw part of the direction error
+         resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
+         heading is undefined at the pole.
 
    .. method:: float getRollError()
 
@@ -422,7 +424,7 @@ AutoPilot
       .. note::
 
          Measured about the vessel's nose axis, so it stays well-defined near the vertical
-         singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+         singularity. A subtraction of pitch, heading and roll angles has a roll term that is
          ill-conditioned when the vessel points close to straight up or down.
 
    .. method:: float getCurrentError()
@@ -441,7 +443,7 @@ AutoPilot
 
 
       The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
-      attitude and the target the auto-pilot is currently tracking (the slewed target — see
+      attitude and the target the auto-pilot is currently tracking (the slewed target, see
       :meth:`AutoPilot.getCurrentTargetRotation()`). Like :meth:`AutoPilot.getAttitudeError()` but relative to the
       current target, so it stays small while a smoothed change (see
       :meth:`AutoPilot.getTargetSmoothingTime()`) is fed in; equal to :meth:`AutoPilot.getAttitudeError()` when
@@ -490,7 +492,7 @@ AutoPilot
       .. note::
 
          Measured about the vessel's nose axis, so it stays well-defined near the vertical
-         singularity — see :meth:`AutoPilot.getRollError()`.
+         singularity. See :meth:`AutoPilot.getRollError()`.
 
    .. method:: double getRollStartAngle()
 
@@ -652,8 +654,8 @@ AutoPilot
       :meth:`RateFilterMode.AUTOMATIC` (the default) the auto-pilot detects the
       oscillation at runtime, estimates its frequency and routes it to the appropriate tool
       (a notch filter for a low-frequency mode near the control band, a low-pass for a
-      high-frequency mode). :meth:`RateFilterMode.OFF` disables rate filtering only —
-      the other oscillation mitigations are unaffected. :meth:`RateFilterMode.NOTCH`
+      high-frequency mode). :meth:`RateFilterMode.OFF` disables rate filtering only,
+      leaving the other oscillation mitigations unaffected. :meth:`RateFilterMode.NOTCH`
       and :meth:`RateFilterMode.LOW_PASS` force the respective tool unconditionally at
       :meth:`AutoPilot.getPitchYawOscillationFrequency()`, for a vessel known in advance to be
       flexible.
@@ -707,7 +709,7 @@ AutoPilot
    .. method:: void setOscillationBandwidthFloorMode(MitigationMode value)
 
       Controls the bandwidth-floor mitigation: the reduction of the inner control loop
-      bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+      bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
       :meth:`MitigationMode.AUTOMATIC` (the default) it engages on a latched axis
       while holding (and during a detected limit cycle). :meth:`MitigationMode.OFF`
       never reduces the bandwidth; :meth:`MitigationMode.FORCED` keeps it fully
@@ -873,7 +875,7 @@ AutoPilot
 
 .. type:: public enum RateFilterMode
 
-   Controls the auto-pilot's rate-feedback filtering for an axis group — the mitigation that
+   Controls the auto-pilot's rate-feedback filtering for an axis group, the mitigation that
    removes a structural oscillation (wobble) from the measured angular velocity before the
    control loops consume it.
    See :meth:`AutoPilot.getPitchYawRateFilterMode()` and :meth:`AutoPilot.getRollRateFilterMode()`.

@@ -616,11 +616,10 @@
 <h1>User Interface<a class="headerlink" href="#user-interface" title="Link to this heading">#</a></h1>
 <p>The following script demonstrates how to use the UI service to display text and
 handle basic user input. It adds a panel to the left side of the screen, which
-the user can drag around with the mouse. A vertical layout arranges the panel’s
-contents in a column, so nothing needs positioning by hand: a button that sets
-the throttle to maximum, with a tooltip shown while the mouse rests on it, a
-slider that sets the throttle directly, and text displaying the current thrust
-produced by the vessel.</p>
+can be dragged with the mouse. A vertical layout arranges its contents in a
+column: a button that sets the throttle to maximum, a slider that sets it
+directly, and text showing the current thrust produced by the vessel. A tooltip
+is shown while the mouse rests on the button.</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">C</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
 <span class="cp">#ifdef _WIN32</span>

@@ -775,13 +775,12 @@ The hint is hidden as soon as the field has a value.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_InputField_t.krpc_UI_InputField_set_ContentType">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_InputField_set_ContentType</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_UI_InputContentType_t" title="krpc_UI_InputContentType_t"><span class="n"><span class="pre">krpc_UI_InputContentType_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_InputField_t.krpc_UI_InputField_set_ContentType" title="Link to this definition">#</a><br /></dt>
-<dd><p>What the field lets the user type into it. Keystrokes that do not fit are
-ignored as they are typed, so a numeric field never shows text a client would
-have to reject.</p>
+<dd><p>The content the field accepts from the user. Keystrokes that do not fit are
+ignored as they are typed, so a numeric field only ever shows a number.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Only what the user types is filtered. A value set by a client is shown as it
-is given.</p>
+<p>The filter applies to typing alone. A value set by a client is shown as it is
+given.</p>
 </div>
 </dd></dl>
 

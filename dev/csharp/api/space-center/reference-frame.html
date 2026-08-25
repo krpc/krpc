@@ -781,13 +781,11 @@ when it is finished with it.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Only a frame created by <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateRelative" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateRelative method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ReferenceFrame.CreateRelative</span></code></a> or
-<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateHybrid" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateHybrid method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ReferenceFrame.CreateHybrid</span></code></a> can be removed. Every other frame is named by
-something in the game, which is what says when it is finished with, and the
-server holds one of each however often it is asked for.</p>
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateHybrid" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateHybrid method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ReferenceFrame.CreateHybrid</span></code></a> can be removed. Every other frame belongs to
+something in the game, and the server holds one of each.</p>
 <p>Any further use of this object throws an exception, as does use of a frame
-built on it, which cannot be evaluated without it. A frame is removed for the
-client that created it and is not shared with any other, and one whose client
-disconnects is removed with it.</p>
+built on it, which cannot be evaluated without it. A frame belongs to the
+client that created it, and is removed when that client disconnects.</p>
 </div>
 </dd></dl>
 

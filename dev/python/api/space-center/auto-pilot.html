@@ -840,7 +840,7 @@ hidden when the game is restarted.</p>
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.AutoPilot.reset" title="Link to this definition">#</a></dt>
 <dd><p>Disengages the auto-pilot and resets all configuration parameters to their defaults.
 Also resets the target pitch, heading and roll, and clears all internal controller
-state, including the oscillation detector’s structural level — which otherwise
+state, including the oscillation detector’s structural level, which otherwise
 persists across engagements so that a craft known to be flexible re-latches quickly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -894,7 +894,7 @@ both change. Set the frame first, then the target.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
-the nose is near vertical (pitch → ±90°); near the vertical prefer
+the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
 <a class="reference internal" href="#SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.AutoPilot.target_direction"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_direction</span></code></a> or <a class="reference internal" href="#SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AutoPilot.set_direction_and_up()</span></code></a>. The setter preserves the
 current roll relative to <a class="reference internal" href="#SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.up_reference</span></code></a>.</p>
 </div>
@@ -918,7 +918,8 @@ current roll relative to <a class="reference internal" href="#SpaceCenter.AutoPi
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
-(pitch → ±90°) — see <a class="reference internal" href="#SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.AutoPilot.target_pitch"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_pitch</span></code></a>. The setter preserves the current roll
+(a pitch near -90° or +90°). See <a class="reference internal" href="#SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.AutoPilot.target_pitch"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_pitch</span></code></a>. The setter preserves the
+current roll
 relative to <a class="reference internal" href="#SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.up_reference</span></code></a>.</p>
 </div>
 </dd></dl>
@@ -942,13 +943,13 @@ positive roll banks right). <code class="docutils literal notranslate"><span cla
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation — it drives the roll
-rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation, driving the roll
+rate to zero instead of holding a specific roll angle. Setting a value re-rolls the
 current target to that angle relative to the up reference while keeping the nose direction.
-With the default reference (the frame’s up) this reproduces the historical roll away from
-the vertical, and is ill-defined only when the nose points along the reference (near
-straight up or down). To hold a well-defined roll through the vertical — for example a
-gravity turn — set the up reference off the flight path (see
+With the default reference (the frame’s up) this is the roll away from the vertical, and
+is ill-defined only when the nose points along the reference (near straight up or down).
+To hold a well-defined roll through the vertical, such as through a gravity turn, set
+the up reference off the flight path (see
 <a class="reference internal" href="#SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AutoPilot.set_direction_and_up()</span></code></a> / <a class="reference internal" href="#SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.up_reference</span></code></a>).</p>
 </div>
 </dd></dl>
@@ -1004,7 +1005,8 @@ the roll afterwards, or set both at once with <a class="reference internal" href
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
-vertical (pitch → ±90°), so near the vertical prefer <a class="reference internal" href="#SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.AutoPilot.target_direction"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_direction</span></code></a> or
+vertical (a pitch near -90° or +90°), so near the vertical prefer
+<a class="reference internal" href="#SpaceCenter.AutoPilot.target_direction" title="SpaceCenter.AutoPilot.target_direction"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_direction</span></code></a> or
 <a class="reference internal" href="#SpaceCenter.AutoPilot.set_direction_and_up" title="SpaceCenter.AutoPilot.set_direction_and_up"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AutoPilot.set_direction_and_up()</span></code></a>. Preserves the current roll relative to
 <a class="reference internal" href="#SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.up_reference</span></code></a>.</p>
 </div>
@@ -1065,7 +1067,7 @@ specified by <a class="reference internal" href="#SpaceCenter.AutoPilot.referenc
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>direction</strong> (<em>tuple</em>) – The direction to point the nose in.</p></li>
-<li><p><strong>up</strong> (<em>tuple</em>) – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em> — its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.up_reference</span></code></a>.</p></li>
+<li><p><strong>up</strong> (<em>tuple</em>) – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em>, as its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.up_reference</span></code></a>.</p></li>
 <li><p><strong>roll</strong> (<em>float</em>) – An additional roll about the nose, in degrees (positive banks right). Defaults to 0.</p></li>
 </ul>
 </dd>
@@ -1075,7 +1077,7 @@ specified by <a class="reference internal" href="#SpaceCenter.AutoPilot.referenc
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is the way to hold a well-defined orientation through a maneuver — for example a
+<p>This is the way to hold a well-defined orientation through a maneuver such as a
 gravity turn: pass a fixed <em>up</em> (say north) and the roll stays defined the
 whole way, with no singularity at the vertical. It is well-defined for every nose direction
 except <em>up</em> parallel to <em>direction</em> (asking the roof to
@@ -1092,7 +1094,7 @@ Equivalent to setting <a class="reference internal" href="#SpaceCenter.AutoPilot
 <dd><p>The current target pitch the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_smoothing_time</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.AutoPilot.target_pitch"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_pitch</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.AutoPilot.target_pitch"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_pitch</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#SpaceCenter.AutoPilot.target_pitch" title="SpaceCenter.AutoPilot.target_pitch"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_pitch</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1112,7 +1114,7 @@ A convenience scalar, ill-defined near the vertical — see <a class="reference 
 <dd><p>The current target heading the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_smoothing_time</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#SpaceCenter.AutoPilot.target_heading" title="SpaceCenter.AutoPilot.target_heading"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_heading</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#SpaceCenter.AutoPilot.target_heading" title="SpaceCenter.AutoPilot.target_heading"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_heading</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#SpaceCenter.AutoPilot.target_heading" title="SpaceCenter.AutoPilot.target_heading"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_heading</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1303,8 +1305,8 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The pitch component of <a class="reference internal" href="#SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.attitude_error</span></code></a> — the pitch part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical.</p>
+<p>The pitch component of <a class="reference internal" href="#SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.attitude_error</span></code></a>, the pitch part of the direction
+error resolved in the roll-invariant frame, well-defined near the vertical.</p>
 </div>
 </dd></dl>
 
@@ -1326,9 +1328,9 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The yaw component of <a class="reference internal" href="#SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.attitude_error</span></code></a> — the yaw part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
-heading, which is undefined at the pole).</p>
+<p>The yaw component of <a class="reference internal" href="#SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.attitude_error</span></code></a>, the yaw part of the direction error
+resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
+heading is undefined at the pole.</p>
 </div>
 </dd></dl>
 
@@ -1351,7 +1353,7 @@ Throws an exception if the auto-pilot has not been engaged or no target roll is 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+singularity. A subtraction of pitch, heading and roll angles has a roll term that is
 ill-conditioned when the vessel points close to straight up or down.</p>
 </div>
 </dd></dl>
@@ -1382,7 +1384,7 @@ auto-pilot has not been engaged.</p>
 <dt class="sig sig-object py" id="SpaceCenter.AutoPilot.current_attitude_error">
 <span class="sig-name descname"><span class="pre">current_attitude_error</span></span><a class="headerlink" href="#SpaceCenter.AutoPilot.current_attitude_error" title="Link to this definition">#</a></dt>
 <dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
-attitude and the target the auto-pilot is currently tracking (the slewed target — see
+attitude and the target the auto-pilot is currently tracking (the slewed target, see
 <a class="reference internal" href="#SpaceCenter.AutoPilot.current_target_rotation" title="SpaceCenter.AutoPilot.current_target_rotation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.current_target_rotation</span></code></a>). Like <a class="reference internal" href="#SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.attitude_error</span></code></a> but relative to the
 current target, so it stays small while a smoothed change (see
 <a class="reference internal" href="#SpaceCenter.AutoPilot.target_smoothing_time" title="SpaceCenter.AutoPilot.target_smoothing_time"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.target_smoothing_time</span></code></a>) is fed in; equal to <a class="reference internal" href="#SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.AutoPilot.attitude_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.attitude_error</span></code></a> when
@@ -1466,7 +1468,7 @@ auto-pilot has not been engaged or no target roll is set.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — see <a class="reference internal" href="#SpaceCenter.AutoPilot.roll_error" title="SpaceCenter.AutoPilot.roll_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.roll_error</span></code></a>.</p>
+singularity. See <a class="reference internal" href="#SpaceCenter.AutoPilot.roll_error" title="SpaceCenter.AutoPilot.roll_error"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.roll_error</span></code></a>.</p>
 </div>
 </dd></dl>
 
@@ -1743,8 +1745,8 @@ angular velocity) for the pitch and yaw axes of a structurally flexible vessel. 
 <a class="reference internal" href="#SpaceCenter.RateFilterMode.automatic" title="SpaceCenter.RateFilterMode.automatic"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RateFilterMode.automatic</span></code></a> (the default) the auto-pilot detects the
 oscillation at runtime, estimates its frequency and routes it to the appropriate tool
 (a notch filter for a low-frequency mode near the control band, a low-pass for a
-high-frequency mode). <a class="reference internal" href="#SpaceCenter.RateFilterMode.off" title="SpaceCenter.RateFilterMode.off"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RateFilterMode.off</span></code></a> disables rate filtering only —
-the other oscillation mitigations are unaffected. <a class="reference internal" href="#SpaceCenter.RateFilterMode.notch" title="SpaceCenter.RateFilterMode.notch"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RateFilterMode.notch</span></code></a>
+high-frequency mode). <a class="reference internal" href="#SpaceCenter.RateFilterMode.off" title="SpaceCenter.RateFilterMode.off"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RateFilterMode.off</span></code></a> disables rate filtering only,
+leaving the other oscillation mitigations unaffected. <a class="reference internal" href="#SpaceCenter.RateFilterMode.notch" title="SpaceCenter.RateFilterMode.notch"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RateFilterMode.notch</span></code></a>
 and <a class="reference internal" href="#SpaceCenter.RateFilterMode.low_pass" title="SpaceCenter.RateFilterMode.low_pass"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RateFilterMode.low_pass</span></code></a> force the respective tool unconditionally at
 <a class="reference internal" href="#SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency" title="SpaceCenter.AutoPilot.pitch_yaw_oscillation_frequency"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.pitch_yaw_oscillation_frequency</span></code></a>, for a vessel known in advance to be
 flexible.</p>
@@ -1843,7 +1845,7 @@ advanced tuning parameter.</p>
 <dt class="sig sig-object py" id="SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode">
 <span class="sig-name descname"><span class="pre">oscillation_bandwidth_floor_mode</span></span><a class="headerlink" href="#SpaceCenter.AutoPilot.oscillation_bandwidth_floor_mode" title="Link to this definition">#</a></dt>
 <dd><p>Controls the bandwidth-floor mitigation: the reduction of the inner control loop
-bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
 <a class="reference internal" href="#SpaceCenter.MitigationMode.automatic" title="SpaceCenter.MitigationMode.automatic"><code class="xref py py-attr docutils literal notranslate"><span class="pre">MitigationMode.automatic</span></code></a> (the default) it engages on a latched axis
 while holding (and during a detected limit cycle). <a class="reference internal" href="#SpaceCenter.MitigationMode.off" title="SpaceCenter.MitigationMode.off"><code class="xref py py-attr docutils literal notranslate"><span class="pre">MitigationMode.off</span></code></a>
 never reduces the bandwidth; <a class="reference internal" href="#SpaceCenter.MitigationMode.forced" title="SpaceCenter.MitigationMode.forced"><code class="xref py py-attr docutils literal notranslate"><span class="pre">MitigationMode.forced</span></code></a> keeps it fully
@@ -2137,7 +2139,7 @@ program chooses where among its own calls it runs.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="SpaceCenter.RateFilterMode">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">RateFilterMode</span></span><a class="headerlink" href="#SpaceCenter.RateFilterMode" title="Link to this definition">#</a></dt>
-<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group — the mitigation that
+<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group, the mitigation that
 removes a structural oscillation (wobble) from the measured angular velocity before the
 control loops consume it.
 See <a class="reference internal" href="#SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode" title="SpaceCenter.AutoPilot.pitch_yaw_rate_filter_mode"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.pitch_yaw_rate_filter_mode</span></code></a> and <a class="reference internal" href="#SpaceCenter.AutoPilot.roll_rate_filter_mode" title="SpaceCenter.AutoPilot.roll_rate_filter_mode"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.roll_rate_filter_mode</span></code></a>.</p>

@@ -754,9 +754,8 @@ once by making that panel visible.</p>
 <dt class="sig sig-object java" id="krpc.client.services.UI.Text.setWordWrap(boolean)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setWordWrap</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.setWordWrap(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the text wraps onto further lines when it is wider than the space it
-has. When wrapping is off, the text carries on past the edge instead, and a
-label asked for its preferred size asks for a single line, so a value that
-changes does not reflow a layout.</p>
+has. Text that does not wrap carries on past the edge, and its preferred size
+is that of a single line, so a changing value leaves a layout in place.</p>
 </dd></dl>
 
 <dl class="java method">

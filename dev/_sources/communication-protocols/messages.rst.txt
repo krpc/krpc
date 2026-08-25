@@ -176,12 +176,11 @@ Protocol Buffer version 3 serialization format:
 * Protocol Buffer libraries in many languages are available here:
   https://github.com/google/protobuf/releases
 
-A null value is not encoded in the ``value`` field. Instead it is signaled out-of-band by the
-``is_null`` field on the ``Argument`` or ``ProcedureResult`` message. When ``is_null`` is set, the
-``value`` field is unset and carries no encoded value. Null is signaled out-of-band because the
-encoding of every type already assigns a meaning to all byte sequences, leaving no spare value to
-reserve for null. This applies to values of any type. Note that a zero-length ``value`` is a valid
-encoding -- for example an empty collection -- and is distinct from a null value.
+The ``is_null`` field on the ``Argument`` or ``ProcedureResult`` message signals a null value of
+any type. When it is set, the ``value`` field is unset and carries no encoded value. Null is
+signaled this way because the encoding of every type assigns a meaning to all byte sequences,
+leaving no spare value for null. A zero-length ``value``, an empty collection for example, is a
+valid encoding and is distinct from null.
 
 .. _communication-protocol-streams:
 
@@ -570,10 +569,9 @@ The fields are:
 Structures
 ^^^^^^^^^^
 
-A structure is a compound value with named fields. Unlike a class, whose value on the wire is an
-identifier for an object that stays on the server, a structure's value is the values of its fields,
-sent inline. Details about each :csharp:attr:`KRPCStruct` are specified in a ``Struct`` message,
-with the format:
+A structure is a compound value with named fields, whose value on the wire is the values of those
+fields sent inline. A class sends an identifier for an object held on the server instead. Details
+about each :csharp:attr:`KRPCStruct` are specified in a ``Struct`` message, with the format:
 
 .. code-block:: protobuf
 
@@ -623,20 +621,18 @@ The fields are:
   empty.
 
 A value of a structure type is encoded as a ``Tuple`` message whose items are the encoded values of
-the structure's fields, in the order the ``fields`` list gives them. This is the same encoding as a
-tuple of the field types, so a client can encode and decode a structure with the codec it already
-has for tuples, and the field names exist only in the definition above.
+the structure's fields, in the order the ``fields`` list gives them. This is the encoding of a tuple
+of the field types, so a client can use the codec it already has for tuples. The field names appear
+only in the definition above.
 
-Two rules follow from that encoding, and a client author should rely on them:
+Two rules follow from that encoding:
 
-* Fields are only ever appended to a structure. A value may therefore carry more items than the
-  fields a client knows about, when it was generated against an older definition of the structure,
-  and those extra items are to be ignored. Fewer items than the known fields means the definitions
-  do not match, and is an error.
+* Fields are only ever appended to a structure. A client generated against an older definition may
+  receive more items than it has fields for, and ignores the extra items. Fewer items than its
+  fields means the definitions do not match, and is an error.
 
-* A field is never null. Null is signaled out-of-band by the ``is_null`` field of the enclosing
-  ``Argument`` or ``ProcedureResult`` message, which can say that a whole structure value is null
-  but says nothing about its fields.
+* A field is never null. The ``is_null`` field of the enclosing ``Argument`` or ``ProcedureResult``
+  message applies to the structure value as a whole, and carries nothing about its fields.
 
 Exceptions
 ^^^^^^^^^^
@@ -739,9 +735,8 @@ not return a value.
 
 For ``CLASS``, ``ENUMERATION`` and ``STRUCT`` types the ``service`` and ``name`` fields specify the
 service that defines the class, enumeration or structure and its name. For all other types these
-fields are empty. A ``STRUCT`` type carries no more than that, so the fields of a structure have to
-be read from the :ref:`Struct message <communication-protocol-structures>` in the definition of the
-service that names it.
+fields are empty. The fields of a structure are read from the :ref:`Struct message
+<communication-protocol-structures>` in the definition of the service that names it.
 
 For collection types the ``types`` repeated field will contain the sub-types:
 
@@ -792,8 +787,8 @@ properties make remote procedure calls to the server. Object identifiers have ty
 When a procedure returns a proxy object or takes one as a parameter, the type code will be set to
 ``CLASS``.
 
-A null object reference is signaled by the ``is_null`` field of the ``ProcedureResult`` or
-``Argument`` message, in the same way as a null value of any other type. The object identifier is
-not used to represent null on the wire.
+The ``is_null`` field of the ``ProcedureResult`` or ``Argument`` message signals a null object
+reference, as it does a null value of any other type. The object identifier is never used to
+represent null on the wire.
 
 .. _C# XML documentation: https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx

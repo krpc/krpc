@@ -723,23 +723,20 @@ be at any later time.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The orbit is a single conic around <em>body</em>. Nothing else acts on
-it: it never changes sphere of influence, so <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.next_orbit" title="SpaceCenter.SpaceCenter.Orbit.next_orbit"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.next_orbit</span></code></a> is
-<code class="docutils literal notranslate"><span class="pre">nil</span></code> however far it travels from the body, and it is not slowed by an
-atmosphere. A vessel held on rails follows its own orbit exactly, while one
-inside the physics bubble is simulated and drifts from it a little.</p>
-<p>The members that describe where the orbit has got to – <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.radius" title="SpaceCenter.SpaceCenter.Orbit.radius"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.radius</span></code></a>,
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.speed" title="SpaceCenter.SpaceCenter.Orbit.speed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.speed</span></code></a>, <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.true_anomaly" title="SpaceCenter.SpaceCenter.Orbit.true_anomaly"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.true_anomaly</span></code></a>, <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.time_to_apoapsis" title="SpaceCenter.SpaceCenter.Orbit.time_to_apoapsis"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.time_to_apoapsis</span></code></a>
-and the like – describe it at <em>ut</em> and stay there, as
-nothing is moving along it. Use <a class="reference internal" href="#SpaceCenter.Orbit.radius_at" title="SpaceCenter.Orbit.radius_at"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.radius_at()</span></code></a>,
+<p>The orbit is a single conic around <em>body</em>. It never changes
+sphere of influence, so <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.next_orbit" title="SpaceCenter.SpaceCenter.Orbit.next_orbit"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.next_orbit</span></code></a> is <code class="docutils literal notranslate"><span class="pre">nil</span></code>, and no
+atmosphere slows it. A vessel held on rails follows its own orbit exactly,
+while one inside the physics bubble is simulated and drifts from it a little.</p>
+<p><a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.radius" title="SpaceCenter.SpaceCenter.Orbit.radius"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.radius</span></code></a>, <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.speed" title="SpaceCenter.SpaceCenter.Orbit.speed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.speed</span></code></a>, <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.true_anomaly" title="SpaceCenter.SpaceCenter.Orbit.true_anomaly"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.true_anomaly</span></code></a>,
+<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.time_to_apoapsis" title="SpaceCenter.SpaceCenter.Orbit.time_to_apoapsis"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.time_to_apoapsis</span></code></a> and the like describe the orbit at
+<em>ut</em> and stay there. Use <a class="reference internal" href="#SpaceCenter.Orbit.radius_at" title="SpaceCenter.Orbit.radius_at"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.radius_at()</span></code></a>,
 <a class="reference internal" href="#SpaceCenter.Orbit.position_at" title="SpaceCenter.Orbit.position_at"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.position_at()</span></code></a>, <a class="reference internal" href="#SpaceCenter.Orbit.velocity_at" title="SpaceCenter.Orbit.velocity_at"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.velocity_at()</span></code></a> and
-<a class="reference internal" href="#SpaceCenter.Orbit.true_anomaly_at_ut" title="SpaceCenter.Orbit.true_anomaly_at_ut"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.true_anomaly_at_ut()</span></code></a> to ask where it is at another time.
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.reference_frame" title="SpaceCenter.SpaceCenter.Orbit.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.reference_frame</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.orbital_reference_frame" title="SpaceCenter.SpaceCenter.Orbit.orbital_reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.orbital_reference_frame</span></code></a> follow
+<a class="reference internal" href="#SpaceCenter.Orbit.true_anomaly_at_ut" title="SpaceCenter.Orbit.true_anomaly_at_ut"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.true_anomaly_at_ut()</span></code></a> for another time, and
+<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.reference_frame" title="SpaceCenter.SpaceCenter.Orbit.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.reference_frame</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.orbital_reference_frame" title="SpaceCenter.SpaceCenter.Orbit.orbital_reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.orbital_reference_frame</span></code></a> to follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept until <a class="reference internal" href="#SpaceCenter.Orbit.remove" title="SpaceCenter.Orbit.remove"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.remove()</span></code></a> is called on
-it or the client that created it disconnects, so a script that creates one
-repeatedly, for example once per update, should remove each one when it is
-finished with it.</p>
+<p>The orbit is held until <a class="reference internal" href="#SpaceCenter.Orbit.remove" title="SpaceCenter.Orbit.remove"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.remove()</span></code></a> is called on it or the client
+that created it disconnects. Remove each one created by a script that creates
+them repeatedly, for example once per update.</p>
 </div>
 </dd></dl>
 
@@ -769,27 +766,24 @@ so it describes where an object on it would be at any time.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The orbit is a single conic around <em>body</em>. Nothing else acts
-on it: it never changes sphere of influence, so <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.next_orbit" title="SpaceCenter.SpaceCenter.Orbit.next_orbit"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.next_orbit</span></code></a> is
-<code class="docutils literal notranslate"><span class="pre">nil</span></code> however far it travels from the body, and it is not slowed by an
-atmosphere.</p>
-<p>The angles are measured against the same reference plane and direction that
+<p>The orbit is a single conic around <em>body</em>. It never changes
+sphere of influence, so <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.next_orbit" title="SpaceCenter.SpaceCenter.Orbit.next_orbit"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.next_orbit</span></code></a> is <code class="docutils literal notranslate"><span class="pre">nil</span></code>, and no
+atmosphere slows it.</p>
+<p>The angles are measured against the reference plane and direction that
 <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.inclination" title="SpaceCenter.SpaceCenter.Orbit.inclination"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.inclination</span></code></a>, <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.longitude_of_ascending_node" title="SpaceCenter.SpaceCenter.Orbit.longitude_of_ascending_node"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.longitude_of_ascending_node</span></code></a> and
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.argument_of_periapsis" title="SpaceCenter.SpaceCenter.Orbit.argument_of_periapsis"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.argument_of_periapsis</span></code></a> report them against, which
+<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.argument_of_periapsis" title="SpaceCenter.SpaceCenter.Orbit.argument_of_periapsis"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.argument_of_periapsis</span></code></a> report them against.
 <a class="reference internal" href="#SpaceCenter.Orbit.reference_plane_normal" title="SpaceCenter.Orbit.reference_plane_normal"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.reference_plane_normal()</span></code></a> and <a class="reference internal" href="#SpaceCenter.Orbit.reference_plane_direction" title="SpaceCenter.Orbit.reference_plane_direction"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.reference_plane_direction()</span></code></a>
-give as vectors in a reference frame.</p>
-<p>The members that describe where the orbit has got to – <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.radius" title="SpaceCenter.SpaceCenter.Orbit.radius"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.radius</span></code></a>,
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.speed" title="SpaceCenter.SpaceCenter.Orbit.speed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.speed</span></code></a>, <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.true_anomaly" title="SpaceCenter.SpaceCenter.Orbit.true_anomaly"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.true_anomaly</span></code></a>, <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.time_to_apoapsis" title="SpaceCenter.SpaceCenter.Orbit.time_to_apoapsis"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.time_to_apoapsis</span></code></a>
-and the like – describe it at <em>epoch</em> and stay there, as
-nothing is moving along it. Use <a class="reference internal" href="#SpaceCenter.Orbit.radius_at" title="SpaceCenter.Orbit.radius_at"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.radius_at()</span></code></a>,
+give these as vectors in a reference frame.</p>
+<p><a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.radius" title="SpaceCenter.SpaceCenter.Orbit.radius"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.radius</span></code></a>, <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.speed" title="SpaceCenter.SpaceCenter.Orbit.speed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.speed</span></code></a>, <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.true_anomaly" title="SpaceCenter.SpaceCenter.Orbit.true_anomaly"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.true_anomaly</span></code></a>,
+<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.time_to_apoapsis" title="SpaceCenter.SpaceCenter.Orbit.time_to_apoapsis"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.time_to_apoapsis</span></code></a> and the like describe the orbit at
+<em>epoch</em> and stay there. Use <a class="reference internal" href="#SpaceCenter.Orbit.radius_at" title="SpaceCenter.Orbit.radius_at"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.radius_at()</span></code></a>,
 <a class="reference internal" href="#SpaceCenter.Orbit.position_at" title="SpaceCenter.Orbit.position_at"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.position_at()</span></code></a>, <a class="reference internal" href="#SpaceCenter.Orbit.velocity_at" title="SpaceCenter.Orbit.velocity_at"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.velocity_at()</span></code></a> and
-<a class="reference internal" href="#SpaceCenter.Orbit.true_anomaly_at_ut" title="SpaceCenter.Orbit.true_anomaly_at_ut"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.true_anomaly_at_ut()</span></code></a> to ask where it is at another time.
-<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.reference_frame" title="SpaceCenter.SpaceCenter.Orbit.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.reference_frame</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.orbital_reference_frame" title="SpaceCenter.SpaceCenter.Orbit.orbital_reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.orbital_reference_frame</span></code></a> follow
+<a class="reference internal" href="#SpaceCenter.Orbit.true_anomaly_at_ut" title="SpaceCenter.Orbit.true_anomaly_at_ut"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.true_anomaly_at_ut()</span></code></a> for another time, and
+<a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.reference_frame" title="SpaceCenter.SpaceCenter.Orbit.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.reference_frame</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.Orbit.orbital_reference_frame" title="SpaceCenter.SpaceCenter.Orbit.orbital_reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.orbital_reference_frame</span></code></a> to follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept until <a class="reference internal" href="#SpaceCenter.Orbit.remove" title="SpaceCenter.Orbit.remove"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.remove()</span></code></a> is called on
-it or the client that created it disconnects, so a script that creates one
-repeatedly, for example once per update, should remove each one when it is
-finished with it.</p>
+<p>The orbit is held until <a class="reference internal" href="#SpaceCenter.Orbit.remove" title="SpaceCenter.Orbit.remove"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.remove()</span></code></a> is called on it or the client
+that created it disconnects. Remove each one created by a script that creates
+them repeatedly, for example once per update.</p>
 </div>
 </dd></dl>
 
@@ -800,13 +794,11 @@ finished with it.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Only an orbit created by <a class="reference internal" href="#SpaceCenter.Orbit.create_from_position_and_velocity" title="SpaceCenter.Orbit.create_from_position_and_velocity"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.create_from_position_and_velocity()</span></code></a> or
-<a class="reference internal" href="#SpaceCenter.Orbit.create_from_orbital_elements" title="SpaceCenter.Orbit.create_from_orbital_elements"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.create_from_orbital_elements()</span></code></a> can be removed. Every other orbit is
-the orbit of something in the game, which is what says when it is finished
-with, and the server holds one of each however often it is asked for.</p>
+<a class="reference internal" href="#SpaceCenter.Orbit.create_from_orbital_elements" title="SpaceCenter.Orbit.create_from_orbital_elements"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.create_from_orbital_elements()</span></code></a> can be removed. Every other orbit
+belongs to something in the game, and the server holds one of each.</p>
 <p>Any further use of this object throws an exception, as does use of a
-reference frame defined against it. An orbit is removed for the client that
-created it and is not shared with any other, and one whose client disconnects
-is removed with it.</p>
+reference frame defined against it. An orbit belongs to the client that
+created it, and is removed when that client disconnects.</p>
 </div>
 </dd></dl>
 

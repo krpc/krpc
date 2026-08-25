@@ -609,10 +609,10 @@
 <h1>Protocol Buffers over a Local Socket<a class="headerlink" href="#protocol-buffers-over-a-local-socket" title="Link to this heading">#</a></h1>
 <p>This communication protocol allows a client running on the same machine as the game to interact
 with a kRPC server over a unix domain socket, rather than a TCP/IP connection.</p>
-<p>Compared to <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>, a local socket carries the same messages over a cheaper path: it does not
-go through the network stack, so a client that makes many calls in quick succession gets more of
-them done per physics update. A client that makes one call and then waits sees no difference, as
-the wait is governed by the game’s update rate rather than by the connection.</p>
+<p>A local socket carries the same messages as <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a> over a cheaper path, bypassing the
+network stack. A client that makes many calls in quick succession completes more of them per
+physics update. A client that makes one call and then waits runs at the game’s update rate
+either way.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a client library is available for your language, you do not need to implement this
@@ -652,43 +652,35 @@ there is no need to connect.</p>
 </section>
 <section id="default-socket-paths">
 <h2>Default Socket Paths<a class="headerlink" href="#default-socket-paths" title="Link to this heading">#</a></h2>
-<p>The server and its clients each work the default paths out for themselves, without either telling
-the other, so they only meet if they agree at every step. A client that computes a path by hand
-follows the same rule, for a socket named <code class="docutils literal notranslate"><span class="pre">rpc</span></code> or <code class="docutils literal notranslate"><span class="pre">stream</span></code>:</p>
+<p>The server and its clients each compute the default paths for themselves. They meet only by
+following the same rule. For a socket named <code class="docutils literal notranslate"><span class="pre">rpc</span></code> or <code class="docutils literal notranslate"><span class="pre">stream</span></code>:</p>
 <ol class="arabic simple">
 <li><p>If <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> is set and not empty, the path is <code class="docutils literal notranslate"><span class="pre">krpc/&lt;name&gt;</span></code> inside it. On Windows
 <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> is read instead, as there is no runtime directory there.</p></li>
 <li><p>Otherwise the path is <code class="docutils literal notranslate"><span class="pre">krpc-&lt;user&gt;/&lt;name&gt;</span></code> inside <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;user&gt;</span></code> is the name of
-the account running the process. The directory is fixed rather than the one <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> asks
-for, because the server and the client are separate processes and that variable moves the
-directory for one of them and not the other. Windows always names a directory in
-<code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> and so never reaches this step, which is why it is the one place the system
-temporary directory is used.</p></li>
+the account running the process. <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> is fixed, as <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> is set per process and would
+move the directory for the server or the client alone. Windows always names a directory in
+<code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code>, and so never reaches this step.</p></li>
 </ol>
-<p>The user name is that of the account running the process, taken from the account database rather
-than from <code class="docutils literal notranslate"><span class="pre">USER</span></code> alone, which is unset in a process started without a login shell. A client whose
-language leaves it nothing but the environment to ask, and finds nothing there, reports that rather
-than building a path with the name left out, which would be shared between accounts instead of
-belonging to one.</p>
+<p>The user name comes from the account database, as <code class="docutils literal notranslate"><span class="pre">USER</span></code> is unset in a process started without a
+login shell. A client whose language offers only the environment, and finds nothing there, reports
+an error. A path built without the user name would be shared between accounts.</p>
 </section>
 <section id="socket-paths">
 <h2>Socket Paths<a class="headerlink" href="#socket-paths" title="Link to this heading">#</a></h2>
-<p>A socket path is limited to 100 bytes, as the address is copied into a fixed size structure by the
-operating system. The limit is on the bytes a path takes rather than the characters it is written
-with, so a path using characters that take more than one byte reaches it sooner. The server
-reports a path that is too long rather than failing to start with an unhelpful error.</p>
-<p>The socket file is created when the server starts and removed when it stops. A server whose process
-is killed rather than stopped leaves the file behind; the next server to use that path removes it
-before binding, so a stale file does not prevent a restart. The file alone does not say whether the
-server that made it is still there, so that server connects to the path first and refuses to start
-if anything answers, rather than taking a path another server is listening on and leaving it
-unreachable. A path holding content is not a socket at all and is left alone.</p>
-<p>Access to the server is controlled by the permissions on the socket and on the directory holding it.
+<p>A socket path is limited to 100 bytes, as the operating system copies the address into a fixed size
+structure. The limit counts the bytes a path takes rather than its characters, so a path using
+multi-byte characters reaches it sooner. The server reports a path that is too long.</p>
+<p>The socket file is created when the server starts and removed when it stops. A killed server leaves
+the file behind, and the next server to use that path removes it before binding.</p>
+<p>A stale file is indistinguishable from a live one, so the server connects to the path first and
+refuses to start if the connection succeeds. A path holding a file with content is left alone.</p>
+<p>The permissions on the socket and on the directory holding it control access to the server.
 <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> are private to the account they belong to, so sockets
-placed there are reachable only by that user. The <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> fallback is named after the user rather
-than restricted to them: it is created with whatever the process <code class="docutils literal notranslate"><span class="pre">umask</span></code> allows, which can leave
-the socket open to the user’s group. Where that matters, set <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> or configure the
-paths.</p>
+placed there are reachable only by that user.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> fallback is created with whatever the process <code class="docutils literal notranslate"><span class="pre">umask</span></code> allows, which can leave the
+socket open to the user’s group. Set <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> or configure the paths where that
+matters.</p>
 </section>
 <section id="invoking-remote-procedures">
 <h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
@@ -699,9 +691,9 @@ paths.</p>
 <p>The following Python code connects to the RPC server over a local socket using the name “Jeb”, then
 invokes the <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC and prints the server version number from the response. The
 message encoding is identical to the TCP/IP protocol; only the socket differs.</p>
-<p>It is written for the socket API as POSIX has it, so it runs on Linux and macOS. The protocol is
-the same on Windows, where the address family has to be reached through winsock, as Python’s
-socket module does not expose it.</p>
+<p>It is written for the POSIX socket API, so it runs on Linux and macOS. The protocol is the same on
+Windows, where the address family is reached through winsock, as Python’s socket module does not
+expose it.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">getpass</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>

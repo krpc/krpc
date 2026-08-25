@@ -790,9 +790,8 @@ The hint is hidden as soon as the field has a value.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.ContentType">
 <a class="reference internal" href="#enum-KRPC.Client.Services.UI.InputContentType" title="KRPC.Client.Services.UI.InputContentType enum"><span class="pre">InputContentType</span></a> <span class="sig-name descname"><span class="pre">ContentType</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.ContentType" title="Link to this definition">#</a></dt>
-<dd><p>What the field lets the user type into it. Keystrokes that do not fit are
-ignored as they are typed, so a numeric field never shows text a client would
-have to reject.</p>
+<dd><p>The content the field accepts from the user. Keystrokes that do not fit are
+ignored as they are typed, so a numeric field only ever shows a number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -800,8 +799,8 @@ have to reject.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Only what the user types is filtered. A value set by a client is shown as it
-is given.</p>
+<p>The filter applies to typing alone. A value set by a client is shown as it is
+given.</p>
 </div>
 </dd></dl>
 

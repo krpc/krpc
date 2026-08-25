@@ -2442,7 +2442,7 @@ The remaining properties in this section are only available when it is.</p>
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Part.HighlyPressurized">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">HighlyPressurized</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.HighlyPressurized" title="Link to this definition">#</a></dt>
 <dd><p>Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
-draw from (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.PressureFed" title="KRPC.Client.Services.SpaceCenter.Engine.PressureFed property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.PressureFed</span></code></a>). Raises an exception if the part is
+draw from (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.PressureFed" title="KRPC.Client.Services.SpaceCenter.Engine.PressureFed property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.PressureFed</span></code></a>). Throws an exception if the part is
 not a RealFuels fuel tank (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.HasRealFuelsTank" title="KRPC.Client.Services.SpaceCenter.Part.HasRealFuelsTank property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.HasRealFuelsTank</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -2459,7 +2459,7 @@ second of in-game time, measured over the last update RealFuels computed it in.
 The contents keep boiling off under time warp, where that update covers a much
 longer span of in-game time than a physics frame does. The rate is zero for a
 tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
-temperature RealFuels holds down instead, and in the editor. Raises an exception
+temperature RealFuels holds down instead, and in the editor. Throws an exception
 if the part is not a RealFuels fuel tank (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.HasRealFuelsTank" title="KRPC.Client.Services.SpaceCenter.Part.HasRealFuelsTank property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.HasRealFuelsTank</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5032,7 +5032,7 @@ standard way to detect one.</p>
 direction of thrust. While the reverser is still moving, this reports
 the state it is moving to, so a read immediately after a set returns
 the value that was set and setting the same value again has no effect.
-Raises an exception if the engine does not have a thrust reverser
+Throws an exception if the engine does not have a thrust reverser
 (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.CanReverseThrust" title="KRPC.Client.Services.SpaceCenter.Engine.CanReverseThrust property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.CanReverseThrust</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5044,7 +5044,7 @@ Raises an exception if the engine does not have a thrust reverser
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Engine.ToggleThrustReversal">
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">ToggleThrustReversal</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Engine.ToggleThrustReversal" title="Link to this definition">#</a></dt>
-<dd><p>Toggle the engine’s thrust reverser. Raises an exception if the engine
+<dd><p>Toggle the engine’s thrust reverser. Throws an exception if the engine
 does not have a thrust reverser (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.CanReverseThrust" title="KRPC.Client.Services.SpaceCenter.Engine.CanReverseThrust property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.CanReverseThrust</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5070,7 +5070,7 @@ The remaining properties in this section are only available when it is.</p>
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Engine.Ignitions">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">Ignitions</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Engine.Ignitions" title="Link to this definition">#</a></dt>
 <dd><p>The number of times the engine can still be ignited, or -1 if it can be ignited an
-unlimited number of times. Raises an exception if the engine is not managed by
+unlimited number of times. Throws an exception if the engine is not managed by
 RealFuels (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels" title="KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.HasRealFuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5084,7 +5084,7 @@ RealFuels (see <a class="reference internal" href="#property-KRPC.Client.Service
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.idictionary-2" title="System.Collections.Generic.IDictionary"><span class="pre">IDictionary</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">IgnitionResources</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Engine.IgnitionResources" title="Link to this definition">#</a></dt>
 <dd><p>The resources the engine consumes each time it ignites, keyed by resource name, with
 the amount of each that is required. The engine uses up an ignition and fails to
-light if they are not available. Raises an exception if the engine is not managed by
+light if they are not available. Throws an exception if the engine is not managed by
 RealFuels (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels" title="KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.HasRealFuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5097,7 +5097,7 @@ RealFuels (see <a class="reference internal" href="#property-KRPC.Client.Service
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Engine.HasUllage">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">HasUllage</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Engine.HasUllage" title="Link to this definition">#</a></dt>
 <dd><p>Whether the engine’s propellant is subject to ullage, so that it must be settled
-before the engine will run reliably. Raises an exception if the engine is not
+before the engine will run reliably. Throws an exception if the engine is not
 managed by RealFuels (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels" title="KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.HasRealFuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5111,7 +5111,7 @@ managed by RealFuels (see <a class="reference internal" href="#property-KRPC.Cli
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">PropellantStability</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Engine.PropellantStability" title="Link to this definition">#</a></dt>
 <dd><p>How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
 (fully settled). Acceleration along the engine’s thrust axis settles it, and
-coasting and rotation unsettle it. Raises an exception if the engine is not managed
+coasting and rotation unsettle it. Throws an exception if the engine is not managed
 by RealFuels (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels" title="KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.HasRealFuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5126,7 +5126,7 @@ by RealFuels (see <a class="reference internal" href="#property-KRPC.Client.Serv
 <dd><p>The probability that the propellant feeding the engine behaves normally, from 0 to 1.
 This is <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.PropellantStability" title="KRPC.Client.Services.SpaceCenter.Engine.PropellantStability property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.PropellantStability</span></code></a> scaled by the game’s ullage difficulty
 setting, and is the value RealFuels itself tests against when deciding whether the
-engine runs. Raises an exception if the engine is not managed by RealFuels
+engine runs. Throws an exception if the engine is not managed by RealFuels
 (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels" title="KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.HasRealFuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5139,7 +5139,7 @@ engine runs. Raises an exception if the engine is not managed by RealFuels
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Engine.PressureFed">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">PressureFed</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Engine.PressureFed" title="Link to this definition">#</a></dt>
 <dd><p>Whether the engine is fed by tank pressure rather than by a pump, and so needs to
-draw from a highly pressurized tank. Raises an exception if the engine is not
+draw from a highly pressurized tank. Throws an exception if the engine is not
 managed by RealFuels (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels" title="KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.HasRealFuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5152,7 +5152,7 @@ managed by RealFuels (see <a class="reference internal" href="#property-KRPC.Cli
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Engine.HasFeedPressure">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">HasFeedPressure</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Engine.HasFeedPressure" title="Link to this definition">#</a></dt>
 <dd><p>Whether the tanks feeding the engine supply the pressure it needs. Always
-<code class="docutils literal notranslate"><span class="pre">true</span></code> for an engine that is not pressure fed. Raises an exception if the
+<code class="docutils literal notranslate"><span class="pre">true</span></code> for an engine that is not pressure fed. Throws an exception if the
 engine is not managed by RealFuels (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels" title="KRPC.Client.Services.SpaceCenter.Engine.HasRealFuels property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Engine.HasRealFuels</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>

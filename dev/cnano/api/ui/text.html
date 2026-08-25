@@ -754,9 +754,8 @@ once by making that panel visible.</p>
 <dt class="sig sig-object c" id="c.krpc_UI_Text_t.krpc_UI_Text_set_WordWrap">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Text_set_WordWrap</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Text_t.krpc_UI_Text_set_WordWrap" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the text wraps onto further lines when it is wider than the space it
-has. When wrapping is off, the text carries on past the edge instead, and a
-label asked for its preferred size asks for a single line, so a value that
-changes does not reflow a layout.</p>
+has. Text that does not wrap carries on past the edge, and its preferred size
+is that of a single line, so a changing value leaves a layout in place.</p>
 </dd></dl>
 
 <dl class="c function">

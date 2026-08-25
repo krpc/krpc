@@ -738,9 +738,9 @@ accessible via <code class="docutils literal notranslate"><span class="pre">conn
 InfernalRobotics service is accessible via <code class="docutils literal notranslate"><span class="pre">conn.infernal_robotics</span></code>.</p>
 <p>Calling methods, getting or setting properties, etc. are mapped to remote
 procedure calls and passed to the server by the lua client.</p>
-<p>Many procedures return an object standing for something in the game, such as a vessel or
-a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for what those objects do
-when a game is loaded or the thing they stand for is destroyed.</p>
+<p>Many procedures return an object identifying something in the game, such as a vessel or
+a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
+behaves when a game is loaded or what it identifies is destroyed.</p>
 </section>
 <section id="streams-and-events">
 <h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
@@ -858,10 +858,10 @@ over the network:</p>
 </section>
 <section id="numeric-limits">
 <h2>Numeric Limits<a class="headerlink" href="#numeric-limits" title="Link to this heading">#</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types that kRPC carries over the
-wire. Lua names none of them itself, as <code class="docutils literal notranslate"><span class="pre">math.maxinteger</span></code> and <code class="docutils literal notranslate"><span class="pre">math.mininteger</span></code> arrive in
-Lua 5.3 and this client targets 5.1 and 5.2. A service can declare one of these as a
-parameter’s default value, in which case it is documented as the constant here.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types kRPC carries over the wire.
+Lua gained <code class="docutils literal notranslate"><span class="pre">math.maxinteger</span></code> and <code class="docutils literal notranslate"><span class="pre">math.mininteger</span></code> in 5.3, and this client targets 5.1 and
+5.2. A service can declare one of these limits as a parameter’s default value, and it is then
+documented as the constant here.</p>
 <p>The minimum of an unsigned type is <code class="docutils literal notranslate"><span class="pre">0</span></code>, so it has no constant.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

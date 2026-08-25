@@ -768,12 +768,11 @@ Protocol Buffer version 3 serialization format:</p>
 <li><p>Protocol Buffer libraries in many languages are available here:
 <a class="github reference external" href="https://github.com/google/protobuf/releases">google/protobuf</a></p></li>
 </ul>
-<p>A null value is not encoded in the <code class="docutils literal notranslate"><span class="pre">value</span></code> field. Instead it is signaled out-of-band by the
-<code class="docutils literal notranslate"><span class="pre">is_null</span></code> field on the <code class="docutils literal notranslate"><span class="pre">Argument</span></code> or <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message. When <code class="docutils literal notranslate"><span class="pre">is_null</span></code> is set, the
-<code class="docutils literal notranslate"><span class="pre">value</span></code> field is unset and carries no encoded value. Null is signaled out-of-band because the
-encoding of every type already assigns a meaning to all byte sequences, leaving no spare value to
-reserve for null. This applies to values of any type. Note that a zero-length <code class="docutils literal notranslate"><span class="pre">value</span></code> is a valid
-encoding – for example an empty collection – and is distinct from a null value.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field on the <code class="docutils literal notranslate"><span class="pre">Argument</span></code> or <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message signals a null value of
+any type. When it is set, the <code class="docutils literal notranslate"><span class="pre">value</span></code> field is unset and carries no encoded value. Null is
+signaled this way because the encoding of every type assigns a meaning to all byte sequences,
+leaving no spare value for null. A zero-length <code class="docutils literal notranslate"><span class="pre">value</span></code>, an empty collection for example, is a
+valid encoding and is distinct from null.</p>
 </section>
 </section>
 <section id="streams">
@@ -1095,10 +1094,9 @@ empty.</p></li>
 </section>
 <section id="structures">
 <span id="communication-protocol-structures"></span><h3>Structures<a class="headerlink" href="#structures" title="Link to this heading">#</a></h3>
-<p>A structure is a compound value with named fields. Unlike a class, whose value on the wire is an
-identifier for an object that stays on the server, a structure’s value is the values of its fields,
-sent inline. Details about each <a class="reference internal" href="../extending.html#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> are specified in a <code class="docutils literal notranslate"><span class="pre">Struct</span></code> message,
-with the format:</p>
+<p>A structure is a compound value with named fields, whose value on the wire is the values of those
+fields sent inline. A class sends an identifier for an object held on the server instead. Details
+about each <a class="reference internal" href="../extending.html#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> are specified in a <code class="docutils literal notranslate"><span class="pre">Struct</span></code> message, with the format:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">StructField</span><span class="w"> </span><span class="na">fields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
@@ -1139,18 +1137,16 @@ functional; this field is informational.</p></li>
 empty.</p></li>
 </ul>
 <p>A value of a structure type is encoded as a <code class="docutils literal notranslate"><span class="pre">Tuple</span></code> message whose items are the encoded values of
-the structure’s fields, in the order the <code class="docutils literal notranslate"><span class="pre">fields</span></code> list gives them. This is the same encoding as a
-tuple of the field types, so a client can encode and decode a structure with the codec it already
-has for tuples, and the field names exist only in the definition above.</p>
-<p>Two rules follow from that encoding, and a client author should rely on them:</p>
+the structure’s fields, in the order the <code class="docutils literal notranslate"><span class="pre">fields</span></code> list gives them. This is the encoding of a tuple
+of the field types, so a client can use the codec it already has for tuples. The field names appear
+only in the definition above.</p>
+<p>Two rules follow from that encoding:</p>
 <ul class="simple">
-<li><p>Fields are only ever appended to a structure. A value may therefore carry more items than the
-fields a client knows about, when it was generated against an older definition of the structure,
-and those extra items are to be ignored. Fewer items than the known fields means the definitions
-do not match, and is an error.</p></li>
-<li><p>A field is never null. Null is signaled out-of-band by the <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field of the enclosing
-<code class="docutils literal notranslate"><span class="pre">Argument</span></code> or <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message, which can say that a whole structure value is null
-but says nothing about its fields.</p></li>
+<li><p>Fields are only ever appended to a structure. A client generated against an older definition may
+receive more items than it has fields for, and ignores the extra items. Fewer items than its
+fields means the definitions do not match, and is an error.</p></li>
+<li><p>A field is never null. The <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field of the enclosing <code class="docutils literal notranslate"><span class="pre">Argument</span></code> or <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code>
+message applies to the structure value as a whole, and carries nothing about its fields.</p></li>
 </ul>
 </section>
 <section id="exceptions">
@@ -1241,9 +1237,7 @@ therefore be used to split the name into its constituent parts.</p>
 not return a value.</p>
 <p>For <code class="docutils literal notranslate"><span class="pre">CLASS</span></code>, <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> and <code class="docutils literal notranslate"><span class="pre">STRUCT</span></code> types the <code class="docutils literal notranslate"><span class="pre">service</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> fields specify the
 service that defines the class, enumeration or structure and its name. For all other types these
-fields are empty. A <code class="docutils literal notranslate"><span class="pre">STRUCT</span></code> type carries no more than that, so the fields of a structure have to
-be read from the <a class="reference internal" href="#communication-protocol-structures"><span class="std std-ref">Struct message</span></a> in the definition of the
-service that names it.</p>
+fields are empty. The fields of a structure are read from the <a class="reference internal" href="#communication-protocol-structures"><span class="std std-ref">Struct message</span></a> in the definition of the service that names it.</p>
 <p>For collection types the <code class="docutils literal notranslate"><span class="pre">types</span></code> repeated field will contain the sub-types:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TUPLE</span></code> types contain 1 or more types in the <code class="docutils literal notranslate"><span class="pre">types</span></code> field.</p></li>
@@ -1283,9 +1277,9 @@ client. This allows the client to create a <em>proxy</em> object for the actual 
 properties make remote procedure calls to the server. Object identifiers have type <code class="docutils literal notranslate"><span class="pre">uint64</span></code>.</p>
 <p>When a procedure returns a proxy object or takes one as a parameter, the type code will be set to
 <code class="docutils literal notranslate"><span class="pre">CLASS</span></code>.</p>
-<p>A null object reference is signaled by the <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field of the <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> or
-<code class="docutils literal notranslate"><span class="pre">Argument</span></code> message, in the same way as a null value of any other type. The object identifier is
-not used to represent null on the wire.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field of the <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> or <code class="docutils literal notranslate"><span class="pre">Argument</span></code> message signals a null object
+reference, as it does a null value of any other type. The object identifier is never used to
+represent null on the wire.</p>
 </section>
 </section>
 
