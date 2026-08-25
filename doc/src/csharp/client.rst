@@ -86,9 +86,10 @@ then repeatedly prints the position returned by the stream. The stream is automa
 the client disconnects.
 
 A stream can be created for any method call by calling :meth:`Connection.AddStream` and passing it
-a lambda expression that invokes the desired method. This lambda expression must take zero arguments
-and be a method call or property access, which may be multiplied by a constant. It returns a stream
-object of type :type:`Stream`. The most recent value of the stream can be obtained by calling
+a lambda expression, taking zero arguments, that invokes the desired method. A lambda that is
+anything more than a single method call or property access is compiled into a server side
+function, as described in `Compiling Lambdas`_. It returns a stream object of
+type :type:`Stream`. The most recent value of the stream can be obtained by calling
 :meth:`Stream.Get`. A stream can be stopped and removed from the server by calling
 :meth:`Stream.Remove` on the stream object. All of a clients streams are automatically stopped when
 it disconnects.
@@ -162,12 +163,60 @@ Some procedures return event objects of type :type:`Event`. These allow you to w
 occurs, by calling :meth:`Event.Wait`. Under the hood, these are implemented using streams and
 condition variables.
 
-Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression ``MeanAltitude > 1000`` and then creates an event that will be triggered when the
-expression returns true:
+Custom events can also be created from a server side function, which is code that runs inside
+the game. For example, the following builds the function ``MeanAltitude > 1000`` and then creates
+an event that will be triggered when the function returns true:
 
 .. literalinclude:: /scripts/client/csharp/Event.cs
+
+Function Streams
+----------------
+
+A server side function can also stream the result of a computation, by passing it to
+:meth:`Connection.AddStream`. Values are computed on the server on each stream update, so
+complex telemetry arrives without the round trip latency of multiple RPCs, and without the
+values changing between calls. The function can evaluate to any type that can be sent to a
+client, including collections and objects, and the type parameter must correspond to the
+function's return type. For example, the following streams the vessel's altitude, converted to
+kilometers on the server:
+
+.. literalinclude:: /scripts/client/csharp/FunctionStream.cs
+
+Compiling Lambdas
+-----------------
+
+Instead of building a function from the expression factory methods directly, a lambda
+expression that takes no arguments can be compiled into a server side function using
+:meth:`Connection.CompileFunction`. :meth:`Connection.AddEvent` accepts a boolean lambda
+directly, and :meth:`Connection.AddStream` compiles any lambda that is not a single method call
+or property access:
+
+.. literalinclude:: /scripts/client/csharp/CompiledFunction.cs
+
+The compiler translates the lambda's expression tree into a server side function that computes
+the same result on the server:
+
+* Property accesses and method calls on remote objects and services become calls embedded in
+  the function, re-invoked on each evaluation. This includes calls on the elements of
+  collections inside LINQ operators.
+* Captured variables, literals, and any sub-expression that does not involve the server are
+  evaluated once, when the function is compiled, and embedded as constants.
+* Arithmetic, comparison and bitwise operators, boolean operators, conditional expressions,
+  casts, string concatenation and ``ToString``, tuple and collection constructors, and indexing
+  are translated to the corresponding expression operators. ``&&`` and ``||`` short-circuit on
+  the server as they do locally; ``&`` and ``|`` evaluate both operands. Calls to
+  ``System.Math`` methods with server side arguments are compiled to the ``StdLib`` service's
+  procedures.
+* The LINQ operators ``Select``, ``Where``, ``SelectMany``, ``Any``, ``All``, ``Count``,
+  ``Sum``, ``Min``, ``Max``, ``Average``, ``Contains``, ``OrderBy``, ``Concat``, ``Skip``,
+  ``Take``, ``ToDictionary``, ``ToList`` and ``ToHashSet`` are translated to the server's
+  collection operations. A lazily evaluated sequence produced at the top level of the lambda
+  is implicitly converted to a list.
+* Reading a field of a structure a service defines reads that field of it on the server, and
+  constructing one with ``new`` builds it there.
+
+Anything else cannot run on the server, and throws :type:`FunctionCompilationException`
+describing the unsupported construct.
 
 Client API Reference
 --------------------
@@ -217,7 +266,39 @@ Client API Reference
 
    .. method:: Stream<ReturnType> AddStream<ReturnType>(LambdaExpression expression)
 
-      Create a new stream from the given lambda expression.
+      Create a new stream from the given lambda expression. A lambda consisting of a single
+      method call or property access is streamed as that remote procedure call. Any other
+      lambda is compiled into a server side function using
+      :meth:`Connection.CompileFunction`, evaluated on the server on each stream update.
+
+   .. method:: KRPC.Client.Services.KRPC.Expression CompileFunction<ReturnType>(Expression<Func<ReturnType>> expression)
+
+      Compile a lambda expression, taking no arguments, into a server side function that
+      computes the same result on the server. Remote procedure calls made by the lambda are
+      re-invoked on each evaluation; other values are captured when the function is compiled.
+      Throws :type:`FunctionCompilationException` for constructs that cannot run on the
+      server.
+
+   .. method:: Event AddEvent(Expression<Func<bool>> expression)
+
+      Create an event from a boolean lambda expression, compiled into a server side function
+      using :meth:`Connection.CompileFunction`.
+
+   .. method:: ReturnType RunFunction<ReturnType>(Expression<Func<ReturnType>> expression)
+
+      Run a function on the server, within a single physics tick, and return the value it
+      produces. The lambda expression is compiled using :meth:`Connection.CompileFunction`.
+      Also callable with a server side function object in place of the lambda. A function
+      whose value is null needs a reference type or a nullable value type as the return type,
+      and throws otherwise. This is the intended way to use functions with side effects, which
+      would otherwise re-run on every update of an event or stream.
+
+   .. method:: void RunFunction(Expression<Action> expression)
+
+      Run a function with no result on the server, within a single physics tick, for its
+      effects, such as a lambda that invokes a single remote method. Also callable with a
+      server side function object, which may be a statement block built with the expression
+      API.
 
    .. method:: KRPC.Schema.KRPC.ProcedureCall GetCall(LambdaExpression expression)
 
@@ -228,6 +309,10 @@ Client API Reference
    .. method:: void Dispose()
 
       Closes the connection and frees the resources associated with it.
+
+.. class:: FunctionCompilationException
+
+   Thrown when a lambda expression cannot be compiled into a server side function.
 
 .. class:: Stream<ReturnType>
 

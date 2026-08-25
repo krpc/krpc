@@ -165,12 +165,23 @@ Some procedures return event objects of type :type:`Event`. These allow you to w
 until an event occurs, by calling :meth:`Event.waitFor`. Under the hood, these are
 implemented using streams and condition variables.
 
-Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression ``MeanAltitude > 1000`` and then creates an event that will be triggered when the
-expression returns true:
+Custom events can also be created from a server side function, which is code that runs inside
+the game. For example, the following builds the function ``MeanAltitude > 1000`` and then creates
+an event that will be triggered when the function returns true:
 
 .. literalinclude:: /scripts/client/java/CustomEvent.java
+
+Function Streams
+----------------
+
+A server side function can also stream the result of a computation, by passing it to
+:meth:`Connection.addStream`. Values are computed on the server on each stream update, so
+complex telemetry arrives without the round trip latency of multiple RPCs, and without the
+values changing between calls. The function can evaluate to any type that can be sent to a
+client, including collections and objects. For example, the following streams the vessel's
+altitude, converted to kilometers on the server:
+
+.. literalinclude:: /scripts/client/java/FunctionStream.java
 
 Client API Reference
 --------------------
@@ -232,6 +243,18 @@ Client API Reference
    .. method:: Stream<T> addStream(RemoteObject instance, String method, Object... args)
 
       Create a stream for a method call to the given remote object.
+
+   .. method:: Stream<T> addStream(KRPC.Expression function)
+
+      Create a stream from a server side function, decoding values using the type reported
+      by the server.
+
+   .. method:: T runFunction(KRPC.Expression function)
+
+      Run a function on the server, within a single physics tick, and return the value it
+      produces, decoded using the type reported by the server. Null for a function with no
+      result, and for one whose value is null. This is the intended way to use functions with
+      side effects, which would otherwise re-run on every update of an event or stream.
 
    .. method:: krpc.schema.KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
 
