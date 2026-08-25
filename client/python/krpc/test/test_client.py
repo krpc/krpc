@@ -779,6 +779,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "clients",
                     "Expression",
                     "Type",
+                    "TypeCode",
                     "InvalidOperationException",
                     "ArgumentException",
                     "ArgumentNullException",
