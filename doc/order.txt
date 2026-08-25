@@ -43,6 +43,7 @@ KRPC.Expression.Or
 KRPC.Expression.ExclusiveOr
 KRPC.Expression.Not
 KRPC.Expression.Negate
+KRPC.Expression.Conditional
 KRPC.Expression.Add
 KRPC.Expression.Subtract
 KRPC.Expression.Multiply
