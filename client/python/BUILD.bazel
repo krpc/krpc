@@ -20,6 +20,7 @@ py_library(
         ":services-lidar",
         ":services-remotetech",
         ":services-spacecenter",
+        ":services-stdlib",
         ":services-testservice",
         ":services-ui",
     ],
@@ -122,6 +123,7 @@ py_sdist(
         ":services-lidar",
         ":services-remotetech",
         ":services-spacecenter",
+        ":services-stdlib",
         ":services-testservice",
         ":services-ui",
         "//:COPYING",
@@ -191,6 +193,13 @@ clientgen_python(
     out = "krpc/services/ui.py",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+)
+
+clientgen_python(
+    name = "services-stdlib",
+    out = "krpc/services/stdlib.py",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
 )
 
 clientgen_python(
