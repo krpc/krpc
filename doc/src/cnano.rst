@@ -6,6 +6,7 @@ C-nano
 
    cnano/client
    cnano/api/krpc
+   cnano/api/stdlib
    cnano/api/space-center
    cnano/api/drawing
    cnano/api/ui

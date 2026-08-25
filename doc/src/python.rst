@@ -6,6 +6,7 @@ Python
 
    python/client
    python/api/krpc
+   python/api/stdlib
    python/api/space-center
    python/api/drawing
    python/api/ui
