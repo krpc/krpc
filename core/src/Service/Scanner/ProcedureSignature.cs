@@ -73,36 +73,6 @@ namespace KRPC.Service.Scanner
         /// </summary>
         public bool ReturnIsNullable { get; private set; }
 
-        /// <summary>
-        /// Whether the procedure is a static method.
-        /// </summary>
-        public bool IsStatic { get; private set; }
-
-        /// <summary>
-        /// Whether the procedure is a class method/property.
-        /// </summary>
-        public bool IsClassMember { get; private set; }
-
-        /// <summary>
-        /// If the procedure is a class method/property, the name of the class it is a member of.
-        /// </summary>
-        public string ClassName { get; private set; }
-
-        /// <summary>
-        /// Whether the procedure is a property getter.
-        /// </summary>
-        public bool IsPropertyGetter { get; private set; }
-
-        /// <summary>
-        /// Whether the procedure is a property setter.
-        /// </summary>
-        public bool IsPropertySetter { get; private set; }
-
-        /// <summary>
-        /// If the procedure is a property getter/setter, the name of the property.
-        /// </summary>
-        public string PropertyName { get; private set; }
-
         internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene, bool deprecated, string deprecatedReason)
         {
             Name = procedureName;
@@ -130,35 +100,6 @@ namespace KRPC.Service.Scanner
                 // Check it's a valid return type
                 if (!TypeUtils.IsAValidType (returnType))
                     throw new ServiceException (returnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
-            }
-
-            var parts = procedureName.Split (new char[]{'_'});
-            if (parts.Length == 2) {
-                if (parts [0] == ("get")) {
-                    IsPropertyGetter = true;
-                    PropertyName = parts [1];
-                } else if (parts [0] == "set") {
-                    IsPropertySetter = true;
-                    PropertyName = parts [1];
-                } else {
-                    IsClassMember = true;
-                    ClassName = parts [0];
-                }
-            } else if (parts.Length == 3) {
-                if (parts [1] == "get") {
-                    IsClassMember = true;
-                    IsPropertyGetter = true;
-                    PropertyName = parts [2];
-                } else if (parts [1] == "set") {
-                    IsClassMember = true;
-                    ClassName = parts [0];
-                    IsPropertySetter = true;
-                    PropertyName = parts [2];
-                } else if (parts [1] == "static") {
-                    IsClassMember = true;
-                    ClassName = parts [0];
-                    IsStatic = true;
-                }
             }
         }
 
