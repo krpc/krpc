@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using KRPC.Service.Attributes;
 
 namespace KRPC.Service
@@ -21,6 +22,14 @@ namespace KRPC.Service
         /// for class methods, or null for static procedures.
         /// </summary>
         object Invoke (object instance, object[] arguments);
+
+        /// <summary>
+        /// The method that implements the RPC. A compiled server side function calls
+        /// it directly, with typed arguments, rather than through
+        /// <see cref="Invoke"/>, so that evaluating one does not box the arguments
+        /// or allocate an argument array.
+        /// </summary>
+        MethodInfo Method { get; }
 
         /// <summary>
         /// Information about the parameters of the method
