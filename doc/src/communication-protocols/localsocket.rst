@@ -4,10 +4,10 @@ Protocol Buffers over a Local Socket
 This communication protocol allows a client running on the same machine as the game to interact
 with a kRPC server over a unix domain socket, rather than a TCP/IP connection.
 
-Compared to :doc:`tcpip`, a local socket carries the same messages over a cheaper path: it does not
-go through the network stack, so a client that makes many calls in quick succession gets more of
-them done per physics update. A client that makes one call and then waits sees no difference, as
-the wait is governed by the game's update rate rather than by the connection.
+A local socket carries the same messages as :doc:`tcpip` over a cheaper path, bypassing the
+network stack. A client that makes many calls in quick succession completes more of them per
+physics update. A client that makes one call and then waits runs at the game's update rate
+either way.
 
 .. note:: If a client library is available for your language, you do not need to implement this
           protocol.
@@ -50,47 +50,41 @@ there is no need to connect.
 Default Socket Paths
 --------------------
 
-The server and its clients each work the default paths out for themselves, without either telling
-the other, so they only meet if they agree at every step. A client that computes a path by hand
-follows the same rule, for a socket named ``rpc`` or ``stream``:
+The server and its clients each compute the default paths for themselves. They meet only by
+following the same rule. For a socket named ``rpc`` or ``stream``:
 
 1. If ``XDG_RUNTIME_DIR`` is set and not empty, the path is ``krpc/<name>`` inside it. On Windows
    ``LOCALAPPDATA`` is read instead, as there is no runtime directory there.
 
 2. Otherwise the path is ``krpc-<user>/<name>`` inside ``/tmp``, where ``<user>`` is the name of
-   the account running the process. The directory is fixed rather than the one ``TMPDIR`` asks
-   for, because the server and the client are separate processes and that variable moves the
-   directory for one of them and not the other. Windows always names a directory in
-   ``LOCALAPPDATA`` and so never reaches this step, which is why it is the one place the system
-   temporary directory is used.
+   the account running the process. ``/tmp`` is fixed, as ``TMPDIR`` is set per process and would
+   move the directory for the server or the client alone. Windows always names a directory in
+   ``LOCALAPPDATA``, and so never reaches this step.
 
-The user name is that of the account running the process, taken from the account database rather
-than from ``USER`` alone, which is unset in a process started without a login shell. A client whose
-language leaves it nothing but the environment to ask, and finds nothing there, reports that rather
-than building a path with the name left out, which would be shared between accounts instead of
-belonging to one.
+The user name comes from the account database, as ``USER`` is unset in a process started without a
+login shell. A client whose language offers only the environment, and finds nothing there, reports
+an error. A path built without the user name would be shared between accounts.
 
 Socket Paths
 ------------
 
-A socket path is limited to 100 bytes, as the address is copied into a fixed size structure by the
-operating system. The limit is on the bytes a path takes rather than the characters it is written
-with, so a path using characters that take more than one byte reaches it sooner. The server
-reports a path that is too long rather than failing to start with an unhelpful error.
+A socket path is limited to 100 bytes, as the operating system copies the address into a fixed size
+structure. The limit counts the bytes a path takes rather than its characters, so a path using
+multi-byte characters reaches it sooner. The server reports a path that is too long.
 
-The socket file is created when the server starts and removed when it stops. A server whose process
-is killed rather than stopped leaves the file behind; the next server to use that path removes it
-before binding, so a stale file does not prevent a restart. The file alone does not say whether the
-server that made it is still there, so that server connects to the path first and refuses to start
-if anything answers, rather than taking a path another server is listening on and leaving it
-unreachable. A path holding content is not a socket at all and is left alone.
+The socket file is created when the server starts and removed when it stops. A killed server leaves
+the file behind, and the next server to use that path removes it before binding.
 
-Access to the server is controlled by the permissions on the socket and on the directory holding it.
+A stale file is indistinguishable from a live one, so the server connects to the path first and
+refuses to start if the connection succeeds. A path holding a file with content is left alone.
+
+The permissions on the socket and on the directory holding it control access to the server.
 ``XDG_RUNTIME_DIR`` and ``LOCALAPPDATA`` are private to the account they belong to, so sockets
-placed there are reachable only by that user. The ``/tmp`` fallback is named after the user rather
-than restricted to them: it is created with whatever the process ``umask`` allows, which can leave
-the socket open to the user's group. Where that matters, set ``XDG_RUNTIME_DIR`` or configure the
-paths.
+placed there are reachable only by that user.
+
+The ``/tmp`` fallback is created with whatever the process ``umask`` allows, which can leave the
+socket open to the user's group. Set ``XDG_RUNTIME_DIR`` or configure the paths where that
+matters.
 
 Invoking Remote Procedures
 --------------------------
@@ -104,9 +98,9 @@ The following Python code connects to the RPC server over a local socket using t
 invokes the ``KRPC.GetStatus`` RPC and prints the server version number from the response. The
 message encoding is identical to the TCP/IP protocol; only the socket differs.
 
-It is written for the socket API as POSIX has it, so it runs on Linux and macOS. The protocol is
-the same on Windows, where the address family has to be reached through winsock, as Python's
-socket module does not expose it.
+It is written for the POSIX socket API, so it runs on Linux and macOS. The protocol is the same on
+Windows, where the address family is reached through winsock, as Python's socket module does not
+expose it.
 
 .. literalinclude:: /scripts/communication-protocol-localsocket.py
    :language: python

@@ -130,8 +130,8 @@ carries roughly a thousand bytes per second. The server therefore buffers up to 
 in each direction, and the two directions behave differently when their buffer fills:
 
 * Data received from the port is buffered until the game reads it. When the buffer fills, the
-  server stops reading from the port until the game catches up. Nothing is lost, but the client
-  sees the port carry its data more slowly.
+  server stops reading from the port until the game catches up. The data is kept, and the port
+  carries it more slowly.
 
 * Data written by the game is buffered until the port has sent it. When this buffer fills, which
   means the game has been producing data faster than the port can send for a sustained period,
