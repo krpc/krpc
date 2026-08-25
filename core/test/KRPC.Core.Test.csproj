@@ -97,6 +97,7 @@
     <Compile Include="Service\ScannerTest.cs" />
     <Compile Include="Service\ServiceSignatureTest.cs" />
     <Compile Include="Service\ServicesTest.cs" />
+    <Compile Include="Service\StdLib\StdLibTest.cs" />
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Service\TestService2.cs" />
     <Compile Include="Service\TestService3.cs" />

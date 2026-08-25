@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('StdLib') }}
+{% import domain.macros as macros with context %}
+
+Standard Library
+================
+
+{{ macros.service(services['StdLib']) }}

@@ -6,6 +6,7 @@ Java
 
    java/client
    java/api/krpc
+   java/api/stdlib
    java/api/space-center
    java/api/drawing
    java/api/ui
