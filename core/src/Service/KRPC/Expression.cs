@@ -249,6 +249,7 @@ namespace KRPC.Service.KRPC
                     "in service \"" + service + "\"");
             return Constant (type, System.Enum.ToObject (type, value));
         }
+
         /// <summary>
         /// A constant value of an object type, i.e. an instance of a class defined
         /// by a service. The object is given by its object identifier, the value
@@ -1170,7 +1171,11 @@ namespace KRPC.Service.KRPC
         public static Expression Count (Expression arg)
         {
             CheckIsEnumerable (arg);
-            var count = arg.Type.GetProperty ("Count");
+            var count = GetCountProperty (arg.Type);
+            if (count == null)
+                throw new InvalidOperationException (
+                    "A lazily evaluated sequence does not have a count. " +
+                    "Convert it to a list or a set first.");
             return new Expression (LinqExpression.Property (arg, count));
         }
 
@@ -1274,6 +1279,855 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// Skip the first count values of a collection.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
+        /// </summary>
+        /// <returns>The collection without its first count values.</returns>
+        /// <param name="arg">The collection.</param>
+        /// <param name="count">The number of values to skip.</param>
+        [KRPCMethod]
+        public static Expression Skip (Expression arg, Expression count)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            if (ReferenceEquals (count, null))
+                throw new ArgumentNullException (nameof (count));
+            var sourceType = GetEnumerableValueType (arg);
+            var skip = typeof (Enumerable).GetMethods ().Single (
+                x => x.Name == "Skip" && x.GetParameters ().Length == 2);
+            skip = skip.MakeGenericMethod (sourceType);
+            return new Expression (LinqExpression.Call (skip, arg, count));
+        }
+
+        /// <summary>
+        /// Take only the first count values of a collection.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
+        /// </summary>
+        /// <returns>The first count values of the collection.</returns>
+        /// <param name="arg">The collection.</param>
+        /// <param name="count">The number of values to take.</param>
+        [KRPCMethod]
+        public static Expression Take (Expression arg, Expression count)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            if (ReferenceEquals (count, null))
+                throw new ArgumentNullException (nameof (count));
+            var sourceType = GetEnumerableValueType (arg);
+            var take = typeof (Enumerable).GetMethods ().Single (
+                x => x.Name == "Take" && x.GetParameters () [1].ParameterType == typeof (int));
+            take = take.MakeGenericMethod (sourceType);
+            return new Expression (LinqExpression.Call (take, arg, count));
+        }
+
+        /// <summary>
+        /// Run a function returning a collection on every element in the
+        /// collection, and flatten the results into a single collection.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
+        /// </summary>
+        /// <returns>The flattened collection of function results.</returns>
+        /// <param name="arg">The list or set.</param>
+        /// <param name="func">The function, taking an element of the collection
+        /// and returning a collection.</param>
+        [KRPCMethod]
+        public static Expression SelectMany (Expression arg, Expression func)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            if (ReferenceEquals (func, null))
+                throw new ArgumentNullException (nameof (func));
+            var sourceType = GetEnumerableValueType (arg);
+            var funcResultType = func.Type.GetGenericArguments () [1];
+            if (!typeof (IEnumerable).IsAssignableFrom (funcResultType))
+                throw new InvalidOperationException ("The function must return a collection");
+            var resultType = funcResultType.GetGenericArguments () [0];
+            var selectMany = typeof (Enumerable)
+                .GetMethods ()
+                .Single (x => x.Name == "SelectMany" &&
+                         x.GetParameters ().Length == 2 &&
+                         x.GetParameters () [1].ParameterType.GetGenericArguments ().Length == 2);
+            selectMany = selectMany.MakeGenericMethod (sourceType, resultType);
+            return new Expression (LinqExpression.Call (selectMany, arg, func));
+        }
+
+        /// <summary>
+        /// Build a dictionary from a collection, by running a function computing
+        /// the key and a function computing the value on every element.
+        /// </summary>
+        /// <returns>The dictionary.</returns>
+        /// <param name="arg">The list or set.</param>
+        /// <param name="keyFunc">The function computing an element's key.</param>
+        /// <param name="valueFunc">The function computing an element's value.</param>
+        [KRPCMethod]
+        public static Expression BuildDictionary (Expression arg, Expression keyFunc, Expression valueFunc)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            if (ReferenceEquals (keyFunc, null))
+                throw new ArgumentNullException (nameof (keyFunc));
+            if (ReferenceEquals (valueFunc, null))
+                throw new ArgumentNullException (nameof (valueFunc));
+            var sourceType = GetEnumerableValueType (arg);
+            var keyType = keyFunc.Type.GetGenericArguments () [1];
+            var valueType = valueFunc.Type.GetGenericArguments () [1];
+            CheckIsFunction (keyFunc, sourceType, keyType);
+            CheckIsFunction (valueFunc, sourceType, valueType);
+            var toDictionary = typeof (Enumerable)
+                .GetMethods ()
+                .Single (x => x.Name == "ToDictionary" &&
+                         x.GetParameters ().Length == 3 &&
+                         x.GetParameters () [2].ParameterType.Name.StartsWith ("Func`", StringComparison.Ordinal));
+            toDictionary = toDictionary.MakeGenericMethod (sourceType, keyType, valueType);
+            return new Expression (LinqExpression.Call (toDictionary, arg, keyFunc, valueFunc));
+        }
+
+        internal static string ConvertToStringHelper (object value)
+        {
+            return Convert.ToString (value, System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Convert a value to its string representation.
+        /// </summary>
+        /// <param name="arg">The value to convert.</param>
+        [KRPCMethod]
+        public static Expression ConvertToString (Expression arg)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            var method = typeof (Expression).GetMethod (
+                nameof (ConvertToStringHelper), BindingFlags.Static | BindingFlags.NonPublic);
+            return new Expression (LinqExpression.Call (
+                method, LinqExpression.Convert (arg, typeof (object))));
+        }
+
+        /// <summary>
+        /// Concatenate strings.
+        /// Use <see cref="ConvertToString"/> to convert other values to strings.
+        /// </summary>
+        /// <returns>The concatenated string.</returns>
+        /// <param name="args">The strings to concatenate, in order.</param>
+        [KRPCMethod]
+        public static Expression StringConcat (IList<Expression> args)
+        {
+            if (ReferenceEquals (args, null))
+                throw new ArgumentNullException (nameof (args));
+            foreach (var arg in args)
+                if (arg.Type != typeof (string))
+                    throw new InvalidOperationException (
+                        "All values to concatenate must be strings; " +
+                        "use ConvertToString to convert them");
+            var concat = typeof (string).GetMethod ("Concat", new [] { typeof (string []) });
+            return new Expression (LinqExpression.Call (
+                concat,
+                LinqExpression.NewArrayInit (
+                    typeof (string), args.Select (x => x.internalExpression))));
+        }
+
+        // A string is its own kind of value on the server, so the string operations
+        // are named apart from the collection ones they share a concept with.
+        // Comparison and case conversion ignore the ambient culture, so a function
+        // produces the same result whatever locale the game is running in
+
+        /// <summary>
+        /// The number of characters in a string.
+        /// </summary>
+        /// <returns>The length of the string.</returns>
+        /// <param name="arg">The string.</param>
+        [KRPCMethod]
+        public static Expression StringLength (Expression arg)
+        {
+            CheckIsAString (arg, nameof (arg));
+            return new Expression (LinqExpression.Property (
+                arg, typeof (string).GetProperty ("Length")));
+        }
+        /// <summary>
+        /// The character at the given position in a string, as a string of length one.
+        /// </summary>
+        /// <returns>The character at the given position.</returns>
+        /// <param name="arg">The string.</param>
+        /// <param name="index">The position of the character, counting from zero.</param>
+        [KRPCMethod]
+        public static Expression StringGet (Expression arg, Expression index)
+        {
+            CheckIsAString (arg, nameof (arg));
+            CheckIsAnInt (index, nameof (index));
+            return new Expression (LinqExpression.Call (
+                arg, typeof (string).GetMethod ("Substring", new [] { typeof (int), typeof (int) }),
+                index, LinqExpression.Constant (1)));
+        }
+        /// <summary>
+        /// Part of a string.
+        /// </summary>
+        /// <returns>The substring.</returns>
+        /// <param name="arg">The string.</param>
+        /// <param name="start">The position to start at, counting from zero.</param>
+        /// <param name="length">The number of characters to take.</param>
+        [KRPCMethod]
+        public static Expression StringSubstring (Expression arg, Expression start, Expression length)
+        {
+            CheckIsAString (arg, nameof (arg));
+            CheckIsAnInt (start, nameof (start));
+            CheckIsAnInt (length, nameof (length));
+            return new Expression (LinqExpression.Call (
+                arg, typeof (string).GetMethod ("Substring", new [] { typeof (int), typeof (int) }),
+                start, length));
+        }
+        /// <summary>
+        /// The position of the first occurrence of one string within another.
+        /// </summary>
+        /// <returns>The position of the value, counting from zero, or -1 if it does not occur.</returns>
+        /// <param name="arg">The string to search.</param>
+        /// <param name="value">The string to search for.</param>
+        [KRPCMethod]
+        public static Expression StringIndexOf (Expression arg, Expression value)
+        {
+            return new Expression (OrdinalIndexOf (arg, value));
+        }
+        /// <summary>
+        /// Determine whether one string occurs within another.
+        /// </summary>
+        /// <returns>Whether the value occurs in the string.</returns>
+        /// <param name="arg">The string to search.</param>
+        /// <param name="value">The string to search for.</param>
+        [KRPCMethod]
+        public static Expression StringContains (Expression arg, Expression value)
+        {
+            return new Expression (LinqExpression.GreaterThanOrEqual (
+                OrdinalIndexOf (arg, value), LinqExpression.Constant (0)));
+        }
+        /// <summary>
+        /// Determine whether a string starts with another.
+        /// </summary>
+        /// <returns>Whether the string starts with the value.</returns>
+        /// <param name="arg">The string to test.</param>
+        /// <param name="value">The string to test for.</param>
+        [KRPCMethod]
+        public static Expression StringStartsWith (Expression arg, Expression value)
+        {
+            return new Expression (OrdinalStringCall ("StartsWith", arg, value));
+        }
+        /// <summary>
+        /// Determine whether a string ends with another.
+        /// </summary>
+        /// <returns>Whether the string ends with the value.</returns>
+        /// <param name="arg">The string to test.</param>
+        /// <param name="value">The string to test for.</param>
+        [KRPCMethod]
+        public static Expression StringEndsWith (Expression arg, Expression value)
+        {
+            return new Expression (OrdinalStringCall ("EndsWith", arg, value));
+        }
+        /// <summary>
+        /// Convert a string to upper case, independently of the game's language.
+        /// </summary>
+        /// <returns>The string in upper case.</returns>
+        /// <param name="arg">The string.</param>
+        [KRPCMethod]
+        public static Expression StringToUpper (Expression arg)
+        {
+            CheckIsAString (arg, nameof (arg));
+            return new Expression (LinqExpression.Call (
+                arg, typeof (string).GetMethod ("ToUpperInvariant", System.Type.EmptyTypes)));
+        }
+        /// <summary>
+        /// Convert a string to lower case, independently of the game's language.
+        /// </summary>
+        /// <returns>The string in lower case.</returns>
+        /// <param name="arg">The string.</param>
+        [KRPCMethod]
+        public static Expression StringToLower (Expression arg)
+        {
+            CheckIsAString (arg, nameof (arg));
+            return new Expression (LinqExpression.Call (
+                arg, typeof (string).GetMethod ("ToLowerInvariant", System.Type.EmptyTypes)));
+        }
+        /// <summary>
+        /// Remove white space from both ends of a string.
+        /// </summary>
+        /// <returns>The trimmed string.</returns>
+        /// <param name="arg">The string.</param>
+        [KRPCMethod]
+        public static Expression StringTrim (Expression arg)
+        {
+            return new Expression (TrimCall ("Trim", arg));
+        }
+        /// <summary>
+        /// Remove white space from the start of a string.
+        /// </summary>
+        /// <returns>The trimmed string.</returns>
+        /// <param name="arg">The string.</param>
+        [KRPCMethod]
+        public static Expression StringTrimStart (Expression arg)
+        {
+            return new Expression (TrimCall ("TrimStart", arg));
+        }
+        /// <summary>
+        /// Remove white space from the end of a string.
+        /// </summary>
+        /// <returns>The trimmed string.</returns>
+        /// <param name="arg">The string.</param>
+        [KRPCMethod]
+        public static Expression StringTrimEnd (Expression arg)
+        {
+            return new Expression (TrimCall ("TrimEnd", arg));
+        }
+        /// <summary>
+        /// Replace every occurrence of one string within another.
+        /// </summary>
+        /// <returns>The string with the replacements made.</returns>
+        /// <param name="arg">The string to search.</param>
+        /// <param name="oldValue">The string to replace.</param>
+        /// <param name="newValue">The string to replace it with.</param>
+        [KRPCMethod]
+        public static Expression StringReplace (Expression arg, Expression oldValue, Expression newValue)
+        {
+            CheckIsAString (arg, nameof (arg));
+            CheckIsAString (oldValue, nameof (oldValue));
+            CheckIsAString (newValue, nameof (newValue));
+            return new Expression (LinqExpression.Call (
+                arg, typeof (string).GetMethod ("Replace", new [] { typeof (string), typeof (string) }),
+                oldValue, newValue));
+        }
+        internal static IList<string> StringSplitHelper (string value, string separator)
+        {
+            return value.Split (new [] { separator }, StringSplitOptions.None);
+        }
+        /// <summary>
+        /// Split a string into the parts separated by another string.
+        /// </summary>
+        /// <returns>The parts of the string.</returns>
+        /// <param name="arg">The string to split.</param>
+        /// <param name="separator">The string that separates the parts.</param>
+        [KRPCMethod]
+        public static Expression StringSplit (Expression arg, Expression separator)
+        {
+            CheckIsAString (arg, nameof (arg));
+            CheckIsAString (separator, nameof (separator));
+            var method = typeof (Expression).GetMethod (
+                nameof (StringSplitHelper), BindingFlags.Static | BindingFlags.NonPublic);
+            return new Expression (LinqExpression.Call (method, arg, separator));
+        }
+        /// <summary>
+        /// Join strings together, separated by another string.
+        /// </summary>
+        /// <returns>The joined string.</returns>
+        /// <param name="separator">The string to put between the values.</param>
+        /// <param name="values">The strings to join.</param>
+        [KRPCMethod]
+        public static Expression StringJoin (Expression separator, Expression values)
+        {
+            CheckIsAString (separator, nameof (separator));
+            if (ReferenceEquals (values, null))
+                throw new ArgumentNullException (nameof (values));
+            if (!typeof (IEnumerable<string>).IsAssignableFrom (values.Type))
+                throw new InvalidOperationException ("Expected a collection of strings to join");
+            var join = typeof (string).GetMethod (
+                "Join", new [] { typeof (string), typeof (IEnumerable<string>) });
+            return new Expression (LinqExpression.Call (join, separator, values));
+        }
+        // Removing from a collection and emptying one. They pair with ListAdd,
+        // SetAdd and DictionarySet
+
+        /// <summary>
+        /// Remove the first occurrence of a value from a list.
+        /// </summary>
+        /// <returns>Whether the value was in the list.</returns>
+        /// <param name="list">The list.</param>
+        /// <param name="value">The value to remove.</param>
+        [KRPCMethod]
+        public static Expression ListRemove (Expression list, Expression value)
+        {
+            if (ReferenceEquals (value, null))
+                throw new ArgumentNullException (nameof (value));
+            var valueType = GetEnumerableValueType (list);
+            var remove = typeof (ICollection<>).MakeGenericType (valueType).GetMethod ("Remove");
+            return new Expression (LinqExpression.Call (
+                list, remove, ConvertElement (value, valueType)));
+        }
+
+        /// <summary>
+        /// Remove the value at the given position from a list.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <param name="index">The position of the value, counting from zero.</param>
+        [KRPCMethod]
+        public static Expression ListRemoveAt (Expression list, Expression index)
+        {
+            CheckIsAnInt (index, nameof (index));
+            var valueType = GetEnumerableValueType (list);
+            var removeAt = typeof (IList<>).MakeGenericType (valueType).GetMethod ("RemoveAt");
+            return new Expression (LinqExpression.Call (list, removeAt, index));
+        }
+
+        /// <summary>
+        /// Remove every value from a list.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        [KRPCMethod]
+        public static Expression ListClear (Expression list)
+        {
+            return new Expression (ClearCall (list, typeof (ICollection<>)));
+        }
+
+        /// <summary>
+        /// Remove a value from a set.
+        /// </summary>
+        /// <returns>Whether the value was in the set.</returns>
+        /// <param name="set">The set.</param>
+        /// <param name="value">The value to remove.</param>
+        [KRPCMethod]
+        public static Expression SetRemove (Expression set, Expression value)
+        {
+            if (ReferenceEquals (value, null))
+                throw new ArgumentNullException (nameof (value));
+            var valueType = GetEnumerableValueType (set);
+            var remove = typeof (ICollection<>).MakeGenericType (valueType).GetMethod ("Remove");
+            return new Expression (LinqExpression.Call (
+                set, remove, ConvertElement (value, valueType)));
+        }
+
+        /// <summary>
+        /// Remove every value from a set.
+        /// </summary>
+        /// <param name="set">The set.</param>
+        [KRPCMethod]
+        public static Expression SetClear (Expression set)
+        {
+            return new Expression (ClearCall (set, typeof (ICollection<>)));
+        }
+
+        /// <summary>
+        /// Remove a key, and the value stored under it, from a dictionary.
+        /// </summary>
+        /// <returns>Whether the key was in the dictionary.</returns>
+        /// <param name="dictionary">The dictionary.</param>
+        /// <param name="key">The key to remove.</param>
+        [KRPCMethod]
+        public static Expression DictionaryRemove (Expression dictionary, Expression key)
+        {
+            if (ReferenceEquals (key, null))
+                throw new ArgumentNullException (nameof (key));
+            var types = DictionaryTypes (dictionary);
+            var remove = typeof (IDictionary<,>).MakeGenericType (types).GetMethod ("Remove");
+            return new Expression (LinqExpression.Call (
+                dictionary, remove, ConvertElement (key, types [0])));
+        }
+
+        /// <summary>
+        /// Remove every key and value from a dictionary.
+        /// </summary>
+        /// <param name="dictionary">The dictionary.</param>
+        [KRPCMethod]
+        public static Expression DictionaryClear (Expression dictionary)
+        {
+            var types = DictionaryTypes (dictionary);
+            return new Expression (LinqExpression.Call (
+                dictionary,
+                typeof (ICollection<>)
+                    .MakeGenericType (typeof (KeyValuePair<,>).MakeGenericType (types))
+                    .GetMethod ("Clear")));
+        }
+
+        internal static IList<TKey> DictionaryKeysHelper<TKey, TValue> (
+            IDictionary<TKey, TValue> dictionary)
+        {
+            return new List<TKey> (dictionary.Keys);
+        }
+
+        internal static IList<TValue> DictionaryValuesHelper<TKey, TValue> (
+            IDictionary<TKey, TValue> dictionary)
+        {
+            return new List<TValue> (dictionary.Values);
+        }
+
+        /// <summary>
+        /// The keys of a dictionary, as a list. A dictionary cannot be iterated over
+        /// directly; iterate over its keys or its values instead.
+        /// </summary>
+        /// <returns>The keys of the dictionary.</returns>
+        /// <param name="dictionary">The dictionary.</param>
+        [KRPCMethod]
+        public static Expression DictionaryKeys (Expression dictionary)
+        {
+            return new Expression (DictionaryPartCall (
+                dictionary, nameof (DictionaryKeysHelper)));
+        }
+
+        /// <summary>
+        /// The values of a dictionary, as a list.
+        /// </summary>
+        /// <returns>The values of the dictionary.</returns>
+        /// <param name="dictionary">The dictionary.</param>
+        [KRPCMethod]
+        public static Expression DictionaryValues (Expression dictionary)
+        {
+            return new Expression (DictionaryPartCall (
+                dictionary, nameof (DictionaryValuesHelper)));
+        }
+
+        // Selecting a single value out of a collection
+
+        /// <summary>
+        /// The first value of a collection. Fails if the collection is empty.
+        /// </summary>
+        /// <returns>The first value.</returns>
+        /// <param name="arg">The collection.</param>
+        [KRPCMethod]
+        public static Expression First (Expression arg)
+        {
+            return new Expression (EnumerableCall ("First", 1, arg));
+        }
+
+        /// <summary>
+        /// The last value of a collection. Fails if the collection is empty.
+        /// </summary>
+        /// <returns>The last value.</returns>
+        /// <param name="arg">The collection.</param>
+        [KRPCMethod]
+        public static Expression Last (Expression arg)
+        {
+            return new Expression (EnumerableCall ("Last", 1, arg));
+        }
+
+        /// <summary>
+        /// The value at the given position in a collection.
+        /// </summary>
+        /// <returns>The value at the given position.</returns>
+        /// <param name="arg">The collection.</param>
+        /// <param name="index">The position of the value, counting from zero.</param>
+        [KRPCMethod]
+        public static Expression ElementAt (Expression arg, Expression index)
+        {
+            CheckIsAnInt (index, nameof (index));
+            var sourceType = GetEnumerableValueType (arg);
+            // Newer frameworks also offer an overload taking a System.Index
+            var elementAt = typeof (Enumerable).GetMethods ().Single (
+                x => x.Name == "ElementAt" && x.GetParameters ().Length == 2 &&
+                x.GetParameters () [1].ParameterType == typeof (int));
+            return new Expression (LinqExpression.Call (
+                elementAt.MakeGenericMethod (sourceType), arg, index));
+        }
+
+        internal static TSource MinByHelper<TSource, TKey> (
+            IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        {
+            return ByKeyHelper (source, selector, -1);
+        }
+
+        internal static TSource MaxByHelper<TSource, TKey> (
+            IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        {
+            return ByKeyHelper (source, selector, 1);
+        }
+
+        /// <summary>
+        /// The value of a collection whose key is the smallest or the largest,
+        /// selected in a single pass.
+        /// </summary>
+        static TSource ByKeyHelper<TSource, TKey> (
+            IEnumerable<TSource> source, Func<TSource, TKey> selector, int wanted)
+        {
+            var comparer = Comparer<TKey>.Default;
+            bool found = false;
+            TSource best = default (TSource);
+            TKey bestKey = default (TKey);
+            foreach (var value in source) {
+                var key = selector (value);
+                if (!found || System.Math.Sign (comparer.Compare (key, bestKey)) == wanted) {
+                    best = value;
+                    bestKey = key;
+                    found = true;
+                }
+            }
+            if (!found)
+                throw new InvalidOperationException ("The collection is empty");
+            return best;
+        }
+
+        /// <summary>
+        /// The value of a collection for which the given function produces the
+        /// smallest value. Fails if the collection is empty.
+        /// </summary>
+        /// <returns>The value with the smallest key.</returns>
+        /// <param name="arg">The collection.</param>
+        /// <param name="key">A function producing the key to compare values by.</param>
+        [KRPCMethod]
+        public static Expression MinBy (Expression arg, Expression key)
+        {
+            return new Expression (ByKeyCall (nameof (MinByHelper), arg, key));
+        }
+
+        /// <summary>
+        /// The value of a collection for which the given function produces the
+        /// largest value. Fails if the collection is empty.
+        /// </summary>
+        /// <returns>The value with the largest key.</returns>
+        /// <param name="arg">The collection.</param>
+        /// <param name="key">A function producing the key to compare values by.</param>
+        [KRPCMethod]
+        public static Expression MaxBy (Expression arg, Expression key)
+        {
+            return new Expression (ByKeyCall (nameof (MaxByHelper), arg, key));
+        }
+
+        // Reshaping a collection. Each produces a lazily evaluated sequence unless
+        // stated otherwise. Use ToList or ToSet to convert one to a concrete
+        // collection before it is returned to a client
+
+        /// <summary>
+        /// The values of a collection with duplicates removed, keeping the first
+        /// occurrence of each.
+        /// </summary>
+        /// <returns>The distinct values of the collection.</returns>
+        /// <param name="arg">The collection.</param>
+        [KRPCMethod]
+        public static Expression Distinct (Expression arg)
+        {
+            return new Expression (EnumerableCall ("Distinct", 1, arg));
+        }
+
+        /// <summary>
+        /// The values of a collection in the opposite order.
+        /// </summary>
+        /// <returns>The reversed collection.</returns>
+        /// <param name="arg">The collection.</param>
+        [KRPCMethod]
+        public static Expression Reverse (Expression arg)
+        {
+            return new Expression (EnumerableCall ("Reverse", 1, arg));
+        }
+
+        /// <summary>
+        /// The values in either of two collections, with duplicates removed.
+        /// </summary>
+        /// <returns>The union of the two collections.</returns>
+        /// <param name="arg1">The first collection.</param>
+        /// <param name="arg2">The second collection.</param>
+        [KRPCMethod]
+        public static Expression Union (Expression arg1, Expression arg2)
+        {
+            return new Expression (SetOperationCall ("Union", arg1, arg2));
+        }
+
+        /// <summary>
+        /// The values in both of two collections, with duplicates removed.
+        /// </summary>
+        /// <returns>The intersection of the two collections.</returns>
+        /// <param name="arg1">The first collection.</param>
+        /// <param name="arg2">The second collection.</param>
+        [KRPCMethod]
+        public static Expression Intersect (Expression arg1, Expression arg2)
+        {
+            return new Expression (SetOperationCall ("Intersect", arg1, arg2));
+        }
+
+        /// <summary>
+        /// The values of the first collection that are not in the second, with
+        /// duplicates removed.
+        /// </summary>
+        /// <returns>The difference between the two collections.</returns>
+        /// <param name="arg1">The first collection.</param>
+        /// <param name="arg2">The second collection.</param>
+        [KRPCMethod]
+        public static Expression Except (Expression arg1, Expression arg2)
+        {
+            return new Expression (SetOperationCall ("Except", arg1, arg2));
+        }
+
+        /// <summary>
+        /// Combine two collections by applying a function to their values in pairs.
+        /// The result is as long as the shorter of the two.
+        /// </summary>
+        /// <returns>The combined collection.</returns>
+        /// <param name="arg1">The first collection.</param>
+        /// <param name="arg2">The second collection.</param>
+        /// <param name="func">A function combining a value from each collection.</param>
+        [KRPCMethod]
+        public static Expression Zip (Expression arg1, Expression arg2, Expression func)
+        {
+            var sourceType1 = GetEnumerableValueType (arg1);
+            var sourceType2 = GetEnumerableValueType (arg2);
+            if (ReferenceEquals (func, null))
+                throw new ArgumentNullException (nameof (func));
+            var arguments = func.Type.GetGenericArguments ();
+            if (arguments.Length != 3)
+                throw new InvalidOperationException (
+                    "Expected a function taking two arguments");
+            var resultType = arguments [2];
+            CheckIsFunction (func, sourceType1, sourceType2, resultType);
+            // Newer frameworks also offer overloads pairing values into tuples and
+            // combining three collections, so the one taking a function is named
+            var zip = typeof (Enumerable).GetMethods ().Single (
+                x => x.Name == "Zip" && x.GetParameters ().Length == 3 &&
+                x.GetParameters () [2].ParameterType.IsGenericType &&
+                x.GetParameters () [2].ParameterType.GetGenericTypeDefinition () ==
+                typeof (Func<,,>));
+            return new Expression (LinqExpression.Call (
+                zip.MakeGenericMethod (sourceType1, sourceType2, resultType),
+                arg1, arg2, func));
+        }
+
+        internal static IDictionary<TKey, IList<TSource>> GroupByHelper<TSource, TKey> (
+            IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        {
+            var groups = new Dictionary<TKey, IList<TSource>> ();
+            foreach (var value in source) {
+                var key = selector (value);
+                IList<TSource> group;
+                if (!groups.TryGetValue (key, out group)) {
+                    group = new List<TSource> ();
+                    groups [key] = group;
+                }
+                group.Add (value);
+            }
+            return groups;
+        }
+
+        /// <summary>
+        /// Group the values of a collection by the key the given function produces
+        /// for each of them.
+        /// </summary>
+        /// <returns>A dictionary of each key to the values that produced it.</returns>
+        /// <param name="arg">The collection.</param>
+        /// <param name="key">A function producing the key to group values by.</param>
+        [KRPCMethod]
+        public static Expression GroupBy (Expression arg, Expression key)
+        {
+            var call = (MethodCallExpression)ByKeyCall (nameof (GroupByHelper), arg, key);
+            var keyType = call.Method.GetGenericArguments () [1];
+            if (!TypeUtils.IsAValidKeyType (keyType))
+                throw new InvalidOperationException (
+                    keyType + " is not a valid dictionary key type, so it cannot be grouped by");
+            return new Expression (call);
+        }
+
+        static System.Type[] DictionaryTypes (Expression dictionary)
+        {
+            if (ReferenceEquals (dictionary, null))
+                throw new ArgumentNullException (nameof (dictionary));
+            var types = dictionary.Type.GetGenericArguments ();
+            if (types.Length != 2)
+                throw new InvalidOperationException ("Expected a dictionary");
+            return types;
+        }
+
+        static LinqExpression DictionaryPartCall (Expression dictionary, string helper)
+        {
+            var types = DictionaryTypes (dictionary);
+            var method = typeof (Expression)
+                .GetMethod (helper, BindingFlags.Static | BindingFlags.NonPublic)
+                .MakeGenericMethod (types);
+            return LinqExpression.Call (method, dictionary);
+        }
+
+        static LinqExpression ClearCall (Expression collection, System.Type declaringType)
+        {
+            var valueType = GetEnumerableValueType (collection);
+            return LinqExpression.Call (
+                collection, declaringType.MakeGenericType (valueType).GetMethod ("Clear"));
+        }
+
+        /// <summary>
+        /// A call of an Enumerable method taking only the collection, over the type of
+        /// its values.
+        /// </summary>
+        static LinqExpression EnumerableCall (string name, int parameters, Expression arg)
+        {
+            var sourceType = GetEnumerableValueType (arg);
+            var method = typeof (Enumerable).GetMethods ().Single (
+                x => x.Name == name && x.GetParameters ().Length == parameters);
+            return LinqExpression.Call (method.MakeGenericMethod (sourceType), arg);
+        }
+
+        /// <summary>
+        /// A call of an Enumerable method combining two collections of the same type.
+        /// </summary>
+        static LinqExpression SetOperationCall (string name, Expression arg1, Expression arg2)
+        {
+            var sourceType1 = GetEnumerableValueType (arg1);
+            var sourceType2 = GetEnumerableValueType (arg2);
+            if (sourceType1 != sourceType2)
+                throw new InvalidOperationException (
+                    "Cannot combine collections with different value types");
+            var method = typeof (Enumerable).GetMethods ().Single (
+                x => x.Name == name && x.GetParameters ().Length == 2);
+            return LinqExpression.Call (
+                method.MakeGenericMethod (sourceType1), arg1, arg2);
+        }
+
+        /// <summary>
+        /// A call of one of the helpers taking a collection and a function producing a
+        /// key for each of its values.
+        /// </summary>
+        static LinqExpression ByKeyCall (string helper, Expression arg, Expression key)
+        {
+            if (ReferenceEquals (key, null))
+                throw new ArgumentNullException (nameof (key));
+            var sourceType = GetEnumerableValueType (arg);
+            var arguments = key.Type.GetGenericArguments ();
+            if (arguments.Length != 2)
+                throw new InvalidOperationException (
+                    "Expected a function taking one argument");
+            var keyType = arguments [1];
+            CheckIsFunction (key, sourceType, keyType);
+            var method = typeof (Expression)
+                .GetMethod (helper, BindingFlags.Static | BindingFlags.NonPublic)
+                .MakeGenericMethod (sourceType, keyType);
+            return LinqExpression.Call (method, arg, key);
+        }
+
+
+        static void CheckIsAString (Expression expression, string name)
+        {
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (name);
+            if (expression.Type != typeof (string))
+                throw new InvalidOperationException (
+                    "Expected a string for " + name + "; " +
+                    "use ConvertToString to convert a value to one");
+        }
+        static void CheckIsAnInt (Expression expression, string name)
+        {
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (name);
+            if (expression.Type != typeof (int))
+                throw new InvalidOperationException (
+                    "Expected an integer for " + name + "; use a cast to convert a value to one");
+        }
+        /// <summary>
+        /// A call of a string method comparing with another string, done by ordinal
+        /// value so that the result does not depend on the game's language.
+        /// </summary>
+        static LinqExpression OrdinalStringCall (string name, Expression arg, Expression value)
+        {
+            CheckIsAString (arg, nameof (arg));
+            CheckIsAString (value, nameof (value));
+            var method = typeof (string).GetMethod (
+                name, new [] { typeof (string), typeof (StringComparison) });
+            return LinqExpression.Call (
+                arg, method, value, LinqExpression.Constant (StringComparison.Ordinal));
+        }
+        static LinqExpression OrdinalIndexOf (Expression arg, Expression value)
+        {
+            return OrdinalStringCall ("IndexOf", arg, value);
+        }
+        /// <summary>
+        /// A call of one of the trim methods. Each takes the characters to trim, and
+        /// trims white space when given none.
+        /// </summary>
+        static LinqExpression TrimCall (string name, Expression arg)
+        {
+            CheckIsAString (arg, nameof (arg));
+            var method = typeof (string).GetMethod (name, new [] { typeof (char []) });
+            return LinqExpression.Call (
+                arg, method, LinqExpression.Constant (new char [0]));
+        }
+
+        /// <summary>
         /// Determine if a collection contains a value.
         /// </summary>
         /// <returns>Whether the collection contains a value.</returns>
@@ -1289,7 +2143,8 @@ namespace KRPC.Service.KRPC
             var sourceType = GetEnumerableValueType (arg);
             var contains = typeof (Enumerable).GetMethods ().Single (x => x.Name == "Contains" && x.GetParameters ().Length == 2);
             contains = contains.MakeGenericMethod (sourceType);
-            return new Expression (LinqExpression.Call (contains, arg, value));
+            return new Expression (LinqExpression.Call (
+                contains, arg, ConvertElement (value, sourceType)));
         }
 
         /// <summary>
@@ -1748,6 +2603,18 @@ namespace KRPC.Service.KRPC
         {
             if (!typeof (IEnumerable).IsAssignableFrom (collection.Type))
                 throw new InvalidOperationException ("Expected an enumerable collection type");
+        }
+        /// <summary>
+        /// The Count property of a collection type. A service procedure returns an
+        /// interface type, which declares nothing itself and inherits the property
+        /// from ICollection, so the interfaces have to be searched as well.
+        /// </summary>
+        static PropertyInfo GetCountProperty (System.Type type)
+        {
+            return type.GetProperty ("Count") ??
+                type.GetInterfaces ()
+                    .Select (x => x.GetProperty ("Count"))
+                    .FirstOrDefault (property => property != null);
         }
 
         static System.Type GetEnumerableValueType (Expression collection)
