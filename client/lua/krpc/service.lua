@@ -125,7 +125,7 @@ function service.register_definitions(types, svc)
   end
   for _,struct in ipairs(svc.structs) do
     -- A structure whose fields cannot all be resolved is left without any, so that whatever
-    -- names it is skipped rather than the whole service failing to build
+    -- names it is skipped and the service still builds
     local known = true
     for _,field in ipairs(struct.fields) do
       known = known and Types.is_a_known_type(field.type)
@@ -230,9 +230,9 @@ function ServiceBase:_add_service_class_property(class_name, property_name, gett
 end
 
 --- Run one step of building a service, skipping it with a warning if it names a type this
---- client does not know about, rather than failing to create the service at all. That is what
---- a definition from a newer server looks like, where a member has been added whose type is
---- from a later version of the protocol.
+--- client does not know about, so that the service is still created. A definition from a
+--- newer server carries such a type where a member has been added from a later version of
+--- the protocol.
 local function _skipping_unknown_types(what, build)
   local ok, err = pcall(build)
   if not ok then

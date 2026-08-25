@@ -70,8 +70,8 @@ public abstract class ConnectionTestCase {
   @Test
   @SuppressWarnings("checkstyle:missingjavadocmethod")
   public void testCarriesOneCall() throws IOException, RPCException {
-    // The stand-in answers every request, so this is the request reaching it and the response
-    // coming back rather than anything the call means
+    // The stand-in answers every request, so this measures the request reaching it and the
+    // response coming back, and not what the call means
     try (Connection connection = connect("JavaConnectionTest")) {
       assertNotNull(connection.invoke("TestService", "TestProcedure"));
     }
@@ -81,7 +81,7 @@ public abstract class ConnectionTestCase {
   @SuppressWarnings("checkstyle:missingjavadocmethod")
   public void testCarriesManyCalls() throws IOException, RPCException {
     // Calls are read out of a buffer the transport fills, so a run of them covers that buffer
-    // being refilled and reused rather than only its first use
+    // being refilled and reused, and not only its first use
     try (Connection connection = connect("JavaConnectionTest")) {
       for (int i = 0; i < 100; i++) {
         assertNotNull(connection.invoke("TestService", "TestProcedure"));

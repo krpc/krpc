@@ -1,39 +1,38 @@
 -- Benchmarks for the lua client, run by //tools/benchmarks:lua.
 --
--- Measures what this client costs from inside it: the round trip for a procedure call, and
--- what a call carrying a collection of values costs. The runner starts a TestServer, says in
--- the environment where it is listening and which transport that is, and reads the JSON printed
--- here; see tools/benchmarks/run_client.py for the contract and for what happens to these
--- numbers.
+-- Measures this client from inside it: the round trip for a procedure call, and the cost of
+-- a call carrying a collection of values. The runner starts a TestServer, names in the
+-- environment where it is listening and over which transport, and reads the JSON printed
+-- here. See tools/benchmarks/run_client.py for the contract.
 
 local krpc = require 'krpc.init'
 local socket = require 'socket'
 
--- How long one timed loop should run for. Long enough that the clock and a stray scheduling
--- delay do not decide the answer, short enough that a whole run stays in seconds.
+-- Duration of one timed loop. Long enough that the clock and a stray scheduling delay do not
+-- decide the answer, and short enough that a whole run stays in seconds.
 local TARGET_SECONDS = 0.2
 
--- How many timed loops to take.
+-- The number of timed loops to take.
 local SAMPLES = 9
 
--- How long one discarded chunk of calls runs for while a case is being settled, how many of
--- them at a time are asked whether it has stopped getting faster, and how much better the last
--- few have to be than everything before them for it to count as still improving.
+-- The duration of one discarded chunk of calls while a case is being settled, the number of
+-- them compared at a time, and the margin the last few have to beat for the case to count as
+-- still improving.
 local SETTLE_CHUNK_SECONDS = 0.1
 local SETTLE_CHUNKS = 3
 local SETTLE_TOLERANCE = 0.02
 
--- How long to keep settling one case before measuring it anyway.
+-- The time to keep settling one case before measuring it anyway.
 local SETTLE_TIMEOUT_SECONDS = 10.0
 
--- How many values the collection case sends and gets back. A call carries a value at a time, so
--- what one costs to encode and decode is lost in the round trip it arrives in; a list makes that
+-- The number of values the collection case sends and gets back. A call carries one value at a
+-- time, so the cost of encoding and decoding it is lost in the round trip. A list makes that
 -- per-value cost most of what the case measures. The same count for every client, so that the
 -- figures can be read against each other.
 local LIST_VALUES = 100
 
--- Wall clock. os.clock measures processor time, which leaves out everything spent waiting for
--- the server to answer - that is most of a round trip, so it is the wrong clock entirely.
+-- Wall clock. os.clock measures processor time, which leaves out the wait for the server to
+-- answer, and that is most of a round trip.
 local function now()
   return socket.gettime()
 end
@@ -66,14 +65,12 @@ local function smallest(values, first, last)
   return best
 end
 
--- Make discarded calls until they stop getting faster, and return what one costs along with
--- whether it got there.
---
--- A fixed warmup cannot know when it is done. Both ends of a round trip get faster under load
--- for a while - the server's rate control adapts to what it is being asked for - and a case
--- measured before that finishes returns a curve rather than a cost. Every case is settled on
--- its own, since one already warmed by the case before it says so within a few chunks. The
--- cost of a call also falls out of the last chunk, which is what sizes the timed loops.
+-- Make discarded calls until they stop getting faster, and return the cost of one along with
+-- whether it got there. A fixed warmup cannot know when it is done: both ends of a round trip
+-- get faster under load for a while, as the server's rate control adapts, and a case measured
+-- before that finishes returns a curve. Every case is settled on its own, as one already
+-- warmed by the case before it settles within a few chunks. The cost of a call falls out of
+-- the last chunk, which sizes the timed loops.
 local function settle(call)
   local chunks = {chunk(call)}
   local start = now()
@@ -88,8 +85,8 @@ local function settle(call)
       end
     end
   end
-  -- However many chunks it got through, which is fewer than a settle compares where a single
-  -- one of them ran longer than the whole timeout.
+  -- The chunks it got through, which is fewer than a settle compares when a single chunk ran
+  -- longer than the whole timeout.
   return smallest(chunks, math.max(#chunks - SETTLE_CHUNKS + 1, 1), #chunks), false
 end
 
@@ -133,8 +130,8 @@ local function emit(cases)
   print(string.format('{"results": [%s]}', table.concat(parts, ', ')))
 end
 
--- Connect over whichever transport the runner started the server with, which it names by socket
--- path or by port. Both are measured, since which one carries a call is part of what it costs.
+-- Connect over whichever transport the runner started the server with, named by socket path or
+-- by port. Both are measured, as the transport is part of what a call costs.
 local function connect()
   local rpc_path = os.getenv('RPC_PATH')
   if rpc_path ~= nil then

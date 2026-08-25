@@ -74,9 +74,9 @@ class StreamManager {
     List<Consumer<Object>> callbacks;
     // The update lock is held only to find the stream and decode its new value, and is released
     // before the stream's condition is taken. A thread waiting for an update holds the condition
-    // and then needs the update lock -- Event.waitFor resets the stream value while holding it,
-    // as its documented use requires -- so taking the two in the opposite order here deadlocks.
-    // The callbacks are copied for the same reason: they run below without the lock held.
+    // and then needs the update lock, as Event.waitFor resets the stream value while holding it,
+    // so taking the two in the opposite order here deadlocks. The callbacks are copied for the
+    // same reason: they run below without the lock held.
     synchronized (updateLock) {
       if (!streams.containsKey(id)) {
         return;
@@ -96,7 +96,7 @@ class StreamManager {
       synchronized (updateLock) {
         // The stream can be removed while its new value is being decoded, in which case
         // remove() has already stored the error saying so and this value must not overwrite
-        // it - the stream is gone from the registry, so nothing would ever replace it and it
+        // it. The stream is gone from the registry, so nothing would ever replace it and it
         // would be returned as though the stream were still live.
         if (!streams.containsKey(id)) {
           return;

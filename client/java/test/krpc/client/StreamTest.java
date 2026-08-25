@@ -431,7 +431,7 @@ public class StreamTest {
   }
 
   // The update thread must not hold the update lock while waiting for a stream's condition. A
-  // caller holding that condition -- which is how waiting for an update is documented to work --
+  // caller holding that condition, which is how waiting for an update is documented to work,
   // otherwise blocks forever on anything needing the update lock, and the update thread blocks
   // on the condition, deadlocking both. The timeout catches it, as it hangs the test outright.
   @Test(timeout = 30000)

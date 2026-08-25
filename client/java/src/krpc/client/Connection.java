@@ -254,7 +254,7 @@ public class Connection implements AutoCloseable {
     if (timeout.isZero()) {
       return SocketChannel.open(new InetSocketAddress(address, port));
     }
-    // A network that drops a connection attempt rather than refusing it leaves the client
+    // A network that drops a connection attempt instead of refusing it leaves the client
     // waiting, so bound the wait where one was asked for.
     SocketChannel channel = SocketChannel.open();
     try {
@@ -472,8 +472,8 @@ public class Connection implements AutoCloseable {
       if (ctor == null) {
         // The type is unknown here if the service it belongs to has no generated stubs loaded,
         // and has no usable constructor if it was not generated as an exception type. Report
-        // the error itself, named by its type on the server, rather than the failure to build
-        // an exception for it, which would say nothing about what actually went wrong.
+        // the error itself, named by its type on the server, so that the failure to build an
+        // exception for it does not hide it.
         throw new RPCException(key + ": " + message);
       }
       try {

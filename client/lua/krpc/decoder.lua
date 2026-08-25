@@ -25,7 +25,7 @@ local function _decode_varint(data)
   return value
 end
 
--- What pb.struct_unpack calls a single precision and a double precision number.
+-- The pb.struct_unpack format codes for a single precision and a double precision number.
 local FLOAT_FORMAT = string.byte('f')
 local DOUBLE_FORMAT = string.byte('d')
 
@@ -42,9 +42,8 @@ local function _decode_string(data)
   return data:sub(position+1, position+size+1)
 end
 
--- How to decode a value, by the code of the type it has. Which of these a type wants is the
--- first thing decoding a value asks, and a table says so in one lookup where asking a type what
--- class it is walks its ancestry once per question.
+-- The decoder for each value type, by type code. Decoding a value starts here, and a table
+-- resolves it in one lookup, where testing a type's class walks its ancestry every time.
 local _value_decoders = {
   [Types.DOUBLE] = _decode_double,
   [Types.FLOAT] = _decode_float,
@@ -83,7 +82,7 @@ local _ENTRY_VALUE = 18
 
 --- Read the values a collection carries, each a length delimited field under the given tag.
 --
--- Read here rather than by parsing a message, for the reason the encoder writes them here: the
+-- Read here and not by parsing a message, for the reason the encoder writes them here: the
 -- protocol buffer library is written in lua, and parsing a message of a hundred values into a
 -- container that type checks each one costs far more than reading the bytes does.
 local function _decode_items(data, tag)
@@ -105,11 +104,11 @@ end
 
 --- Read the key and the value out of one entry of a dictionary.
 --
--- The two are read by the tag in front of each rather than by the order they are in, as a
--- message carries its fields in whatever order the writer chose.
+-- The two are read by the tag in front of each, as a message carries its fields in whatever
+-- order the writer chose.
 local function _decode_entry(data)
-  -- A key or a value that encodes to nothing, an empty collection or an empty string among
-  -- them, is left out of the entry entirely, and reads back as the nothing it was
+  -- A key or a value that encodes to nothing, such as an empty collection or an empty
+  -- string, is left out of the entry entirely and reads back empty
   local key = ''
   local value = ''
   local position = 0
