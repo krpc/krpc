@@ -48,6 +48,51 @@ namespace KRPC.Service.KRPC
             get { return internalExpression.Type; }
         }
 
+        static readonly Dictionary<Tuple<System.Type, object>, Expression> constants =
+            new Dictionary<Tuple<System.Type, object>, Expression> ();
+
+        /// <summary>
+        /// A constant expression of the given type and value, shared with every other
+        /// constant of that type and value, so that the object store gives them all a
+        /// single object identifier. The key includes the type so that constants of
+        /// equal value but differing type stay distinct. Sharing is safe because the
+        /// trees are immutable.
+        /// </summary>
+        static Expression Constant (System.Type type, object value)
+        {
+            var key = Tuple.Create (type, KeyOfConstant (value));
+            Expression constant;
+            if (!constants.TryGetValue (key, out constant)) {
+                constant = new Expression (LinqExpression.Constant (value, type));
+                constants [key] = constant;
+            }
+            return constant;
+        }
+
+        /// <summary>
+        /// The part of a constant's key that stands for its value. A floating point
+        /// value is keyed on its bits, because Equals makes -0.0 and 0.0 the same key
+        /// while they are different constants.
+        /// </summary>
+        static object KeyOfConstant (object value)
+        {
+            if (value is double)
+                return BitConverter.DoubleToInt64Bits ((double)value);
+            if (value is float)
+                return BitConverter.ToInt32 (BitConverter.GetBytes ((float)value), 0);
+            return value;
+        }
+
+        /// <summary>
+        /// Drop the shared constants. They are registered with the object store, which is
+        /// emptied once no server is left for a client to hold an identifier through, so
+        /// they live no longer than the identifiers naming them.
+        /// </summary>
+        internal static void ClearConstants ()
+        {
+            constants.Clear ();
+        }
+
         static bool IsNumericType (System.Type type)
         {
             return
@@ -120,7 +165,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantDouble(double value)
         {
-            return new Expression(LinqExpression.Constant(value));
+            return Constant (typeof (double), value);
         }
 
         /// <summary>
@@ -130,7 +175,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantFloat(float value)
         {
-            return new Expression(LinqExpression.Constant(value));
+            return Constant (typeof (float), value);
         }
 
         /// <summary>
@@ -140,7 +185,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantInt(int value)
         {
-            return new Expression(LinqExpression.Constant(value));
+            return Constant (typeof (int), value);
         }
 
         /// <summary>
@@ -150,7 +195,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantBool (bool value)
         {
-            return new Expression (LinqExpression.Constant (value));
+            return Constant (typeof (bool), value);
         }
 
         /// <summary>
@@ -160,7 +205,59 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantString (string value)
         {
-            return new Expression (LinqExpression.Constant (value));
+            return Constant (typeof (string), value);
+        }
+
+        /// <summary>
+        /// A constant value of an enumeration a service defines.
+        /// </summary>
+        /// <param name="service">The name of the service the enumeration is defined in.</param>
+        /// <param name="name">The name of the enumeration.</param>
+        /// <param name="value">The value of the member of the enumeration.</param>
+        [KRPCMethod]
+        public static Expression ConstantEnum (string service, string name, int value)
+        {
+            Scanner.ServiceSignature signature;
+            if (!Services.Instance.Signatures.TryGetValue (service, out signature))
+                throw new ArgumentException ("Service \"" + service + "\" not found");
+            Scanner.EnumerationSignature enumeration;
+            if (!signature.Enumerations.TryGetValue (name, out enumeration))
+                throw new ArgumentException (
+                    "Enumeration \"" + name + "\" not found in service \"" + service + "\"");
+            var type = enumeration.UnderlyingType;
+            if (!System.Enum.IsDefined (type, value))
+                throw new ArgumentException (
+                    value + " is not a value of enumeration \"" + name + "\" " +
+                    "in service \"" + service + "\"");
+            return Constant (type, System.Enum.ToObject (type, value));
+        }
+        /// <summary>
+        /// A constant value of an object type, i.e. an instance of a class defined
+        /// by a service. The object is given by its object identifier, the value
+        /// used to reference the object over the communication protocol, which
+        /// client libraries make available on their remote object wrappers.
+        /// </summary>
+        /// <param name="value">The object identifier of the object.</param>
+        [KRPCMethod]
+        public static Expression ConstantObject (ulong value)
+        {
+            var instance = ObjectStore.Instance.GetInstance (value);
+            return new Expression (LinqExpression.Constant (instance, GetClassType (instance)));
+        }
+
+        /// <summary>
+        /// The service-defined class type of an object, i.e. the closest type in its
+        /// hierarchy annotated as a kRPC class.
+        /// </summary>
+        static System.Type GetClassType (object instance)
+        {
+            var type = instance.GetType ();
+            while (type != null && !TypeUtils.IsAClassType (type))
+                type = type.BaseType;
+            if (type == null)
+                throw new ArgumentException (
+                    instance.GetType () + " is not an instance of a class defined by a service");
+            return type;
         }
 
         /// <summary>
