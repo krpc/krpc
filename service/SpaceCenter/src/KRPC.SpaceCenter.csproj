@@ -114,6 +114,7 @@
     <Compile Include="Services\AlarmType.cs" />
     <Compile Include="Services\AlarmWarpAction.cs" />
     <Compile Include="Services\AutoPilot.cs" />
+    <Compile Include="Services\AutoPilotUpdateMode.cs" />
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\AltimeterMode.cs" />
     <Compile Include="Services\CameraMode.cs" />

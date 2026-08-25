@@ -9,6 +9,11 @@ namespace KRPC
     /// <summary>
     /// Main KRPC addon. Contains the kRPC core, config and UI.
     /// </summary>
+    // Ordered ahead of the game's own scripts so that the server executes a tick's calls before
+    // the game collects control inputs for it. Without that the order is Unity's default, which
+    // puts the control input first, and a value written by a call in one tick is not acted on
+    // until the next.
+    [DefaultExecutionOrder (-100)]
     [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
     public sealed class Addon : MonoBehaviour
     {

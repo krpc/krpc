@@ -30,6 +30,22 @@ namespace KRPC
         Dictionary<ulong, IClient<NoMessage, StreamUpdate>> removeStreams = new Dictionary<ulong, IClient<NoMessage, StreamUpdate>> ();
         ulong nextStreamId = 0;
 
+        /// <summary>
+        /// The client holding the game on the current tick, and the timestamp its hold runs
+        /// out at. One client at a time: what a hold offers is that nothing else happens,
+        /// which two clients cannot both be given.
+        /// </summary>
+        IClient<Request,Response> tickHoldClient;
+        long tickHoldDeadline;
+
+        /// <summary>
+        /// Whether the update is executing calls a client made. A hold only means anything
+        /// while it is: a call made by a stream or an event runs after the update has finished
+        /// with the calls, so a hold taken there would be found in force by the next update
+        /// with no client waiting to release it, and be taken again before that one ended too.
+        /// </summary>
+        bool executingRPCs;
+
         static Core instance;
 
         /// <summary>
@@ -79,6 +95,17 @@ namespace KRPC
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
 
+        /// <summary>
+        /// Event triggered at the start of an update, before it executes any calls.
+        /// </summary>
+        public event EventHandler OnBeforeCalls;
+
+        /// <summary>
+        /// Event triggered once an update has executed the calls it received, before it
+        /// produces stream updates.
+        /// </summary>
+        public event EventHandler OnAfterCalls;
+
         internal void RPCClientConnected (IClient<Request,Response> client)
         {
             rpcClients [client.Guid] = client;
@@ -89,6 +116,9 @@ namespace KRPC
         internal void RPCClientDisconnected (IClient<Request,Response> client)
         {
             rpcClients.Remove (client.Guid);
+            // A client that goes away while holding the tick does not get to keep holding it.
+            if (tickHoldClient != null && tickHoldClient.Guid == client.Guid)
+                ReleaseTickHold ();
             clientScheduler.Remove (client);
             EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
@@ -363,7 +393,13 @@ namespace KRPC
             ulong startBytesRead = BytesRead;
             ulong startBytesWritten = BytesWritten;
 
+            // The events bracket the call phase rather than being raised from inside it, so that
+            // they are raised exactly once per update whatever the update does: the poll loop
+            // runs many times over while a client holds the tick. Raising OnAfterCalls before
+            // the stream update also means streams observe whatever the handlers did.
+            EventHandlerExtensions.Invoke (OnBeforeCalls, this);
             RPCServerUpdate ();
+            EventHandlerExtensions.Invoke (OnAfterCalls, this);
             StreamServerUpdate ();
 
             var timeElapsed = updateTimer.ElapsedSeconds ();
@@ -383,7 +419,11 @@ namespace KRPC
             // This prevents MaxTimePerUpdate from being set to a high value when the server is idle, which would
             // cause a drop in framerate if a large burst of RPCs are received.
             var config = Configuration.Instance;
-            if (config.AdaptiveRateControl) {
+            // An update that a client held the tick through ran for as long as that client
+            // asked it to. Adapting to it would read the client's own work as the server
+            // spending too long on RPCs, and wind the limit down to its floor for every other
+            // client as well.
+            if (config.AdaptiveRateControl && !heldTick) {
                 var targetTicks = Stopwatch.Frequency / 59;
                 if (ticksElapsed > targetTicks) {
                     if (config.MaxTimePerUpdate > 1000)
@@ -399,6 +439,14 @@ namespace KRPC
             }
         }
 
+        /// <summary>
+        /// Whether a client held the tick during the update that just ran. Two things read it:
+        /// the tick gets held once per update and no more, and an update that was held took as
+        /// long as the client it was waiting for, which is not a measurement the frame rate
+        /// should be adapted to.
+        /// </summary>
+        bool heldTick;
+
         Stopwatch rpcTimer = new Stopwatch ();
         Stopwatch rpcPollTimeout = new Stopwatch ();
         Stopwatch rpcPollTimer = new Stopwatch ();
@@ -413,6 +461,9 @@ namespace KRPC
         /// If NonBlockingUpdate is false, this call will block waiting for new RPCs for up to
         /// MaxPollTimePerUpdate microseconds. If NonBlockingUpdate is true, a single non-blocking call
         /// will be made to check for new RPCs.
+        /// While a client holds the tick, none of those limits apply: its RPCs are waited for and
+        /// executed until it releases the tick or its hold runs out of time, so that a program can
+        /// read the game state, compute with it and write the result back within one tick.
         /// </summary>
         void RPCServerUpdate ()
         {
@@ -421,6 +472,7 @@ namespace KRPC
             rpcPollTimeout.Reset ();
             rpcPollTimer.Reset ();
             rpcExecTimer.Reset ();
+            heldTick = false;
             var config = Configuration.Instance;
             long maxTimePerUpdateTicks = StopwatchExtensions.MicrosecondsToTicks (config.MaxTimePerUpdate);
             long recvTimeoutTicks = StopwatchExtensions.MicrosecondsToTicks (config.RecvTimeout);
@@ -438,13 +490,21 @@ namespace KRPC
                 rpcPollTimeout.Start ();
                 while (true) {
                     PollRequests (rpcYieldedContinuations);
+                    if (rpcContinuations.Count > 0)
+                        break;
+                    // A client holding the tick is waited for until it releases it, so that a
+                    // call it makes after seeing the result of an earlier one is executed in
+                    // this update rather than the next. The hold ending is the only thing that
+                    // ends this wait, which is why it is asked about every time around.
+                    if (TickHeld) {
+                        heldTick = true;
+                        continue;
+                    }
                     if (!config.BlockingRecv)
                         break;
                     if (rpcPollTimeout.ElapsedTicks > recvTimeoutTicks)
                         break;
                     if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
-                        break;
-                    if (rpcContinuations.Count > 0)
                         break;
                 }
                 rpcPollTimer.Stop ();
@@ -454,6 +514,7 @@ namespace KRPC
 
                 // Execute RPCs
                 rpcExecTimer.Start ();
+                executingRPCs = true;
                 for (int i = 0; i < rpcContinuations.Count; i++) {
                     var continuation = rpcContinuations [i];
 
@@ -461,8 +522,9 @@ namespace KRPC
                     if (!continuation.Client.Connected)
                         continue;
 
-                    // Max exec time exceeded, delay to next update
-                    if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks) {
+                    // Max exec time exceeded, delay to next update. An update holding a tick
+                    // runs for as long as the hold lasts instead.
+                    if (!TickHeld && rpcTimer.ElapsedTicks > maxTimePerUpdateTicks) {
                         rpcYieldedContinuations.Add (continuation);
                         continue;
                     }
@@ -472,11 +534,23 @@ namespace KRPC
                         ExecuteContinuation (continuation);
                     } catch (YieldException<RequestContinuation> e) {
                         rpcYieldedContinuations.Add (e.Value);
+                        ReleaseTickToYield (e.Value.Client);
                     }
                     rpcsExecuted++;
                 }
+                executingRPCs = false;
                 rpcContinuations.Clear ();
                 rpcExecTimer.Stop ();
+
+                if (TickHeld) {
+                    heldTick = true;
+                    continue;
+                }
+
+                // Exit if a hold on the tick ended during this update, so that the game takes
+                // the tick it was held back from before another hold can defer it again.
+                if (heldTick)
+                    break;
 
                 // Exit if only execute one RPC per update
                 if (config.OneRPCPerUpdate)
@@ -485,6 +559,17 @@ namespace KRPC
                 // Exit if max exec time exceeded
                 if (rpcTimer.ElapsedTicks > maxTimePerUpdateTicks)
                     break;
+            }
+
+            // Nothing leaves the loop while a client holds the tick, so a hold still in force
+            // here belongs to an update that failed part way through. Which is also the only
+            // way calls can still be marked as executing.
+            executingRPCs = false;
+            if (tickHoldClient != null) {
+                Logger.WriteLine (
+                    "Ending a hold on the tick left behind by client " + tickHoldClient.Address,
+                    Logger.Severity.Error);
+                ReleaseTickHold ();
             }
 
             // Run yielded continuations on the next update
@@ -580,6 +665,126 @@ namespace KRPC
             streamTimer.Stop ();
             StreamRPCsExecuted += rpcsExecuted;
             TimePerStreamUpdate = (float)streamTimer.ElapsedSeconds ();
+        }
+
+        /// <summary>
+        /// Hold the game on the current tick for a client, so that the calls it makes next are
+        /// executed in this tick rather than in later ones. Yields to the next tick if this one
+        /// has already been held and let go.
+        /// </summary>
+        internal void HoldTick (IClient rpcClient)
+        {
+            if (rpcClient == null)
+                throw new ArgumentNullException (nameof (rpcClient));
+            if (!executingRPCs)
+                throw new InvalidOperationException (
+                    "The tick can only be held by a client making a call, " +
+                    "not by a stream or an event");
+            IClient<Request,Response> client;
+            if (!rpcClients.TryGetValue (rpcClient.Guid, out client))
+                throw new InvalidOperationException (
+                    "No RPC client is connected with this identifier");
+            // Taking a hold that is already held would let a client renew its own before it ran
+            // out of time, and so hold the game for as long as it liked.
+            if (TickHeld)
+                throw new InvalidOperationException (
+                    tickHoldClient.Guid == rpcClient.Guid
+                    ? "This client is already holding the tick"
+                    : "Another client is holding the tick");
+            // One hold per tick, whoever asks for it. A tick that has already been held and let
+            // go has done its waiting, and holding it again would defer it a second time; a
+            // client looping on hold and release, or two passing it between them, could defer it
+            // for as long as they kept asking. The call waits for the next tick instead, which
+            // is where the work it is about to do belongs.
+            if (heldTick)
+                throw new YieldException<Action> (() => HoldTick (rpcClient));
+            tickHoldClient = client;
+            tickHoldDeadline = Stopwatch.GetTimestamp () +
+                StopwatchExtensions.MicrosecondsToTicks (Configuration.Instance.TickHoldTimeout);
+            Logger.WriteLine ("Client " + client.Address + " is holding the tick",
+                              Logger.Severity.Debug);
+        }
+
+        /// <summary>
+        /// Let the game move on from the current tick. Does nothing if the client is not
+        /// holding it, which is what a client whose hold has already ended sees.
+        /// </summary>
+        internal void ReleaseTick (IClient rpcClient)
+        {
+            if (rpcClient == null)
+                throw new ArgumentNullException (nameof (rpcClient));
+            if (tickHoldClient == null || tickHoldClient.Guid != rpcClient.Guid)
+                return;
+            Logger.WriteLine ("Client " + tickHoldClient.Address + " released the tick",
+                              Logger.Severity.Debug);
+            ReleaseTickHold ();
+        }
+
+        /// <summary>
+        /// Let the game move on from the current tick and hold the one after it, so that a
+        /// client works on consecutive ticks rather than on whichever it manages to ask for in
+        /// time. The hold on the next tick is taken by the yield the second call makes: the
+        /// caller's continuation waits in the server and is carried on at the start of the next
+        /// update, ahead of anything the server has to be polled for, so there is no window for
+        /// the game to advance through.
+        /// </summary>
+        internal void NextTick (IClient rpcClient)
+        {
+            ReleaseTick (rpcClient);
+            HoldTick (rpcClient);
+        }
+
+        /// <summary>
+        /// Whether a client is holding the game on this tick. A hold that has run out of time,
+        /// or whose client has gone away, ends here: the client cannot end it itself, and an
+        /// update must not be left waiting for one that will never end.
+        /// </summary>
+        bool TickHeld {
+            get {
+                if (tickHoldClient == null)
+                    return false;
+                if (Stopwatch.GetTimestamp () >= tickHoldDeadline) {
+                    Logger.WriteLine (
+                        "Client " + tickHoldClient.Address + " held the tick for longer than the " +
+                        "timeout allows, so the game has moved on without it",
+                        Logger.Severity.Warning);
+                    ReleaseTickHold ();
+                    return false;
+                }
+                // Clients that have gone away are only reconciled between updates, so an update
+                // holding a tick has to notice for itself that the client it waits for has left.
+                if (!rpcClients.ContainsKey (tickHoldClient.Guid) || !tickHoldClient.Connected) {
+                    Logger.WriteLine (
+                        "Client " + tickHoldClient.Address + " disconnected while holding the tick",
+                        Logger.Severity.Warning);
+                    ReleaseTickHold ();
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// End a client's hold on the tick because a call it made needs another update to
+        /// finish. Only a later update can carry on such a call, which is exactly what the hold
+        /// prevents, so waiting the hold out would leave the client and the game waiting for
+        /// each other until the timeout.
+        /// </summary>
+        void ReleaseTickToYield (IClient<Request,Response> client)
+        {
+            if (tickHoldClient == null || tickHoldClient.Guid != client.Guid)
+                return;
+            Logger.WriteLine (
+                "Client " + client.Address + " called a procedure that takes more than one " +
+                "update to finish while holding the tick, so the hold has ended",
+                Logger.Severity.Warning);
+            ReleaseTickHold ();
+        }
+
+        void ReleaseTickHold ()
+        {
+            tickHoldClient = null;
+            tickHoldDeadline = 0;
         }
 
         /// <summary>

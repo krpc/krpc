@@ -125,6 +125,15 @@
     `AutoPilot.UpReference` as the scalar `TargetPitch` and `TargetHeading` setters do, so
     tracking a moving direction such as prograde no longer drops the roll on every
     update (#1054)
+  - The auto-pilot's control loop runs at a defined point in the server's update rather than
+    wherever the game happened to collect control inputs, so a target set during a tick is
+    flown on that tick instead of the next one. `AutoPilot.UpdateMode` chooses that point,
+    and in its manual mode `AutoPilot.Update` runs the loop, letting a program place it
+    among its own calls inside a held tick (#1070)
+  - Fix an engaged auto-pilot failing on every physics tick once the vessel or part its
+    `AutoPilot.ReferenceFrame` is defined against is gone. The loop now waits for a frame
+    it can measure in, and releases the controls in the meantime, so pointing it at
+    another frame picks it back up (#1070)
 
 - Orbits, nodes and bodies
   - An `Orbit` reads the orbit of the vessel, celestial body or maneuver node it belongs to as

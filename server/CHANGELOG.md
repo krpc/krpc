@@ -1,4 +1,8 @@
 ## [v0.7.0] - unreleased
+- Add the `TickHoldTimeout` setting, which bounds how long a client may hold the game on one
+  physics tick using `KRPC.HoldTick` (#1070)
+- The server now updates before the game collects control inputs, so a control input written by
+  a call takes effect on the tick the call is made in rather than on the tick after (#1070)
 - **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum. Compatibility
   code for older versions of the game has been removed (#1048)
 - Servers can now use the local socket protocol, chosen in the server window like any other. The
