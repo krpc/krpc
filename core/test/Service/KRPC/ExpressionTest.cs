@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using KRPC.Service.KRPC;
 using KRPC.Service.Messages;
@@ -690,6 +691,242 @@ namespace KRPC.Test.Service.KRPC
                 StringAssert.Contains ("string is not a collection", exn.Message);
             }
         }
+        [Test]
+        public void StringOperations ()
+        {
+            var s = Expression.ConstantString ("Hello, World");
+            Assert.AreEqual (12, Eval<int> (Expression.StringLength (s)));
+            Assert.AreEqual ("H", Eval<string> (
+                Expression.StringGet (s, Expression.ConstantInt (0))));
+            Assert.AreEqual ("World", Eval<string> (Expression.StringSubstring (
+                s, Expression.ConstantInt (7), Expression.ConstantInt (5))));
+            Assert.AreEqual (7, Eval<int> (
+                Expression.StringIndexOf (s, Expression.ConstantString ("World"))));
+            Assert.AreEqual (-1, Eval<int> (
+                Expression.StringIndexOf (s, Expression.ConstantString ("Mars"))));
+            Assert.IsTrue (Eval<bool> (
+                Expression.StringContains (s, Expression.ConstantString ("o, W"))));
+            Assert.IsFalse (Eval<bool> (
+                Expression.StringContains (s, Expression.ConstantString ("Mars"))));
+            Assert.IsTrue (Eval<bool> (
+                Expression.StringStartsWith (s, Expression.ConstantString ("Hello"))));
+            Assert.IsFalse (Eval<bool> (
+                Expression.StringStartsWith (s, Expression.ConstantString ("World"))));
+            Assert.IsTrue (Eval<bool> (
+                Expression.StringEndsWith (s, Expression.ConstantString ("World"))));
+            Assert.AreEqual ("HELLO, WORLD", Eval<string> (Expression.StringToUpper (s)));
+            Assert.AreEqual ("hello, world", Eval<string> (Expression.StringToLower (s)));
+            Assert.AreEqual ("Hello, Mars", Eval<string> (Expression.StringReplace (
+                s, Expression.ConstantString ("World"), Expression.ConstantString ("Mars"))));
+            CollectionAssert.AreEqual (
+                new List<string> { "Hello", "World" },
+                Eval<IList<string>> (Expression.StringSplit (
+                    s, Expression.ConstantString (", "))));
+            Assert.AreEqual ("Hello, World", Eval<string> (Expression.StringJoin (
+                Expression.ConstantString (", "),
+                Expression.StringSplit (s, Expression.ConstantString (", ")))));
+        }
+
+        [Test]
+        public void StringTrimming ()
+        {
+            var s = Expression.ConstantString ("  pad  ");
+            Assert.AreEqual ("pad", Eval<string> (Expression.StringTrim (s)));
+            Assert.AreEqual ("pad  ", Eval<string> (Expression.StringTrimStart (s)));
+            Assert.AreEqual ("  pad", Eval<string> (Expression.StringTrimEnd (s)));
+        }
+
+        [Test]
+        public void StringOperationsRejectNonStrings ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.StringLength (Expression.ConstantInt (1)));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.StringGet (
+                    Expression.ConstantString ("a"), Expression.ConstantDouble (0)));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.StringJoin (
+                    Expression.ConstantString (","), Expression.ConstantString ("a")));
+        }
+
+        [Test]
+        public void StringOperationsDoNotDependOnTheCulture ()
+        {
+            // The same function must produce the same result whatever language the
+            // game is running in. Turkish is the case that catches a culture
+            // sensitive conversion, mapping i onto a dotted capital I
+            var culture = CultureInfo.CurrentCulture;
+            try {
+                CultureInfo.CurrentCulture = new CultureInfo ("tr-TR");
+                Assert.AreEqual ("I", Eval<string> (
+                    Expression.StringToUpper (Expression.ConstantString ("i"))));
+                Assert.AreEqual ("i", Eval<string> (
+                    Expression.StringToLower (Expression.ConstantString ("I"))));
+                // A zero width joiner is ignorable in a culture sensitive comparison
+                // and is a character like any other in an ordinal one
+                Assert.AreEqual (-1, Eval<int> (Expression.StringIndexOf (
+                    Expression.ConstantString ("abc"),
+                    Expression.ConstantString ("‍"))));
+            } finally {
+                CultureInfo.CurrentCulture = culture;
+            }
+        }
+
+        [Test]
+        public void StringsAreNotCollections ()
+        {
+            var s = Expression.ConstantString ("abc");
+            foreach (var build in new List<TestDelegate> {
+                () => Expression.Count (s),
+                () => Expression.Get (s, Expression.ConstantInt (0)),
+                () => Expression.Contains (s, Expression.ConstantString ("a")),
+                () => Expression.ToList (s)
+            }) {
+                var exn = Assert.Catch (build);
+                StringAssert.Contains ("string is not a collection", exn.Message);
+            }
+        }
+
+        [Test]
+        public void Throw ()
+        {
+            var expr = Expression.Throw (
+                "KRPC", "InvalidOperationException", Expression.ConstantString ("boom"));
+            Assert.IsFalse (expr.HasReturnType);
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => expr.Runner ());
+            Assert.AreEqual ("boom", exn.Message);
+        }
+
+        [Test]
+        public void ThrowRejectsAnUnknownException ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.Throw (
+                    "KRPC", "NoSuchException", Expression.ConstantString ("boom")));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.Throw (
+                    "NoSuchService", "InvalidOperationException",
+                    Expression.ConstantString ("boom")));
+        }
+
+        [Test]
+        public void TryCatchCatchesAThrow ()
+        {
+            var caught = Expression.Variable ("caught", Type.String ());
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { caught },
+                new List<Expression> {
+                    Expression.Assign (caught, Expression.ConstantString ("")),
+                    Expression.TryCatch (
+                        Expression.Throw (
+                            "KRPC", "InvalidOperationException",
+                            Expression.ConstantString ("boom")),
+                        "KRPC", "InvalidOperationException", caught,
+                        Expression.Assign (caught, Expression.StringConcat (
+                            new List<Expression> {
+                                Expression.ConstantString ("caught "), caught
+                            }))),
+                    caught
+                });
+            Assert.AreEqual ("caught boom", Eval<string> (expr));
+        }
+
+        [Test]
+        public void TryCatchCatchesTheMappedException ()
+        {
+            // A service throws the CLR exception types, which the client sees under
+            // the kRPC name, so naming that name catches them
+            var expr = Expression.TryCatch (
+                // Substring past the end of the string, a System.ArgumentOutOfRangeException
+                Expression.StringGet (
+                    Expression.ConstantString ("ab"), Expression.ConstantInt (5)),
+                "KRPC", "ArgumentOutOfRangeException", null,
+                Expression.ConstantString ("caught"));
+            Assert.DoesNotThrow (() => expr.Runner ());
+        }
+
+        [Test]
+        public void TryCatchDoesNotCatchAnotherException ()
+        {
+            var expr = Expression.TryCatch (
+                Expression.StringGet (
+                    Expression.ConstantString ("ab"), Expression.ConstantInt (5)),
+                "KRPC", "ObjectDestroyedException", null,
+                Expression.ConstantString ("caught"));
+            Assert.Throws<System.ArgumentOutOfRangeException> (() => expr.Runner ());
+        }
+
+        [Test]
+        public void TryCatchDoesNotCatchASubclass ()
+        {
+            // ArgumentOutOfRangeException derives from ArgumentException, and reaches
+            // the client under its own name, so naming ArgumentException leaves it alone
+            var expr = Expression.TryCatch (
+                Expression.StringGet (
+                    Expression.ConstantString ("ab"), Expression.ConstantInt (5)),
+                "KRPC", "ArgumentException", null,
+                Expression.ConstantString ("caught"));
+            Assert.Throws<System.ArgumentOutOfRangeException> (() => expr.Runner ());
+        }
+
+        [Test]
+        public void TryCatchAllCatchesAnything ()
+        {
+            var caught = Expression.Variable ("caught", Type.String ());
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { caught },
+                new List<Expression> {
+                    Expression.Assign (caught, Expression.ConstantString ("")),
+                    Expression.TryCatchAll (
+                        Expression.StringGet (
+                            Expression.ConstantString ("ab"), Expression.ConstantInt (5)),
+                        caught, Expression.ConstantString ("")),
+                    Expression.StringLength (caught)
+                });
+            Assert.Greater (Eval<int> (expr), 0);
+        }
+
+        [Test]
+        public void TryCatchAllDoesNotCatchAYield ()
+        {
+            // A procedure that pauses execution unwinds by throwing YieldException.
+            // The catch-all lets it through, so the stream evaluating the expression
+            // still reports the pause
+            var mock = new Mock<global::KRPC.Test.Service.ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()))
+                .Returns ((int n, int sum) => {
+                    throw new global::KRPC.Service.YieldException<System.Func<int>> (() => 0);
+                });
+            global::KRPC.Test.Service.TestService.Service = mock.Object;
+            var expr = Expression.TryCatchAll (
+                Expression.Call (BuildProcedureCall (
+                    "BlockingProcedureReturns", new Argument (0, 1))),
+                null, Expression.ConstantString ("caught"));
+            Assert.Throws<global::KRPC.Service.YieldException<System.Func<int>>> (
+                () => expr.Runner ());
+        }
+
+        [Test]
+        public void TryFinallyRunsTheFinalizer ()
+        {
+            var ran = Expression.Variable ("ran", Type.Bool ());
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { ran },
+                new List<Expression> {
+                    Expression.Assign (ran, Expression.ConstantBool (false)),
+                    Expression.TryCatchAll (
+                        Expression.TryFinally (
+                            Expression.Throw (
+                                "KRPC", "InvalidOperationException",
+                                Expression.ConstantString ("boom")),
+                            Expression.Assign (ran, Expression.ConstantBool (true))),
+                        null, Expression.ConstantString ("")),
+                    ran
+                });
+            Assert.IsTrue (Eval<bool> (expr));
+        }
+
         [Test]
         public void BuildListInLoop ()
         {
