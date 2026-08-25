@@ -42,9 +42,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the transfer, which needs both of the parts it runs
-        /// between and so is as alive as the less alive of them. A transfer the client
-        /// has removed is gone whatever the parts are doing.
+        /// The state of the transfer. It needs both of the parts it runs between, and takes
+        /// the less alive of their two states. A transfer the client has removed is
+        /// destroyed whatever the parts' states.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

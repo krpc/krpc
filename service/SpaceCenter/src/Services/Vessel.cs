@@ -78,9 +78,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the vessel. A vessel is either there to be
-        /// found, loaded or not, or it is gone for good; it has no unloaded form that
-        /// the game can bring back.
+        /// The state of the vessel. A vessel is live whether it is loaded or not, and
+        /// destroyed once the game holds no vessel with its id.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return FlightGlobalsExtensions.VesselState (Id); }
@@ -134,14 +133,14 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The distance from the active vessel, in meters, out to which this vessel keeps running
-        /// its physics simulation — and so stays controllable, able to burn its engines and
+        /// its physics simulation, and so stays controllable, able to burn its engines and
         /// respond to its autopilot. Setting this raises the vessel out of the stock physics
         /// bubble, so that it keeps flying while the active vessel is far away. Set to zero to
         /// restore the game's default range.
         /// </summary>
         /// <remarks>
         /// This always reports the vessel's live range, so reading it when no range has been set
-        /// gives the game's default for the vessel's current <see cref="Situation" /> — which is
+        /// gives the game's default for the vessel's current <see cref="Situation" />, which is
         /// much shorter than the distance at which the vessel unloads. In orbit a vessel is put
         /// on rails just 350m away, long before it unloads at 2.5km, and a vessel on rails
         /// produces no thrust and ignores control input even though it is still loaded.
@@ -152,7 +151,7 @@ namespace KRPC.SpaceCenter.Services
         /// between it keeps whichever state it is already in.
         ///
         /// The requested range applies in every situation. The game's own defaults are not
-        /// uniform — a vessel flying in atmosphere stays loaded out to 22.5km — so setting a
+        /// uniform, and a vessel flying in atmosphere stays loaded out to 22.5km, so setting a
         /// small range can shorten the range such a vessel would otherwise have had.
         ///
         /// A range lasts until it is set back to zero or the game is exited. Unlike most state a

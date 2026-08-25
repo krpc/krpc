@@ -417,7 +417,7 @@ namespace KRPC.SpaceCenter.Services
         /// <item><description>Otherwise, the named Kerbals are placed in the craft in the order
         /// given: the first name takes the first seat, the second name the next seat, and so on,
         /// scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
-        /// An exception is thrown, without launching, if a name does not match an available Kerbal
+        /// Throws an exception, without launching, if a name does not match an available Kerbal
         /// or the craft has too few seats for the requested crew.</description></item>
         /// </list>
         /// Throws an exception if any of the games pre-flight checks fail.

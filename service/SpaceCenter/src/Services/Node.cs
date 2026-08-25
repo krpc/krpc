@@ -119,11 +119,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the node. It is live while the vessel still has it in
-        /// its flight plan, and destroyed once the vessel is there to ask and does not,
-        /// as a node that leaves the plan is gone for good. A vessel the game is not
-        /// solving conics for has no flight plan to look in, which says nothing about the
-        /// node either way.
+        /// The state of the node. It is live while the vessel holds it in its flight plan,
+        /// and destroyed once a live vessel stops holding it. A vessel the game solves no
+        /// conics for has no flight plan, and leaves the node dormant.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

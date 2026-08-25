@@ -24,7 +24,7 @@ namespace KRPC.RemoteTech
         }
 
         /// <summary>
-        /// What the game holds for the vessel these communications belong to.
+        /// The state of the vessel these communications belong to.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return vessel.GameObjectState; }

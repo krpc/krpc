@@ -34,7 +34,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the module this belongs to.
+        /// The state of the module this belongs to.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return Module.GameObjectState; }

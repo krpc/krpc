@@ -57,9 +57,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the parameter. It belongs to its contract, so it is
-        /// exactly as live, dormant or destroyed as the contract is, and destroyed when a
-        /// contract that is there to look in no longer has it.
+        /// The state of the parameter. It takes the state of its contract, and is destroyed
+        /// once a live contract stops holding it.
         /// </summary>
         public GameObjectState GameObjectState
         {

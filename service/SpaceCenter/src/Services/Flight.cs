@@ -34,10 +34,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the vessel this belongs to and the frame it is
-        /// measured in. Every member reads both, so it is as alive as the less alive of
-        /// them: a flight measured in a frame the client has removed has nothing left to
-        /// be expressed against.
+        /// The state of the vessel this belongs to and of the frame it is measured in.
+        /// Every member reads both, so it takes the less alive of their two states.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -495,8 +493,9 @@ namespace KRPC.SpaceCenter.Services
         /// A value between -90° and +90°.
         /// </summary>
         /// <remarks>
-        /// An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-        /// ±90°), where heading and roll become ambiguous. For an always-defined attitude use
+        /// An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+        /// near -90° or +90°), where heading and roll become ambiguous. For an always-defined
+        /// attitude use
         /// <see cref="Rotation"/> or <see cref="Direction"/>.
         /// </remarks>
         [KRPCProperty]
@@ -509,8 +508,9 @@ namespace KRPC.SpaceCenter.Services
         /// A value between 0° and 360°.
         /// </summary>
         /// <remarks>
-        /// An absolute Euler angle, undefined when the vessel points near vertical (pitch → ±90°).
-        /// For an always-defined attitude use <see cref="Rotation"/> or <see cref="Direction"/>.
+        /// An absolute Euler angle, undefined when the vessel points near vertical (a pitch near
+        /// -90° or +90°). For an always-defined attitude use <see cref="Rotation"/> or
+        /// <see cref="Direction"/>.
         /// </remarks>
         [KRPCProperty]
         public float Heading {
@@ -522,8 +522,9 @@ namespace KRPC.SpaceCenter.Services
         /// A value between -180° and +180°.
         /// </summary>
         /// <remarks>
-        /// An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-        /// ±90°), where the vertical-plane reference vanishes. For an always-defined attitude use
+        /// An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+        /// near -90° or +90°), where the vertical-plane reference vanishes. For an always-defined
+        /// attitude use
         /// <see cref="Rotation"/>; for a well-defined roll use the auto-pilot's
         /// <c>TargetRoll</c> / <c>RollError</c> against a chosen up reference.
         /// </remarks>
@@ -633,7 +634,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
         /// strength of the aerodynamic forces. It is equal to
-        /// ½ · air density · velocity².
+        /// <math>\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2</math>.
         /// It is commonly denoted <math>Q</math>.
         /// </summary>
         [KRPCProperty]

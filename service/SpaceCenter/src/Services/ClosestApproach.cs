@@ -77,9 +77,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the approach. Every member reads both of the orbits,
-        /// so it needs both: it is as live, dormant or destroyed as the less alive of
-        /// the two.
+        /// The state of the approach. Every member reads both orbits, so it takes the less
+        /// alive of their two states.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return orbit.GameObjectState.LeastAlive (target.GameObjectState); }

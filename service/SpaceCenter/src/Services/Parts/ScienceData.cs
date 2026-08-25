@@ -31,9 +31,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the record. It is as live, dormant or destroyed as the
-        /// experiment holding it until that experiment is there to look in, and destroyed
-        /// once the experiment no longer holds this record.
+        /// The state of the record. It takes the state of the experiment holding it, and is
+        /// destroyed once a live experiment stops holding it.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

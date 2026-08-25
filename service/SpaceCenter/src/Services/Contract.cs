@@ -45,10 +45,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the contract. It is live while the contract system
-        /// lists it, running or finished, and destroyed once the system is there to ask and
-        /// does not. A game with no contract system has no contracts to look through, which
-        /// says nothing about this one.
+        /// The state of the contract. It is live while the contract system lists it,
+        /// running or finished, and destroyed once a running system stops listing it. A
+        /// game with no contract system leaves the contract dormant.
         /// </summary>
         public GameObjectState GameObjectState
         {

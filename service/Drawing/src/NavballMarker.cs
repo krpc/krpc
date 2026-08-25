@@ -124,10 +124,9 @@ namespace KRPC.Drawing
         public GameObject GameObject { get; private set; }
 
         /// <summary>
-        /// What the game holds for the marker. The marker is the game object it was made
-        /// with, so it is live while the game still has that object, and destroyed once it
-        /// does not, which is what removing it, clearing the drawing objects, disconnecting
-        /// the client that made it and leaving the scene all do.
+        /// The state of the marker, which is the game object it was made with. Removing it,
+        /// clearing the drawing objects, disconnecting the client that made it and leaving
+        /// the scene each destroy that object.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

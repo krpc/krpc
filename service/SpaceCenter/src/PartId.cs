@@ -85,11 +85,11 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// What the game holds for the part. A part in flight is live while the vessel
-        /// carrying it is loaded, dormant while that vessel is unloaded, as the game then
-        /// keeps only a snapshot of each of its parts, and destroyed once the game holds
-        /// neither. A part in the editor is only ever in the vessel the editor has open,
-        /// so once it is not there it is gone, and leaving the editor takes it with it.
+        /// The state of the part. A part in flight is live while the vessel carrying it is
+        /// loaded, dormant while that vessel is unloaded and the game keeps only a snapshot
+        /// of its parts, and destroyed once the game holds neither. A part in the editor is
+        /// live while it is in the vessel the editor has open, and destroyed once it leaves
+        /// that vessel or the game leaves the editor.
         /// </summary>
         /// <remarks>
         /// Only reached once looking the part up has already failed, so it may take as

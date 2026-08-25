@@ -95,13 +95,12 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// What the field lets the user type into it. Keystrokes that do not fit are
-        /// ignored as they are typed, so a numeric field never shows text a client would
-        /// have to reject.
+        /// The content the field accepts from the user. Keystrokes that do not fit are
+        /// ignored as they are typed, so a numeric field only ever shows a number.
         /// </summary>
         /// <remarks>
-        /// Only what the user types is filtered. A value set by a client is shown as it
-        /// is given.
+        /// The filter applies to typing alone. A value set by a client is shown as it is
+        /// given.
         /// </remarks>
         [KRPCProperty]
         public InputContentType ContentType {

@@ -37,8 +37,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the module. A module belongs to its part's game object,
-        /// so a module of a part that is not loaded is no more gone than the part is.
+        /// The state of the module. A module belongs to its part's game object, and takes
+        /// the part's state.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return reference.StateOn (Part); }

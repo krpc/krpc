@@ -279,11 +279,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for everything the frame is built from. A frame needs each
-        /// of the vessel, part, maneuver node, thruster, orbit and other frames it is
-        /// defined against, so it is as alive as the least alive of them; one defined
-        /// against a celestial body alone never dies. A frame the client has removed is
-        /// gone whatever it was built from, and so is anything built on it.
+        /// The state of everything the frame is built from. A frame needs each of the
+        /// vessel, part, maneuver node, thruster, orbit and other frames it is defined
+        /// against, so it takes the least alive of their states. A frame defined against a
+        /// celestial body alone stays live, and a frame the client has removed is destroyed
+        /// along with anything built on it.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -547,14 +547,12 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// Only a frame created by <see cref="CreateRelative"/> or
-        /// <see cref="CreateHybrid"/> can be removed. Every other frame is named by
-        /// something in the game, which is what says when it is finished with, and the
-        /// server holds one of each however often it is asked for.
+        /// <see cref="CreateHybrid"/> can be removed. Every other frame belongs to
+        /// something in the game, and the server holds one of each.
         ///
         /// Any further use of this object throws an exception, as does use of a frame
-        /// built on it, which cannot be evaluated without it. A frame is removed for the
-        /// client that created it and is not shared with any other, and one whose client
-        /// disconnects is removed with it.
+        /// built on it, which cannot be evaluated without it. A frame belongs to the
+        /// client that created it, and is removed when that client disconnects.
         /// </remarks>
         [KRPCMethod]
         public void Remove ()

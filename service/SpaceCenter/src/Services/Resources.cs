@@ -65,7 +65,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the vessel or part these are the resources of.
+        /// The state of the vessel or part these are the resources of.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

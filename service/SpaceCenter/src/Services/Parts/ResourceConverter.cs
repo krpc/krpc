@@ -42,8 +42,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the converters: the state of the part carrying
-        /// them, or destroyed once that part no longer has them.
+        /// The state of the part carrying the converters, or destroyed once that part loses
+        /// them.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return converterRefs [0].StateOn (Part); }

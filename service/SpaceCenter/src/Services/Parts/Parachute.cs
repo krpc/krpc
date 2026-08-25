@@ -53,9 +53,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the parachute. A part carries a stock parachute
-        /// module, a RealChutes one, or both, and either is enough for the parachute,
-        /// so it is as alive as the more alive of them.
+        /// The state of the parachute. A part carries a stock parachute module, a
+        /// RealChutes one, or both, and either is enough, so the parachute takes the more
+        /// alive of their states.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

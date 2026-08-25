@@ -24,9 +24,8 @@ namespace KRPC.LiDAR
         }
 
         /// <summary>
-        /// What the game holds for the laser. It belongs to its part, so it is exactly as
-        /// live, dormant or destroyed as the part, and destroyed when a part that is there
-        /// to look at no longer carries the module.
+        /// The state of the laser. It takes the state of its part, and is destroyed once a
+        /// live part no longer carries the module.
         /// </summary>
         public GameObjectState GameObjectState
         {

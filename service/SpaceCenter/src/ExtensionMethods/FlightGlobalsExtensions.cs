@@ -48,11 +48,9 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// What the game holds for the vessel with the given id. A vessel is either there
-        /// to be found, loaded or not, or it is gone for good; it has no unloaded form
-        /// that the game can bring back. A game that does not currently know what vessels
-        /// exist says nothing about any of them, so a vessel it cannot find then is
-        /// dormant, and nothing standing for one is dropped on the strength of it.
+        /// The state of the vessel with the given id. A vessel is live whether it is loaded
+        /// or not, and destroyed once the game holds no vessel with the id. A game between
+        /// states holds no list of vessels, and leaves the vessel dormant.
         /// </summary>
         public static GameObjectState VesselState (Guid id)
         {

@@ -29,11 +29,10 @@ namespace KRPC.UI
         protected GameObject GameObject { get; private set; }
 
         /// <summary>
-        /// What the game holds for the element. The element is the game object it was made
-        /// with, so it is live while the game still has that object, and destroyed once it
-        /// does not, which is what removing it, clearing the interface elements,
-        /// disconnecting the client that made it and leaving the scene all do. Nothing
-        /// builds a client's element again, so there is no dormant state.
+        /// The state of the element, which is the game object it was made with. Removing
+        /// it, clearing the interface elements, disconnecting the client that made it and
+        /// leaving the scene each destroy that object. A client's element is never built
+        /// again, so it has no dormant state.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

@@ -282,24 +282,22 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// Hold the game on its current physics tick until <see cref="ReleaseTick" /> is called
-        /// or the hold times out. Every call made in between is executed before the game moves
-        /// on, so that a program which reads the game state, computes with it and writes the
-        /// result back does all three in the state of a single tick.
-        ///
-        /// A tick is held once and no more, so this waits for the next tick when the current
-        /// one has already been held and let go.
+        /// or the hold times out. Every call made in between is executed before the game
+        /// advances, so a read, compute and write all happen in the state of one tick.
         /// </summary>
         /// <remarks>
         /// The game renders no frame, takes no input and runs no physics while the tick is
-        /// held, so a hold should be as short as the program can make it, and should be
-        /// released even when the code between the two calls fails. Only one client can hold
-        /// the tick at a time, and only a client making a call can hold it: the tick cannot be
-        /// held by a stream or an event. A hold ends by itself when it times out, when the
-        /// client disconnects, or when the client calls a procedure that takes more than one
-        /// tick to finish, such as staging or warping, since such a call can only finish in the
-        /// tick the hold is holding back. Waiting for a stream or an event while holding the
-        /// tick therefore waits out the timeout, as stream updates are only sent once the tick
-        /// has been let go.
+        /// held. Keep a hold as short as possible, and release it even when the code between
+        /// the two calls fails.
+        ///
+        /// A tick is held once, so this waits for the next tick when the current one has
+        /// already been released. One client holds the tick at a time, and only a client
+        /// making a call can hold it: a stream or an event cannot.
+        ///
+        /// A hold ends by itself when it times out, when the client disconnects, and when the
+        /// client calls a procedure that takes more than one tick to finish, such as staging
+        /// or warping. Stream updates are sent once the tick is released, so waiting for a
+        /// stream or an event inside a hold waits out the timeout.
         /// </remarks>
         [KRPCProcedure]
         public static void HoldTick ()
@@ -309,8 +307,7 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// Let the game move on from the tick that <see cref="HoldTick" /> held it on. Does
-        /// nothing if the tick is not being held, which is what a client whose hold has already
-        /// ended sees.
+        /// nothing when no tick is held, which is the case once a hold has timed out.
         /// </summary>
         [KRPCProcedure]
         public static void ReleaseTick ()
@@ -324,17 +321,15 @@ namespace KRPC.Service.KRPC
         /// is currently being held.
         /// </summary>
         /// <remarks>
-        /// A release and a hold made as two separate calls leave the server free to advance
-        /// between them, since the hold is a call it has to be waiting for when it looks. This
-        /// takes the next tick without that gap, so it is the call a loop that has to act on
-        /// every tick is built around: call it at the top of the loop, work, and come back to
-        /// it. The game advances one tick per call and no faster, so it runs at the rate of the
-        /// loop for as long as the loop runs, and the loop ends by calling
-        /// <see cref="ReleaseTick" />.
+        /// A release and a hold made as two separate calls let the game advance between them.
+        /// This takes the next tick without that gap. Call it at the top of a loop that has to
+        /// act on every tick, work, and come back to it.
         ///
-        /// Every other limit of <see cref="HoldTick" /> applies unchanged, the timeout
-        /// included. A hold lost to the timeout is not reported: the next call simply takes
-        /// whatever tick it lands on.
+        /// The game advances one tick per call, so it runs at the rate of the loop for as long
+        /// as the loop runs. End the loop with <see cref="ReleaseTick" />.
+        ///
+        /// Every limit of <see cref="HoldTick" /> applies, the timeout included. A hold lost to
+        /// the timeout is not reported, and the next call takes whatever tick it lands on.
         /// </remarks>
         [KRPCProcedure]
         public static void NextTick ()

@@ -62,9 +62,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the engine or RCS module the thruster is part of.
-        /// Either is enough for the thruster, so it is as alive as the more alive of
-        /// them.
+        /// The state of the engine or RCS module the thruster is part of. Either is enough,
+        /// so the thruster takes the more alive of their states.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return engineRef.StateOn (part).MostAlive (rcsRef.StateOn (part)); }

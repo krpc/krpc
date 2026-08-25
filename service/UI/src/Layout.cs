@@ -49,9 +49,8 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// What the game holds for the layout. It belongs to the interface element it was
-        /// taken from, and the game destroys it with that element, which nothing builds
-        /// again.
+        /// The state of the layout. It belongs to the interface element it was taken from,
+        /// and the game destroys it with that element. The layout is never built again.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

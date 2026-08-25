@@ -4,7 +4,7 @@ using KRPC.Service.Attributes;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// Controls the auto-pilot's rate-feedback filtering for an axis group — the mitigation that
+    /// Controls the auto-pilot's rate-feedback filtering for an axis group, the mitigation that
     /// removes a structural oscillation (wobble) from the measured angular velocity before the
     /// control loops consume it.
     /// See <see cref="AutoPilot.PitchYawRateFilterMode"/> and <see cref="AutoPilot.RollRateFilterMode"/>.

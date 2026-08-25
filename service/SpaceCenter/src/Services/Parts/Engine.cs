@@ -79,8 +79,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the engine: the state of the part
-        /// carrying it, or destroyed once that part no longer has the module.
+        /// The state of the part carrying the engine, or destroyed once that part loses the
+        /// module.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return primaryRef.StateOn (Part); }
@@ -695,7 +695,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// direction of thrust. While the reverser is still moving, this reports
         /// the state it is moving to, so a read immediately after a set returns
         /// the value that was set and setting the same value again has no effect.
-        /// Raises an exception if the engine does not have a thrust reverser
+        /// Throws an exception if the engine does not have a thrust reverser
         /// (see <see cref="CanReverseThrust"/>).
         /// </summary>
         [KRPCProperty]
@@ -711,7 +711,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Toggle the engine's thrust reverser. Raises an exception if the engine
+        /// Toggle the engine's thrust reverser. Throws an exception if the engine
         /// does not have a thrust reverser (see <see cref="CanReverseThrust"/>).
         /// </summary>
         [KRPCMethod]
@@ -747,7 +747,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The number of times the engine can still be ignited, or -1 if it can be ignited an
-        /// unlimited number of times. Raises an exception if the engine is not managed by
+        /// unlimited number of times. Throws an exception if the engine is not managed by
         /// RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
@@ -758,7 +758,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The resources the engine consumes each time it ignites, keyed by resource name, with
         /// the amount of each that is required. The engine uses up an ignition and fails to
-        /// light if they are not available. Raises an exception if the engine is not managed by
+        /// light if they are not available. Throws an exception if the engine is not managed by
         /// RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
@@ -768,7 +768,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the engine's propellant is subject to ullage, so that it must be settled
-        /// before the engine will run reliably. Raises an exception if the engine is not
+        /// before the engine will run reliably. Throws an exception if the engine is not
         /// managed by RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
@@ -779,7 +779,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
         /// (fully settled). Acceleration along the engine's thrust axis settles it, and
-        /// coasting and rotation unsettle it. Raises an exception if the engine is not managed
+        /// coasting and rotation unsettle it. Throws an exception if the engine is not managed
         /// by RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
         [KRPCProperty]
@@ -791,7 +791,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The probability that the propellant feeding the engine behaves normally, from 0 to 1.
         /// This is <see cref="PropellantStability"/> scaled by the game's ullage difficulty
         /// setting, and is the value RealFuels itself tests against when deciding whether the
-        /// engine runs. Raises an exception if the engine is not managed by RealFuels
+        /// engine runs. Throws an exception if the engine is not managed by RealFuels
         /// (see <see cref="HasRealFuels"/>).
         /// </summary>
         [KRPCProperty]
@@ -801,7 +801,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the engine is fed by tank pressure rather than by a pump, and so needs to
-        /// draw from a highly pressurized tank. Raises an exception if the engine is not
+        /// draw from a highly pressurized tank. Throws an exception if the engine is not
         /// managed by RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
@@ -811,7 +811,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the tanks feeding the engine supply the pressure it needs. Always
-        /// <c>true</c> for an engine that is not pressure fed. Raises an exception if the
+        /// <c>true</c> for an engine that is not pressure fed. Throws an exception if the
         /// engine is not managed by RealFuels (see <see cref="HasRealFuels"/>).
         /// </summary>
         [KRPCProperty]

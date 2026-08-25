@@ -89,11 +89,10 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// What the game holds for the vessel in the editor. The editor holds one vessel
-        /// while it is open and takes it with it when it is left, so anything named
-        /// against that vessel is live until the game leaves the editor, and gone
-        /// afterwards. An editor that is still starting up has no vessel yet, and nothing
-        /// is concluded from that.
+        /// The state of the vessel in the editor. The editor holds one vessel while it is
+        /// open and destroys it on leaving, so anything identified against that vessel is
+        /// live until the game leaves the editor. An editor that is still starting up
+        /// leaves the vessel dormant.
         /// </summary>
         public static GameObjectState ShipState {
             get {

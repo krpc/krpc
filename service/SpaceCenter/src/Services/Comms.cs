@@ -33,7 +33,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the vessel this belongs to.
+        /// The state of the vessel this belongs to.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return FlightGlobalsExtensions.VesselState (VesselId); }

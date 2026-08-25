@@ -23,9 +23,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the crew member, who is live while the game still
-        /// has them on its roster. A game that has not been loaded has no roster to look
-        /// in, which says nothing about anyone.
+        /// The state of the crew member, who is live while the game holds them on its
+        /// roster. A game that has yet to be loaded has no roster, and leaves the crew
+        /// member dormant.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

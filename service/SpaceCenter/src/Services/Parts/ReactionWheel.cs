@@ -40,8 +40,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the reaction wheel: the state of the part
-        /// carrying it, or destroyed once that part no longer has the module.
+        /// The state of the part carrying the reaction wheel, or destroyed once that part
+        /// loses the module.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return reactionWheelRef.StateOn (Part); }

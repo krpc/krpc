@@ -47,10 +47,9 @@ namespace KRPC.KerbalAlarmClock
         }
 
         /// <summary>
-        /// What the game holds for the alarm. It is live while Kerbal Alarm Clock lists an
-        /// alarm with the identifier, and destroyed once the mod is there to ask and lists
-        /// none, as an alarm that is removed is gone for good. The mod not being ready says
-        /// nothing about any alarm.
+        /// The state of the alarm. It is live while Kerbal Alarm Clock lists an alarm with
+        /// the identifier, and destroyed once a running mod lists none. A mod that has yet
+        /// to start leaves the alarm dormant.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

@@ -49,9 +49,9 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// What the game holds for the rect transform. It belongs to the interface element
-        /// it was taken from, and the game destroys it with that element, which nothing
-        /// builds again.
+        /// The state of the rect transform. It belongs to the interface element it was
+        /// taken from, and the game destroys it with that element. The rect transform is
+        /// never built again.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

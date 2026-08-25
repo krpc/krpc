@@ -75,7 +75,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the part.
+        /// The state of the part.
         /// </summary>
         /// <remarks>
         /// A part looked up in this game state and still there is the part, so there is
@@ -1118,7 +1118,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
-        /// draw from (see <see cref="Engine.PressureFed"/>). Raises an exception if the part is
+        /// draw from (see <see cref="Engine.PressureFed"/>). Throws an exception if the part is
         /// not a RealFuels fuel tank (see <see cref="HasRealFuelsTank"/>).
         /// </summary>
         [KRPCProperty]
@@ -1132,7 +1132,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The contents keep boiling off under time warp, where that update covers a much
         /// longer span of in-game time than a physics frame does. The rate is zero for a
         /// tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
-        /// temperature RealFuels holds down instead, and in the editor. Raises an exception
+        /// temperature RealFuels holds down instead, and in the editor. Throws an exception
         /// if the part is not a RealFuels fuel tank (see <see cref="HasRealFuelsTank"/>).
         /// </summary>
         [KRPCProperty]

@@ -44,8 +44,8 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// What the game holds for the size fitter. It belongs to the interface element it was
-        /// taken from, and the game destroys it with that element, which nothing builds
+        /// The state of the size fitter. It belongs to the interface element it was taken
+        /// from, and the game destroys it with that element. The size fitter is never built
         /// again.
         /// </summary>
         public GameObjectState GameObjectState {

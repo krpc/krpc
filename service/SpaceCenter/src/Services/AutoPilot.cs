@@ -31,7 +31,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the vessel this belongs to.
+        /// The state of the vessel this belongs to.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return FlightGlobalsExtensions.VesselState (vesselId); }
@@ -250,7 +250,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Disengages the auto-pilot and resets all configuration parameters to their defaults.
         /// Also resets the target pitch, heading and roll, and clears all internal controller
-        /// state, including the oscillation detector's structural level — which otherwise
+        /// state, including the oscillation detector's structural level, which otherwise
         /// persists across engagements so that a craft known to be flexible re-latches quickly.
         /// </summary>
         [KRPCMethod]
@@ -302,7 +302,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
-        /// the nose is near vertical (pitch → ±90°); near the vertical prefer
+        /// the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
         /// <see cref="TargetDirection"/> or <see cref="SetDirectionAndUp"/>. The setter preserves the
         /// current roll relative to <see cref="UpReference"/>.
         /// </remarks>
@@ -317,7 +317,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
-        /// (pitch → ±90°) — see <see cref="TargetPitch"/>. The setter preserves the current roll
+        /// (a pitch near -90° or +90°). See <see cref="TargetPitch"/>. The setter preserves the
+        /// current roll
         /// relative to <see cref="UpReference"/>.
         /// </remarks>
         [KRPCProperty]
@@ -332,13 +333,13 @@ namespace KRPC.SpaceCenter.Services
         /// positive roll banks right). <c>NaN</c> if no target roll is set.
         /// </summary>
         /// <remarks>
-        /// When left unset (<c>NaN</c>) the auto-pilot suppresses roll rotation — it drives the roll
-        /// rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+        /// When left unset (<c>NaN</c>) the auto-pilot suppresses roll rotation, driving the roll
+        /// rate to zero instead of holding a specific roll angle. Setting a value re-rolls the
         /// current target to that angle relative to the up reference while keeping the nose direction.
-        /// With the default reference (the frame's up) this reproduces the historical roll away from
-        /// the vertical, and is ill-defined only when the nose points along the reference (near
-        /// straight up or down). To hold a well-defined roll through the vertical — for example a
-        /// gravity turn — set the up reference off the flight path (see
+        /// With the default reference (the frame's up) this is the roll away from the vertical, and
+        /// is ill-defined only when the nose points along the reference (near straight up or down).
+        /// To hold a well-defined roll through the vertical, such as through a gravity turn, set
+        /// the up reference off the flight path (see
         /// <see cref="SetDirectionAndUp"/> / <see cref="UpReference"/>).
         /// </remarks>
         [KRPCProperty]
@@ -379,7 +380,8 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="heading">Target heading angle, in degrees between 0° and 360°.</param>
         /// <remarks>
         /// A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
-        /// vertical (pitch → ±90°), so near the vertical prefer <see cref="TargetDirection"/> or
+        /// vertical (a pitch near -90° or +90°), so near the vertical prefer
+        /// <see cref="TargetDirection"/> or
         /// <see cref="SetDirectionAndUp"/>. Preserves the current roll relative to
         /// <see cref="UpReference"/>.
         /// </remarks>
@@ -399,12 +401,12 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="direction">The direction to point the nose in.</param>
         /// <param name="up">The reference direction the roof is rolled towards. Need not be
-        /// normalized or perpendicular to <paramref name="direction"/> — its component perpendicular
-        /// to the nose is used. Stored as the <see cref="UpReference"/>.</param>
+        /// normalized or perpendicular to <paramref name="direction"/>, as its component
+        /// perpendicular to the nose is used. Stored as the <see cref="UpReference"/>.</param>
         /// <param name="roll">An additional roll about the nose, in degrees (positive banks right).
         /// Defaults to 0.</param>
         /// <remarks>
-        /// This is the way to hold a well-defined orientation through a maneuver — for example a
+        /// This is the way to hold a well-defined orientation through a maneuver such as a
         /// gravity turn: pass a fixed <paramref name="up"/> (say north) and the roll stays defined the
         /// whole way, with no singularity at the vertical. It is well-defined for every nose direction
         /// except <paramref name="up"/> parallel to <paramref name="direction"/> (asking the roof to
@@ -449,7 +451,7 @@ namespace KRPC.SpaceCenter.Services
         /// The current target pitch the auto-pilot is tracking, in degrees. When
         /// <see cref="TargetSmoothingTime"/> is non-zero this lags the commanded
         /// <see cref="TargetPitch"/> while a change is slewed in; otherwise the two are equal.
-        /// A convenience scalar, ill-defined near the vertical — see <see cref="TargetPitch"/>.
+        /// A convenience scalar, ill-defined near the vertical. See <see cref="TargetPitch"/>.
         /// </summary>
         [KRPCProperty]
         public float CurrentTargetPitch {
@@ -460,7 +462,7 @@ namespace KRPC.SpaceCenter.Services
         /// The current target heading the auto-pilot is tracking, in degrees. When
         /// <see cref="TargetSmoothingTime"/> is non-zero this lags the commanded
         /// <see cref="TargetHeading"/> while a change is slewed in; otherwise the two are equal.
-        /// A convenience scalar, ill-defined near the vertical — see <see cref="TargetHeading"/>.
+        /// A convenience scalar, ill-defined near the vertical. See <see cref="TargetHeading"/>.
         /// </summary>
         [KRPCProperty]
         public float CurrentTargetHeading {
@@ -620,8 +622,8 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
         /// <remarks>
-        /// The pitch component of <see cref="AttitudeError"/> — the pitch part of the direction error
-        /// resolved in the roll-invariant frame, well-defined near the vertical.
+        /// The pitch component of <see cref="AttitudeError"/>, the pitch part of the direction
+        /// error resolved in the roll-invariant frame, well-defined near the vertical.
         /// </remarks>
         [KRPCProperty]
         public float PitchError {
@@ -633,9 +635,9 @@ namespace KRPC.SpaceCenter.Services
         /// Throws an exception if the auto-pilot has not been engaged.
         /// </summary>
         /// <remarks>
-        /// The yaw component of <see cref="AttitudeError"/> — the yaw part of the direction error
-        /// resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
-        /// heading, which is undefined at the pole).
+        /// The yaw component of <see cref="AttitudeError"/>, the yaw part of the direction error
+        /// resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
+        /// heading is undefined at the pole.
         /// </remarks>
         [KRPCProperty]
         public float HeadingError {
@@ -648,7 +650,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// Measured about the vessel's nose axis, so it stays well-defined near the vertical
-        /// singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+        /// singularity. A subtraction of pitch, heading and roll angles has a roll term that is
         /// ill-conditioned when the vessel points close to straight up or down.
         /// </remarks>
         [KRPCProperty]
@@ -682,7 +684,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
-        /// attitude and the target the auto-pilot is currently tracking (the slewed target — see
+        /// attitude and the target the auto-pilot is currently tracking (the slewed target, see
         /// <see cref="CurrentTargetRotation"/>). Like <see cref="AttitudeError"/> but relative to the
         /// current target, so it stays small while a smoothed change (see
         /// <see cref="TargetSmoothingTime"/>) is fed in; equal to <see cref="AttitudeError"/> when
@@ -732,7 +734,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// Measured about the vessel's nose axis, so it stays well-defined near the vertical
-        /// singularity — see <see cref="RollError"/>.
+        /// singularity. See <see cref="RollError"/>.
         /// </remarks>
         [KRPCProperty]
         public float CurrentRollError {
@@ -931,8 +933,8 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="RateFilterMode.Automatic"/> (the default) the auto-pilot detects the
         /// oscillation at runtime, estimates its frequency and routes it to the appropriate tool
         /// (a notch filter for a low-frequency mode near the control band, a low-pass for a
-        /// high-frequency mode). <see cref="RateFilterMode.Off"/> disables rate filtering only —
-        /// the other oscillation mitigations are unaffected. <see cref="RateFilterMode.Notch"/>
+        /// high-frequency mode). <see cref="RateFilterMode.Off"/> disables rate filtering only,
+        /// leaving the other oscillation mitigations unaffected. <see cref="RateFilterMode.Notch"/>
         /// and <see cref="RateFilterMode.LowPass"/> force the respective tool unconditionally at
         /// <see cref="PitchYawOscillationFrequency"/>, for a vessel known in advance to be
         /// flexible.
@@ -991,7 +993,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Controls the bandwidth-floor mitigation: the reduction of the inner control loop
-        /// bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+        /// bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
         /// <see cref="MitigationMode.Automatic"/> (the default) it engages on a latched axis
         /// while holding (and during a detected limit cycle). <see cref="MitigationMode.Off"/>
         /// never reduces the bandwidth; <see cref="MitigationMode.Forced"/> keeps it fully

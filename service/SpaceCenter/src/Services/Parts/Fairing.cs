@@ -36,8 +36,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// What the game holds for the fairing. The module objects it is built from
-        /// find their part modules again on each access, so this follows them.
+        /// The state of the fairing. The module objects it is built from look their part
+        /// modules up on each access, and this follows them.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return (fairing ?? proceduralFairing).GameObjectState; }

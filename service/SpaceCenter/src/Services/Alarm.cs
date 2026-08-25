@@ -41,10 +41,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the alarm. It is live while an alarm with the id is in
-        /// the game's alarm clock, and destroyed once the alarm clock is there to ask and
-        /// has none, as an alarm that is removed is gone for good. A game that has no alarm
-        /// clock running has no alarms to look through, which says nothing about this one.
+        /// The state of the alarm. It is live while an alarm with the id is in the game's
+        /// alarm clock, and destroyed once a running alarm clock has none. A game with no
+        /// alarm clock running leaves the alarm dormant.
         /// </summary>
         public GameObjectState GameObjectState
         {

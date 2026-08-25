@@ -52,10 +52,10 @@ namespace KRPC.InfernalRobotics
         }
 
         /// <summary>
-        /// What the game holds for the group. It belongs to its vessel, so it is exactly as
-        /// live, dormant or destroyed as the vessel, and destroyed when a vessel that the
-        /// mod can be asked about has no group of the name. The mod not being ready says
-        /// nothing about any group: its controller only ever tracks the active vessel.
+        /// The state of the group. It takes the state of its vessel, and is destroyed once
+        /// a vessel the mod reports on has no group of the name. A mod that has yet to
+        /// start leaves the group dormant, as its controller tracks the active vessel
+        /// alone.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -105,11 +105,9 @@ namespace KRPC.InfernalRobotics
         /// The name of the group.
         /// </summary>
         /// <remarks>
-        /// Renaming a group renames it for every servo in it. The name is what this object
-        /// names the group by, and is fixed for its lifetime, so every object for the group
-        /// stands for one the vessel no longer has once it is renamed, the object the rename
-        /// was made through included. An object for the group has to be obtained again under
-        /// the new name.
+        /// Renaming a group renames it for every servo in it. This object identifies the
+        /// group by its name, so a rename destroys every object for the group, including the
+        /// one the rename was made through. Obtain the group again under the new name.
         /// </remarks>
         [KRPCProperty]
         public string Name {

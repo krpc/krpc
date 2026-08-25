@@ -80,9 +80,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the thing the orbit belongs to. An orbit built from a KSP
-        /// orbit alone has no owner to ask, so it is kept, and an orbit constructed for a
-        /// client is kept until it is removed or that client goes.
+        /// The state of the object the orbit belongs to. An orbit built from a KSP orbit
+        /// alone has no owner, and stays live. An orbit constructed for a client stays live
+        /// until it is removed or that client disconnects.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -110,14 +110,12 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <remarks>
         /// Only an orbit created by <see cref="CreateFromPositionAndVelocity"/> or
-        /// <see cref="CreateFromOrbitalElements"/> can be removed. Every other orbit is
-        /// the orbit of something in the game, which is what says when it is finished
-        /// with, and the server holds one of each however often it is asked for.
+        /// <see cref="CreateFromOrbitalElements"/> can be removed. Every other orbit
+        /// belongs to something in the game, and the server holds one of each.
         ///
         /// Any further use of this object throws an exception, as does use of a
-        /// reference frame defined against it. An orbit is removed for the client that
-        /// created it and is not shared with any other, and one whose client disconnects
-        /// is removed with it.
+        /// reference frame defined against it. An orbit belongs to the client that
+        /// created it, and is removed when that client disconnects.
         /// </remarks>
         [KRPCMethod]
         public void Remove ()
@@ -499,25 +497,22 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
         /// <paramref name="body"/>.</param>
         /// <remarks>
-        /// The orbit is a single conic around <paramref name="body"/>. Nothing else acts on
-        /// it: it never changes sphere of influence, so <see cref="NextOrbit"/> is
-        /// <c>null</c> however far it travels from the body, and it is not slowed by an
-        /// atmosphere. A vessel held on rails follows its own orbit exactly, while one
-        /// inside the physics bubble is simulated and drifts from it a little.
+        /// The orbit is a single conic around <paramref name="body"/>. It never changes
+        /// sphere of influence, so <see cref="NextOrbit"/> is <c>null</c>, and no
+        /// atmosphere slows it. A vessel held on rails follows its own orbit exactly,
+        /// while one inside the physics bubble is simulated and drifts from it a little.
         ///
-        /// The members that describe where the orbit has got to -- <see cref="Radius"/>,
-        /// <see cref="Speed"/>, <see cref="TrueAnomaly"/>, <see cref="TimeToApoapsis"/>
-        /// and the like -- describe it at <paramref name="ut"/> and stay there, as
-        /// nothing is moving along it. Use <see cref="RadiusAt"/>,
+        /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="TrueAnomaly"/>,
+        /// <see cref="TimeToApoapsis"/> and the like describe the orbit at
+        /// <paramref name="ut"/> and stay there. Use <see cref="RadiusAt"/>,
         /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
-        /// <see cref="TrueAnomalyAtUT"/> to ask where it is at another time.
-        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
+        /// <see cref="TrueAnomalyAtUT"/> for another time, and
+        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> to follow
         /// the orbit as time passes.
         ///
-        /// The orbit that is returned is kept until <see cref="Remove"/> is called on
-        /// it or the client that created it disconnects, so a script that creates one
-        /// repeatedly, for example once per update, should remove each one when it is
-        /// finished with it.
+        /// The orbit is held until <see cref="Remove"/> is called on it or the client
+        /// that created it disconnects. Remove each one created by a script that creates
+        /// them repeatedly, for example once per update.
         /// </remarks>
         [KRPCMethod]
         public static Orbit CreateFromPositionAndVelocity (
@@ -584,30 +579,27 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="epoch">The universal time, in seconds, that
         /// <paramref name="meanAnomalyAtEpoch"/> is measured at.</param>
         /// <remarks>
-        /// The orbit is a single conic around <paramref name="body"/>. Nothing else acts
-        /// on it: it never changes sphere of influence, so <see cref="NextOrbit"/> is
-        /// <c>null</c> however far it travels from the body, and it is not slowed by an
-        /// atmosphere.
+        /// The orbit is a single conic around <paramref name="body"/>. It never changes
+        /// sphere of influence, so <see cref="NextOrbit"/> is <c>null</c>, and no
+        /// atmosphere slows it.
         ///
-        /// The angles are measured against the same reference plane and direction that
+        /// The angles are measured against the reference plane and direction that
         /// <see cref="Inclination"/>, <see cref="LongitudeOfAscendingNode"/> and
-        /// <see cref="ArgumentOfPeriapsis"/> report them against, which
+        /// <see cref="ArgumentOfPeriapsis"/> report them against.
         /// <see cref="ReferencePlaneNormal"/> and <see cref="ReferencePlaneDirection"/>
-        /// give as vectors in a reference frame.
+        /// give these as vectors in a reference frame.
         ///
-        /// The members that describe where the orbit has got to -- <see cref="Radius"/>,
-        /// <see cref="Speed"/>, <see cref="TrueAnomaly"/>, <see cref="TimeToApoapsis"/>
-        /// and the like -- describe it at <paramref name="epoch"/> and stay there, as
-        /// nothing is moving along it. Use <see cref="RadiusAt"/>,
+        /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="TrueAnomaly"/>,
+        /// <see cref="TimeToApoapsis"/> and the like describe the orbit at
+        /// <paramref name="epoch"/> and stay there. Use <see cref="RadiusAt"/>,
         /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
-        /// <see cref="TrueAnomalyAtUT"/> to ask where it is at another time.
-        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
+        /// <see cref="TrueAnomalyAtUT"/> for another time, and
+        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> to follow
         /// the orbit as time passes.
         ///
-        /// The orbit that is returned is kept until <see cref="Remove"/> is called on
-        /// it or the client that created it disconnects, so a script that creates one
-        /// repeatedly, for example once per update, should remove each one when it is
-        /// finished with it.
+        /// The orbit is held until <see cref="Remove"/> is called on it or the client
+        /// that created it disconnects. Remove each one created by a script that creates
+        /// them repeatedly, for example once per update.
         /// </remarks>
         [KRPCMethod]
         public static Orbit CreateFromOrbitalElements (

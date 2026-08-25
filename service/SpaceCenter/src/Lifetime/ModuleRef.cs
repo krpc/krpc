@@ -127,7 +127,7 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// What the game holds for the module, for an object that stands for one.
+        /// The state of the module, for an object that identifies one.
         /// </summary>
         /// <remarks>
         /// A module belongs to its part's game object, so it is exactly as live, dormant or

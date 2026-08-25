@@ -67,10 +67,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the waypoint. It is live while the game's waypoint
-        /// manager lists it, and destroyed once the manager is there to ask and does not, as
-        /// a waypoint that leaves the list is gone for good. A game with no waypoint manager
-        /// has no waypoints to look through, which says nothing about this one.
+        /// The state of the waypoint. It is live while the game's waypoint manager lists
+        /// it, and destroyed once a running manager stops listing it. A game with no
+        /// waypoint manager leaves the waypoint dormant.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

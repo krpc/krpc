@@ -46,11 +46,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the link. It is live while the vessel's control path
-        /// still runs through the two nodes, and destroyed once the vessel is gone. A path
-        /// that no longer takes the hop has lost contact rather than destroyed anything,
-        /// and takes it again when the two are in range of each other, so the link is
-        /// dormant.
+        /// The state of the link. It is live while the vessel's control path runs through
+        /// the two nodes, and destroyed once the vessel is destroyed. A path that drops the
+        /// hop leaves the link dormant, and takes it again once the two nodes are in range
+        /// of each other.
         /// </summary>
         public GameObjectState GameObjectState {
             get {

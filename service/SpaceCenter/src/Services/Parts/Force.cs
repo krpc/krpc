@@ -37,11 +37,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Part Part { get; private set; }
 
         /// <summary>
-        /// What the game holds for the force. A force is applied to a part, so it is
-        /// exactly as live, dormant or destroyed as that part: a part the game has
-        /// destroyed can never be pushed again, and one it has merely unloaded has no
-        /// rigidbody to push until it is loaded. A force the client has taken off its
-        /// part is gone whatever the part is doing, as nothing applies it again.
+        /// The state of the force. A force is applied to a part and takes that part's
+        /// state: a destroyed part can never be pushed again, and an unloaded part has no
+        /// rigidbody to push until it is loaded. A force the client has removed is
+        /// destroyed whatever its part's state.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return removed ? GameObjectState.Destroyed : Part.GameObjectState; }
