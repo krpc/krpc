@@ -13,6 +13,7 @@ KRPC.AddEvent
 KRPC.HoldTick
 KRPC.ReleaseTick
 KRPC.NextTick
+KRPC.RunFunction
 KRPC.GameScene
 KRPC.GameScene.SpaceCenter
 KRPC.GameScene.Flight
@@ -28,6 +29,7 @@ KRPC.CurrentGameScene
 KRPC.Paused
 KRPC.Expression
 KRPC.Expression.ReturnType
+KRPC.Expression.HasReturnType
 KRPC.Expression.ConstantDouble
 KRPC.Expression.ConstantFloat
 KRPC.Expression.ConstantInt

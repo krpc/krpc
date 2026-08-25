@@ -20,6 +20,7 @@ namespace KRPC.Service.KRPC
         readonly LinqExpression internalExpression;
 
         Func<object> evaluator;
+        Action runner;
         bool markersChecked;
 
         internal Expression(LinqExpression expression)
@@ -75,6 +76,17 @@ namespace KRPC.Service.KRPC
             }
         }
 
+        /// <summary>
+        /// A delegate that evaluates an expression that produces no value, for its
+        /// effects. Compiled on first use and reused afterwards.
+        /// </summary>
+        internal Action Runner {
+            get {
+                if (runner == null)
+                    runner = LinqExpression.Lambda<Action> (internalExpression).Compile ();
+                return runner;
+            }
+        }
 
         /// <summary>
         /// The type of the value the expression evaluates to.
@@ -90,6 +102,20 @@ namespace KRPC.Service.KRPC
             get { return new Type (GetValidReturnType ()); }
         }
 
+        /// <summary>
+        /// Whether the expression evaluates to a value, rather than being evaluated
+        /// only for its effects. An expression with no value has no
+        /// <see cref="ReturnType"/>.
+        /// </summary>
+        /// <remarks>
+        /// The value of an expression that evaluates to an empty collection encodes to
+        /// an empty sequence of bytes, which is what an expression with no value
+        /// produces as well, so this is what tells the two apart.
+        /// </remarks>
+        [KRPCProperty]
+        public bool HasReturnType {
+            get { return internalExpression.Type != typeof (void); }
+        }
 
         /// <summary>
         /// The expression's type, checked to be a type that can be sent to a client.
