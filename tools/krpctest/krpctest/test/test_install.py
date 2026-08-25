@@ -58,7 +58,7 @@ class TestValidateGamedata(krpctest.TestCase):
 
     def test_requested_mod_missing_from_set_raises(self):
         # A managed mod present in GameData but not among the requested subdirs is still
-        # unexpected — reconcile should have removed it.
+        # unexpected, as reconcile should have removed it.
         self._populate(_CLEAN + ["RealChute"])
         with self.assertRaises(RuntimeError) as cm:
             _validate_gamedata(self.gamedata, set())

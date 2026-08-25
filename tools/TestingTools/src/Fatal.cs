@@ -5,7 +5,7 @@ namespace TestingTools
 {
     /// <summary>
     /// Thrown when a TestingTools --krpctest-load-* option cannot be honoured. The launch is
-    /// aborted rather than silently continuing with different behaviour than was requested.
+    /// aborted, and does not silently continue with different behavior than was requested.
     /// </summary>
     sealed class TestingToolsException : Exception
     {

@@ -134,7 +134,7 @@ namespace TestServer
             // Services are found by scanning the assemblies that are loaded, and the runtime
             // does not load one until something in it is used. Nothing in this program calls
             // into the benchmark service, so name a type from it to get it loaded before the
-            // scan; the game has no such problem, since KSP loads every assembly it installs.
+            // scan. KSP loads every assembly it installs, so the game has no such problem.
             Logger.WriteLine (
                 "Loaded " + typeof (KRPC.Benchmarks.Benchmark).Assembly.GetName ().Name);
 
@@ -239,11 +239,10 @@ namespace TestServer
                         Console.WriteLine ("Fast by " + diffTime + " ms (" + diffTicks + " ticks)");
                 }
 
-                // Wait, to force 60 FPS — sleep most of the remaining time rather than
-                // spinning, so the process doesn't burn a core during profiling/benchmarks.
-                // Unpaced, the next update follows immediately instead, which costs a core
-                // and is what makes a round trip measure the client rather than the update
-                // it landed in.
+                // Wait, to force 60 FPS. Sleep most of the remaining time, so the process
+                // does not burn a core during profiling and benchmarks. Unpaced, the next
+                // update follows immediately, which costs a core and makes a round trip
+                // measure the client and not the update it landed in.
                 if (framePacing) {
                     var remainingTicks = ticksPerUpdate - timer.ElapsedTicks;
                     if (remainingTicks > Stopwatch.Frequency / 1000) {

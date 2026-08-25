@@ -157,18 +157,16 @@ GAMESCENE_SHIM = '''namespace KRPC.Service.KRPC
 }
 '''
 
-# Before 0.5.4 the KRPC service lived in server/ and its Paused and
-# CurrentGameScene properties were implemented against server and KSP symbols --
-# the server Addon and the KSP PauseMenu, EditorDriver and EditorFacility -- that
-# the KSP-free core/ assembly, where the service is now grafted, cannot see.
-# These compile-only shims, placed in the KRPC service's own namespace so the
-# grafted code resolves them unqualified and carrying no [KRPC*] attribute so the
-# scanner ignores them, let those properties build; their bodies never run during
-# doc generation. The service's namespace (not KRPC) keeps the shim Addon from
-# colliding with the server's own KRPC.Addon, which core is imported into. The
-# shim is written only when the grafted service still references these symbols,
-# so 0.5.4 onwards (which moved the properties out of the service) needs it not at
-# all.
+# A release before 0.5.4 has the KRPC service in server/, with its Paused and
+# CurrentGameScene properties implemented against server and KSP symbols: the
+# server Addon and the KSP PauseMenu, EditorDriver and EditorFacility. The
+# KSP-free core/ assembly the service is grafted into cannot see them. These
+# compile-only shims let those properties build, and their bodies never run
+# during doc generation. They sit in the KRPC service's own namespace, so the
+# grafted code resolves them unqualified and the shim Addon does not collide
+# with the server's own KRPC.Addon, and they carry no [KRPC*] attribute, so the
+# scanner ignores them. The shim is written only when the grafted service still
+# references these symbols.
 KRPC_COMPAT_SHIM_PATH = 'core/src/Service/KRPC/DocsCompat.cs'
 KRPC_COMPAT_SHIM = '''namespace KRPC.Service.KRPC
 {
@@ -319,9 +317,9 @@ def graft_krpc_service(worktree, ref):
         lib.run('git', '-C', worktree, 'checkout', ref, '--', KRPC_SERVICE_DEST)
         return
     # Relocate: materialize the ref's tree at its old path, then move it into the
-    # current core/ location. The stale index entry the checkout leaves at the
-    # old path is harmless -- the build reads the worktree, and the move leaves
-    # the sources there only at the core/ location.
+    # current core/ location. The stale index entry the checkout leaves at the old
+    # path is harmless, as the build reads the worktree and the move leaves the
+    # sources only at the core/ location.
     lib.run('git', '-C', worktree, 'checkout', ref, '--', source)
     dest = worktree / KRPC_SERVICE_DEST
     dest.parent.mkdir(parents=True, exist_ok=True)

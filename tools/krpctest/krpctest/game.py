@@ -71,7 +71,7 @@ _MOD_FLAGS = {
 _owned_ksp = None  # pylint: disable=invalid-name
 
 # Mod sets (as frozensets) that were installed and launched but did not become available
-# in-game — recorded so ensure_game fails fast instead of relaunching KSP forever.
+# in-game, recorded so that ensure_game fails fast instead of relaunching KSP forever.
 _unsatisfiable = set()
 
 

@@ -27,9 +27,9 @@ import time
 
 import krpc
 
-# What TestServer writes to standard output as it comes up, behind the log line's timestamp
-# and severity. Where it is listening comes first, then the ready line, so a reader that has
-# seen the ready line has already seen the rest.
+# The lines TestServer writes to standard output as it comes up, behind the log line's
+# timestamp and severity. Where it is listening comes first, then the ready line, so a reader
+# that has seen the ready line has already seen the rest.
 ADDRESSES = {
     "rpc_port": re.compile(r"rpc_port = (\d+)"),
     "stream_port": re.compile(r"stream_port = (\d+)"),
@@ -48,15 +48,15 @@ LABELS = {TCP: "TCP/IP", LOCAL_SOCKET: "a local socket"}
 SERVER_TYPES = {TCP: "protobuf", LOCAL_SOCKET: "localsocket"}
 
 # Every variable a benchmark program reads to find the server. A program looks for the socket
-# paths first and falls back to the ports, so naming only the pair the transport being measured
-# uses is also what picks that transport inside the program - as long as the other pair is
-# cleared rather than inherited from whatever started the run.
+# paths first and falls back to the ports, so setting only the pair the transport being
+# measured uses also picks that transport inside the program. The other pair has to be
+# cleared, not inherited from whatever started the run.
 VARIABLES = ("RPC_PORT", "STREAM_PORT", "RPC_PATH", "STREAM_PATH")
 
-# How long to wait for those lines before giving up and showing what the server did say.
+# The time to wait for those lines before giving up and showing what the server printed.
 STARTUP_TIMEOUT_SECONDS = 60
 
-# How long to exercise a freshly started server before anything is measured against it. A
+# The time to exercise a freshly started server before anything is measured against it. A
 # server that has just started spends its first calls having the paths they run through
 # compiled, and whichever case is measured first otherwise pays for that and reports itself as
 # a case that was still getting faster.

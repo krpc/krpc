@@ -77,11 +77,10 @@ namespace TestingTools
             GameEvents.onLevelWasLoadedGUIReady.Remove(OnGUIReady);
         }
 
-        // Named OnGUIReady rather than OnLevelWasLoaded to avoid colliding with
-        // Unity's deprecated OnLevelWasLoaded(int) magic message. The collision is
-        // harmless (the handler is invoked via the GameEvents delegate, not Unity's
-        // message dispatch) but logs a spurious "message parameter has to be of
-        // type: int" error on every run.
+        // Named OnGUIReady, to avoid colliding with Unity's deprecated
+        // OnLevelWasLoaded(int) magic message. The collision is harmless, as the handler
+        // is invoked through the GameEvents delegate, but it logs a spurious "message
+        // parameter has to be of type: int" error on every run.
         void OnGUIReady(GameScenes scene)
         {
             // Only auto-load when an auto-load argument was actually supplied.
@@ -118,10 +117,10 @@ namespace TestingTools
                 throw Fatal.Error(
                     "Failed to load game configuration for save \"" + Save + "\" in folder saves/" + Game);
             // Ensure the loaded save has every scenario module the current install
-            // expects. Loading a clean save into a modded install commonly adds
-            // modules and makes this return true; that is normal, not a failure, so
-            // the return value is ignored, matching KSP's own MainMenu load flow.
-            // (Treating true as an error here left the game stuck at the main menu.)
+            // expects. Loading a clean save into a modded install commonly adds modules
+            // and makes this return true, which is normal, so the return value is
+            // ignored, matching KSP's own MainMenu load flow. Treating true as an error
+            // here leaves the game stuck at the main menu.
             GamePersistence.UpdateScenarioModules(HighLogic.CurrentGame);
 
             // Load the game
@@ -129,9 +128,9 @@ namespace TestingTools
             HighLogic.SaveFolder = Game;
 
             if (Options.HasCraft) {
-                // A failure here quits KSP (via Fatal.Error) rather than loading into the
-                // Space Center without the requested craft, so the launch fails fast instead
-                // of leaving the user or the test framework to guess why the craft is missing.
+                // A failure here quits KSP through Fatal.Error, so the launch fails fast and
+                // does not load into the Space Center without the requested craft, leaving the
+                // user or the test framework to guess why the craft is missing.
                 PrepareCraftLaunch(Options);
                 AutoSwitchVessel.SetCraftLaunch(
                     Options.Craft, Options.CraftDirectory, Options.LaunchSite);

@@ -785,9 +785,9 @@ namespace TestServer
         }
 
         // The special values of the numeric types as default arguments. Each is a compile-time
-        // constant, so they are plain optional parameters rather than KRPCDefaultValue
-        // factories. Every generated client has to spell them in a way its language accepts,
-        // which the client builds check by compiling the generated stubs.
+        // constant, so they are plain optional parameters and not KRPCDefaultValue factories.
+        // Every generated client has to spell them in a way its language accepts, which the
+        // client builds check by compiling the generated stubs.
 
         /// <summary>
         /// Procedure whose defaults are the special values of double.

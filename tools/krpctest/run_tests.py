@@ -33,7 +33,7 @@ def main():
     # krpctest is a library here rather than an installed distribution, so it has no
     # pytest11 entry point for pytest to discover the plugin through; name it explicitly.
     # This belongs here and not in pytest.ini, which is also read when krpctest is
-    # installed -- pytest would then register the plugin twice and fail.
+    # installed, as pytest would then register the plugin twice and fail.
     return pytest.main(["-p", "krpctest.pytest_plugin", *sys.argv[1:]])
 
 

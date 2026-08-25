@@ -94,8 +94,8 @@ class BenchmarkTestCase(krpctest.TestCase):
         RESULTS.append(result)
         return result
 
-    # How long to let the stream update reading settle before sampling it, how many samples
-    # to take, and how long to leave between them. time_per_stream_update is an exponential
+    # The settling time for the stream update reading before it is sampled, the number of
+    # samples to take, and the gap between them. time_per_stream_update is an exponential
     # moving average, so it takes a few updates to reach the value for the streams that were
     # just added.
     stream_settle_seconds = 2
@@ -118,9 +118,9 @@ class BenchmarkTestCase(krpctest.TestCase):
                 stream.start(wait=False)
             self.wait(self.stream_settle_seconds)
             status = conn.krpc.get_status()
-            # Scene sanity rather than a measurement: each stream is evaluated every fixed
-            # update, so the rate is a large multiple of the number of streams. Anything less
-            # means they are not all running, and the timing below is an empty loop.
+            # A scene check, not a measurement: each stream is evaluated every fixed update,
+            # so the rate is a large multiple of the number of streams. Anything less means
+            # they are not all running, and the timing below is an empty loop.
             self.assertEqual(len(streams), status.stream_rpcs)
             self.assertGreater(status.stream_rpc_rate, len(streams))
             samples = []

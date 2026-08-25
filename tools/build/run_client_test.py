@@ -166,8 +166,8 @@ def run(config):
     serial = config["server_type"] == "serialio"
     local_socket = config["server_type"] == "localsocket"
 
-    # The executables locate their own runfiles -- the .NET runtime and
-    # assemblies, the python interpreter and its packages -- through RUNFILES_DIR
+    # The executables locate their own runfiles, the .NET runtime and assemblies,
+    # the python interpreter and its packages, through RUNFILES_DIR
     # when they cannot find a runfiles tree of their own beside them. They share
     # this test's tree, which holds everything they need.
     environment = dict(os.environ)

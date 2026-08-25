@@ -75,7 +75,7 @@ class TestEndToEnd(ReferenceCraft):
         self.measure_getter("module.part", self.module, "part")
 
     def test_concrete_module_proxies(self):
-        # Reading through a concrete proxy that already exists, which is what a stream over
+        # Reading through a concrete proxy that already exists, as a stream over
         # engine.thrust or parachute.state does.
         self.measure_getter("engine.thrust", self.engine_part.engine, "thrust")
         self.measure_getter("parachute.state", self.parachute_part.parachute, "state")
@@ -83,8 +83,8 @@ class TestEndToEnd(ReferenceCraft):
         self.measure_getter("part.engine", self.engine_part, "engine")
 
     def test_bulk(self):
-        # Work proportional to the size of the vessel rather than to one access: one Part
-        # proxy per part, constructed, deduplicated against the object store and encoded.
+        # Work proportional to the size of the vessel, not to one access: one Part proxy per
+        # part, constructed, deduplicated against the object store and encoded.
         self.measure_getter("vessel.parts.all", self.parts, "all")
 
 
@@ -115,12 +115,11 @@ class TestObjectAccess(ReferenceCraft):
 
     def test_of_type_to_list(self):
         # The pattern a concrete module proxy can use to collect the modules it wraps. It
-        # allocates an enumerator and a list every time, which is why it is measured rather
-        # than assumed cheap.
+        # allocates an enumerator and a list every time, so it is measured.
         self.measure_part(self.part, "module.of_type_to_list")
 
     def test_store_dedup(self):
-        # What returning an already-known proxy costs: the object store hashes it and
+        # The cost of returning an already-known proxy: the object store hashes it and
         # compares it against what it holds. Every proxy a call returns pays this.
         self.measure_vessel(self.vessel, "store.dedup")
 

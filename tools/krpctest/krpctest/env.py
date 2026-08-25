@@ -10,7 +10,7 @@ import os
 import subprocess
 import sys
 
-# What the game's executable is called here. An install is built for one platform, and the
+# The name of the game's executable here. An install is built for one platform, and the
 # name it gives the executable is what says which.
 _KSP_EXECUTABLE = "KSP_x64.exe" if sys.platform == "win32" else "KSP.x86_64"
 

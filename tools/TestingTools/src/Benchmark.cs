@@ -140,11 +140,11 @@ namespace TestingTools
             new Dictionary<string, Func<ServiceVessel, Action>> {
                 { "empty", vessel => () => { Timer.IntSink = 0; } },
 
-                // What returning a proxy costs once it has been constructed: the object store
+                // The cost of returning a proxy once it has been constructed: the object store
                 // hashes it and compares it against what it already holds, so this is the dedup
                 // path, over a store holding one entry per part of the vessel. The store is a
-                // private one rather than the server's, so the benchmark does not grow the store
-                // the rest of the session is measured against.
+                // private one, so the benchmark does not grow the store the rest of the session
+                // is measured against.
                 { "store.dedup", vessel => {
                     var store = new ObjectStore ();
                     var parts = vessel.Parts.All;

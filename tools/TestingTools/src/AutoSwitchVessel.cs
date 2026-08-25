@@ -77,9 +77,9 @@ namespace TestingTools
             GameEvents.onLevelWasLoadedGUIReady.Remove(OnGUIReady);
         }
 
-        // Named OnGUIReady rather than OnLevelWasLoaded to avoid colliding with
-        // Unity's deprecated OnLevelWasLoaded(int) magic message, which would
-        // otherwise log a spurious type error on every run.
+        // Named OnGUIReady, to avoid colliding with Unity's deprecated
+        // OnLevelWasLoaded(int) magic message, which logs a spurious type error on
+        // every run.
         void OnGUIReady(GameScenes scene)
         {
             if (scene != GameScenes.SPACECENTER)
