@@ -9,6 +9,7 @@ from krpc.connection import Connection
 from krpc.definitions import CLASS, ENUMERATION, STRUCT, Definition, register_all
 from krpc.error import StreamError
 from krpc.event import Event
+from krpc.functioncompiler import compile_function
 from krpc.types import Types, TypeBase, DefaultArgument, EXCEPTION_TYPES
 from krpc.service import (
     create_service,
@@ -154,6 +155,15 @@ class Client(krpc.services.Client):
         self._rpc_connection_lock = threading.Lock()
         self._stream_connection = stream_connection
         self._stream_manager = StreamManager(self)
+        # The type a server side function returns, by expression object
+        # identifier, so that it is introspected over the wire only once
+        self._expression_return_types: dict[int, Optional[KRPC.Type]] = {}
+        # What the function compiler knows about the services, built on the first
+        # compile, and the objects naming a type by their type message. Both cost
+        # round trips to build, so every function compiled for this connection
+        # shares them
+        self._expression_metadata: Any = None
+        self._expression_remote_types: dict[bytes, Any] = {}
 
         services = cast(
             KRPC.Services,
@@ -249,6 +259,14 @@ class Client(krpc.services.Client):
         finally:
             stream.remove()
 
+    def compile_function(self, func: Callable) -> Any:  # type: ignore[type-arg]
+        """Compile a python function or lambda, taking no arguments, into a
+        server side function (a KRPC.Expression object) that computes the
+        same result on the server. Remote procedure calls made by the function
+        are re-invoked on each evaluation; other values are captured when the
+        function is compiled."""
+        return compile_function(self, func)
+
     def add_function_stream(self, function: Any) -> Stream:
         """Add a stream to the server that evaluates a server side function
         (a KRPC.Expression object) on each update and streams the value it
@@ -267,6 +285,15 @@ class Client(krpc.services.Client):
         return krpc.stream.Stream.from_stream_id(
             self, stream.id, self._types.as_type(return_type)
         )
+
+    def add_event(self, function: Any) -> Event:
+        """Create an event from a server side function, that must evaluate
+        to a boolean value. The function may also be given as a python
+        function or lambda taking no arguments, which is compiled using
+        compile_function."""
+        if callable(function):
+            function = self.compile_function(function)
+        return cast(Event, self.krpc.add_event(function))
 
     def run_function(self, function: Any) -> Any:
         """Run a function on the server, within a single physics tick, and

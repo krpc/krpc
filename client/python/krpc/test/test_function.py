@@ -115,6 +115,81 @@ class TestFunction(ServerTestCase, unittest.TestCase):
             event.wait(2)
             self.assertTrue(event.stream())
 
+    def test_function_stream_struct(self) -> None:
+        expression = self.conn.krpc.Expression
+        expr = expression.call(
+            self.conn.get_call(
+                self.conn.test_service.counter_struct, "TestFunction.struct"
+            )
+        )
+        with self.conn.function_stream(expr) as stream:
+            value = stream()
+            self.assertIsInstance(value, self.conn.test_service.TestStruct)
+            self.assertEqual("TestFunction.struct", value.string_field)
+            with stream.condition:
+                stream.wait()
+            self.assertGreater(stream().int_field, value.int_field)
+
+    def test_expression_struct_field(self) -> None:
+        expression = self.conn.krpc.Expression
+        struct = expression.call(
+            self.conn.get_call(
+                self.conn.test_service.counter_struct, "TestFunction.field"
+            )
+        )
+        expr = expression.get_field(struct, "StringField")
+        with self.conn.function_stream(expr) as stream:
+            self.assertEqual("TestFunction.field", stream())
+
+    def test_expression_create_struct(self) -> None:
+        expression = self.conn.krpc.Expression
+        types = self.conn.krpc.Type
+        test_enum = self.conn.test_service.TestEnum
+        struct = expression.create_struct(
+            types.struct_type("TestService", "TestStruct"),
+            [
+                expression.constant_int(3),
+                expression.constant_string("built"),
+                expression.cast(
+                    expression.constant_int(test_enum.value_c.value),
+                    types.enumeration_type("TestService", "TestEnum"),
+                ),
+                expression.create_list([expression.constant_int(7)]),
+            ],
+        )
+        expr = expression.call_with_arguments(
+            self.conn.get_call(
+                self.conn.test_service.struct_echo,
+                self.conn.test_service.TestStruct(0, "", test_enum.value_a, []),
+            ),
+            {0: struct},
+        )
+        with self.conn.function_stream(expr) as stream:
+            value = stream()
+            self.assertEqual(3, value.int_field)
+            self.assertEqual("built", value.string_field)
+            self.assertEqual(test_enum.value_c, value.enum_field)
+            self.assertEqual([7], value.list_field)
+
+    def test_boolean_operators_short_circuit(self) -> None:
+        counter = self.conn.test_service.counter
+        # The right operand is never evaluated, so the counter is left at zero and
+        # the client's own call is the first one
+        self.assertFalse(
+            self.conn.run_function(
+                lambda: False and counter("TestFunction.shortcircuit") > 0
+            )
+        )
+        self.assertEqual(1, counter("TestFunction.shortcircuit"))
+
+    def test_chained_comparison_reads_the_middle_operand_once(self) -> None:
+        counter = self.conn.test_service.counter
+        # The counter gives 1 on its first call and 2 on its second, so reading it
+        # a second time would make the right hand comparison fail
+        self.assertTrue(
+            self.conn.run_function(lambda: 0 < counter("TestFunction.chained") < 2)
+        )
+
     def test_return_type_introspection(self) -> None:
         expression = self.conn.krpc.Expression
         type_code = self.conn.krpc.TypeCode
