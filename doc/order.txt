@@ -31,6 +31,8 @@ KRPC.Expression.ConstantFloat
 KRPC.Expression.ConstantInt
 KRPC.Expression.ConstantBool
 KRPC.Expression.ConstantString
+KRPC.Expression.ConstantEnum
+KRPC.Expression.ConstantObject
 KRPC.Expression.Call
 KRPC.Expression.Equal
 KRPC.Expression.NotEqual
