@@ -41,12 +41,18 @@ namespace KRPC.Service.Scanner
         public string DeprecatedReason { get; private set; }
 
         /// <summary>
+        /// The CLR type of the enumeration.
+        /// </summary>
+        public Type UnderlyingType { get; private set; }
+
+        /// <summary>
         /// Create an enumeration signature
         /// </summary>
-        public EnumerationSignature (string serviceName, string enumName, IList<EnumerationValueSignature> values, string documentation, bool deprecated, string deprecatedReason)
+        public EnumerationSignature (string serviceName, string enumName, Type enumType, IList<EnumerationValueSignature> values, string documentation, bool deprecated, string deprecatedReason)
         {
             Name = enumName;
             FullyQualifiedName = serviceName + "." + Name;
+            UnderlyingType = enumType;
             Values = values;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;
