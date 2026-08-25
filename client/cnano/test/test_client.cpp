@@ -14,10 +14,10 @@
 
 class test_client : public server_test {};
 
-// The version is three dot separated runs of digits. It is checked by hand
-// rather than against a regular expression because gtest falls back to a syntax
-// of its own where it cannot use POSIX ones, and the two have no spelling of a
-// digit in common: [0-9] is only understood by the former, \d only by the latter.
+// The version is three dot separated runs of digits, checked by hand. gtest falls back to
+// a regular expression syntax of its own where it cannot use POSIX ones, and the two have
+// no spelling of a digit in common: [0-9] is only understood by the former, \d only by the
+// latter.
 static bool is_version(const char* value) {
   int parts = 1;
   int digits = 0;

@@ -42,7 +42,7 @@ static void connect_generic(asio::generic::stream_protocol::socket& socket,
 }
 
 // Connect, giving up once the deadline has passed. A network that drops a connection attempt
-// rather than refusing it otherwise leaves the caller waiting indefinitely.
+// instead of refusing it otherwise leaves the caller waiting indefinitely.
 static void connect_generic(asio::io_context& io_context,
                             asio::generic::stream_protocol::socket& socket,
                             const asio::generic::stream_protocol::endpoint& endpoint,
@@ -85,7 +85,7 @@ void Connection::connect() {
   // Each address the name resolved to is tried in turn, so a host that has more than one is
   // reached through whichever of them answers, and the failure reported when none of them does
   // is the one from the last address tried. The timeout is what connecting is given as a
-  // whole, so they share one deadline rather than each being given the whole of it.
+  // whole, so they share one deadline.
   auto deadline = std::chrono::steady_clock::now() + timeout;
   std::exception_ptr failure;
   for (auto& endpoint : endpoints) {
@@ -122,8 +122,8 @@ void LocalConnection::connect() {
 void Connection::close() {
   // A connection that was never opened, or has already been closed, has no socket to close
   if (socket.is_open()) socket.close();
-  // What was read but not consumed belongs to a connection that is gone, so it is dropped
-  // rather than handed out by a later read
+  // Bytes read but not consumed belong to a connection that is gone, so they are dropped
+  // and not handed out by a later read
   filled = 0;
   consumed = 0;
 }
@@ -161,8 +161,8 @@ std::pair<const char*, size_t> Connection::buffered_message() {
 }
 
 void Connection::fill() {
-  // Move what is left to the front rather than reading further along a buffer that only ever
-  // grows. In the ordinary case nothing is left and this moves nothing.
+  // Move what is left to the front, so the buffer does not grow with every read. In the
+  // ordinary case nothing is left and this moves nothing.
   if (consumed > 0) {
     std::memmove(buffer.data(), buffer.data() + consumed, available());
     filled -= consumed;

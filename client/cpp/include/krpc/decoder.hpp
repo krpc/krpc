@@ -92,19 +92,19 @@ inline void decode(std::optional<T>& value, const std::string& data, Client* cli
 }
 
 // A collection arrives as a message holding its items, one encoded value each. That message is
-// kept between calls rather than made for one: parsing into it reuses the storage the items it
-// held last time have, where a message made for the call goes to the allocator for every item
-// and gives it all back again. It is one per thread, since the thread that reads stream updates
-// decodes them while the program is decoding what it asked for; and it is one per element type,
-// which is what makes it safe to reuse - reaching this function again while it is running takes
-// a collection of itself, which is not a type that can be written.
+// kept between calls: parsing into it reuses the storage the items it held last time have,
+// where a message made for the call goes to the allocator for every item and gives it all back
+// again. It is one per thread, as the thread that reads stream updates decodes them while the
+// program is decoding what it asked for. It is one per element type, which makes it safe to
+// reuse: reaching this function again while it is running takes a collection of itself, which
+// is not a type that can be written.
 template <typename T>
 inline void decode(std::vector<T>& list, const std::string& data, Client* client) {
   static thread_local krpc::schema::List listMessage;
   if (!listMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
   list.clear();
   // The number of items is known before any of them are decoded, so the list is given room for
-  // all of them rather than growing as they arrive.
+  // all of them up front.
   list.reserve(listMessage.items_size());
   for (int i = 0; i < listMessage.items_size(); i++) {
     T value;

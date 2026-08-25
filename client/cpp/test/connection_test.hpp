@@ -25,7 +25,7 @@ class echo_server {
  public:
   explicit echo_server(const typename Protocol::endpoint& endpoint)
       : acceptor_(io_context_), stopping_(false) {
-    // Opened, bound and listened on a step at a time rather than through the constructor
+    // Opened, bound and listened on a step at a time, and not through the constructor
     // that does all three, which also asks for the address to be reusable. That option is
     // meaningless for a unix domain socket, and asking for it on one is an error on Windows;
     // the port these tests listen on over TCP/IP is one the system picks, so nothing needs it.
@@ -101,8 +101,8 @@ TYPED_TEST_P(connection_test, long_send_receive) {
 }
 
 TYPED_TEST_P(connection_test, send_receive_in_pieces) {
-  // What is received need not line up with what was sent, as a read returns whatever has
-  // arrived rather than what a particular send put on the wire
+  // A receive need not line up with a send, as a read returns whatever has
+  // arrived, and not what a particular send put on the wire
   auto connection = this->connect();
   connection->send("foobar");
   ASSERT_EQ("foo", connection->receive(3));
@@ -118,7 +118,7 @@ TYPED_TEST_P(connection_test, partial_receive) {
 }
 
 TYPED_TEST_P(connection_test, partial_receive_with_nothing_waiting) {
-  // Nothing has been sent, so this gives up once its timeout has passed rather than
+  // Nothing has been sent, so this gives up once its timeout has passed instead of
   // blocking until something arrives
   auto connection = this->connect();
   ASSERT_EQ("", connection->partial_receive(16));
@@ -137,7 +137,7 @@ TYPED_TEST_P(connection_test, receive_message) {
 }
 
 TYPED_TEST_P(connection_test, receive_two_messages_from_one_read) {
-  // A read brings in a block rather than a message, so a block holding two of them has to
+  // A read brings in a block and not a message, so a block holding two messages has to
   // yield both without a second read
   auto connection = this->connect();
   krpc::schema::Response response;
@@ -178,7 +178,7 @@ TYPED_TEST_P(connection_test, close_twice) {
 }
 
 TYPED_TEST_P(connection_test, close_drops_what_was_read_but_not_taken) {
-  // A read brings in a block rather than the bytes asked for, so a connection can be closed
+  // A read brings in a block and not the bytes asked for, so a connection can be closed
   // with data still in hand. It belongs to a connection that is gone, so it is not handed out.
   auto connection = this->connect();
   connection->send("foobar");

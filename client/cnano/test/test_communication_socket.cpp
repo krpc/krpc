@@ -26,9 +26,8 @@ void count_alarm(int) { alarms++; }
 }  // namespace
 
 // A read that returns fewer bytes than requested must resume at the point the previous one
-// finished, rather than restarting at the beginning of the buffer. A large response arrives in
-// as many segments as the network chose to split it into, so this is the usual case rather than
-// an unusual one.
+// finished, and not restart at the beginning of the buffer. A large response arrives in as
+// many segments as the network chose to split it into, so this is the usual case.
 TEST(test_communication, test_socket_read_partial) {
   int fds[2];
   ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_STREAM, 0, fds));
@@ -65,8 +64,8 @@ TEST(test_communication, test_socket_read_eof) {
 }
 
 // Writing to a socket whose peer has gone must report the failure. Left to itself it raises
-// SIGPIPE, whose default action ends the program before the caller is told anything, so this
-// test crashes rather than fails when the signal is not suppressed.
+// SIGPIPE, whose default action ends the program before the caller is told anything, so
+// this test crashes when the signal is not suppressed.
 TEST(test_communication, test_socket_write_peer_closed) {
   int fds[2];
   ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_STREAM, 0, fds));
@@ -89,8 +88,8 @@ TEST(test_communication, test_socket_read_interrupted) {
   const uint8_t data[] = {1, 2, 3, 4, 5, 6, 7, 8};
   ASSERT_EQ(3, send(fds[1], data, 3, 0));
 
-  // A handler with no SA_RESTART, which is what leaves an interrupted read to be resumed by the
-  // program rather than by the system
+  // A handler with no SA_RESTART, so an interrupted read is resumed by the program and not
+  // by the system
   struct sigaction action;
   struct sigaction previous_action;
   std::memset(&action, 0, sizeof(action));

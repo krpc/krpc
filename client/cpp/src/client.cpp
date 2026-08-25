@@ -80,9 +80,8 @@ schema::ProcedureResult Client::invoke(std::string_view service, std::string_vie
   return this->send_request(request_buffer);
 }
 
-// Send a request and return the result it is answered by. Called with lock held, which is what
-// makes the response and the bytes the request is written as safe to keep from one call to the
-// next.
+// Send a request and return the result it is answered by. Called with lock held, which makes
+// the response and the bytes the request is written as safe to keep from one call to the next.
 schema::ProcedureResult Client::send_request(const schema::Request& request) {
   encoder::encode_message_with_size(request, &request_data);
   rpc_connection->send(request_data);
@@ -90,7 +89,7 @@ schema::ProcedureResult Client::send_request(const schema::Request& request) {
 
   if (response_buffer.has_error()) throw_exception(response_buffer.error());
 
-  // Moved out of the response, which is about to be reused, rather than copied out of it.
+  // Moved out of the response, which is about to be reused.
   schema::ProcedureResult result = std::move(*response_buffer.mutable_results(0));
 
   if (result.has_error()) throw_exception(result.error());
@@ -143,8 +142,7 @@ void Client::throw_exception(const schema::Error& error) const {
     if (thrower == exception_throwers.end()) {
       // The type is unknown here if the generated header for its service was never
       // instantiated in this translation unit, so nothing registered a thrower for it.
-      // Report the error itself, named by its type on the server, rather than dereferencing
-      // the end of the map.
+      // Report the error itself, named by its type on the server.
       throw RPCError(error.service() + "." + error.name() + ": " + error.description());
     }
     // Copy the thrower and release the lock before calling it: it throws, and it must not

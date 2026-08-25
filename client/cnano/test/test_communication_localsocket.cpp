@@ -81,8 +81,8 @@ class EchoServer {
     address.sun_family = AF_UNIX;
     strncpy(address.sun_path, path_.c_str(), sizeof(address.sun_path) - 1);
     listener_ = socket(AF_UNIX, SOCK_STREAM, 0);
-    // Checked here so that a server that never came up says so, rather than leaving the
-    // client to report only that it could not connect to it
+    // Checked here, so that a server that never came up is reported as such and not as a
+    // client that could not connect
     EXPECT_NE(INVALID_SOCKET, listener_);
     EXPECT_EQ(0, bind(listener_, reinterpret_cast<struct sockaddr*>(&address),
                       static_cast<int>(sizeof(address))));
@@ -181,8 +181,8 @@ TEST(test_communication_localsocket, test_open_nonexistent) {
   ASSERT_EQ(KRPC_ERROR_IO, krpc_open(&connection, missing_path().c_str()));
 }
 
-// The path is copied into a fixed size field, so one that does not fit is reported
-// rather than silently truncated to name a different socket
+// The path is copied into a fixed size field, so one that does not fit is reported and not
+// truncated to name a different socket
 TEST(test_communication_localsocket, test_open_path_too_long) {
   krpc_connection_t connection;
   std::string path(512, 'x');

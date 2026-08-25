@@ -1,10 +1,9 @@
 // Benchmarks for the C++ client, run by //tools/benchmarks:cpp.
 //
-// Measures what this client costs from inside it: the round trip for a procedure call, and what
-// a call carrying a collection of values costs. The runner starts a TestServer, says in the
-// environment where it is listening and which transport that is, and reads the JSON printed
-// here; see tools/benchmarks/run_client.py for the contract and for what happens to these
-// numbers afterwards.
+// Measures this client from inside it: the round trip for a procedure call, and the cost of a
+// call carrying a collection of values. The runner starts a TestServer, names in the
+// environment where it is listening and over which transport, and reads the JSON printed here.
+// See tools/benchmarks/run_client.py for the contract.
 
 #include <krpc.hpp>
 
@@ -24,28 +23,28 @@ namespace {
 
 using clock_type = std::chrono::steady_clock;
 
-// How long one timed loop should run for. Long enough that the clock and a stray scheduling
-// delay do not decide the answer, short enough that a whole run stays in seconds.
+// Duration of one timed loop. Long enough that the clock and a stray scheduling delay do not
+// decide the answer, and short enough that a whole run stays in seconds.
 const double kTargetSeconds = 0.2;
 
-// How many timed loops to take. A round trip crosses a socket and a scheduler as well as the
-// server, and every one of those can only make a sample slower.
+// The number of timed loops to take. A round trip crosses a socket and a scheduler as well as
+// the server, and every one of those can only make a sample slower.
 const int kSamples = 9;
 
-// How long one discarded chunk of calls runs for while a case is being settled, how many of
-// them at a time are asked whether it has stopped getting faster, and how much better the
-// last few have to be than everything before them for it to count as still improving.
+// The duration of one discarded chunk of calls while a case is being settled, the number of
+// them compared at a time, and the margin the last few have to beat for the case to count as
+// still improving.
 const double kSettleChunkSeconds = 0.1;
 const int kSettleChunks = 3;
 const double kSettleTolerance = 0.02;
 
-// How long to keep settling one case before measuring it anyway.
+// The time to keep settling one case before measuring it anyway.
 const double kSettleTimeoutSeconds = 10.0;
 
-// How many values the collection case sends and gets back. A call carries a value at a time,
-// so what one costs to encode and decode is lost in the round trip it arrives in; a list makes
-// that per-value cost most of what the case measures. The same count for every client, so that
-// the figures can be read against each other.
+// The number of values the collection case sends and gets back. A call carries one value at a
+// time, so the cost of encoding and decoding it is lost in the round trip. A list makes that
+// per-value cost most of what the case measures. The same count for every client, so that the
+// figures can be read against each other.
 const int kListValues = 100;
 
 struct Case {
@@ -55,7 +54,7 @@ struct Case {
   std::string rate;
   std::string note;
   // Whether the case had settled before it was measured. See tools/benchmarks/run_client.py
-  // for what the runner does with it.
+  // for how the runner uses it.
   bool settled = true;
 };
 
@@ -68,8 +67,8 @@ int port(const char* name, int fallback) {
   return value == nullptr ? fallback : std::stoi(value);
 }
 
-// Connect over whichever transport the runner started the server with, which it names by socket
-// path or by port. Both are measured, since which one carries a call is part of what it costs.
+// Connect over whichever transport the runner started the server with, named by socket path or
+// by port. Both are measured, as the transport is part of what a call costs.
 krpc::Client connect_to_server() {
   const char* rpc_path = std::getenv("RPC_PATH");
   if (rpc_path != nullptr) {
@@ -97,12 +96,11 @@ struct Settled {
   bool settled;
 };
 
-// Make discarded calls until they stop getting faster, and return what one costs along with
+// Make discarded calls until they stop getting faster, and return the cost of one along with
 // whether it got there. A fixed warmup cannot know when it is done: both ends of a round trip
-// get faster under load for a while, and a case measured before that finishes returns a curve
-// rather than a cost. Every case is settled on its own, since one already warmed by the case
-// before it says so within a few chunks. The cost of a call also falls out of the last chunk,
-// which is what sizes the timed loops.
+// get faster under load for a while, and a case measured before that finishes returns a curve.
+// Every case is settled on its own, as one already warmed by the case before it settles within
+// a few chunks. The cost of a call falls out of the last chunk, which sizes the timed loops.
 Settled settle(const std::function<void()>& call) {
   std::vector<double> chunks{chunk(call)};
   auto start = clock_type::now();
@@ -116,8 +114,8 @@ Settled settle(const std::function<void()>& call) {
         return {recent, true};
     }
   }
-  // However many chunks it got through, which is fewer than a settle compares where a single
-  // one of them ran longer than the whole timeout.
+  // The chunks it got through, which is fewer than a settle compares when a single chunk ran
+  // longer than the whole timeout.
   auto taken = static_cast<long>(chunks.size());
   auto recent = chunks.begin() + std::max(taken - kSettleChunks, 0L);
   return {*std::min_element(recent, chunks.end()), false};

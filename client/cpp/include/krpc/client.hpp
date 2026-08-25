@@ -90,8 +90,8 @@ class Client {
   std::shared_ptr<StreamManager> stream_manager;
   std::shared_ptr<std::mutex> lock;
   // The request a call is built into, the bytes it is written as, and the response it is
-  // answered by. Kept from one call to the next and guarded by lock, so that a call reuses
-  // what the one before it allocated: clearing a protobuf message keeps the storage its fields
+  // answered by. Kept from one call to the next and guarded by lock, so that a call reuses the
+  // allocations of the one before it: clearing a protobuf message keeps the storage its fields
   // have, and the buffer keeps its capacity.
   schema::Request request_buffer;
   std::string request_data;

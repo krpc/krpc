@@ -23,7 +23,7 @@
 #endif
 
 // A read that returns fewer bytes than requested must resume at the point the previous one
-// finished, rather than restarting at the beginning of the buffer.
+// finished, and not restart at the beginning of the buffer.
 TEST(test_communication, test_read_partial) {
   HANDLE read_end = INVALID_HANDLE_VALUE;
   HANDLE write_end = INVALID_HANDLE_VALUE;
@@ -52,7 +52,7 @@ TEST(test_communication, test_read_partial) {
   for (size_t i = 0; i < sizeof(buf); i++) ASSERT_EQ(data[i], buf[i]);
 }
 
-// A read whose data can never arrive has to fail rather than hand back whatever the buffer
+// A read whose data can never arrive has to fail, and not hand back whatever the buffer
 // already held. A pipe reports the far end closing as a failed read, where a serial port, whose
 // far end is hardware, reports no data.
 TEST(test_communication, test_read_peer_closed) {

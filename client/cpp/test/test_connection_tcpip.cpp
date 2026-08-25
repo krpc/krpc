@@ -13,7 +13,7 @@ class tcpip_transport {
  public:
   void start() {
     // Port zero, so the system picks one nothing else is using. Bound to the loopback address
-    // rather than to every interface, both because nothing outside this machine has any business
+    // and not to every interface, both because nothing outside this machine has any business
     // reaching it and because the address a server is bound to is the one it is reached on when
     // it is stopped; connecting to the address that stands for every interface is an error on
     // Windows, which would leave the server waiting to be woken.
