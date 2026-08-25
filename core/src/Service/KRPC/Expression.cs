@@ -18,6 +18,7 @@ namespace KRPC.Service.KRPC
     public class Expression
     {
         readonly LinqExpression internalExpression;
+        bool markersChecked;
 
         internal Expression(LinqExpression expression)
         {
@@ -46,6 +47,23 @@ namespace KRPC.Service.KRPC
 
         internal System.Type Type {
             get { return internalExpression.Type; }
+        }
+
+        /// <summary>
+        /// Throws if the expression contains a break, continue or return marker that was
+        /// never bound to an enclosing loop or function.
+        /// </summary>
+        /// <remarks>
+        /// An unbound marker compiles successfully, because it is an ordinary call to a
+        /// method that throws. Checking before compiling reports the mistake when the
+        /// function is built rather than every time it is evaluated.
+        /// </remarks>
+        internal void CheckMarkersBound ()
+        {
+            if (markersChecked)
+                return;
+            new MarkerChecker ().Visit (internalExpression);
+            markersChecked = true;
         }
 
         static readonly Dictionary<Tuple<System.Type, object>, Expression> constants =
@@ -727,14 +745,47 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// A function.
+        /// The body may be a single expression, or a block of statements; a
+        /// function whose body does not produce a value performs its statements
+        /// for their effects. Return and ReturnNothing statements within the
+        /// body end the function's evaluation.
         /// </summary>
         /// <returns>A function.</returns>
         /// <param name="parameters">The parameters of the function.</param>
         /// <param name="body">The body of the function.</param>
         [KRPCMethod]
-        public static Expression Function (IList<Expression> parameters, Expression body)
+        public static Expression Lambda (IList<Expression> parameters, Expression body)
         {
-            return new Expression (LinqExpression.Lambda (body, parameters.Select(x => (ParameterExpression)(x.internalExpression)).ToArray()));
+            if (ReferenceEquals (parameters, null))
+                throw new ArgumentNullException (nameof (parameters));
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            var boundBody = BindReturns (body.internalExpression);
+            var parameterNodes = new ParameterExpression [parameters.Count];
+            for (int i = 0; i < parameters.Count; i++) {
+                parameterNodes [i] = parameters [i].internalExpression as ParameterExpression;
+                if (parameterNodes [i] == null)
+                    throw new ArgumentException (
+                        "Expected a parameter, created with Parameter");
+            }
+            return new Expression (LinqExpression.Lambda (boundBody, parameterNodes));
+        }
+
+        /// <summary>
+        /// Replace return markers in a function body with jumps to a label at
+        /// the end of the body.
+        /// </summary>
+        static LinqExpression BindReturns (LinqExpression body)
+        {
+            if (body.Type == typeof (void)) {
+                var target = LinqExpression.Label ();
+                var bound = new MarkerRewriter (null, null, target).Visit (body);
+                return LinqExpression.Block (bound, LinqExpression.Label (target));
+            } else {
+                var target = LinqExpression.Label (body.Type);
+                var bound = new MarkerRewriter (null, null, target).Visit (body);
+                return LinqExpression.Label (target, bound);
+            }
         }
 
         /// <summary>
@@ -833,6 +884,15 @@ namespace KRPC.Service.KRPC
             for (int i = 0; i < keys.Length; i++)
                 dictionary [keys [i]] = values [i];
             return dictionary;
+        }
+
+
+
+
+
+
+
+        {
         }
 
         /// <summary>
@@ -1131,6 +1191,347 @@ namespace KRPC.Service.KRPC
             var any = typeof (Enumerable).GetMethods ().Single (x => x.Name == "Any" && x.GetParameters ().Length == 2);
             any = any.MakeGenericMethod (sourceType);
             return new Expression (LinqExpression.Call (any, arg, predicate));
+        }
+
+        /// <summary>
+        /// A local variable, for use within a block.
+        /// Declare it in the enclosing block's variable list, and set its value
+        /// using <see cref="Assign"/>.
+        /// </summary>
+        /// <returns>A local variable.</returns>
+        /// <param name="name">The name of the variable.</param>
+        /// <param name="type">The type of the variable.</param>
+        [KRPCMethod]
+        public static Expression Variable (string name, Type type)
+        {
+            if (ReferenceEquals (type, null))
+                throw new ArgumentNullException (nameof (type));
+            return new Expression (LinqExpression.Variable (type.InternalType, name));
+        }
+
+        /// <summary>
+        /// Assign a value to a local variable or function parameter.
+        /// The value's type must be assignable to the variable's type; numeric
+        /// values of a different type are converted.
+        /// </summary>
+        /// <param name="variable">The variable to assign to.</param>
+        /// <param name="value">The value to assign.</param>
+        [KRPCMethod]
+        public static Expression Assign (Expression variable, Expression value)
+        {
+            if (ReferenceEquals (variable, null))
+                throw new ArgumentNullException (nameof (variable));
+            if (ReferenceEquals (value, null))
+                throw new ArgumentNullException (nameof (value));
+            if (!(variable.internalExpression is ParameterExpression))
+                throw new ArgumentException ("The assignment target must be a variable or parameter");
+            LinqExpression converted = value;
+            var targetType = variable.Type;
+            if (converted.Type != targetType &&
+                IsNumericType (converted.Type) && IsNumericType (targetType))
+                converted = LinqExpression.Convert (converted, targetType);
+            return new Expression (LinqExpression.Assign (variable, converted));
+        }
+
+        /// <summary>
+        /// A block of statements, evaluated in order. The value of the block is
+        /// the value of its last statement.
+        /// </summary>
+        /// <param name="statements">The statements.</param>
+        [KRPCMethod]
+        public static Expression Block (IList<Expression> statements)
+        {
+            CheckStatements (statements);
+            return new Expression (LinqExpression.Block (
+                statements.Select (x => x.internalExpression)));
+        }
+
+        /// <summary>
+        /// A block of statements with local variables, evaluated in order.
+        /// The value of the block is the value of its last statement. The
+        /// variables, created with <see cref="Variable"/>, are in scope for
+        /// the statements of the block, including within nested functions.
+        /// </summary>
+        /// <param name="variables">The local variables of the block.</param>
+        /// <param name="statements">The statements.</param>
+        [KRPCMethod]
+        public static Expression BlockWithVariables (IList<Expression> variables, IList<Expression> statements)
+        {
+            if (ReferenceEquals (variables, null))
+                throw new ArgumentNullException (nameof (variables));
+            CheckStatements (statements);
+            return new Expression (LinqExpression.Block (
+                variables.Select (x => (ParameterExpression)x.internalExpression),
+                statements.Select (x => x.internalExpression)));
+        }
+
+        static void CheckStatements (IList<Expression> statements)
+        {
+            if (ReferenceEquals (statements, null))
+                throw new ArgumentNullException (nameof (statements));
+            if (statements.Count == 0)
+                throw new ArgumentException ("A block must contain at least one statement");
+        }
+
+        /// <summary>
+        /// An if statement. Evaluates the body when the condition is true.
+        /// Use <see cref="Conditional"/> for an if-then-else that produces a value.
+        /// </summary>
+        /// <param name="condition">The condition. Must evaluate to a boolean value.</param>
+        /// <param name="body">The statement to evaluate when the condition is true.</param>
+        [KRPCMethod]
+        public static Expression IfThen (Expression condition, Expression body)
+        {
+            return new Expression (LinqExpression.IfThen (condition, AsStatement (body)));
+        }
+
+        /// <summary>
+        /// An if-else statement. Evaluates the first body when the condition is
+        /// true, and the second body otherwise.
+        /// Use <see cref="Conditional"/> for an if-then-else that produces a value.
+        /// </summary>
+        /// <param name="condition">The condition. Must evaluate to a boolean value.</param>
+        /// <param name="body">The statement to evaluate when the condition is true.</param>
+        /// <param name="elseBody">The statement to evaluate when the condition is false.</param>
+        [KRPCMethod]
+        public static Expression IfThenElse (Expression condition, Expression body, Expression elseBody)
+        {
+            return new Expression (LinqExpression.IfThenElse (
+                condition, AsStatement (body), AsStatement (elseBody)));
+        }
+
+        /// <summary>
+        /// Discard a statement's value, so that differently typed statements can
+        /// be used as the branches of an if statement.
+        /// </summary>
+        static LinqExpression AsStatement (Expression statement)
+        {
+            if (ReferenceEquals (statement, null))
+                throw new ArgumentNullException (nameof (statement));
+            var expression = statement.internalExpression;
+            if (expression.Type == typeof (void))
+                return expression;
+            return LinqExpression.Block (typeof (void), expression);
+        }
+
+        // Markers for break, continue and return statements. They are replaced with
+        // jumps when the enclosing loop or function is created. Expressions are built
+        // from the innermost node outwards, so a marker binds to the nearest
+        // enclosing construct
+        internal static void BreakMarker ()
+        {
+            throw new InvalidOperationException ("break used outside of a loop");
+        }
+
+        internal static void ContinueMarker ()
+        {
+            throw new InvalidOperationException ("continue used outside of a loop");
+        }
+
+        internal static T ReturnMarker<T> (T value)
+        {
+            throw new InvalidOperationException ("return used outside of a function");
+        }
+
+        internal static void ReturnVoidMarker ()
+        {
+            throw new InvalidOperationException ("return used outside of a function");
+        }
+
+        /// <summary>
+        /// A break statement. Ends the evaluation of the enclosing loop.
+        /// </summary>
+        [KRPCMethod]
+        public static Expression Break ()
+        {
+            return new Expression (LinqExpression.Call (
+                typeof (Expression).GetMethod (nameof (BreakMarker), BindingFlags.Static | BindingFlags.NonPublic)));
+        }
+
+        /// <summary>
+        /// A continue statement. Skips to the next iteration of the enclosing loop.
+        /// </summary>
+        [KRPCMethod]
+        public static Expression Continue ()
+        {
+            return new Expression (LinqExpression.Call (
+                typeof (Expression).GetMethod (nameof (ContinueMarker), BindingFlags.Static | BindingFlags.NonPublic)));
+        }
+
+        /// <summary>
+        /// A return statement. Ends the evaluation of the enclosing function,
+        /// which must be created with <see cref="Lambda"/>, with the given
+        /// value as its result.
+        /// </summary>
+        /// <param name="value">The value to return.</param>
+        [KRPCMethod]
+        public static Expression Return (Expression value)
+        {
+            if (ReferenceEquals (value, null))
+                throw new ArgumentNullException (nameof (value));
+            var method = typeof (Expression)
+                .GetMethod (nameof (ReturnMarker), BindingFlags.Static | BindingFlags.NonPublic)
+                .MakeGenericMethod (value.Type);
+            return new Expression (LinqExpression.Call (method, value.internalExpression));
+        }
+
+        /// <summary>
+        /// A return statement with no value. Ends the evaluation of the
+        /// enclosing function, which must be created with <see cref="Lambda"/>
+        /// and must not produce a value.
+        /// </summary>
+        [KRPCMethod]
+        public static Expression ReturnNothing ()
+        {
+            return new Expression (LinqExpression.Call (
+                typeof (Expression).GetMethod (nameof (ReturnVoidMarker), BindingFlags.Static | BindingFlags.NonPublic)));
+        }
+
+        /// <summary>
+        /// Replaces break, continue and return markers with jumps to the given
+        /// labels. Does not descend into nested functions, whose markers bind to
+        /// their own function and loops, and leaves already-bound jumps intact.
+        /// </summary>
+        sealed class MarkerRewriter : ExpressionVisitor
+        {
+            readonly LabelTarget breakTarget;
+            readonly LabelTarget continueTarget;
+            readonly LabelTarget returnTarget;
+
+            public MarkerRewriter (LabelTarget breakLabel, LabelTarget continueLabel, LabelTarget returnLabel)
+            {
+                breakTarget = breakLabel;
+                continueTarget = continueLabel;
+                returnTarget = returnLabel;
+            }
+
+            protected override LinqExpression VisitLambda<T> (Expression<T> node)
+            {
+                return node;
+            }
+
+            protected override LinqExpression VisitMethodCall (MethodCallExpression node)
+            {
+                var method = node.Method;
+                if (method.DeclaringType == typeof (Expression)) {
+                    if (breakTarget != null && method.Name == nameof (BreakMarker))
+                        return LinqExpression.Break (breakTarget);
+                    if (continueTarget != null && method.Name == nameof (ContinueMarker))
+                        return LinqExpression.Continue (continueTarget);
+                    if (returnTarget != null && method.IsGenericMethod && method.Name == nameof (ReturnMarker)) {
+                        if (returnTarget.Type != method.GetGenericArguments () [0])
+                            throw new InvalidOperationException (
+                                "return value of type " + method.GetGenericArguments () [0] +
+                                " does not match the function's result type " + returnTarget.Type);
+                        return LinqExpression.Return (returnTarget, Visit (node.Arguments [0]), typeof (void));
+                    }
+                    if (returnTarget != null && method.Name == nameof (ReturnVoidMarker)) {
+                        if (returnTarget.Type != typeof (void))
+                            throw new InvalidOperationException (
+                                "return must have a value in a function that produces a value");
+                        return LinqExpression.Return (returnTarget, typeof (void));
+                    }
+                }
+                return base.VisitMethodCall (node);
+            }
+        }
+
+        /// <summary>
+        /// Finds break, continue and return markers that no enclosing loop or function
+        /// bound to a jump, and reports them with the same message the marker itself
+        /// would have thrown when evaluated.
+        /// </summary>
+        sealed class MarkerChecker : ExpressionVisitor
+        {
+            protected override LinqExpression VisitMethodCall (MethodCallExpression node)
+            {
+                var method = node.Method;
+                if (method.DeclaringType == typeof (Expression)) {
+                    if (method.Name == nameof (BreakMarker))
+                        throw new InvalidOperationException ("break used outside of a loop");
+                    if (method.Name == nameof (ContinueMarker))
+                        throw new InvalidOperationException ("continue used outside of a loop");
+                    if (method.Name == nameof (ReturnMarker) || method.Name == nameof (ReturnVoidMarker))
+                        throw new InvalidOperationException ("return used outside of a function");
+                }
+                return base.VisitMethodCall (node);
+            }
+        }
+
+        /// <summary>
+        /// A while loop. Evaluates the body repeatedly, for as long as the
+        /// condition evaluates to true. Break and Continue statements within
+        /// the body apply to this loop.
+        /// </summary>
+        /// <param name="condition">The condition. Must evaluate to a boolean value.</param>
+        /// <param name="body">The statement to evaluate on each iteration.</param>
+        [KRPCMethod]
+        public static Expression While (Expression condition, Expression body)
+        {
+            if (ReferenceEquals (condition, null))
+                throw new ArgumentNullException (nameof (condition));
+            if (condition.Type != typeof (bool))
+                throw new ArgumentException ("The loop condition must evaluate to a boolean value");
+            var breakTarget = LinqExpression.Label ();
+            var continueTarget = LinqExpression.Label ();
+            var boundBody = new MarkerRewriter (breakTarget, continueTarget, null)
+                .Visit (AsStatement (body));
+            return new Expression (LinqExpression.Loop (
+                LinqExpression.IfThenElse (
+                    condition, boundBody, LinqExpression.Break (breakTarget)),
+                breakTarget, continueTarget));
+        }
+
+        /// <summary>
+        /// A loop over the values of a collection. Evaluates the body once per
+        /// value, with the variable set to the value. Break and Continue
+        /// statements within the body apply to this loop.
+        /// </summary>
+        /// <param name="variable">The loop variable, created with <see cref="Variable"/>.
+        /// Must also be declared in an enclosing block.</param>
+        /// <param name="collection">The collection to iterate over.</param>
+        /// <param name="body">The statement to evaluate on each iteration.</param>
+        [KRPCMethod]
+        public static Expression ForEach (Expression variable, Expression collection, Expression body)
+        {
+            if (ReferenceEquals (variable, null))
+                throw new ArgumentNullException (nameof (variable));
+            if (ReferenceEquals (collection, null))
+                throw new ArgumentNullException (nameof (collection));
+            if (!(variable.internalExpression is ParameterExpression))
+                throw new ArgumentException ("The loop variable must be a variable or parameter");
+            var valueType = GetEnumerableValueType (collection);
+            if (!variable.Type.IsAssignableFrom (valueType))
+                throw new ArgumentException (
+                    "The loop variable type " + variable.Type +
+                    " does not match the collection's value type " + valueType);
+            var enumeratorType = typeof (IEnumerator<>).MakeGenericType (valueType);
+            var enumerator = LinqExpression.Variable (enumeratorType, "enumerator");
+            var getEnumerator = typeof (IEnumerable<>).MakeGenericType (valueType).GetMethod ("GetEnumerator");
+            var moveNext = typeof (IEnumerator).GetMethod ("MoveNext");
+            var current = enumeratorType.GetProperty ("Current");
+            var breakTarget = LinqExpression.Label ();
+            var continueTarget = LinqExpression.Label ();
+            var boundBody = new MarkerRewriter (breakTarget, continueTarget, null)
+                .Visit (AsStatement (body));
+            var loopBody = LinqExpression.Block (
+                LinqExpression.Assign (variable, LinqExpression.Property (enumerator, current)),
+                boundBody);
+            var loop = LinqExpression.Loop (
+                LinqExpression.IfThenElse (
+                    LinqExpression.Call (enumerator, moveNext),
+                    loopBody,
+                    LinqExpression.Break (breakTarget)),
+                breakTarget, continueTarget);
+            var dispose = LinqExpression.Call (
+                enumerator, typeof (IDisposable).GetMethod ("Dispose"));
+            // The enumerator is created outside the try, so the finally only runs
+            // once there is one to dispose of
+            return new Expression (LinqExpression.Block (
+                new [] { enumerator },
+                LinqExpression.Assign (
+                    enumerator, LinqExpression.Call (collection, getEnumerator)),
+                LinqExpression.TryFinally (loop, dispose)));
         }
 
         static void CheckIsEnumerable (Expression collection)
