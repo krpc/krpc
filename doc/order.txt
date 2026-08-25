@@ -29,8 +29,14 @@ KRPC.Expression
 KRPC.Expression.ConstantDouble
 KRPC.Expression.ConstantFloat
 KRPC.Expression.ConstantInt
+KRPC.Expression.ConstantLong
+KRPC.Expression.ConstantUInt
+KRPC.Expression.ConstantULong
 KRPC.Expression.ConstantBool
 KRPC.Expression.ConstantString
+KRPC.Expression.ConstantBytes
+KRPC.Expression.ConstantEnum
+KRPC.Expression.ConstantObject
 KRPC.Expression.Call
 KRPC.Expression.Equal
 KRPC.Expression.NotEqual

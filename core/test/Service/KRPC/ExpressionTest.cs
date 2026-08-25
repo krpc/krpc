@@ -58,14 +58,81 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (1.2, Eval<double> (Expression.ConstantDouble (1.2)));
             Assert.AreEqual (3.4f, Eval<float> (Expression.ConstantFloat (3.4f)));
             Assert.AreEqual (5, Eval<int> (Expression.ConstantInt (5)));
+            Assert.AreEqual (5000000000L, Eval<long> (Expression.ConstantLong (5000000000L)));
+            Assert.AreEqual (4000000000u, Eval<uint> (Expression.ConstantUInt (4000000000u)));
+            Assert.AreEqual (
+                18000000000000000000ul, Eval<ulong> (Expression.ConstantULong (18000000000000000000ul)));
             Assert.IsFalse (Eval<bool> (Expression.ConstantBool (false)));
             Assert.IsTrue (Eval<bool> (Expression.ConstantBool (true)));
             Assert.AreEqual ("foo", Eval<string> (Expression.ConstantString ("foo")));
         }
 
         [Test]
+        public void ConstantBytes ()
+        {
+            CollectionAssert.AreEqual (
+                new byte [] { 1, 2, 3 }, Eval<byte[]> (Expression.ConstantBytes (new byte [] { 1, 2, 3 })));
+            Assert.AreSame (
+                Expression.ConstantBytes (new byte [] { 1, 2 }),
+                Expression.ConstantBytes (new byte [] { 1, 2 }));
+            Assert.AreNotSame (
+                Expression.ConstantBytes (new byte [] { 1, 2 }),
+                Expression.ConstantBytes (new byte [] { 2, 1 }));
+        }
+
+        [Test]
         public void Call ()
         {
+        }
+        [Test]
+        public void ConstantObject ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var id = global::KRPC.Service.ObjectStore.Instance.AddInstance (obj);
+            var expr = Expression.ConstantObject (id);
+            Assert.AreEqual (typeof (global::KRPC.Test.Service.TestService.TestClass), ((LinqExpression)expr).Type);
+            Assert.AreSame (obj, Eval<global::KRPC.Test.Service.TestService.TestClass> (expr));
+            Assert.IsTrue (Eval<bool> (Expression.Equal (
+                Expression.ConstantObject (id), Expression.ConstantObject (id))));
+        }
+
+        [Test]
+        public void ConstantsAreShared ()
+        {
+            // A compiled function mentions the same literals over and over, so each
+            // value gets one entry in the object store rather than one per mention
+            var store = global::KRPC.Service.ObjectStore.Instance;
+            Assert.AreEqual (store.AddInstance (Expression.ConstantInt (1)),
+                             store.AddInstance (Expression.ConstantInt (1)));
+            Assert.AreEqual (store.AddInstance (Expression.ConstantString ("a")),
+                             store.AddInstance (Expression.ConstantString ("a")));
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantInt (1)),
+                                store.AddInstance (Expression.ConstantInt (2)));
+            // Constants of equal value but differing type stay distinct
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantInt (1)),
+                                store.AddInstance (Expression.ConstantDouble (1)));
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantDouble (1)),
+                                store.AddInstance (Expression.ConstantFloat (1)));
+            // Negative zero is a distinct constant, though it compares equal to zero
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantDouble (0)),
+                                store.AddInstance (Expression.ConstantDouble (-0.0)));
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantFloat (0)),
+                                store.AddInstance (Expression.ConstantFloat (-0.0f)));
+        }
+
+        [Test]
+        public void ConstantObjectInvalid ()
+        {
+            // The object store issues identifiers from one, and reports both an
+            // identifier it never issued and one it has not reached
+            var zero = Assert.Throws<System.ArgumentException> (
+                () => Expression.ConstantObject (0));
+            StringAssert.Contains ("0 is not an object identifier", zero.Message);
+            Assert.Throws<System.ArgumentException> (
+                () => Expression.ConstantObject (ulong.MaxValue));
+            var id = global::KRPC.Service.ObjectStore.Instance.AddInstance (new object ());
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantObject (id));
         }
 
         [Test]
