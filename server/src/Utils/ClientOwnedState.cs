@@ -74,8 +74,8 @@ namespace KRPC.Utils
             try {
                 action ();
             } catch (Exception exn) {
-                // Anything at all, as what runs here is supplied by the services and acts
-                // on state whose subject the game may already have destroyed.
+                // Catch everything: the action comes from a service and acts on state whose
+                // game object may already be destroyed
                 Logger.WriteLine (failure + "; " + exn, Logger.Severity.Error);
             }
         }

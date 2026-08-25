@@ -113,8 +113,7 @@ namespace KRPC.Test.Service
             var deadId = store.AddInstance (dead);
             dead.GameObjectState = GameObjectState.Destroyed;
 
-            // The rest of the store is still swept, and the instance that could not be
-            // asked is kept rather than dropped on the strength of an error.
+            // The rest of the store is still swept, and the instance that threw is kept
             Assert.AreEqual (1, store.Sweep ());
             Assert.AreSame (broken, store.GetInstance (brokenId));
             Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (deadId));

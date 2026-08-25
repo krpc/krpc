@@ -17,8 +17,8 @@ namespace KRPC.Server.LocalSocket
                 throw new ArgumentNullException (nameof (innerSocket));
             guid = Guid.NewGuid ();
             socket = innerSocket;
-            // A unix socket has no remote address of its own; the path the client
-            // connected to is the only thing there is to identify it by
+            // A unix socket has no remote address, so the path the client connected to is
+            // what identifies it
             address = socketPath ?? string.Empty;
         }
 
@@ -49,8 +49,8 @@ namespace KRPC.Server.LocalSocket
                 try {
                     if (!socket.Connected)
                         return false;
-                    // A closed peer polls readable and then reads nothing, which is
-                    // what tells a disconnect apart from an idle connection
+                    // A closed peer polls readable and then reads nothing, which tells a
+                    // disconnect apart from an idle connection
                     if (socket.Poll (0, SelectMode.SelectRead))
                         return socket.Receive (connectedTestBuffer, SocketFlags.Peek) != 0;
                     return true;

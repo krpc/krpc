@@ -217,9 +217,8 @@ namespace KRPC
             server.OnStopped += (s, e) => {
                 Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' stopped");
                 AnyRunning = Servers.Any (x => x.Running);
-                // The object store is shared by every server, and its object identifiers
-                // are handed out from a single sequence, so it is only emptied once no
-                // server is left for a client to hold an identifier through.
+                // The object store is shared by every server, so it is only emptied
+                // once they have all stopped
                 if (!AnyRunning)
                     ObjectStore.Clear ();
                 EventHandlerExtensions.Invoke (OnServerStopped, this, new ServerStoppedEventArgs ((Server.Server)s));
@@ -393,10 +392,9 @@ namespace KRPC
             ulong startBytesRead = BytesRead;
             ulong startBytesWritten = BytesWritten;
 
-            // The events bracket the call phase rather than being raised from inside it, so that
-            // they are raised exactly once per update whatever the update does: the poll loop
-            // runs many times over while a client holds the tick. Raising OnAfterCalls before
-            // the stream update also means streams observe whatever the handlers did.
+            // Bracket the call phase, so that the events are raised once per update however
+            // many times the poll loop runs. OnAfterCalls is raised before the stream update,
+            // so that streams observe what the handlers did.
             EventHandlerExtensions.Invoke (OnBeforeCalls, this);
             RPCServerUpdate ();
             EventHandlerExtensions.Invoke (OnAfterCalls, this);
@@ -419,10 +417,8 @@ namespace KRPC
             // This prevents MaxTimePerUpdate from being set to a high value when the server is idle, which would
             // cause a drop in framerate if a large burst of RPCs are received.
             var config = Configuration.Instance;
-            // An update that a client held the tick through ran for as long as that client
-            // asked it to. Adapting to it would read the client's own work as the server
-            // spending too long on RPCs, and wind the limit down to its floor for every other
-            // client as well.
+            // An update that held the tick ran for as long as the client asked. Adapting to it
+            // would wind the limit down to its floor for every other client.
             if (config.AdaptiveRateControl && !heldTick) {
                 var targetTicks = Stopwatch.Frequency / 59;
                 if (ticksElapsed > targetTicks) {
@@ -492,10 +488,8 @@ namespace KRPC
                     PollRequests (rpcYieldedContinuations);
                     if (rpcContinuations.Count > 0)
                         break;
-                    // A client holding the tick is waited for until it releases it, so that a
-                    // call it makes after seeing the result of an earlier one is executed in
-                    // this update rather than the next. The hold ending is the only thing that
-                    // ends this wait, which is why it is asked about every time around.
+                    // Wait for the client to release the tick, so that a call it makes after
+                    // seeing an earlier result is executed in this update
                     if (TickHeld) {
                         heldTick = true;
                         continue;
@@ -547,8 +541,8 @@ namespace KRPC
                     continue;
                 }
 
-                // Exit if a hold on the tick ended during this update, so that the game takes
-                // the tick it was held back from before another hold can defer it again.
+                // Exit if a hold ended during this update, so that the game takes the tick
+                // before another hold can defer it
                 if (heldTick)
                     break;
 
@@ -561,9 +555,8 @@ namespace KRPC
                     break;
             }
 
-            // Nothing leaves the loop while a client holds the tick, so a hold still in force
-            // here belongs to an update that failed part way through. Which is also the only
-            // way calls can still be marked as executing.
+            // Nothing leaves the loop while the tick is held, so a hold still in force here
+            // belongs to an update that failed part way through
             executingRPCs = false;
             if (tickHoldClient != null) {
                 Logger.WriteLine (
@@ -684,18 +677,14 @@ namespace KRPC
             if (!rpcClients.TryGetValue (rpcClient.Guid, out client))
                 throw new InvalidOperationException (
                     "No RPC client is connected with this identifier");
-            // Taking a hold that is already held would let a client renew its own before it ran
-            // out of time, and so hold the game for as long as it liked.
+            // Renewing a hold would let a client hold the game for as long as it liked
             if (TickHeld)
                 throw new InvalidOperationException (
                     tickHoldClient.Guid == rpcClient.Guid
                     ? "This client is already holding the tick"
                     : "Another client is holding the tick");
-            // One hold per tick, whoever asks for it. A tick that has already been held and let
-            // go has done its waiting, and holding it again would defer it a second time; a
-            // client looping on hold and release, or two passing it between them, could defer it
-            // for as long as they kept asking. The call waits for the next tick instead, which
-            // is where the work it is about to do belongs.
+            // One hold per tick. Holding a tick that has already been held and released would
+            // defer it a second time, so the call waits for the next tick
             if (heldTick)
                 throw new YieldException<Action> (() => HoldTick (rpcClient));
             tickHoldClient = client;
@@ -751,8 +740,8 @@ namespace KRPC
                     ReleaseTickHold ();
                     return false;
                 }
-                // Clients that have gone away are only reconciled between updates, so an update
-                // holding a tick has to notice for itself that the client it waits for has left.
+                // Clients are only reconciled between updates, so an update holding a tick
+                // checks for itself that the client is still connected
                 if (!rpcClients.ContainsKey (tickHoldClient.Guid) || !tickHoldClient.Connected) {
                     Logger.WriteLine (
                         "Client " + tickHoldClient.Address + " disconnected while holding the tick",
@@ -944,10 +933,9 @@ namespace KRPC
                     client.Stream.Close ();
                     continue;
                 } catch (KRPC.Server.Message.RequestDecodeException e) {
-                    // The request arrived intact but names something the server cannot
-                    // give, such as an object it has reclaimed. That is a failed call
-                    // rather than a broken connection, so it is reported as the error it
-                    // is and the client carries on.
+                    // The request arrived intact but names something the server cannot give,
+                    // such as an object it has reclaimed. Report a failed call, and leave the
+                    // connection open
                     SendErrorResponse (client, KRPC.Service.Services.Instance.HandleException (e.InnerException ?? e));
                 } catch (System.Exception e) {
                     if (Logger.ShouldLog (Logger.Severity.Debug))

@@ -20,15 +20,15 @@ namespace KRPC.Test
         public void SetUp ()
         {
             core = Core.Instance;
-            // Procedures are gated on the game scene, so the calls these tests script only run
-            // in one. Set here rather than relied on from whichever fixture ran last.
+            // Procedures are gated on the game scene, so the calls these tests script only
+            // run in one. Set here, as another fixture may have left a different scene
             CallContext.GameScene = GameScene.Flight;
             var config = Configuration.Instance;
             blockingRecv = config.BlockingRecv;
             tickHoldTimeout = config.TickHoldTimeout;
-            // Without blocking receives the server polls each client once per pass, so a client
-            // that is not ready costs it one poll rather than a wait, and the number of updates
-            // a script takes is decided by the script rather than by a clock.
+            // Without blocking receives the server polls each client once per pass, so a
+            // client that is not ready costs it one poll. The number of updates a script
+            // takes is then decided by the script and not by a clock
             config.BlockingRecv = false;
         }
 
@@ -69,8 +69,8 @@ namespace KRPC.Test
         {
             foreach (var response in responses) {
                 Assert.IsFalse (response.HasError, response.Error == null ? string.Empty : response.Error.Description);
-                // A call that failed is reported in its own result, so checking the response
-                // alone would pass however the calls went.
+                // A call that failed is reported in its own result, so the response alone
+                // would pass however the calls went
                 foreach (var result in response.Results)
                     Assert.IsFalse (result.HasError, result.Error == null ? string.Empty : result.Error.Description);
             }
@@ -122,7 +122,7 @@ namespace KRPC.Test
             var client = Connect (1, 50, "HoldTick");
             core.Update ();
             // Taken on this update, and the client goes away while it is held. The update has
-            // to notice, rather than waiting out a timeout that is far longer than the test.
+            // to notice before the timeout, which is far longer than the test
             var timer = Stopwatch.StartNew ();
             core.Update ();
             timer.Stop ();
@@ -146,9 +146,9 @@ namespace KRPC.Test
         [Test]
         public void AHoldSentWithTheReleaseBeforeItWaitsForTheNextTick ()
         {
-            // Sent as one request, so both calls run in one continuation and the release cannot
-            // end the update before the hold behind it is executed. The hold has to turn itself
-            // down, or a client could defer the tick for as long as it kept asking.
+            // Sent as one request, so both calls run in one continuation and the release
+            // cannot end the update before the hold behind it is executed. The second hold
+            // is refused
             var client = Batched (
                 new [] { "HoldTick" },
                 new [] { "ReleaseTick", "HoldTick" },
@@ -165,9 +165,9 @@ namespace KRPC.Test
         [Test]
         public void AReleaseAndAHoldInSeparateRequestsCanMissATick ()
         {
-            // The hold is a call the server has to be waiting for when it looks, and a client
-            // that is not ready costs it a poll. Nothing holds the tick after the release, so
-            // the update it would have held ends without it.
+            // The server has to be polling when the hold arrives, and a client that is not
+            // ready costs it a poll. Nothing holds the tick after the release, so the update
+            // it would have held ends without it
             var client = Connect (1, "HoldTick", "ReleaseTick", "HoldTick", "ReleaseTick");
             core.Update ();
             core.Update ();

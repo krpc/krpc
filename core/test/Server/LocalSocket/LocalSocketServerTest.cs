@@ -219,8 +219,7 @@ namespace KRPC.Test.Server.LocalSocket
         public void StartFailsWhenAnotherServerIsListening ()
         {
             // The socket file alone does not say whether the server that made it is still
-            // there, and taking the path from one that is would leave it unreachable with
-            // nothing to say where its clients had gone
+            // there, and taking the path from a running server would leave it unreachable
             var running = new LocalSocketServer (path);
             running.OnClientRequestingConnection += (s, e) => {
                 return;
@@ -242,8 +241,8 @@ namespace KRPC.Test.Server.LocalSocket
         [Test]
         public void StartDoesNotDeleteAFileThatIsNotASocket ()
         {
-            // A mistyped path points at a file that is nothing to do with the server, and
-            // whatever is in it is not the server's to remove
+            // A mistyped path points at a file that has nothing to do with the server, and
+            // the server does not remove it
             File.WriteAllText (path, "not a socket");
             var server = new LocalSocketServer (path);
             server.OnClientRequestingConnection += (s, e) => {
@@ -271,8 +270,8 @@ namespace KRPC.Test.Server.LocalSocket
         [Platform (Exclude = "Win", Reason = "made with the link command POSIX has")]
         public void StartReportsAPathItCannotAsk ()
         {
-            // A link with nothing on the end of it answers a connection with neither a server
-            // nor a refusal, which says only that the question went unanswered
+            // A link with nothing on the end of it gives neither a connection nor a refusal,
+            // so whether a server is there stays unknown
             Link ("/nowhere-at-all", path);
             var server = new LocalSocketServer (path);
             server.OnClientRequestingConnection += (s, e) => {
@@ -333,8 +332,8 @@ namespace KRPC.Test.Server.LocalSocket
         public void StartWithATooLongPathFails ()
         {
             // The limit is on the bytes a path takes, not the characters it is written with,
-            // so one written in characters that take more than a byte each reaches it while
-            // it still has fewer characters than the limit names
+            // so a path in multi-byte characters reaches it with fewer characters than the
+            // limit names
             var longPath = new string ('\u00e9', LocalSocketServer.MaximumPathLength / 2 + 1);
             Assert.IsTrue (longPath.Length <= LocalSocketServer.MaximumPathLength);
             Assert.IsTrue (LocalSocketServer.PathLength (longPath) > LocalSocketServer.MaximumPathLength);

@@ -82,11 +82,10 @@ namespace KRPC.UI
             var area = GUILayoutUtility.GetRect (singleLine, style, GUILayout.ExpandWidth (true));
             var content = new GUIContent (value);
             var width = Mathf.Max (area.width, style.CalcSize (content).x + caretRoom);
-            // How wide a field is is only settled once the layout has been worked out, so the
-            // window onto its content moves on the passes that know and holds still on the one
-            // that does not. Taking the width as nothing there would leave no room around the
-            // caret, pinning the window to it so that the text slid along behind a caret that
-            // never moved.
+            // A field's width is only settled once the layout has been worked out, so the
+            // window onto its content moves on the passes that know it and holds still on
+            // the one that does not. A width of zero would pin the window to the caret, and
+            // slide the text along behind it
             if (Event.current.type != EventType.Layout)
                 offset = Mathf.Clamp (ScrolledTo (name, content, style, area.width, width, offset), 0, width - area.width);
             GUI.BeginGroup (area);
@@ -221,12 +220,11 @@ namespace KRPC.UI
         public static GUIStyle ComboOptionStyle ()
         {
             var style = new GUIStyle (Skin.DefaultSkin.label);
-            // Highlighting of the hovered option (a grey background and lighter text)
-            // is handled manually in ComboBoxWindow.Draw. Give the text a known base
-            // colour so the manual GUI.contentColor tint is predictable, and neutralise
-            // the built-in interactive states so they never recolour (or, in the case
-            // of the skin's default hover colour, hide) the text based on the stale
-            // hover position.
+            // Highlighting of the hovered option (a gray background and lighter text) is
+            // handled in ComboBoxWindow.Draw. Give the text a known base color so that the
+            // manual GUI.contentColor tint is predictable, and clear the built-in
+            // interactive states so that they never recolor the text from a stale hover
+            // position
             style.normal.textColor = Color.white;
             style.hover.textColor = style.normal.textColor;
             style.active.textColor = style.normal.textColor;
@@ -244,10 +242,10 @@ namespace KRPC.UI
 
         public static int ComboBox (object caller, int selectedItem, IList<string> entries, GUIStyle buttonStyle, GUIStyle optionsStyle, GUIStyle optionStyle)
         {
-            // Main button. Expand to fill the row so combo boxes line up with the
-            // (stretchy) text fields in the edit-server form, and left-align the label
-            // to match the left-aligned drop-down items. buttonStyle is shared with the
-            // action buttons, so its alignment is restored immediately after.
+            // Main button. Expand to fill the row so that combo boxes line up with the text
+            // fields in the edit-server form, and left-align the label to match the
+            // drop-down items. buttonStyle is shared with the action buttons, so its
+            // alignment is restored below
             var oldAlignment = buttonStyle.alignment;
             buttonStyle.alignment = TextAnchor.MiddleLeft;
             var clicked = GUILayout.Button (entries [selectedItem], buttonStyle, GUILayout.ExpandWidth (true));
@@ -342,15 +340,13 @@ namespace KRPC.UI
                 if (Options == null)
                     return;
 
-                // Highlight the option under the mouse using the live pointer position
-                // (Input.mousePosition) rather than the built-in hover state, which is
-                // driven by Event.current.mousePosition. In the KSP runtime the latter is
-                // only refreshed when an input event is processed, so the built-in
-                // highlight freezes between mouse movements (the classic "wiggle the mouse
-                // to update it" behaviour). The options do not move once the window is
-                // shown, so hit-testing against the rects captured on the last repaint is
-                // exact. Position is the window's top-left in screen space; Input.mousePosition
-                // is bottom-left origin, hence the y flip.
+                // Highlight the option under the mouse from the live pointer position. The
+                // built-in hover state is driven by Event.current.mousePosition, which the
+                // KSP runtime only refreshes when an input event is processed, so it
+                // freezes between mouse movements. The options do not move once the window
+                // is shown, so the rects captured on the last repaint are exact. Position
+                // is top-left in screen space and Input.mousePosition is bottom-left,
+                // hence the y flip
                 var mouse = new Vector2 (
                     Input.mousePosition.x - Position.x,
                     Screen.height - Input.mousePosition.y - Position.y);

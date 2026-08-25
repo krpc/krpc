@@ -18,8 +18,8 @@ namespace KRPC.Utils
     /// </remarks>
     public struct Hash : IEquatable<Hash>
     {
-        // An arbitrary starting value, and an odd multiplier that moves what has been
-        // folded in so far clear of the field being added.
+        // An arbitrary starting value, and an odd multiplier that spreads the bits folded
+        // in so far clear of the field being added
         const int seed = 17;
         const int multiplier = 31;
 

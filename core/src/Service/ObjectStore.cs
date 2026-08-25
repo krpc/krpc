@@ -86,11 +86,9 @@ namespace KRPC.Service
                 try {
                     state = instance.GameObjectState;
                 } catch (Exception e) {
-                    // One pass covers the whole store, so an instance that breaks the
-                    // interface's promise not to throw must not stop the rest from being
-                    // checked. Keeping it is the safe answer, on the same grounds as
-                    // reporting anything uncertain as dormant: an instance wrongly kept
-                    // costs memory until the next sweep, where one wrongly removed is gone.
+                    // One pass covers the whole store, so an instance that throws must not
+                    // stop the rest being checked. Keep it: an instance wrongly kept costs
+                    // memory until the next sweep, where one wrongly removed is gone
                     Logger.WriteLine (
                         "Failed to determine whether an instance in the object store still " +
                         "exists, so it was kept: " + e.Message, Logger.Severity.Error);
@@ -119,10 +117,9 @@ namespace KRPC.Service
             object result;
             if (objectIds.TryGetValue (id, out result))
                 return result;
-            // Identifiers are allocated in sequence and never reused, so an identifier
-            // below the next one to be allocated was issued and has since been removed.
-            // That means the object it referred to is gone, rather than the client
-            // having made the identifier up.
+            // Identifiers are allocated in sequence and never reused, so an identifier below
+            // the next one to be allocated was issued and has since been removed. The object
+            // it referred to is gone
             if (id < nextObjectId)
                 throw new global::KRPC.Service.KRPC.ObjectDestroyedException (
                     "The object with id " + id + " no longer exists, " +
