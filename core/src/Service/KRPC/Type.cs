@@ -83,6 +83,7 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// An unsigned 32-bit integer type.
         /// </summary>
         [KRPCMethod]
         public static Type UInt ()
@@ -91,6 +92,7 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// An unsigned 64-bit integer type.
         /// </summary>
         [KRPCMethod]
         public static Type ULong ()

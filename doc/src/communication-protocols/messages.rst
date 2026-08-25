@@ -327,6 +327,35 @@ whether the stream should start sending data to the client immediately. The proc
 :ref:`communication-protocol-anatomy-of-a-request` for the format and contents of this message. See
 :ref:`communication-protocol-streams` for more information on working with streams.
 
+.. _communication-protocol-add-function-stream:
+
+AddFunctionStream
+^^^^^^^^^^^^^^^^^
+
+The ``AddFunctionStream`` procedure adds a stream that evaluates a server side function on
+each update and streams the value it evaluates to. Its first argument is the function, built
+using the ``KRPC.Expression`` class. The second argument is a boolean value indicating
+whether the stream should start sending data to the client immediately. The procedure returns a
+``Stream`` message describing the stream that was added. The type of the values sent over the
+stream is the function's return type, which can be obtained from the function before starting
+the stream.
+
+.. _communication-protocol-run-function:
+
+RunFunction
+^^^^^^^^^^^
+
+The ``RunFunction`` procedure evaluates a server side function once, within a single physics
+tick, and returns the value it produces. Its argument is the function, built using the
+``KRPC.Expression`` class. The value is returned as a ``bytes`` result holding the value's
+ordinary encoding, at the function's return type.
+
+The result's own type says nothing about the value inside it, so a client obtains the type from
+the function. A function that produces no value returns an empty result, and a function
+whose value is null sets ``is_null`` on the result, the same flag any nullable return value uses.
+An empty result therefore means either no value or an empty collection, which the function's
+``HasReturnType`` property tells apart.
+
 .. _communication-protocol-start-stream:
 
 StartStream
