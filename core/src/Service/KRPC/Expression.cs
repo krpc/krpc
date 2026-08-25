@@ -829,6 +829,43 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// Construct a structure.
+        /// </summary>
+        /// <returns>The structure.</returns>
+        /// <param name="type">The type of the structure.</param>
+        /// <param name="fieldValues">The values of the structure's fields,
+        /// in the order the structure declares them.</param>
+        [KRPCMethod]
+        public static Expression CreateStruct (Type type, IList<Expression> fieldValues)
+        {
+            if (ReferenceEquals (type, null))
+                throw new ArgumentNullException (nameof (type));
+            if (ReferenceEquals (fieldValues, null))
+                throw new ArgumentNullException (nameof (fieldValues));
+            var structType = type.InternalType;
+            if (!TypeUtils.IsAStructType (structType))
+                throw new ArgumentException (structType + " is not a structure type");
+            var fields = TypeUtils.GetStructFields (structType);
+            if (fieldValues.Count != fields.Count)
+                throw new ArgumentException (
+                    structType + " has " + fields.Count + " fields, got " +
+                    fieldValues.Count + " field values");
+            var bindings = new MemberBinding [fields.Count];
+            for (var i = 0; i < fields.Count; i++) {
+                var field = fields [i];
+                var value = ConvertElement (fieldValues [i], field.PropertyType);
+                if (!field.PropertyType.IsAssignableFrom (value.Type))
+                    throw new InvalidOperationException (
+                        "Incorrect expression type for field " + field.Name + " of " +
+                        structType + ". Expected an expression of type " +
+                        field.PropertyType + ", got " + value.Type);
+                bindings [i] = LinqExpression.Bind (field, value);
+            }
+            return new Expression (
+                LinqExpression.MemberInit (LinqExpression.New (structType), bindings));
+        }
+
+        /// <summary>
         /// Construct a list.
         /// </summary>
         /// <returns>The list.</returns>
@@ -886,13 +923,158 @@ namespace KRPC.Service.KRPC
             return dictionary;
         }
 
-
-
-
-
-
-
+        /// <summary>
+        /// Construct an empty list that values of the given type can be added to.
+        /// </summary>
+        /// <returns>The empty list.</returns>
+        /// <param name="valueType">The type of the values the list holds.</param>
+        [KRPCMethod]
+        public static Expression CreateEmptyList (Type valueType)
         {
+            if (ReferenceEquals (valueType, null))
+                throw new ArgumentNullException (nameof (valueType));
+            var listType = typeof (List<>).MakeGenericType (valueType.InternalType);
+            return new Expression (LinqExpression.New (listType.GetConstructor (System.Type.EmptyTypes)));
+        }
+
+        /// <summary>
+        /// Construct an empty set that values of the given type can be added to.
+        /// </summary>
+        /// <returns>The empty set.</returns>
+        /// <param name="valueType">The type of the values the set holds.</param>
+        [KRPCMethod]
+        public static Expression CreateEmptySet (Type valueType)
+        {
+            if (ReferenceEquals (valueType, null))
+                throw new ArgumentNullException (nameof (valueType));
+            var setType = typeof (HashSet<>).MakeGenericType (valueType.InternalType);
+            return new Expression (LinqExpression.New (setType.GetConstructor (System.Type.EmptyTypes)));
+        }
+
+        /// <summary>
+        /// Construct an empty dictionary that entries of the given types can be
+        /// added to.
+        /// </summary>
+        /// <returns>The empty dictionary.</returns>
+        /// <param name="keyType">The type of the dictionary's keys.</param>
+        /// <param name="valueType">The type of the dictionary's values.</param>
+        [KRPCMethod]
+        public static Expression CreateEmptyDictionary (Type keyType, Type valueType)
+        {
+            if (ReferenceEquals (keyType, null))
+                throw new ArgumentNullException (nameof (keyType));
+            if (ReferenceEquals (valueType, null))
+                throw new ArgumentNullException (nameof (valueType));
+            if (!TypeUtils.IsAValidKeyType (keyType.InternalType))
+                throw new ArgumentException (
+                    keyType.InternalType + " is not a valid dictionary key type");
+            var dictionaryType = typeof (Dictionary<,>).MakeGenericType (
+                keyType.InternalType, valueType.InternalType);
+            return new Expression (LinqExpression.New (dictionaryType.GetConstructor (System.Type.EmptyTypes)));
+        }
+
+        /// <summary>
+        /// A statement that adds a value to the end of a list.
+        /// </summary>
+        /// <param name="list">The list to add to.</param>
+        /// <param name="value">The value to add.</param>
+        [KRPCMethod]
+        public static Expression ListAdd (Expression list, Expression value)
+        {
+            if (ReferenceEquals (list, null))
+                throw new ArgumentNullException (nameof (list));
+            if (ReferenceEquals (value, null))
+                throw new ArgumentNullException (nameof (value));
+            var valueType = GetEnumerableValueType (list);
+            var add = typeof (ICollection<>).MakeGenericType (valueType).GetMethod ("Add");
+            return new Expression (LinqExpression.Call (
+                list, add, ConvertElement (value, valueType)));
+        }
+
+        /// <summary>
+        /// A statement that sets the element at an index of a list.
+        /// </summary>
+        /// <param name="list">The list to modify.</param>
+        /// <param name="index">The zero indexed position of the element to set.</param>
+        /// <param name="value">The value to set the element to.</param>
+        [KRPCMethod]
+        public static Expression ListSet (Expression list, Expression index, Expression value)
+        {
+            if (ReferenceEquals (list, null))
+                throw new ArgumentNullException (nameof (list));
+            if (ReferenceEquals (index, null))
+                throw new ArgumentNullException (nameof (index));
+            if (ReferenceEquals (value, null))
+                throw new ArgumentNullException (nameof (value));
+            var valueType = GetEnumerableValueType (list);
+            var item = typeof (IList<>).MakeGenericType (valueType).GetProperty ("Item");
+            return new Expression (LinqExpression.Assign (
+                LinqExpression.Property (list, item, index),
+                ConvertElement (value, valueType)));
+        }
+
+        /// <summary>
+        /// A statement that adds a value to a set. Has no effect if the set
+        /// already contains the value.
+        /// </summary>
+        /// <param name="set">The set to add to.</param>
+        /// <param name="value">The value to add.</param>
+        [KRPCMethod]
+        public static Expression SetAdd (Expression set, Expression value)
+        {
+            if (ReferenceEquals (set, null))
+                throw new ArgumentNullException (nameof (set));
+            if (ReferenceEquals (value, null))
+                throw new ArgumentNullException (nameof (value));
+            var valueType = GetEnumerableValueType (set);
+            var add = typeof (HashSet<>).MakeGenericType (valueType).GetMethod ("Add");
+            // Discard the added/already-present result so this is a statement
+            return new Expression (LinqExpression.Block (typeof (void),
+                LinqExpression.Call (set, add, ConvertElement (value, valueType))));
+        }
+
+        /// <summary>
+        /// A statement that sets the value for a key of a dictionary, adding an
+        /// entry if the key is not present.
+        /// </summary>
+        /// <param name="dictionary">The dictionary to modify.</param>
+        /// <param name="key">The key of the entry to set.</param>
+        /// <param name="value">The value to set the entry to.</param>
+        [KRPCMethod]
+        public static Expression DictionarySet (Expression dictionary, Expression key, Expression value)
+        {
+            if (ReferenceEquals (dictionary, null))
+                throw new ArgumentNullException (nameof (dictionary));
+            if (ReferenceEquals (key, null))
+                throw new ArgumentNullException (nameof (key));
+            if (ReferenceEquals (value, null))
+                throw new ArgumentNullException (nameof (value));
+            var types = dictionary.Type.GetGenericArguments ();
+            if (types.Length != 2)
+                throw new InvalidOperationException ("Expected a dictionary");
+            var item = typeof (IDictionary<,>).MakeGenericType (types).GetProperty ("Item");
+            return new Expression (LinqExpression.Assign (
+                LinqExpression.Property (
+                    dictionary, item, ConvertElement (key, types [0])),
+                ConvertElement (value, types [1])));
+        }
+
+        /// <summary>
+        /// Convert a value to the type of the position it is used in: a collection's
+        /// element, a structure's field or the variable it is assigned to. A numeric
+        /// conversion that widens is implicit; one that narrows requires a cast.
+        /// </summary>
+        static LinqExpression ConvertElement (Expression value, System.Type type)
+        {
+            LinqExpression expression = value;
+            if (expression.Type == type ||
+                !IsNumericType (expression.Type) || !IsNumericType (type))
+                return expression;
+            if (FindCommonNumericType (expression.Type, type) != type)
+                throw new InvalidOperationException (
+                    "No implicit conversion from " + expression.Type + " to " + type + ". " +
+                    "Use a cast to convert the value.");
+            return LinqExpression.Convert (expression, type);
         }
 
         /// <summary>
@@ -935,16 +1117,48 @@ namespace KRPC.Service.KRPC
         {
             if (ReferenceEquals (arg, null))
                 throw new ArgumentNullException (nameof (arg));
+            CheckIsNotAString (arg);
             var argType = arg.Type;
             if (argType.Name.StartsWith("Tuple`", StringComparison.Ordinal)) {
-                var tupleIndex = LinqExpression.Lambda<Func<int>> (index).Compile () ();
+                // The elements of a tuple differ in type, so which one is being read has
+                // to be known when the tree is built rather than when it is evaluated
+                var constant = index.internalExpression as ConstantExpression;
+                if (constant == null || !(constant.Value is int))
+                    throw new ArgumentException (
+                        "The index into a tuple must be a constant integer");
+                var tupleIndex = (int)constant.Value;
                 var property = argType.GetProperty ("Item" + (tupleIndex + 1));
                 if (property == null)
                     throw new ArgumentOutOfRangeException (nameof (index));
                 return new Expression (LinqExpression.Property (arg, property));
             }
             var method = argType.GetMethod ("get_Item");
+            if (method == null)
+                throw new InvalidOperationException (
+                    argType + " does not have elements that can be accessed by index");
             return new Expression (LinqExpression.Call (arg, method, index));
+        }
+
+        /// <summary>
+        /// Access a field of a structure.
+        /// </summary>
+        /// <returns>The value of the field.</returns>
+        /// <param name="arg">The structure.</param>
+        /// <param name="name">The name of the field to access.</param>
+        [KRPCMethod]
+        public static Expression GetField (Expression arg, string name)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            var argType = arg.Type;
+            if (!TypeUtils.IsAStructType (argType))
+                throw new ArgumentException (argType + " is not a structure type");
+            var field = TypeUtils.GetStructFields (argType)
+                .FirstOrDefault (property => property.Name == name);
+            if (field == null)
+                throw new ArgumentException (
+                    argType + " does not have a field called \"" + name + "\"");
+            return new Expression (LinqExpression.Property (arg, field));
         }
 
         /// <summary>
@@ -1211,8 +1425,8 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// Assign a value to a local variable or function parameter.
-        /// The value's type must be assignable to the variable's type; numeric
-        /// values of a different type are converted.
+        /// The value's type must be assignable to the variable's type. A numeric
+        /// value of a different type is widened, and narrowing it requires a cast.
         /// </summary>
         /// <param name="variable">The variable to assign to.</param>
         /// <param name="value">The value to assign.</param>
@@ -1225,12 +1439,8 @@ namespace KRPC.Service.KRPC
                 throw new ArgumentNullException (nameof (value));
             if (!(variable.internalExpression is ParameterExpression))
                 throw new ArgumentException ("The assignment target must be a variable or parameter");
-            LinqExpression converted = value;
-            var targetType = variable.Type;
-            if (converted.Type != targetType &&
-                IsNumericType (converted.Type) && IsNumericType (targetType))
-                converted = LinqExpression.Convert (converted, targetType);
-            return new Expression (LinqExpression.Assign (variable, converted));
+            return new Expression (LinqExpression.Assign (
+                variable, ConvertElement (value, variable.Type)));
         }
 
         /// <summary>
