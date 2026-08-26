@@ -27,15 +27,19 @@ import krpc.schema.KRPC_pb2 as KRPC
 import krpc.services
 
 
-def _client_class(service_name: str, class_name: str, python_type: type) -> type:
+def _client_class(
+    client: Client, service_name: str, class_name: str, python_type: type
+) -> type:
     """One client's subclass of a pre-generated class, for the members it adds to it.
 
     The subclass names the class it stands for, which is what coerces an object between two
-    connections that each have a subclass of their own."""
+    connections that each have a subclass of their own. It also carries the client, so a
+    static method reached through an object's class uses that object's connection."""
     return type(
         python_type.__name__,
         (python_type,),
         {
+            "_client": client,
             "_service_name": service_name,
             "_class_name": class_name,
             "__doc__": python_type.__doc__,
@@ -46,7 +50,7 @@ def _client_class(service_name: str, class_name: str, python_type: type) -> type
 
 
 def _stub_definitions(
-    service_info: KRPC.Service, service: object
+    client: Client, service_info: KRPC.Service, service: object
 ) -> Iterator[Definition]:
     """The types of a service whose stubs were generated ahead of time, as records that can be
     registered in a type registry. The stubs already provide the python types, so registering
@@ -100,7 +104,7 @@ def _stub_definitions(
     classes = service._classes  # type: ignore[attr-defined]
     for class_name, python_type in classes.items():
         if class_name in extended:
-            python_type = _client_class(name, class_name, python_type)
+            python_type = _client_class(client, name, class_name, python_type)
         yield Definition(
             CLASS, name, class_name, [], register_class(class_name, python_type)
         )
@@ -165,7 +169,7 @@ class Client(krpc.services.Client):
             if use_pregenerated_stubs:
                 service = self._services.get(service_info.name)
             if service is not None:
-                definitions.extend(_stub_definitions(service_info, service))
+                definitions.extend(_stub_definitions(self, service_info, service))
                 stub_services.append((service_info, service))
             else:
                 dynamic_services.append(service_info)
