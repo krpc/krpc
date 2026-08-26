@@ -114,15 +114,12 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The stock delta-v simulation the stage's figures come from, for either the
-        /// vessel in flight or the vessel in the editor.
+        /// The stock delta-v simulation the figures of a stage of the vessel under
+        /// construction come from. A stage in flight goes through
+        /// <see cref="FlightDeltaV" />, which also asks the game to run the simulation.
         /// </summary>
-        VesselDeltaV InternalDeltaV {
-            get {
-                return editorVessel
-                    ? EditorExtensions.GetShip ().vesselDeltaV
-                    : InternalVessel.VesselDeltaV;
-            }
+        VesselDeltaV EditorInternalDeltaV {
+            get { return EditorExtensions.GetShip ().vesselDeltaV; }
         }
 
         /// <summary>
@@ -169,119 +166,130 @@ namespace KRPC.SpaceCenter.Services
         /// Delta-v for this stage in the current situation, in m/s.
         /// </summary>
         [KRPCProperty]
-        public float DeltaV => RequireBurnStage ().deltaVActual;
+        public float DeltaV => Figure (stage => stage.deltaVActual);
 
         /// <summary>
         /// Vacuum delta-v for this stage, in m/s.
         /// </summary>
         [KRPCProperty]
-        public float VacuumDeltaV => RequireBurnStage ().deltaVinVac;
+        public float VacuumDeltaV => Figure (stage => stage.deltaVinVac);
 
         /// <summary>
         /// Sea-level delta-v for this stage, in m/s.
         /// </summary>
         [KRPCProperty]
-        public float SeaLevelDeltaV => RequireBurnStage ().deltaVatASL;
+        public float SeaLevelDeltaV => Figure (stage => stage.deltaVatASL);
 
         /// <summary>
         /// Thrust in the current situation, in newtons.
         /// </summary>
         [KRPCProperty]
-        public float Thrust => RequireBurnStage ().thrustActual * 1000f;
+        public float Thrust => Figure (stage => stage.thrustActual * 1000f);
 
         /// <summary>
         /// Vacuum thrust, in newtons.
         /// </summary>
         [KRPCProperty]
-        public float VacuumThrust => RequireBurnStage ().thrustVac * 1000f;
+        public float VacuumThrust => Figure (stage => stage.thrustVac * 1000f);
 
         /// <summary>
         /// Sea-level thrust, in newtons.
         /// </summary>
         [KRPCProperty]
-        public float SeaLevelThrust => RequireBurnStage ().thrustASL * 1000f;
+        public float SeaLevelThrust => Figure (stage => stage.thrustASL * 1000f);
 
         /// <summary>
         /// Thrust-to-weight ratio in the current situation.
         /// </summary>
         [KRPCProperty]
-        public float TWR => RequireBurnStage ().TWRActual;
+        public float TWR => Figure (stage => stage.TWRActual);
 
         /// <summary>
         /// Vacuum thrust-to-weight ratio.
         /// </summary>
         [KRPCProperty]
-        public float VacuumTWR => RequireBurnStage ().TWRVac;
+        public float VacuumTWR => Figure (stage => stage.TWRVac);
 
         /// <summary>
         /// Sea-level thrust-to-weight ratio.
         /// </summary>
         [KRPCProperty]
-        public float SeaLevelTWR => RequireBurnStage ().TWRASL;
+        public float SeaLevelTWR => Figure (stage => stage.TWRASL);
 
         /// <summary>
         /// Specific impulse in the current situation, in seconds.
         /// </summary>
         [KRPCProperty]
-        public float SpecificImpulse => (float)RequireBurnStage ().ispActual;
+        public float SpecificImpulse => Figure (stage => (float)stage.ispActual);
 
         /// <summary>
         /// Vacuum specific impulse, in seconds.
         /// </summary>
         [KRPCProperty]
-        public float VacuumSpecificImpulse => (float)RequireBurnStage ().ispVac;
+        public float VacuumSpecificImpulse => Figure (stage => (float)stage.ispVac);
 
         /// <summary>
         /// Sea-level specific impulse, in seconds.
         /// </summary>
         [KRPCProperty]
-        public float SeaLevelSpecificImpulse => (float)RequireBurnStage ().ispASL;
+        public float SeaLevelSpecificImpulse => Figure (stage => (float)stage.ispASL);
 
         /// <summary>
         /// Burn time for this stage, in seconds.
         /// </summary>
         [KRPCProperty]
-        public float BurnTime => (float)RequireBurnStage ().stageBurnTime;
+        public float BurnTime => Figure (stage => (float)stage.stageBurnTime);
 
         /// <summary>
         /// Start mass for this stage, in kg.
         /// </summary>
         [KRPCProperty]
-        public float StartMass => RequireBurnStage ().startMass * 1000f;
+        public float StartMass => Figure (stage => stage.startMass * 1000f);
 
         /// <summary>
         /// End mass for this stage, in kg.
         /// </summary>
         [KRPCProperty]
-        public float EndMass => RequireBurnStage ().endMass * 1000f;
+        public float EndMass => Figure (stage => stage.endMass * 1000f);
 
         /// <summary>
         /// Dry mass for this stage, in kg.
         /// </summary>
         [KRPCProperty]
-        public float DryMass => RequireBurnStage ().dryMass * 1000f;
+        public float DryMass => Figure (stage => stage.dryMass * 1000f);
 
         /// <summary>
         /// Fuel mass for this stage, in kg.
         /// </summary>
         [KRPCProperty]
-        public float FuelMass => RequireBurnStage ().fuelMass * 1000f;
+        public float FuelMass => Figure (stage => stage.fuelMass * 1000f);
 
         /// <summary>
-        /// Validates that a stage can provide burn-related delta-v data 
-        /// before returning it. It throws an exception for decouple stages, 
-        /// for vessels whose delta-v calculations are not ready, or when 
-        /// the requested activation stage has no available delta-v 
-        /// information.
+        /// Read a figure off the stage's entry in the stock delta-v simulation. In flight
+        /// the game is asked for a run when the figures are out of date, and the read
+        /// yields until it has finished.
         /// </summary>
-        DeltaVStageInfo RequireBurnStage ()
+        T Figure<T> (Func<DeltaVStageInfo, T> read)
         {
             if (decoupleStage)
-                throw new InvalidOperationException ("Delta-v information is not available for a decouple stage.");
-            var dv = InternalDeltaV;
-            if (dv == null || !dv.IsReady || (editorVessel && !EditorDeltaV.Ready))
-                throw new InvalidOperationException ("Delta-v has not been calculated for this vessel yet.");
-            var stageInfo = dv.GetStage (stageNumber);
+                throw new InvalidOperationException (
+                    "Delta-v information is not available for a decouple stage.");
+            if (!editorVessel)
+                return FlightDeltaV.Read (vesselId, deltaV => read (BurnStage (deltaV)));
+            var ship = EditorInternalDeltaV;
+            if (ship == null || !ship.IsReady || !EditorDeltaV.Ready)
+                throw new InvalidOperationException (
+                    "Delta-v has not been calculated for this vessel yet.");
+            return read (BurnStage (ship));
+        }
+
+        /// <summary>
+        /// The stage's entry in the simulation, or an error when the simulation holds none
+        /// for its number.
+        /// </summary>
+        DeltaVStageInfo BurnStage (VesselDeltaV deltaV)
+        {
+            var stageInfo = deltaV.GetStage (stageNumber);
             if (stageInfo == null)
                 throw new InvalidOperationException (
                     string.Format (

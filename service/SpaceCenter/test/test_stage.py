@@ -55,6 +55,19 @@ class TestStage(krpctest.TestCase):
         self.assertGreaterEqual(self.vessel.sea_level_delta_v, 0)
         self.assertGreaterEqual(self.vessel.burn_time, 0)
 
+    def test_delta_v_ready(self):
+        # The game drops the first calculation of a vessel whose staging is not built yet,
+        # and never repeats it. Reading a figure asks for another calculation, so a figure
+        # read at any point in the flight is a figure the game has produced.
+        self.assertGreater(self.vessel.vacuum_delta_v, 0)
+        self.assertTrue(self.vessel.delta_v_ready)
+
+    def test_recalculate_delta_v(self):
+        before = self.vessel.vacuum_delta_v
+        self.vessel.recalculate_delta_v()
+        self.assertTrue(self.vessel.delta_v_ready)
+        self.assertAlmostEqual(before, self.vessel.vacuum_delta_v, delta=1)
+
     def test_stage_at_and_decouple_stage_at(self):
         stage = self.vessel.stage_at(0)
         self.assertIsNotNone(stage)
@@ -104,16 +117,21 @@ class TestStageRevertToLaunch(krpctest.TestCase):
 
     def wait_for_delta_v(self, vessel):
         # The recreated vessel builds its delta-v simulation over the first few frames of
-        # the reloaded scene, so wait for it before reading any stage. This uses the
-        # vessel-level figure, which resolves the vessel by id and so is unaffected by
-        # what this test is checking.
-        def ready():
+        # the reloaded scene, and the game revises its first figures once the vessel has
+        # come to rest, so wait for one that stops changing before reading any stage. This
+        # uses the vessel-level figure, which resolves the vessel by id and so is
+        # unaffected by what this test is checking.
+        def settled():
             try:
-                return vessel.vacuum_delta_v > 0
+                first = vessel.vacuum_delta_v
             except RuntimeError:
                 return False
+            if first <= 0:
+                return False
+            self.wait(0.5)
+            return vessel.vacuum_delta_v == first
 
-        self.wait_until(ready, timeout=30, message="delta-v after revert")
+        self.wait_until(settled, timeout=30, message="delta-v after revert")
 
     def stage_state(self, stage, decouple_stage):
         # Everything a stage exposes that has to survive the reload: the delta-v figures
@@ -160,3 +178,61 @@ class TestStageRevertToLaunch(krpctest.TestCase):
                 vessel.decouple_stage_at(decouple_stage_number),
             ),
         )
+
+
+class TestStageDeltaVJettisoned(krpctest.TestCase):
+    """The game calculates delta-v for the active vessel alone, so a vessel left behind by
+    staging can never report figures and says so."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Staging")
+        cls.remove_other_vessels()
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.set_circular_orbit("Kerbin", 250000)
+        # The first few stages ignite engines without separating anything, so keep going
+        # until one leaves a vessel behind.
+        cls.jettisoned = None
+        for _ in range(6):
+            jettisoned = cls.vessel.control.activate_next_stage()
+            cls.wait(1)
+            if jettisoned:
+                cls.jettisoned = jettisoned[0]
+                break
+        assert cls.jettisoned is not None, "no stage of the craft left a vessel behind"
+
+    def test_jettisoned_vessel_reports_no_figures(self):
+        self.assertFalse(self.jettisoned.delta_v_ready)
+        with self.assertRaises(RuntimeError) as cm:
+            _ = self.jettisoned.vacuum_delta_v
+        self.assertIn("delta-v", str(cm.exception).lower())
+
+    def test_active_vessel_still_reports_figures(self):
+        self.assertTrue(self.vessel.delta_v_ready)
+
+
+class TestStageDeltaVWithoutEngines(krpctest.TestCase):
+    """CrewlessCommandPod carries no engine. The game runs its simulation but leaves the
+    ready flag down, and the zeros it computed are what there is to report."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.space_center = cls.connect().space_center
+        if cls.space_center.get_kerbal("Solo Kerman") is None:
+            cls.space_center.create_kerbal("Solo Kerman", "Pilot", True)
+        cls._stage_craft("CrewlessCommandPod", "VAB", None)
+        cls.space_center.launch_vessel(
+            "VAB", "CrewlessCommandPod", "LaunchPad", ["Solo Kerman"]
+        )
+        cls.remove_other_vessels()
+        cls.vessel = cls.space_center.active_vessel
+
+    def test_figures_are_zero(self):
+        self.assertTrue(self.vessel.delta_v_ready)
+        self.assertEqual(0, self.vessel.vacuum_delta_v)
+        self.assertEqual(0, self.vessel.sea_level_delta_v)
+        self.assertEqual(0, self.vessel.delta_v)
+        self.assertEqual(0, self.vessel.burn_time)

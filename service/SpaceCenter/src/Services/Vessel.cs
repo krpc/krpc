@@ -440,12 +440,6 @@ namespace KRPC.SpaceCenter.Services
                 .ToList ();
         }
 
-        void RequireVesselDeltaVReady ()
-        {
-            if (InternalVessel.VesselDeltaV == null || !InternalVessel.VesselDeltaV.IsReady)
-                throw new InvalidOperationException ("Delta-v has not been calculated for this vessel yet.");
-        }
-
         /// <summary>
         /// Activation (burn) stages for this vessel, in ascending stage order. This does
         /// not include the -1 stage (parts with no staging icon), as it carries no
@@ -501,11 +495,35 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the vessel's delta-v figures are current.
+        /// </summary>
+        /// <remarks>
+        /// The game calculates delta-v for the active vessel alone, over the several ticks
+        /// after the vessel changes. Reading a delta-v member waits for the figures, so poll
+        /// this instead when a call must not block.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public bool DeltaVReady {
+            get { return FlightDeltaV.Ready (Id); }
+        }
+
+        /// <summary>
+        /// Recalculates the vessel's delta-v figures, and waits until they are current.
+        /// Throws an exception if the vessel is not the active vessel.
+        /// </summary>
+        [KRPCMethod (GameScene = GameScene.Flight)]
+        public void RecalculateDeltaV ()
+        {
+            FlightDeltaV.Recalculate (Id);
+            FlightDeltaV.Wait (Id);
+        }
+
+        /// <summary>
         /// Total delta-v for the vessel in the current situation, in m/s.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float DeltaV {
-            get { RequireVesselDeltaVReady (); return (float)InternalVessel.VesselDeltaV.TotalDeltaVActual; }
+            get { return FlightDeltaV.Read (Id, dv => (float)dv.TotalDeltaVActual); }
         }
 
         /// <summary>
@@ -513,7 +531,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float VacuumDeltaV {
-            get { RequireVesselDeltaVReady (); return (float)InternalVessel.VesselDeltaV.TotalDeltaVVac; }
+            get { return FlightDeltaV.Read (Id, dv => (float)dv.TotalDeltaVVac); }
         }
 
         /// <summary>
@@ -521,7 +539,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float SeaLevelDeltaV {
-            get { RequireVesselDeltaVReady (); return (float)InternalVessel.VesselDeltaV.TotalDeltaVASL; }
+            get { return FlightDeltaV.Read (Id, dv => (float)dv.TotalDeltaVASL); }
         }
 
         /// <summary>
@@ -529,7 +547,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float BurnTime {
-            get { RequireVesselDeltaVReady (); return (float)InternalVessel.VesselDeltaV.TotalBurnTime; }
+            get { return FlightDeltaV.Read (Id, dv => (float)dv.TotalBurnTime); }
         }
 
         /// <summary>
