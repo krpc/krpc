@@ -142,6 +142,7 @@
     <Compile Include="Services\EditorFacility.cs" />
     <Compile Include="Services\EditorVessel.cs" />
     <Compile Include="Services\Flight.cs" />
+    <Compile Include="Services\FlightDeltaV.cs" />
     <Compile Include="Services\GameMode.cs" />
     <Compile Include="Services\MapFilterType.cs" />
     <Compile Include="Services\MitigationMode.cs" />

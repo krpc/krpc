@@ -69,6 +69,10 @@
 - Staging
   - Fix stages from `Vessel.Stages`, `Vessel.StageAt`, `Vessel.DecoupleStages` and
     `Vessel.DecoupleStageAt` breaking after a Revert to Launch (#1023)
+  - The delta-v figures on `Vessel` and `Stage` ask the game to calculate them, so they are
+    available in flight without opening the game's own delta-v app first (#1076)
+  - Add `Vessel.RecalculateDeltaV`, which recalculates the figures and waits for them, and
+    `Vessel.DeltaVReady`, which reports whether they are current (#1076)
 
 - Autopilot
   - Setting `AutoPilot.TargetDirection` keeps the target roll, rather than clearing it (#1054)

@@ -199,6 +199,8 @@ SpaceCenter.Vessel.Stages
 SpaceCenter.Vessel.StageAt
 SpaceCenter.Vessel.DecoupleStages
 SpaceCenter.Vessel.DecoupleStageAt
+SpaceCenter.Vessel.DeltaVReady
+SpaceCenter.Vessel.RecalculateDeltaV
 SpaceCenter.Vessel.DeltaV
 SpaceCenter.Vessel.VacuumDeltaV
 SpaceCenter.Vessel.SeaLevelDeltaV
