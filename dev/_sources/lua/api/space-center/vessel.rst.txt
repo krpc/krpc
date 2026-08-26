@@ -273,6 +273,24 @@ Vessel
       :param number stage: Get decouple stage at this index.
       :rtype: :class:`SpaceCenter.Stage`
 
+   .. attribute:: delta_v_ready: boolean
+
+      Whether the vessel's delta-v figures are current.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+      .. note::
+
+         The game calculates delta-v for the active vessel alone, over the several ticks
+         after the vessel changes. Reading a delta-v member waits for the figures, so poll
+         this instead when a call must not block.
+
+   .. method:: recalculate_delta_v()
+
+      Recalculates the vessel's delta-v figures, and waits until they are current.
+      Throws an exception if the vessel is not the active vessel.
+
    .. attribute:: delta_v: number
 
       Total delta-v for the vessel in the current situation, in m/s.

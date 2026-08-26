@@ -278,6 +278,27 @@ Vessel
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DeltaVReady(krpc_connection_t connection, bool * result)
+
+      Whether the vessel's delta-v figures are current.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game calculates delta-v for the active vessel alone, over the several ticks
+         after the vessel changes. Reading a delta-v member waits for the figures, so poll
+         this instead when a call must not block.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_RecalculateDeltaV(krpc_connection_t connection)
+
+      Recalculates the vessel's delta-v figures, and waits until they are current.
+      Throws an exception if the vessel is not the active vessel.
+
+
+      :Game Scenes: Flight
+
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DeltaV(krpc_connection_t connection, float * result)
 
       Total delta-v for the vessel in the current situation, in m/s.

@@ -671,6 +671,8 @@
 <li><p>Staging</p>
 <ul>
 <li><p>Fix stages from <code class="docutils literal notranslate"><span class="pre">Vessel.Stages</span></code>, <code class="docutils literal notranslate"><span class="pre">Vessel.StageAt</span></code>, <code class="docutils literal notranslate"><span class="pre">Vessel.DecoupleStages</span></code> and <code class="docutils literal notranslate"><span class="pre">Vessel.DecoupleStageAt</span></code> breaking after a Revert to Launch (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1023">#1023</a>)</p></li>
+<li><p>The delta-v figures on <code class="docutils literal notranslate"><span class="pre">Vessel</span></code> and <code class="docutils literal notranslate"><span class="pre">Stage</span></code> ask the game to calculate them, so they are available in flight without opening the game’s own delta-v app first (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1076">#1076</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.RecalculateDeltaV</span></code>, which recalculates the figures and waits for them, and <code class="docutils literal notranslate"><span class="pre">Vessel.DeltaVReady</span></code>, which reports whether they are current (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1076">#1076</a>)</p></li>
 </ul>
 </li>
 <li><p>Autopilot</p>

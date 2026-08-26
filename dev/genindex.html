@@ -2355,7 +2355,11 @@
       <li><a href="python/api/space-center/editor.html#SpaceCenter.Editor.delta_v_body">delta_v_body (Editor attribute)</a>
 </li>
       <li><a href="python/api/space-center/editor.html#SpaceCenter.EditorVessel.delta_v_ready">delta_v_ready (EditorVessel attribute)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.delta_v_ready">(Vessel attribute)</a>
 </li>
+      </ul></li>
       <li><a href="python/api/space-center/editor.html#SpaceCenter.Editor.delta_v_situation">delta_v_situation (Editor attribute)</a>
 </li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.DeltaVSituation">DeltaVSituation (class in SpaceCenter)</a>, <a href="python/api/space-center/editor.html#SpaceCenter.DeltaVSituation">[1]</a>
@@ -3578,7 +3582,7 @@
 </li>
       <li><a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.Editor.getDeltaVBody()">getDeltaVBody() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.EditorVessel.getDeltaVReady()">getDeltaVReady() (Java method)</a>
+      <li><a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.EditorVessel.getDeltaVReady()">getDeltaVReady() (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getDeltaVReady()">[1]</a>
 </li>
       <li><a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.Editor.getDeltaVSituation()">getDeltaVSituation() (Java method)</a>
 </li>
@@ -9623,6 +9627,8 @@
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel7delta_vEv">krpc::services::SpaceCenter::Vessel::delta_v (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel13delta_v_readyEv">krpc::services::SpaceCenter::Vessel::delta_v_ready (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel9directionE14ReferenceFrame">krpc::services::SpaceCenter::Vessel::direction (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel8dry_massEv">krpc::services::SpaceCenter::Vessel::dry_mass (C++ function)</a>
@@ -9668,6 +9674,8 @@
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel13physics_rangeEv">krpc::services::SpaceCenter::Vessel::physics_range (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel8positionE14ReferenceFrame">krpc::services::SpaceCenter::Vessel::position (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel19recalculate_delta_vEv">krpc::services::SpaceCenter::Vessel::recalculate_delta_v (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel7recoverEv">krpc::services::SpaceCenter::Vessel::recover (C++ function)</a>
 </li>
@@ -14569,6 +14577,8 @@
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DeltaV">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DeltaV (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DeltaVReady">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DeltaVReady (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Direction">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Direction (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DryMass">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DryMass (C function)</a>
@@ -14614,6 +14624,8 @@
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_PhysicsRange">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_PhysicsRange (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Position">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Position (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_RecalculateDeltaV">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_RecalculateDeltaV (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Recover">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Recover (C function)</a>
 </li>
@@ -17000,6 +17012,10 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPortState.READY">READY (Java field)</a>
 </li>
       <li><a href="python/api/space-center/space-center.html#SpaceCenter.real_fuels_available">real_fuels_available (in module SpaceCenter)</a>
+</li>
+      <li><a href="lua/api/space-center/vessel.html#SpaceCenter.Vessel.recalculate_delta_v">recalculate_delta_v() (Vessel method)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.recalculate_delta_v">[1]</a>
+</li>
+      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.recalculateDeltaV()">recalculateDeltaV() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.recover()">recover() (Java method)</a>
 
@@ -20328,6 +20344,8 @@
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.decouple_stages">SpaceCenter.SpaceCenter.Vessel.decouple_stages (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.delta_v">SpaceCenter.SpaceCenter.Vessel.delta_v (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.delta_v_ready">SpaceCenter.SpaceCenter.Vessel.delta_v_ready (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.dry_mass">SpaceCenter.SpaceCenter.Vessel.dry_mass (attribute)</a>
 </li>

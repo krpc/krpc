@@ -1035,6 +1035,35 @@ never decoupled and remain on the vessel after all stages have fired.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getDeltaVReady()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDeltaVReady</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDeltaVReady()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vessel’s delta-v figures are current.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game calculates delta-v for the active vessel alone, over the several ticks
+after the vessel changes. Reading a delta-v member waits for the figures, so poll
+this instead when a call must not block.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.recalculateDeltaV()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">recalculateDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.recalculateDeltaV()" title="Link to this definition">#</a></dt>
+<dd><p>Recalculates the vessel’s delta-v figures, and waits until they are current.
+Throws an exception if the vessel is not the active vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getDeltaV()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getDeltaV()" title="Link to this definition">#</a></dt>
 <dd><p>Total delta-v for the vessel in the current situation, in m/s.</p>

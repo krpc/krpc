@@ -1035,6 +1035,35 @@ never decoupled and remain on the vessel after all stages have fired.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DeltaVReady">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_DeltaVReady</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DeltaVReady" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the vessel’s delta-v figures are current.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game calculates delta-v for the active vessel alone, over the several ticks
+after the vessel changes. Reading a delta-v member waits for the figures, so poll
+this instead when a call must not block.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_RecalculateDeltaV">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_RecalculateDeltaV</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_RecalculateDeltaV" title="Link to this definition">#</a><br /></dt>
+<dd><p>Recalculates the vessel’s delta-v figures, and waits until they are current.
+Throws an exception if the vessel is not the active vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DeltaV">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_DeltaV</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_DeltaV" title="Link to this definition">#</a><br /></dt>
 <dd><p>Total delta-v for the vessel in the current situation, in m/s.</p>

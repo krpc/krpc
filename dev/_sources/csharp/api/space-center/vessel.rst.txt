@@ -277,6 +277,27 @@ Vessel
 
       :Game Scenes: Flight
 
+   .. property:: bool DeltaVReady { get; }
+
+      Whether the vessel's delta-v figures are current.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game calculates delta-v for the active vessel alone, over the several ticks
+         after the vessel changes. Reading a delta-v member waits for the figures, so poll
+         this instead when a call must not block.
+
+   .. method:: void RecalculateDeltaV()
+
+      Recalculates the vessel's delta-v figures, and waits until they are current.
+      Throws an exception if the vessel is not the active vessel.
+
+
+      :Game Scenes: Flight
+
    .. property:: float DeltaV { get; }
 
       Total delta-v for the vessel in the current situation, in m/s.
