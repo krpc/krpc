@@ -1,6 +1,6 @@
 import unittest
 import krpctest
-from krpctest.geometry import distance, norm
+from krpctest.geometry import cross, distance, norm
 
 
 class RCSTestBase:
@@ -236,6 +236,40 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         rcs.rotation_override = rotation
         rcs.translation_override = translation
         self.wait(0.5)
+
+    def test_force_and_torque(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        self.wait()
+        self.assertAlmostEqual((0, 0, 0), rcs.force)
+        self.assertAlmostEqual((0, 0, 0), rcs.torque)
+        try:
+            self.override(rcs, translation=(0, 0, 1))
+            self.assertGreater(norm(rcs.force), 0)
+        finally:
+            rcs.input_override = False
+        self.wait(0.5)
+        self.assertAlmostEqual((0, 0, 0), rcs.force)
+        self.assertAlmostEqual((0, 0, 0), rcs.torque)
+
+    def test_force_and_torque_match_the_thrusters(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        frame = self.vessel.reference_frame
+        try:
+            self.override(rcs, rotation=(1, 0, 0), translation=(0, 0, 1))
+            force = (0.0, 0.0, 0.0)
+            torque = (0.0, 0.0, 0.0)
+            for thruster in rcs.thrusters:
+                thrust = thruster.thrust
+                nozzle = tuple(x * thrust for x in thruster.thrust_direction(frame))
+                position = thruster.thrust_position(frame)
+                force = tuple(a + b for a, b in zip(force, nozzle))
+                torque = tuple(a + b for a, b in zip(torque, cross(position, nozzle)))
+            self.assertGreater(norm(force), 0)
+            self.assertAlmostEqual(force, rcs.force, delta=1)
+            self.assertAlmostEqual(torque, rcs.torque, delta=1)
+        finally:
+            rcs.input_override = False
 
     def test_thruster_thrust(self):
         rcs = self.get_rcs("RCSBlock.v2")

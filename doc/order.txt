@@ -1115,6 +1115,8 @@ SpaceCenter.RCS.RotationOverride
 SpaceCenter.RCS.TranslationOverride
 SpaceCenter.RCS.AvailableTorque
 SpaceCenter.RCS.AvailableForce
+SpaceCenter.RCS.Force
+SpaceCenter.RCS.Torque
 SpaceCenter.RCS.AvailableThrust
 SpaceCenter.RCS.MaxThrust
 SpaceCenter.RCS.MaxVacuumThrust

@@ -227,11 +227,53 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The force being applied by the RCS thrusters, in Newtons. The vector is in the
+        /// vessel's reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// Returns zero if the RCS is inactive.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 Force {
+            get { return AppliedForceAndTorque ().Item1.ToTuple (); }
+        }
+
+        /// <summary>
+        /// The torque being applied by the RCS thrusters about the vessel's center of mass,
+        /// in Newton meters. The vector is in the vessel's reference frame
+        /// (<see cref="Vessel.ReferenceFrame"/>). Returns zero if the RCS is inactive.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 Torque {
+            get { return AppliedForceAndTorque ().Item2.ToTuple (); }
+        }
+
+        /// <summary>
         /// Whether the game has stopped allocating thrust to the nozzles. ModuleRCS returns
         /// early from its update in high warp, leaving the last allocation in place.
         /// </summary>
         internal static bool ThrustAllocationStale {
             get { return TimeWarp.CurrentRate > 1f && TimeWarp.WarpMode == TimeWarp.Modes.HIGH; }
+        }
+
+        /// <summary>
+        /// Sums the force and torque the game allocated to each nozzle in the last physics
+        /// frame, in the vessel's reference frame.
+        /// </summary>
+        TupleV3 AppliedForceAndTorque ()
+        {
+            if (!Active || ThrustAllocationStale)
+                return ITorqueProviderExtensions.zero;
+            var frame = Part.Vessel.ReferenceFrame;
+            var force = Vector3d.zero;
+            var torque = Vector3d.zero;
+            foreach (var thruster in Thrusters) {
+                var thrust = thruster.Thrust;
+                if (thrust <= 0f)
+                    continue;
+                var thrusterForce = thruster.ThrustDirection (frame).ToVector () * thrust;
+                force += thrusterForce;
+                torque += Vector3d.Cross (thruster.ThrustPosition (frame).ToVector (), thrusterForce);
+            }
+            return new TupleV3 (force, torque);
         }
 
         /// <summary>
