@@ -732,6 +732,7 @@
 </li>
 <li><p>Parts</p>
 <ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">RCS.Thrusters</span></code>, <code class="docutils literal notranslate"><span class="pre">RCS.AvailableForce</span></code> and <code class="docutils literal notranslate"><span class="pre">RCS.AvailableTorque</span></code> count only the nozzles of the part’s selected variant (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1079">#1079</a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Decoupler.IsOmniDecoupler</span></code> reports what the part is configured as for every decoupler, including radial ones. It was false for all of them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1048">#1048</a>)</p></li>
 <li><p>A force added with <code class="docutils literal notranslate"><span class="pre">Part.AddForce</span></code> stops being applied, and is freed, once its part is destroyed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Force.Remove</span></code> leaves the object gone, so using one afterwards raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>

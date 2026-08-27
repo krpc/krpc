@@ -136,6 +136,7 @@ SpaceCenter service
 
 * Parts
 
+  * ``RCS.Thrusters``, ``RCS.AvailableForce`` and ``RCS.AvailableTorque`` count only the nozzles of the part's selected variant (:issue:`1079`)
   * ``Decoupler.IsOmniDecoupler`` reports what the part is configured as for every decoupler, including radial ones. It was false for all of them (:issue:`1048`)
   * A force added with ``Part.AddForce`` stops being applied, and is freed, once its part is destroyed (:issue:`1051`)
   * ``Force.Remove`` leaves the object gone, so using one afterwards raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
