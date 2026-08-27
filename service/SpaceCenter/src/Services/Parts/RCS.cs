@@ -227,6 +227,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// Whether the game has stopped allocating thrust to the nozzles. ModuleRCS returns
+        /// early from its update in high warp, leaving the last allocation in place.
+        /// </summary>
+        internal static bool ThrustAllocationStale {
+            get { return TimeWarp.CurrentRate > 1f && TimeWarp.WarpMode == TimeWarp.Modes.HIGH; }
+        }
+
+        /// <summary>
         /// Calculates available torque vectors.
         /// We use this custom code rather than KSPs ITorqueProvider as it produces erroneous values.
         /// </summary>

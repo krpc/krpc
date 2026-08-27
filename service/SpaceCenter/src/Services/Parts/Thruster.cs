@@ -94,6 +94,28 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The thrust being produced by the thruster, in Newtons.
+        /// </summary>
+        [KRPCProperty]
+        public float Thrust {
+            get {
+                var engine = InternalEngine;
+                if (engine != null) {
+                    // The engine's thrust is split across its nozzles by these weights
+                    var multipliers = engine.thrustTransformMultipliers;
+                    if (multipliers == null || transformIndex >= multipliers.Count)
+                        return 0f;
+                    return engine.finalThrust * multipliers [transformIndex] * 1000f;
+                }
+                // ModuleRCS records the thrust it allocated to each nozzle, in kilonewtons
+                var forces = InternalRCS.thrustForces;
+                if (RCS.ThrustAllocationStale || forces == null || transformIndex >= forces.Length)
+                    return 0f;
+                return forces [transformIndex] * 1000f;
+            }
+        }
+
+        /// <summary>
         /// The position at which the thruster generates thrust, in the given reference frame.
         /// For gimballed engines, this takes into account the current rotation of the gimbal.
         /// </summary>

@@ -282,6 +282,23 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.vessel.control.throttle = 0
         engine.active = False
 
+    def test_thruster_thrust(self):
+        engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
+        for thruster in engine.thrusters:
+            self.assertEqual(0, thruster.thrust)
+        engine.thrust_limit = 1
+        engine.active = True
+        self.vessel.control.throttle = 1
+        self.wait(0.5)
+        # The engine's thrust is split across its nozzles
+        self.assertGreater(engine.thrust, 0)
+        self.assertAlmostEqual(
+            engine.thrust, sum(t.thrust for t in engine.thrusters), delta=1
+        )
+        self.vessel.control.throttle = 0
+        engine.active = False
+        self.wait_until(lambda: all(t.thrust == 0 for t in engine.thrusters))
+
     def test_thrust_limit(self):
         engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
         thrust = 205600

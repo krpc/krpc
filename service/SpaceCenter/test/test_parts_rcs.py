@@ -228,6 +228,33 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         self.assertFalse(rcs.input_override)
         self.assertAlmostEqual((0, 0, 0), rcs.rotation_override)
 
+    def override(self, rcs, rotation=(0, 0, 0), translation=(0, 0, 0)):
+        """Drive a block with the given demands, and wait for the game to
+        allocate thrust to its nozzles."""
+        self.control.rcs = True
+        rcs.input_override = True
+        rcs.rotation_override = rotation
+        rcs.translation_override = translation
+        self.wait(0.5)
+
+    def test_thruster_thrust(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        self.wait()
+        for thruster in rcs.thrusters:
+            self.assertEqual(0, thruster.thrust)
+        try:
+            self.override(rcs, translation=(0, 0, 1))
+            thrusts = [thruster.thrust for thruster in rcs.thrusters]
+            self.assertGreater(max(thrusts), 0)
+            for thrust in thrusts:
+                self.assertLessEqual(thrust, rcs.max_thrust + 1)
+        finally:
+            rcs.input_override = False
+        self.wait(0.5)
+        for thruster in rcs.thrusters:
+            self.assertEqual(0, thruster.thrust)
+
     def test_thrusters_match_the_part_variant(self):
         """The RV-105 mesh carries the nozzles of every variant, and the game
         fires only the ones the chosen variant leaves active."""

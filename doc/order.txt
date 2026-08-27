@@ -1238,6 +1238,7 @@ SpaceCenter.SolarPanel.EnergyFlow
 SpaceCenter.SolarPanel.SunExposure
 SpaceCenter.Thruster
 SpaceCenter.Thruster.Part
+SpaceCenter.Thruster.Thrust
 SpaceCenter.Thruster.ThrustPosition
 SpaceCenter.Thruster.ThrustDirection
 SpaceCenter.Thruster.ThrustReferenceFrame
