@@ -15,6 +15,7 @@ v0.7.0 - unreleased
 Core
 ^^^^
 
+* Add extension members: a service can add methods and properties to a class belonging to another service, declared as C# extension methods annotated with ``KRPCMethod`` or ``KRPCProperty`` (:issue:`1077`)
 * Add structure types: a compound value with named fields, declared with ``KRPCStruct`` on a C# ``struct`` and sent to the client in full (:issue:`1066`)
 * Add a communication protocol carrying protocol buffer messages over a unix domain socket, for clients running on the same machine as the game (:issue:`1065`)
 * Add ``KRPC.HoldTick`` and ``KRPC.ReleaseTick``, which hold the game on its current physics tick so a control loop can read, compute and write within one tick (:issue:`1070`)
@@ -152,6 +153,7 @@ SpaceCenter service
   * A ``ScienceSubject`` belongs to the game state it was read from, and using one after that state has been replaced raises ``KRPC.ObjectDestroyedException`` (:issue:`771`)
   * Fix ``Experiment.ScienceSubject`` adding a new object for every read (:issue:`771`)
   * Fix ``ScienceSubject.Science`` and ``ScienceSubject.ScienceCap`` scaling by the science gain multiplier that was in force when the object was read (:issue:`1051`)
+  * Make ``ModuleRef`` public, for a mod that exposes a part module as a class of its own service (:issue:`1077`)
 
 * Resources
 
@@ -324,6 +326,7 @@ Lua client
 Python client
 ^^^^^^^^^^^^^
 
+* A service with pre-generated stubs also gains the class members that only the server declares (:issue:`1077`)
 * Support structure types. A value is a named tuple, and a tuple or list with one element per field is accepted where one is expected (:issue:`1066`)
 * A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (:issue:`1066`)
 * :breaking:`Breaking` Support ``None`` for any nullable type (:issue:`1017`)

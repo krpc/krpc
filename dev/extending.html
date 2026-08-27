@@ -854,12 +854,14 @@ setting from the class the method is defined in.</p></li>
 </dl>
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to methods
 inside a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. This allows a client to call methods on an instance, or static
-methods in the class.</p>
+methods in the class. It can also be applied to a C# extension method, adding a method to a
+class belonging to another service; see <a class="reference internal" href="#service-api-extension-members"><span class="std std-ref">Extending Other Services</span></a>.</p>
 <p>The method to which this attribute is applied must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>The method must be <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p></li>
 <li><p>The name of the method must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
-<li><p>The method must be declared in a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>.</p></li>
+<li><p>The method must be declared in a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>, or be a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> extension
+method of one.</p></li>
 <li><p>The parameter types and return type must be <a class="reference internal" href="#service-api-serializable-types"><span class="std std-ref">types that kRPC can serialize</span></a>.</p></li>
 <li><p>Parameters can have default arguments.</p></li>
 </ul>
@@ -894,7 +896,7 @@ setting from the class the property is defined in.</p></li>
 </dd>
 </dl>
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to class
-properties, and comes in two flavors:</p>
+properties, and comes in three flavors:</p>
 <ol class="arabic simple">
 <li><p>Applied to static properties in a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>. In this case, the property must
 satisfy the following criteria:</p>
@@ -913,6 +915,9 @@ setter.</p></li>
 <li><p>Must be declared inside a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>.</p></li>
 </ul>
 </li>
+<li><p>Applied to a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> extension method of a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>, adding a
+property to a class belonging to another service. C# has no extension properties, so the
+getter and setter are a pair of methods; see <a class="reference internal" href="#service-api-extension-members"><span class="std std-ref">Extending Other Services</span></a>.</p></li>
 </ol>
 <p>If the property getter might return a null value, or the setter should accept <code class="docutils literal notranslate"><span class="pre">null</span></code>, the
 <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of the attribute must be set to true. A <code class="docutils literal notranslate"><span class="pre">null</span></code> write to a property that
@@ -1513,6 +1518,130 @@ mechanism: for example, the Python client emits a <code class="docutils literal 
 is called, and the generated C#, C++, Java and C-nano client code marks deprecated members with
 <code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code>, <code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> respectively.</p>
 </section>
+<section id="extending-other-services">
+<span id="service-api-extension-members"></span><h3>Extending Other Services<a class="headerlink" href="#extending-other-services" title="Link to this heading">#</a></h3>
+<p>A mod can add methods and properties to a class belonging to another service, as
+<a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> lets it add a class to one. A <code class="docutils literal notranslate"><span class="pre">TestFlight</span></code> mod can add
+<code class="docutils literal notranslate"><span class="pre">vessel.parts.with_failure(...)</span></code> to <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Parts</span></code>. The member is written as a C# extension
+method, and joins the service that owns the type being extended:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TestFlightExtensions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">/// &lt;summary&gt;The parts that have the named failure.&lt;/summary&gt;</span>
+<span class="w">    </span><span class="na">[KRPCMethod]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Part</span><span class="o">&gt;</span><span class="w"> </span><span class="n">WithFailure</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="n">Parts</span><span class="w"> </span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">failure</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The containing class needs no kRPC attribute, only <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code>. A dynamic client, such as
+Python or Lua, exposes the member as an ordinary member of the class it extends. A static client,
+such as C#, C++, Java or C-nano, reaches it once its code is regenerated from the mod’s assembly
+and the assembly declaring the service being extended; see <a class="reference internal" href="#service-api-clientgen"><span class="std std-ref">Generating Service Code for Static Clients</span></a>.</p>
+<p>C# has no extension properties, so a property is a pair of extension methods named <code class="docutils literal notranslate"><span class="pre">GetX</span></code> and
+<code class="docutils literal notranslate"><span class="pre">SetX</span></code>, each carrying <a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a>. The getter takes only the instance and returns
+a value. The setter takes the instance and the value to set, and returns nothing. Either one on its
+own gives a read-only or a write-only property.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCProperty]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetFailed</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="n">Parts</span><span class="w"> </span><span class="n">parts</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+
+<span class="na">[KRPCProperty]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetFailed</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="n">Parts</span><span class="w"> </span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>An extension member must satisfy the following criteria:</p>
+<ul class="simple">
+<li><p>The method must be a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> C# extension method, declared in a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> class
+outside any <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>. A class that is not public puts its members out of reach,
+and the server names it in a warning in the log.</p></li>
+<li><p>The type it extends must be a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. A <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> is a value
+with a fixed set of fields, and cannot be extended.</p></li>
+<li><p>The name of the member must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>, and must
+not clash with a member the class already has, or with another extension member. The getter and
+the setter of an extension property must be declared in the same class.</p></li>
+<li><p>The parameter types and return type must be <a class="reference internal" href="#service-api-serializable-types"><span class="std std-ref">types that kRPC can serialize</span></a>, and may name types from any service.</p></li>
+</ul>
+<p>Deprecation and the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of the attribute work as they do for a member declared
+in the class. A setter’s value is an ordinary parameter, so mark it nullable with
+<a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> parameter defaults to the game scenes of the class
+being extended.</p>
+<section id="exposing-a-part-module-as-a-class">
+<h4>Exposing a Part Module as a Class<a class="headerlink" href="#exposing-a-part-module-as-a-class" title="Link to this heading">#</a></h4>
+<p>A mod that adds a <code class="docutils literal notranslate"><span class="pre">PartModule</span></code> to a part can expose it as a class of its own, in place of the
+string-keyed <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code> API. Declare a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> wrapping the module, and
+add a nullable extension property on <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code> that returns it. The wrapper names the
+module with a <code class="docutils literal notranslate"><span class="pre">KRPC.SpaceCenter.ModuleRef</span></code>, as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code> does:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCClass (Service = &quot;TestFlight&quot;)]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FailureModule</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Equatable</span><span class="o">&lt;</span><span class="n">FailureModule</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">IGameObjectState</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// The part the module is on, and which of the part&#39;s modules it is</span>
+<span class="w">    </span><span class="k">readonly</span><span class="w"> </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ModuleRef</span><span class="w"> </span><span class="n">reference</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">internal</span><span class="w"> </span><span class="nf">FailureModule</span><span class="w"> </span><span class="p">(</span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="p">,</span><span class="w"> </span><span class="n">ModuleRef</span><span class="w"> </span><span class="n">reference</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="n">reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reference</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// The module, which every member reaches the game through</span>
+<span class="w">    </span><span class="n">TestFlightFailure</span><span class="w"> </span><span class="n">InternalModule</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">TestFlightFailure</span><span class="p">)</span><span class="n">reference</span><span class="p">.</span><span class="n">Get</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">InternalPart</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">/// &lt;summary&gt;The state of the module, which is its part&#39;s until the part is there to look in.&lt;/summary&gt;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">GameObjectState</span><span class="w"> </span><span class="n">GameObjectState</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">reference</span><span class="p">.</span><span class="n">StateOn</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">/// &lt;summary&gt;Returns true if the objects are equal.&lt;/summary&gt;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Equals</span><span class="w"> </span><span class="p">(</span><span class="n">FailureModule</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="n">ReferenceEquals</span><span class="w"> </span><span class="p">(</span><span class="n">other</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">part</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">reference</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">/// &lt;summary&gt;Hash code for the object.&lt;/summary&gt;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetHashCode</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Hash</span><span class="p">.</span><span class="n">Of</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">).</span><span class="n">And</span><span class="w"> </span><span class="p">(</span><span class="n">reference</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">/// &lt;summary&gt;Whether the part has failed.&lt;/summary&gt;</span>
+<span class="w">    </span><span class="na">[KRPCProperty]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Failed</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">InternalModule</span><span class="p">.</span><span class="n">failed</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TestFlightExtensions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">/// &lt;summary&gt;The failure module of the part, or &lt;c&gt;null&lt;/c&gt; if it does not have one.&lt;/summary&gt;</span>
+<span class="w">    </span><span class="na">[KRPCProperty (Nullable = true)]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">FailureModule</span><span class="w"> </span><span class="nf">GetFailureModule</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ModuleRef</span><span class="p">.</span><span class="n">ForType</span><span class="o">&lt;</span><span class="n">TestFlightFailure</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">InternalPart</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">reference</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ModuleRef</span><span class="p">.</span><span class="n">None</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FailureModule</span><span class="w"> </span><span class="p">(</span><span class="n">part</span><span class="p">,</span><span class="w"> </span><span class="n">reference</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The server keeps the object in a store keyed on the object itself, so the rules the <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code>
+classes follow apply here too. A <code class="docutils literal notranslate"><span class="pre">ModuleRef</span></code> names one of a part’s modules by its class and its
+position among the part’s modules of that class, which outlives any one of them. The wrapper holds
+the part and the reference, and finds the module again on each access.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Equals</span></code> and <code class="docutils literal notranslate"><span class="pre">GetHashCode</span></code> read that identity alone, never a resolved game object, and build the
+hash with <code class="docutils literal notranslate"><span class="pre">KRPC.Utils.Hash</span></code>. The extension property builds a wrapper on each call, so value
+identity is what keeps the store to one entry for the module.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ModuleRef.Get</span></code> raises <code class="docutils literal notranslate"><span class="pre">KRPC.Service.KRPC.ObjectDestroyedException</span></code> once the part no longer has
+the module. <code class="docutils literal notranslate"><span class="pre">ModuleRef.StateOn</span></code> gives the module the state of its part, which is what lets the
+store drop the object once the game destroys the part.</p>
+<p>The reference records where it last found the module, so the field holding one is declared without
+<code class="docutils literal notranslate"><span class="pre">readonly</span></code>. A <code class="docutils literal notranslate"><span class="pre">readonly</span></code> field is copied on each access, and the record is written to the copy.</p>
+<p>Clients reach the module as <code class="docutils literal notranslate"><span class="pre">part.failure_module.failed</span></code>.</p>
+</section>
+</section>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h2>
@@ -1567,6 +1696,12 @@ installed using pip:</p>
 <p>Client code can be generated either directly from an assembly DLL containing the service, or from a
 JSON file that has previously been generated from an assembly DLL (using the <code class="docutils literal notranslate"><span class="pre">--output-defs</span></code>
 flag).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Pass every assembly that declares part of the service. A mod adding an extension member to
+another service’s class is generated alongside that service’s assembly; see
+<a class="reference internal" href="#service-api-extension-members"><span class="std std-ref">Extending Other Services</span></a>.</p>
+</div>
 <p>Generating client code from an assembly DLL requires a copy of Kerbal Space Program and a C# runtime
 to be available on the machine. In contrast, generating client code from a JSON file does not have
 these requirements and so is more portable.</p>
@@ -1656,6 +1791,10 @@ and include <cite>LaunchControl.cs</cite> in your project.</p>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#game-scenes">Game Scenes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecating-service-members">Deprecating Service Members</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-other-services">Extending Other Services</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exposing-a-part-module-as-a-class">Exposing a Part Module as a Class</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>

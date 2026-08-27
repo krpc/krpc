@@ -248,7 +248,8 @@ to add functionality to the kRPC server.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to methods
    inside a :csharp:attr:`KRPCClass`. This allows a client to call methods on an instance, or static
-   methods in the class.
+   methods in the class. It can also be applied to a C# extension method, adding a method to a
+   class belonging to another service; see :ref:`service-api-extension-members`.
 
    The method to which this attribute is applied must satisfy the following criteria:
 
@@ -256,7 +257,8 @@ to add functionality to the kRPC server.
 
    * The name of the method must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
-   * The method must be declared in a :csharp:attr:`KRPCClass`.
+   * The method must be declared in a :csharp:attr:`KRPCClass`, or be a ``public static`` extension
+     method of one.
 
    * The parameter types and return type must be :ref:`types that kRPC can serialize
      <service-api-serializable-types>`.
@@ -293,7 +295,7 @@ to add functionality to the kRPC server.
       setting from the class the property is defined in.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to class
-   properties, and comes in two flavors:
+   properties, and comes in three flavors:
 
    1. Applied to static properties in a :csharp:attr:`KRPCService`. In this case, the property must
       satisfy the following criteria:
@@ -313,6 +315,10 @@ to add functionality to the kRPC server.
       * The name of the property must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
       * Must be declared inside a :csharp:attr:`KRPCClass`.
+
+   3. Applied to a ``public static`` extension method of a :csharp:attr:`KRPCClass`, adding a
+      property to a class belonging to another service. C# has no extension properties, so the
+      getter and setter are a pair of methods; see :ref:`service-api-extension-members`.
 
    If the property getter might return a null value, or the setter should accept ``null``, the
    ``Nullable`` parameter of the attribute must be set to true. A ``null`` write to a property that
@@ -941,6 +947,149 @@ mechanism: for example, the Python client emits a ``DeprecationWarning`` when a 
 is called, and the generated C#, C++, Java and C-nano client code marks deprecated members with
 ``[Obsolete]``, ``[[deprecated]]``, ``@Deprecated`` and ``KRPC_DEPRECATED`` respectively.
 
+.. _service-api-extension-members:
+
+Extending Other Services
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+A mod can add methods and properties to a class belonging to another service, as
+:csharp:attr:`KRPCClass` lets it add a class to one. A ``TestFlight`` mod can add
+``vessel.parts.with_failure(...)`` to ``SpaceCenter.Parts``. The member is written as a C# extension
+method, and joins the service that owns the type being extended:
+
+.. code-block:: csharp
+
+   public static class TestFlightExtensions {
+       /// <summary>The parts that have the named failure.</summary>
+       [KRPCMethod]
+       public static IList<Part> WithFailure (this Parts parts, string failure)
+       {
+           ...
+       }
+   }
+
+The containing class needs no kRPC attribute, only ``public static``. A dynamic client, such as
+Python or Lua, exposes the member as an ordinary member of the class it extends. A static client,
+such as C#, C++, Java or C-nano, reaches it once its code is regenerated from the mod's assembly
+and the assembly declaring the service being extended; see :ref:`service-api-clientgen`.
+
+C# has no extension properties, so a property is a pair of extension methods named ``GetX`` and
+``SetX``, each carrying :csharp:attr:`KRPCProperty`. The getter takes only the instance and returns
+a value. The setter takes the instance and the value to set, and returns nothing. Either one on its
+own gives a read-only or a write-only property.
+
+.. code-block:: csharp
+
+   [KRPCProperty]
+   public static bool GetFailed (this Parts parts)
+   {
+       ...
+   }
+
+   [KRPCProperty]
+   public static void SetFailed (this Parts parts, bool value)
+   {
+       ...
+   }
+
+An extension member must satisfy the following criteria:
+
+* The method must be a ``public static`` C# extension method, declared in a ``public static`` class
+  outside any :csharp:attr:`KRPCService`. A class that is not public puts its members out of reach,
+  and the server names it in a warning in the log.
+
+* The type it extends must be a :csharp:attr:`KRPCClass`. A :csharp:attr:`KRPCStruct` is a value
+  with a fixed set of fields, and cannot be extended.
+
+* The name of the member must be a valid :ref:`kRPC identifier <service-api-identifiers>`, and must
+  not clash with a member the class already has, or with another extension member. The getter and
+  the setter of an extension property must be declared in the same class.
+
+* The parameter types and return type must be :ref:`types that kRPC can serialize
+  <service-api-serializable-types>`, and may name types from any service.
+
+Deprecation and the ``Nullable`` parameter of the attribute work as they do for a member declared
+in the class. A setter's value is an ordinary parameter, so mark it nullable with
+:csharp:attr:`KRPCNullable`. The ``GameScene`` parameter defaults to the game scenes of the class
+being extended.
+
+Exposing a Part Module as a Class
+"""""""""""""""""""""""""""""""""
+
+A mod that adds a ``PartModule`` to a part can expose it as a class of its own, in place of the
+string-keyed ``SpaceCenter.Module`` API. Declare a :csharp:attr:`KRPCClass` wrapping the module, and
+add a nullable extension property on ``SpaceCenter.Part`` that returns it. The wrapper names the
+module with a ``KRPC.SpaceCenter.ModuleRef``, as ``SpaceCenter.Module`` does:
+
+.. code-block:: csharp
+
+   [KRPCClass (Service = "TestFlight")]
+   public class FailureModule : Equatable<FailureModule>, IGameObjectState {
+       // The part the module is on, and which of the part's modules it is
+       readonly Part part;
+       ModuleRef reference;
+
+       internal FailureModule (Part part, ModuleRef reference)
+       {
+           this.part = part;
+           this.reference = reference;
+       }
+
+       // The module, which every member reaches the game through
+       TestFlightFailure InternalModule {
+           get { return (TestFlightFailure)reference.Get (part.InternalPart); }
+       }
+
+       /// <summary>The state of the module, which is its part's until the part is there to look in.</summary>
+       public GameObjectState GameObjectState {
+           get { return reference.StateOn (part); }
+       }
+
+       /// <summary>Returns true if the objects are equal.</summary>
+       public override bool Equals (FailureModule other)
+       {
+           return !ReferenceEquals (other, null) && part == other.part && reference == other.reference;
+       }
+
+       /// <summary>Hash code for the object.</summary>
+       public override int GetHashCode ()
+       {
+           return Hash.Of (part).And (reference);
+       }
+
+       /// <summary>Whether the part has failed.</summary>
+       [KRPCProperty]
+       public bool Failed { get { return InternalModule.failed; } }
+   }
+
+   public static class TestFlightExtensions {
+       /// <summary>The failure module of the part, or <c>null</c> if it does not have one.</summary>
+       [KRPCProperty (Nullable = true)]
+       public static FailureModule GetFailureModule (this Part part)
+       {
+           var reference = ModuleRef.ForType<TestFlightFailure> (part.InternalPart);
+           return reference == ModuleRef.None ? null : new FailureModule (part, reference);
+       }
+   }
+
+The server keeps the object in a store keyed on the object itself, so the rules the ``SpaceCenter``
+classes follow apply here too. A ``ModuleRef`` names one of a part's modules by its class and its
+position among the part's modules of that class, which outlives any one of them. The wrapper holds
+the part and the reference, and finds the module again on each access.
+
+``Equals`` and ``GetHashCode`` read that identity alone, never a resolved game object, and build the
+hash with ``KRPC.Utils.Hash``. The extension property builds a wrapper on each call, so value
+identity is what keeps the store to one entry for the module.
+
+``ModuleRef.Get`` raises ``KRPC.Service.KRPC.ObjectDestroyedException`` once the part no longer has
+the module. ``ModuleRef.StateOn`` gives the module the state of its part, which is what lets the
+store drop the object once the game destroys the part.
+
+The reference records where it last found the module, so the field holding one is declared without
+``readonly``. A ``readonly`` field is copied on each access, and the record is written to the copy.
+
+Clients reach the module as ``part.failure_module.failed``.
+
 Documentation
 -------------
 
@@ -1006,6 +1155,12 @@ You can then run the script from the command line:
 Client code can be generated either directly from an assembly DLL containing the service, or from a
 JSON file that has previously been generated from an assembly DLL (using the ``--output-defs``
 flag).
+
+.. note::
+
+   Pass every assembly that declares part of the service. A mod adding an extension member to
+   another service's class is generated alongside that service's assembly; see
+   :ref:`service-api-extension-members`.
 
 Generating client code from an assembly DLL requires a copy of Kerbal Space Program and a C# runtime
 to be available on the machine. In contrast, generating client code from a JSON file does not have

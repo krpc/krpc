@@ -601,6 +601,7 @@
 <section id="core">
 <h3>Core<a class="headerlink" href="#core" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Add extension members: a service can add methods and properties to a class belonging to another service, declared as C# extension methods annotated with <code class="docutils literal notranslate"><span class="pre">KRPCMethod</span></code> or <code class="docutils literal notranslate"><span class="pre">KRPCProperty</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1077">#1077</a>)</p></li>
 <li><p>Add structure types: a compound value with named fields, declared with <code class="docutils literal notranslate"><span class="pre">KRPCStruct</span></code> on a C# <code class="docutils literal notranslate"><span class="pre">struct</span></code> and sent to the client in full (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
 <li><p>Add a communication protocol carrying protocol buffer messages over a unix domain socket, for clients running on the same machine as the game (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1065">#1065</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.ReleaseTick</span></code>, which hold the game on its current physics tick so a control loop can read, compute and write within one tick (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1070">#1070</a>)</p></li>
@@ -748,6 +749,7 @@
 <li><p>A <code class="docutils literal notranslate"><span class="pre">ScienceSubject</span></code> belongs to the game state it was read from, and using one after that state has been replaced raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/771">#771</a>)</p></li>
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">Experiment.ScienceSubject</span></code> adding a new object for every read (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/771">#771</a>)</p></li>
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">ScienceSubject.Science</span></code> and <code class="docutils literal notranslate"><span class="pre">ScienceSubject.ScienceCap</span></code> scaling by the science gain multiplier that was in force when the object was read (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">ModuleRef</span></code> public, for a mod that exposes a part module as a class of its own service (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1077">#1077</a>)</p></li>
 </ul>
 </li>
 <li><p>Resources</p>
@@ -925,6 +927,7 @@
 <section id="python-client">
 <h3>Python client<a class="headerlink" href="#python-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>A service with pre-generated stubs also gains the class members that only the server declares (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1077">#1077</a>)</p></li>
 <li><p>Support structure types. A value is a named tuple, and a tuple or list with one element per field is accepted where one is expected (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
 <li><p>A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Support <code class="docutils literal notranslate"><span class="pre">None</span></code> for any nullable type (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>
