@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- A service with pre-generated stubs also gains the class members that only the server
+  declares (#1077)
 - Support structure types. A value is a named tuple, and a tuple or list with one element per
   field is accepted where one is expected (#1066)
 - A service definition naming an unknown type skips the member that names it with a warning,

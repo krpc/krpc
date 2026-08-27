@@ -56,10 +56,11 @@ namespace KRPC.Service.Scanner
                             HandleError(errors, "service " + service.Name, exn);
                         }
                     }
-                    // Check for methods
+                    // Check for class members declared in the service
                     var invalidMethod = Reflection.GetMethodsWith<KRPCMethodAttribute> (serviceType).FirstOrDefault ();
                     if (invalidMethod != null)
                         HandleError(errors, "service " + service.Name, "Service contains a class method " + invalidMethod.Name);
+                    CheckForPropertyMethod (errors, "service " + service.Name, serviceType);
                 } catch (ServiceException exn) {
                     HandleError(errors, string.Empty, exn);
                 }
@@ -91,6 +92,7 @@ namespace KRPC.Service.Scanner
                             HandleError(errors, "service " + serviceName + ", class " + cls, exn);
                         }
                     }
+                    CheckForPropertyMethod (errors, "service " + serviceName + ", class " + cls, classType);
                 } catch (ServiceException exn) {
                     HandleError(errors, string.Empty, exn);
                 }
@@ -142,6 +144,14 @@ namespace KRPC.Service.Scanner
                 }
             }
 
+            // Extension members are methods in public static classes that add a member to
+            // another service's class. They are scanned last, once every class is registered
+            var unreachable = new HashSet<Type> ();
+            foreach (var method in Reflection.GetStaticClassMethodsWith<KRPCMethodAttribute> ())
+                AddExtensionMember (signatures, errors, unreachable, method, false);
+            foreach (var method in Reflection.GetStaticClassMethodsWith<KRPCPropertyAttribute> ())
+                AddExtensionMember (signatures, errors, unreachable, method, true);
+
             CurrentAssembly = null;
 
             // Check that the main KRPC service was found
@@ -149,6 +159,57 @@ namespace KRPC.Service.Scanner
                 HandleError(errors, string.Empty, "KRPC service could not be found");
 
             return signatures;
+        }
+
+        /// <summary>
+        /// Report a KRPCProperty applied to a method of the given type. Only an extension method
+        /// declares a property that way, and the extension pass skips services and classes.
+        /// </summary>
+        static void CheckForPropertyMethod (IList<string> errors, string context, Type type)
+        {
+            var method = Reflection.GetMethodsWith<KRPCPropertyAttribute> (type).FirstOrDefault ();
+            if (method != null)
+                HandleError (errors, context, "KRPCProperty is applied to the method " + method.Name +
+                             "; a method declares a property only as an extension member, in a public static class outside a service");
+        }
+
+        static void AddExtensionMember (IDictionary<string, ServiceSignature> signatures, IList<string> errors,
+                                        ISet<Type> unreachable, MethodInfo method, bool isProperty)
+        {
+            var declaringType = method.DeclaringType;
+            // Members declared in a service are handled when scanning the service itself
+            if (Reflection.HasAttribute<KRPCServiceAttribute> (declaringType))
+                return;
+            // A class that is not public is out of reach of the assembly the server runs from,
+            // so its members are named in a warning
+            if (!(declaringType.IsPublic || declaringType.IsNestedPublic)) {
+                if (unreachable.Add (declaringType))
+                    Logger.WriteLine (
+                        "Ignoring the extension members of " + declaringType + ", as the class is not public",
+                        Logger.Severity.Warning);
+                return;
+            }
+            try {
+                CurrentAssembly = declaringType.Assembly;
+                var classType = TypeUtils.GetExtensionTargetClass (method);
+                var serviceName = TypeUtils.GetClassServiceName (classType);
+                if (!signatures.ContainsKey (serviceName)) {
+                    HandleError (errors, "service " + serviceName, "Service does not exist, when loading extension member");
+                    return;
+                }
+                var service = signatures [serviceName];
+                var cls = classType.Name;
+                try {
+                    if (isProperty)
+                        service.AddClassExtensionProperty (cls, classType, method);
+                    else
+                        service.AddClassExtensionMethod (cls, classType, method);
+                } catch (ServiceException exn) {
+                    HandleError (errors, "service " + serviceName + ", class " + cls, exn);
+                }
+            } catch (ServiceException exn) {
+                HandleError (errors, string.Empty, exn);
+            }
         }
 
         static void HandleError(IList<string> errors, string context, string msg) {

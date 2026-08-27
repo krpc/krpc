@@ -1,3 +1,4 @@
+using System;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
@@ -23,10 +24,18 @@ namespace KRPC.SpaceCenter
     /// nothing to look it up by. Counting the part's modules of the class is what answers
     /// then, and it settles the id and the position again for next time.
     ///
+    /// A reference names a module of a part, and the part is the holder's to supply. An access
+    /// given a different part finds that part's module of the same class and position.
+    ///
+    /// Finding a module records where it was, so a field holding a reference is declared
+    /// without <c>readonly</c>. A <c>readonly</c> field is copied on each access, and the
+    /// record is written to the copy. A property and a <c>List</c> indexer hand back a copy
+    /// in the same way.
+    ///
     /// Nothing here allocates, and nothing is generic on the module type, which in a shared
     /// generic costs more than the lookup itself.
     /// </remarks>
-    struct ModuleRef
+    public struct ModuleRef : IEquatable<ModuleRef>
     {
         // The module's class name, and which of the part's modules of that class this is.
         // A null name stands for no module at all.
@@ -87,10 +96,12 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// A reference to no module at all, for an object that has one only sometimes.
+        /// A reference to no module at all, for an object that has one only sometimes. It
+        /// compares equal to the default value of the type, which a field holds until one
+        /// is built for it.
         /// </summary>
         public static ModuleRef None {
-            get { return new ModuleRef (null, -1); }
+            get { return new ModuleRef (null, 0); }
         }
 
         /// <summary>

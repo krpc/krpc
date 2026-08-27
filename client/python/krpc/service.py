@@ -4,10 +4,12 @@ from typing import (
     Any,
     Callable,
     DefaultDict,
+    Dict,
     Iterable,
     Iterator,
     List,
     Optional,
+    Set,
     Tuple,
     TYPE_CHECKING,
 )
@@ -30,6 +32,7 @@ from krpc.types import (
     DynamicClassBase,
     DefaultArgument,
     UnknownTypeError,
+    WrappedClass,
     check_type_is_known,
     is_a_known_type,
 )
@@ -426,29 +429,54 @@ def create_service(client: Client, service: KRPC.Service) -> object:
             procedures[1],
         )
 
+    _add_class_members(cls, service)
+
+    return cls()  # type: ignore[operator]
+
+
+def _add_class_members(
+    cls: ServiceBase,
+    service: KRPC.Service,
+    skip: Optional[Callable[[str, str], bool]] = None,
+) -> None:
+    """Attach the members that a service declares for its classes to the class types.
+
+    skip takes a class and member name, and returns whether the member is already
+    present."""
+
+    def attach(
+        class_name: str,
+        member_name: str,
+        add: Callable[..., None],
+        *args: object,
+    ) -> None:
+        if skip is not None and skip(class_name, member_name):
+            return
+        _skipping_unknown_types(
+            "%s.%s.%s" % (service.name, class_name, member_name),
+            add,
+            class_name,
+            member_name,
+            *args,
+        )
+
     # Add class methods
     for procedure in service.procedures:
         if Attributes.is_a_class_method(procedure.name):
-            class_name = Attributes.get_class_name(procedure.name)
-            method_name = Attributes.get_class_member_name(procedure.name)
-            _skipping_unknown_types(
-                "%s.%s.%s" % (service.name, class_name, method_name),
+            attach(
+                Attributes.get_class_name(procedure.name),
+                Attributes.get_class_member_name(procedure.name),
                 cls._add_service_class_method,
-                class_name,
-                method_name,
                 procedure,
             )
 
     # Add static class methods
     for procedure in service.procedures:
         if Attributes.is_a_class_static_method(procedure.name):
-            class_name = Attributes.get_class_name(procedure.name)
-            method_name = Attributes.get_class_member_name(procedure.name)
-            _skipping_unknown_types(
-                "%s.%s.%s" % (service.name, class_name, method_name),
+            attach(
+                Attributes.get_class_name(procedure.name),
+                Attributes.get_class_member_name(procedure.name),
                 cls._add_service_class_static_method,
-                class_name,
-                method_name,
                 procedure,
             )
 
@@ -458,24 +486,80 @@ def create_service(client: Client, service: KRPC.Service) -> object:
     )
     for procedure in service.procedures:
         if Attributes.is_a_class_property_accessor(procedure.name):
-            class_name = Attributes.get_class_name(procedure.name)
-            property_name = Attributes.get_class_member_name(procedure.name)
-            key = (class_name, property_name)
+            key = (
+                Attributes.get_class_name(procedure.name),
+                Attributes.get_class_member_name(procedure.name),
+            )
             if Attributes.is_a_class_property_getter(procedure.name):
                 class_properties[key][0] = procedure
             else:
                 class_properties[key][1] = procedure
     for (class_name, property_name), procedures in class_properties.items():
-        _skipping_unknown_types(
-            "%s.%s.%s" % (service.name, class_name, property_name),
-            cls._add_service_class_property,
+        attach(
             class_name,
             property_name,
+            cls._add_service_class_property,
             procedures[0],
             procedures[1],
         )
 
-    return cls()  # type: ignore[operator]
+
+def _stub_is_missing(
+    classes: Dict[str, type], class_name: str, member_name: str
+) -> bool:
+    """Whether the stubs lack a member that a service declares for one of its classes.
+
+    A class the stubs omit lacks nothing, as there is nothing to add a member to."""
+    python_type = classes.get(class_name)
+    return python_type is not None and not hasattr(
+        python_type, _member_name(member_name)
+    )
+
+
+def extended_stub_classes(service: KRPC.Service, stub: object) -> Set[str]:
+    """The classes of a service whose members the stubs do not all have.
+
+    The stubs are generated from one version of a service. The server may declare more
+    members for its classes, either because another mod adds them or because the server
+    is newer."""
+    classes = stub._classes  # type: ignore[attr-defined]
+    names: Set[str] = set()
+    for procedure in service.procedures:
+        if not Attributes.is_a_class_member(procedure.name):
+            continue
+        class_name = Attributes.get_class_name(procedure.name)
+        member_name = Attributes.get_class_member_name(procedure.name)
+        if _stub_is_missing(classes, class_name, member_name):
+            names.add(class_name)
+    return names
+
+
+def merge_service(client: Client, service: KRPC.Service, stub: object) -> None:
+    """Attach the class members that only a service's definition declares.
+
+    The members go on this client's subclass of each pre-generated class, which the type
+    registry already holds (see extended_stub_classes). Members the stubs already have are
+    left alone, as are classes the stubs omit."""
+    classes = stub._classes  # type: ignore[attr-defined]
+    cls = cast(
+        ServiceBase,
+        type(
+            str(service.name),
+            (ServiceBase,),
+            {"_client": client, "_name": service.name},
+        ),
+    )
+
+    def already_present(class_name: str, member_name: str) -> bool:
+        return not _stub_is_missing(classes, class_name, member_name)
+
+    _add_class_members(cls, service, already_present)
+
+    # The class reached through the service is the pre-generated one, so point it at the
+    # subclass the members went on
+    for class_name in extended_stub_classes(service, stub):
+        python_type = client._types.class_type(service.name, class_name).python_type
+        stub.__dict__[class_name] = WrappedClass(client, python_type)
 
 
 class ServiceBase(DynamicType):

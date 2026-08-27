@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Messages;
+using KRPC.Utils;
 using NUnit.Framework;
 
 namespace KRPC.Test.Service
@@ -31,7 +32,7 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (65, service.Procedures.Count);
+            Assert.AreEqual (75, service.Procedures.Count);
             Assert.AreEqual (3, service.Classes.Count);
             Assert.AreEqual (2, service.Enumerations.Count);
             Assert.AreEqual (2, service.Structs.Count);
@@ -53,11 +54,41 @@ namespace KRPC.Test.Service
         public void TestService3Name ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService3Name");
-            Assert.AreEqual (1, service.Procedures.Count);
+            Assert.AreEqual (2, service.Procedures.Count);
             Assert.AreEqual (1, service.Classes.Count);
             Assert.AreEqual (0, service.Enumerations.Count);
             Assert.AreEqual (string.Empty, service.Documentation);
             MessageAssert.IsNotDeprecated (service);
+        }
+
+        [Test]
+        public void TestService3NameExtensionMember ()
+        {
+            var service = services.ServicesList.First (x => x.Name == "TestService3Name");
+            var proc = service.Procedures.First (x => x.Name == "TestClass3_ExtensionMethodOnOtherServicesClass");
+            MessageAssert.HasParameters (proc, 1);
+            MessageAssert.HasParameter (proc, 0, typeof(TestClass3), "this");
+            MessageAssert.HasReturnType (proc, typeof(string));
+            MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Editor);
+            MessageAssert.HasNoDocumentation (proc);
+        }
+
+        [Test]
+        public void ExtensionMembersInAClassThatIsNotPublic ()
+        {
+            var warnings = new List<string> ();
+            var writer = Logger.Writer;
+            var level = Logger.Level;
+            try {
+                Logger.Level = Logger.Severity.Warning;
+                Logger.Writer = (message, severity) => warnings.Add (message);
+                global::KRPC.Service.Scanner.Scanner.GetServices (new List<string> ());
+            } finally {
+                Logger.Writer = writer;
+                Logger.Level = level;
+            }
+            // InvalidExtensions is internal, so its members are named in a warning and skipped
+            Assert.AreEqual (1, warnings.Count (x => x.Contains ("InvalidExtensions")));
         }
 
         [Test]
@@ -473,13 +504,77 @@ namespace KRPC.Test.Service
                     MessageAssert.HasReturnType (proc, typeof(string));
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.EditorVAB);
                     MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_ExtensionMethod") {
+                    MessageAssert.HasParameters (proc, 2);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasParameter (proc, 1, typeof(int), "x");
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasDocumentation (proc, "<doc>\n<summary>\nExtension method documentation string.\n</summary>\n</doc>");
+                } else if (proc.Name == "TestClass_ExtensionNullableMethod") {
+                    MessageAssert.HasParameters (proc, 2);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasNullableParameter (proc, 1, typeof(TestService.TestClass), "other");
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestClass), true);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_ExtensionMethodAvailableInSpecifiedGameScene") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.EditorVAB);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_DeprecatedExtensionMethod") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.IsDeprecated (proc, "Use ExtensionMethod instead.");
+                } else if (proc.Name == "TestClass_ExtensionMethodReturningClassFromOtherService") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(TestClass3));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_get_ExtensionProperty") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasDocumentation (proc, "<doc>\n<summary>\nExtension property documentation string.\n</summary>\n</doc>");
+                } else if (proc.Name == "TestClass_get_ExtensionReadWriteProperty") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(int));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_set_ExtensionReadWriteProperty") {
+                    MessageAssert.HasParameters (proc, 2);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasParameter (proc, 1, typeof(int), "value");
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_get_ExtensionNullableProperty") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestClass), true);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_set_ExtensionNullableProperty") {
+                    MessageAssert.HasParameters (proc, 2);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasNullableParameter (proc, 1, typeof(TestService.TestClass), "value");
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasNoDocumentation (proc);
                 } else {
                     Assert.Fail ("Procedure not found");
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (65, foundProcedures);
-            Assert.AreEqual (65, service.Procedures.Count);
+            Assert.AreEqual (75, foundProcedures);
+            Assert.AreEqual (75, service.Procedures.Count);
         }
 
         [Test]

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
@@ -451,6 +452,70 @@ namespace KRPC.Test.Service
         public void ValidStructFields (Type type)
         {
             Assert.DoesNotThrow (() => TypeUtils.ValidateStructFields (type));
+        }
+
+        static MethodInfo Extension (Type type, string name)
+        {
+            return type.GetMethod (name, BindingFlags.Public | BindingFlags.Static);
+        }
+
+        [TestCase ("ExtensionMethod")]
+        [TestCase ("ExtensionNullableMethod")]
+        [TestCase ("DeprecatedExtensionMethod")]
+        [TestCase ("ExtensionMethodOnOtherServicesClass")]
+        public void ValidExtensionMethod (string name)
+        {
+            Assert.DoesNotThrow (
+                () => TypeUtils.ValidateKRPCExtensionMethod (Extension (typeof(TestServiceExtensions), name)));
+        }
+
+        [TestCase ("MethodWithoutThis")]
+        [TestCase ("MethodExtendingAValueType")]
+        [TestCase ("MethodExtendingAStruct")]
+        [TestCase ("lowerCaseMethod")]
+        public void InvalidExtensionMethod (string name)
+        {
+            Assert.Throws<ServiceException> (
+                () => TypeUtils.ValidateKRPCExtensionMethod (Extension (typeof(InvalidExtensions), name)));
+        }
+
+        [TestCase ("GetExtensionProperty")]
+        [TestCase ("GetExtensionReadWriteProperty")]
+        [TestCase ("SetExtensionReadWriteProperty")]
+        [TestCase ("GetExtensionNullableProperty")]
+        [TestCase ("SetExtensionNullableProperty")]
+        public void ValidExtensionProperty (string name)
+        {
+            Assert.DoesNotThrow (
+                () => TypeUtils.ValidateKRPCExtensionProperty (Extension (typeof(TestServiceExtensions), name)));
+        }
+
+        [TestCase ("PropertyWithoutAnAccessorPrefix")]
+        [TestCase ("GetPropertyWithTooManyParameters")]
+        [TestCase ("GetPropertyWithNoReturnValue")]
+        [TestCase ("SetPropertyWithAReturnValue")]
+        [TestCase ("SetPropertyWithNoValue")]
+        public void InvalidExtensionProperty (string name)
+        {
+            Assert.Throws<ServiceException> (
+                () => TypeUtils.ValidateKRPCExtensionProperty (Extension (typeof(InvalidExtensions), name)));
+        }
+
+        [TestCase ("ExtensionMethod", typeof(TestService.TestClass))]
+        [TestCase ("GetExtensionProperty", typeof(TestService.TestClass))]
+        [TestCase ("ExtensionMethodOnOtherServicesClass", typeof(TestClass3))]
+        public void GetExtensionTargetClass (string name, Type target)
+        {
+            Assert.AreEqual (target, TypeUtils.GetExtensionTargetClass (Extension (typeof(TestServiceExtensions), name)));
+        }
+
+        [TestCase ("GetExtensionProperty", false, "ExtensionProperty")]
+        [TestCase ("SetExtensionReadWriteProperty", true, "ExtensionReadWriteProperty")]
+        public void ExtensionPropertyName (string name, bool isSetter, string propertyName)
+        {
+            var method = Extension (typeof(TestServiceExtensions), name);
+            Assert.AreEqual (isSetter, TypeUtils.IsAnExtensionPropertySetter (method));
+            Assert.AreEqual (propertyName, TypeUtils.GetExtensionPropertyName (method));
         }
 
         [TestCase ("IdentifierName")]

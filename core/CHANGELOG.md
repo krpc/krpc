@@ -1,4 +1,7 @@
 ## [v0.7.0] - unreleased
+- Add extension members: a service can add methods and properties to a class belonging to
+  another service, declared as C# extension methods annotated with `KRPCMethod` or
+  `KRPCProperty` (#1077)
 - Add structure types: a compound value with named fields, declared with `KRPCStruct` on a C#
   `struct` and sent to the client in full (#1066)
 - Add a communication protocol carrying protocol buffer messages over a unix domain socket,

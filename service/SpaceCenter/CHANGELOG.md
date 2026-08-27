@@ -178,6 +178,8 @@
   - Fix `Experiment.ScienceSubject` adding a new object for every read (#771)
   - Fix `ScienceSubject.Science` and `ScienceSubject.ScienceCap` scaling by the science gain
     multiplier that was in force when the object was read (#1051)
+  - Make `ModuleRef` public, for a mod that exposes a part module as a class of its own
+    service (#1077)
 
 - Resources
   - Add `ResourceTransfer.Cancel` to stop a transfer before it finishes (#1028)

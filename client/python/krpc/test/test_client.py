@@ -150,6 +150,39 @@ class TestClient(ServerTestCase, unittest.TestCase):
         finally:
             conn.close()
 
+    def test_extension_members(self) -> None:
+        obj = self.conn.test_service.create_test_object("jeb")
+        self.assertEqual("value=jeb42", obj.extension_method(42))
+        self.assertEqual("value=jeb", obj.extension_property)
+        obj.extension_read_write_property = 42
+        self.assertEqual(42, obj.extension_read_write_property)
+        # The extension property writes through to the class's own int_property
+        self.assertEqual(42, obj.int_property)
+
+    def test_extension_member_returning_class_from_other_service(self) -> None:
+        obj = self.conn.test_service.create_test_object("jeb")
+        obj2 = obj.extension_method_returning_class_from_other_service()
+        self.assertEqual("TestClass2", type(obj2).__name__)
+        self.assertEqual("value=jeb", obj2.value)
+
+    def test_extension_members_are_per_connection(self) -> None:
+        # A pre-generated class is shared by every client in the process, so the members
+        # merged onto it go through the connection the object was reached through
+        other = self.connect()
+        try:
+            obj = other.test_service.create_test_object("jeb")
+            self.assertEqual("value=jeb", obj.extension_property)
+            obj2 = obj.extension_method_returning_class_from_other_service()
+            self.assertIs(other, obj2._client)
+            self.assertIn("extension_method", dir(other.test_service.TestClass))
+        finally:
+            other.close()
+
+    def test_extension_member_stream(self) -> None:
+        obj = self.conn.test_service.create_test_object("jeb")
+        with self.conn.stream(getattr, obj, "extension_property") as stream:
+            self.assertEqual("value=jeb", stream())
+
     def test_class_as_return_value(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
         self.assertEqual("TestClass", type(obj).__name__)
@@ -619,6 +652,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 [
                     "krpc",
                     "test_service",
+                    # Owns the class that an extension member of TestService returns
+                    "test_service2",
                     # The server-side benchmarks the test server exposes. It has no
                     # pre-generated stubs, so this is also the client building a service
                     # from the definitions the server hands over.
@@ -775,6 +810,12 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "optional_arguments",
                     "static_method",
                     "static_nullable_object",
+                    # Added by extension members, which the client picks up from the
+                    # server's definitions
+                    "extension_method",
+                    "extension_method_returning_class_from_other_service",
+                    "extension_property",
+                    "extension_read_write_property",
                 ]
             ),
             set(

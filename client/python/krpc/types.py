@@ -647,7 +647,7 @@ class DynamicType:
         return getattr(cls, name)
 
 
-class ClassBase:
+class ClassBase(DynamicType):
     """Base class for service-defined class types"""
 
     def __init__(self, client: Client, object_id: int) -> None:
@@ -684,7 +684,7 @@ class ClassBase:
         return hash(self._object_id)
 
 
-class DynamicClassBase(ClassBase, DynamicType):
+class DynamicClassBase(ClassBase):
     def __repr__(self) -> str:
         return "<%s.%s remote object #%d>" % (
             self._service_name,

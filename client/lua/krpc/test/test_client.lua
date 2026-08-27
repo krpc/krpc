@@ -76,6 +76,23 @@ function TestClient:test_properties()
   luaunit.assertEquals(obj, self.conn.test_service.object_property)
 end
 
+function TestClient:test_extension_members()
+  local obj = self.conn.test_service.create_test_object('jeb')
+  luaunit.assertEquals('value=jeb42', obj:extension_method(42))
+  luaunit.assertEquals('value=jeb', obj.extension_property)
+  obj.extension_read_write_property = 42
+  luaunit.assertEquals(42, obj.extension_read_write_property)
+  -- The extension property writes through to the class's own int_property
+  luaunit.assertEquals(42, obj.int_property)
+end
+
+function TestClient:test_extension_member_returning_class_from_other_service()
+  local obj = self.conn.test_service.create_test_object('jeb')
+  local obj2 = obj:extension_method_returning_class_from_other_service()
+  luaunit.assertTrue(obj2:is_a(self.conn.test_service2.TestClass2))
+  luaunit.assertEquals('value=jeb', obj2.value)
+end
+
 function TestClient:test_class_as_return_value()
   local obj = self.conn.test_service.create_test_object('jeb')
   luaunit.assertTrue(obj:is_a(self.conn.test_service.TestClass))
@@ -197,8 +214,9 @@ end
 
 function TestClient:test_client_members()
   -- benchmark is the server-side benchmarks the test server exposes
+  -- test_service2 owns the class that an extension member of test_service returns
   luaunit.assertEquals(
-    Set{'krpc', 'test_service', 'benchmark'},
+    Set{'krpc', 'test_service', 'test_service2', 'benchmark'},
     Set(filter_private(tablex.keys(self.conn)))
   )
 end
@@ -512,13 +530,18 @@ function TestClient:test_test_service_test_class_members()
   luaunit.assertEquals(
     members,
     {'echo_nullable_object',
+     'extension_method',
+     'extension_method_returning_class_from_other_service',
      'float_to_string',
+     'get_extension_property',
+     'get_extension_read_write_property',
      'get_int_property',
      'get_object_property',
      'get_string_property_private_set',
      'get_value',
      'object_to_string',
      'optional_arguments',
+     'set_extension_read_write_property',
      'set_int_property',
      'set_object_property',
      'set_string_property_private_get',

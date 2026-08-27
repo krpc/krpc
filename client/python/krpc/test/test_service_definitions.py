@@ -205,7 +205,9 @@ class TestServiceDefinitions(unittest.TestCase):
         service = struct_service("ServiceB", Types().sint32_type.protobuf_type)
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
-            register_all(client._types, _stub_definitions(service, StubService()))
+            register_all(
+                client._types, _stub_definitions(client, service, StubService())
+            )
         self.assertTrue(
             any("ServiceB.Thing" in str(warning.message) for warning in caught)
         )

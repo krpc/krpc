@@ -3,9 +3,10 @@ using System;
 namespace KRPC.Service.Attributes
 {
     /// <summary>
-    /// A kRPC property.
+    /// A kRPC property. Applied to a property, or to a GetX or SetX extension method that
+    /// adds a property to another service's class.
     /// </summary>
-    [AttributeUsage (AttributeTargets.Property)]
+    [AttributeUsage (AttributeTargets.Property | AttributeTargets.Method)]
     public sealed class KRPCPropertyAttribute : Attribute
     {
         /// <summary>

@@ -327,6 +327,30 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Get the game scene(s) that an extension method should be available during
+        /// </summary>
+        public static GameScene GetExtensionMethodGameScene (MethodInfo method, GameScene classGameScene)
+        {
+            ValidateKRPCExtensionMethod (method);
+            var attribute = Reflection.GetAttribute<KRPCMethodAttribute> (method);
+            if (attribute.GameScene == GameScene.Inherit)
+                return classGameScene;
+            return attribute.GameScene;
+        }
+
+        /// <summary>
+        /// Get the game scene(s) that an extension property should be available during
+        /// </summary>
+        public static GameScene GetExtensionPropertyGameScene (MethodInfo method, GameScene classGameScene)
+        {
+            ValidateKRPCExtensionProperty (method);
+            var attribute = Reflection.GetAttribute<KRPCPropertyAttribute> (method);
+            if (attribute.GameScene == GameScene.Inherit)
+                return classGameScene;
+            return attribute.GameScene;
+        }
+
+        /// <summary>
         /// Get the name of the service for the given KRPCEnum annotated type
         /// </summary>
         public static string GetEnumServiceName (Type type)
@@ -662,6 +686,97 @@ namespace KRPC.Service
             var declaringType = property.DeclaringType;
             if (declaringType == null || !declaringType.IsAssignableFrom (cls))
                 throw new ServiceException ("KRPCProperty " + property + " is not declared inside a KRPCClass");
+        }
+
+        /// <summary>
+        /// Returns true if the given method is a C# extension method.
+        /// </summary>
+        public static bool IsAnExtensionMethod (MethodBase method)
+        {
+            return Reflection.HasAttribute<ExtensionAttribute> (method);
+        }
+
+        /// <summary>
+        /// Returns true if the given extension property accessor is a setter.
+        /// </summary>
+        public static bool IsAnExtensionPropertySetter (MethodInfo method)
+        {
+            return method.Name.StartsWith ("Set", StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Get the name of the property that the given accessor implements, i.e. its name
+        /// without the Get or Set prefix.
+        /// </summary>
+        public static string GetExtensionPropertyName (MethodInfo method)
+        {
+            return method.Name.Substring (3);
+        }
+
+        /// <summary>
+        /// Get the kRPC class that the given extension member adds a member to, which is the
+        /// type of its instance parameter.
+        /// </summary>
+        public static Type GetExtensionTargetClass (MethodInfo method)
+        {
+            ValidateExtensionTarget (method);
+            return method.GetParameters () [0].ParameterType;
+        }
+
+        /// <summary>
+        /// Check the given method can add a member to a kRPC class
+        /// 1. Must be a public static extension method
+        /// 2. The type it extends must be a kRPC class
+        /// </summary>
+        static void ValidateExtensionTarget (MethodInfo method)
+        {
+            var parameters = method.GetParameters ();
+            if (!(method.IsPublic && method.IsStatic && IsAnExtensionMethod (method) && parameters.Length > 0))
+                throw new ServiceException ("Extension member " + method + " is not a public static extension method");
+            var target = parameters [0].ParameterType;
+            if (IsAStructType (target))
+                throw new ServiceException ("Extension member " + method + " extends the KRPCStruct " + target + "; only kRPC classes can be extended");
+            if (!IsAClassType (target))
+                throw new ServiceException ("Extension member " + method + " does not extend a KRPCClass");
+            ValidateKRPCClass (target);
+        }
+
+        /// <summary>
+        /// Check the given method is a valid kRPC extension method
+        /// 1. Must have KRPCMethod attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public static extension method of a kRPC class
+        /// </summary>
+        public static void ValidateKRPCExtensionMethod (MethodInfo method)
+        {
+            if (!Reflection.HasAttribute<KRPCMethodAttribute> (method))
+                throw new ArgumentException (method + " does not have KRPCMethod attribute");
+            ValidateIdentifier (method.Name);
+            ValidateExtensionTarget (method);
+        }
+
+        /// <summary>
+        /// Check the given method is a valid kRPC extension property accessor
+        /// 1. Must have KRPCProperty attribute
+        /// 2. Must be named GetX or SetX, where X is a valid identifier
+        /// 3. Must be a public static extension method of a kRPC class
+        /// 4. A getter must take only the instance and return a value
+        /// 5. A setter must take the instance and the value to set, and return nothing
+        /// </summary>
+        public static void ValidateKRPCExtensionProperty (MethodInfo method)
+        {
+            if (!Reflection.HasAttribute<KRPCPropertyAttribute> (method))
+                throw new ArgumentException (method + " does not have KRPCProperty attribute");
+            var isSetter = IsAnExtensionPropertySetter (method);
+            if (!isSetter && !method.Name.StartsWith ("Get", StringComparison.Ordinal))
+                throw new ServiceException ("KRPCProperty " + method + " is not named GetX or SetX");
+            ValidateIdentifier (GetExtensionPropertyName (method));
+            ValidateExtensionTarget (method);
+            var numParameters = method.GetParameters ().Length;
+            if (isSetter && !(numParameters == 2 && method.ReturnType == typeof(void)))
+                throw new ServiceException ("KRPCProperty " + method + " is not a property setter; it must take the value to set and return nothing");
+            if (!isSetter && !(numParameters == 1 && method.ReturnType != typeof(void)))
+                throw new ServiceException ("KRPCProperty " + method + " is not a property getter; it must take no arguments and return a value");
         }
 
         /// <summary>

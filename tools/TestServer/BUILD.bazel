@@ -28,7 +28,15 @@ lib_deps = [
     "//tools/build/ksp:KRPC.IO.Ports",
 ]
 
-exe_srcs = srcs + ["src/Program.cs"]
+# The extension members, and the service whose class one of them returns, are built into
+# the server but not into the assembly the service definitions are generated from. The
+# bundled stubs therefore lack them, and a client has to pick them up from the definitions
+# the server sends at connect
+exe_srcs = srcs + [
+    "src/Program.cs",
+    "src/TestService2.cs",
+    "src/TestServiceExtensions.cs",
+]
 
 exe_deps = [
     "//core:KRPC.Core.net8",
