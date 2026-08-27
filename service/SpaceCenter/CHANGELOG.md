@@ -143,6 +143,8 @@
   - Setting `Control.StageLock` leaves the in-game Alt+L shortcut in step with it (#1022)
 
 - Parts
+  - `RCS.Thrusters`, `RCS.AvailableForce` and `RCS.AvailableTorque` count only the nozzles of
+    the part's selected variant (#1079)
   - `Decoupler.IsOmniDecoupler` reports what the part is configured as for every decoupler,
     including radial ones. It was false for all of them (#1048)
   - A force added with `Part.AddForce` stops being applied, and is freed, once its part is

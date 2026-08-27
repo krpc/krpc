@@ -358,7 +358,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Thruster> Thrusters {
-            get { return Enumerable.Range (0, InternalRCS.thrusterTransforms.Count).Select (i => new Thruster (Part, InternalRCS, i)).ToList (); }
+            get {
+                // The mesh carries the nozzles of every part variant, and the game fires only the
+                // ones the chosen variant leaves active in the hierarchy
+                var transforms = InternalRCS.thrusterTransforms;
+                return Enumerable.Range (0, transforms.Count)
+                    .Where (i => transforms [i].gameObject.activeInHierarchy)
+                    .Select (i => new Thruster (Part, InternalRCS, i))
+                    .ToList ();
+            }
         }
 
         /// <summary>

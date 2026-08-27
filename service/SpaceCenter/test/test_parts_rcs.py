@@ -20,12 +20,10 @@ class RCSTestBase:
             "max_vac_thrust": 1000,
             "msl_isp": 100,
             "vac_isp": 240,
-            # The RV-105 mesh carries the "RCSthruster" transforms for every
-            # variant (the default Angled 4-horn plus the Orthogonal 5-horn
-            # pool), and kRPC enumerates them all rather than just the active
-            # variant's. So it reports 9 thrusters and sums available torque
-            # over all 9 (see the per-scenario torque values below).
-            "thrusters": 9,
+            # The craft uses the default Angled 4-horn variant. The mesh also
+            # carries the Orthogonal 5-horn pool, which the variant leaves
+            # inactive.
+            "thrusters": 4,
         },
         "vernierEngine": {  # Vernor Engine
             "propellants": {"LiquidFuel": 9.0 / 11.0, "Oxidizer": 1},
@@ -230,6 +228,22 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         self.assertFalse(rcs.input_override)
         self.assertAlmostEqual((0, 0, 0), rcs.rotation_override)
 
+    def test_thrusters_match_the_part_variant(self):
+        """The RV-105 mesh carries the nozzles of every variant, and the game
+        fires only the ones the chosen variant leaves active."""
+        rcs = self.get_rcs("RCSBlock.v2")
+        frame = self.vessel.reference_frame
+        thrusters = rcs.thrusters
+        self.assertEqual(4, len(thrusters))
+        # The Angled 4-horn variant is balanced, so its directions cancel. The
+        # Orthogonal pool adds a nozzle along the mount axis, which breaks that.
+        total = (0.0, 0.0, 0.0)
+        for thruster in thrusters:
+            total = tuple(
+                t + d for t, d in zip(total, thruster.thrust_direction(frame))
+            )
+        self.assertAlmostEqual((0, 0, 0), total, places=3)
+
     def test_has_fuel(self):
         rcs = self.get_rcs("RCSBlock.v2")
         self.assertTrue(rcs.has_fuel)
@@ -265,11 +279,9 @@ class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
             {
                 "max_thrust": 420,
                 "isp": 101,
-                # Summed over all 9 "RCSthruster" transforms in the mesh (see
-                # the thrusters note above); the spread of nozzle positions
-                # makes the roll term asymmetric. Refreshed against KSP 1.12.5.
-                "pos_torque": (892, 460, 751),
-                "neg_torque": (-892, -460, -1084),
+                # The four nozzles are balanced, so each axis is symmetric
+                "pos_torque": (446, 232, 379),
+                "neg_torque": (-447, -232, -379),
             },
         )
         cls.add_rcs_data(
@@ -308,10 +320,8 @@ class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
             {
                 "max_thrust": 1000,
                 "isp": 240,
-                # Summed over all 9 nozzle transforms; refreshed for KSP 1.12.5
-                # (see TestPartsRCSMSL / the thrusters note for details).
-                "pos_torque": (1989, 1176, 1815),
-                "neg_torque": (-1990, -1176, -2533),
+                "pos_torque": (996, 593, 916),
+                "neg_torque": (-997, -594, -916),
             },
         )
         cls.add_rcs_data(
