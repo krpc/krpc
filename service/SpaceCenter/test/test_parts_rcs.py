@@ -271,6 +271,38 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         finally:
             rcs.input_override = False
 
+    def test_override_force_and_torque_predict_what_is_applied(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        self.wait()
+        demands = (
+            ((0, 0, 0), (0, 0, 1)),
+            ((1, 0, 0), (0, 0, 0)),
+            ((0, 0.5, 0), (0.5, 0, 0)),
+        )
+        try:
+            for rotation, translation in demands:
+                force = rcs.override_force(rotation, translation)
+                torque = rcs.override_torque(rotation, translation)
+                self.override(rcs, rotation=rotation, translation=translation)
+                self.assertAlmostEqual(force, rcs.force, delta=1)
+                self.assertAlmostEqual(torque, rcs.torque, delta=1)
+        finally:
+            rcs.input_override = False
+
+    def test_override_force_lies_within_the_available_force(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        self.wait()
+        positive, negative = rcs.available_force
+        for axis in range(3):
+            for sign in (1, -1):
+                translation = tuple(sign if i == axis else 0 for i in range(3))
+                force = rcs.override_force((0, 0, 0), translation)
+                for i in range(3):
+                    self.assertLessEqual(force[i], positive[i] + 1)
+                    self.assertGreaterEqual(force[i], negative[i] - 1)
+
     def test_thruster_thrust(self):
         rcs = self.get_rcs("RCSBlock.v2")
         self.control.rcs = True
