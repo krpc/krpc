@@ -237,6 +237,53 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         rcs.translation_override = translation
         self.wait(0.5)
 
+    def check_override_matches_control(self, rcs, name, demand, rotation):
+        """Drive an axis with the cooked control, then with the equivalent
+        override demand, and compare what the block applies."""
+        setattr(self.control, name, 1)
+        self.wait(0.5)
+        cooked = rcs.torque if rotation else rcs.force
+        setattr(self.control, name, 0)
+        self.wait(0.5)
+        if rotation:
+            self.override(rcs, rotation=demand)
+        else:
+            self.override(rcs, translation=demand)
+        self.assertGreater(norm(cooked), 0)
+        self.assertAlmostEqual(cooked, rcs.torque if rotation else rcs.force, delta=2)
+        rcs.input_override = False
+        self.wait(0.5)
+
+    def test_translation_override_axes(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        try:
+            for name, demand in (
+                ("right", (1, 0, 0)),
+                ("up", (0, 1, 0)),
+                ("forward", (0, 0, 1)),
+            ):
+                self.check_override_matches_control(rcs, name, demand, False)
+        finally:
+            for name in ("right", "up", "forward"):
+                setattr(self.control, name, 0)
+            rcs.input_override = False
+
+    def test_rotation_override_axes(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        try:
+            for name, demand in (
+                ("pitch", (1, 0, 0)),
+                ("roll", (0, 1, 0)),
+                ("yaw", (0, 0, 1)),
+            ):
+                self.check_override_matches_control(rcs, name, demand, True)
+        finally:
+            for name in ("pitch", "roll", "yaw"):
+                setattr(self.control, name, 0)
+            rcs.input_override = False
+
     def test_force_and_torque(self):
         rcs = self.get_rcs("RCSBlock.v2")
         self.control.rcs = True
