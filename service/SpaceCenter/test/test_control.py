@@ -139,6 +139,26 @@ class ControlMixin:
     def test_roll_trim(self):
         self.check_trim("roll")
 
+    def test_precision_mode(self):
+        # Precision mode is a game setting, so it is only available for the active vessel
+        if self.vessel != self.space_center.active_vessel:
+            self.assertRaises(RuntimeError, getattr, self.control, "precision_mode")
+            self.assertRaises(
+                RuntimeError, setattr, self.control, "precision_mode", True
+            )
+            return
+        try:
+            self.assertFalse(self.control.precision_mode)
+            self.control.precision_mode = True
+            self.assertTrue(self.control.precision_mode)
+            # Setting it to what it already is leaves it alone
+            self.control.precision_mode = True
+            self.assertTrue(self.control.precision_mode)
+            self.control.precision_mode = False
+            self.assertFalse(self.control.precision_mode)
+        finally:
+            self.control.precision_mode = False
+
     def test_sas_mode(self):
         sas_mode = self.space_center.SASMode
         active = self.vessel == self.space_center.active_vessel

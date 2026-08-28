@@ -575,6 +575,37 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether precision control mode is enabled.
+        /// Equivalent to the Caps Lock key.
+        /// This is a game setting rather than a vessel setting,
+        /// and can only be accessed for the active vessel.
+        /// Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+        /// when clients disconnect.
+        /// </summary>
+        /// <remarks>
+        /// Precision mode weakens the RCS thrust that the control inputs produce. A block
+        /// driven by <see cref="Parts.RCS.InputOverride"/> is exempt.
+        /// </remarks>
+        [KRPCProperty]
+        public bool PrecisionMode {
+            get {
+                CheckActiveVessel ();
+                var handler = FlightInputHandler.fetch;
+                return handler != null && handler.precisionMode;
+            }
+            set {
+                CheckActiveVessel ();
+                var handler = FlightInputHandler.fetch;
+                if (handler == null || handler.precisionMode == value)
+                    return;
+                handler.precisionMode = value;
+                // The nav-ball control gauges recolor off this event, which the game fires
+                // when the keybinding toggles the flag
+                GameEvents.Input.OnPrecisionModeToggle.Fire (value);
+            }
+        }
+
+        /// <summary>
         /// The state of the forward translational control.
         /// A value between -1 and 1.
         /// Equivalent to the h and n keys.
