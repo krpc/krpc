@@ -141,6 +141,8 @@
     standing at, and `Control.GrabLadder`, `Control.ReleaseLadder` and `Control.Ladder` for
     the ladder it is alongside (#319)
   - Setting `Control.StageLock` leaves the in-game Alt+L shortcut in step with it (#1022)
+  - Add `Control.PrecisionMode`, the precision control mode that the Caps Lock key
+    toggles (#1082)
 
 - Parts
   - **Breaking:** `RCS.TranslationOverride` thrusts along the right, up and forward axes it
@@ -149,6 +151,9 @@
     `RCS.OverrideForce` and `RCS.OverrideTorque`, what a given demand would apply (#1080)
   - Add `Thruster.Thrust`, the thrust a single nozzle of an engine or RCS block is producing
     (#1080)
+  - `RCS.AvailableForce` and `RCS.AvailableTorque`, and the vessel level force, torque and
+    acceleration properties that include them, account for precision mode (#1082)
+  - Precision mode leaves a block driven by `RCS.InputOverride` at full thrust (#1082)
   - `RCS.Thrusters`, `RCS.AvailableForce` and `RCS.AvailableTorque` count only the nozzles of
     the part's selected variant (#1079)
   - `Decoupler.IsOmniDecoupler` reports what the part is configured as for every decoupler,
