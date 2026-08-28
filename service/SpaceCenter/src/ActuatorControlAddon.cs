@@ -71,12 +71,12 @@ namespace KRPC.SpaceCenter
 
             public override Vector3 ApplyInputRotationAdjustment (Vector3 inputRotation)
             {
-                return ToWorld () * Rotation;
+                return ToWorld () * RCSRotationInput (Rotation);
             }
 
             public override Vector3 ApplyInputLinearAdjustment (Vector3 inputLinear)
             {
-                return ToWorld () * Linear;
+                return ToWorld () * RCSTranslationInput (Linear);
             }
         }
 
@@ -234,6 +234,27 @@ namespace KRPC.SpaceCenter
         internal static void SetRCSOverride (ModuleRCS module, bool enabled)
         {
             rcs.Set (module, enabled);
+        }
+
+        /// <summary>
+        /// The rotation demand as the module's own rotation input. RCS.OverrideTorque predicts
+        /// through the same mapping, so the prediction follows the override.
+        /// </summary>
+        internal static Vector3 RCSRotationInput (Vector3 rotation)
+        {
+            return rotation;
+        }
+
+        /// <summary>
+        /// The translation demand as the module's own linear input. ModuleRCS takes
+        /// (-right, -forward, up) and thrusts along the negative of it, so the right, up and
+        /// forward demand is negated and reordered to match the cooked control input.
+        /// RCS.OverrideForce predicts through the same mapping, so the prediction follows the
+        /// override.
+        /// </summary>
+        internal static Vector3 RCSTranslationInput (Vector3 translation)
+        {
+            return new Vector3 (-translation.x, -translation.z, translation.y);
         }
 
         internal static Vector3 GetRCSRotation (ModuleRCS module)

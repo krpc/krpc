@@ -143,6 +143,12 @@
   - Setting `Control.StageLock` leaves the in-game Alt+L shortcut in step with it (#1022)
 
 - Parts
+  - **Breaking:** `RCS.TranslationOverride` thrusts along the right, up and forward axes it
+    documents (#1080)
+  - Add `RCS.Force` and `RCS.Torque`, the force and torque a block is applying, and
+    `RCS.OverrideForce` and `RCS.OverrideTorque`, what a given demand would apply (#1080)
+  - Add `Thruster.Thrust`, the thrust a single nozzle of an engine or RCS block is producing
+    (#1080)
   - `RCS.Thrusters`, `RCS.AvailableForce` and `RCS.AvailableTorque` count only the nozzles of
     the part's selected variant (#1079)
   - `Decoupler.IsOmniDecoupler` reports what the part is configured as for every decoupler,

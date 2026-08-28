@@ -5,6 +5,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
 using TupleV3 = System.Tuple<Vector3d, Vector3d>;
 using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
@@ -224,6 +225,131 @@ namespace KRPC.SpaceCenter.Services.Parts
                     return ITorqueProviderExtensions.zero;
                 return GetForceVectors ();
             }
+        }
+
+        /// <summary>
+        /// The force being applied by the RCS thrusters, in Newtons. The vector is in the
+        /// vessel's reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// Returns zero if the RCS is inactive.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 Force {
+            get { return AppliedForceAndTorque ().Item1.ToTuple (); }
+        }
+
+        /// <summary>
+        /// The torque being applied by the RCS thrusters about the vessel's center of mass,
+        /// in Newton meters. The vector is in the vessel's reference frame
+        /// (<see cref="Vessel.ReferenceFrame"/>). Returns zero if the RCS is inactive.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 Torque {
+            get { return AppliedForceAndTorque ().Item2.ToTuple (); }
+        }
+
+        /// <summary>
+        /// The force the given demands would produce, in Newtons. The vector is in the
+        /// vessel's reference frame (<see cref="Vessel.ReferenceFrame"/>).
+        /// Returns zero if the RCS is inactive.
+        /// </summary>
+        /// <returns>The force as a vector.</returns>
+        /// <param name="rotation">A rotation demand, as set by
+        /// <see cref="RotationOverride"/>.</param>
+        /// <param name="translation">A translation demand, as set by
+        /// <see cref="TranslationOverride"/>.</param>
+        /// <remarks>
+        /// The demands do not have to be applied. The prediction leaves out precision mode,
+        /// full thrust and the lever divisor, which <see cref="Force"/> includes.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple3 OverrideForce (Tuple3 rotation, Tuple3 translation)
+        {
+            return DemandForceAndTorque (rotation, translation).Item1.ToTuple ();
+        }
+
+        /// <summary>
+        /// The torque the given demands would produce about the vessel's center of mass, in
+        /// Newton meters. The vector is in the vessel's reference frame
+        /// (<see cref="Vessel.ReferenceFrame"/>). Returns zero if the RCS is inactive.
+        /// </summary>
+        /// <returns>The torque as a vector.</returns>
+        /// <param name="rotation">A rotation demand, as set by
+        /// <see cref="RotationOverride"/>.</param>
+        /// <param name="translation">A translation demand, as set by
+        /// <see cref="TranslationOverride"/>.</param>
+        /// <remarks>
+        /// The demands do not have to be applied. The prediction leaves out precision mode,
+        /// full thrust and the lever divisor, which <see cref="Torque"/> includes.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple3 OverrideTorque (Tuple3 rotation, Tuple3 translation)
+        {
+            return DemandForceAndTorque (rotation, translation).Item2.ToTuple ();
+        }
+
+        /// <summary>
+        /// Whether the game has stopped allocating thrust to the nozzles. ModuleRCS returns
+        /// early from its update in high warp, leaving the last allocation in place.
+        /// </summary>
+        internal static bool ThrustAllocationStale {
+            get { return TimeWarp.CurrentRate > 1f && TimeWarp.WarpMode == TimeWarp.Modes.HIGH; }
+        }
+
+        /// <summary>
+        /// Sums the force and torque the game allocated to each nozzle in the last physics
+        /// frame, in the vessel's reference frame.
+        /// </summary>
+        TupleV3 AppliedForceAndTorque ()
+        {
+            if (!Active || ThrustAllocationStale)
+                return ITorqueProviderExtensions.zero;
+            var frame = Part.Vessel.ReferenceFrame;
+            var force = Vector3d.zero;
+            var torque = Vector3d.zero;
+            foreach (var thruster in Thrusters) {
+                var thrust = thruster.Thrust;
+                if (thrust <= 0f)
+                    continue;
+                var thrusterForce = thruster.ThrustDirection (frame).ToVector () * thrust;
+                force += thrusterForce;
+                torque += Vector3d.Cross (thruster.ThrustPosition (frame).ToVector (), thrusterForce);
+            }
+            return new TupleV3 (force, torque);
+        }
+
+        /// <summary>
+        /// Runs the game's thrust allocation over the nozzles for the given demands, in the
+        /// vessel's reference frame. A nozzle fires when its exhaust aligns with the demand,
+        /// hence the sign of each dot product, and the two terms are summed before the clamp.
+        /// </summary>
+        TupleV3 DemandForceAndTorque (Tuple3 rotationDemand, Tuple3 translationDemand)
+        {
+            if (!Active)
+                return ITorqueProviderExtensions.zero;
+            // The demands go through the mapping the override applies, clamped as its setters
+            // clamp them
+            Vector3 rotationInput = rotationDemand.ToVector ();
+            Vector3 translationInput = translationDemand.ToVector ();
+            Vector3d rotation = ActuatorControlAddon.RCSRotationInput (rotationInput.Clamp (-1f, 1f));
+            Vector3d translation = ActuatorControlAddon.RCSTranslationInput (translationInput.Clamp (-1f, 1f));
+            var frame = Part.Vessel.ReferenceFrame;
+            var thrust = AvailableThrust;
+            var force = Vector3d.zero;
+            var torque = Vector3d.zero;
+            foreach (var thruster in Thrusters) {
+                var direction = thruster.ThrustDirection (frame).ToVector ();
+                var position = thruster.ThrustPosition (frame).ToVector ();
+                var demand = Math.Max (0, -Vector3d.Dot (direction, translation));
+                if (rotation != Vector3d.zero) {
+                    var lever = Vector3d.Exclude (rotation, position);
+                    if (lever.sqrMagnitude > 0)
+                        demand += Math.Max (0, -Vector3d.Dot (direction, Vector3d.Cross (rotation, lever.normalized)));
+                }
+                var thrusterForce = direction * Math.Min (demand, 1) * thrust;
+                force += thrusterForce;
+                torque += Vector3d.Cross (position, thrusterForce);
+            }
+            return new TupleV3 (force, torque);
         }
 
         /// <summary>

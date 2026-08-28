@@ -1,6 +1,6 @@
 import unittest
 import krpctest
-from krpctest.geometry import distance, norm
+from krpctest.geometry import cross, distance, norm
 
 
 class RCSTestBase:
@@ -227,6 +227,146 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         self.wait()
         self.assertFalse(rcs.input_override)
         self.assertAlmostEqual((0, 0, 0), rcs.rotation_override)
+
+    def override(self, rcs, rotation=(0, 0, 0), translation=(0, 0, 0)):
+        """Drive a block with the given demands, and wait for the game to
+        allocate thrust to its nozzles."""
+        self.control.rcs = True
+        rcs.input_override = True
+        rcs.rotation_override = rotation
+        rcs.translation_override = translation
+        self.wait(0.5)
+
+    def check_override_matches_control(self, rcs, name, demand, rotation):
+        """Drive an axis with the cooked control, then with the equivalent
+        override demand, and compare what the block applies."""
+        setattr(self.control, name, 1)
+        self.wait(0.5)
+        cooked = rcs.torque if rotation else rcs.force
+        setattr(self.control, name, 0)
+        self.wait(0.5)
+        if rotation:
+            self.override(rcs, rotation=demand)
+        else:
+            self.override(rcs, translation=demand)
+        self.assertGreater(norm(cooked), 0)
+        self.assertAlmostEqual(cooked, rcs.torque if rotation else rcs.force, delta=2)
+        rcs.input_override = False
+        self.wait(0.5)
+
+    def test_translation_override_axes(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        try:
+            for name, demand in (
+                ("right", (1, 0, 0)),
+                ("up", (0, 1, 0)),
+                ("forward", (0, 0, 1)),
+            ):
+                self.check_override_matches_control(rcs, name, demand, False)
+        finally:
+            for name in ("right", "up", "forward"):
+                setattr(self.control, name, 0)
+            rcs.input_override = False
+
+    def test_rotation_override_axes(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        try:
+            for name, demand in (
+                ("pitch", (1, 0, 0)),
+                ("roll", (0, 1, 0)),
+                ("yaw", (0, 0, 1)),
+            ):
+                self.check_override_matches_control(rcs, name, demand, True)
+        finally:
+            for name in ("pitch", "roll", "yaw"):
+                setattr(self.control, name, 0)
+            rcs.input_override = False
+
+    def test_force_and_torque(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        self.wait()
+        self.assertAlmostEqual((0, 0, 0), rcs.force)
+        self.assertAlmostEqual((0, 0, 0), rcs.torque)
+        try:
+            self.override(rcs, translation=(0, 0, 1))
+            self.assertGreater(norm(rcs.force), 0)
+        finally:
+            rcs.input_override = False
+        self.wait(0.5)
+        self.assertAlmostEqual((0, 0, 0), rcs.force)
+        self.assertAlmostEqual((0, 0, 0), rcs.torque)
+
+    def test_force_and_torque_match_the_thrusters(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        frame = self.vessel.reference_frame
+        try:
+            self.override(rcs, rotation=(1, 0, 0), translation=(0, 0, 1))
+            force = (0.0, 0.0, 0.0)
+            torque = (0.0, 0.0, 0.0)
+            for thruster in rcs.thrusters:
+                thrust = thruster.thrust
+                nozzle = tuple(x * thrust for x in thruster.thrust_direction(frame))
+                position = thruster.thrust_position(frame)
+                force = tuple(a + b for a, b in zip(force, nozzle))
+                torque = tuple(a + b for a, b in zip(torque, cross(position, nozzle)))
+            self.assertGreater(norm(force), 0)
+            self.assertAlmostEqual(force, rcs.force, delta=1)
+            self.assertAlmostEqual(torque, rcs.torque, delta=1)
+        finally:
+            rcs.input_override = False
+
+    def test_override_force_and_torque_predict_what_is_applied(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        self.wait()
+        demands = (
+            ((0, 0, 0), (0, 0, 1)),
+            ((1, 0, 0), (0, 0, 0)),
+            ((0, 0.5, 0), (0.5, 0, 0)),
+        )
+        try:
+            for rotation, translation in demands:
+                force = rcs.override_force(rotation, translation)
+                torque = rcs.override_torque(rotation, translation)
+                self.override(rcs, rotation=rotation, translation=translation)
+                self.assertAlmostEqual(force, rcs.force, delta=1)
+                self.assertAlmostEqual(torque, rcs.torque, delta=1)
+        finally:
+            rcs.input_override = False
+
+    def test_override_force_lies_within_the_available_force(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        self.wait()
+        positive, negative = rcs.available_force
+        for axis in range(3):
+            for sign in (1, -1):
+                translation = tuple(sign if i == axis else 0 for i in range(3))
+                force = rcs.override_force((0, 0, 0), translation)
+                for i in range(3):
+                    self.assertLessEqual(force[i], positive[i] + 1)
+                    self.assertGreaterEqual(force[i], negative[i] - 1)
+
+    def test_thruster_thrust(self):
+        rcs = self.get_rcs("RCSBlock.v2")
+        self.control.rcs = True
+        self.wait()
+        for thruster in rcs.thrusters:
+            self.assertEqual(0, thruster.thrust)
+        try:
+            self.override(rcs, translation=(0, 0, 1))
+            thrusts = [thruster.thrust for thruster in rcs.thrusters]
+            self.assertGreater(max(thrusts), 0)
+            for thrust in thrusts:
+                self.assertLessEqual(thrust, rcs.max_thrust + 1)
+        finally:
+            rcs.input_override = False
+        self.wait(0.5)
+        for thruster in rcs.thrusters:
+            self.assertEqual(0, thruster.thrust)
 
     def test_thrusters_match_the_part_variant(self):
         """The RV-105 mesh carries the nozzles of every variant, and the game

@@ -1115,6 +1115,10 @@ SpaceCenter.RCS.RotationOverride
 SpaceCenter.RCS.TranslationOverride
 SpaceCenter.RCS.AvailableTorque
 SpaceCenter.RCS.AvailableForce
+SpaceCenter.RCS.Force
+SpaceCenter.RCS.Torque
+SpaceCenter.RCS.OverrideForce
+SpaceCenter.RCS.OverrideTorque
 SpaceCenter.RCS.AvailableThrust
 SpaceCenter.RCS.MaxThrust
 SpaceCenter.RCS.MaxVacuumThrust
@@ -1238,6 +1242,7 @@ SpaceCenter.SolarPanel.EnergyFlow
 SpaceCenter.SolarPanel.SunExposure
 SpaceCenter.Thruster
 SpaceCenter.Thruster.Part
+SpaceCenter.Thruster.Thrust
 SpaceCenter.Thruster.ThrustPosition
 SpaceCenter.Thruster.ThrustDirection
 SpaceCenter.Thruster.ThrustReferenceFrame
