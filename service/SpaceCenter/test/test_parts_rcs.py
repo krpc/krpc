@@ -1,6 +1,6 @@
 import unittest
 import krpctest
-from krpctest.geometry import cross, distance, norm
+from krpctest.geometry import cross, distance, dot, norm
 
 
 class RCSTestBase:
@@ -349,6 +349,132 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
                 for i in range(3):
                     self.assertLessEqual(force[i], positive[i] + 1)
                     self.assertGreaterEqual(force[i], negative[i] - 1)
+
+    def lever_distance(self, thruster, frame):
+        """The perpendicular distance from the center of mass to a nozzle's thrust
+        line, which precision mode divides the nozzle's thrust by."""
+        position = thruster.thrust_position(frame)
+        direction = thruster.thrust_direction(frame)
+        along = dot(position, direction)
+        return norm(tuple(p - along * d for p, d in zip(position, direction)))
+
+    def firing_translation(self, rcs):
+        """A translation demand that fires the part. The cooked control axes reach the
+        module through the same mapping, so the demand doubles as a control setting."""
+        for demand in (
+            (1, 0, 0),
+            (-1, 0, 0),
+            (0, 1, 0),
+            (0, -1, 0),
+            (0, 0, 1),
+            (0, 0, -1),
+        ):
+            if norm(rcs.override_force((0, 0, 0), demand)) > 0:
+                return demand
+        raise AssertionError("no translation demand fires the part")
+
+    def set_translation(self, demand):
+        self.control.right, self.control.up, self.control.forward = demand
+
+    def test_precision_mode_weakens_the_cooked_control(self):
+        rcs = self.get_rcs("linearRcs")
+        self.control.rcs = True
+        self.wait()
+        lever = self.lever_distance(rcs.thrusters[0], self.vessel.reference_frame)
+        # Below one meter the game does not divide, and the test is vacuous
+        self.assertGreater(lever, 1)
+        demand = self.firing_translation(rcs)
+        try:
+            self.set_translation(demand)
+            self.wait(0.5)
+            full = rcs.force
+            self.assertGreater(norm(full), 0)
+            self.control.precision_mode = True
+            self.wait(0.5)
+            self.assertAlmostEqual(tuple(x / lever for x in full), rcs.force, delta=2)
+        finally:
+            self.control.precision_mode = False
+            self.set_translation((0, 0, 0))
+            self.wait()
+
+    def test_precision_mode_leaves_the_override_alone(self):
+        rcs = self.get_rcs("linearRcs")
+        self.control.rcs = True
+        self.wait()
+        demand = self.firing_translation(rcs)
+        try:
+            self.override(rcs, translation=demand)
+            full = rcs.force
+            self.assertGreater(norm(full), 0)
+            rcs.input_override = False
+            self.wait(0.5)
+            # Install the override while precision mode is on
+            self.control.precision_mode = True
+            self.override(rcs, translation=demand)
+            self.assertAlmostEqual(full, rcs.force, delta=2)
+            self.assertAlmostEqual(
+                rcs.override_force((0, 0, 0), demand), rcs.force, delta=2
+            )
+        finally:
+            self.control.precision_mode = False
+            rcs.input_override = False
+            self.wait()
+
+    def test_releasing_the_override_restores_precision_mode(self):
+        rcs = self.get_rcs("linearRcs")
+        self.control.rcs = True
+        self.wait()
+        lever = self.lever_distance(rcs.thrusters[0], self.vessel.reference_frame)
+        self.assertGreater(lever, 1)
+        demand = self.firing_translation(rcs)
+        try:
+            self.override(rcs, translation=demand)
+            full = rcs.force
+            self.assertGreater(norm(full), 0)
+            self.control.precision_mode = True
+            self.wait(0.5)
+            rcs.input_override = False
+            self.wait(0.5)
+            # The same demand through the cooked control is weakened again
+            self.set_translation(demand)
+            self.wait(0.5)
+            self.assertAlmostEqual(tuple(x / lever for x in full), rcs.force, delta=2)
+        finally:
+            self.control.precision_mode = False
+            self.set_translation((0, 0, 0))
+            rcs.input_override = False
+            self.wait()
+
+    def test_precision_mode_scales_available_force_and_torque(self):
+        rcs = self.get_rcs("linearRcs")
+        self.control.rcs = True
+        self.wait()
+        lever = self.lever_distance(rcs.thrusters[0], self.vessel.reference_frame)
+        self.assertGreater(lever, 1)
+        force = rcs.available_force
+        torque = rcs.available_torque
+        vessel_torque = self.vessel.available_rcs_torque
+        try:
+            self.control.precision_mode = True
+            for expected, actual in zip(force, rcs.available_force):
+                self.assertAlmostEqual(
+                    tuple(x / lever for x in expected), actual, delta=2
+                )
+            for expected, actual in zip(torque, rcs.available_torque):
+                self.assertAlmostEqual(
+                    tuple(x / lever for x in expected), actual, delta=2
+                )
+            self.assertLess(
+                norm(self.vessel.available_rcs_torque[0]), norm(vessel_torque[0])
+            )
+            # An overridden block is exempt, so its available force comes back
+            rcs.input_override = True
+            for expected, actual in zip(force, rcs.available_force):
+                self.assertAlmostEqual(expected, actual, delta=2)
+        finally:
+            rcs.input_override = False
+            self.control.precision_mode = False
+            self.wait()
 
     def test_thruster_thrust(self):
         rcs = self.get_rcs("RCSBlock.v2")

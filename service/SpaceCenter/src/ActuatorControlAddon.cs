@@ -92,11 +92,15 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// An RCS override, installed as an adjuster on the module.
+        /// An RCS override, installed as an adjuster on the module. Precision mode weakens
+        /// every nozzle, and the two fields its branch reads are saved and neutralized so
+        /// that an overridden block thrusts at full force.
         /// </summary>
         sealed class RCSEntry : ClientOwnedEntry
         {
             public RCSAdjuster Adjuster;
+            public bool SavedUseLever;
+            public float SavedPrecisionFactor;
         }
 
         /// <summary>
@@ -215,15 +219,26 @@ namespace KRPC.SpaceCenter
 
         static RCSEntry InstallRCS (ModuleRCS module)
         {
-            var entry = new RCSEntry { Adjuster = new RCSAdjuster { Module = module } };
+            var entry = new RCSEntry {
+                Adjuster = new RCSAdjuster { Module = module },
+                SavedUseLever = module.useLever,
+                SavedPrecisionFactor = module.precisionFactor
+            };
+            // ModuleRCS reads these two fields only inside its precision mode branch, so a
+            // fixed factor of one makes the branch a no-op
+            module.useLever = false;
+            module.precisionFactor = 1f;
             CacheAdd (rcsAdjusterCache, module, entry.Adjuster);
             return entry;
         }
 
         static void ReleaseRCS (ModuleRCS module, RCSEntry entry)
         {
-            if (!Destroyed (module))
-                CacheRemove (rcsAdjusterCache, module, entry.Adjuster);
+            if (Destroyed (module))
+                return;
+            CacheRemove (rcsAdjusterCache, module, entry.Adjuster);
+            module.useLever = entry.SavedUseLever;
+            module.precisionFactor = entry.SavedPrecisionFactor;
         }
 
         internal static bool GetRCSOverride (ModuleRCS module)

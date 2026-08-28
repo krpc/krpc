@@ -491,6 +491,7 @@ SpaceCenter.Control.Roll
 SpaceCenter.Control.PitchTrim
 SpaceCenter.Control.YawTrim
 SpaceCenter.Control.RollTrim
+SpaceCenter.Control.PrecisionMode
 SpaceCenter.Control.Forward
 SpaceCenter.Control.Up
 SpaceCenter.Control.Right
