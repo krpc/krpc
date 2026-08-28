@@ -196,6 +196,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// Returns zero if RCS is disable.
         /// </summary>
+        /// <remarks>
+        /// Precision mode weakens the block, and the available torque follows it. A block
+        /// driven by <see cref="InputOverride"/> is exempt, so <see cref="OverrideTorque"/>
+        /// can report the larger torque an override reaches.
+        /// </remarks>
         [KRPCProperty]
         public TupleT3 AvailableTorque {
             get { return AvailableTorqueVectors.ToTuple (); }
@@ -215,6 +220,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// Returns zero if RCS is disabled.
         /// </summary>
+        /// <remarks>
+        /// Precision mode weakens the block, and the available force follows it. A block
+        /// driven by <see cref="InputOverride"/> is exempt, so <see cref="OverrideForce"/>
+        /// can report the larger force an override reaches.
+        /// </remarks>
         [KRPCProperty]
         public TupleT3 AvailableForce {
             get { return AvailableForceVectors.ToTuple (); }
@@ -354,6 +364,24 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The factor precision mode applies to a nozzle's thrust. The game either divides by
+        /// the nozzle's lever arm about the center of mass, or scales by a fixed factor. The
+        /// vessel reference frame is centered on the center of mass, so the thrust position is
+        /// the lever arm. Reading the module's own two fields keeps an overridden block, whose
+        /// install neutralizes them, at full thrust.
+        /// </summary>
+        double PrecisionFactor (Tuple3 direction, Tuple3 position)
+        {
+            var handler = FlightInputHandler.fetch;
+            if (handler == null || !handler.precisionMode)
+                return 1;
+            if (!InternalRCS.useLever)
+                return InternalRCS.precisionFactor;
+            var lever = Vector3d.Exclude (direction.ToVector (), position.ToVector ()).magnitude;
+            return lever > 1 ? 1 / lever : 1;
+        }
+
+        /// <summary>
         /// Calculates available torque vectors.
         /// We use this custom code rather than KSPs ITorqueProvider as it produces erroneous values.
         /// </summary>
@@ -371,9 +399,10 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // torque = cross product of position and force
                 var thrustPosition = thruster.ThrustPosition(frame);
                 var thrustDirection = thruster.ThrustDirection(frame);
-                var forceX = thrustDirection.Item1 * thrust;
-                var forceY = thrustDirection.Item2 * thrust;
-                var forceZ = thrustDirection.Item3 * thrust;
+                var nozzleThrust = thrust * PrecisionFactor (thrustDirection, thrustPosition);
+                var forceX = thrustDirection.Item1 * nozzleThrust;
+                var forceY = thrustDirection.Item2 * nozzleThrust;
+                var forceZ = thrustDirection.Item3 * nozzleThrust;
                 var posX = thrustPosition.Item1;
                 var posY = thrustPosition.Item2;
                 var posZ = thrustPosition.Item3;
@@ -409,9 +438,11 @@ namespace KRPC.SpaceCenter.Services.Parts
             var forceN = Vector3d.zero;
             foreach (var thruster in Thrusters) {
                 var thrustDirection = thruster.ThrustDirection (frame);
-                var forceX = thrustDirection.Item1 * thrust;
-                var forceY = thrustDirection.Item2 * thrust;
-                var forceZ = thrustDirection.Item3 * thrust;
+                var thrustPosition = thruster.ThrustPosition (frame);
+                var nozzleThrust = thrust * PrecisionFactor (thrustDirection, thrustPosition);
+                var forceX = thrustDirection.Item1 * nozzleThrust;
+                var forceY = thrustDirection.Item2 * nozzleThrust;
+                var forceZ = thrustDirection.Item3 * nozzleThrust;
                 if (forceX > 0)
                     force.x += forceX;
                 else

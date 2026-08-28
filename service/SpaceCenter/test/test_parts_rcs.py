@@ -445,6 +445,37 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
             rcs.input_override = False
             self.wait()
 
+    def test_precision_mode_scales_available_force_and_torque(self):
+        rcs = self.get_rcs("linearRcs")
+        self.control.rcs = True
+        self.wait()
+        lever = self.lever_distance(rcs.thrusters[0], self.vessel.reference_frame)
+        self.assertGreater(lever, 1)
+        force = rcs.available_force
+        torque = rcs.available_torque
+        vessel_torque = self.vessel.available_rcs_torque
+        try:
+            self.control.precision_mode = True
+            for expected, actual in zip(force, rcs.available_force):
+                self.assertAlmostEqual(
+                    tuple(x / lever for x in expected), actual, delta=2
+                )
+            for expected, actual in zip(torque, rcs.available_torque):
+                self.assertAlmostEqual(
+                    tuple(x / lever for x in expected), actual, delta=2
+                )
+            self.assertLess(
+                norm(self.vessel.available_rcs_torque[0]), norm(vessel_torque[0])
+            )
+            # An overridden block is exempt, so its available force comes back
+            rcs.input_override = True
+            for expected, actual in zip(force, rcs.available_force):
+                self.assertAlmostEqual(expected, actual, delta=2)
+        finally:
+            rcs.input_override = False
+            self.control.precision_mode = False
+            self.wait()
+
     def test_thruster_thrust(self):
         rcs = self.get_rcs("RCSBlock.v2")
         self.control.rcs = True
