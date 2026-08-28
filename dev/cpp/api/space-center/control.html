@@ -1342,6 +1342,32 @@ when clients disconnect.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control14precision_modeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control14precision_modeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control14precision_modeEv"></span><span id="krpc::services::SpaceCenter::Control::precision_mode"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">precision_mode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control14precision_modeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control18set_precision_modeEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control18set_precision_modeEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control18set_precision_modeEb"></span><span id="krpc::services::SpaceCenter::Control::set_precision_mode__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_precision_mode</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control18set_precision_modeEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether precision control mode is enabled.
+Equivalent to the Caps Lock key.
+This is a game setting rather than a vessel setting,
+and can only be accessed for the active vessel.
+Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+when clients disconnect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision mode weakens the RCS thrust that the control inputs produce. A block
+driven by <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS14input_overrideEv" title="krpc::services::SpaceCenter::RCS::input_override"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::input_override()</span></code></a> is exempt.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control7forwardEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter7Control7forwardEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control7forwardEv"></span><span id="krpc::services::SpaceCenter::Control::forward"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">forward</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control7forwardEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>

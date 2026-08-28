@@ -416,6 +416,25 @@ Control
       :rtype: float
       :Game Scenes: Flight
 
+   .. attribute:: precision_mode
+
+      Whether precision control mode is enabled.
+      Equivalent to the Caps Lock key.
+      This is a game setting rather than a vessel setting,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+      when clients disconnect.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the RCS thrust that the control inputs produce. A block
+         driven by :attr:`RCS.input_override` is exempt.
+
    .. attribute:: forward
 
       The state of the forward translational control.

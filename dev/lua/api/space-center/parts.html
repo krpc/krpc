@@ -8428,7 +8428,8 @@ An RCS thruster is inactive if the RCS action group is disabled
 normal flight controls. When enabled, the rotation and translation demand is set by
 <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.rotation_override" title="SpaceCenter.SpaceCenter.RCS.rotation_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.rotation_override</span></code></a> and <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.translation_override" title="SpaceCenter.SpaceCenter.RCS.translation_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.translation_override</span></code></a> instead of the
 normal control inputs. The override is automatically released if the
-controlling client disconnects or the vessel changes.</p>
+controlling client disconnects or the vessel changes.
+Precision mode leaves an overridden block at full thrust.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -8485,6 +8486,12 @@ Returns zero if RCS is disable.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision mode weakens the block, and the available torque follows it. A block
+driven by <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.input_override" title="SpaceCenter.SpaceCenter.RCS.input_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.input_override</span></code></a> is exempt, so <a class="reference internal" href="#SpaceCenter.RCS.override_torque" title="SpaceCenter.RCS.override_torque"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.RCS.override_torque()</span></code></a>
+can report the larger torque an override reaches.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -8502,6 +8509,12 @@ Returns zero if RCS is disabled.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision mode weakens the block, and the available force follows it. A block
+driven by <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.input_override" title="SpaceCenter.SpaceCenter.RCS.input_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.input_override</span></code></a> is exempt, so <a class="reference internal" href="#SpaceCenter.RCS.override_force" title="SpaceCenter.RCS.override_force"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.RCS.override_force()</span></code></a>
+can report the larger force an override reaches.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -8558,8 +8571,8 @@ Returns zero if the RCS is inactive.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out precision mode,
-full thrust and the lever divisor, which <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.force" title="SpaceCenter.SpaceCenter.RCS.force"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.force</span></code></a> includes.</p>
+<p>The demands do not have to be applied. The prediction leaves out full thrust,
+which <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.force" title="SpaceCenter.SpaceCenter.RCS.force"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.force</span></code></a> includes.</p>
 </div>
 </dd></dl>
 
@@ -8585,8 +8598,8 @@ Newton meters. The vector is in the vessel’s reference frame
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out precision mode,
-full thrust and the lever divisor, which <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.torque" title="SpaceCenter.SpaceCenter.RCS.torque"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.torque</span></code></a> includes.</p>
+<p>The demands do not have to be applied. The prediction leaves out full thrust,
+which <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.torque" title="SpaceCenter.SpaceCenter.RCS.torque"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.torque</span></code></a> includes.</p>
 </div>
 </dd></dl>
 

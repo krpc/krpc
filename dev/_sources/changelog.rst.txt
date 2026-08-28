@@ -133,12 +133,15 @@ SpaceCenter service
   * A Kerbal on EVA can be driven through ``Vessel.Control``. The translation inputs walk it about and fly its jetpack, ``Control.RCS`` deploys and stows the jetpack, and ``Control.Lights`` switches the helmet lamp (:issue:`319`)
   * Add ``Control.Board`` and ``Control.Airlock``, for the part whose hatch a Kerbal on EVA is standing at, and ``Control.GrabLadder``, ``Control.ReleaseLadder`` and ``Control.Ladder`` for the ladder it is alongside (:issue:`319`)
   * Setting ``Control.StageLock`` leaves the in-game Alt+L shortcut in step with it (:issue:`1022`)
+  * Add ``Control.PrecisionMode``, the precision control mode that the Caps Lock key toggles (:issue:`1082`)
 
 * Parts
 
   * :breaking:`Breaking` ``RCS.TranslationOverride`` thrusts along the right, up and forward axes it documents (:issue:`1080`)
   * Add ``RCS.Force`` and ``RCS.Torque``, the force and torque a block is applying, and ``RCS.OverrideForce`` and ``RCS.OverrideTorque``, what a given demand would apply (:issue:`1080`)
   * Add ``Thruster.Thrust``, the thrust a single nozzle of an engine or RCS block is producing (:issue:`1080`)
+  * ``RCS.AvailableForce`` and ``RCS.AvailableTorque``, and the vessel level force, torque and acceleration properties that include them, account for precision mode (:issue:`1082`)
+  * Precision mode leaves a block driven by ``RCS.InputOverride`` at full thrust (:issue:`1082`)
   * ``RCS.Thrusters``, ``RCS.AvailableForce`` and ``RCS.AvailableTorque`` count only the nozzles of the part's selected variant (:issue:`1079`)
   * ``Decoupler.IsOmniDecoupler`` reports what the part is configured as for every decoupler, including radial ones. It was false for all of them (:issue:`1048`)
   * A force added with ``Part.AddForce`` stops being applied, and is freed, once its part is destroyed (:issue:`1051`)

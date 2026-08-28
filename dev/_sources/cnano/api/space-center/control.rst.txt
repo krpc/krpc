@@ -382,6 +382,24 @@ Control
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_PrecisionMode(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_PrecisionMode(bool value)
+
+      Whether precision control mode is enabled.
+      Equivalent to the Caps Lock key.
+      This is a game setting rather than a vessel setting,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the RCS thrust that the control inputs produce. A block
+         driven by :func:`krpc_SpaceCenter_RCS_InputOverride` is exempt.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_Forward(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Control_set_Forward(float value)
 

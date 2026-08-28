@@ -4360,6 +4360,7 @@ RCS
       :prop:`RCS.RotationOverride` and :prop:`RCS.TranslationOverride` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
       :Game Scenes: Flight
 
@@ -4387,6 +4388,13 @@ RCS
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :prop:`RCS.InputOverride` is exempt, so :meth:`RCS.OverrideTorque`
+         can report the larger torque an override reaches.
+
    .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableForce { get; }
 
       The available force, in Newtons, that can be produced by this RCS,
@@ -4395,6 +4403,13 @@ RCS
       Returns zero if RCS is disabled.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :prop:`RCS.InputOverride` is exempt, so :meth:`RCS.OverrideForce`
+         can report the larger force an override reaches.
 
    .. property:: System.Tuple<double,double,double> Force { get; }
 
@@ -4429,8 +4444,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :prop:`RCS.Force` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :prop:`RCS.Force` includes.
 
    .. method:: System.Tuple<double,double,double> OverrideTorque(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
 
@@ -4449,8 +4464,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :prop:`RCS.Torque` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :prop:`RCS.Torque` includes.
 
    .. property:: float AvailableThrust { get; }
 

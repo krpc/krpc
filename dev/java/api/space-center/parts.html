@@ -7325,7 +7325,8 @@ An RCS thruster is inactive if the RCS action group is disabled
 normal flight controls. When enabled, the rotation and translation demand is set by
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getRotationOverride()" title="krpc.client.services.SpaceCenter.RCS.getRotationOverride()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getRotationOverride()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getTranslationOverride()" title="krpc.client.services.SpaceCenter.RCS.getTranslationOverride()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getTranslationOverride()</span></code></a> instead of the
 normal control inputs. The override is automatically released if the
-controlling client disconnects or the vessel changes.</p>
+controlling client disconnects or the vessel changes.
+Precision mode leaves an overridden block at full thrust.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -7380,6 +7381,12 @@ Returns zero if RCS is disable.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision mode weakens the block, and the available torque follows it. A block
+driven by <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getInputOverride()" title="krpc.client.services.SpaceCenter.RCS.getInputOverride()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getInputOverride()</span></code></a> is exempt, so <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.overrideTorque(org.javatuples.Triplet, org.javatuples.Triplet)" title="krpc.client.services.SpaceCenter.RCS.overrideTorque(org.javatuples.Triplet, org.javatuples.Triplet)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.overrideTorque(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;)</span></code></a>
+can report the larger torque an override reaches.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -7394,6 +7401,12 @@ Returns zero if RCS is disabled.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision mode weakens the block, and the available force follows it. A block
+driven by <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getInputOverride()" title="krpc.client.services.SpaceCenter.RCS.getInputOverride()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getInputOverride()</span></code></a> is exempt, so <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.overrideForce(org.javatuples.Triplet, org.javatuples.Triplet)" title="krpc.client.services.SpaceCenter.RCS.overrideForce(org.javatuples.Triplet, org.javatuples.Triplet)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.overrideForce(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;)</span></code></a>
+can report the larger force an override reaches.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -7444,8 +7457,8 @@ Returns zero if the RCS is inactive.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out precision mode,
-full thrust and the lever divisor, which <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getForce()" title="krpc.client.services.SpaceCenter.RCS.getForce()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getForce()</span></code></a> includes.</p>
+<p>The demands do not have to be applied. The prediction leaves out full thrust,
+which <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getForce()" title="krpc.client.services.SpaceCenter.RCS.getForce()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getForce()</span></code></a> includes.</p>
 </div>
 </dd></dl>
 
@@ -7471,8 +7484,8 @@ Newton meters. The vector is in the vessel’s reference frame
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out precision mode,
-full thrust and the lever divisor, which <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getTorque()" title="krpc.client.services.SpaceCenter.RCS.getTorque()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getTorque()</span></code></a> includes.</p>
+<p>The demands do not have to be applied. The prediction leaves out full thrust,
+which <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getTorque()" title="krpc.client.services.SpaceCenter.RCS.getTorque()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getTorque()</span></code></a> includes.</p>
 </div>
 </dd></dl>
 

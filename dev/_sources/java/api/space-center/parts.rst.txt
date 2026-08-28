@@ -4581,6 +4581,7 @@ RCS
       :meth:`RCS.getRotationOverride()` and :meth:`RCS.getTranslationOverride()` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
       :Game Scenes: Flight
 
@@ -4613,6 +4614,13 @@ RCS
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :meth:`RCS.getInputOverride()` is exempt, so :meth:`RCS.overrideTorque(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)`
+         can report the larger torque an override reaches.
+
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableForce()
 
 
@@ -4622,6 +4630,13 @@ RCS
       Returns zero if RCS is disabled.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :meth:`RCS.getInputOverride()` is exempt, so :meth:`RCS.overrideForce(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)`
+         can report the larger force an override reaches.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getForce()
 
@@ -4655,8 +4670,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :meth:`RCS.getForce()` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :meth:`RCS.getForce()` includes.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> overrideTorque(org.javatuples.Triplet<Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> translation)
 
@@ -4672,8 +4687,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :meth:`RCS.getTorque()` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :meth:`RCS.getTorque()` includes.
 
    .. method:: float getAvailableThrust()
 

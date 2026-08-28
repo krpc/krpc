@@ -7268,7 +7268,8 @@ An RCS thruster is inactive if the RCS action group is disabled
 normal flight controls. When enabled, the rotation and translation demand is set by
 <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_RotationOverride" title="krpc_SpaceCenter_RCS_RotationOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_RotationOverride()</span></code></a> and <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_TranslationOverride" title="krpc_SpaceCenter_RCS_TranslationOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_TranslationOverride()</span></code></a> instead of the
 normal control inputs. The override is automatically released if the
-controlling client disconnects or the vessel changes.</p>
+controlling client disconnects or the vessel changes.
+Precision mode leaves an overridden block at full thrust.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -7323,6 +7324,12 @@ Returns zero if RCS is disable.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision mode weakens the block, and the available torque follows it. A block
+driven by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_InputOverride" title="krpc_SpaceCenter_RCS_InputOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_InputOverride()</span></code></a> is exempt, so <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideTorque" title="krpc_SpaceCenter_RCS_OverrideTorque"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_OverrideTorque()</span></code></a>
+can report the larger torque an override reaches.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -7337,6 +7344,12 @@ Returns zero if RCS is disabled.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision mode weakens the block, and the available force follows it. A block
+driven by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_InputOverride" title="krpc_SpaceCenter_RCS_InputOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_InputOverride()</span></code></a> is exempt, so <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideForce" title="krpc_SpaceCenter_RCS_OverrideForce"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_OverrideForce()</span></code></a>
+can report the larger force an override reaches.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -7387,8 +7400,8 @@ Returns zero if the RCS is inactive.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out precision mode,
-full thrust and the lever divisor, which <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Force" title="krpc_SpaceCenter_RCS_Force"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Force()</span></code></a> includes.</p>
+<p>The demands do not have to be applied. The prediction leaves out full thrust,
+which <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Force" title="krpc_SpaceCenter_RCS_Force"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Force()</span></code></a> includes.</p>
 </div>
 </dd></dl>
 
@@ -7414,8 +7427,8 @@ Newton meters. The vector is in the vessel’s reference frame
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out precision mode,
-full thrust and the lever divisor, which <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Torque" title="krpc_SpaceCenter_RCS_Torque"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Torque()</span></code></a> includes.</p>
+<p>The demands do not have to be applied. The prediction leaves out full thrust,
+which <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Torque" title="krpc_SpaceCenter_RCS_Torque"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Torque()</span></code></a> includes.</p>
 </div>
 </dd></dl>
 

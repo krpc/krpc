@@ -3992,10 +3992,10 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getLight()">getLight() (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getLights()">getLights() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parts.getLights()">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getLineSpacing()">getLineSpacing() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getLineSpacing()">[1]</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
@@ -4263,6 +4263,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getPowered()">getPowered() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.getPowerUsage()">getPowerUsage() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getPrecisionMode()">getPrecisionMode() (Java method)</a>
 </li>
       <li><a href="java/api/ui/layout-element.html#krpc.client.services.UI.LayoutElement.getPreferredSize()">getPreferredSize() (Java method)</a>
 </li>
@@ -7351,6 +7353,8 @@
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control10pitch_trimEv">krpc::services::SpaceCenter::Control::pitch_trim (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control14precision_modeEv">krpc::services::SpaceCenter::Control::precision_mode (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control9radiatorsEv">krpc::services::SpaceCenter::Control::radiators (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control3rcsEv">krpc::services::SpaceCenter::Control::rcs (C++ function)</a>
@@ -7414,6 +7418,8 @@
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control9set_pitchEf">krpc::services::SpaceCenter::Control::set_pitch (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control14set_pitch_trimEf">krpc::services::SpaceCenter::Control::set_pitch_trim (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control18set_precision_modeEb">krpc::services::SpaceCenter::Control::set_precision_mode (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control13set_radiatorsEb">krpc::services::SpaceCenter::Control::set_radiators (C++ function)</a>
 </li>
@@ -12313,6 +12319,8 @@
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_PitchTrim">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_PitchTrim (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_PrecisionMode">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_PrecisionMode (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Radiators">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Radiators (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_RCS">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_RCS (C function)</a>
@@ -12374,6 +12382,8 @@
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_set_Pitch">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_set_Pitch (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_set_PitchTrim">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_set_PitchTrim (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_set_PrecisionMode">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_set_PrecisionMode (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_set_Radiators">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_set_Radiators (C function)</a>
 </li>
@@ -16715,8 +16725,6 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parts">Parts (Java class)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.parts">parts (ServoGroup attribute)</a>
 
       <ul>
@@ -16725,6 +16733,8 @@
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.parts">(Vessel attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/input-field.html#krpc.client.services.UI.InputContentType.PASSWORD">PASSWORD (Java field)</a>
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction.PAUSE_GAME">PAUSE_GAME (Java field)</a>, <a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.AlarmWarpAction.PAUSE_GAME">[1]</a>
@@ -16854,6 +16864,8 @@
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Wheel.powered">powered (Wheel attribute)</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselSituation.PRE_LAUNCH">PRE_LAUNCH (Java field)</a>
+</li>
+      <li><a href="python/api/space-center/control.html#SpaceCenter.Control.precision_mode">precision_mode (Control attribute)</a>
 </li>
       <li><a href="java/api/ui/size-fitter.html#krpc.client.services.UI.ContentSizeFit.PREFERRED_SIZE">PREFERRED_SIZE (Java field)</a>
 </li>
@@ -18296,6 +18308,8 @@
 </li>
       <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setPosition(org.javatuples.Triplet, SpaceCenter.ReferenceFrame)">setPosition(org.javatuples.Triplet, SpaceCenter.ReferenceFrame) (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.setPrecisionMode(boolean)">setPrecisionMode(boolean) (Java method)</a>
+</li>
       <li><a href="java/api/ui/layout-element.html#krpc.client.services.UI.LayoutElement.setPreferredSize(org.javatuples.Pair)">setPreferredSize(org.javatuples.Pair) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.setPrograde(double)">setPrograde(double) (Java method)</a>
@@ -19135,6 +19149,8 @@
 </li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.pitch_trim">SpaceCenter.SpaceCenter.Control.pitch_trim (attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.precision_mode">SpaceCenter.SpaceCenter.Control.precision_mode (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.radiators">SpaceCenter.SpaceCenter.Control.radiators (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.rcs">SpaceCenter.SpaceCenter.Control.rcs (attribute)</a>
@@ -19251,10 +19267,10 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.docked_part">SpaceCenter.SpaceCenter.DockingPort.docked_part (attribute)</a>
 </li>
-      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.has_shield">SpaceCenter.SpaceCenter.DockingPort.has_shield (attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.has_shield">SpaceCenter.SpaceCenter.DockingPort.has_shield (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.maximum_rotation">SpaceCenter.SpaceCenter.DockingPort.maximum_rotation (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.minimum_rotation">SpaceCenter.SpaceCenter.DockingPort.minimum_rotation (attribute)</a>

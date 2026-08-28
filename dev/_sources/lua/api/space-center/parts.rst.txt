@@ -4404,6 +4404,7 @@ RCS
       :attr:`SpaceCenter.RCS.rotation_override` and :attr:`SpaceCenter.RCS.translation_override` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
       :Attribute: Can be read or written
       :rtype: boolean
@@ -4435,6 +4436,12 @@ RCS
       :Attribute: Read-only, cannot be set
       :rtype: Tuple
 
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :attr:`SpaceCenter.RCS.input_override` is exempt, so :meth:`SpaceCenter.RCS.override_torque`
+         can report the larger torque an override reaches.
+
    .. attribute:: available_force: Tuple
 
       The available force, in Newtons, that can be produced by this RCS,
@@ -4444,6 +4451,12 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: Tuple
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :attr:`SpaceCenter.RCS.input_override` is exempt, so :meth:`SpaceCenter.RCS.override_force`
+         can report the larger force an override reaches.
 
    .. attribute:: force: Tuple
 
@@ -4476,8 +4489,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :attr:`SpaceCenter.RCS.force` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :attr:`SpaceCenter.RCS.force` includes.
 
    .. method:: override_torque(rotation, translation)
 
@@ -4492,8 +4505,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :attr:`SpaceCenter.RCS.torque` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :attr:`SpaceCenter.RCS.torque` includes.
 
    .. attribute:: available_thrust: number
 

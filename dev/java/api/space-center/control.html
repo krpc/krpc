@@ -1342,6 +1342,32 @@ when clients disconnect.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getPrecisionMode()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getPrecisionMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getPrecisionMode()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setPrecisionMode(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPrecisionMode</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setPrecisionMode(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether precision control mode is enabled.
+Equivalent to the Caps Lock key.
+This is a game setting rather than a vessel setting,
+and can only be accessed for the active vessel.
+Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+when clients disconnect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision mode weakens the RCS thrust that the control inputs produce. A block
+driven by <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.RCS.getInputOverride()" title="krpc.client.services.SpaceCenter.RCS.getInputOverride()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getInputOverride()</span></code></a> is exempt.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getForward()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getForward</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getForward()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>

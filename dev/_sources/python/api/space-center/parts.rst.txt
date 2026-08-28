@@ -4915,6 +4915,7 @@ RCS
       :attr:`RCS.rotation_override` and :attr:`RCS.translation_override` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
       :Attribute: Can be read or written
       :rtype: bool
@@ -4950,6 +4951,13 @@ RCS
       :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :attr:`RCS.input_override` is exempt, so :meth:`RCS.override_torque`
+         can report the larger torque an override reaches.
+
    .. attribute:: available_force
 
       The available force, in Newtons, that can be produced by this RCS,
@@ -4960,6 +4968,13 @@ RCS
       :Attribute: Read-only, cannot be set
       :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :attr:`RCS.input_override` is exempt, so :meth:`RCS.override_force`
+         can report the larger force an override reaches.
 
    .. attribute:: force
 
@@ -4996,8 +5011,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :attr:`RCS.force` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :attr:`RCS.force` includes.
 
    .. method:: override_torque(rotation, translation)
 
@@ -5014,8 +5029,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :attr:`RCS.torque` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :attr:`RCS.torque` includes.
 
    .. attribute:: available_thrust
 

@@ -4428,6 +4428,7 @@ RCS
       :func:`krpc_SpaceCenter_RCS_RotationOverride` and :func:`krpc_SpaceCenter_RCS_TranslationOverride` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
       :Game Scenes: Flight
 
@@ -4457,6 +4458,13 @@ RCS
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :func:`krpc_SpaceCenter_RCS_InputOverride` is exempt, so :func:`krpc_SpaceCenter_RCS_OverrideTorque`
+         can report the larger torque an override reaches.
+
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_AvailableForce(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
 
       The available force, in Newtons, that can be produced by this RCS,
@@ -4465,6 +4473,13 @@ RCS
       Returns zero if RCS is disabled.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :func:`krpc_SpaceCenter_RCS_InputOverride` is exempt, so :func:`krpc_SpaceCenter_RCS_OverrideForce`
+         can report the larger force an override reaches.
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_Force(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
 
@@ -4499,8 +4514,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :func:`krpc_SpaceCenter_RCS_Force` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :func:`krpc_SpaceCenter_RCS_Force` includes.
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_OverrideTorque(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * rotation, const krpc_tuple_double_double_double_t * translation)
 
@@ -4519,8 +4534,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :func:`krpc_SpaceCenter_RCS_Torque` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :func:`krpc_SpaceCenter_RCS_Torque` includes.
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_AvailableThrust(krpc_connection_t connection, float * result)
 

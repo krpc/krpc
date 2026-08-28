@@ -352,6 +352,23 @@ Control
 
       :Game Scenes: Flight
 
+   .. property:: bool PrecisionMode { get; set; }
+
+      Whether precision control mode is enabled.
+      Equivalent to the Caps Lock key.
+      This is a game setting rather than a vessel setting,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the RCS thrust that the control inputs produce. A block
+         driven by :prop:`RCS.InputOverride` is exempt.
+
    .. property:: float Forward { get; set; }
 
       The state of the forward translational control.

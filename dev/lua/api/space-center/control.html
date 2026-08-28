@@ -1288,6 +1288,30 @@ when clients disconnect.</p>
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.precision_mode">
+<span class="sig-name descname"><span class="pre">precision_mode</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.precision_mode" title="Link to this definition">#</a></dt>
+<dd><p>Whether precision control mode is enabled.
+Equivalent to the Caps Lock key.
+This is a game setting rather than a vessel setting,
+and can only be accessed for the active vessel.
+Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+when clients disconnect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision mode weakens the RCS thrust that the control inputs produce. A block
+driven by <a class="reference internal" href="parts.html#SpaceCenter.SpaceCenter.RCS.input_override" title="SpaceCenter.SpaceCenter.RCS.input_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.input_override</span></code></a> is exempt.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Control.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Control.forward" title="Link to this definition">#</a></dt>
 <dd><p>The state of the forward translational control.

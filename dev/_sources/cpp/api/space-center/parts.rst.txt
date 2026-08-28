@@ -4436,6 +4436,7 @@ RCS
       :func:`RCS::rotation_override` and :func:`RCS::translation_override` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
       :Game Scenes: Flight
 
@@ -4465,6 +4466,13 @@ RCS
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :func:`RCS::input_override` is exempt, so :func:`RCS::override_torque`
+         can report the larger torque an override reaches.
+
    .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_force()
 
       The available force, in Newtons, that can be produced by this RCS,
@@ -4473,6 +4481,13 @@ RCS
       Returns zero if RCS is disabled.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :func:`RCS::input_override` is exempt, so :func:`RCS::override_force`
+         can report the larger force an override reaches.
 
    .. function:: std::tuple<double, double, double> force()
 
@@ -4507,8 +4522,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :func:`RCS::force` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :func:`RCS::force` includes.
 
    .. function:: std::tuple<double, double, double> override_torque(std::tuple<double, double, double> rotation, std::tuple<double, double, double> translation)
 
@@ -4527,8 +4542,8 @@ RCS
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out precision mode,
-         full thrust and the lever divisor, which :func:`RCS::torque` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust,
+         which :func:`RCS::torque` includes.
 
    .. function:: float available_thrust()
 
