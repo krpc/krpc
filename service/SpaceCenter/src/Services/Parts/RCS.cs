@@ -161,6 +161,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <see cref="RotationOverride"/> and <see cref="TranslationOverride"/> instead of the
         /// normal control inputs. The override is automatically released if the
         /// controlling client disconnects or the vessel changes.
+        /// Precision mode leaves an overridden block at full thrust.
         /// </summary>
         [KRPCProperty]
         public bool InputOverride {
@@ -258,8 +259,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <param name="translation">A translation demand, as set by
         /// <see cref="TranslationOverride"/>.</param>
         /// <remarks>
-        /// The demands do not have to be applied. The prediction leaves out precision mode,
-        /// full thrust and the lever divisor, which <see cref="Force"/> includes.
+        /// The demands do not have to be applied. The prediction leaves out full thrust,
+        /// which <see cref="Force"/> includes.
         /// </remarks>
         [KRPCMethod]
         public Tuple3 OverrideForce (Tuple3 rotation, Tuple3 translation)
@@ -278,8 +279,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <param name="translation">A translation demand, as set by
         /// <see cref="TranslationOverride"/>.</param>
         /// <remarks>
-        /// The demands do not have to be applied. The prediction leaves out precision mode,
-        /// full thrust and the lever divisor, which <see cref="Torque"/> includes.
+        /// The demands do not have to be applied. The prediction leaves out full thrust,
+        /// which <see cref="Torque"/> includes.
         /// </remarks>
         [KRPCMethod]
         public Tuple3 OverrideTorque (Tuple3 rotation, Tuple3 translation)
