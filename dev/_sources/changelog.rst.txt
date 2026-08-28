@@ -136,6 +136,9 @@ SpaceCenter service
 
 * Parts
 
+  * :breaking:`Breaking` ``RCS.TranslationOverride`` thrusts along the right, up and forward axes it documents (:issue:`1080`)
+  * Add ``RCS.Force`` and ``RCS.Torque``, the force and torque a block is applying, and ``RCS.OverrideForce`` and ``RCS.OverrideTorque``, what a given demand would apply (:issue:`1080`)
+  * Add ``Thruster.Thrust``, the thrust a single nozzle of an engine or RCS block is producing (:issue:`1080`)
   * ``RCS.Thrusters``, ``RCS.AvailableForce`` and ``RCS.AvailableTorque`` count only the nozzles of the part's selected variant (:issue:`1079`)
   * ``Decoupler.IsOmniDecoupler`` reports what the part is configured as for every decoupler, including radial ones. It was false for all of them (:issue:`1048`)
   * A force added with ``Part.AddForce`` stops being applied, and is freed, once its part is destroyed (:issue:`1051`)

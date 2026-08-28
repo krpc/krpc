@@ -4474,6 +4474,62 @@ RCS
 
       :Game Scenes: Flight
 
+   .. function:: std::tuple<double, double, double> force()
+
+      The force being applied by the RCS thrusters, in Newtons. The vector is in the
+      vessel's reference frame (:func:`Vessel::reference_frame`).
+      Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> torque()
+
+      The torque being applied by the RCS thrusters about the vessel's center of mass,
+      in Newton meters. The vector is in the vessel's reference frame
+      (:func:`Vessel::reference_frame`). Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> override_force(std::tuple<double, double, double> rotation, std::tuple<double, double, double> translation)
+
+      The force the given demands would produce, in Newtons. The vector is in the
+      vessel's reference frame (:func:`Vessel::reference_frame`).
+      Returns zero if the RCS is inactive.
+
+      :Parameters:
+
+       * **rotation** -- A rotation demand, as set by :func:`RCS::rotation_override`.
+       * **translation** -- A translation demand, as set by :func:`RCS::translation_override`.
+
+      :returns: The force as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :func:`RCS::force` includes.
+
+   .. function:: std::tuple<double, double, double> override_torque(std::tuple<double, double, double> rotation, std::tuple<double, double, double> translation)
+
+      The torque the given demands would produce about the vessel's center of mass, in
+      Newton meters. The vector is in the vessel's reference frame
+      (:func:`Vessel::reference_frame`). Returns zero if the RCS is inactive.
+
+      :Parameters:
+
+       * **rotation** -- A rotation demand, as set by :func:`RCS::rotation_override`.
+       * **translation** -- A translation demand, as set by :func:`RCS::translation_override`.
+
+      :returns: The torque as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :func:`RCS::torque` includes.
+
    .. function:: float available_thrust()
 
       The amount of thrust, in Newtons, that would be produced by the thruster when activated.
@@ -4659,6 +4715,12 @@ Thruster
    .. function:: Part part()
 
       The :func:`Thruster::part` that contains this thruster.
+
+      :Game Scenes: Flight
+
+   .. function:: float thrust()
+
+      The thrust being produced by the thruster, in Newtons.
 
       :Game Scenes: Flight
 

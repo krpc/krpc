@@ -4445,6 +4445,56 @@ RCS
       :Attribute: Read-only, cannot be set
       :rtype: Tuple
 
+   .. attribute:: force: Tuple
+
+      The force being applied by the RCS thrusters, in Newtons. The vector is in the
+      vessel's reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
+      Returns zero if the RCS is inactive.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: Tuple
+
+   .. attribute:: torque: Tuple
+
+      The torque being applied by the RCS thrusters about the vessel's center of mass,
+      in Newton meters. The vector is in the vessel's reference frame
+      (:attr:`SpaceCenter.Vessel.reference_frame`). Returns zero if the RCS is inactive.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: Tuple
+
+   .. method:: override_force(rotation, translation)
+
+      The force the given demands would produce, in Newtons. The vector is in the
+      vessel's reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
+      Returns zero if the RCS is inactive.
+
+      :param Tuple rotation: A rotation demand, as set by :attr:`SpaceCenter.RCS.rotation_override`.
+      :param Tuple translation: A translation demand, as set by :attr:`SpaceCenter.RCS.translation_override`.
+      :returns: The force as a vector.
+      :rtype: Tuple
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :attr:`SpaceCenter.RCS.force` includes.
+
+   .. method:: override_torque(rotation, translation)
+
+      The torque the given demands would produce about the vessel's center of mass, in
+      Newton meters. The vector is in the vessel's reference frame
+      (:attr:`SpaceCenter.Vessel.reference_frame`). Returns zero if the RCS is inactive.
+
+      :param Tuple rotation: A rotation demand, as set by :attr:`SpaceCenter.RCS.rotation_override`.
+      :param Tuple translation: A translation demand, as set by :attr:`SpaceCenter.RCS.translation_override`.
+      :returns: The torque as a vector.
+      :rtype: Tuple
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :attr:`SpaceCenter.RCS.torque` includes.
+
    .. attribute:: available_thrust: number
 
       The amount of thrust, in Newtons, that would be produced by the thruster when activated.
@@ -4649,6 +4699,13 @@ Thruster
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
+
+   .. attribute:: thrust: number
+
+      The thrust being produced by the thruster, in Newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
 
    .. method:: thrust_position(reference_frame)
 

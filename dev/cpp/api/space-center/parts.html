@@ -7340,6 +7340,86 @@ Returns zero if RCS is disabled.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3RCS5forceEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3RCS5forceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3RCS5forceEv"></span><span id="krpc::services::SpaceCenter::RCS::force"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">force</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3RCS5forceEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force being applied by the RCS thrusters, in Newtons. The vector is in the
+vessel’s reference frame (<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3RCS6torqueEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter3RCS6torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3RCS6torqueEv"></span><span id="krpc::services::SpaceCenter::RCS::torque"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3RCS6torqueEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque being applied by the RCS thrusters about the vessel’s center of mass,
+in Newton meters. The vector is in the vessel’s reference frame
+(<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3RCS14override_forceENSt5tupleIdddEENSt5tupleIdddEE">
+<span id="_CPPv3N4krpc8services11SpaceCenter3RCS14override_forceENSt5tupleIdddEENSt5tupleIdddEE"></span><span id="_CPPv2N4krpc8services11SpaceCenter3RCS14override_forceENSt5tupleIdddEENSt5tupleIdddEE"></span><span id="krpc::services::SpaceCenter::RCS::override_force__std::tuple:double.double.double:.std::tuple:double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">override_force</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rotation</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3RCS14override_forceENSt5tupleIdddEENSt5tupleIdddEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force the given demands would produce, in Newtons. The vector is in the
+vessel’s reference frame (<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> – A rotation demand, as set by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS17rotation_overrideEv" title="krpc::services::SpaceCenter::RCS::rotation_override"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::rotation_override()</span></code></a>.</p></li>
+<li><p><strong>translation</strong> – A translation demand, as set by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS20translation_overrideEv" title="krpc::services::SpaceCenter::RCS::translation_override"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::translation_override()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The force as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS5forceEv" title="krpc::services::SpaceCenter::RCS::force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::force()</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3RCS15override_torqueENSt5tupleIdddEENSt5tupleIdddEE">
+<span id="_CPPv3N4krpc8services11SpaceCenter3RCS15override_torqueENSt5tupleIdddEENSt5tupleIdddEE"></span><span id="_CPPv2N4krpc8services11SpaceCenter3RCS15override_torqueENSt5tupleIdddEENSt5tupleIdddEE"></span><span id="krpc::services::SpaceCenter::RCS::override_torque__std::tuple:double.double.double:.std::tuple:double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">override_torque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rotation</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3RCS15override_torqueENSt5tupleIdddEENSt5tupleIdddEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque the given demands would produce about the vessel’s center of mass, in
+Newton meters. The vector is in the vessel’s reference frame
+(<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> – A rotation demand, as set by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS17rotation_overrideEv" title="krpc::services::SpaceCenter::RCS::rotation_override"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::rotation_override()</span></code></a>.</p></li>
+<li><p><strong>translation</strong> – A translation demand, as set by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS20translation_overrideEv" title="krpc::services::SpaceCenter::RCS::translation_override"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::translation_override()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The torque as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS6torqueEv" title="krpc::services::SpaceCenter::RCS::torque"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::torque()</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter3RCS16available_thrustEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter3RCS16available_thrustEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter3RCS16available_thrustEv"></span><span id="krpc::services::SpaceCenter::RCS::available_thrust"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_thrust</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter3RCS16available_thrustEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The amount of thrust, in Newtons, that would be produced by the thruster when activated.
@@ -7633,6 +7713,17 @@ four thrusters.</p>
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8Thruster4partEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8Thruster4partEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8Thruster4partEv"></span><span id="krpc::services::SpaceCenter::Thruster::part"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8Thruster4partEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8Thruster4partEv" title="krpc::services::SpaceCenter::Thruster::part"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Thruster::part()</span></code></a> that contains this thruster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8Thruster6thrustEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter8Thruster6thrustEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8Thruster6thrustEv"></span><span id="krpc::services::SpaceCenter::Thruster::thrust"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thrust</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8Thruster6thrustEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The thrust being produced by the thruster, in Newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>

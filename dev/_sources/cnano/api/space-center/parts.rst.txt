@@ -4466,6 +4466,62 @@ RCS
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_Force(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The force being applied by the RCS thrusters, in Newtons. The vector is in the
+      vessel's reference frame (:func:`krpc_SpaceCenter_Vessel_ReferenceFrame`).
+      Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_Torque(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The torque being applied by the RCS thrusters about the vessel's center of mass,
+      in Newton meters. The vector is in the vessel's reference frame
+      (:func:`krpc_SpaceCenter_Vessel_ReferenceFrame`). Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_OverrideForce(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * rotation, const krpc_tuple_double_double_double_t * translation)
+
+      The force the given demands would produce, in Newtons. The vector is in the
+      vessel's reference frame (:func:`krpc_SpaceCenter_Vessel_ReferenceFrame`).
+      Returns zero if the RCS is inactive.
+
+      :Parameters:
+
+       * **rotation** -- A rotation demand, as set by :func:`krpc_SpaceCenter_RCS_RotationOverride`.
+       * **translation** -- A translation demand, as set by :func:`krpc_SpaceCenter_RCS_TranslationOverride`.
+
+      :returns: The force as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :func:`krpc_SpaceCenter_RCS_Force` includes.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_OverrideTorque(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * rotation, const krpc_tuple_double_double_double_t * translation)
+
+      The torque the given demands would produce about the vessel's center of mass, in
+      Newton meters. The vector is in the vessel's reference frame
+      (:func:`krpc_SpaceCenter_Vessel_ReferenceFrame`). Returns zero if the RCS is inactive.
+
+      :Parameters:
+
+       * **rotation** -- A rotation demand, as set by :func:`krpc_SpaceCenter_RCS_RotationOverride`.
+       * **translation** -- A translation demand, as set by :func:`krpc_SpaceCenter_RCS_TranslationOverride`.
+
+      :returns: The torque as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :func:`krpc_SpaceCenter_RCS_Torque` includes.
+
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_AvailableThrust(krpc_connection_t connection, float * result)
 
       The amount of thrust, in Newtons, that would be produced by the thruster when activated.
@@ -4651,6 +4707,12 @@ Thruster
    .. function:: krpc_error_t krpc_SpaceCenter_Thruster_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
 
       The :func:`krpc_SpaceCenter_Thruster_Part` that contains this thruster.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_Thrust(krpc_connection_t connection, float * result)
+
+      The thrust being produced by the thruster, in Newtons.
 
       :Game Scenes: Flight
 

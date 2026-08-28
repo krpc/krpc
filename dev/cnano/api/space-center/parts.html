@@ -7340,6 +7340,86 @@ Returns zero if RCS is disabled.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Force">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_Force</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Force" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force being applied by the RCS thrusters, in Newtons. The vector is in the
+vessel’s reference frame (<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Torque">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_Torque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Torque" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque being applied by the RCS thrusters about the vessel’s center of mass,
+in Newton meters. The vector is in the vessel’s reference frame
+(<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideForce">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_OverrideForce</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rotation</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideForce" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force the given demands would produce, in Newtons. The vector is in the
+vessel’s reference frame (<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> – A rotation demand, as set by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_RotationOverride" title="krpc_SpaceCenter_RCS_RotationOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_RotationOverride()</span></code></a>.</p></li>
+<li><p><strong>translation</strong> – A translation demand, as set by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_TranslationOverride" title="krpc_SpaceCenter_RCS_TranslationOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_TranslationOverride()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The force as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Force" title="krpc_SpaceCenter_RCS_Force"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Force()</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideTorque">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_OverrideTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rotation</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideTorque" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque the given demands would produce about the vessel’s center of mass, in
+Newton meters. The vector is in the vessel’s reference frame
+(<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> – A rotation demand, as set by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_RotationOverride" title="krpc_SpaceCenter_RCS_RotationOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_RotationOverride()</span></code></a>.</p></li>
+<li><p><strong>translation</strong> – A translation demand, as set by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_TranslationOverride" title="krpc_SpaceCenter_RCS_TranslationOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_TranslationOverride()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The torque as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Torque" title="krpc_SpaceCenter_RCS_Torque"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Torque()</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_AvailableThrust">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_AvailableThrust</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_AvailableThrust" title="Link to this definition">#</a><br /></dt>
 <dd><p>The amount of thrust, in Newtons, that would be produced by the thruster when activated.
@@ -7633,6 +7713,17 @@ four thrusters.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_Part">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Thruster_Part</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_Part" title="Link to this definition">#</a><br /></dt>
 <dd><p>The <a class="reference internal" href="#c.krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_Part" title="krpc_SpaceCenter_Thruster_Part"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Thruster_Part()</span></code></a> that contains this thruster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_Thrust">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Thruster_Thrust</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_Thrust" title="Link to this definition">#</a><br /></dt>
+<dd><p>The thrust being produced by the thruster, in Newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>

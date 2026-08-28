@@ -7397,6 +7397,86 @@ Returns zero if RCS is disabled.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RCS.getForce()">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RCS.getForce()" title="Link to this definition">#</a></dt>
+<dd><p>The force being applied by the RCS thrusters, in Newtons. The vector is in the
+vessel’s reference frame (<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RCS.getTorque()">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RCS.getTorque()" title="Link to this definition">#</a></dt>
+<dd><p>The torque being applied by the RCS thrusters about the vessel’s center of mass,
+in Newton meters. The vector is in the vessel’s reference frame
+(<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RCS.overrideForce(org.javatuples.Triplet, org.javatuples.Triplet)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">overrideForce</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">rotation</span></em>, <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RCS.overrideForce(org.javatuples.Triplet, org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+<dd><p>The force the given demands would produce, in Newtons. The vector is in the
+vessel’s reference frame (<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – A rotation demand, as set by <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getRotationOverride()" title="krpc.client.services.SpaceCenter.RCS.getRotationOverride()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getRotationOverride()</span></code></a>.</p></li>
+<li><p><strong>translation</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – A translation demand, as set by <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getTranslationOverride()" title="krpc.client.services.SpaceCenter.RCS.getTranslationOverride()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getTranslationOverride()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The force as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getForce()" title="krpc.client.services.SpaceCenter.RCS.getForce()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getForce()</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RCS.overrideTorque(org.javatuples.Triplet, org.javatuples.Triplet)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">overrideTorque</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">rotation</span></em>, <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RCS.overrideTorque(org.javatuples.Triplet, org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+<dd><p>The torque the given demands would produce about the vessel’s center of mass, in
+Newton meters. The vector is in the vessel’s reference frame
+(<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getReferenceFrame()</span></code></a>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – A rotation demand, as set by <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getRotationOverride()" title="krpc.client.services.SpaceCenter.RCS.getRotationOverride()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getRotationOverride()</span></code></a>.</p></li>
+<li><p><strong>translation</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – A translation demand, as set by <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getTranslationOverride()" title="krpc.client.services.SpaceCenter.RCS.getTranslationOverride()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getTranslationOverride()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The torque as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getTorque()" title="krpc.client.services.SpaceCenter.RCS.getTorque()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getTorque()</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RCS.getAvailableThrust()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAvailableThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RCS.getAvailableThrust()" title="Link to this definition">#</a></dt>
 <dd><p>The amount of thrust, in Newtons, that would be produced by the thruster when activated.
@@ -7690,6 +7770,17 @@ four thrusters.</p>
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Thruster.getPart()">
  <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Thruster.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The <a class="reference internal" href="#krpc.client.services.SpaceCenter.Thruster.getPart()" title="krpc.client.services.SpaceCenter.Thruster.getPart()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Thruster.getPart()</span></code></a> that contains this thruster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Thruster.getThrust()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Thruster.getThrust()" title="Link to this definition">#</a></dt>
+<dd><p>The thrust being produced by the thruster, in Newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>

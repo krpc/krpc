@@ -4396,6 +4396,62 @@ RCS
 
       :Game Scenes: Flight
 
+   .. property:: System.Tuple<double,double,double> Force { get; }
+
+      The force being applied by the RCS thrusters, in Newtons. The vector is in the
+      vessel's reference frame (:prop:`Vessel.ReferenceFrame`).
+      Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Tuple<double,double,double> Torque { get; }
+
+      The torque being applied by the RCS thrusters about the vessel's center of mass,
+      in Newton meters. The vector is in the vessel's reference frame
+      (:prop:`Vessel.ReferenceFrame`). Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. method:: System.Tuple<double,double,double> OverrideForce(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
+
+      The force the given demands would produce, in Newtons. The vector is in the
+      vessel's reference frame (:prop:`Vessel.ReferenceFrame`).
+      Returns zero if the RCS is inactive.
+
+      :parameters:
+
+       * **rotation** -- A rotation demand, as set by :prop:`RCS.RotationOverride`.
+       * **translation** -- A translation demand, as set by :prop:`RCS.TranslationOverride`.
+
+      :returns: The force as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :prop:`RCS.Force` includes.
+
+   .. method:: System.Tuple<double,double,double> OverrideTorque(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
+
+      The torque the given demands would produce about the vessel's center of mass, in
+      Newton meters. The vector is in the vessel's reference frame
+      (:prop:`Vessel.ReferenceFrame`). Returns zero if the RCS is inactive.
+
+      :parameters:
+
+       * **rotation** -- A rotation demand, as set by :prop:`RCS.RotationOverride`.
+       * **translation** -- A translation demand, as set by :prop:`RCS.TranslationOverride`.
+
+      :returns: The torque as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :prop:`RCS.Torque` includes.
+
    .. property:: float AvailableThrust { get; }
 
       The amount of thrust, in Newtons, that would be produced by the thruster when activated.
@@ -4578,6 +4634,12 @@ Thruster
    .. property:: Part Part { get; }
 
       The :prop:`Thruster.Part` that contains this thruster.
+
+      :Game Scenes: Flight
+
+   .. property:: float Thrust { get; }
+
+      The thrust being produced by the thruster, in Newtons.
 
       :Game Scenes: Flight
 

@@ -8505,6 +8505,92 @@ Returns zero if RCS is disabled.</p>
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RCS.force">
+<span class="sig-name descname"><span class="pre">force</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RCS.force" title="Link to this definition">#</a></dt>
+<dd><p>The force being applied by the RCS thrusters, in Newtons. The vector is in the
+vessel’s reference frame (<a class="reference internal" href="vessel.html#SpaceCenter.SpaceCenter.Vessel.reference_frame" title="SpaceCenter.SpaceCenter.Vessel.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.reference_frame</span></code></a>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RCS.torque">
+<span class="sig-name descname"><span class="pre">torque</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RCS.torque" title="Link to this definition">#</a></dt>
+<dd><p>The torque being applied by the RCS thrusters about the vessel’s center of mass,
+in Newton meters. The vector is in the vessel’s reference frame
+(<a class="reference internal" href="vessel.html#SpaceCenter.SpaceCenter.Vessel.reference_frame" title="SpaceCenter.SpaceCenter.Vessel.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.reference_frame</span></code></a>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="SpaceCenter.RCS.override_force">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">override_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">rotation</span></em>, <em class="sig-param"><span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RCS.override_force" title="Link to this definition">#</a></dt>
+<dd><p>The force the given demands would produce, in Newtons. The vector is in the
+vessel’s reference frame (<a class="reference internal" href="vessel.html#SpaceCenter.SpaceCenter.Vessel.reference_frame" title="SpaceCenter.SpaceCenter.Vessel.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.reference_frame</span></code></a>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – A rotation demand, as set by <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.rotation_override" title="SpaceCenter.SpaceCenter.RCS.rotation_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.rotation_override</span></code></a>.</p></li>
+<li><p><strong>translation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – A translation demand, as set by <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.translation_override" title="SpaceCenter.SpaceCenter.RCS.translation_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.translation_override</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The force as a vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.force" title="SpaceCenter.SpaceCenter.RCS.force"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.force</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="SpaceCenter.RCS.override_torque">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">override_torque</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">rotation</span></em>, <em class="sig-param"><span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RCS.override_torque" title="Link to this definition">#</a></dt>
+<dd><p>The torque the given demands would produce about the vessel’s center of mass, in
+Newton meters. The vector is in the vessel’s reference frame
+(<a class="reference internal" href="vessel.html#SpaceCenter.SpaceCenter.Vessel.reference_frame" title="SpaceCenter.SpaceCenter.Vessel.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.reference_frame</span></code></a>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – A rotation demand, as set by <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.rotation_override" title="SpaceCenter.SpaceCenter.RCS.rotation_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.rotation_override</span></code></a>.</p></li>
+<li><p><strong>translation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – A translation demand, as set by <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.translation_override" title="SpaceCenter.SpaceCenter.RCS.translation_override"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.translation_override</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The torque as a vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#SpaceCenter.SpaceCenter.RCS.torque" title="SpaceCenter.SpaceCenter.RCS.torque"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.RCS.torque</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RCS.available_thrust">
 <span class="sig-name descname"><span class="pre">available_thrust</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RCS.available_thrust" title="Link to this definition">#</a></dt>
 <dd><p>The amount of thrust, in Newtons, that would be produced by the thruster when activated.
@@ -8849,6 +8935,20 @@ four thrusters.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Thruster.thrust">
+<span class="sig-name descname"><span class="pre">thrust</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Thruster.thrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust being produced by the thruster, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>

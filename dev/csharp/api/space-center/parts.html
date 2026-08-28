@@ -7575,6 +7575,86 @@ Returns zero if RCS is disabled.</p>
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RCS.Force">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Force</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Force" title="Link to this definition">#</a></dt>
+<dd><p>The force being applied by the RCS thrusters, in Newtons. The vector is in the
+vessel’s reference frame (<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RCS.Torque">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Torque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Torque" title="Link to this definition">#</a></dt>
+<dd><p>The torque being applied by the RCS thrusters about the vessel’s center of mass,
+in Newton meters. The vector is in the vessel’s reference frame
+(<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.RCS.OverrideForce">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">OverrideForce</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">rotation</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.RCS.OverrideForce" title="Link to this definition">#</a></dt>
+<dd><p>The force the given demands would produce, in Newtons. The vector is in the
+vessel’s reference frame (<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>).
+Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> – A rotation demand, as set by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.RotationOverride" title="KRPC.Client.Services.SpaceCenter.RCS.RotationOverride property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">RCS.RotationOverride</span></code></a>.</p></li>
+<li><p><strong>translation</strong> – A translation demand, as set by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.TranslationOverride" title="KRPC.Client.Services.SpaceCenter.RCS.TranslationOverride property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">RCS.TranslationOverride</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The force as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Force" title="KRPC.Client.Services.SpaceCenter.RCS.Force property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">RCS.Force</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.RCS.OverrideTorque">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">OverrideTorque</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">rotation</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.RCS.OverrideTorque" title="Link to this definition">#</a></dt>
+<dd><p>The torque the given demands would produce about the vessel’s center of mass, in
+Newton meters. The vector is in the vessel’s reference frame
+(<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>). Returns zero if the RCS is inactive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> – A rotation demand, as set by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.RotationOverride" title="KRPC.Client.Services.SpaceCenter.RCS.RotationOverride property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">RCS.RotationOverride</span></code></a>.</p></li>
+<li><p><strong>translation</strong> – A translation demand, as set by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.TranslationOverride" title="KRPC.Client.Services.SpaceCenter.RCS.TranslationOverride property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">RCS.TranslationOverride</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The torque as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The demands do not have to be applied. The prediction leaves out precision mode,
+full thrust and the lever divisor, which <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Torque" title="KRPC.Client.Services.SpaceCenter.RCS.Torque property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">RCS.Torque</span></code></a> includes.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RCS.AvailableThrust">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">AvailableThrust</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RCS.AvailableThrust" title="Link to this definition">#</a></dt>
 <dd><p>The amount of thrust, in Newtons, that would be produced by the thruster when activated.
@@ -7853,6 +7933,17 @@ four thrusters.</p>
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Thruster.Part">
 <a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Part" title="KRPC.Client.Services.SpaceCenter.Part class"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">Part</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Thruster.Part" title="Link to this definition">#</a></dt>
 <dd><p>The <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Thruster.Part" title="KRPC.Client.Services.SpaceCenter.Thruster.Part property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Thruster.Part</span></code></a> that contains this thruster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Thruster.Thrust">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Thrust</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Thruster.Thrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust being produced by the thruster, in Newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>

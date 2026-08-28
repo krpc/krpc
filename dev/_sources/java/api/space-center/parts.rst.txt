@@ -4623,6 +4623,58 @@ RCS
 
       :Game Scenes: Flight
 
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getForce()
+
+
+      The force being applied by the RCS thrusters, in Newtons. The vector is in the
+      vessel's reference frame (:meth:`Vessel.getReferenceFrame()`).
+      Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getTorque()
+
+
+      The torque being applied by the RCS thrusters about the vessel's center of mass,
+      in Newton meters. The vector is in the vessel's reference frame
+      (:meth:`Vessel.getReferenceFrame()`). Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> overrideForce(org.javatuples.Triplet<Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> translation)
+
+      The force the given demands would produce, in Newtons. The vector is in the
+      vessel's reference frame (:meth:`Vessel.getReferenceFrame()`).
+      Returns zero if the RCS is inactive.
+
+      :param org.javatuples.Triplet<Double,Double,Double> rotation: A rotation demand, as set by :meth:`RCS.getRotationOverride()`.
+      :param org.javatuples.Triplet<Double,Double,Double> translation: A translation demand, as set by :meth:`RCS.getTranslationOverride()`.
+      :returns: The force as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :meth:`RCS.getForce()` includes.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> overrideTorque(org.javatuples.Triplet<Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> translation)
+
+      The torque the given demands would produce about the vessel's center of mass, in
+      Newton meters. The vector is in the vessel's reference frame
+      (:meth:`Vessel.getReferenceFrame()`). Returns zero if the RCS is inactive.
+
+      :param org.javatuples.Triplet<Double,Double,Double> rotation: A rotation demand, as set by :meth:`RCS.getRotationOverride()`.
+      :param org.javatuples.Triplet<Double,Double,Double> translation: A translation demand, as set by :meth:`RCS.getTranslationOverride()`.
+      :returns: The torque as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out precision mode,
+         full thrust and the lever divisor, which :meth:`RCS.getTorque()` includes.
+
    .. method:: float getAvailableThrust()
 
 
@@ -4829,6 +4881,13 @@ Thruster
 
 
       The :meth:`Thruster.getPart()` that contains this thruster.
+
+      :Game Scenes: Flight
+
+   .. method:: float getThrust()
+
+
+      The thrust being produced by the thruster, in Newtons.
 
       :Game Scenes: Flight
 

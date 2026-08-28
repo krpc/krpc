@@ -3018,6 +3018,8 @@
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force">(Java class)</a>
 </li>
       </ul></li>
+      <li><a href="python/api/space-center/parts.html#SpaceCenter.RCS.force">force (RCS attribute)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.AutoStrutMode.FORCE_GRANDPARENT">FORCE_GRANDPARENT (Java field)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.AutoStrutMode.FORCE_HEAVIEST">FORCE_HEAVIEST (Java field)</a>
@@ -3735,6 +3737,8 @@
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.Camera.getFocussedVessel()">getFocussedVessel() (Java method)</a>
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getFont()">getFont() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getFont()">[1]</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getForce()">getForce() (Java method)</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getForceLimit()">getForceLimit() (Java method)</a>
 </li>
@@ -4680,7 +4684,7 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getThrottleLocked()">getThrottleLocked() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getThrust()">getThrust() (Java method)</a>, <a href="java/api/space-center/stage.html#krpc.client.services.SpaceCenter.Stage.getThrust()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getThrust()">[2]</a>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getThrust()">getThrust() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.getThrust()">[1]</a>, <a href="java/api/space-center/stage.html#krpc.client.services.SpaceCenter.Stage.getThrust()">[2]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getThrust()">[3]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getThrusters()">getThrusters() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getThrusters()">[1]</a>
 </li>
@@ -4711,6 +4715,8 @@
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.getTitle()">getTitle() (Java method)</a>, <a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getTitle()">[1]</a>, <a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.ContractParameter.getTitle()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Experiment.getTitle()">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getTitle()">[4]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ScienceSubject.getTitle()">[5]</a>
 </li>
       <li><a href="java/api/ui/button.html#krpc.client.services.UI.Button.getTooltip()">getTooltip() (Java method)</a>, <a href="java/api/ui/dropdown.html#krpc.client.services.UI.Dropdown.getTooltip()">[1]</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.getTooltip()">[2]</a>, <a href="java/api/ui/slider.html#krpc.client.services.UI.Slider.getTooltip()">[3]</a>, <a href="java/api/ui/toggle.html#krpc.client.services.UI.Toggle.getTooltip()">[4]</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getTorque()">getTorque() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getTorqueLimit()">getTorqueLimit() (Java method)</a>
 </li>
@@ -8919,6 +8925,8 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS7enabledEv">krpc::services::SpaceCenter::RCS::enabled (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS5forceEv">krpc::services::SpaceCenter::RCS::force (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS15forward_enabledEv">krpc::services::SpaceCenter::RCS::forward_enabled (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS8has_fuelEv">krpc::services::SpaceCenter::RCS::has_fuel (C++ function)</a>
@@ -8930,6 +8938,10 @@
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS10max_thrustEv">krpc::services::SpaceCenter::RCS::max_thrust (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS17max_vacuum_thrustEv">krpc::services::SpaceCenter::RCS::max_vacuum_thrust (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS14override_forceENSt5tupleIdddEENSt5tupleIdddEE">krpc::services::SpaceCenter::RCS::override_force (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS15override_torqueENSt5tupleIdddEENSt5tupleIdddEE">krpc::services::SpaceCenter::RCS::override_torque (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS4partEv">krpc::services::SpaceCenter::RCS::part (C++ function)</a>
 </li>
@@ -8972,6 +8984,8 @@
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS12thrust_limitEv">krpc::services::SpaceCenter::RCS::thrust_limit (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS9thrustersEv">krpc::services::SpaceCenter::RCS::thrusters (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS6torqueEv">krpc::services::SpaceCenter::RCS::torque (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter3RCS20translation_overrideEv">krpc::services::SpaceCenter::RCS::translation_override (C++ function)</a>
 </li>
@@ -9540,6 +9554,8 @@
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter8Thruster23initial_thrust_positionE14ReferenceFrame">krpc::services::SpaceCenter::Thruster::initial_thrust_position (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter8Thruster4partEv">krpc::services::SpaceCenter::Thruster::part (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter8Thruster6thrustEv">krpc::services::SpaceCenter::Thruster::thrust (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter8Thruster16thrust_directionE14ReferenceFrame">krpc::services::SpaceCenter::Thruster::thrust_direction (C++ function)</a>
 </li>
@@ -13871,6 +13887,8 @@
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Enabled">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Enabled (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Force">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Force (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_ForwardEnabled">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_ForwardEnabled (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_HasFuel">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_HasFuel (C function)</a>
@@ -13882,6 +13900,10 @@
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_MaxThrust">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_MaxThrust (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_MaxVacuumThrust">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_MaxVacuumThrust (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideForce">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideForce (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideTorque">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideTorque (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Part">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Part (C function)</a>
 </li>
@@ -13924,6 +13946,8 @@
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Thrusters">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Thrusters (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_ThrustLimit">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_ThrustLimit (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Torque">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Torque (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_TranslationOverride">krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_TranslationOverride (C function)</a>
 </li>
@@ -14490,6 +14514,8 @@
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_InitialThrustPosition">krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_InitialThrustPosition (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_Part">krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_Part (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_Thrust">krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_Thrust (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_ThrustDirection">krpc_SpaceCenter_Thruster_t.krpc_SpaceCenter_Thruster_ThrustDirection (C function)</a>
 </li>
@@ -16435,12 +16461,12 @@
       </ul></li>
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.orbit_speed_reference_frame">orbit_speed_reference_frame (Vessel attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.CameraMode.ORBITAL">ORBITAL (Java field)</a>
 </li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.orbital_energy">orbital_energy (Orbit attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.orbital_reference_frame">orbital_reference_frame (CelestialBody attribute)</a>
 
       <ul>
@@ -16482,6 +16508,14 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverter.outputs(int)">outputs(int) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlInputMode.OVERRIDE">OVERRIDE (Java field)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.RCS.override_force">override_force() (RCS method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.RCS.override_force">[1]</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.RCS.override_torque">override_torque() (RCS method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.RCS.override_torque">[1]</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.overrideForce(org.javatuples.Triplet, org.javatuples.Triplet)">overrideForce(org.javatuples.Triplet, org.javatuples.Triplet) (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.overrideTorque(org.javatuples.Triplet, org.javatuples.Triplet)">overrideTorque(org.javatuples.Triplet, org.javatuples.Triplet) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.overshoot">overshoot (AutoPilot attribute)</a>
 </li>
@@ -19215,12 +19249,12 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.can_rotate">SpaceCenter.SpaceCenter.DockingPort.can_rotate (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.docked_part">SpaceCenter.SpaceCenter.DockingPort.docked_part (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.has_shield">SpaceCenter.SpaceCenter.DockingPort.has_shield (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.maximum_rotation">SpaceCenter.SpaceCenter.DockingPort.maximum_rotation (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.minimum_rotation">SpaceCenter.SpaceCenter.DockingPort.minimum_rotation (attribute)</a>
@@ -19983,6 +20017,8 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.RCS.enabled">SpaceCenter.SpaceCenter.RCS.enabled (attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.RCS.force">SpaceCenter.SpaceCenter.RCS.force (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.RCS.forward_enabled">SpaceCenter.SpaceCenter.RCS.forward_enabled (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.RCS.has_fuel">SpaceCenter.SpaceCenter.RCS.has_fuel (attribute)</a>
@@ -20014,6 +20050,8 @@
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.RCS.thrust_limit">SpaceCenter.SpaceCenter.RCS.thrust_limit (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.RCS.thrusters">SpaceCenter.SpaceCenter.RCS.thrusters (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.RCS.torque">SpaceCenter.SpaceCenter.RCS.torque (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.RCS.translation_override">SpaceCenter.SpaceCenter.RCS.translation_override (attribute)</a>
 </li>
@@ -20284,6 +20322,8 @@
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Thruster.gimballed">SpaceCenter.SpaceCenter.Thruster.gimballed (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Thruster.part">SpaceCenter.SpaceCenter.Thruster.part (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Thruster.thrust">SpaceCenter.SpaceCenter.Thruster.thrust (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Thruster.thrust_reference_frame">SpaceCenter.SpaceCenter.Thruster.thrust_reference_frame (attribute)</a>
 </li>
@@ -21024,6 +21064,8 @@
       <ul>
         <li><a href="python/api/space-center/stage.html#SpaceCenter.Stage.thrust">(Stage attribute)</a>
 </li>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Thruster.thrust">(Thruster attribute)</a>
+</li>
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.thrust">(Vessel attribute)</a>
 </li>
       </ul></li>
@@ -21146,6 +21188,8 @@
       <li><a href="java/api/ui/ui.html#krpc.client.services.UI.MessagePosition.TOP_LEFT">TOP_LEFT (Java field)</a>
 </li>
       <li><a href="java/api/ui/ui.html#krpc.client.services.UI.MessagePosition.TOP_RIGHT">TOP_RIGHT (Java field)</a>
+</li>
+      <li><a href="python/api/space-center/parts.html#SpaceCenter.RCS.torque">torque (RCS attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.RoboticRotor.torque_limit">torque_limit (RoboticRotor attribute)</a>
 </li>
