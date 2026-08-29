@@ -57,10 +57,13 @@ class TestStage(krpctest.TestCase):
 
     def test_delta_v_ready(self):
         # The game drops the first calculation of a vessel whose staging is not built yet,
-        # and never repeats it. Reading a figure asks for another calculation, so a figure
-        # read at any point in the flight is a figure the game has produced.
+        # and never repeats it. A read asks for another calculation when the game holds no
+        # figures, so a figure is available at any point in the flight. The read reports
+        # what the game holds, so the figures become current a run later.
         self.assertGreater(self.vessel.vacuum_delta_v, 0)
-        self.assertTrue(self.vessel.delta_v_ready)
+        self.wait_until(
+            lambda: self.vessel.delta_v_ready, message="delta-v figures current"
+        )
 
     def test_recalculate_delta_v(self):
         before = self.vessel.vacuum_delta_v
