@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Fix the error from a call that waits on the game being reported as `Exception has been
+  thrown by the target of an invocation` (#1083)
 - Add the `TickHoldTimeout` setting, which bounds how long a client may hold the game on one
   physics tick (#1070)
 - The server updates before the game collects control inputs, so a control input takes effect
