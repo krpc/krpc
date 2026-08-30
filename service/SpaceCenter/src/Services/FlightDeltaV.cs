@@ -96,6 +96,19 @@ namespace KRPC.SpaceCenter.Services
                 return false;
             if (vessel.id == requestedFor && Time.fixedTime <= requestedAt)
                 return false;
+            return HasFigures (vessel);
+        }
+
+        /// <summary>
+        /// Whether the game holds figures for the vessel. It keeps the ones from the last
+        /// run while it works on the next, so a read has figures to report throughout a
+        /// run.
+        /// </summary>
+        static bool HasFigures (global::Vessel vessel)
+        {
+            var simulation = vessel.VesselDeltaV;
+            if (simulation == null)
+                return false;
             // A vessel between scenes holds no parts yet, and reads as engine-less until
             // the game has rebuilt it.
             return simulation.IsReady || (vessel.parts.Count > 0 && !HasEngines (vessel));
@@ -122,14 +135,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Read a figure off the simulation, asking the game for a run when the figures
-        /// are out of date and yielding until it has finished. Callers pass no tick; the
+        /// Read a figure off the simulation, asking the game for a run when it holds no
+        /// figures and yielding until it has finished. Callers pass no tick; the
         /// continuations count it up.
         /// </summary>
+        /// <remarks>
+        /// A read reports the figures the game holds, rather than waiting out a run it has
+        /// under way. Staging marks the figures out of date, and a read that waited would
+        /// come back to a stage the game has since dropped.
+        /// </remarks>
         internal static T Read<T> (Guid id, Func<VesselDeltaV, T> figure, int tick = 0)
         {
             var vessel = FlightGlobalsExtensions.GetVesselById (id);
-            if (Ready (vessel))
+            if (HasFigures (vessel))
                 return figure (vessel.VesselDeltaV);
             if (tick > WaitTicks)
                 throw TimedOut ();

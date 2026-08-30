@@ -732,6 +732,44 @@ namespace KRPC.Test.Service
             Assert.AreEqual (expectedResult, (int)result.Value);
         }
 
+        int BlockingProcedureThrowsFnCount;
+
+        int BlockingProcedureThrowsFn (int n)
+        {
+            BlockingProcedureThrowsFnCount++;
+            if (n == 0)
+                throw new ArgumentException ("test exception");
+            throw new YieldException<Func<int>> (() => BlockingProcedureThrowsFn (n - 1));
+        }
+
+        [Test]
+        public void HandleBlockingRequestArgsThrows ()
+        {
+            const int num = 3;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()))
+                .Returns ((int n, int sum) => BlockingProcedureThrowsFn (n));
+            TestService.Service = mock.Object;
+            var call = Call ("TestService", "BlockingProcedureReturns", Arg (0, num));
+            BlockingProcedureThrowsFnCount = 0;
+            ProcedureResult result = null;
+            var continuation = new ProcedureCallContinuation (call);
+            while (result == null) {
+                try {
+                    result = continuation.Run ();
+                } catch (YieldException<ProcedureCallContinuation> e) {
+                    continuation = e.Value;
+                } catch (RPCException e) {
+                    result = new ProcedureResult {
+                        Error = global::KRPC.Service.Services.Instance.HandleException (e)
+                    };
+                }
+            }
+            // The exception a continuation throws keeps its type and message
+            Assert.AreEqual (num + 1, BlockingProcedureThrowsFnCount);
+            CheckError ("ArgumentException", "test exception", result);
+        }
+
         [Test]
         public void HandleEchoList ()
         {

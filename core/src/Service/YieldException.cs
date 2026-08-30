@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace KRPC.Service
 {
@@ -33,8 +34,12 @@ namespace KRPC.Service
                 }
                 catch (TargetInvocationException e)
                 {
-                    if (e.InnerException is YieldException)
-                        throw e.InnerException;
+                    // DynamicInvoke wraps whatever the continuation threw. Rethrow the
+                    // original, so that a yield reads as a yield and an error keeps its
+                    // type and message.
+                    if (e.InnerException == null)
+                        throw;
+                    ExceptionDispatchInfo.Capture (e.InnerException).Throw ();
                     throw;
                 }
             }
