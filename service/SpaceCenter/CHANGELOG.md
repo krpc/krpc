@@ -112,6 +112,14 @@
     `Orbit.SpeedAt` (#1086)
   - **Deprecated:** `Orbit.OrbitalSpeed` and `Orbit.OrbitalEnergy`, superseded by
     `Orbit.Speed` and `Orbit.SpecificEnergy` (#1086)
+  - Add `Orbit.Position` and `Orbit.Velocity`, the position and velocity the orbit has
+    reached at the current time (#1087)
+  - `Orbit.PositionAt` takes an optional reference frame, defaulting to the non-rotating
+    reference frame of the body being orbited (#1087)
+  - Add `Orbit.PositionAtTrueAnomaly`, `Orbit.VelocityAtTrueAnomaly`,
+    `Orbit.SpeedAtTrueAnomaly` and `Orbit.SpeedAtRadius` (#1087)
+  - Add `Orbit.Altitude`, `Orbit.MeanMotion`, `Orbit.SemiLatusRectum` and
+    `Orbit.SpecificAngularMomentum` (#1087)
 
 - Maneuver nodes
   - Using a maneuver node that has been removed raises `KRPC.ObjectDestroyedException`.

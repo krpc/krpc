@@ -246,11 +246,9 @@ namespace KRPC.SpaceCenter.Services
             get { CheckExists (); return ReferenceFrame.Orbital (this); }
         }
 
-        // The reference frame used by the closest-approach members when the caller
-        // does not specify one: the orbital frame of the object the orbit belongs to,
-        // falling back to the reference body's non-rotating (inertial) frame when the
-        // owner is unknown.
-        internal ReferenceFrame DefaultReferenceFrame {
+        // The orbital frame of the object the orbit belongs to, falling back to the
+        // reference body's non-rotating (inertial) frame when the owner is unknown
+        internal ReferenceFrame OwnerOrbitalReferenceFrame {
             get {
                 if (ownerNode != null)
                     return ownerNode.OrbitalReferenceFrame;
@@ -343,6 +341,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The semi-latus rectum of the orbit, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double SemiLatusRectum {
+            get { return InternalOrbit.semiLatusRectum; }
+        }
+
+        /// <summary>
         /// The current radius of the orbit, in meters. This is the distance between the center
         /// of mass of the object in orbit, and the center of mass of the body around which it
         /// is orbiting.
@@ -353,6 +359,18 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public double Radius {
             get { return InternalOrbit.radius; }
+        }
+
+        /// <summary>
+        /// The current altitude of the object, in meters above the sea level of the body
+        /// being orbited.
+        /// </summary>
+        /// <remarks>
+        /// This is equal to <see cref="Radius"/> minus the equatorial radius of the body.
+        /// </remarks>
+        [KRPCProperty]
+        public double Altitude {
+            get { return InternalOrbit.altitude; }
         }
 
         /// <summary>
@@ -380,11 +398,27 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The specific relative angular momentum, in meters squared per second.
+        /// </summary>
+        [KRPCProperty]
+        public double SpecificAngularMomentum {
+            get { return InternalOrbit.h.magnitude; }
+        }
+
+        /// <summary>
         /// The orbital period, in seconds.
         /// </summary>
         [KRPCProperty]
         public double Period {
             get { return InternalOrbit.period; }
+        }
+
+        /// <summary>
+        /// The mean motion, in radians per second.
+        /// </summary>
+        [KRPCProperty]
+        public double MeanMotion {
+            get { return InternalOrbit.meanMotion; }
         }
 
         /// <summary>
@@ -512,8 +546,8 @@ namespace KRPC.SpaceCenter.Services
         /// atmosphere slows it. A vessel held on rails follows its own orbit exactly,
         /// while one inside the physics bubble is simulated and drifts from it a little.
         ///
-        /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="TrueAnomaly"/>,
-        /// <see cref="TimeToApoapsis"/> and the like describe the orbit at
+        /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="Position"/>,
+        /// <see cref="Velocity"/> and the like describe the orbit at
         /// <paramref name="ut"/> and stay there. Use <see cref="RadiusAt"/>,
         /// <see cref="SpeedAt"/>, <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
         /// <see cref="TrueAnomalyAtUT"/> for another time, and
@@ -540,8 +574,7 @@ namespace KRPC.SpaceCenter.Services
             var framePosition = position.ToVector ();
             var worldPosition = frame.PositionToWorldSpace (framePosition);
             var worldVelocity = frame.VelocityToWorldSpace (framePosition, velocity.ToVector ());
-            // The game states an orbit relative to the body it is around, in its own axis
-            // order, so take out the body's own position and motion and swap the axes.
+            // Take out the body's own position and motion, then swap the axes
             var relativePosition = worldPosition - internalBody.position;
             var relativeVelocity = worldVelocity - internalBody.GetWorldVelocity ();
             if (relativePosition.sqrMagnitude < 1)
@@ -598,8 +631,8 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="ReferencePlaneNormal"/> and <see cref="ReferencePlaneDirection"/>
         /// give these as vectors in a reference frame.
         ///
-        /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="TrueAnomaly"/>,
-        /// <see cref="TimeToApoapsis"/> and the like describe the orbit at
+        /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="Position"/>,
+        /// <see cref="Velocity"/> and the like describe the orbit at
         /// <paramref name="epoch"/> and stay there. Use <see cref="RadiusAt"/>,
         /// <see cref="SpeedAt"/>, <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
         /// <see cref="TrueAnomalyAtUT"/> for another time, and
@@ -831,7 +864,82 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double SpeedAt (double ut)
         {
-            return InternalOrbit.getOrbitalSpeedAtDistance (RadiusAt (ut));
+            return SpeedAtRadius (RadiusAt (ut));
+        }
+
+        /// <summary>
+        /// The orbital speed at the given orbital radius, in meters per second.
+        /// </summary>
+        /// <param name="radius">The orbital radius in meters.</param>
+        /// <remarks>
+        /// This is the vis-viva speed. A radius the orbit never reaches is accepted. On
+        /// an ellipse the speed is <c>NaN</c> above twice the semi-major axis.
+        /// </remarks>
+        [KRPCMethod]
+        public double SpeedAtRadius (double radius)
+        {
+            return InternalOrbit.getOrbitalSpeedAtDistance (radius);
+        }
+
+        /// <summary>
+        /// The orbital speed at the point in the orbit given by the true anomaly, in meters
+        /// per second.
+        /// </summary>
+        /// <param name="trueAnomaly">The true anomaly.</param>
+        [KRPCMethod]
+        public double SpeedAtTrueAnomaly (double trueAnomaly)
+        {
+            return SpeedAtRadius (RadiusAtTrueAnomaly (trueAnomaly));
+        }
+
+        // The frame the position and velocity members measure in when the caller gives none
+        ReferenceFrame FrameOrBodyNonRotating (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame ?? ReferenceFrame.NonRotating (InternalOrbit.referenceBody);
+        }
+
+        // The game states an orbit relative to the body it is around, in its own axis order.
+        // Adding the body's position back and swapping the axes gives world space.
+        Vector3d WorldPositionNow {
+            get { return InternalOrbit.referenceBody.position + InternalOrbit.pos.SwapYZ (); }
+        }
+
+        // An orbital velocity is stated the same way, with the body's own motion in place
+        // of its position.
+        internal Vector3d WorldVelocity (Vector3d relativeVelocity)
+        {
+            return relativeVelocity.SwapYZ () + InternalOrbit.referenceBody.GetWorldVelocity ();
+        }
+
+        /// <summary>
+        /// The position the orbit has reached at the current time, in the given reference
+        /// frame.
+        /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned position vector
+        /// is in. Defaults to <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <see cref="Body"/>.</param>
+        [KRPCMethod]
+        public Tuple3 Position (ReferenceFrame referenceFrame = null)
+        {
+            return FrameOrBodyNonRotating (referenceFrame).PositionFromWorldSpace (
+                WorldPositionNow).ToTuple ();
+        }
+
+        /// <summary>
+        /// The velocity the orbit has reached at the current time, in the given reference
+        /// frame.
+        /// </summary>
+        /// <returns>The velocity as a vector. The vector points in the direction of
+        /// travel, and its magnitude is the speed in meters per second.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned velocity vector
+        /// is in. Defaults to <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <see cref="Body"/>.</param>
+        [KRPCMethod]
+        public Tuple3 Velocity (ReferenceFrame referenceFrame = null)
+        {
+            return FrameOrBodyNonRotating (referenceFrame).VelocityFromWorldSpace (
+                WorldPositionNow, WorldVelocity (InternalOrbit.vel)).ToTuple ();
         }
 
         /// <summary>
@@ -839,12 +947,14 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <returns>The position as a vector.</returns>
         /// <param name="ut">The universal time to measure the position at.</param>
-        /// <param name="referenceFrame">The reference frame that the returned
-        /// position vector is in.</param>
+        /// <param name="referenceFrame">The reference frame that the returned position vector
+        /// is in. Defaults to <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <see cref="Body"/>.</param>
         [KRPCMethod]
-        public Tuple3 PositionAt (double ut, ReferenceFrame referenceFrame)
+        public Tuple3 PositionAt (double ut, ReferenceFrame referenceFrame = null)
         {
-            return referenceFrame.PositionFromWorldSpace(InternalOrbit.getPositionAtUT(ut)).ToTuple();
+            return FrameOrBodyNonRotating (referenceFrame).PositionFromWorldSpace (
+                InternalOrbit.getPositionAtUT (ut)).ToTuple ();
         }
 
         /// <summary>
@@ -853,18 +963,52 @@ namespace KRPC.SpaceCenter.Services
         /// <returns>The velocity as a vector. The vector points in the direction of
         /// travel, and its magnitude is the speed in meters per second.</returns>
         /// <param name="ut">The universal time to measure the velocity at.</param>
-        /// <param name="referenceFrame">The reference frame that the returned
-        /// velocity vector is in.</param>
+        /// <param name="referenceFrame">The reference frame that the returned velocity vector
+        /// is in. Defaults to <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <see cref="Body"/>.</param>
         [KRPCMethod]
-        public Tuple3 VelocityAt (double ut, ReferenceFrame referenceFrame)
+        public Tuple3 VelocityAt (double ut, ReferenceFrame referenceFrame = null)
         {
-            // An orbital velocity is relative to the body being orbited, so the body's
-            // own motion is added to it to give a velocity in world space.
-            var worldVelocity =
-                InternalOrbit.getOrbitalVelocityAtUT (ut).SwapYZ () +
-                InternalOrbit.referenceBody.GetWorldVelocity ();
-            return referenceFrame.VelocityFromWorldSpace (
-                InternalOrbit.getPositionAtUT (ut), worldVelocity).ToTuple ();
+            return FrameOrBodyNonRotating (referenceFrame).VelocityFromWorldSpace (
+                InternalOrbit.getPositionAtUT (ut),
+                WorldVelocity (InternalOrbit.getOrbitalVelocityAtUT (ut))).ToTuple ();
+        }
+
+        /// <summary>
+        /// The position at the point in the orbit given by the true anomaly, in the specified
+        /// reference frame.
+        /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="trueAnomaly">The true anomaly.</param>
+        /// <param name="referenceFrame">The reference frame that the returned position vector
+        /// is in. Defaults to <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <see cref="Body"/>.</param>
+        [KRPCMethod]
+        public Tuple3 PositionAtTrueAnomaly (
+            double trueAnomaly, ReferenceFrame referenceFrame = null)
+        {
+            return FrameOrBodyNonRotating (referenceFrame).PositionFromWorldSpace (
+                InternalOrbit.getPositionFromTrueAnomaly (trueAnomaly)).ToTuple ();
+        }
+
+        /// <summary>
+        /// The velocity at the point in the orbit given by the true anomaly, in the specified
+        /// reference frame.
+        /// </summary>
+        /// <returns>The velocity as a vector. The vector points in the direction of
+        /// travel, and its magnitude is the speed in meters per second.</returns>
+        /// <param name="trueAnomaly">The true anomaly.</param>
+        /// <param name="referenceFrame">The reference frame that the returned velocity vector
+        /// is in. Defaults to <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <see cref="Body"/>.</param>
+        [KRPCMethod]
+        public Tuple3 VelocityAtTrueAnomaly (
+            double trueAnomaly, ReferenceFrame referenceFrame = null)
+        {
+            return FrameOrBodyNonRotating (referenceFrame).VelocityFromWorldSpace (
+                InternalOrbit.getPositionFromTrueAnomaly (trueAnomaly),
+                WorldVelocity (
+                    InternalOrbit.getOrbitalVelocityAtTrueAnomaly (trueAnomaly))).ToTuple ();
         }
 
         /// <summary>
