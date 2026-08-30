@@ -201,6 +201,8 @@ vcpkg
 ve
 vertices
 virtualenv
+vis
+viva
 waypoint
 waypoints
 websockets

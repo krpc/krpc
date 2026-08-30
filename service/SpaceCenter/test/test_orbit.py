@@ -592,6 +592,7 @@ class TestCreateFromPositionAndVelocity(krpctest.TestCase):
         radius = 1500000
         orbit = self.create((0, 0, radius), (0.9 * self.circular_speed(radius), 0, 0))
         ut = self.space_center.ut
+        true_anomaly = orbit.true_anomaly_at_ut(ut)
         self.assertAlmostEqual(orbit.position(self.frame), orbit.position(), delta=0.1)
         self.assertAlmostEqual(orbit.velocity(self.frame), orbit.velocity(), delta=0.1)
         self.assertAlmostEqual(
@@ -600,6 +601,57 @@ class TestCreateFromPositionAndVelocity(krpctest.TestCase):
         self.assertAlmostEqual(
             orbit.velocity_at(ut, self.frame), orbit.velocity_at(ut), delta=0.1
         )
+        self.assertAlmostEqual(
+            orbit.position_at_true_anomaly(true_anomaly, self.frame),
+            orbit.position_at_true_anomaly(true_anomaly),
+            delta=0.1,
+        )
+        self.assertAlmostEqual(
+            orbit.velocity_at_true_anomaly(true_anomaly, self.frame),
+            orbit.velocity_at_true_anomaly(true_anomaly),
+            delta=0.1,
+        )
+
+    def test_the_true_anomaly_members(self):
+        """The true anomaly members describe the same point of the orbit as the
+        universal time members that reach it."""
+        radius = 1500000
+        orbit = self.create((0, 0, radius), (0.9 * self.circular_speed(radius), 0, 0))
+        ut = self.space_center.ut
+        for offset in (0, 300, 1200):
+            at = ut + offset
+            true_anomaly = orbit.true_anomaly_at_ut(at)
+            position = orbit.position_at_true_anomaly(true_anomaly, self.frame)
+            self.assertAlmostEqual(
+                orbit.position_at(at, self.frame), position, delta=0.1
+            )
+            self.assertAlmostEqual(
+                orbit.velocity_at(at, self.frame),
+                orbit.velocity_at_true_anomaly(true_anomaly, self.frame),
+                delta=0.1,
+            )
+            self.assertAlmostEqual(
+                orbit.speed_at(at), orbit.speed_at_true_anomaly(true_anomaly), delta=0.1
+            )
+            self.assertAlmostEqual(
+                orbit.radius_at_true_anomaly(true_anomaly), norm(position), delta=0.1
+            )
+
+    def test_speed_at_radius(self):
+        """speed_at_radius is the vis-viva speed at a given orbital radius."""
+        radius = 1500000
+        orbit = self.create((0, 0, radius), (0.9 * self.circular_speed(radius), 0, 0))
+        mu = self.kerbin.gravitational_parameter
+        for at_radius in (1300000, 1500000, 1700000):
+            expected = math.sqrt(mu * ((2 / at_radius) - (1 / orbit.semi_major_axis)))
+            self.assertAlmostEqual(
+                expected, orbit.speed_at_radius(at_radius), delta=0.1
+            )
+        self.assertAlmostEqual(
+            orbit.speed, orbit.speed_at_radius(orbit.radius), delta=0.1
+        )
+        # Above twice the semi-major axis the vis-viva speed has no real value
+        self.assertIsNaN(orbit.speed_at_radius(3 * orbit.semi_major_axis))
 
     def test_rotating_construction_frame(self):
         """The frame the state vectors are given in is taken into account.
