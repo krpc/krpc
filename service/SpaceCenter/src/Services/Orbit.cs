@@ -777,17 +777,17 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double OrbitalSpeed {
-            get { return InternalOrbit.orbitalSpeed; }
+            get { return InternalOrbit.vel.magnitude; }
         }
 
         /// <summary>
         /// The orbital speed at the given time, in meters per second.
         /// </summary>
-        /// <param name="time">Time from now, in seconds.</param>
+        /// <param name="ut">The universal time to measure the speed at.</param>
         [KRPCMethod]
-        public double OrbitalSpeedAt (double time)
+        public double OrbitalSpeedAt (double ut)
         {
-            return InternalOrbit.getOrbitalSpeedAt (time);
+            return InternalOrbit.getOrbitalSpeedAtDistance (RadiusAt (ut));
         }
 
         /// <summary>

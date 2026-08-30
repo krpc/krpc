@@ -127,6 +127,38 @@ class TestOrbit(krpctest.TestCase):
         self.check_anomalies(vessel, orbit)
         # self.assertNone(orbit.next_orbit)
 
+    def test_orbital_speed_at(self):
+        """orbital_speed_at is the vis-viva speed at the radius the orbit has reached
+        at the given universal time."""
+        self.set_orbit("Bop", 320000, 0.18, 27, 38, 241, 2.3, 0)
+        orbit = self.space_center.active_vessel.orbit
+        ut = self.space_center.ut
+        for offset in (0, 300, 1200):
+            at = ut + offset
+            expected = math.sqrt(
+                orbit.body.gravitational_parameter
+                * ((2 / orbit.radius_at(at)) - (1 / orbit.semi_major_axis))
+            )
+            self.assertAlmostEqual(expected, orbit.orbital_speed_at(at), delta=1)
+        self.assertAlmostEqual(orbit.speed, orbit.orbital_speed_at(ut), delta=1)
+
+    def test_orbital_speed_of_a_vessel_under_physics(self):
+        """orbital_speed follows the orbit as the game runs. KSP caches an orbital
+        speed of its own and leaves it behind while a vessel is off rails."""
+        self.set_orbit("Kerbin", 1000000, 0.32, 0, 0, 0, 0.6, 0)
+        orbit = self.space_center.active_vessel.orbit
+        mu = orbit.body.gravitational_parameter
+        first = orbit.orbital_speed
+        for _ in range(2):
+            self.wait(10)
+            expected = math.sqrt(
+                mu * ((2 / orbit.radius) - (1 / orbit.semi_major_axis))
+            )
+            self.assertAlmostEqual(expected, orbit.orbital_speed, delta=1)
+        # The orbit sheds about 1.4 m/s of speed each second here, so a value cached
+        # when the vessel went off rails fails the check above within one wait
+        self.assertGreater(abs(first - orbit.orbital_speed), 10)
+
     def test_vessel_orbiting_mun_on_escape_soi(self):
         self.set_orbit("Mun", 1800000, 0.52, 0, 13, 67, 6.25, 0)
         vessel = self.space_center.active_vessel
