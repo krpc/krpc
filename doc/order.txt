@@ -407,7 +407,9 @@ SpaceCenter.Orbit.SemiMajorAxis
 SpaceCenter.Orbit.SemiMinorAxis
 SpaceCenter.Orbit.Radius
 SpaceCenter.Orbit.RadiusAt
+SpaceCenter.Orbit.Position
 SpaceCenter.Orbit.PositionAt
+SpaceCenter.Orbit.Velocity
 SpaceCenter.Orbit.VelocityAt
 SpaceCenter.Orbit.Speed
 SpaceCenter.Orbit.SpeedAt

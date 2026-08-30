@@ -148,6 +148,7 @@ class TestOrbit(krpctest.TestCase):
         off rails, so orbital_speed is read here too."""
         self.set_orbit("Kerbin", 1000000, 0.32, 0, 0, 0, 0.6, 0)
         orbit = self.space_center.active_vessel.orbit
+        frame = orbit.body.non_rotating_reference_frame
         mu = orbit.body.gravitational_parameter
         first = orbit.speed
         for _ in range(2):
@@ -157,6 +158,7 @@ class TestOrbit(krpctest.TestCase):
             )
             self.assertAlmostEqual(expected, orbit.speed, delta=1)
             self.assertAlmostEqual(expected, orbit.orbital_speed, delta=1)
+            self.assertAlmostEqual(expected, norm(orbit.velocity(frame)), delta=1)
         # The orbit sheds about 1.4 m/s of speed each second here, so a value cached
         # when the vessel went off rails fails the checks above within one wait
         self.assertGreater(abs(first - orbit.speed), 10)
@@ -172,6 +174,25 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(
             orbit.specific_energy / orbit.orbital_energy, 1, places=3
         )
+
+    def test_position_and_velocity(self):
+        """position and velocity are the point the orbit has reached now, so their
+        magnitudes are radius and speed."""
+        self.set_orbit("Bop", 320000, 0.18, 27, 38, 241, 2.3, 0)
+        orbit = self.space_center.active_vessel.orbit
+        frame = orbit.body.non_rotating_reference_frame
+        self.assertAlmostEqual(orbit.radius, norm(orbit.position(frame)), delta=10)
+        self.assertAlmostEqual(orbit.speed, norm(orbit.velocity(frame)), delta=1)
+
+    def test_position_and_velocity_follow_the_vessel(self):
+        """A vessel under physics is simulated rather than held on its orbit, and
+        position and velocity report the state it is in."""
+        self.set_orbit("Bop", 320000, 0.18, 27, 38, 241, 2.3, 0)
+        vessel = self.space_center.active_vessel
+        orbit = vessel.orbit
+        frame = orbit.body.non_rotating_reference_frame
+        self.assertAlmostEqual(vessel.position(frame), orbit.position(frame), delta=50)
+        self.assertAlmostEqual(vessel.velocity(frame), orbit.velocity(frame), delta=1)
 
     def test_vessel_orbiting_mun_on_escape_soi(self):
         self.set_orbit("Mun", 1800000, 0.52, 0, 13, 67, 6.25, 0)
@@ -562,6 +583,23 @@ class TestCreateFromPositionAndVelocity(krpctest.TestCase):
         )
         self.assertAlmostEqual(position, orbit.position_at(ut, self.frame), delta=1)
         self.assertAlmostEqual(velocity, orbit.velocity_at(ut, self.frame), delta=0.1)
+        self.assertAlmostEqual(position, orbit.position(self.frame), delta=1)
+        self.assertAlmostEqual(velocity, orbit.velocity(self.frame), delta=0.1)
+
+    def test_omitting_the_reference_frame(self):
+        """The position and velocity members measure in the non-rotating frame of the
+        body being orbited when no frame is given."""
+        radius = 1500000
+        orbit = self.create((0, 0, radius), (0.9 * self.circular_speed(radius), 0, 0))
+        ut = self.space_center.ut
+        self.assertAlmostEqual(orbit.position(self.frame), orbit.position(), delta=0.1)
+        self.assertAlmostEqual(orbit.velocity(self.frame), orbit.velocity(), delta=0.1)
+        self.assertAlmostEqual(
+            orbit.position_at(ut, self.frame), orbit.position_at(ut), delta=0.1
+        )
+        self.assertAlmostEqual(
+            orbit.velocity_at(ut, self.frame), orbit.velocity_at(ut), delta=0.1
+        )
 
     def test_rotating_construction_frame(self):
         """The frame the state vectors are given in is taken into account.
