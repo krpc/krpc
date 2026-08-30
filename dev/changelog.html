@@ -618,6 +618,7 @@
 <section id="server">
 <h3>Server<a class="headerlink" href="#server" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fix the error from a call that waits on the game being reported as <code class="docutils literal notranslate"><span class="pre">Exception</span> <span class="pre">has</span> <span class="pre">been</span> <span class="pre">thrown</span> <span class="pre">by</span> <span class="pre">the</span> <span class="pre">target</span> <span class="pre">of</span> <span class="pre">an</span> <span class="pre">invocation</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1083">#1083</a>)</p></li>
 <li><p>Add the <code class="docutils literal notranslate"><span class="pre">TickHoldTimeout</span></code> setting, which bounds how long a client may hold the game on one physics tick (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1070">#1070</a>)</p></li>
 <li><p>The server updates before the game collects control inputs, so a control input takes effect on the tick the call is made in (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1070">#1070</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> KSP 1.12.5 is the minimum supported version, matching the maximum (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1048">#1048</a>)</p></li>

@@ -1101,8 +1101,8 @@ never decoupled and remain on the vessel after all stages have fired.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The game calculates delta-v for the active vessel alone, over the several ticks
-after the vessel changes. Reading a delta-v member waits for the figures, so poll
-this instead when a call must not block.</p>
+after the vessel changes. A delta-v member reports the figures from the last
+calculation, and waits only when the game has calculated none.</p>
 </div>
 </dd></dl>
 

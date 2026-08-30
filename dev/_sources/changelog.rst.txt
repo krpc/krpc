@@ -32,6 +32,7 @@ Core
 Server
 ^^^^^^
 
+* Fix the error from a call that waits on the game being reported as ``Exception has been thrown by the target of an invocation`` (:issue:`1083`)
 * Add the ``TickHoldTimeout`` setting, which bounds how long a client may hold the game on one physics tick (:issue:`1070`)
 * The server updates before the game collects control inputs, so a control input takes effect on the tick the call is made in (:issue:`1070`)
 * :breaking:`Breaking` KSP 1.12.5 is the minimum supported version, matching the maximum (:issue:`1048`)
