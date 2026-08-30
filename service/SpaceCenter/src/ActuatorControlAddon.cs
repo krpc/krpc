@@ -340,6 +340,25 @@ namespace KRPC.SpaceCenter
                 : entry.Deflection * -limits.x;
         }
 
+        /// <summary>
+        /// The surface's deploy angle. While the override is active the module's own field
+        /// carries the deflection command, so the angle is the value saved for release.
+        /// </summary>
+        internal static float GetControlSurfaceDeployAngle (ModuleControlSurface module)
+        {
+            var entry = controlSurfaces.Get (module);
+            return entry != null ? entry.SavedDeployAngle : module.deployAngle;
+        }
+
+        internal static void SetControlSurfaceDeployAngle (ModuleControlSurface module, float angle)
+        {
+            var entry = controlSurfaces.Get (module);
+            if (entry != null)
+                entry.SavedDeployAngle = angle;
+            else
+                module.deployAngle = angle;
+        }
+
         internal static bool GetControlSurfaceOverride (ModuleControlSurface module)
         {
             return controlSurfaces.IsSet (module);
