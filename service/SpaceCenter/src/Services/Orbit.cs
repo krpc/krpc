@@ -367,6 +367,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The specific orbital energy, in Joules per kilogram (equivalently,
+        /// meters squared per second squared).
+        /// </summary>
+        /// <remarks>
+        /// This is the sum of the orbit's specific kinetic and potential energy, and
+        /// is negative for a bound (elliptical) orbit.
+        /// </remarks>
+        [KRPCProperty]
+        public double SpecificEnergy {
+            get { return InternalOrbit.orbitalEnergy; }
+        }
+
+        /// <summary>
         /// The orbital period, in seconds.
         /// </summary>
         [KRPCProperty]
@@ -502,7 +515,7 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="TrueAnomaly"/>,
         /// <see cref="TimeToApoapsis"/> and the like describe the orbit at
         /// <paramref name="ut"/> and stay there. Use <see cref="RadiusAt"/>,
-        /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
+        /// <see cref="SpeedAt"/>, <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
         /// <see cref="TrueAnomalyAtUT"/> for another time, and
         /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> to follow
         /// the orbit as time passes.
@@ -588,7 +601,7 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="Radius"/>, <see cref="Speed"/>, <see cref="TrueAnomaly"/>,
         /// <see cref="TimeToApoapsis"/> and the like describe the orbit at
         /// <paramref name="epoch"/> and stay there. Use <see cref="RadiusAt"/>,
-        /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
+        /// <see cref="SpeedAt"/>, <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
         /// <see cref="TrueAnomalyAtUT"/> for another time, and
         /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> to follow
         /// the orbit as time passes.
@@ -775,30 +788,30 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The current orbital speed in meters per second.
         /// </summary>
+        [Obsolete ("Use <see cref='Speed'/> instead.")]
         [KRPCProperty]
         public double OrbitalSpeed {
-            get { return InternalOrbit.vel.magnitude; }
+            get { return Speed; }
         }
 
         /// <summary>
         /// The orbital speed at the given time, in meters per second.
         /// </summary>
         /// <param name="ut">The universal time to measure the speed at.</param>
+        [Obsolete ("Use <see cref='SpeedAt'/> instead.")]
         [KRPCMethod]
         public double OrbitalSpeedAt (double ut)
         {
-            return InternalOrbit.getOrbitalSpeedAtDistance (RadiusAt (ut));
+            return SpeedAt (ut);
         }
 
         /// <summary>
-        /// The specific orbital energy of the orbit, in Joules per kilogram
-        /// (equivalently, meters squared per second squared). This is the sum
-        /// of the orbit's specific kinetic and potential energy, and is
-        /// negative for a bound (elliptical) orbit.
+        /// The specific orbital energy of the orbit, in Joules per kilogram.
         /// </summary>
+        [Obsolete ("Use <see cref='SpecificEnergy'/> instead.")]
         [KRPCProperty]
         public double OrbitalEnergy {
-            get { return InternalOrbit.orbitalEnergy; }
+            get { return SpecificEnergy; }
         }
 
         /// <summary>
@@ -809,6 +822,16 @@ namespace KRPC.SpaceCenter.Services
         public double RadiusAt (double ut)
         {
             return InternalOrbit.getRelativePositionAtUT(ut).magnitude;
+        }
+
+        /// <summary>
+        /// The orbital speed at the given time, in meters per second.
+        /// </summary>
+        /// <param name="ut">The universal time to measure the speed at.</param>
+        [KRPCMethod]
+        public double SpeedAt (double ut)
+        {
+            return InternalOrbit.getOrbitalSpeedAtDistance (RadiusAt (ut));
         }
 
         /// <summary>

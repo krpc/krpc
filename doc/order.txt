@@ -410,6 +410,8 @@ SpaceCenter.Orbit.RadiusAt
 SpaceCenter.Orbit.PositionAt
 SpaceCenter.Orbit.VelocityAt
 SpaceCenter.Orbit.Speed
+SpaceCenter.Orbit.SpeedAt
+SpaceCenter.Orbit.SpecificEnergy
 SpaceCenter.Orbit.Period
 SpaceCenter.Orbit.TimeToApoapsis
 SpaceCenter.Orbit.TimeToPeriapsis
