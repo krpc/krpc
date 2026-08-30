@@ -109,6 +109,10 @@ SpaceCenter service
   * Add ``Orbit.SpeedAt`` and ``Orbit.SpecificEnergy``, the speed at a given universal time and the specific orbital energy (:issue:`1086`)
   * :breaking:`Breaking` ``Orbit.OrbitalSpeedAt`` takes a universal time, in a parameter renamed from ``time`` to ``ut``. It took the time since the orbit's periapsis. Deprecated in favor of ``Orbit.SpeedAt`` (:issue:`1086`)
   * :deprecated:`Deprecated` ``Orbit.OrbitalSpeed`` and ``Orbit.OrbitalEnergy``, superseded by ``Orbit.Speed`` and ``Orbit.SpecificEnergy`` (:issue:`1086`)
+  * Add ``Orbit.Position`` and ``Orbit.Velocity``, the position and velocity the orbit has reached at the current time (:issue:`1087`)
+  * ``Orbit.PositionAt`` takes an optional reference frame, defaulting to the non-rotating reference frame of the body being orbited (:issue:`1087`)
+  * Add ``Orbit.PositionAtTrueAnomaly``, ``Orbit.VelocityAtTrueAnomaly``, ``Orbit.SpeedAtTrueAnomaly`` and ``Orbit.SpeedAtRadius`` (:issue:`1087`)
+  * Add ``Orbit.Altitude``, ``Orbit.MeanMotion``, ``Orbit.SemiLatusRectum`` and ``Orbit.SpecificAngularMomentum`` (:issue:`1087`)
 
 * Maneuver nodes
 

@@ -724,8 +724,8 @@ be at any later time.</p>
 sphere of influence, so <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getNextOrbit()" title="krpc.client.services.SpaceCenter.Orbit.getNextOrbit()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getNextOrbit()</span></code></a> is <code class="docutils literal notranslate"><span class="pre">null</span></code>, and no
 atmosphere slows it. A vessel held on rails follows its own orbit exactly,
 while one inside the physics bubble is simulated and drifts from it a little.</p>
-<p><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getRadius()" title="krpc.client.services.SpaceCenter.Orbit.getRadius()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getRadius()</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getSpeed()" title="krpc.client.services.SpaceCenter.Orbit.getSpeed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getSpeed()</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getTrueAnomaly()" title="krpc.client.services.SpaceCenter.Orbit.getTrueAnomaly()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getTrueAnomaly()</span></code></a>,
-<a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getTimeToApoapsis()" title="krpc.client.services.SpaceCenter.Orbit.getTimeToApoapsis()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getTimeToApoapsis()</span></code></a> and the like describe the orbit at
+<p><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getRadius()" title="krpc.client.services.SpaceCenter.Orbit.getRadius()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getRadius()</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getSpeed()" title="krpc.client.services.SpaceCenter.Orbit.getSpeed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getSpeed()</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.position(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.position(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.position(ReferenceFrame)</span></code></a>,
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.velocity(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.velocity(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.velocity(ReferenceFrame)</span></code></a> and the like describe the orbit at
 <em>ut</em> and stay there. Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.radiusAt(double)" title="krpc.client.services.SpaceCenter.Orbit.radiusAt(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.radiusAt(double)</span></code></a>,
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.speedAt(double)" title="krpc.client.services.SpaceCenter.Orbit.speedAt(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.speedAt(double)</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.positionAt(double, ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.positionAt(double, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.positionAt(double,</span> <span class="pre">ReferenceFrame)</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.velocityAt(double, ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.velocityAt(double, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.velocityAt(double,</span> <span class="pre">ReferenceFrame)</span></code></a> and
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.trueAnomalyAtUT(double)" title="krpc.client.services.SpaceCenter.Orbit.trueAnomalyAtUT(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.trueAnomalyAtUT(double)</span></code></a> for another time, and
@@ -768,8 +768,8 @@ atmosphere slows it.</p>
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getArgumentOfPeriapsis()" title="krpc.client.services.SpaceCenter.Orbit.getArgumentOfPeriapsis()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getArgumentOfPeriapsis()</span></code></a> report them against.
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.referencePlaneNormal(Connection, ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.referencePlaneNormal(Connection, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.referencePlaneNormal(ReferenceFrame)</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.referencePlaneDirection(Connection, ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.referencePlaneDirection(Connection, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.referencePlaneDirection(ReferenceFrame)</span></code></a>
 give these as vectors in a reference frame.</p>
-<p><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getRadius()" title="krpc.client.services.SpaceCenter.Orbit.getRadius()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getRadius()</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getSpeed()" title="krpc.client.services.SpaceCenter.Orbit.getSpeed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getSpeed()</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getTrueAnomaly()" title="krpc.client.services.SpaceCenter.Orbit.getTrueAnomaly()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getTrueAnomaly()</span></code></a>,
-<a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getTimeToApoapsis()" title="krpc.client.services.SpaceCenter.Orbit.getTimeToApoapsis()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getTimeToApoapsis()</span></code></a> and the like describe the orbit at
+<p><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getRadius()" title="krpc.client.services.SpaceCenter.Orbit.getRadius()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getRadius()</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getSpeed()" title="krpc.client.services.SpaceCenter.Orbit.getSpeed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getSpeed()</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.position(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.position(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.position(ReferenceFrame)</span></code></a>,
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.velocity(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.velocity(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.velocity(ReferenceFrame)</span></code></a> and the like describe the orbit at
 <em>epoch</em> and stay there. Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.radiusAt(double)" title="krpc.client.services.SpaceCenter.Orbit.radiusAt(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.radiusAt(double)</span></code></a>,
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.speedAt(double)" title="krpc.client.services.SpaceCenter.Orbit.speedAt(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.speedAt(double)</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.positionAt(double, ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.positionAt(double, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.positionAt(double,</span> <span class="pre">ReferenceFrame)</span></code></a>, <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.velocityAt(double, ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.velocityAt(double, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.velocityAt(double,</span> <span class="pre">ReferenceFrame)</span></code></a> and
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.trueAnomalyAtUT(double)" title="krpc.client.services.SpaceCenter.Orbit.trueAnomalyAtUT(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.trueAnomalyAtUT(double)</span></code></a> for another time, and
@@ -903,6 +903,12 @@ use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.getSemiLatusRectum()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSemiLatusRectum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.getSemiLatusRectum()" title="Link to this definition">#</a></dt>
+<dd><p>The semi-latus rectum of the orbit, in meters.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.getRadius()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getRadius</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.getRadius()" title="Link to this definition">#</a></dt>
 <dd><p>The current radius of the orbit, in meters. This is the distance between the center
@@ -911,6 +917,17 @@ is orbiting.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This value will change over time if the orbit is elliptical.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.getAltitude()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.getAltitude()" title="Link to this definition">#</a></dt>
+<dd><p>The current altitude of the object, in meters above the sea level of the body
+being orbited.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equal to <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getRadius()" title="krpc.client.services.SpaceCenter.Orbit.getRadius()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getRadius()</span></code></a> minus the equatorial radius of the body.</p>
 </div>
 </dd></dl>
 
@@ -928,6 +945,36 @@ is orbiting.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.radiusAtTrueAnomaly(double)">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">radiusAtTrueAnomaly</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">trueAnomaly</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.radiusAtTrueAnomaly(double)" title="Link to this definition">#</a></dt>
+<dd><p>The orbital radius at the point in the orbit given by the true anomaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trueAnomaly</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The true anomaly.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.position(ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.position(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The position the orbit has reached at the current time, in the given reference
+frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in. Defaults to <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()" title="krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CelestialBody.getNonRotatingReferenceFrame()</span></code></a> of <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getBody()" title="krpc.client.services.SpaceCenter.Orbit.getBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getBody()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.positionAt(double, ReferenceFrame)">
  <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">positionAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">ut</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.positionAt(double, ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The position at a given time, in the specified reference frame.</p>
@@ -935,11 +982,46 @@ is orbiting.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ut</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The universal time to measure the position at.</p></li>
-<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in.</p></li>
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in. Defaults to <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()" title="krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CelestialBody.getNonRotatingReferenceFrame()</span></code></a> of <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getBody()" title="krpc.client.services.SpaceCenter.Orbit.getBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getBody()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The position as a vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.positionAtTrueAnomaly(double, ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">positionAtTrueAnomaly</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">trueAnomaly</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.positionAtTrueAnomaly(double, ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The position at the point in the orbit given by the true anomaly, in the specified
+reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trueAnomaly</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The true anomaly.</p></li>
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in. Defaults to <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()" title="krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CelestialBody.getNonRotatingReferenceFrame()</span></code></a> of <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getBody()" title="krpc.client.services.SpaceCenter.Orbit.getBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getBody()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.velocity(ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.velocity(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The velocity the orbit has reached at the current time, in the given reference
+frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned velocity vector is in. Defaults to <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()" title="krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CelestialBody.getNonRotatingReferenceFrame()</span></code></a> of <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getBody()" title="krpc.client.services.SpaceCenter.Orbit.getBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getBody()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -952,7 +1034,25 @@ is orbiting.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ut</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The universal time to measure the velocity at.</p></li>
-<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned velocity vector is in.</p></li>
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned velocity vector is in. Defaults to <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()" title="krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CelestialBody.getNonRotatingReferenceFrame()</span></code></a> of <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getBody()" title="krpc.client.services.SpaceCenter.Orbit.getBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getBody()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.velocityAtTrueAnomaly(double, ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">velocityAtTrueAnomaly</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">trueAnomaly</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.velocityAtTrueAnomaly(double, ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The velocity at the point in the orbit given by the true anomaly, in the specified
+reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trueAnomaly</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The true anomaly.</p></li>
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned velocity vector is in. Defaults to <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()" title="krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CelestialBody.getNonRotatingReferenceFrame()</span></code></a> of <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getBody()" title="krpc.client.services.SpaceCenter.Orbit.getBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getBody()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -985,6 +1085,38 @@ is orbiting.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.speedAtRadius(double)">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">speedAtRadius</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">radius</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.speedAtRadius(double)" title="Link to this definition">#</a></dt>
+<dd><p>The orbital speed at the given orbital radius, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The orbital radius in meters.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the vis-viva speed. A radius the orbit never reaches is accepted. On
+an ellipse the speed is <code class="docutils literal notranslate"><span class="pre">NaN</span></code> above twice the semi-major axis.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.speedAtTrueAnomaly(double)">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">speedAtTrueAnomaly</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">trueAnomaly</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.speedAtTrueAnomaly(double)" title="Link to this definition">#</a></dt>
+<dd><p>The orbital speed at the point in the orbit given by the true anomaly, in meters
+per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trueAnomaly</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The true anomaly.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.getSpecificEnergy()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSpecificEnergy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.getSpecificEnergy()" title="Link to this definition">#</a></dt>
 <dd><p>The specific orbital energy, in Joules per kilogram (equivalently,
@@ -997,9 +1129,21 @@ is negative for a bound (elliptical) orbit.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.getSpecificAngularMomentum()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSpecificAngularMomentum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.getSpecificAngularMomentum()" title="Link to this definition">#</a></dt>
+<dd><p>The specific relative angular momentum, in meters squared per second.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.getPeriod()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getPeriod</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.getPeriod()" title="Link to this definition">#</a></dt>
 <dd><p>The orbital period, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.getMeanMotion()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMeanMotion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.getMeanMotion()" title="Link to this definition">#</a></dt>
+<dd><p>The mean motion, in radians per second.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -1143,19 +1287,6 @@ is measured.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>trueAnomaly</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – True anomaly.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.radiusAtTrueAnomaly(double)">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">radiusAtTrueAnomaly</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">trueAnomaly</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.radiusAtTrueAnomaly(double)" title="Link to this definition">#</a></dt>
-<dd><p>The orbital radius at the point in the orbit given by the true anomaly.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>trueAnomaly</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The true anomaly.</p></li>
 </ul>
 </dd>
 </dl>

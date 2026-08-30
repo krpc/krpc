@@ -34,8 +34,8 @@ Orbit
          atmosphere slows it. A vessel held on rails follows its own orbit exactly,
          while one inside the physics bubble is simulated and drifts from it a little.
 
-         :attr:`Orbit.radius`, :attr:`Orbit.speed`, :attr:`Orbit.true_anomaly`,
-         :attr:`Orbit.time_to_apoapsis` and the like describe the orbit at
+         :attr:`Orbit.radius`, :attr:`Orbit.speed`, :meth:`Orbit.position`,
+         :meth:`Orbit.velocity` and the like describe the orbit at
          *ut* and stay there. Use :meth:`Orbit.radius_at`,
          :meth:`Orbit.speed_at`, :meth:`Orbit.position_at`, :meth:`Orbit.velocity_at` and
          :meth:`Orbit.true_anomaly_at_ut` for another time, and
@@ -76,8 +76,8 @@ Orbit
          :meth:`Orbit.reference_plane_normal` and :meth:`Orbit.reference_plane_direction`
          give these as vectors in a reference frame.
 
-         :attr:`Orbit.radius`, :attr:`Orbit.speed`, :attr:`Orbit.true_anomaly`,
-         :attr:`Orbit.time_to_apoapsis` and the like describe the orbit at
+         :attr:`Orbit.radius`, :attr:`Orbit.speed`, :meth:`Orbit.position`,
+         :meth:`Orbit.velocity` and the like describe the orbit at
          *epoch* and stay there. Use :meth:`Orbit.radius_at`,
          :meth:`Orbit.speed_at`, :meth:`Orbit.position_at`, :meth:`Orbit.velocity_at` and
          :meth:`Orbit.true_anomaly_at_ut` for another time, and
@@ -226,6 +226,14 @@ Orbit
       :rtype: float
    
 
+   .. attribute:: semi_latus_rectum
+
+      The semi-latus rectum of the orbit, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
    .. attribute:: radius
 
       The current radius of the orbit, in meters. This is the distance between the center
@@ -240,6 +248,19 @@ Orbit
 
          This value will change over time if the orbit is elliptical.
 
+   .. attribute:: altitude
+
+      The current altitude of the object, in meters above the sea level of the body
+      being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         This is equal to :attr:`Orbit.radius` minus the equatorial radius of the body.
+
    .. method:: radius_at(ut)
 
       The orbital radius at the given time, in meters.
@@ -248,13 +269,52 @@ Orbit
       :rtype: float
    
 
+   .. method:: radius_at_true_anomaly(true_anomaly)
+
+      The orbital radius at the point in the orbit given by the true anomaly.
+
+      :param float true_anomaly: The true anomaly.
+      :rtype: float
+   
+
+   .. method:: position(reference_frame)
+
+      The position the orbit has reached at the current time, in the given reference
+      frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
    .. method:: position_at(ut, reference_frame)
 
       The position at a given time, in the specified reference frame.
 
       :param float ut: The universal time to measure the position at.
-      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
       :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: position_at_true_anomaly(true_anomaly, reference_frame)
+
+      The position at the point in the orbit given by the true anomaly, in the specified
+      reference frame.
+
+      :param float true_anomaly: The true anomaly.
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: velocity(reference_frame)
+
+      The velocity the orbit has reached at the current time, in the given reference
+      frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :rtype: tuple(float, float, float)
    
 
@@ -263,7 +323,18 @@ Orbit
       The velocity at a given time, in the specified reference frame.
 
       :param float ut: The universal time to measure the velocity at.
-      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in.
+      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: velocity_at_true_anomaly(true_anomaly, reference_frame)
+
+      The velocity at the point in the orbit given by the true anomaly, in the specified
+      reference frame.
+
+      :param float true_anomaly: The true anomaly.
+      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :rtype: tuple(float, float, float)
    
@@ -288,6 +359,28 @@ Orbit
       :rtype: float
    
 
+   .. method:: speed_at_radius(radius)
+
+      The orbital speed at the given orbital radius, in meters per second.
+
+      :param float radius: The orbital radius in meters.
+      :rtype: float
+   
+
+      .. note::
+
+         This is the vis-viva speed. A radius the orbit never reaches is accepted. On
+         an ellipse the speed is ``NaN`` above twice the semi-major axis.
+
+   .. method:: speed_at_true_anomaly(true_anomaly)
+
+      The orbital speed at the point in the orbit given by the true anomaly, in meters
+      per second.
+
+      :param float true_anomaly: The true anomaly.
+      :rtype: float
+   
+
    .. attribute:: specific_energy
 
       The specific orbital energy, in Joules per kilogram (equivalently,
@@ -302,9 +395,25 @@ Orbit
          This is the sum of the orbit's specific kinetic and potential energy, and
          is negative for a bound (elliptical) orbit.
 
+   .. attribute:: specific_angular_momentum
+
+      The specific relative angular momentum, in meters squared per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
    .. attribute:: period
 
       The orbital period, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: mean_motion
+
+      The mean motion, in radians per second.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -450,14 +559,6 @@ Orbit
       The universal time, in seconds, corresponding to the given true anomaly.
 
       :param float true_anomaly: True anomaly.
-      :rtype: float
-   
-
-   .. method:: radius_at_true_anomaly(true_anomaly)
-
-      The orbital radius at the point in the orbit given by the true anomaly.
-
-      :param float true_anomaly: The true anomaly.
       :rtype: float
    
 

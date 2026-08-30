@@ -37,8 +37,8 @@ Orbit
          atmosphere slows it. A vessel held on rails follows its own orbit exactly,
          while one inside the physics bubble is simulated and drifts from it a little.
 
-         :prop:`Orbit.Radius`, :prop:`Orbit.Speed`, :prop:`Orbit.TrueAnomaly`,
-         :prop:`Orbit.TimeToApoapsis` and the like describe the orbit at
+         :prop:`Orbit.Radius`, :prop:`Orbit.Speed`, :meth:`Orbit.Position`,
+         :meth:`Orbit.Velocity` and the like describe the orbit at
          *ut* and stay there. Use :meth:`Orbit.RadiusAt`,
          :meth:`Orbit.SpeedAt`, :meth:`Orbit.PositionAt`, :meth:`Orbit.VelocityAt` and
          :meth:`Orbit.TrueAnomalyAtUT` for another time, and
@@ -82,8 +82,8 @@ Orbit
          :meth:`Orbit.ReferencePlaneNormal` and :meth:`Orbit.ReferencePlaneDirection`
          give these as vectors in a reference frame.
 
-         :prop:`Orbit.Radius`, :prop:`Orbit.Speed`, :prop:`Orbit.TrueAnomaly`,
-         :prop:`Orbit.TimeToApoapsis` and the like describe the orbit at
+         :prop:`Orbit.Radius`, :prop:`Orbit.Speed`, :meth:`Orbit.Position`,
+         :meth:`Orbit.Velocity` and the like describe the orbit at
          *epoch* and stay there. Use :meth:`Orbit.RadiusAt`,
          :meth:`Orbit.SpeedAt`, :meth:`Orbit.PositionAt`, :meth:`Orbit.VelocityAt` and
          :meth:`Orbit.TrueAnomalyAtUT` for another time, and
@@ -222,6 +222,12 @@ Orbit
 
       :Game Scenes: All
 
+   .. property:: double SemiLatusRectum { get; }
+
+      The semi-latus rectum of the orbit, in meters.
+
+      :Game Scenes: All
+
    .. property:: double Radius { get; }
 
       The current radius of the orbit, in meters. This is the distance between the center
@@ -235,6 +241,18 @@ Orbit
 
          This value will change over time if the orbit is elliptical.
 
+   .. property:: double Altitude { get; }
+
+      The current altitude of the object, in meters above the sea level of the body
+      being orbited.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is equal to :prop:`Orbit.Radius` minus the equatorial radius of the body.
+
    .. method:: double RadiusAt(double ut)
 
       The orbital radius at the given time, in meters.
@@ -245,6 +263,28 @@ Orbit
 
       :Game Scenes: All
 
+   .. method:: double RadiusAtTrueAnomaly(double trueAnomaly)
+
+      The orbital radius at the point in the orbit given by the true anomaly.
+
+      :parameters:
+
+       * **trueAnomaly** -- The true anomaly.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+
+      The position the orbit has reached at the current time, in the given reference
+      frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of :prop:`Orbit.Body`.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
    .. method:: System.Tuple<double,double,double> PositionAt(double ut, ReferenceFrame referenceFrame)
 
       The position at a given time, in the specified reference frame.
@@ -252,9 +292,34 @@ Orbit
       :parameters:
 
        * **ut** -- The universal time to measure the position at.
-       * **referenceFrame** -- The reference frame that the returned position vector is in.
+       * **referenceFrame** -- The reference frame that the returned position vector is in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of :prop:`Orbit.Body`.
 
       :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> PositionAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame)
+
+      The position at the point in the orbit given by the true anomaly, in the specified
+      reference frame.
+
+      :parameters:
+
+       * **trueAnomaly** -- The true anomaly.
+       * **referenceFrame** -- The reference frame that the returned position vector is in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of :prop:`Orbit.Body`.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+
+      The velocity the orbit has reached at the current time, in the given reference
+      frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of :prop:`Orbit.Body`.
+
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :Game Scenes: All
 
    .. method:: System.Tuple<double,double,double> VelocityAt(double ut, ReferenceFrame referenceFrame)
@@ -264,7 +329,20 @@ Orbit
       :parameters:
 
        * **ut** -- The universal time to measure the velocity at.
-       * **referenceFrame** -- The reference frame that the returned velocity vector is in.
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of :prop:`Orbit.Body`.
+
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> VelocityAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame)
+
+      The velocity at the point in the orbit given by the true anomaly, in the specified
+      reference frame.
+
+      :parameters:
+
+       * **trueAnomaly** -- The true anomaly.
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of :prop:`Orbit.Body`.
 
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :Game Scenes: All
@@ -290,6 +368,33 @@ Orbit
 
       :Game Scenes: All
 
+   .. method:: double SpeedAtRadius(double radius)
+
+      The orbital speed at the given orbital radius, in meters per second.
+
+      :parameters:
+
+       * **radius** -- The orbital radius in meters.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the vis-viva speed. A radius the orbit never reaches is accepted. On
+         an ellipse the speed is ``NaN`` above twice the semi-major axis.
+
+   .. method:: double SpeedAtTrueAnomaly(double trueAnomaly)
+
+      The orbital speed at the point in the orbit given by the true anomaly, in meters
+      per second.
+
+      :parameters:
+
+       * **trueAnomaly** -- The true anomaly.
+
+      :Game Scenes: All
+
    .. property:: double SpecificEnergy { get; }
 
       The specific orbital energy, in Joules per kilogram (equivalently,
@@ -303,9 +408,21 @@ Orbit
          This is the sum of the orbit's specific kinetic and potential energy, and
          is negative for a bound (elliptical) orbit.
 
+   .. property:: double SpecificAngularMomentum { get; }
+
+      The specific relative angular momentum, in meters squared per second.
+
+      :Game Scenes: All
+
    .. property:: double Period { get; }
 
       The orbital period, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double MeanMotion { get; }
+
+      The mean motion, in radians per second.
 
       :Game Scenes: All
 
@@ -439,16 +556,6 @@ Orbit
       :parameters:
 
        * **trueAnomaly** -- True anomaly.
-
-      :Game Scenes: All
-
-   .. method:: double RadiusAtTrueAnomaly(double trueAnomaly)
-
-      The orbital radius at the point in the orbit given by the true anomaly.
-
-      :parameters:
-
-       * **trueAnomaly** -- The true anomaly.
 
       :Game Scenes: All
 

@@ -33,8 +33,8 @@ Orbit
          atmosphere slows it. A vessel held on rails follows its own orbit exactly,
          while one inside the physics bubble is simulated and drifts from it a little.
 
-         :meth:`Orbit.getRadius()`, :meth:`Orbit.getSpeed()`, :meth:`Orbit.getTrueAnomaly()`,
-         :meth:`Orbit.getTimeToApoapsis()` and the like describe the orbit at
+         :meth:`Orbit.getRadius()`, :meth:`Orbit.getSpeed()`, :meth:`Orbit.position(ReferenceFrame)`,
+         :meth:`Orbit.velocity(ReferenceFrame)` and the like describe the orbit at
          *ut* and stay there. Use :meth:`Orbit.radiusAt(double)`,
          :meth:`Orbit.speedAt(double)`, :meth:`Orbit.positionAt(double, ReferenceFrame)`, :meth:`Orbit.velocityAt(double, ReferenceFrame)` and
          :meth:`Orbit.trueAnomalyAtUT(double)` for another time, and
@@ -74,8 +74,8 @@ Orbit
          :meth:`Orbit.referencePlaneNormal(ReferenceFrame)` and :meth:`Orbit.referencePlaneDirection(ReferenceFrame)`
          give these as vectors in a reference frame.
 
-         :meth:`Orbit.getRadius()`, :meth:`Orbit.getSpeed()`, :meth:`Orbit.getTrueAnomaly()`,
-         :meth:`Orbit.getTimeToApoapsis()` and the like describe the orbit at
+         :meth:`Orbit.getRadius()`, :meth:`Orbit.getSpeed()`, :meth:`Orbit.position(ReferenceFrame)`,
+         :meth:`Orbit.velocity(ReferenceFrame)` and the like describe the orbit at
          *epoch* and stay there. Use :meth:`Orbit.radiusAt(double)`,
          :meth:`Orbit.speedAt(double)`, :meth:`Orbit.positionAt(double, ReferenceFrame)`, :meth:`Orbit.velocityAt(double, ReferenceFrame)` and
          :meth:`Orbit.trueAnomalyAtUT(double)` for another time, and
@@ -215,6 +215,13 @@ Orbit
 
    
 
+   .. method:: double getSemiLatusRectum()
+
+
+      The semi-latus rectum of the orbit, in meters.
+
+   
+
    .. method:: double getRadius()
 
 
@@ -228,6 +235,18 @@ Orbit
 
          This value will change over time if the orbit is elliptical.
 
+   .. method:: double getAltitude()
+
+
+      The current altitude of the object, in meters above the sea level of the body
+      being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :meth:`Orbit.getRadius()` minus the equatorial radius of the body.
+
    .. method:: double radiusAt(double ut)
 
       The orbital radius at the given time, in meters.
@@ -235,13 +254,48 @@ Orbit
       :param double ut: The universal time to measure the radius at.
    
 
+   .. method:: double radiusAtTrueAnomaly(double trueAnomaly)
+
+      The orbital radius at the point in the orbit given by the true anomaly.
+
+      :param double trueAnomaly: The true anomaly.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position the orbit has reached at the current time, in the given reference
+      frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The position as a vector.
+   
+
    .. method:: org.javatuples.Triplet<Double,Double,Double> positionAt(double ut, ReferenceFrame referenceFrame)
 
       The position at a given time, in the specified reference frame.
 
       :param double ut: The universal time to measure the position at.
-      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
       :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> positionAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame)
+
+      The position at the point in the orbit given by the true anomaly, in the specified
+      reference frame.
+
+      :param double trueAnomaly: The true anomaly.
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
+
+      The velocity the orbit has reached at the current time, in the given reference
+      frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
    
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> velocityAt(double ut, ReferenceFrame referenceFrame)
@@ -249,7 +303,17 @@ Orbit
       The velocity at a given time, in the specified reference frame.
 
       :param double ut: The universal time to measure the velocity at.
-      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in.
+      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocityAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame)
+
+      The velocity at the point in the orbit given by the true anomaly, in the specified
+      reference frame.
+
+      :param double trueAnomaly: The true anomaly.
+      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
    
 
@@ -271,6 +335,26 @@ Orbit
       :param double ut: The universal time to measure the speed at.
    
 
+   .. method:: double speedAtRadius(double radius)
+
+      The orbital speed at the given orbital radius, in meters per second.
+
+      :param double radius: The orbital radius in meters.
+   
+
+      .. note::
+
+         This is the vis-viva speed. A radius the orbit never reaches is accepted. On
+         an ellipse the speed is ``NaN`` above twice the semi-major axis.
+
+   .. method:: double speedAtTrueAnomaly(double trueAnomaly)
+
+      The orbital speed at the point in the orbit given by the true anomaly, in meters
+      per second.
+
+      :param double trueAnomaly: The true anomaly.
+   
+
    .. method:: double getSpecificEnergy()
 
 
@@ -284,10 +368,24 @@ Orbit
          This is the sum of the orbit's specific kinetic and potential energy, and
          is negative for a bound (elliptical) orbit.
 
+   .. method:: double getSpecificAngularMomentum()
+
+
+      The specific relative angular momentum, in meters squared per second.
+
+   
+
    .. method:: double getPeriod()
 
 
       The orbital period, in seconds.
+
+   
+
+   .. method:: double getMeanMotion()
+
+
+      The mean motion, in radians per second.
 
    
 
@@ -416,13 +514,6 @@ Orbit
       The universal time, in seconds, corresponding to the given true anomaly.
 
       :param double trueAnomaly: True anomaly.
-   
-
-   .. method:: double radiusAtTrueAnomaly(double trueAnomaly)
-
-      The orbital radius at the point in the orbit given by the true anomaly.
-
-      :param double trueAnomaly: The true anomaly.
    
 
    .. method:: double trueAnomalyAtAN(Orbit target)
