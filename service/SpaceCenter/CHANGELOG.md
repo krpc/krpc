@@ -103,6 +103,15 @@
     frame (#1046)
   - `Orbit.Epoch` is documented as the universal time at which the mean anomaly at epoch is
     measured. It was described as the time since that point (#1046)
+  - Fix `Orbit.OrbitalSpeed`, which reported the speed the vessel had when it was last on
+    rails (#1086)
+  - Add `Orbit.SpeedAt` and `Orbit.SpecificEnergy`, the speed at a given universal time and
+    the specific orbital energy (#1086)
+  - **Breaking:** `Orbit.OrbitalSpeedAt` takes a universal time, in a parameter renamed from
+    `time` to `ut`. It took the time since the orbit's periapsis. Deprecated in favor of
+    `Orbit.SpeedAt` (#1086)
+  - **Deprecated:** `Orbit.OrbitalSpeed` and `Orbit.OrbitalEnergy`, superseded by
+    `Orbit.Speed` and `Orbit.SpecificEnergy` (#1086)
 
 - Maneuver nodes
   - Using a maneuver node that has been removed raises `KRPC.ObjectDestroyedException`.
