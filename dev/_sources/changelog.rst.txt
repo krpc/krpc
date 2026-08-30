@@ -105,6 +105,10 @@ SpaceCenter service
   * :breaking:`Breaking` A ``ClosestApproach`` reads the two orbits as they are now, so its estimate follows them as the game runs. Asking for the same approach again gives the same object (:issue:`1072`)
   * Add ``Orbit.VelocityAt``, giving the velocity at a given time in a given reference frame (:issue:`1046`)
   * ``Orbit.Epoch`` is documented as the universal time at which the mean anomaly at epoch is measured. It was described as the time since that point (:issue:`1046`)
+  * Fix ``Orbit.OrbitalSpeed``, which reported the speed the vessel had when it was last on rails (:issue:`1086`)
+  * Add ``Orbit.SpeedAt`` and ``Orbit.SpecificEnergy``, the speed at a given universal time and the specific orbital energy (:issue:`1086`)
+  * :breaking:`Breaking` ``Orbit.OrbitalSpeedAt`` takes a universal time, in a parameter renamed from ``time`` to ``ut``. It took the time since the orbit's periapsis. Deprecated in favor of ``Orbit.SpeedAt`` (:issue:`1086`)
+  * :deprecated:`Deprecated` ``Orbit.OrbitalSpeed`` and ``Orbit.OrbitalEnergy``, superseded by ``Orbit.Speed`` and ``Orbit.SpecificEnergy`` (:issue:`1086`)
 
 * Maneuver nodes
 

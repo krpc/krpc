@@ -40,7 +40,7 @@ Orbit
          :prop:`Orbit.Radius`, :prop:`Orbit.Speed`, :prop:`Orbit.TrueAnomaly`,
          :prop:`Orbit.TimeToApoapsis` and the like describe the orbit at
          *ut* and stay there. Use :meth:`Orbit.RadiusAt`,
-         :meth:`Orbit.PositionAt`, :meth:`Orbit.VelocityAt` and
+         :meth:`Orbit.SpeedAt`, :meth:`Orbit.PositionAt`, :meth:`Orbit.VelocityAt` and
          :meth:`Orbit.TrueAnomalyAtUT` for another time, and
          :prop:`Orbit.ReferenceFrame` and :prop:`Orbit.OrbitalReferenceFrame` to follow
          the orbit as time passes.
@@ -85,7 +85,7 @@ Orbit
          :prop:`Orbit.Radius`, :prop:`Orbit.Speed`, :prop:`Orbit.TrueAnomaly`,
          :prop:`Orbit.TimeToApoapsis` and the like describe the orbit at
          *epoch* and stay there. Use :meth:`Orbit.RadiusAt`,
-         :meth:`Orbit.PositionAt`, :meth:`Orbit.VelocityAt` and
+         :meth:`Orbit.SpeedAt`, :meth:`Orbit.PositionAt`, :meth:`Orbit.VelocityAt` and
          :meth:`Orbit.TrueAnomalyAtUT` for another time, and
          :prop:`Orbit.ReferenceFrame` and :prop:`Orbit.OrbitalReferenceFrame` to follow
          the orbit as time passes.
@@ -280,6 +280,29 @@ Orbit
 
          This value will change over time if the orbit is elliptical.
 
+   .. method:: double SpeedAt(double ut)
+
+      The orbital speed at the given time, in meters per second.
+
+      :parameters:
+
+       * **ut** -- The universal time to measure the speed at.
+
+      :Game Scenes: All
+
+   .. property:: double SpecificEnergy { get; }
+
+      The specific orbital energy, in Joules per kilogram (equivalently,
+      meters squared per second squared).
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the sum of the orbit's specific kinetic and potential energy, and
+         is negative for a bound (elliptical) orbit.
+
    .. property:: double Period { get; }
 
       The orbital period, in seconds.
@@ -451,26 +474,29 @@ Orbit
 
    .. property:: double OrbitalSpeed { get; }
 
+      .. warning:: Deprecated. Use :prop:`Orbit.Speed` instead.
+
       The current orbital speed in meters per second.
 
       :Game Scenes: All
 
-   .. method:: double OrbitalSpeedAt(double time)
+   .. method:: double OrbitalSpeedAt(double ut)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.SpeedAt` instead.
 
       The orbital speed at the given time, in meters per second.
 
       :parameters:
 
-       * **time** -- Time from now, in seconds.
+       * **ut** -- The universal time to measure the speed at.
 
       :Game Scenes: All
 
    .. property:: double OrbitalEnergy { get; }
 
-      The specific orbital energy of the orbit, in Joules per kilogram
-      (equivalently, meters squared per second squared). This is the sum
-      of the orbit's specific kinetic and potential energy, and is
-      negative for a bound (elliptical) orbit.
+      .. warning:: Deprecated. Use :prop:`Orbit.SpecificEnergy` instead.
+
+      The specific orbital energy of the orbit, in Joules per kilogram.
 
       :Game Scenes: All
 

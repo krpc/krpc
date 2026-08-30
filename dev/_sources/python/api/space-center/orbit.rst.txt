@@ -37,7 +37,7 @@ Orbit
          :attr:`Orbit.radius`, :attr:`Orbit.speed`, :attr:`Orbit.true_anomaly`,
          :attr:`Orbit.time_to_apoapsis` and the like describe the orbit at
          *ut* and stay there. Use :meth:`Orbit.radius_at`,
-         :meth:`Orbit.position_at`, :meth:`Orbit.velocity_at` and
+         :meth:`Orbit.speed_at`, :meth:`Orbit.position_at`, :meth:`Orbit.velocity_at` and
          :meth:`Orbit.true_anomaly_at_ut` for another time, and
          :attr:`Orbit.reference_frame` and :attr:`Orbit.orbital_reference_frame` to follow
          the orbit as time passes.
@@ -79,7 +79,7 @@ Orbit
          :attr:`Orbit.radius`, :attr:`Orbit.speed`, :attr:`Orbit.true_anomaly`,
          :attr:`Orbit.time_to_apoapsis` and the like describe the orbit at
          *epoch* and stay there. Use :meth:`Orbit.radius_at`,
-         :meth:`Orbit.position_at`, :meth:`Orbit.velocity_at` and
+         :meth:`Orbit.speed_at`, :meth:`Orbit.position_at`, :meth:`Orbit.velocity_at` and
          :meth:`Orbit.true_anomaly_at_ut` for another time, and
          :attr:`Orbit.reference_frame` and :attr:`Orbit.orbital_reference_frame` to follow
          the orbit as time passes.
@@ -280,6 +280,28 @@ Orbit
 
          This value will change over time if the orbit is elliptical.
 
+   .. method:: speed_at(ut)
+
+      The orbital speed at the given time, in meters per second.
+
+      :param float ut: The universal time to measure the speed at.
+      :rtype: float
+   
+
+   .. attribute:: specific_energy
+
+      The specific orbital energy, in Joules per kilogram (equivalently,
+      meters squared per second squared).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         This is the sum of the orbit's specific kinetic and potential energy, and
+         is negative for a bound (elliptical) orbit.
+
    .. attribute:: period
 
       The orbital period, in seconds.
@@ -457,26 +479,29 @@ Orbit
 
    .. attribute:: orbital_speed
 
+      .. warning:: Deprecated. Use :attr:`Orbit.speed` instead.
+
       The current orbital speed in meters per second.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
    
 
-   .. method:: orbital_speed_at(time)
+   .. method:: orbital_speed_at(ut)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.speed_at` instead.
 
       The orbital speed at the given time, in meters per second.
 
-      :param float time: Time from now, in seconds.
+      :param float ut: The universal time to measure the speed at.
       :rtype: float
    
 
    .. attribute:: orbital_energy
 
-      The specific orbital energy of the orbit, in Joules per kilogram
-      (equivalently, meters squared per second squared). This is the sum
-      of the orbit's specific kinetic and potential energy, and is
-      negative for a bound (elliptical) orbit.
+      .. warning:: Deprecated. Use :attr:`Orbit.specific_energy` instead.
+
+      The specific orbital energy of the orbit, in Joules per kilogram.
 
       :Attribute: Read-only, cannot be set
       :rtype: float

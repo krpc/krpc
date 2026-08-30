@@ -36,7 +36,7 @@ Orbit
          :meth:`Orbit.getRadius()`, :meth:`Orbit.getSpeed()`, :meth:`Orbit.getTrueAnomaly()`,
          :meth:`Orbit.getTimeToApoapsis()` and the like describe the orbit at
          *ut* and stay there. Use :meth:`Orbit.radiusAt(double)`,
-         :meth:`Orbit.positionAt(double, ReferenceFrame)`, :meth:`Orbit.velocityAt(double, ReferenceFrame)` and
+         :meth:`Orbit.speedAt(double)`, :meth:`Orbit.positionAt(double, ReferenceFrame)`, :meth:`Orbit.velocityAt(double, ReferenceFrame)` and
          :meth:`Orbit.trueAnomalyAtUT(double)` for another time, and
          :meth:`Orbit.getReferenceFrame()` and :meth:`Orbit.getOrbitalReferenceFrame()` to follow
          the orbit as time passes.
@@ -77,7 +77,7 @@ Orbit
          :meth:`Orbit.getRadius()`, :meth:`Orbit.getSpeed()`, :meth:`Orbit.getTrueAnomaly()`,
          :meth:`Orbit.getTimeToApoapsis()` and the like describe the orbit at
          *epoch* and stay there. Use :meth:`Orbit.radiusAt(double)`,
-         :meth:`Orbit.positionAt(double, ReferenceFrame)`, :meth:`Orbit.velocityAt(double, ReferenceFrame)` and
+         :meth:`Orbit.speedAt(double)`, :meth:`Orbit.positionAt(double, ReferenceFrame)`, :meth:`Orbit.velocityAt(double, ReferenceFrame)` and
          :meth:`Orbit.trueAnomalyAtUT(double)` for another time, and
          :meth:`Orbit.getReferenceFrame()` and :meth:`Orbit.getOrbitalReferenceFrame()` to follow
          the orbit as time passes.
@@ -264,6 +264,26 @@ Orbit
 
          This value will change over time if the orbit is elliptical.
 
+   .. method:: double speedAt(double ut)
+
+      The orbital speed at the given time, in meters per second.
+
+      :param double ut: The universal time to measure the speed at.
+   
+
+   .. method:: double getSpecificEnergy()
+
+
+      The specific orbital energy, in Joules per kilogram (equivalently,
+      meters squared per second squared).
+
+   
+
+      .. note::
+
+         This is the sum of the orbit's specific kinetic and potential energy, and
+         is negative for a bound (elliptical) orbit.
+
    .. method:: double getPeriod()
 
 
@@ -422,24 +442,27 @@ Orbit
    .. method:: double getOrbitalSpeed()
 
 
+      .. warning:: Deprecated. Use :meth:`Orbit.getSpeed()` instead.
+
       The current orbital speed in meters per second.
 
    
 
-   .. method:: double orbitalSpeedAt(double time)
+   .. method:: double orbitalSpeedAt(double ut)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.speedAt(double)` instead.
 
       The orbital speed at the given time, in meters per second.
 
-      :param double time: Time from now, in seconds.
+      :param double ut: The universal time to measure the speed at.
    
 
    .. method:: double getOrbitalEnergy()
 
 
-      The specific orbital energy of the orbit, in Joules per kilogram
-      (equivalently, meters squared per second squared). This is the sum
-      of the orbit's specific kinetic and potential energy, and is
-      negative for a bound (elliptical) orbit.
+      .. warning:: Deprecated. Use :meth:`Orbit.getSpecificEnergy()` instead.
+
+      The specific orbital energy of the orbit, in Joules per kilogram.
 
    
 

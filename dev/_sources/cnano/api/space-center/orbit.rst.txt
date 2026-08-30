@@ -39,7 +39,7 @@ Orbit
          :func:`krpc_SpaceCenter_Orbit_Radius`, :func:`krpc_SpaceCenter_Orbit_Speed`, :func:`krpc_SpaceCenter_Orbit_TrueAnomaly`,
          :func:`krpc_SpaceCenter_Orbit_TimeToApoapsis` and the like describe the orbit at
          *ut* and stay there. Use :func:`krpc_SpaceCenter_Orbit_RadiusAt`,
-         :func:`krpc_SpaceCenter_Orbit_PositionAt`, :func:`krpc_SpaceCenter_Orbit_VelocityAt` and
+         :func:`krpc_SpaceCenter_Orbit_SpeedAt`, :func:`krpc_SpaceCenter_Orbit_PositionAt`, :func:`krpc_SpaceCenter_Orbit_VelocityAt` and
          :func:`krpc_SpaceCenter_Orbit_TrueAnomalyAtUT` for another time, and
          :func:`krpc_SpaceCenter_Orbit_ReferenceFrame` and :func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame` to follow
          the orbit as time passes.
@@ -83,7 +83,7 @@ Orbit
          :func:`krpc_SpaceCenter_Orbit_Radius`, :func:`krpc_SpaceCenter_Orbit_Speed`, :func:`krpc_SpaceCenter_Orbit_TrueAnomaly`,
          :func:`krpc_SpaceCenter_Orbit_TimeToApoapsis` and the like describe the orbit at
          *epoch* and stay there. Use :func:`krpc_SpaceCenter_Orbit_RadiusAt`,
-         :func:`krpc_SpaceCenter_Orbit_PositionAt`, :func:`krpc_SpaceCenter_Orbit_VelocityAt` and
+         :func:`krpc_SpaceCenter_Orbit_SpeedAt`, :func:`krpc_SpaceCenter_Orbit_PositionAt`, :func:`krpc_SpaceCenter_Orbit_VelocityAt` and
          :func:`krpc_SpaceCenter_Orbit_TrueAnomalyAtUT` for another time, and
          :func:`krpc_SpaceCenter_Orbit_ReferenceFrame` and :func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame` to follow
          the orbit as time passes.
@@ -269,6 +269,28 @@ Orbit
 
          This value will change over time if the orbit is elliptical.
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_SpeedAt(krpc_connection_t connection, double * result, double ut)
+
+      The orbital speed at the given time, in meters per second.
+
+      :Parameters:
+
+       * **ut** -- The universal time to measure the speed at.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_SpecificEnergy(krpc_connection_t connection, double * result)
+
+      The specific orbital energy, in Joules per kilogram (equivalently,
+      meters squared per second squared).
+
+   
+
+      .. note::
+
+         This is the sum of the orbit's specific kinetic and potential energy, and
+         is negative for a bound (elliptical) orbit.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Period(krpc_connection_t connection, double * result)
 
       The orbital period, in seconds.
@@ -438,26 +460,29 @@ Orbit
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_OrbitalSpeed(krpc_connection_t connection, double * result)
 
+      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Orbit_Speed` instead.
+
       The current orbital speed in meters per second.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_OrbitalSpeedAt(krpc_connection_t connection, double * result, double time)
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_OrbitalSpeedAt(krpc_connection_t connection, double * result, double ut)
+
+      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Orbit_SpeedAt` instead.
 
       The orbital speed at the given time, in meters per second.
 
       :Parameters:
 
-       * **time** -- Time from now, in seconds.
+       * **ut** -- The universal time to measure the speed at.
 
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_OrbitalEnergy(krpc_connection_t connection, double * result)
 
-      The specific orbital energy of the orbit, in Joules per kilogram
-      (equivalently, meters squared per second squared). This is the sum
-      of the orbit's specific kinetic and potential energy, and is
-      negative for a bound (elliptical) orbit.
+      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Orbit_SpecificEnergy` instead.
+
+      The specific orbital energy of the orbit, in Joules per kilogram.
 
    
 

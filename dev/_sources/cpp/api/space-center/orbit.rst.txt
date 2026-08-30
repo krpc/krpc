@@ -39,7 +39,7 @@ Orbit
          :func:`Orbit::radius`, :func:`Orbit::speed`, :func:`Orbit::true_anomaly`,
          :func:`Orbit::time_to_apoapsis` and the like describe the orbit at
          *ut* and stay there. Use :func:`Orbit::radius_at`,
-         :func:`Orbit::position_at`, :func:`Orbit::velocity_at` and
+         :func:`Orbit::speed_at`, :func:`Orbit::position_at`, :func:`Orbit::velocity_at` and
          :func:`Orbit::true_anomaly_at_ut` for another time, and
          :func:`Orbit::reference_frame` and :func:`Orbit::orbital_reference_frame` to follow
          the orbit as time passes.
@@ -83,7 +83,7 @@ Orbit
          :func:`Orbit::radius`, :func:`Orbit::speed`, :func:`Orbit::true_anomaly`,
          :func:`Orbit::time_to_apoapsis` and the like describe the orbit at
          *epoch* and stay there. Use :func:`Orbit::radius_at`,
-         :func:`Orbit::position_at`, :func:`Orbit::velocity_at` and
+         :func:`Orbit::speed_at`, :func:`Orbit::position_at`, :func:`Orbit::velocity_at` and
          :func:`Orbit::true_anomaly_at_ut` for another time, and
          :func:`Orbit::reference_frame` and :func:`Orbit::orbital_reference_frame` to follow
          the orbit as time passes.
@@ -269,6 +269,28 @@ Orbit
 
          This value will change over time if the orbit is elliptical.
 
+   .. function:: double speed_at(double ut)
+
+      The orbital speed at the given time, in meters per second.
+
+      :Parameters:
+
+       * **ut** -- The universal time to measure the speed at.
+
+   
+
+   .. function:: double specific_energy()
+
+      The specific orbital energy, in Joules per kilogram (equivalently,
+      meters squared per second squared).
+
+   
+
+      .. note::
+
+         This is the sum of the orbit's specific kinetic and potential energy, and
+         is negative for a bound (elliptical) orbit.
+
    .. function:: double period()
 
       The orbital period, in seconds.
@@ -438,26 +460,29 @@ Orbit
 
    .. function:: double orbital_speed()
 
+      .. warning:: Deprecated. Use :func:`Orbit::speed` instead.
+
       The current orbital speed in meters per second.
 
    
 
-   .. function:: double orbital_speed_at(double time)
+   .. function:: double orbital_speed_at(double ut)
+
+      .. warning:: Deprecated. Use :func:`Orbit::speed_at` instead.
 
       The orbital speed at the given time, in meters per second.
 
       :Parameters:
 
-       * **time** -- Time from now, in seconds.
+       * **ut** -- The universal time to measure the speed at.
 
    
 
    .. function:: double orbital_energy()
 
-      The specific orbital energy of the orbit, in Joules per kilogram
-      (equivalently, meters squared per second squared). This is the sum
-      of the orbit's specific kinetic and potential energy, and is
-      negative for a bound (elliptical) orbit.
+      .. warning:: Deprecated. Use :func:`Orbit::specific_energy` instead.
+
+      The specific orbital energy of the orbit, in Joules per kilogram.
 
    
 

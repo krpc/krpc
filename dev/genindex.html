@@ -4520,6 +4520,8 @@
 </li>
       <li><a href="java/api/ui/layout.html#krpc.client.services.UI.Layout.getSpacing()">getSpacing() (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.getSpecificEnergy()">getSpecificEnergy() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getSpecificImpulse()">getSpecificImpulse() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getSpecificImpulse()">[1]</a>, <a href="java/api/space-center/stage.html#krpc.client.services.SpaceCenter.Stage.getSpecificImpulse()">[2]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getSpecificImpulse()">[3]</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getSpeed()">getSpeed() (Java method)</a>, <a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getSpeed()">[1]</a>, <a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getSpeed()">[2]</a>, <a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.getSpeed()">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Intake.getSpeed()">[4]</a>
@@ -8467,7 +8469,11 @@
 </li>
       <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit15semi_minor_axisEv">krpc::services::SpaceCenter::Orbit::semi_minor_axis (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit15specific_energyEv">krpc::services::SpaceCenter::Orbit::specific_energy (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit5speedEv">krpc::services::SpaceCenter::Orbit::speed (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit8speed_atEd">krpc::services::SpaceCenter::Orbit::speed_at (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5Orbit24time_of_closest_approachE5Orbit">krpc::services::SpaceCenter::Orbit::time_of_closest_approach (C++ function)</a>
 </li>
@@ -13433,7 +13439,11 @@
 </li>
       <li><a href="cnano/api/space-center/orbit.html#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SemiMinorAxis">krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SemiMinorAxis (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/orbit.html#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpecificEnergy">krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpecificEnergy (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/orbit.html#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_Speed">krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_Speed (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/orbit.html#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpeedAt">krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpeedAt (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/orbit.html#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_TimeOfClosestApproach">krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_TimeOfClosestApproach (C function)</a>
 </li>
@@ -19267,12 +19277,12 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.docked_part">SpaceCenter.SpaceCenter.DockingPort.docked_part (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.has_shield">SpaceCenter.SpaceCenter.DockingPort.has_shield (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.maximum_rotation">SpaceCenter.SpaceCenter.DockingPort.maximum_rotation (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.minimum_rotation">SpaceCenter.SpaceCenter.DockingPort.minimum_rotation (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.part">SpaceCenter.SpaceCenter.DockingPort.part (attribute)</a>
@@ -19710,6 +19720,8 @@
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.SpaceCenter.Orbit.semi_major_axis">SpaceCenter.SpaceCenter.Orbit.semi_major_axis (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.SpaceCenter.Orbit.semi_minor_axis">SpaceCenter.SpaceCenter.Orbit.semi_minor_axis (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/orbit.html#SpaceCenter.SpaceCenter.Orbit.specific_energy">SpaceCenter.SpaceCenter.Orbit.specific_energy (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.SpaceCenter.Orbit.speed">SpaceCenter.SpaceCenter.Orbit.speed (attribute)</a>
 </li>
@@ -20585,6 +20597,8 @@
 </li>
       <li><a href="python/api/ui/layout.html#UI.Layout.spacing">spacing (Layout attribute)</a>
 </li>
+      <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.specific_energy">specific_energy (Orbit attribute)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Engine.specific_impulse">specific_impulse (Engine attribute)</a>
 
       <ul>
@@ -20615,9 +20629,13 @@
         <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.speed">(ServoGroup attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/space-center/orbit.html#SpaceCenter.Orbit.speed_at">speed_at() (Orbit method)</a>, <a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.speed_at">[1]</a>
+</li>
       <li><a href="python/api/space-center/control.html#SpaceCenter.Control.speed_mode">speed_mode (Control attribute)</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.speed_of_sound">speed_of_sound (Flight attribute)</a>
+</li>
+      <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.speedAt(double)">speedAt(double) (Java method)</a>
 </li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpeedMode">SpeedMode (class in SpaceCenter)</a>, <a href="python/api/space-center/control.html#SpaceCenter.SpeedMode">[1]</a>
 
