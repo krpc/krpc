@@ -24,12 +24,12 @@ class TestOrbit(krpctest.TestCase):
         )
         self.assertAlmostEqual(speed, orbit.speed, delta=1)
 
-    def check_orbital_energy(self, orbit):
+    def check_specific_energy(self, orbit):
         # Specific orbital energy is -mu / (2a) for a bound orbit. KSP derives
         # it from the instantaneous state vectors, so compare as a ratio to
         # tolerate the small jitter in an active vessel's velocity.
         energy = -orbit.body.gravitational_parameter / (2 * orbit.semi_major_axis)
-        self.assertAlmostEqual(energy / orbit.orbital_energy, 1, places=3)
+        self.assertAlmostEqual(energy / orbit.specific_energy, 1, places=3)
 
     def check_angles_close(self, angle, other_angle, places=2):
         # Compare two angles, in radians, ignoring multiples of 2*pi
@@ -85,7 +85,7 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(700000, orbit.radius, delta=50)
         self.assertAlmostEqual(2246.1, orbit.speed, delta=1)
         self.check_radius_and_speed(vessel, orbit)
-        self.check_orbital_energy(orbit)
+        self.check_specific_energy(orbit)
         # self.check_time_to_apoapsis_and_periapsis(vessel, orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity, places=1)
@@ -126,6 +126,52 @@ class TestOrbit(krpctest.TestCase):
         # vessel is under physics; check_anomalies verifies their consistency
         self.check_anomalies(vessel, orbit)
         # self.assertNone(orbit.next_orbit)
+
+    def test_speed_at(self):
+        """speed_at is the vis-viva speed at the radius the orbit has reached at
+        the given universal time."""
+        self.set_orbit("Bop", 320000, 0.18, 27, 38, 241, 2.3, 0)
+        orbit = self.space_center.active_vessel.orbit
+        ut = self.space_center.ut
+        for offset in (0, 300, 1200):
+            at = ut + offset
+            expected = math.sqrt(
+                orbit.body.gravitational_parameter
+                * ((2 / orbit.radius_at(at)) - (1 / orbit.semi_major_axis))
+            )
+            self.assertAlmostEqual(expected, orbit.speed_at(at), delta=1)
+        self.assertAlmostEqual(orbit.speed, orbit.speed_at(ut), delta=1)
+
+    def test_speed_of_a_vessel_under_physics(self):
+        """The speed of a vessel under physics follows its orbit as the game runs.
+        KSP caches an orbital speed of its own and leaves it behind while a vessel is
+        off rails, so orbital_speed is read here too."""
+        self.set_orbit("Kerbin", 1000000, 0.32, 0, 0, 0, 0.6, 0)
+        orbit = self.space_center.active_vessel.orbit
+        mu = orbit.body.gravitational_parameter
+        first = orbit.speed
+        for _ in range(2):
+            self.wait(10)
+            expected = math.sqrt(
+                mu * ((2 / orbit.radius) - (1 / orbit.semi_major_axis))
+            )
+            self.assertAlmostEqual(expected, orbit.speed, delta=1)
+            self.assertAlmostEqual(expected, orbit.orbital_speed, delta=1)
+        # The orbit sheds about 1.4 m/s of speed each second here, so a value cached
+        # when the vessel went off rails fails the checks above within one wait
+        self.assertGreater(abs(first - orbit.speed), 10)
+
+    def test_the_deprecated_speed_and_energy_members(self):
+        """orbital_speed, orbital_speed_at and orbital_energy report what the
+        members that supersede them report."""
+        self.set_orbit("Bop", 320000, 0.18, 27, 38, 241, 2.3, 0)
+        orbit = self.space_center.active_vessel.orbit
+        ut = self.space_center.ut
+        self.assertAlmostEqual(orbit.speed, orbit.orbital_speed, delta=1)
+        self.assertAlmostEqual(orbit.speed_at(ut), orbit.orbital_speed_at(ut), delta=1)
+        self.assertAlmostEqual(
+            orbit.specific_energy / orbit.orbital_energy, 1, places=3
+        )
 
     def test_vessel_orbiting_mun_on_escape_soi(self):
         self.set_orbit("Mun", 1800000, 0.52, 0, 13, 67, 6.25, 0)
@@ -198,7 +244,7 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(13599840256, orbit.radius)
         self.assertAlmostEqual(9284.50, orbit.speed, places=1)
         self.check_radius_and_speed(body, orbit)
-        self.check_orbital_energy(orbit)
+        self.check_specific_energy(orbit)
         # self.check_time_to_apoapsis_and_periapsis(body, orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity)
@@ -220,7 +266,7 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(47000000, orbit.radius)
         self.assertAlmostEqual(274.1, orbit.speed, delta=0.5)
         self.check_radius_and_speed(body, orbit)
-        self.check_orbital_energy(orbit)
+        self.check_specific_energy(orbit)
         # self.check_time_to_apoapsis_and_periapsis(body, orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity)
