@@ -2,7 +2,7 @@ import math
 import unittest
 
 import krpctest
-from krpctest.geometry import compute_position, norm
+from krpctest.geometry import compute_position, cross, norm
 
 
 class TestOrbit(krpctest.TestCase):
@@ -652,6 +652,23 @@ class TestCreateFromPositionAndVelocity(krpctest.TestCase):
         )
         # Above twice the semi-major axis the vis-viva speed has no real value
         self.assertIsNaN(orbit.speed_at_radius(3 * orbit.semi_major_axis))
+
+    def test_the_orbit_shape_scalars(self):
+        """altitude, semi_latus_rectum, mean_motion and specific_angular_momentum
+        follow from the shape of the orbit."""
+        radius = 1500000
+        orbit = self.create((0, 0, radius), (0.9 * self.circular_speed(radius), 0, 0))
+        mu = self.kerbin.gravitational_parameter
+        sma = orbit.semi_major_axis
+        self.assertAlmostEqual(
+            radius - self.kerbin.equatorial_radius, orbit.altitude, delta=1
+        )
+        self.assertAlmostEqual(
+            sma * (1 - orbit.eccentricity**2), orbit.semi_latus_rectum, delta=1
+        )
+        self.assertAlmostEqual(math.sqrt(mu / sma**3) / orbit.mean_motion, 1, places=6)
+        momentum = norm(cross(orbit.position(self.frame), orbit.velocity(self.frame)))
+        self.assertAlmostEqual(momentum / orbit.specific_angular_momentum, 1, places=6)
 
     def test_rotating_construction_frame(self):
         """The frame the state vectors are given in is taken into account.

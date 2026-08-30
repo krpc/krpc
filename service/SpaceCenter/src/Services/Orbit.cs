@@ -341,6 +341,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The semi-latus rectum of the orbit, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double SemiLatusRectum {
+            get { return InternalOrbit.semiLatusRectum; }
+        }
+
+        /// <summary>
         /// The current radius of the orbit, in meters. This is the distance between the center
         /// of mass of the object in orbit, and the center of mass of the body around which it
         /// is orbiting.
@@ -351,6 +359,18 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public double Radius {
             get { return InternalOrbit.radius; }
+        }
+
+        /// <summary>
+        /// The current altitude of the object, in meters above the sea level of the body
+        /// being orbited.
+        /// </summary>
+        /// <remarks>
+        /// This is equal to <see cref="Radius"/> minus the equatorial radius of the body.
+        /// </remarks>
+        [KRPCProperty]
+        public double Altitude {
+            get { return InternalOrbit.altitude; }
         }
 
         /// <summary>
@@ -378,11 +398,27 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The specific relative angular momentum, in meters squared per second.
+        /// </summary>
+        [KRPCProperty]
+        public double SpecificAngularMomentum {
+            get { return InternalOrbit.h.magnitude; }
+        }
+
+        /// <summary>
         /// The orbital period, in seconds.
         /// </summary>
         [KRPCProperty]
         public double Period {
             get { return InternalOrbit.period; }
+        }
+
+        /// <summary>
+        /// The mean motion, in radians per second.
+        /// </summary>
+        [KRPCProperty]
+        public double MeanMotion {
+            get { return InternalOrbit.meanMotion; }
         }
 
         /// <summary>

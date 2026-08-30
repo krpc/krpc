@@ -405,7 +405,9 @@ SpaceCenter.Orbit.ApoapsisAltitude
 SpaceCenter.Orbit.PeriapsisAltitude
 SpaceCenter.Orbit.SemiMajorAxis
 SpaceCenter.Orbit.SemiMinorAxis
+SpaceCenter.Orbit.SemiLatusRectum
 SpaceCenter.Orbit.Radius
+SpaceCenter.Orbit.Altitude
 SpaceCenter.Orbit.RadiusAt
 SpaceCenter.Orbit.RadiusAtTrueAnomaly
 SpaceCenter.Orbit.Position
@@ -419,7 +421,9 @@ SpaceCenter.Orbit.SpeedAt
 SpaceCenter.Orbit.SpeedAtRadius
 SpaceCenter.Orbit.SpeedAtTrueAnomaly
 SpaceCenter.Orbit.SpecificEnergy
+SpaceCenter.Orbit.SpecificAngularMomentum
 SpaceCenter.Orbit.Period
+SpaceCenter.Orbit.MeanMotion
 SpaceCenter.Orbit.TimeToApoapsis
 SpaceCenter.Orbit.TimeToPeriapsis
 SpaceCenter.Orbit.Eccentricity
