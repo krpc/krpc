@@ -96,6 +96,54 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.wait()
         self.assertFalse(self.ctrlsrf.deployed)
 
+    def test_deploy_angle(self):
+        # The limits default to +/-1.5 * ctrlSurfaceRange, and the angle itself
+        # to ctrlSurfaceRange, so they differ between the two part types
+        self.assertAlmostEqual(-22.5, self.ctrlsrf.min_deploy_angle)
+        self.assertAlmostEqual(22.5, self.ctrlsrf.max_deploy_angle)
+        self.assertAlmostEqual(15, self.ctrlsrf.deploy_angle)
+        self.assertAlmostEqual(-37.5, self.winglet.min_deploy_angle)
+        self.assertAlmostEqual(37.5, self.winglet.max_deploy_angle)
+        self.assertAlmostEqual(25, self.winglet.deploy_angle)
+        self.ctrlsrf.deploy_angle = -10
+        self.wait()
+        self.assertAlmostEqual(-10, self.ctrlsrf.deploy_angle)
+        # Out of range values clamp to the limits
+        self.ctrlsrf.deploy_angle = 100
+        self.assertAlmostEqual(22.5, self.ctrlsrf.deploy_angle)
+        self.ctrlsrf.deploy_angle = -100
+        self.assertAlmostEqual(-22.5, self.ctrlsrf.deploy_angle)
+        # The angle is persistent, so restore it for the other tests
+        self.ctrlsrf.deploy_angle = 15
+        self.wait()
+        self.assertAlmostEqual(15, self.ctrlsrf.deploy_angle)
+
+    def test_deploy_angle_during_override(self):
+        cs = self.ctrlsrf
+        cs.deflection_override = True
+        self.wait()
+        # The override drives the angle, so a value set here is held for the release
+        cs.deploy_angle = -5
+        self.assertAlmostEqual(-5, cs.deploy_angle)
+        cs.deflection_override = False
+        self.wait()
+        self.assertAlmostEqual(-5, cs.deploy_angle)
+        cs.deploy_angle = 15
+        self.wait()
+
+    def test_deployed_during_override(self):
+        cs = self.ctrlsrf
+        self.assertFalse(cs.deployed)
+        cs.deflection_override = True
+        self.wait()
+        # The override holds the surface deployed, so it cannot be set
+        self.assertTrue(cs.deployed)
+        self.assertRaises(RuntimeError, setattr, cs, "deployed", False)
+        self.assertRaises(RuntimeError, setattr, cs, "deployed", True)
+        cs.deflection_override = False
+        self.wait()
+        self.assertFalse(cs.deployed)
+
     def test_deflection_override(self):
         cs = self.ctrlsrf
         self.assertFalse(cs.deflection_override)
@@ -126,6 +174,7 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.assertTrue(cs.yaw_enabled)
         self.assertFalse(cs.roll_enabled)
         self.assertFalse(cs.deployed)
+        self.assertAlmostEqual(15, cs.deploy_angle)
 
     def test_deflection_override_released_on_disconnect(self):
         cs = self.ctrlsrf
@@ -149,6 +198,7 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.assertTrue(cs.yaw_enabled)
         self.assertFalse(cs.roll_enabled)
         self.assertFalse(cs.deployed)
+        self.assertAlmostEqual(15, cs.deploy_angle)
 
     def test_surface_area(self):
         self.assertAlmostEqual(1, self.ctrlsrf.surface_area)

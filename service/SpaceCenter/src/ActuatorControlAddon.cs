@@ -117,6 +117,7 @@ namespace KRPC.SpaceCenter
             public bool SavedIgnoreYaw;
             public bool SavedIgnoreRoll;
             public bool SavedDeploy;
+            public float SavedDeployAngle;
         }
 
         static readonly ClientOwnedOverrides<ModuleGimbal, GimbalEntry> gimbals =
@@ -305,7 +306,8 @@ namespace KRPC.SpaceCenter
                 SavedIgnorePitch = module.ignorePitch,
                 SavedIgnoreYaw = module.ignoreYaw,
                 SavedIgnoreRoll = module.ignoreRoll,
-                SavedDeploy = module.deploy
+                SavedDeploy = module.deploy,
+                SavedDeployAngle = module.deployAngle
             };
             // Remove the cooked-control contribution and drive the surface through the
             // deploy offset, which the module applies persistently every frame.
@@ -325,6 +327,7 @@ namespace KRPC.SpaceCenter
             module.ignoreYaw = entry.SavedIgnoreYaw;
             module.ignoreRoll = entry.SavedIgnoreRoll;
             module.deploy = entry.SavedDeploy;
+            module.deployAngle = entry.SavedDeployAngle;
         }
 
         static void ApplyControlSurfaceDeflection (ModuleControlSurface module, ControlSurfaceEntry entry)
@@ -335,6 +338,25 @@ namespace KRPC.SpaceCenter
             module.deployAngle = entry.Deflection >= 0f
                 ? entry.Deflection * limits.y
                 : entry.Deflection * -limits.x;
+        }
+
+        /// <summary>
+        /// The surface's deploy angle. While the override is active the module's own field
+        /// carries the deflection command, so the angle is the value saved for release.
+        /// </summary>
+        internal static float GetControlSurfaceDeployAngle (ModuleControlSurface module)
+        {
+            var entry = controlSurfaces.Get (module);
+            return entry != null ? entry.SavedDeployAngle : module.deployAngle;
+        }
+
+        internal static void SetControlSurfaceDeployAngle (ModuleControlSurface module, float angle)
+        {
+            var entry = controlSurfaces.Get (module);
+            if (entry != null)
+                entry.SavedDeployAngle = angle;
+            else
+                module.deployAngle = angle;
         }
 
         internal static bool GetControlSurfaceOverride (ModuleControlSurface module)

@@ -116,12 +116,55 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the control surface has been fully deployed.
+        /// Whether the control surface has been fully deployed. Throws an exception if set
+        /// while <see cref="DeflectionOverride"/> is enabled, which holds the surface deployed.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployed {
             get { return InternalControlSurface.deploy; }
-            set { InternalControlSurface.deploy = value; }
+            set {
+                var surface = InternalControlSurface;
+                if (ActuatorControlAddon.GetControlSurfaceOverride (surface))
+                    throw new InvalidOperationException (
+                        "Control surface deflection is being overridden");
+                surface.deploy = value;
+            }
+        }
+
+        /// <summary>
+        /// The deploy angle of the control surface, in degrees.
+        /// </summary>
+        /// <remarks>
+        /// Applied when <see cref="Deployed"/> is true, and clamped to the range given by
+        /// <see cref="MinDeployAngle"/> and <see cref="MaxDeployAngle"/>. While
+        /// <see cref="DeflectionOverride"/> is enabled, <see cref="Deflection"/> drives the
+        /// angle. A value set here takes effect when the override is released.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float DeployAngle {
+            get { return ActuatorControlAddon.GetControlSurfaceDeployAngle (InternalControlSurface); }
+            set {
+                var surface = InternalControlSurface;
+                var limits = surface.deployAngleLimits;
+                ActuatorControlAddon.SetControlSurfaceDeployAngle (
+                    surface, value.Clamp (limits.x, limits.y));
+            }
+        }
+
+        /// <summary>
+        /// The minimum <see cref="DeployAngle"/> of the control surface, in degrees.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float MinDeployAngle {
+            get { return InternalControlSurface.deployAngleLimits.x; }
+        }
+
+        /// <summary>
+        /// The maximum <see cref="DeployAngle"/> of the control surface, in degrees.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float MaxDeployAngle {
+            get { return InternalControlSurface.deployAngleLimits.y; }
         }
 
         /// <summary>

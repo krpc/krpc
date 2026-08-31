@@ -920,6 +920,9 @@ SpaceCenter.ControlSurface.RollEnabled
 SpaceCenter.ControlSurface.AuthorityLimiter
 SpaceCenter.ControlSurface.Inverted
 SpaceCenter.ControlSurface.Deployed
+SpaceCenter.ControlSurface.DeployAngle
+SpaceCenter.ControlSurface.MinDeployAngle
+SpaceCenter.ControlSurface.MaxDeployAngle
 SpaceCenter.ControlSurface.DeflectionOverride
 SpaceCenter.ControlSurface.Deflection
 SpaceCenter.ControlSurface.SurfaceArea
