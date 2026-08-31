@@ -48,6 +48,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         // apart from lastStepFixedTime so that a step which fails part way through does not run
         // again in the same tick, and does not make the output it did not produce look recent.
         float lastAttemptFixedTime = float.NaN;
+        // Whether the vessel was unloaded on the last step, which makes the next step on a loaded
+        // vessel start the loop over (see Step).
+        bool wasUnloaded;
         // The time the last output stays usable. The loop runs once per tick, but the tick it is
         // applied in is not always the tick it ran in, and a program driving it by hand may miss
         // one. Holding the last command over a short gap is smoother than dropping to zero. Past
@@ -805,9 +808,9 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// Run one tick of the control loop, writing its result to <see cref="Output"/>. Does
-        /// nothing while not engaged, when it has already been tried on this physics tick, or
-        /// while the reference frame cannot be measured in. If the client that engaged the
-        /// auto-pilot has disconnected, disengages instead.
+        /// nothing while not engaged, when it has already been tried on this physics tick, while
+        /// the vessel is unloaded, or while the reference frame cannot be measured in. If the
+        /// client that engaged the auto-pilot has disconnected, disengages instead.
         /// </summary>
         public void Step ()
         {
@@ -828,8 +831,22 @@ namespace KRPC.SpaceCenter.AutoPilot
             // another one, and the output hold time releases the controls in the meantime.
             if (ReferenceFrame.GameObjectState != GameObjectState.Live)
                 return;
+            var internalVessel = vessel.InternalVessel;
+            // A vessel the game has unloaded is flown on rails, and its parts are gone, so there
+            // is no rate to measure and no actuator to command. The loop waits for the game to
+            // load the vessel again, and the output hold time releases the controls meanwhile.
+            if (internalVessel.rootPart == null) {
+                wasUnloaded = true;
+                return;
+            }
+            // A vessel the game has loaded again comes back with a fresh orientation and rate, so
+            // the loop starts over instead of carrying its frame and integrators across the gap.
+            if (wasUnloaded) {
+                wasUnloaded = false;
+                Start ();
+            }
             // The auto-pilot fights stock SAS, so hold it off while engaged.
-            vessel.InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
+            internalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
             Update (Output);
             // Only a step that got this far produced an output to fly the vessel with.
             lastStepFixedTime = Time.fixedTime;
