@@ -116,12 +116,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Whether the control surface has been fully deployed.
+        /// Whether the control surface has been fully deployed. Throws an exception if set
+        /// while <see cref="DeflectionOverride"/> is enabled, which holds the surface deployed.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployed {
             get { return InternalControlSurface.deploy; }
-            set { InternalControlSurface.deploy = value; }
+            set {
+                var surface = InternalControlSurface;
+                if (ActuatorControlAddon.GetControlSurfaceOverride (surface))
+                    throw new InvalidOperationException (
+                        "Control surface deflection is being overridden");
+                surface.deploy = value;
+            }
         }
 
         /// <summary>

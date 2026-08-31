@@ -131,6 +131,19 @@ class TestPartsControlSurface(krpctest.TestCase):
         cs.deploy_angle = 15
         self.wait()
 
+    def test_deployed_during_override(self):
+        cs = self.ctrlsrf
+        self.assertFalse(cs.deployed)
+        cs.deflection_override = True
+        self.wait()
+        # The override holds the surface deployed, so it cannot be set
+        self.assertTrue(cs.deployed)
+        self.assertRaises(RuntimeError, setattr, cs, "deployed", False)
+        self.assertRaises(RuntimeError, setattr, cs, "deployed", True)
+        cs.deflection_override = False
+        self.wait()
+        self.assertFalse(cs.deployed)
+
     def test_deflection_override(self):
         cs = self.ctrlsrf
         self.assertFalse(cs.deflection_override)
