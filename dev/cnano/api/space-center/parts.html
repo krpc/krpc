@@ -3435,7 +3435,53 @@ control surface will move.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_Deployed">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_set_Deployed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_Deployed" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the control surface has been fully deployed.</p>
+<dd><p>Whether the control surface has been fully deployed. Throws an exception if set
+while <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeflectionOverride" title="krpc_SpaceCenter_ControlSurface_DeflectionOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_DeflectionOverride()</span></code></a> is enabled, which holds the surface deployed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeployAngle">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_DeployAngle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeployAngle" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_DeployAngle">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_set_DeployAngle</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_DeployAngle" title="Link to this definition">#</a><br /></dt>
+<dd><p>The deploy angle of the control surface, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Applied when <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_Deployed" title="krpc_SpaceCenter_ControlSurface_Deployed"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_Deployed()</span></code></a> is true, and clamped to the range given by
+<a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MinDeployAngle" title="krpc_SpaceCenter_ControlSurface_MinDeployAngle"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_MinDeployAngle()</span></code></a> and <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MaxDeployAngle" title="krpc_SpaceCenter_ControlSurface_MaxDeployAngle"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_MaxDeployAngle()</span></code></a>. While
+<a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeflectionOverride" title="krpc_SpaceCenter_ControlSurface_DeflectionOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_DeflectionOverride()</span></code></a> is enabled, <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_Deflection" title="krpc_SpaceCenter_ControlSurface_Deflection"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_Deflection()</span></code></a> drives the
+angle. A value set here takes effect when the override is released.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MinDeployAngle">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_MinDeployAngle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MinDeployAngle" title="Link to this definition">#</a><br /></dt>
+<dd><p>The minimum <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeployAngle" title="krpc_SpaceCenter_ControlSurface_DeployAngle"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_DeployAngle()</span></code></a> of the control surface, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MaxDeployAngle">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_MaxDeployAngle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MaxDeployAngle" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeployAngle" title="krpc_SpaceCenter_ControlSurface_DeployAngle"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_DeployAngle()</span></code></a> of the control surface, in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>

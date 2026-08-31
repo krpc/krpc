@@ -2114,7 +2114,35 @@ Control Surface
    .. function:: bool deployed()
    .. function:: void set_deployed(bool value)
 
-      Whether the control surface has been fully deployed.
+      Whether the control surface has been fully deployed. Throws an exception if set
+      while :func:`ControlSurface::deflection_override` is enabled, which holds the surface deployed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: float deploy_angle()
+   .. function:: void set_deploy_angle(float value)
+
+      The deploy angle of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applied when :func:`ControlSurface::deployed` is true, and clamped to the range given by
+         :func:`ControlSurface::min_deploy_angle` and :func:`ControlSurface::max_deploy_angle`. While
+         :func:`ControlSurface::deflection_override` is enabled, :func:`ControlSurface::deflection` drives the
+         angle. A value set here takes effect when the override is released.
+
+   .. function:: float min_deploy_angle()
+
+      The minimum :func:`ControlSurface::deploy_angle` of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: float max_deploy_angle()
+
+      The maximum :func:`ControlSurface::deploy_angle` of the control surface, in degrees.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 

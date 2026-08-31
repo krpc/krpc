@@ -2114,7 +2114,34 @@ Control Surface
 
    .. property:: bool Deployed { get; set; }
 
-      Whether the control surface has been fully deployed.
+      Whether the control surface has been fully deployed. Throws an exception if set
+      while :prop:`ControlSurface.DeflectionOverride` is enabled, which holds the surface deployed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: float DeployAngle { get; set; }
+
+      The deploy angle of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applied when :prop:`ControlSurface.Deployed` is true, and clamped to the range given by
+         :prop:`ControlSurface.MinDeployAngle` and :prop:`ControlSurface.MaxDeployAngle`. While
+         :prop:`ControlSurface.DeflectionOverride` is enabled, :prop:`ControlSurface.Deflection` drives the
+         angle. A value set here takes effect when the override is released.
+
+   .. property:: float MinDeployAngle { get; }
+
+      The minimum :prop:`ControlSurface.DeployAngle` of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: float MaxDeployAngle { get; }
+
+      The maximum :prop:`ControlSurface.DeployAngle` of the control surface, in degrees.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 

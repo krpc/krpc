@@ -2394,6 +2394,8 @@
       </ul></li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Parachute.deploy_altitude">deploy_altitude (Parachute attribute)</a>
 </li>
+      <li><a href="python/api/space-center/parts.html#SpaceCenter.ControlSurface.deploy_angle">deploy_angle (ControlSurface attribute)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Parachute.deploy_min_pressure">deploy_min_pressure (Parachute attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Antenna.deployable">deployable (Antenna attribute)</a>
@@ -2458,6 +2460,8 @@
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-type.html#krpc.client.services.KerbalAlarmClock.AlarmType.DESCENDING_NODE">DESCENDING_NODE (Java field)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/alarms.html#SpaceCenter.Alarm.description">description (Alarm attribute)</a>
 
       <ul>
@@ -2466,8 +2470,6 @@
         <li><a href="python/api/space-center/editor.html#SpaceCenter.EditorVessel.description">(EditorVessel attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/alarms.html#SpaceCenter.Alarm.destination_body">destination_body (Alarm attribute)</a>
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.diagnostic_log">diagnostic_log (AutoPilot attribute)</a>
@@ -3598,6 +3600,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parachute.getDeployAltitude()">getDeployAltitude() (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getDeployAngle()">getDeployAngle() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Antenna.getDeployed()">getDeployed() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getDeployed()">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Experiment.getDeployed()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Leg.getDeployed()">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parachute.getDeployed()">[4]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Radiator.getDeployed()">[5]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceHarvester.getDeployed()">[6]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.SolarPanel.getDeployed()">[7]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getDeployed()">[8]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parachute.getDeployMinPressure()">getDeployMinPressure() (Java method)</a>
@@ -4000,10 +4004,10 @@
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getLineSpacing()">getLineSpacing() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getLineSpacing()">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLocalPosition()">getLocalPosition() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getLocked()">getLocked() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticPiston.getLocked()">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getLocked()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getLocked()">[3]</a>
@@ -4037,6 +4041,8 @@
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getMaxAngularVelocity()">getMaxAngularVelocity() (Java method)</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getMaxConfigPosition()">getMaxConfigPosition() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getMaxDeployAngle()">getMaxDeployAngle() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.Camera.getMaxDistance()">getMaxDistance() (Java method)</a>
 </li>
@@ -4087,6 +4093,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getMinAngle()">getMinAngle() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getMinAngle()">[1]</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getMinConfigPosition()">getMinConfigPosition() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getMinDeployAngle()">getMinDeployAngle() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.Camera.getMinDistance()">getMinDistance() (Java method)</a>
 </li>
@@ -7535,9 +7543,15 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface19deflection_overrideEv">krpc::services::SpaceCenter::ControlSurface::deflection_override (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface12deploy_angleEv">krpc::services::SpaceCenter::ControlSurface::deploy_angle (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface8deployedEv">krpc::services::SpaceCenter::ControlSurface::deployed (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface8invertedEv">krpc::services::SpaceCenter::ControlSurface::inverted (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface16max_deploy_angleEv">krpc::services::SpaceCenter::ControlSurface::max_deploy_angle (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface16min_deploy_angleEv">krpc::services::SpaceCenter::ControlSurface::min_deploy_angle (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface4partEv">krpc::services::SpaceCenter::ControlSurface::part (C++ function)</a>
 </li>
@@ -7550,6 +7564,8 @@
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface14set_deflectionEf">krpc::services::SpaceCenter::ControlSurface::set_deflection (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface23set_deflection_overrideEb">krpc::services::SpaceCenter::ControlSurface::set_deflection_override (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface16set_deploy_angleEf">krpc::services::SpaceCenter::ControlSurface::set_deploy_angle (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ControlSurface12set_deployedEb">krpc::services::SpaceCenter::ControlSurface::set_deployed (C++ function)</a>
 </li>
@@ -12525,9 +12541,15 @@
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeflectionOverride">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeflectionOverride (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeployAngle">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeployAngle (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_Deployed">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_Deployed (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_Inverted">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_Inverted (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MaxDeployAngle">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MaxDeployAngle (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MinDeployAngle">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_MinDeployAngle (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_Part">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_Part (C function)</a>
 </li>
@@ -12540,6 +12562,8 @@
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_Deflection">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_Deflection (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_DeflectionOverride">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_DeflectionOverride (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_DeployAngle">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_DeployAngle (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_Deployed">krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_set_Deployed (C function)</a>
 </li>
@@ -15980,6 +16004,8 @@
 </li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.max_config_position">max_config_position (Servo attribute)</a>
 </li>
+      <li><a href="python/api/space-center/parts.html#SpaceCenter.ControlSurface.max_deploy_angle">max_deploy_angle (ControlSurface attribute)</a>
+</li>
       <li><a href="python/api/space-center/camera.html#SpaceCenter.Camera.max_distance">max_distance (Camera attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.RoboticPiston.max_extension">max_extension (RoboticPiston attribute)</a>
@@ -16107,6 +16133,8 @@
 </li>
       </ul></li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.min_config_position">min_config_position (Servo attribute)</a>
+</li>
+      <li><a href="python/api/space-center/parts.html#SpaceCenter.ControlSurface.min_deploy_angle">min_deploy_angle (ControlSurface attribute)</a>
 </li>
       <li><a href="python/api/space-center/camera.html#SpaceCenter.Camera.min_distance">min_distance (Camera attribute)</a>
 </li>
@@ -18084,6 +18112,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parachute.setDeployAltitude(float)">setDeployAltitude(float) (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.setDeployAngle(float)">setDeployAngle(float) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Antenna.setDeployed(boolean)">setDeployed(boolean) (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.setDeployed(boolean)">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Leg.setDeployed(boolean)">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Radiator.setDeployed(boolean)">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceHarvester.setDeployed(boolean)">[4]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.SolarPanel.setDeployed(boolean)">[5]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.setDeployed(boolean)">[6]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parachute.setDeployMinPressure(float)">setDeployMinPressure(float) (Java method)</a>
@@ -19275,9 +19305,15 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.ControlSurface.deflection_override">SpaceCenter.SpaceCenter.ControlSurface.deflection_override (attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.ControlSurface.deploy_angle">SpaceCenter.SpaceCenter.ControlSurface.deploy_angle (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.ControlSurface.deployed">SpaceCenter.SpaceCenter.ControlSurface.deployed (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.ControlSurface.inverted">SpaceCenter.SpaceCenter.ControlSurface.inverted (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.ControlSurface.max_deploy_angle">SpaceCenter.SpaceCenter.ControlSurface.max_deploy_angle (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.ControlSurface.min_deploy_angle">SpaceCenter.SpaceCenter.ControlSurface.min_deploy_angle (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.ControlSurface.part">SpaceCenter.SpaceCenter.ControlSurface.part (attribute)</a>
 </li>
@@ -19345,12 +19381,12 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.part">SpaceCenter.SpaceCenter.DockingPort.part (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.reengage_distance">SpaceCenter.SpaceCenter.DockingPort.reengage_distance (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.reference_frame">SpaceCenter.SpaceCenter.DockingPort.reference_frame (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.rotation_locked">SpaceCenter.SpaceCenter.DockingPort.rotation_locked (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.rotation_target">SpaceCenter.SpaceCenter.DockingPort.rotation_target (attribute)</a>

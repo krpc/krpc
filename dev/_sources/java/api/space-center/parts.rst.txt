@@ -2139,7 +2139,38 @@ Control Surface
 
    .. method:: void setDeployed(boolean value)
 
-      Whether the control surface has been fully deployed.
+      Whether the control surface has been fully deployed. Throws an exception if set
+      while :meth:`ControlSurface.getDeflectionOverride()` is enabled, which holds the surface deployed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: float getDeployAngle()
+
+   .. method:: void setDeployAngle(float value)
+
+      The deploy angle of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applied when :meth:`ControlSurface.getDeployed()` is true, and clamped to the range given by
+         :meth:`ControlSurface.getMinDeployAngle()` and :meth:`ControlSurface.getMaxDeployAngle()`. While
+         :meth:`ControlSurface.getDeflectionOverride()` is enabled, :meth:`ControlSurface.getDeflection()` drives the
+         angle. A value set here takes effect when the override is released.
+
+   .. method:: float getMinDeployAngle()
+
+
+      The minimum :meth:`ControlSurface.getDeployAngle()` of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: float getMaxDeployAngle()
+
+
+      The maximum :meth:`ControlSurface.getDeployAngle()` of the control surface, in degrees.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 

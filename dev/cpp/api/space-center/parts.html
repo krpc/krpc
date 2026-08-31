@@ -3435,7 +3435,53 @@ control surface will move.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14ControlSurface12set_deployedEb">
 <span id="_CPPv3N4krpc8services11SpaceCenter14ControlSurface12set_deployedEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter14ControlSurface12set_deployedEb"></span><span id="krpc::services::SpaceCenter::ControlSurface::set_deployed__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_deployed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface12set_deployedEb" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the control surface has been fully deployed.</p>
+<dd><p>Whether the control surface has been fully deployed. Throws an exception if set
+while <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface19deflection_overrideEv" title="krpc::services::SpaceCenter::ControlSurface::deflection_override"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ControlSurface::deflection_override()</span></code></a> is enabled, which holds the surface deployed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14ControlSurface12deploy_angleEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter14ControlSurface12deploy_angleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter14ControlSurface12deploy_angleEv"></span><span id="krpc::services::SpaceCenter::ControlSurface::deploy_angle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deploy_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface12deploy_angleEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14ControlSurface16set_deploy_angleEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter14ControlSurface16set_deploy_angleEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter14ControlSurface16set_deploy_angleEf"></span><span id="krpc::services::SpaceCenter::ControlSurface::set_deploy_angle__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_deploy_angle</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface16set_deploy_angleEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The deploy angle of the control surface, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Applied when <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface8deployedEv" title="krpc::services::SpaceCenter::ControlSurface::deployed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ControlSurface::deployed()</span></code></a> is true, and clamped to the range given by
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface16min_deploy_angleEv" title="krpc::services::SpaceCenter::ControlSurface::min_deploy_angle"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ControlSurface::min_deploy_angle()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface16max_deploy_angleEv" title="krpc::services::SpaceCenter::ControlSurface::max_deploy_angle"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ControlSurface::max_deploy_angle()</span></code></a>. While
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface19deflection_overrideEv" title="krpc::services::SpaceCenter::ControlSurface::deflection_override"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ControlSurface::deflection_override()</span></code></a> is enabled, <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface10deflectionEv" title="krpc::services::SpaceCenter::ControlSurface::deflection"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ControlSurface::deflection()</span></code></a> drives the
+angle. A value set here takes effect when the override is released.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14ControlSurface16min_deploy_angleEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter14ControlSurface16min_deploy_angleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter14ControlSurface16min_deploy_angleEv"></span><span id="krpc::services::SpaceCenter::ControlSurface::min_deploy_angle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min_deploy_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface16min_deploy_angleEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The minimum <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface12deploy_angleEv" title="krpc::services::SpaceCenter::ControlSurface::deploy_angle"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ControlSurface::deploy_angle()</span></code></a> of the control surface, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14ControlSurface16max_deploy_angleEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter14ControlSurface16max_deploy_angleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter14ControlSurface16max_deploy_angleEv"></span><span id="krpc::services::SpaceCenter::ControlSurface::max_deploy_angle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_deploy_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface16max_deploy_angleEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ControlSurface12deploy_angleEv" title="krpc::services::SpaceCenter::ControlSurface::deploy_angle"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ControlSurface::deploy_angle()</span></code></a> of the control surface, in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>

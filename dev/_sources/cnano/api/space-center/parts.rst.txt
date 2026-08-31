@@ -2112,7 +2112,35 @@ Control Surface
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_Deployed(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ControlSurface_set_Deployed(bool value)
 
-      Whether the control surface has been fully deployed.
+      Whether the control surface has been fully deployed. Throws an exception if set
+      while :func:`krpc_SpaceCenter_ControlSurface_DeflectionOverride` is enabled, which holds the surface deployed.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_DeployAngle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_ControlSurface_set_DeployAngle(float value)
+
+      The deploy angle of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applied when :func:`krpc_SpaceCenter_ControlSurface_Deployed` is true, and clamped to the range given by
+         :func:`krpc_SpaceCenter_ControlSurface_MinDeployAngle` and :func:`krpc_SpaceCenter_ControlSurface_MaxDeployAngle`. While
+         :func:`krpc_SpaceCenter_ControlSurface_DeflectionOverride` is enabled, :func:`krpc_SpaceCenter_ControlSurface_Deflection` drives the
+         angle. A value set here takes effect when the override is released.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_MinDeployAngle(krpc_connection_t connection, float * result)
+
+      The minimum :func:`krpc_SpaceCenter_ControlSurface_DeployAngle` of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_MaxDeployAngle(krpc_connection_t connection, float * result)
+
+      The maximum :func:`krpc_SpaceCenter_ControlSurface_DeployAngle` of the control surface, in degrees.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 

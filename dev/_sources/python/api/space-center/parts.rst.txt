@@ -2316,10 +2316,43 @@ Control Surface
 
    .. attribute:: deployed
 
-      Whether the control surface has been fully deployed.
+      Whether the control surface has been fully deployed. Throws an exception if set
+      while :attr:`ControlSurface.deflection_override` is enabled, which holds the surface deployed.
 
       :Attribute: Can be read or written
       :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: deploy_angle
+
+      The deploy angle of the control surface, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applied when :attr:`ControlSurface.deployed` is true, and clamped to the range given by
+         :attr:`ControlSurface.min_deploy_angle` and :attr:`ControlSurface.max_deploy_angle`. While
+         :attr:`ControlSurface.deflection_override` is enabled, :attr:`ControlSurface.deflection` drives the
+         angle. A value set here takes effect when the override is released.
+
+   .. attribute:: min_deploy_angle
+
+      The minimum :attr:`ControlSurface.deploy_angle` of the control surface, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: max_deploy_angle
+
+      The maximum :attr:`ControlSurface.deploy_angle` of the control surface, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deflection_override
