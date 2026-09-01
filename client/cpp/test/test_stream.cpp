@@ -283,6 +283,22 @@ TEST_F(test_stream, test_wait_timeout_long) {
   x.release();
 }
 
+// The update thread must not hold the update lock while waiting for a stream's condition.
+// This test holds the condition, which is how waiting for an update is documented to work,
+// and then calls something needing the update lock. A regression deadlocks the two, and the
+// test times out.
+TEST_F(test_stream, test_remove_callback_while_holding_condition) {
+  auto x = test_service.counter_stream("test_stream.test_remove_callback_while_holding_condition");
+  auto tag = x.add_callback([](int) {});
+  x.start();
+  x.acquire();
+  x.wait();
+  // Let the update thread reach the next update and block on the condition we hold
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
+  x.remove_callback(tag);
+  x.release();
+}
+
 // These tests wait for an update first, to synchronize on an update message
 // boundary before reading their baseline count; each subsequent wait then
 // corresponds to exactly one update message, which advances the counter value

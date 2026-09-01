@@ -79,7 +79,7 @@ inline void Stream<T>::start(bool wait) {
   } else {
     if (!acquired) impl->get_condition_lock().lock();
     impl->start();
-    impl->get_condition().wait(impl->get_condition_lock());
+    impl->get_condition().wait(impl->get_condition_lock(), [this] { return impl->has_updated(); });
     if (!acquired) impl->get_condition_lock().unlock();
   }
 }

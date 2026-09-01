@@ -66,30 +66,40 @@ void StreamManager::remove_stream(uint64_t id) {
 }
 
 void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
-  std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  auto it = streams.find(id);
-  if (it == streams.end()) return;
-  auto stream = it->second.lock();
-  if (!stream) return;
+  std::shared_ptr<StreamImpl> stream;
+  StreamImpl::Callbacks callbacks;
+  // The update lock is held only to find the stream and copy its callbacks, and is released
+  // before the stream's condition is taken. A thread waiting for an update holds the
+  // condition and then needs the update lock, as Event::wait resets the stream value while
+  // holding it. Taking the two in the opposite order here deadlocks. The callbacks are
+  // copied for the same reason: they run below without the lock held.
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    auto it = streams.find(id);
+    if (it == streams.end()) return;
+    stream = it->second.lock();
+    if (!stream) return;
+    callbacks = stream->get_callbacks();
+  }
+
   if (!result.has_error()) {
-    stream->update(result.value(), result.is_null(), nullptr);
+    stream->update_and_notify(result.value(), result.is_null(), nullptr);
   } else {
     try {
       client->throw_exception(result.error());
     } catch (...) {
-      stream->update("", false, std::current_exception());
+      stream->update_and_notify("", false, std::current_exception());
     }
   }
-  stream->get_condition().notify_all();
+
   // A stream in an error state has no value to give a callback: a callback takes the encoded
-  // value and there is nowhere to put an exception, so reading the stream would rethrow the
-  // error into this thread. Skip them for such an update. Anything a callback itself throws
-  // is contained here too, as an exception leaving the update thread calls std::terminate and
-  // ends the process.
+  // value and there is nowhere to put an exception. Skip them for such an update. Anything a
+  // callback itself throws is contained here too, as an exception leaving the update thread
+  // calls std::terminate and ends the process.
   if (!result.has_error()) {
-    for (const auto& callback : stream->get_callbacks()) {
+    for (const auto& callback : callbacks) {
       try {
-        callback.second(stream->get_data());
+        callback.second(result.value());
       } catch (const std::exception& exn) {
         std::cerr << "kRPC: exception thrown by a stream callback: " << exn.what() << "\n";
       } catch (...) {

@@ -24,6 +24,8 @@ class StreamImpl {
   const std::string& get_data();
   bool is_null() const;
   void update(const std::string& data, bool is_null, const std::exception_ptr& exception);
+  void update_and_notify(const std::string& data, bool is_null,
+                         const std::exception_ptr& exception);
   bool has_updated() const;
   std::condition_variable& get_condition();
   std::unique_lock<std::mutex>& get_condition_lock();

@@ -56,6 +56,16 @@ void StreamImpl::update(const std::string& data, bool is_null,
   this->exception = exception;
 }
 
+// Store an update and wake the threads waiting for one. We hold the condition across both,
+// so that a notification cannot fire between a waiter checking the value and entering its
+// wait.
+void StreamImpl::update_and_notify(const std::string& data, bool is_null,
+                                   const std::exception_ptr& exception) {
+  std::lock_guard<std::mutex> guard(condition_mutex);
+  update(data, is_null, exception);
+  condition.notify_all();
+}
+
 bool StreamImpl::has_updated() const { return updated; }
 
 std::condition_variable& StreamImpl::get_condition() { return condition; }
