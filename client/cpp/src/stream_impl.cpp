@@ -50,10 +50,13 @@ bool StreamImpl::is_null() const { return _is_null; }
 void StreamImpl::update(const std::string& data, bool is_null,
                         const std::exception_ptr& exception) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  updated = true;
+  // Store the value before the flag that says there is one. A reader checks the flag first
+  // and takes no lock, so the other order lets it see the flag set and read the value that
+  // has not been stored yet.
   this->data = data;
   this->_is_null = is_null;
   this->exception = exception;
+  updated = true;
 }
 
 // Store an update and wake the threads waiting for one. We hold the condition across both,
