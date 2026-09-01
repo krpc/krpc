@@ -151,13 +151,19 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
     for (const auto& result : update.results())
       stream_manager->update(result.id(), result.result());
     {
-      // Notify while holding the condition mutex, so that a notification cannot
-      // fire between a waiter checking the stream value and entering its wait --
-      // it would be lost and the waiter would sleep through the update.
+      // Notify while holding the condition mutex. A notification firing between a
+      // waiter checking the stream value and entering its wait is lost, and the
+      // waiter sleeps through the update.
       std::lock_guard<std::mutex> guard(stream_manager->condition_mutex);
       stream_manager->condition.notify_all();
     }
-    for (const auto& callback : stream_manager->callbacks) callback.second();
+    // Copy the callbacks under the update lock, as they run below without it held
+    Callbacks callbacks;
+    {
+      std::lock_guard<std::recursive_mutex> guard(*stream_manager->update_lock);
+      callbacks = stream_manager->callbacks;
+    }
+    for (const auto& callback : callbacks) callback.second();
   };
 
   while (!stop->load()) {
