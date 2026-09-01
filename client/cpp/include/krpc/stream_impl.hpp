@@ -42,6 +42,7 @@ class StreamImpl {
   std::recursive_mutex* update_lock;
   bool started;
   bool updated;
+  bool removed;
   std::string data;
   bool _is_null;
   std::exception_ptr exception;

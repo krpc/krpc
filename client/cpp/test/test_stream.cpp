@@ -153,6 +153,39 @@ TEST_F(test_stream, test_interleaved) {
   ASSERT_THROW(s2(), krpc::StreamError);
 }
 
+// Removing a stream stores the error saying so on it, which another handle to the same
+// stream reports in place of the value it last received.
+TEST_F(test_stream, test_remove_errors_another_handle) {
+  auto x = test_service.int32_to_string_stream(42);
+  krpc::Stream<std::string> y = x;
+  ASSERT_EQ("42", x());
+  ASSERT_EQ("42", y());
+  x.remove();
+  ASSERT_THROW(y(), krpc::StreamError);
+}
+
+// No further update arrives for a removed stream, so removing one has to wake a thread
+// already waiting on it. This waits on a stream whose value never changes, which gets
+// exactly one update. A regression leaves the waiting thread blocked and the test times out.
+TEST_F(test_stream, test_remove_wakes_a_waiting_thread) {
+  krpc::Stream<std::string> x = test_service.float_to_string_stream(3.14159);
+  krpc::Stream<std::string> y = x;
+  x.start();
+  std::atomic_bool waiting(false);
+  std::thread waiter([&y, &waiting] {
+    y.acquire();
+    waiting.store(true);
+    y.wait();
+    y.release();
+  });
+  // The waiter holds the condition until it enters its wait, so the removal below cannot
+  // notify before then
+  while (!waiting.load()) {
+  }
+  x.remove();
+  waiter.join();
+}
+
 TEST_F(test_stream, test_remove_stream_twice) {
   auto s = test_service.int32_to_string_stream(0);
   ASSERT_EQ("0", s());

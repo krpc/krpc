@@ -1,5 +1,6 @@
 #include "krpc/stream_impl.hpp"
 
+#include <exception>
 #include <string>
 
 #include "krpc/client.hpp"
@@ -14,6 +15,7 @@ StreamImpl::StreamImpl(Client* client, uint64_t id, std::recursive_mutex* update
       update_lock(update_lock),
       started(false),
       updated(false),
+      removed(false),
       _is_null(false),
       condition_lock(condition_mutex, std::defer_lock),
       next_callback_tag(0),
@@ -65,7 +67,14 @@ void StreamImpl::update(const std::string& data, bool is_null,
 void StreamImpl::update_and_notify(const std::string& data, bool is_null,
                                    const std::exception_ptr& exception) {
   std::lock_guard<std::mutex> guard(condition_mutex);
-  update(data, is_null, exception);
+  {
+    std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
+    // The stream can be removed while an update for it is in flight. Removal stores the
+    // error saying so, which this value must not overwrite: no further update arrives to
+    // replace it, and the stream would read as live forever.
+    if (removed) return;
+    update(data, is_null, exception);
+  }
   condition.notify_all();
 }
 
@@ -90,6 +99,17 @@ void StreamImpl::remove_callback(int tag) {
   callbacks.erase(tag);
 }
 
-void StreamImpl::remove() { client->remove_stream(id); }
+void StreamImpl::remove() {
+  client->remove_stream(id);
+  std::lock_guard<std::mutex> guard(condition_mutex);
+  {
+    std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
+    removed = true;
+    update("", false, std::make_exception_ptr(StreamError("Stream does not exist")));
+  }
+  // No further update arrives for a removed stream, so a thread waiting on it has to be
+  // woken here. It reads the error stored above on waking.
+  condition.notify_all();
+}
 
 }  // namespace krpc
