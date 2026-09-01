@@ -194,9 +194,9 @@ class StreamManager:
         # The update lock is held only to find the streams and decode their new values, and
         # is released before any stream condition is taken. A thread waiting for an update
         # holds a condition and then needs the update lock, as Event.wait resets the stream
-        # value while holding it, so taking the two in the opposite order here deadlocks.
-        # The callbacks are read under the lock for the same reason: they run below without
-        # it held.
+        # value while holding it. Taking the two in the opposite order here deadlocks. The
+        # callbacks are read under the lock for the same reason: they run below without it
+        # held.
         decoded = []
         with self._update_lock:
             for result in results:

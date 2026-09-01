@@ -93,7 +93,7 @@ namespace KRPC.Client
             // The update lock is held only to find the stream and decode its new value, and is
             // released before the stream's condition is taken. A thread waiting for an update
             // holds the condition and then needs the update lock, as Event.Wait resets the
-            // stream value while holding it, so taking the two in the opposite order here
+            // stream value while holding it. Taking the two in the opposite order here
             // deadlocks. The callbacks are copied for the same reason: they run below without
             // the lock held.
             lock (updateLock) {
