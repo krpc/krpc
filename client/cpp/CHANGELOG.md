@@ -9,6 +9,11 @@
   sockets (#1065)
 - Add a `timeout` parameter to `krpc::connect`, bounding how long a connection is waited for
   (#1065)
+- Fix `Stream::start` hanging when a stream's only update notification is lost (#1090)
+- Fix a race between a stream update arriving and a stream update callback being added or
+  removed (#1090)
+- Fix a removed stream returning the value it last received (#1090)
+- Fix a thread waiting on a stream being left blocked when the stream is removed (#1090)
 - Fix a service with a collection of enumerations in a procedure signature failing to
   compile (#1044)
 - Fix `krpc::Connection::close` failing to link (#1065)
