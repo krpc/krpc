@@ -47,6 +47,11 @@ std::string encode(const std::set<T>& set);
 template <typename... Ts>
 std::string encode(const std::tuple<Ts...>& tuple);
 
+template <typename T>
+std::string encode_item(const std::optional<T>& value);
+template <typename T>
+std::string encode_item(const T& value);
+
 std::string encode_message_with_size(const google::protobuf::MessageLite& message);
 /** Encode a message, preceded by its size, into data. Reuses whatever data has already
     allocated, for a caller that encodes one message after another. */
@@ -69,7 +74,7 @@ inline std::string encode(const std::vector<T>& list) {
   static thread_local krpc::schema::List listMessage;
   listMessage.Clear();
   for (typename std::vector<T>::const_iterator x = list.begin(); x != list.end(); ++x)
-    listMessage.add_items(encode(*x));
+    listMessage.add_items(encode_item(*x));
   return encode(listMessage);
 }
 
@@ -80,7 +85,7 @@ inline std::string encode(const std::map<K, V>& dictionary) {
   for (typename std::map<K, V>::const_iterator x = dictionary.begin(); x != dictionary.end(); ++x) {
     schema::DictionaryEntry* entry = dictionaryMessage.add_entries();
     entry->set_key(encode(x->first));
-    entry->set_value(encode(x->second));
+    entry->set_value(encode_item(x->second));
   }
   return encode(dictionaryMessage);
 }
@@ -100,8 +105,21 @@ inline std::string encode(const std::tuple<Ts...>& tuple) {
   static thread_local krpc::schema::Tuple tupleMessage;
   tupleMessage.Clear();
   // The message is not captured: it lives for the thread, not for this call.
-  std::apply([](const Ts&... args) { (tupleMessage.add_items(encode(args)), ...); }, tuple);
+  std::apply([](const Ts&... args) { (tupleMessage.add_items(encode_item(args)), ...); }, tuple);
   return encode(tupleMessage);
+}
+
+// Encode one of the values a collection or a structure holds. A nullable position is a
+// std::optional, and carries a presence bool before its value.
+template <typename T>
+inline std::string encode_item(const std::optional<T>& value) {
+  if (!value) return encode(false);
+  return encode(true) + encode(*value);
+}
+
+template <typename T>
+inline std::string encode_item(const T& value) {
+  return encode(value);
 }
 
 // An encoded argument value together with whether the argument is null. A null argument
@@ -118,19 +136,17 @@ struct Value {
   }
 };
 
-// Encode a nullable non-class argument: an empty optional is null, otherwise the
-// contained value is encoded as its underlying type.
+// Encode an argument of a call, which is a slot. A slot carries its null in is_null beside
+// the encoded bytes, so a null is sent as no value at all.
 template <typename T>
-inline Value encode_nullable(const std::optional<T>& value) {
-  if (value) return Value(encode(*value));
-  return Value::null();
+inline Value encode_arg(const std::optional<T>& value) {
+  if (!value) return Value::null();
+  return Value(encode(*value));
 }
 
-// Encode a nullable class argument: an object with id 0 is the null representation.
 template <typename T>
-inline Value encode_nullable(const Object<T>& object) {
-  if (object._id == 0) return Value::null();
-  return Value(encode(object));
+inline Value encode_arg(const T& value) {
+  return Value(encode(value));
 }
 
 }  // namespace encoder

@@ -6,7 +6,7 @@
 int main() {
   krpc::Client conn = krpc::connect();
   krpc::services::SpaceCenter sc(&conn);
-  std::tuple<double, double, double, double> q = sc.active_vessel().flight().rotation();
+  std::tuple<double, double, double, double> q = sc.active_vessel().value().flight().rotation();
   std::cout << std::get<0>(q) << " "
             << std::get<1>(q) << " "
             << std::get<2>(q) << " "

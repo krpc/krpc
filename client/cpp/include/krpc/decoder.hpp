@@ -59,6 +59,11 @@ void decode(std::set<T>& set, const std::string& data, Client* client = nullptr)
 template <typename K, typename V>
 void decode(std::map<K, V>& dictionary, const std::string& data, Client* client = nullptr);
 
+template <typename T>
+void decode_item(std::optional<T>& value, const std::string& data, Client* client);
+template <typename T>
+void decode_item(T& value, const std::string& data, Client* client);
+
 uint32_t decode_size(const std::string& data);
 
 /** Read the size prefix a message is preceded by out of a buffer. Returns false if the buffer
@@ -79,7 +84,8 @@ inline void decode(std::tuple<Ts...>& tuple, const std::string& data, Client* cl
   static thread_local krpc::schema::Tuple tupleMessage;
   if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
   int index = 0;
-  std::apply([&](Ts&... args) { (decode(args, tupleMessage.items(index++), client), ...); }, tuple);
+  std::apply([&](Ts&... args) { (decode_item(args, tupleMessage.items(index++), client), ...); },
+             tuple);
 }
 
 template <typename T>
@@ -89,6 +95,27 @@ inline void decode(std::optional<T>& value, const std::string& data, Client* cli
   T inner;
   decode(inner, data, client);
   value = inner;
+}
+
+// Decode one of the values a collection or a structure holds, where a nullable position is
+// a std::optional.
+template <typename T>
+inline void decode_item(std::optional<T>& value, const std::string& data, Client* client) {
+  // The presence bool is one byte, as a bool value always is, and is read from it directly
+  // rather than through a copy of it
+  if (data.empty()) throw EncodingError("Failed to decode message");
+  if (data[0] == 0) {
+    value.reset();
+    return;
+  }
+  T inner;
+  decode(inner, data.substr(1), client);
+  value = inner;
+}
+
+template <typename T>
+inline void decode_item(T& value, const std::string& data, Client* client) {
+  decode(value, data, client);
 }
 
 // A collection arrives as a message holding its items, one encoded value each. That message is
@@ -108,7 +135,7 @@ inline void decode(std::vector<T>& list, const std::string& data, Client* client
   list.reserve(listMessage.items_size());
   for (int i = 0; i < listMessage.items_size(); i++) {
     T value;
-    decode(value, listMessage.items(i), client);
+    decode_item(value, listMessage.items(i), client);
     list.push_back(std::move(value));
   }
 }
@@ -135,7 +162,7 @@ inline void decode(std::map<K, V>& dictionary, const std::string& data, Client* 
     K key;
     V value;
     decode(key, entry.key(), client);
-    decode(value, entry.value(), client);
+    decode_item(value, entry.value(), client);
     dictionary[std::move(key)] = std::move(value);
   }
 }

@@ -47,7 +47,7 @@ int main() {
   auto button_clicked = button.clicked_stream();
   auto slider_changed = slider.changed_stream();
 
-  auto vessel = space_center.active_vessel();
+  auto vessel = space_center.active_vessel().value();
   while (true) {
     // Handle the throttle button being clicked
     if (button_clicked()) {

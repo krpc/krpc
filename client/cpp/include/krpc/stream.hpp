@@ -101,8 +101,8 @@ inline T Stream<T>::operator()() {
   check_exists();
   if (!impl->has_started()) start();
   std::string data = impl->get_data();
-  // A null value is signaled out-of-band by is_null; leave value default-constructed
-  // (an empty optional, or an object with id 0).
+  // A null value is signaled out-of-band by is_null, and leaves the value default
+  // constructed, which for a nullable stream is an empty optional.
   T value{};
   if (!impl->is_null()) decoder::decode(value, data, impl->get_client());
   return value;
