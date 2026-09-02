@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Support a nullable structure field, list element, tuple item and dictionary value, which is
+  `Types.none` when absent (#1091)
 - Support structure types, built from their field values in order and giving them named
   access (#1066)
 - A service definition naming an unknown type skips the member that names it with a warning,

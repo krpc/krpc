@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Generate and document the nullable structure fields and collection elements a service
+  defines, for every client (#1091)
 - Generate and document the structure types a service defines, for every client (#1066)
 - **Breaking:** A generator module given to `krpc-clientgen` by path is constructed with the
   definitions of every service that was loaded, rather than those of the single service it

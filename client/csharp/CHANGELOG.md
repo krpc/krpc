@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Support a nullable structure field, list element, tuple item and dictionary value; a
+  value-typed one uses the nullable form (`int?`) (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as
   a `struct` with a constructor, `IEquatable`, `IComparable` and the comparison operators over
   its fields (#1066)

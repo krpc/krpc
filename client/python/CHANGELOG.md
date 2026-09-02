@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Support a nullable structure field, list element, tuple item and dictionary value, which is
+  `None` when absent (#1091)
 - A service with pre-generated stubs also gains the class members that only the server
   declares (#1077)
 - Support structure types. A value is a named tuple, and a tuple or list with one element per

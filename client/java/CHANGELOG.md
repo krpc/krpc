@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Support a nullable structure field, list element, tuple item and dictionary value, held as
+  the boxed type (`Integer`, `Double`, …) where the value is a primitive (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as
   a class with a constructor, getters, `equals`, `hashCode` and `Comparable` over its
   fields (#1066)

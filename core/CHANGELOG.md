@@ -1,4 +1,11 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Nullability is carried by `Type.nullable` at every position a value sits in,
+  replacing `Parameter.nullable` and `Procedure.return_is_nullable` (#1091)
+- A structure field can be nullable, declared by `Nullable` on its `KRPCProperty` attribute
+  or by a `Nullable<T>` field type (#1091)
+- A list element, a tuple item and a dictionary value can be nullable, declared by a
+  `Nullable<T>` type or by a path of positions on `KRPCNullable`, such as
+  `[KRPCNullable (Position.Element)]` (#1091)
 - Add extension members: a service can add methods and properties to a class belonging to
   another service, declared as C# extension methods annotated with `KRPCMethod` or
   `KRPCProperty` (#1077)
