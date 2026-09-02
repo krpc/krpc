@@ -361,59 +361,17 @@ inline std::size_t hash_value(const services::{{ service_name }}::{{ struct_name
 
 {% endfor %}
 {% endif %}
-// The encoder and decoder for a collection call encode and decode on the type it
-// contains without qualifying them, so the ones above, which are declared after those
-// templates, are only reachable through argument dependent lookup. That searches the
-// namespace enclosing the enumeration, which is this one, so the collection encoder and
-// decoder find an enumeration through these.
+// A collection encoder or decoder calls encode and decode on the type it contains
+// without qualifying them. The ones above are declared after those templates, so
+// argument dependent lookup is what reaches them. It searches the namespace that
+// encloses the type, which is this one. These name the same functions here, as a
+// second function with the same signature is ambiguous to a compiler that finds both.
 namespace services {
-  {% for enum_name,enm in enumerations.items() %}
-
-  {% if enm.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+  using krpc::encoder::encode;
+  using krpc::decoder::decode;
+  {% if structs | length > 0 %}
+  using krpc::hash_value;
   {% endif %}
-  inline std::string encode(const {{ service_name }}::{{ enum_name }}& value) {
-    return encoder::encode(value);
-  }
-
-  inline void decode({{ service_name }}::{{ enum_name }}& value, const std::string& data, Client* client) {
-    decoder::decode(value, data, client);
-  }
-  {% if enm.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-  {% endif %}
-  {% endfor %}
-  {% for struct_name,struct in structs.items() %}
-
-  {% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  {% endif %}
-  inline std::string encode(const {{ service_name }}::{{ struct_name }}& value) {
-    return encoder::encode(value);
-  }
-
-  inline void decode({{ service_name }}::{{ struct_name }}& value, const std::string& data, Client* client) {
-    decoder::decode(value, data, client);
-  }
-
-  inline std::size_t hash_value(const {{ service_name }}::{{ struct_name }}& value) {
-    return krpc::hash_value(value);
-  }
-  {% if struct.deprecated %}
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-  {% endif %}
-  {% endfor %}
-
 }  // namespace services
 {% endif %}
 

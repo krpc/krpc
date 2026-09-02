@@ -1180,103 +1180,15 @@ inline std::size_t hash_value(const services::TestService::TestNullableStruct& v
   return seed;
 }
 
-// The encoder and decoder for a collection call encode and decode on the type it
-// contains without qualifying them, so the ones above, which are declared after those
-// templates, are only reachable through argument dependent lookup. That searches the
-// namespace enclosing the enumeration, which is this one, so the collection encoder and
-// decoder find an enumeration through these.
+// A collection encoder or decoder calls encode and decode on the type it contains
+// without qualifying them. The ones above are declared after those templates, so
+// argument dependent lookup is what reaches them. It searches the namespace that
+// encloses the type, which is this one. These name the same functions here, as a
+// second function with the same signature is ambiguous to a compiler that finds both.
 namespace services {
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  inline std::string encode(const TestService::DeprecatedEnum& value) {
-    return encoder::encode(value);
-  }
-
-  inline void decode(TestService::DeprecatedEnum& value, const std::string& data, Client* client) {
-    decoder::decode(value, data, client);
-  }
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-
-  inline std::string encode(const TestService::TestEnum& value) {
-    return encoder::encode(value);
-  }
-
-  inline void decode(TestService::TestEnum& value, const std::string& data, Client* client) {
-    decoder::decode(value, data, client);
-  }
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  inline std::string encode(const TestService::DeprecatedStruct& value) {
-    return encoder::encode(value);
-  }
-
-  inline void decode(TestService::DeprecatedStruct& value, const std::string& data, Client* client) {
-    decoder::decode(value, data, client);
-  }
-
-  inline std::size_t hash_value(const TestService::DeprecatedStruct& value) {
-    return krpc::hash_value(value);
-  }
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-
-  inline std::string encode(const TestService::TestNestedNullableStruct& value) {
-    return encoder::encode(value);
-  }
-
-  inline void decode(TestService::TestNestedNullableStruct& value, const std::string& data, Client* client) {
-    decoder::decode(value, data, client);
-  }
-
-  inline std::size_t hash_value(const TestService::TestNestedNullableStruct& value) {
-    return krpc::hash_value(value);
-  }
-
-  inline std::string encode(const TestService::TestStruct& value) {
-    return encoder::encode(value);
-  }
-
-  inline void decode(TestService::TestStruct& value, const std::string& data, Client* client) {
-    decoder::decode(value, data, client);
-  }
-
-  inline std::size_t hash_value(const TestService::TestStruct& value) {
-    return krpc::hash_value(value);
-  }
-
-  inline std::string encode(const TestService::TestNestedStruct& value) {
-    return encoder::encode(value);
-  }
-
-  inline void decode(TestService::TestNestedStruct& value, const std::string& data, Client* client) {
-    decoder::decode(value, data, client);
-  }
-
-  inline std::size_t hash_value(const TestService::TestNestedStruct& value) {
-    return krpc::hash_value(value);
-  }
-
-  inline std::string encode(const TestService::TestNullableStruct& value) {
-    return encoder::encode(value);
-  }
-
-  inline void decode(TestService::TestNullableStruct& value, const std::string& data, Client* client) {
-    decoder::decode(value, data, client);
-  }
-
-  inline std::size_t hash_value(const TestService::TestNullableStruct& value) {
-    return krpc::hash_value(value);
-  }
-
+  using krpc::encoder::encode;
+  using krpc::decoder::decode;
+  using krpc::hash_value;
 }  // namespace services
 
 namespace services {
