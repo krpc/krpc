@@ -159,6 +159,29 @@ function TestEncodeDecode:test_tuple()
   _run_test_decode_value(typ, cases)
 end
 
+function TestEncodeDecode:test_tuple_with_a_nullable_item()
+  local cases = {
+    {List{1, 'jeb'}, '0a01010a0501036a6562'},
+    {List{1, Types.none}, '0a01010a0100'}
+  }
+  typ = types:tuple_type({types:uint32_type(), types:nullable(types:string_type())})
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
+end
+
+function TestEncodeDecode:test_struct_with_nullable_fields()
+  typ = types:struct_type('ServiceName', 'NullableStructName')
+  typ:set_fields({{'count', types:uint32_type()},
+                  {'name', types:nullable(types:string_type())}})
+  -- The 01 ahead of the name is its presence bool, and a null field is that bool alone
+  local cases = {
+    {typ.lua_type(1, 'jeb'), '0a01010a0501036a6562'},
+    {typ.lua_type(1, Types.none), '0a01010a0100'}
+  }
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
+end
+
 function TestEncodeDecode:test_list()
   local cases = {
     {List{}, ''},
@@ -166,6 +189,20 @@ function TestEncodeDecode:test_list()
     {List{1,2,3,4}, '0a01010a01020a01030a0104'}
   }
   typ = types:list_type(types:uint32_type())
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
+end
+
+function TestEncodeDecode:test_list_of_nullable_values()
+  -- A zero is a value like any other, and is told apart from a null by the presence bool
+  -- alone
+  local cases = {
+    {List{}, ''},
+    {List{Types.none}, '0a0100'},
+    {List{0}, '0a020100'},
+    {List{1, Types.none, 3}, '0a0201010a01000a020103'}
+  }
+  typ = types:list_type(types:nullable(types:uint32_type()))
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -192,6 +229,83 @@ function TestEncodeDecode:test_dictionary()
   typ = types:dictionary_type(types:string_type(), types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
+end
+
+function TestEncodeDecode:test_dictionary_of_nullable_values()
+  local zero = Map{}
+  zero[''] = 0
+  local null = Map{}
+  null[''] = Types.none
+  local cases = {
+    {zero, '0a070a010012020100'},
+    {null, '0a060a0100120100'},
+    {Map{foo = 42, bar = Types.none}, '0a090a04036261721201000a0a0a0403666f6f1202012a'}
+  }
+  typ = types:dictionary_type(types:string_type(), types:nullable(types:uint32_type()))
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
+end
+
+function TestEncodeDecode:test_nullability_is_read_at_every_position()
+  -- A service declares no nullable set element and no nullable dictionary key. The client
+  -- reads what the type says at every position rather than naming the ones a value can be
+  -- null at
+  local set_type = types:set_type(types:nullable(types:uint32_type()))
+  local set_cases = {
+    {Set{Types.none}, '0a0100'},
+    {Set{1}, '0a020101'}
+  }
+  _run_test_encode_value(set_type, set_cases)
+  _run_test_decode_value(set_type, set_cases)
+  local null_key = Map{}
+  null_key[Types.none] = 1
+  local dictionary_type = types:dictionary_type(types:nullable(types:string_type()),
+                                                types:uint32_type())
+  local dictionary_cases = {
+    {null_key, '0a060a0100120101'},
+    {Map{jeb = 1}, '0a0a0a0501036a6562120101'}
+  }
+  _run_test_encode_value(dictionary_type, dictionary_cases)
+  _run_test_decode_value(dictionary_type, dictionary_cases)
+end
+
+function TestEncodeDecode:test_nullable_collection_values()
+  -- A nullable position holding a collection carries the presence bool ahead of the
+  -- collection's own encoding
+  local cases = {
+    {List{Types.none}, '0a0100'},
+    {List{List{}}, '0a0101'},
+    {List{List{1}}, '0a04010a0101'}
+  }
+  typ = types:list_type(types:nullable(types:list_type(types:uint32_type())))
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
+end
+
+function TestEncodeDecode:test_nullable_struct_values()
+  local struct_type = types:struct_type('ServiceName', 'NestedStructName')
+  struct_type:set_fields({{'count', types:uint32_type()}})
+  local cases = {
+    {List{Types.none}, '0a0100'},
+    {List{struct_type.lua_type(1)}, '0a04010a0101'}
+  }
+  typ = types:list_type(types:nullable(struct_type))
+  _run_test_encode_value(typ, cases)
+  _run_test_decode_value(typ, cases)
+end
+
+function TestEncodeDecode:test_null_at_a_position_that_cannot_hold_one()
+  -- Types.none carries the object id 0, so a class-typed position takes it for a value
+  -- unless the encoder rejects it
+  typ = types:list_type(types:class_type('ServiceName', 'ClassName'))
+  luaunit.assertError(encoder.encode, List{Types.none}, typ)
+  luaunit.assertError(encoder.encode, List{Types.none}, types:list_type(types:uint32_type()))
+end
+
+function TestEncodeDecode:test_nullable_value_without_a_presence_bool()
+  -- A list holding one item of zero length
+  typ = types:list_type(types:nullable(types:uint32_type()))
+  luaunit.assertError(decoder.decode, platform.unhexlify('0a00'), typ)
 end
 
 return TestEncodeDecode

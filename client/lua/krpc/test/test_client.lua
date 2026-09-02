@@ -129,6 +129,13 @@ function TestClient:test_nullable_class_method()
   luaunit.assertEquals(Types.none, obj:echo_nullable_object(Types.none))
 end
 
+function TestClient:test_nullable_class_type_shares_one_class()
+  -- A nullable class-typed value is the class of the non-nullable one, and not a second
+  -- class built for the nullable declaration
+  local obj = self.conn.test_service.create_test_object('jeb')
+  luaunit.assertIs(getmetatable(obj:echo_nullable_object(obj)), getmetatable(obj))
+end
+
 function TestClient:test_nullable_class_static_method()
   local obj = self.conn.test_service.create_test_object('jeb')
   luaunit.assertEquals(obj, self.conn.test_service.TestClass.static_nullable_object(obj))
@@ -320,6 +327,77 @@ function TestClient:test_nullable_structs()
   luaunit.assertEquals(value, service.struct_echo_nullable(value))
 end
 
+function TestClient:test_nullable_list_elements()
+  local service = self.conn.test_service
+  luaunit.assertEquals(List{1, Types.none, 3},
+                       service.echo_list_of_nullable_ints(List{1, Types.none, 3}))
+  local obj = service.create_test_object('jeb')
+  luaunit.assertEquals(List{obj, Types.none},
+                       service.echo_list_of_nullable_objects(List{obj, Types.none}))
+end
+
+function TestClient:test_nullable_positions_coerced_from_a_plain_table()
+  -- A plain table is coerced to the collection the position declares, and a null in it is
+  -- carried through to the nullable position that holds it
+  local service = self.conn.test_service
+  luaunit.assertEquals(List{1, Types.none, 3},
+                       service.echo_list_of_nullable_ints({1, Types.none, 3}))
+  local obj = service.create_test_object('jeb')
+  luaunit.assertEquals(List{1, Types.none},
+                       service.echo_tuple_with_a_nullable_object({1, Types.none}))
+  luaunit.assertEquals(List{List{obj, Types.none}},
+                       service.echo_nested_list_of_nullable_objects({{obj, Types.none}}))
+end
+
+function TestClient:test_nullable_dictionary_values()
+  local service = self.conn.test_service
+  local obj = service.create_test_object('jeb')
+  local value = Map{a = obj, b = Types.none}
+  luaunit.assertEquals(value, service.echo_dictionary_of_nullable_objects(value))
+end
+
+function TestClient:test_nullable_tuple_item()
+  local service = self.conn.test_service
+  local obj = service.create_test_object('jeb')
+  luaunit.assertEquals(List{1, obj},
+                       service.echo_tuple_with_a_nullable_object(List{1, obj}))
+  luaunit.assertEquals(List{1, Types.none},
+                       service.echo_tuple_with_a_nullable_object(List{1, Types.none}))
+end
+
+function TestClient:test_nullable_nested_list_elements()
+  local service = self.conn.test_service
+  local obj = service.create_test_object('jeb')
+  local value = List{List{obj, Types.none}, List{}}
+  luaunit.assertEquals(value, service.echo_nested_list_of_nullable_objects(value))
+end
+
+function TestClient:test_nullable_struct_fields()
+  local service = self.conn.test_service
+  local obj = service.create_test_object('jeb')
+  local value = service.TestNullableStruct(1, 2, service.TestEnum.value_b, 'jeb', obj)
+  luaunit.assertEquals(value, service.nullable_struct_echo(value))
+end
+
+function TestClient:test_null_struct_fields()
+  local service = self.conn.test_service
+  local value = service.TestNullableStruct(
+    1, Types.none, Types.none, Types.none, Types.none)
+  local result = service.nullable_struct_echo(value)
+  luaunit.assertEquals(1, result.int_field)
+  luaunit.assertEquals(Types.none, result.nullable_int_field)
+  luaunit.assertEquals(Types.none, result.nullable_enum_field)
+  luaunit.assertEquals(Types.none, result.nullable_string_field)
+  luaunit.assertEquals(Types.none, result.nullable_object_field)
+end
+
+function TestClient:test_nullable_elements_of_a_struct_field()
+  local service = self.conn.test_service
+  local obj = service.create_test_object('jeb')
+  local value = service.TestNestedNullableStruct(List{obj, Types.none}, 'jeb')
+  luaunit.assertEquals(value, service.echo_nested_nullable_struct(value))
+end
+
 function TestClient:test_struct_default_value()
   local service = self.conn.test_service
   luaunit.assertEquals(
@@ -452,7 +530,9 @@ function TestClient:test_test_service_service_members()
      'DeprecatedStruct',
      'TestClass',
      'TestEnum',
+     'TestNestedNullableStruct',
      'TestNestedStruct',
+     'TestNullableStruct',
      'TestStruct',
      'add_multiple_values',
      'add_to_object_list',
@@ -467,10 +547,16 @@ function TestClient:test_test_service_service_members()
      'dictionary_default',
      'double_special_defaults',
      'double_to_string',
+     'echo_dictionary_of_nullable_objects',
+     'echo_list_of_nullable_ints',
+     'echo_list_of_nullable_objects',
+     'echo_nested_list_of_nullable_objects',
+     'echo_nested_nullable_struct',
      'echo_nullable_int',
      'echo_nullable_list',
      'echo_nullable_string',
      'echo_test_object',
+     'echo_tuple_with_a_nullable_object',
      'empty_list_default',
      'enum_default_arg',
      'enum_echo',
@@ -496,6 +582,7 @@ function TestClient:test_test_service_service_members()
      'list_default',
      'nested_struct_echo',
      'not_nullable_object',
+     'nullable_struct_echo',
      'on_timer',
      'on_timer_using_lambda',
      'optional_arguments',

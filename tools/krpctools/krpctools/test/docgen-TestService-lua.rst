@@ -165,6 +165,56 @@ Service documentation string.
 
 
 
+.. staticmethod:: echo_dictionary_of_nullable_objects(d)
+
+
+
+   :param Map d:
+   :rtype: Map
+
+
+
+
+.. staticmethod:: echo_list_of_nullable_ints(l)
+
+
+
+   :param List l:
+   :rtype: List
+
+
+
+
+.. staticmethod:: echo_list_of_nullable_objects(l)
+
+
+
+   :param List l:
+   :rtype: List
+
+
+
+
+.. staticmethod:: echo_nested_list_of_nullable_objects(l)
+
+
+
+   :param List l:
+   :rtype: List
+
+
+
+
+.. staticmethod:: echo_nested_nullable_struct(value)
+
+
+
+   :param TestService.TestNestedNullableStruct value:
+   :rtype: :class:`TestService.TestNestedNullableStruct`
+
+
+
+
 .. staticmethod:: echo_nullable_int(value)
 
 
@@ -201,6 +251,16 @@ Service documentation string.
 
    :param TestService.TestClass value:
    :rtype: :class:`TestService.TestClass`
+
+
+
+
+.. staticmethod:: echo_tuple_with_a_nullable_object(t)
+
+
+
+   :param Tuple t:
+   :rtype: Tuple
 
 
 
@@ -418,6 +478,16 @@ Service documentation string.
 
    :Attribute: Can be read or written
    :rtype: :class:`TestService.TestClass`
+
+
+
+
+.. staticmethod:: nullable_struct_echo(x)
+
+
+
+   :param TestService.TestNullableStruct x:
+   :rtype: :class:`TestService.TestNullableStruct`
 
 
 
@@ -856,6 +926,60 @@ Service documentation string.
 
 
       :rtype: :class:`TestService.TestClass`
+
+   .. attribute:: string_field: string
+
+
+
+      :rtype: string
+
+
+.. class:: TestNullableStruct
+
+   Nullable struct documentation string.
+
+
+   .. attribute:: int_field: number
+
+
+
+      :rtype: number
+
+   .. attribute:: nullable_int_field: number
+
+
+
+      :rtype: number
+
+   .. attribute:: nullable_enum_field: TestService.TestEnum
+
+
+
+      :rtype: :class:`TestService.TestEnum`
+
+   .. attribute:: nullable_string_field: string
+
+
+
+      :rtype: string
+
+   .. attribute:: nullable_object_field: TestService.TestClass
+
+
+
+      :rtype: :class:`TestService.TestClass`
+
+
+.. class:: TestNestedNullableStruct
+
+   Nested nullable struct documentation string.
+
+
+   .. attribute:: list_field: List
+
+
+
+      :rtype: List
 
    .. attribute:: string_field: string
 

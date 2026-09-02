@@ -179,6 +179,95 @@ function TestTypes:test_dictionary_types()
   self:check_protobuf_type(Types.UINT32, '', '', 0, typ.value_type.protobuf_type)
 end
 
+function TestTypes:test_nullable_types()
+  local types = Types()
+  local typ = types:nullable(types:uint32_type())
+  luaunit.assertTrue(typ:is_a(Types.ValueType))
+  luaunit.assertTrue(typ.nullable)
+  luaunit.assertFalse(types:uint32_type().nullable)
+  luaunit.assertTrue(typ.protobuf_type.nullable)
+  luaunit.assertEquals('<type: uint32?>', tostring(typ))
+  -- The nullable form of a type is the same type in every position that names it
+  luaunit.assertIs(typ, types:nullable(typ))
+  luaunit.assertIs(typ, types:nullable(types:uint32_type()))
+  luaunit.assertIs(typ, types:as_type(typ.protobuf_type))
+end
+
+function TestTypes:test_nullable_type_shares_its_lua_type()
+  local types = Types()
+  -- Nullability belongs to the position a value sits in, so a class has one metatable
+  -- however the position that holds it is declared
+  local cls = types:class_type('ServiceName', 'ClassName')
+  luaunit.assertIs(cls.lua_type, types:nullable(cls).lua_type)
+  local enumeration = types:enumeration_type('ServiceName', 'EnumName')
+  local nullable_enumeration = types:nullable(enumeration)
+  enumeration:set_values({a = 0})
+  luaunit.assertIs(enumeration.lua_type, nullable_enumeration.lua_type)
+  local struct = types:struct_type('ServiceName', 'StructName')
+  local nullable_struct = types:nullable(struct)
+  struct:set_fields({{'count', types:uint32_type()}})
+  luaunit.assertIs(struct.lua_type, nullable_struct.lua_type)
+  luaunit.assertEquals(struct.field_types, nullable_struct.field_types)
+end
+
+function TestTypes:test_nullable_list_types()
+  local types = Types()
+  local typ = types:list_type(types:nullable(types:uint32_type()))
+  luaunit.assertTrue(typ:is_a(Types.ListType))
+  luaunit.assertTrue(typ.value_type.nullable)
+  self:check_protobuf_type(Types.LIST, '', '', 1, typ.protobuf_type)
+  luaunit.assertTrue(typ.protobuf_type.types[1].nullable)
+  luaunit.assertEquals('<type: List(uint32?)>', tostring(typ))
+  -- A nullable element makes a list type of its own
+  luaunit.assertNotIs(types:list_type(types:uint32_type()), typ)
+end
+
+function TestTypes:test_nullable_dictionary_types()
+  local types = Types()
+  local typ = types:dictionary_type(types:string_type(),
+                                    types:nullable(types:uint32_type()))
+  luaunit.assertTrue(typ:is_a(Types.DictionaryType))
+  luaunit.assertFalse(typ.key_type.nullable)
+  luaunit.assertTrue(typ.value_type.nullable)
+  self:check_protobuf_type(Types.DICTIONARY, '', '', 2, typ.protobuf_type)
+  luaunit.assertFalse(typ.protobuf_type.types[1].nullable)
+  luaunit.assertTrue(typ.protobuf_type.types[2].nullable)
+  luaunit.assertEquals('<type: Dict(string,uint32?)>', tostring(typ))
+  luaunit.assertNotIs(types:dictionary_type(types:string_type(), types:uint32_type()), typ)
+end
+
+function TestTypes:test_nullable_tuple_types()
+  local types = Types()
+  local typ = types:tuple_type({types:sint32_type(), types:nullable(types:string_type())})
+  luaunit.assertTrue(typ:is_a(Types.TupleType))
+  luaunit.assertFalse(typ.value_types[1].nullable)
+  luaunit.assertTrue(typ.value_types[2].nullable)
+  self:check_protobuf_type(Types.TUPLE, '', '', 2, typ.protobuf_type)
+  luaunit.assertFalse(typ.protobuf_type.types[1].nullable)
+  luaunit.assertTrue(typ.protobuf_type.types[2].nullable)
+  luaunit.assertEquals('<type: Tuple(sint32,string?)>', tostring(typ))
+  luaunit.assertNotIs(types:tuple_type({types:sint32_type(), types:string_type()}), typ)
+end
+
+function TestTypes:test_nullable_set_types()
+  local types = Types()
+  local typ = types:set_type(types:nullable(types:uint32_type()))
+  luaunit.assertTrue(typ.value_type.nullable)
+  luaunit.assertEquals('<type: Set(uint32?)>', tostring(typ))
+end
+
+function TestTypes:test_struct_with_nullable_fields()
+  local types = Types()
+  local typ = types:struct_type('ServiceName', 'NullableStructName')
+  typ:set_fields({{'count', types:uint32_type()},
+                  {'name', types:nullable(types:string_type())}})
+  luaunit.assertFalse(typ.field_types[1].nullable)
+  luaunit.assertTrue(typ.field_types[2].nullable)
+  local value = typ.lua_type(42, Types.none)
+  luaunit.assertEquals(42, value.count)
+  luaunit.assertEquals(Types.none, value.name)
+end
+
 function TestTypes:test_coerce_to()
   local types = Types()
   local cases = List{
@@ -208,6 +297,33 @@ function TestTypes:test_coerce_to()
   luaunit.assertError(types.coerce_to, types, List{}, types:tuple_type({types:uint32_type()}))
   luaunit.assertError(types.coerce_to, types, List{'foo', 2}, types:tuple_type({types:string_type()}))
   luaunit.assertError(types.coerce_to, types, List{1}, types:tuple_type({types:string_type()}))
+end
+
+function TestTypes:test_coerce_to_struct_with_a_nullable_field()
+  local types = Types()
+  local typ = types:struct_type('ServiceName', 'CoercedNullableStruct')
+  typ:set_fields({{'count', types:uint32_type()},
+                  {'name', types:nullable(types:string_type())}})
+  luaunit.assertEquals(typ.lua_type(42, Types.none),
+                       types:coerce_to({42, Types.none}, typ))
+  -- A null in a field that cannot hold one is not a value of the structure
+  luaunit.assertError(types.coerce_to, types, {Types.none, 'jeb'}, typ)
+end
+
+function TestTypes:test_coerce_to_collection_holding_a_null()
+  local types = Types()
+  local list_type = types:list_type(types:nullable(types:sint32_type()))
+  luaunit.assertEquals(List{1, Types.none, 3},
+                       types:coerce_to({1, Types.none, 3}, list_type))
+  local tuple_type = types:tuple_type({types:sint32_type(),
+                                       types:nullable(types:string_type())})
+  luaunit.assertEquals(List{1, Types.none}, types:coerce_to({1, Types.none}, tuple_type))
+  -- A null in a position that cannot hold one is not a value of the collection
+  luaunit.assertError(types.coerce_to, types, {1, Types.none},
+                      types:list_type(types:sint32_type()))
+  -- A class type is no different, though a class value carries a null of its own
+  luaunit.assertError(types.coerce_to, types, {Types.none},
+                      types:list_type(types:class_type('ServiceName', 'ClassName')))
 end
 
 function TestTypes:test_struct_comparison()

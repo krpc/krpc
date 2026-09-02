@@ -112,18 +112,28 @@ function _set_protobuf_type(src, dst)
   dst.code = src.code
   dst.service = src.service
   dst.name = src.name
+  dst.nullable = src.nullable
   for _, typ in ipairs(src.types) do
     local newtyp = dst.types:add()
     _set_protobuf_type(typ, newtyp)
   end
 end
 
--- The key a type is cached under, built from the type code, the names and the types nested
--- inside it in turn. It is built here rather than by serializing the message, as the protobuf
--- library writes the fields of a message in the order its own table happens to hold them,
--- which is not the same order every time.
+-- A copy of the given protocol buffer type, marked as the given nullability
+local function _nullable_protobuf_type(protobuf_type, nullable)
+  local result = schema.Type()
+  _set_protobuf_type(protobuf_type, result)
+  result.nullable = nullable
+  return result
+end
+
+-- The key a type is cached under, built from the type code, the names, whether the position
+-- holding it can be null and the types nested inside it in turn. It is built here rather than
+-- by serializing the message, as the protobuf library writes the fields of a message in the
+-- order its own table happens to hold them, which is not the same order every time.
 local function _type_key(protobuf_type)
-  local parts = { protobuf_type.code, protobuf_type.service, protobuf_type.name }
+  local parts = { protobuf_type.code, protobuf_type.service, protobuf_type.name,
+                  protobuf_type.nullable and 'null' or '' }
   for _, typ in ipairs(protobuf_type.types) do
     parts[#parts + 1] = '(' .. _type_key(typ) .. ')'
   end
@@ -137,6 +147,14 @@ function Types:as_type(protobuf_type)
   local key = _type_key(protobuf_type)
   if self._types:get(key) then
     return self._types:get(key)
+  end
+
+  -- A nullable type is built from the type it is the nullable form of, so that the two share
+  -- a lua type
+  if protobuf_type.nullable then
+    local typ = self:as_type(_nullable_protobuf_type(protobuf_type, false)):_as_nullable()
+    self._types:set(key, typ)
+    return typ
   end
 
   local typ
@@ -270,15 +288,28 @@ function Types:status_type()
   return self:as_type(_protobuf_type(Types.STATUS))
 end
 
+function Types:nullable(typ)
+  -- Get the given type at a position that can hold null
+  if typ.nullable then
+    return typ
+  end
+  local nullable_type = typ:_as_nullable()
+  local key = _type_key(nullable_type.protobuf_type)
+  if not self._types:get(key) then
+    self._types:set(key, nullable_type)
+  end
+  return nullable_type
+end
+
 function Types:coerce_to(value, typ)
   -- Coerce a value to the specified type (specified by a type object).
   --        Raises an error if the coercion is not possible.
+  -- A null stands at a position that can hold one, whatever the type there is
+  if typ.nullable and value == Types.none then
+    return Types.none
+  end
   if type(value) == typ.lua_type then
     return value
-  end
-  -- Types.none can be coerced to a ClassType
-  if typ:is_a(Types.ClassType) and value == Types.none then
-    return Types.none
   end
   -- Coerce identical class types from different client connections
   if typ:is_a(Types.ClassType) and Types.ClassBase:class_of(value) then
@@ -345,6 +376,15 @@ local function _create_enum_type(service_name, class_name, values)
   return cls
 end
 
+-- A shallow copy of a type object, of the same class as the one it was made from
+local function _copy_type(typ)
+  local copy = {}
+  for name, value in pairs(typ) do
+    copy[name] = value
+  end
+  return setmetatable(copy, getmetatable(typ))
+end
+
 Types.TypeBase = class()
 
 function Types.TypeBase:_init(protobuf_type, lua_type, type_string)
@@ -353,12 +393,34 @@ function Types.TypeBase:_init(protobuf_type, lua_type, type_string)
   -- about a type, and is read once for every value encoded or decoded, where reading it off the
   -- protobuf message goes through that message's field lookup every time.
   self.code = protobuf_type.code
+  -- Whether the position a value of this type sits in can hold null
+  self.nullable = protobuf_type.nullable
+  -- The nullable form of this type, built on demand by _as_nullable
+  self._nullable_type = nil
   self.lua_type = lua_type
   self._string = type_string
 end
 
 function Types.TypeBase:__tostring()
   return '<type: ' .. self._string .. '>'
+end
+
+--- This type at a position that can hold null.
+--
+-- A copy of this type, so that the two share a lua type and a class has one metatable however
+-- the position that holds it is declared.
+function Types.TypeBase:_as_nullable()
+  if self.nullable then
+    return self
+  end
+  if self._nullable_type == nil then
+    local typ = _copy_type(self)
+    typ.protobuf_type = _nullable_protobuf_type(self.protobuf_type, true)
+    typ.nullable = true
+    typ._string = self._string .. '?'
+    self._nullable_type = typ
+  end
+  return self._nullable_type
 end
 
 Types.ValueType = class(Types.TypeBase)
@@ -409,6 +471,9 @@ end
 
 function Types.EnumerationType:set_values(values)
   self.lua_type = _create_enum_type(self._service_name, self._class_name, values)
+  if self._nullable_type ~= nil then
+    self._nullable_type.lua_type = self.lua_type
+  end
 end
 
 Types.StructType = class(Types.TypeBase)
@@ -433,16 +498,24 @@ function Types.StructType:_init(protobuf_type)
   self:super(protobuf_type, nil, type_string)
 end
 
---- Set the fields of the structure, as a list of {name, type} pairs in the order the
---- structure declares them
-function Types.StructType:set_fields(fields)
+--- Set the fields of the structure, as a list of {name, type} pairs in the order the structure
+--- declares them. The nullable form of the structure takes the same fields and the same
+--- metatable, so a structure value is one lua type however the position that holds it is
+--- declared.
+function Types.StructType:set_fields(fields, lua_type)
   self.field_names = List{}
   self.field_types = List{}
   for _, field in ipairs(fields) do
     self.field_names:append(field[1])
     self.field_types:append(field[2])
   end
-  self.lua_type = _create_struct_type(self._service_name, self._struct_name, self.field_names)
+  if lua_type == nil then
+    lua_type = _create_struct_type(self._service_name, self._struct_name, self.field_names)
+  end
+  self.lua_type = lua_type
+  if self._nullable_type ~= nil then
+    self._nullable_type:set_fields(fields, lua_type)
+  end
 end
 
 Types.TupleType = class(Types.TypeBase)
@@ -455,11 +528,13 @@ function Types.TupleType:_init(protobuf_type, types)
     error('Wrong number of sub-types for tuple type')
   end
   self.value_types = List{}
+  local parts = List{}
   for _, subtype in ipairs(protobuf_type.types) do
-    self.value_types:append(types:as_type(subtype))
+    local value_type = types:as_type(subtype)
+    self.value_types:append(value_type)
+    parts:append(value_type._string)
   end
-  local protobuf_substrings = seq.copy(seq.map(function (x) return x._string end, self.value_types))
-  local type_string = 'Tuple(' .. stringx.join(',', protobuf_substrings) .. ')'
+  local type_string = 'Tuple(' .. stringx.join(',', parts) .. ')'
   self:super(protobuf_type, List, type_string)
 end
 
