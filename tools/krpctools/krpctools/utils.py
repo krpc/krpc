@@ -41,10 +41,10 @@ def as_type(types, type_info):
     return types.as_type(as_protobuf_type(type_info))
 
 
-def is_nullable(type_info):
-    """Whether the position described by the given type specification can hold null.
-    A procedure that returns nothing gives no specification"""
-    return type_info is not None and type_info.get("nullable", False)
+def is_nullable(typ):
+    """Whether the position the given type sits in can hold null. A procedure that returns
+    nothing has no type there"""
+    return typ is not None and typ.nullable
 
 
 def as_protobuf_type(type_info):
