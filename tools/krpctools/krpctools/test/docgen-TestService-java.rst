@@ -123,6 +123,41 @@
       :param double value:
    
 
+   .. method:: java.util.Map<String,TestClass> echoDictionaryOfNullableObjects(java.util.Map<String,TestClass> d)
+
+
+
+      :param java.util.Map<String,TestClass> d:
+   
+
+   .. method:: java.util.List<Integer> echoListOfNullableInts(java.util.List<Integer> l)
+
+
+
+      :param java.util.List<Integer> l:
+   
+
+   .. method:: java.util.List<TestClass> echoListOfNullableObjects(java.util.List<TestClass> l)
+
+
+
+      :param java.util.List<TestClass> l:
+   
+
+   .. method:: java.util.List<java.util.List<TestClass>> echoNestedListOfNullableObjects(java.util.List<java.util.List<TestClass>> l)
+
+
+
+      :param java.util.List<java.util.List<TestClass>> l:
+   
+
+   .. method:: TestNestedNullableStruct echoNestedNullableStruct(TestNestedNullableStruct value)
+
+
+
+      :param TestNestedNullableStruct value:
+   
+
    .. method:: int echoNullableInt(int value)
 
 
@@ -149,6 +184,13 @@
 
 
       :param TestClass value:
+   
+
+   .. method:: org.javatuples.Pair<Integer,TestClass> echoTupleWithANullableObject(org.javatuples.Pair<Integer,TestClass> t)
+
+
+
+      :param org.javatuples.Pair<Integer,TestClass> t:
    
 
    .. method:: java.util.List<String> emptyListDefault(java.util.List<String> x)
@@ -304,6 +346,13 @@
 
 
 
+   
+
+   .. method:: TestNullableStruct nullableStructEcho(TestNullableStruct x)
+
+
+
+      :param TestNullableStruct x:
    
 
    .. method:: TestClass getObjectProperty()
@@ -656,6 +705,46 @@
 
 
    .. method:: TestClass getObjectField()
+
+
+
+   .. method:: String getStringField()
+
+
+
+
+.. type:: public class TestNullableStruct
+
+   Nullable struct documentation string.
+
+
+   .. method:: int getIntField()
+
+
+
+   .. method:: Integer getNullableIntField()
+
+
+
+   .. method:: TestEnum getNullableEnumField()
+
+
+
+   .. method:: String getNullableStringField()
+
+
+
+   .. method:: TestClass getNullableObjectField()
+
+
+
+
+.. type:: public class TestNestedNullableStruct
+
+   Nested nullable struct documentation string.
+
+
+   .. method:: java.util.List<TestClass> getListField()
 
 
 

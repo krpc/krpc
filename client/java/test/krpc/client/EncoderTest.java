@@ -5,13 +5,21 @@ import static krpc.client.TestUtils.repeatedString;
 import static krpc.client.TestUtils.unhexlify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 
 import com.google.protobuf.ByteString;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import krpc.client.Types;
 import krpc.client.services.TestService;
 import krpc.schema.KRPC;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
+import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import org.javatuples.Unit;
 import org.junit.Test;
@@ -95,6 +103,87 @@ public class EncoderTest {
     assertEquals(new TestService.TestClass(null, 300), value);
   }
 
+
+  // Check that the value encodes to the given data, and that the data decodes back to it
+  private static void checkValue(Object value, String data, Type type) {
+    assertEquals(data, hexlify(Encoder.encode(value, type)));
+    assertEquals(value, Encoder.decode(unhexlify(data), type, null));
+  }
+
+  @Test
+  public void testNullableListElements() {
+    Type type = Types.createList(Types.nullable(Types.createValue(TypeCode.UINT32)));
+    checkValue(new ArrayList<Integer>(), "", type);
+    checkValue(Arrays.asList((Integer) null), "0a0100", type);
+    // A zero is a value like any other, and is told apart from a null by the presence bool
+    checkValue(Arrays.asList(0), "0a020100", type);
+    checkValue(Arrays.asList(1, null, 3), "0a0201010a01000a020103", type);
+  }
+
+  @Test
+  public void testNullableDictionaryValues() {
+    Type type = Types.createDictionary(
+        Types.createValue(TypeCode.STRING), Types.nullable(Types.createValue(TypeCode.UINT32)));
+    Map<String, Integer> value = new HashMap<String, Integer>();
+    value.put("", null);
+    checkValue(value, "0a060a0100120100", type);
+  }
+
+  @Test
+  public void testNullableTupleItem() {
+    Type type = Types.createTuple(
+        Types.createValue(TypeCode.UINT32), Types.nullable(Types.createValue(TypeCode.STRING)));
+    checkValue(new Pair<Integer, String>(1, "jeb"), "0a01010a0501036a6562", type);
+    checkValue(new Pair<Integer, String>(1, null), "0a01010a0100", type);
+  }
+
+  @Test
+  public void testNullableCollectionValues() {
+    // A nullable position holding a collection carries the presence bool ahead of the
+    // collection's own encoding
+    Type type = Types.createList(
+        Types.nullable(Types.createList(Types.createValue(TypeCode.UINT32))));
+    checkValue(Arrays.asList((List<Integer>) null), "0a0100", type);
+    checkValue(Arrays.asList(new ArrayList<Integer>()), "0a0101", type);
+    checkValue(Arrays.asList(Arrays.asList(1)), "0a04010a0101", type);
+  }
+
+  @Test
+  public void testNullableStructFields() {
+    // Each nullable field carries its own presence bool, and a null field is that bool alone
+    Type type = Types.createStruct("TestService", "TestNullableStruct");
+    TestService.TestNullableStruct value =
+        new TestService.TestNullableStruct(1, 2, null, null, null);
+    checkValue(value, "0a01020a0201040a01000a01000a0100", type);
+  }
+
+  @Test
+  public void testNullabilityIsReadAtEveryPosition() {
+    // A service declares no nullable set element and no nullable dictionary key. The client
+    // reads what the type says at every position rather than naming the ones a value can be
+    // null at
+    Type setType = Types.createSet(Types.nullable(Types.createValue(TypeCode.UINT32)));
+    checkValue(new HashSet<Integer>(Arrays.asList((Integer) null)), "0a0100", setType);
+    Type dictionaryType = Types.createDictionary(
+        Types.nullable(Types.createValue(TypeCode.STRING)), Types.createValue(TypeCode.UINT32));
+    Map<String, Integer> dictionary = new HashMap<String, Integer>();
+    dictionary.put(null, 1);
+    checkValue(dictionary, "0a060a0100120101", dictionaryType);
+  }
+
+  @Test
+  public void testNullAtNonNullablePosition() {
+    Type type = Types.createList(Types.createValue(TypeCode.UINT32));
+    assertThrows(
+        EncodingException.class, () -> Encoder.encode(Arrays.asList((Integer) null), type));
+  }
+
+  @Test
+  public void testNullableValueWithoutPresenceBool() {
+    // A list holding one item of zero length
+    Type type = Types.createList(Types.nullable(Types.createValue(TypeCode.UINT32)));
+    assertThrows(EncodingException.class, () -> Encoder.decode(unhexlify("0a00"), type, null));
+  }
 
   @Test
   public void testGuid() {

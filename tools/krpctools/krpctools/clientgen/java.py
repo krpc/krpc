@@ -17,7 +17,7 @@ from krpc.types import (
 )
 from .generator import Generator
 from .docparser import DocParser
-from ..utils import lower_camel_case, upper_camel_case, as_type
+from ..utils import lower_camel_case, upper_camel_case, as_type, is_nullable
 from ..lang.java import JavaLanguage
 
 
@@ -59,22 +59,26 @@ class JavaGenerator(Generator):
             )
         if isinstance(typ, TupleType):
             return "krpc.client.Types.createTuple(%s)" % ",".join(
-                self.parse_type_specification(t) for t in typ.value_types
+                self._at_position(t) for t in typ.value_types
             )
         if isinstance(typ, ListType):
-            return "krpc.client.Types.createList(%s)" % self.parse_type_specification(
+            return "krpc.client.Types.createList(%s)" % self._at_position(
                 typ.value_type
             )
         if isinstance(typ, SetType):
-            return "krpc.client.Types.createSet(%s)" % self.parse_type_specification(
-                typ.value_type
-            )
+            return "krpc.client.Types.createSet(%s)" % self._at_position(typ.value_type)
         if isinstance(typ, DictionaryType):
             return "krpc.client.Types.createDictionary(%s, %s)" % (
-                self.parse_type_specification(typ.key_type),
-                self.parse_type_specification(typ.value_type),
+                self._at_position(typ.key_type),
+                self._at_position(typ.value_type),
             )
         raise RuntimeError("Unknown type " + typ)
+
+    def _at_position(self, typ):
+        """The specification of a type at a position inside a value, named as the nullable
+        form where that position can hold null"""
+        spec = self.parse_type_specification(typ)
+        return "krpc.client.Types.nullable(%s)" % spec if typ.nullable else spec
 
     @staticmethod
     def parse_documentation(documentation):
@@ -84,37 +88,13 @@ class JavaGenerator(Generator):
         lines = ["/**"] + [" * " + line for line in documentation.split("\n")] + [" */"]
         return "\n".join(line.rstrip() for line in lines)
 
-    @staticmethod
-    def _needs_boxing(typ):
-        # Java reference types (String, byte[], classes, enums, collections) carry null
-        # naturally; only the primitive value types need the boxed form to hold null.
-        return isinstance(typ, ValueType) and typ.protobuf_type.code not in (
-            Type.STRING,
-            Type.BYTES,
-        )
-
-    def generate_context_parameters(self, name, procedure):
-        parameters = super().generate_context_parameters(name, procedure)
-        for i, parameter in enumerate(parameters):
-            typ = as_type(self.types, procedure["parameters"][i]["type"])
-            if parameter["nullable"] and self._needs_boxing(typ):
-                parameter["type"] = self.language.type_map_classes[
-                    typ.protobuf_type.code
-                ]
-        return parameters
-
     def _make_return_type(self, info):
-        procedure = info["procedure"]
-        name = info["return_type"]
-        nullable = procedure.get("return_is_nullable", False)
-        if nullable:
-            return_type = self.get_return_type(procedure)
-            if self._needs_boxing(return_type):
-                name = self.language.type_map_classes[return_type.protobuf_type.code]
+        return_type = self.get_return_type(info["procedure"])
         return {
-            "name": name,
-            "spec": self.parse_type_specification(self.get_return_type(procedure)),
-            "nullable": nullable,
+            "name": info["return_type"],
+            "spec": self.parse_type_specification(return_type),
+            # The stub reads is_null where the return type says the value can be null
+            "nullable": is_nullable(return_type),
         }
 
     def add_struct_field_specifications(self, context):
@@ -122,7 +102,7 @@ class JavaGenerator(Generator):
         generated declaration is written with"""
         for struct_info in context["structs"].values():
             for field in struct_info["fields"]:
-                field["spec"] = self.parse_type_specification(field["krpc_type"])
+                field["spec"] = self._at_position(field["krpc_type"])
                 field["accessor_name"] = upper_camel_case(field["name"])
 
     def parse_context(self, context):

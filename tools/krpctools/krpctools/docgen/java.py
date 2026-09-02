@@ -47,6 +47,11 @@ class JavaDomain(Domain):
     def type(self, typ):
         return self._type(typ)
 
+    def type_at_position(self, typ):
+        # A primitive takes its boxed form at a position that can hold null, which is the
+        # same form it takes inside a collection
+        return self._type(typ, generic=typ.nullable)
+
     def _type(self, typ, generic=False):
         if typ is None:
             return "void"

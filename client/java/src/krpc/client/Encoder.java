@@ -34,6 +34,11 @@ import org.javatuples.Unit;
 
 /** Encodes and decodes values for kRPC procedure calls. */
 public class Encoder {
+  // The presence bool a nullable position carries ahead of its value, written exactly as a
+  // bool value is
+  private static final ByteString ABSENT = ByteString.copyFrom(new byte[] { 0 });
+  private static final ByteString PRESENT = ByteString.copyFrom(new byte[] { 1 });
+
   static String guidToString(byte[] guid) {
     StringBuilder builder = new StringBuilder();
     for (int i = 3; i >= 0; i--) {
@@ -64,6 +69,25 @@ public class Encoder {
     if (value == null) {
       return null;
     }
+    return encodeValue(value, type);
+  }
+
+  /**
+   * Encode one of the values a collection or a structure holds, at the position the given type
+   * describes. A position that can hold null carries a presence bool before its value, and
+   * holds nothing else when that bool is false.
+   */
+  static ByteString encodeItem(Object value, KRPC.Type type) {
+    if (!type.getNullable()) {
+      if (value == null) {
+        throw new EncodingException("Failed to encode a null at a position that cannot hold one");
+      }
+      return encodeValue(value, type);
+    }
+    return value == null ? ABSENT : PRESENT.concat(encodeValue(value, type));
+  }
+
+  private static ByteString encodeValue(Object value, KRPC.Type type) {
     try {
       switch (type.getCode()) {
         case DOUBLE:
@@ -109,6 +133,24 @@ public class Encoder {
     } catch (IOException exn) {
       throw new EncodingException("Failed to encode value", exn);
     }
+  }
+
+  /**
+   * Decode one of the values a collection or a structure holds, which encodeItem wrote.
+   */
+  static Object decodeItem(ByteString data, KRPC.Type type, Connection connection) {
+    if (!type.getNullable()) {
+      return decode(data, type, connection);
+    }
+    if (data.isEmpty()) {
+      throw new EncodingException("A nullable value carries no presence bool");
+    }
+    // The presence bool is one byte, as a bool value always is, and is read from the data
+    // directly
+    if (data.byteAt(0) == 0) {
+      return null;
+    }
+    return decode(data.substring(1), type, connection);
   }
 
   /** Decode an object. */
@@ -298,7 +340,7 @@ public class Encoder {
     }
     KRPC.Tuple.Builder struct = KRPC.Tuple.newBuilder();
     for (int i = 0; i < values.length; i++) {
-      struct.addItems(encode(values[i], fieldTypes.get(i)));
+      struct.addItems(encodeItem(values[i], fieldTypes.get(i)));
     }
     return UnsafeByteOperations.unsafeWrap(struct.build().toByteArray());
   }
@@ -317,7 +359,7 @@ public class Encoder {
     }
     Object[] values = new Object[info.fieldTypes.size()];
     for (int i = 0; i < values.length; i++) {
-      values[i] = decode(structMessage.getItems(i), info.fieldTypes.get(i), connection);
+      values[i] = decodeItem(structMessage.getItems(i), info.fieldTypes.get(i), connection);
     }
     try {
       return (T) info.fromFieldValues.invoke(null, (Object) values);
@@ -332,7 +374,7 @@ public class Encoder {
     }
     KRPC.Tuple.Builder tuple = KRPC.Tuple.newBuilder();
     for (int i = 0; i < value.getSize(); i++) {
-      tuple.addItems(encode(value.getValue(i), valueTypes.get(i)));
+      tuple.addItems(encodeItem(value.getValue(i), valueTypes.get(i)));
     }
     return UnsafeByteOperations.unsafeWrap(tuple.build().toByteArray());
   }
@@ -340,7 +382,7 @@ public class Encoder {
   static ByteString encodeList(List<?> value, KRPC.Type valueType) throws IOException {
     KRPC.List.Builder list = KRPC.List.newBuilder();
     for (Object item : value) {
-      list.addItems(encode(item, valueType));
+      list.addItems(encodeItem(item, valueType));
     }
     return UnsafeByteOperations.unsafeWrap(list.build().toByteArray());
   }
@@ -348,7 +390,7 @@ public class Encoder {
   static ByteString encodeSet(Set<?> value, KRPC.Type valueType) throws IOException {
     KRPC.Set.Builder set = KRPC.Set.newBuilder();
     for (Object item : value) {
-      set.addItems(encode(item, valueType));
+      set.addItems(encodeItem(item, valueType));
     }
     return UnsafeByteOperations.unsafeWrap(set.build().toByteArray());
   }
@@ -358,8 +400,8 @@ public class Encoder {
     KRPC.Dictionary.Builder dictionary = KRPC.Dictionary.newBuilder();
     KRPC.DictionaryEntry.Builder dictionaryEntry = KRPC.DictionaryEntry.newBuilder();
     for (Map.Entry<?, ?> entry : value.entrySet()) {
-      dictionaryEntry.setKey(encode(entry.getKey(), keyType));
-      dictionaryEntry.setValue(encode(entry.getValue(), valueType));
+      dictionaryEntry.setKey(encodeItem(entry.getKey(), keyType));
+      dictionaryEntry.setValue(encodeItem(entry.getValue(), valueType));
       dictionary.addEntries(dictionaryEntry.build());
     }
     return UnsafeByteOperations.unsafeWrap(dictionary.build().toByteArray());
@@ -463,7 +505,7 @@ public class Encoder {
     int numElements = tupleMessage.getItemsCount();
     Object[] es = new Object[numElements];
     for (int i = 0; i < numElements; i++) {
-      es[i] = decode(tupleMessage.getItems(i), valueTypes.get(i), connection);
+      es[i] = decodeItem(tupleMessage.getItems(i), valueTypes.get(i), connection);
     }
     switch (numElements) {
       case 1:
@@ -497,7 +539,7 @@ public class Encoder {
     KRPC.List listMessage = KRPC.List.newBuilder().mergeFrom(data).build();
     List<T> list = new ArrayList<T>(listMessage.getItemsCount());
     for (ByteString item : listMessage.getItemsList()) {
-      list.add((T) decode(item, valueType, connection));
+      list.add((T) decodeItem(item, valueType, connection));
     }
     return list;
   }
@@ -508,7 +550,7 @@ public class Encoder {
     KRPC.Set setMessage = KRPC.Set.newBuilder().mergeFrom(data).build();
     Set<T> set = new HashSet<T>(setMessage.getItemsCount());
     for (ByteString item : setMessage.getItemsList()) {
-      set.add((T) decode(item, valueType, connection));
+      set.add((T) decodeItem(item, valueType, connection));
     }
     return set;
   }
@@ -519,8 +561,8 @@ public class Encoder {
     KRPC.Dictionary dictionaryMessage = KRPC.Dictionary.newBuilder().mergeFrom(data).build();
     Map<K, V> dictionary = new HashMap<K, V>(dictionaryMessage.getEntriesCount());
     for (KRPC.DictionaryEntry entry : dictionaryMessage.getEntriesList()) {
-      K key = (K) decode(entry.getKey(), keyType, connection);
-      V value = (V) decode(entry.getValue(), valueType, connection);
+      K key = (K) decodeItem(entry.getKey(), keyType, connection);
+      V value = (V) decodeItem(entry.getValue(), valueType, connection);
       dictionary.put(key, value);
     }
     return dictionary;

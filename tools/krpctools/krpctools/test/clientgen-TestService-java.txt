@@ -219,6 +219,56 @@ public class TestService {
     }
 
     @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoDictionaryOfNullableObjects", types = _Types.class)
+    public java.util.Map<String,krpc.client.services.TestService.TestClass> echoDictionaryOfNullableObjects(java.util.Map<String,krpc.client.services.TestService.TestClass> d) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(d, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoDictionaryOfNullableObjects", _args);
+        return (java.util.Map<String,krpc.client.services.TestService.TestClass>) Encoder.decode(_data.getValue(), krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoListOfNullableInts", types = _Types.class)
+    public java.util.List<Integer> echoListOfNullableInts(java.util.List<Integer> l) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoListOfNullableInts", _args);
+        return (java.util.List<Integer>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoListOfNullableObjects", types = _Types.class)
+    public java.util.List<krpc.client.services.TestService.TestClass> echoListOfNullableObjects(java.util.List<krpc.client.services.TestService.TestClass> l) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoListOfNullableObjects", _args);
+        return (java.util.List<krpc.client.services.TestService.TestClass>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoNestedListOfNullableObjects", types = _Types.class)
+    public java.util.List<java.util.List<krpc.client.services.TestService.TestClass>> echoNestedListOfNullableObjects(java.util.List<java.util.List<krpc.client.services.TestService.TestClass>> l) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass")))))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoNestedListOfNullableObjects", _args);
+        return (java.util.List<java.util.List<krpc.client.services.TestService.TestClass>>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass")))), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoNestedNullableStruct", types = _Types.class)
+    public krpc.client.services.TestService.TestNestedNullableStruct echoNestedNullableStruct(krpc.client.services.TestService.TestNestedNullableStruct value) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createStruct("TestService", "TestNestedNullableStruct"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoNestedNullableStruct", _args);
+        return (krpc.client.services.TestService.TestNestedNullableStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "TestNestedNullableStruct"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableInt", types = _Types.class)
     public Integer echoNullableInt(Integer value) throws RPCException {
         ByteString[] _args = new ByteString[] {
@@ -268,6 +318,16 @@ public class TestService {
           return null;
         }
         return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoTupleWithANullableObject", types = _Types.class)
+    public org.javatuples.Pair<Integer,krpc.client.services.TestService.TestClass> echoTupleWithANullableObject(org.javatuples.Pair<Integer,krpc.client.services.TestService.TestClass> t) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(t, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoTupleWithANullableObject", _args);
+        return (org.javatuples.Pair<Integer,krpc.client.services.TestService.TestClass>) Encoder.decode(_data.getValue(), krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -485,6 +545,16 @@ public class TestService {
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "NotNullableObject", _args);
         return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "NullableStructEcho", types = _Types.class)
+    public krpc.client.services.TestService.TestNullableStruct nullableStructEcho(krpc.client.services.TestService.TestNullableStruct x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestNullableStruct"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "NullableStructEcho", _args);
+        return (krpc.client.services.TestService.TestNullableStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "TestNullableStruct"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -967,6 +1037,87 @@ public class TestService {
     }
 
     /**
+     * Nested nullable struct documentation string.
+     */
+    public static class TestNestedNullableStruct implements RemoteStruct, Comparable<TestNestedNullableStruct> {
+        private final java.util.List<krpc.client.services.TestService.TestClass> listField;
+        private final String stringField;
+
+        public TestNestedNullableStruct(java.util.List<krpc.client.services.TestService.TestClass> listField, String stringField) {
+            this.listField = listField;
+            this.stringField = stringField;
+        }
+
+        public java.util.List<krpc.client.services.TestService.TestClass> getListField() {
+            return listField;
+        }
+
+        public String getStringField() {
+            return stringField;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a TestNestedNullableStruct from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static TestNestedNullableStruct fromFieldValues(Object[] values) {
+            return new TestNestedNullableStruct(
+                (java.util.List<krpc.client.services.TestService.TestClass>) values[0],
+                (String) values[1]
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                listField,
+                stringField
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof TestNestedNullableStruct)) {
+                return false;
+            }
+            TestNestedNullableStruct other = (TestNestedNullableStruct) obj;
+            return java.util.Objects.equals(this.listField, other.listField)                && java.util.Objects.equals(this.stringField, other.stringField);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(listField, stringField);
+        }
+
+        /**
+         * Compares this TestNestedNullableStruct with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo(TestNestedNullableStruct other) {
+            int result;
+            result = RemoteStruct.compareFields(listField, other.listField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(stringField, other.stringField);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
+        }
+    }
+
+    /**
      * Struct documentation string.
      */
     public static class TestStruct implements RemoteStruct, Comparable<TestStruct> {
@@ -1163,6 +1314,126 @@ public class TestService {
                 return result;
             }
             result = RemoteStruct.compareFields(stringField, other.stringField);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * Nullable struct documentation string.
+     */
+    public static class TestNullableStruct implements RemoteStruct, Comparable<TestNullableStruct> {
+        private final int intField;
+        private final Integer nullableIntField;
+        private final krpc.client.services.TestService.TestEnum nullableEnumField;
+        private final String nullableStringField;
+        private final krpc.client.services.TestService.TestClass nullableObjectField;
+
+        public TestNullableStruct(int intField, Integer nullableIntField, krpc.client.services.TestService.TestEnum nullableEnumField, String nullableStringField, krpc.client.services.TestService.TestClass nullableObjectField) {
+            this.intField = intField;
+            this.nullableIntField = nullableIntField;
+            this.nullableEnumField = nullableEnumField;
+            this.nullableStringField = nullableStringField;
+            this.nullableObjectField = nullableObjectField;
+        }
+
+        public int getIntField() {
+            return intField;
+        }
+
+        public Integer getNullableIntField() {
+            return nullableIntField;
+        }
+
+        public krpc.client.services.TestService.TestEnum getNullableEnumField() {
+            return nullableEnumField;
+        }
+
+        public String getNullableStringField() {
+            return nullableStringField;
+        }
+
+        public krpc.client.services.TestService.TestClass getNullableObjectField() {
+            return nullableObjectField;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),
+                krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+                krpc.client.Types.nullable(krpc.client.Types.createEnumeration("TestService", "TestEnum")),
+                krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
+                krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a TestNullableStruct from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static TestNullableStruct fromFieldValues(Object[] values) {
+            return new TestNullableStruct(
+                (int) values[0],
+                (Integer) values[1],
+                (krpc.client.services.TestService.TestEnum) values[2],
+                (String) values[3],
+                (krpc.client.services.TestService.TestClass) values[4]
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                intField,
+                nullableIntField,
+                nullableEnumField,
+                nullableStringField,
+                nullableObjectField
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof TestNullableStruct)) {
+                return false;
+            }
+            TestNullableStruct other = (TestNullableStruct) obj;
+            return java.util.Objects.equals(this.intField, other.intField)                && java.util.Objects.equals(this.nullableIntField, other.nullableIntField)                && java.util.Objects.equals(this.nullableEnumField, other.nullableEnumField)                && java.util.Objects.equals(this.nullableStringField, other.nullableStringField)                && java.util.Objects.equals(this.nullableObjectField, other.nullableObjectField);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(intField, nullableIntField, nullableEnumField, nullableStringField, nullableObjectField);
+        }
+
+        /**
+         * Compares this TestNullableStruct with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo(TestNullableStruct other) {
+            int result;
+            result = RemoteStruct.compareFields(intField, other.intField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(nullableIntField, other.nullableIntField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(nullableEnumField, other.nullableEnumField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(nullableStringField, other.nullableStringField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(nullableObjectField, other.nullableObjectField);
             if (result != 0) {
                 return result;
             }
@@ -1425,6 +1696,16 @@ public class TestService {
             PARAMETER_TYPES.put("DoubleSpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
             RETURN_TYPES.put("DoubleToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("DoubleToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
+            RETURN_TYPES.put("EchoDictionaryOfNullableObjects", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))));
+            PARAMETER_TYPES.put("EchoDictionaryOfNullableObjects", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))) });
+            RETURN_TYPES.put("EchoListOfNullableInts", krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))));
+            PARAMETER_TYPES.put("EchoListOfNullableInts", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))) });
+            RETURN_TYPES.put("EchoListOfNullableObjects", krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))));
+            PARAMETER_TYPES.put("EchoListOfNullableObjects", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))) });
+            RETURN_TYPES.put("EchoNestedListOfNullableObjects", krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass")))));
+            PARAMETER_TYPES.put("EchoNestedListOfNullableObjects", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass")))) });
+            RETURN_TYPES.put("EchoNestedNullableStruct", krpc.client.Types.createStruct("TestService", "TestNestedNullableStruct"));
+            PARAMETER_TYPES.put("EchoNestedNullableStruct", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestNestedNullableStruct") });
             RETURN_TYPES.put("EchoNullableInt", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("EchoNullableInt", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("EchoNullableList", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
@@ -1433,6 +1714,8 @@ public class TestService {
             PARAMETER_TYPES.put("EchoNullableString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("EchoTestObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("EchoTestObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("EchoTupleWithANullableObject", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))));
+            PARAMETER_TYPES.put("EchoTupleWithANullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))) });
             RETURN_TYPES.put("EmptyListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)));
             PARAMETER_TYPES.put("EmptyListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)) });
             RETURN_TYPES.put("EnumDefaultArg", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
@@ -1473,6 +1756,8 @@ public class TestService {
             PARAMETER_TYPES.put("NestedStructEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestNestedStruct") });
             RETURN_TYPES.put("NotNullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("NotNullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("NullableStructEcho", krpc.client.Types.createStruct("TestService", "TestNullableStruct"));
+            PARAMETER_TYPES.put("NullableStructEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestNullableStruct") });
             RETURN_TYPES.put("OnTimer", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
             PARAMETER_TYPES.put("OnTimer", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("OnTimerUsingLambda", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
@@ -1485,6 +1770,9 @@ public class TestService {
             PARAMETER_TYPES.put("ResetInvalidOperationExceptionLater", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ReturnNullWhenNotAllowed", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("ReturnNullWhenNotAllowed", new krpc.schema.KRPC.Type[] {  });
+        }
+
+        private static void initTypes1() {
             RETURN_TYPES.put("SetDefault", krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("SetDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("StringToInt32", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
@@ -1499,9 +1787,6 @@ public class TestService {
             PARAMETER_TYPES.put("ThrowArgumentException", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ThrowArgumentNullException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowArgumentNullException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
-        }
-
-        private static void initTypes1() {
             RETURN_TYPES.put("ThrowArgumentOutOfRangeException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowArgumentOutOfRangeException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("ThrowCustomException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
