@@ -15,11 +15,6 @@ namespace KRPC.Service.Scanner
         public string Name { get; private set; }
 
         /// <summary>
-        /// Type of the parameter.
-        /// </summary>
-        public Type Type { get; private set; }
-
-        /// <summary>
         /// True if this parameter is optional and has a default argument.
         /// </summary>
         public bool HasDefaultValue { get; private set; }
@@ -30,9 +25,9 @@ namespace KRPC.Service.Scanner
         public object DefaultValue { get; private set; }
 
         /// <summary>
-        /// True if this parameter is nullable.
+        /// The type of the parameter, together with whether it can be null.
         /// </summary>
-        public bool Nullable { get; private set; }
+        public TypeSpec Spec { get; private set; }
 
         /// <summary>
         /// Create a parameter signature for a reflected parameter.
@@ -40,16 +35,15 @@ namespace KRPC.Service.Scanner
         public ParameterSignature (string fullProcedureName, ProcedureParameter parameter)
         {
             Name = parameter.Name;
-            Type = parameter.Type;
 
             // Check the parameter type is valid
-            if (!TypeUtils.IsAValidType (Type))
-                throw new ServiceException (Type + " is not a valid Procedure parameter type, in " + fullProcedureName);
+            if (!TypeUtils.IsAValidType (parameter.Type))
+                throw new ServiceException (parameter.Type + " is not a valid Procedure parameter type, in " + fullProcedureName);
 
             HasDefaultValue = parameter.HasDefaultValue;
             if (HasDefaultValue)
                 DefaultValue = parameter.DefaultValue;
-            Nullable = parameter.Nullable;
+            Spec = TypeSpec.Create (parameter.Type, parameter.Nullable);
         }
 
         /// <summary>
@@ -58,7 +52,7 @@ namespace KRPC.Service.Scanner
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);
-            info.AddValue ("type", TypeUtils.SerializeType (Type, Nullable));
+            info.AddValue ("type", TypeUtils.SerializeType (Spec));
             if (HasDefaultValue) {
                 if (DefaultValue == null)
                     info.AddValue ("default_value", (object)null);

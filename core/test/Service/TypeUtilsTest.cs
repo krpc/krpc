@@ -568,7 +568,7 @@ namespace KRPC.Test.Service
                    "]}", typeof(IList<TestService.TestStruct>))]
         public void SerializeType (string name, Type type)
         {
-            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type)));
+            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (TypeSpec.Create (type))));
         }
 
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
@@ -576,7 +576,7 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IDictionary<double,string>))]
         public void InvalidSerializeType (Type type)
         {
-            Assert.Throws<ArgumentException> (() => TypeUtils.SerializeType (type));
+            Assert.Throws<ArgumentException> (() => TypeUtils.SerializeType (TypeSpec.Create (type)));
         }
     }
 }

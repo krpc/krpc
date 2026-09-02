@@ -61,7 +61,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void EncodeParameterWithNoDefault ()
         {
-            var wire = new Parameter ("x", typeof(int), false).ToProtobufMessage ();
+            var wire = new Parameter ("x", TypeSpec.Create (typeof(int))).ToProtobufMessage ();
             Assert.IsFalse (wire.HasDefaultValue);
             Assert.IsFalse (wire.DefaultValueIsNull);
             Assert.AreEqual (0, wire.DefaultValue.Length);
@@ -70,7 +70,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void EncodeParameterWithValueDefault ()
         {
-            var parameter = new Parameter ("x", typeof(int), false);
+            var parameter = new Parameter ("x", TypeSpec.Create (typeof(int)));
             parameter.DefaultValue = 42;
             var wire = parameter.ToProtobufMessage ();
             Assert.IsTrue (wire.HasDefaultValue);
@@ -81,7 +81,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void EncodeParameterWithNullDefault ()
         {
-            var parameter = new Parameter ("x", typeof(string), true);
+            var parameter = new Parameter ("x", TypeSpec.Create (typeof(string), true));
             parameter.DefaultValue = null;
             var wire = parameter.ToProtobufMessage ();
             Assert.IsTrue (wire.HasDefaultValue);

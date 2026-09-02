@@ -73,13 +73,11 @@ namespace KRPC.Service.KRPC
                 var service = new Messages.Service (serviceSignature.Name);
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
                     var procedure = new Procedure (procedureSignature.Name);
-                    if (procedureSignature.HasReturnType) {
-                        procedure.ReturnType = procedureSignature.ReturnType;
-                        procedure.ReturnIsNullable = procedureSignature.ReturnIsNullable;
-                    }
+                    if (procedureSignature.HasReturnType)
+                        procedure.ReturnType = procedureSignature.ReturnSpec;
                     foreach (var parameterSignature in procedureSignature.Parameters) {
                         var parameter = new Parameter (
-                            parameterSignature.Name, parameterSignature.Type, parameterSignature.Nullable);
+                            parameterSignature.Name, parameterSignature.Spec);
                         if (parameterSignature.HasDefaultValue)
                             parameter.DefaultValue = parameterSignature.DefaultValue;
                         procedure.Parameters.Add (parameter);

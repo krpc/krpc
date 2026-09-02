@@ -31,6 +31,8 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsAValidType (Type type)
         {
+            // A Nullable<T> is valid wherever T is. It is T at a position that allows a null
+            type = System.Nullable.GetUnderlyingType (type) ?? type;
             return IsAValueType (type) || IsAMessageType (type) || IsAClassType (type) || IsAnEnumType (type) || IsAStructType (type) || IsACollectionType (type);
         }
 
@@ -828,12 +830,13 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Serialize a type into a dictionary for use in a service definition. Nullability
-        /// belongs to the position a value sits in rather than to the value, so the caller
-        /// supplies it.
+        /// Serialize a type into a dictionary for use in a service definition, from the spec
+        /// that carries whether the position holding it can be null.
         /// </summary>
-        public static object SerializeType (Type type, bool nullable = false)
+        public static object SerializeType (TypeSpec spec)
         {
+            var type = spec.Type;
+            var nullable = spec.Nullable;
             if (!IsAValidType (type))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
             var result = new Dictionary<string,object> ();
@@ -882,16 +885,16 @@ namespace KRPC.Service
                 result["name"] = type.Name;
             } else if (IsATupleCollectionType (type)) {
                 result["code"] = "TUPLE";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (TypeSpec.Create (t))).ToList ();
             } else if (IsAListCollectionType (type)) {
                 result["code"] = "LIST";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (TypeSpec.Create (t))).ToList ();
             } else if (IsASetCollectionType (type)) {
                 result["code"] = "SET";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (TypeSpec.Create (t))).ToList ();
             } else if (IsADictionaryCollectionType (type)) {
                 result["code"] = "DICTIONARY";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (TypeSpec.Create (t))).ToList ();
             } else if (IsAMessageType (type)) {
                 var name = type.ToString ();
                 var camelCase = name.Substring (name.LastIndexOf ('.') + 1);

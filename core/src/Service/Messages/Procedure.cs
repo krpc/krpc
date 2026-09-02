@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace KRPC.Service.Messages
@@ -14,9 +13,7 @@ namespace KRPC.Service.Messages
             get { return ReturnType != null; }
         }
 
-        public Type ReturnType { get; set; }
-
-        public bool ReturnIsNullable { get; set; }
+        public TypeSpec ReturnType { get; set; }
 
         public GameScene GameScene { get; set; }
 

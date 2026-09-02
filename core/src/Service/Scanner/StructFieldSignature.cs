@@ -58,7 +58,7 @@ namespace KRPC.Service.Scanner
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);
-            info.AddValue ("type", TypeUtils.SerializeType (Type));
+            info.AddValue ("type", TypeUtils.SerializeType (TypeSpec.Create (Type)));
             info.AddValue ("documentation", Documentation);
             if (Deprecated) {
                 info.AddValue ("deprecated", true);

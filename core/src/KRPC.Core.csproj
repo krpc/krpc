@@ -176,6 +176,7 @@
     <Compile Include="Service\Services.cs" />
     <Compile Include="Service\Stream.cs" />
     <Compile Include="Service\StreamContinuation.cs" />
+    <Compile Include="Service\TypeSpec.cs" />
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="Service\ValueUtils.cs" />
     <Compile Include="Service\YieldException.cs" />

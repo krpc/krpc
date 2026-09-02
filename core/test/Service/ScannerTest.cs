@@ -472,7 +472,7 @@ namespace KRPC.Test.Service
                 } else if (proc.Name == "StructDefault") {
                     MessageAssert.HasParameters (proc, 1);
                     var parameter = proc.Parameters [0];
-                    Assert.AreEqual (typeof(TestService.TestStruct), parameter.Type);
+                    Assert.AreEqual (typeof(TestService.TestStruct), parameter.Type.Type);
                     Assert.AreEqual ("x", parameter.Name);
                     Assert.IsTrue (parameter.HasDefaultValue);
                     var defaultValue = (TestService.TestStruct)parameter.DefaultValue;
