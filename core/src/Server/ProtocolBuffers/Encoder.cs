@@ -28,6 +28,27 @@ namespace KRPC.Server.ProtocolBuffers
                 throw new ArgumentNullException (nameof (value));
             }
             buffer.SetLength (0);
+            WriteObject (value, stream);
+            stream.Flush ();
+            return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
+        }
+
+        /// <summary>
+        /// Encode a value at a position that allows a null: a presence bool, followed by the
+        /// value itself when it is present.
+        /// </summary>
+        static ByteString EncodeNullableObject (object value, MemoryStream buffer, CodedOutputStream stream)
+        {
+            buffer.SetLength (0);
+            stream.WriteBool (value != null);
+            if (value != null)
+                WriteObject (value, stream);
+            stream.Flush ();
+            return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
+        }
+
+        static void WriteObject (object value, CodedOutputStream stream)
+        {
             if (value is Enum) {
                 stream.WriteSInt32 ((int)value);
             } else {
@@ -79,8 +100,6 @@ namespace KRPC.Server.ProtocolBuffers
                     break;
                 }
             }
-            stream.Flush ();
-            return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
         }
 
         static void WriteTuple (object value, CodedOutputStream stream)
@@ -108,13 +127,21 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var encodedStruct = new Schema.KRPC.Tuple ();
             var type = value.GetType ();
+            System.Collections.Generic.IList<PropertyInfo> fields;
+            System.Collections.Generic.IList<TypeSpec> specs;
+            TypeUtils.GetStructFieldsAndSpecs (type, out fields, out specs);
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
-                foreach (var field in TypeUtils.GetStructFields (type)) {
+                for (int i = 0; i < fields.Count; i++) {
+                    var field = fields [i];
                     var item = field.GetGetMethod ().Invoke (value, null);
+                    if (specs [i].Nullable) {
+                        encodedStruct.Items.Add (EncodeNullableObject (item, internalBuffer, internalStream));
+                        continue;
+                    }
                     if (item == null)
                         throw new ServiceException (
-                            "Field " + field.Name + " of " + type.Name + " is null; struct fields cannot be null");
+                            "Field " + field.Name + " of " + type.Name + " is null; the field is not nullable");
                     encodedStruct.Items.Add (EncodeObject (item, internalBuffer, internalStream));
                 }
             }
@@ -178,7 +205,21 @@ namespace KRPC.Server.ProtocolBuffers
         /// </summary>
         public static object Decode (ByteString value, Type type)
         {
+            return DecodeValue (value.CreateCodedInput (), type);
+        }
+
+        /// <summary>
+        /// Decode a value at a position that allows a null, which EncodeNullableObject
+        /// writes.
+        /// </summary>
+        static object DecodeNullable (ByteString value, Type type)
+        {
             var stream = value.CreateCodedInput ();
+            return stream.ReadBool () ? DecodeValue (stream, type) : null;
+        }
+
+        static object DecodeValue (CodedInputStream stream, Type type)
+        {
             if (type.IsEnum) {
                 if (TypeUtils.IsAnEnumType (type))
                     return Enum.ToObject (type, stream.ReadSInt32 ());
@@ -243,13 +284,15 @@ namespace KRPC.Server.ProtocolBuffers
         /// <summary>
         /// Read a structure value from the values of its fields, in the order the structure
         /// declares them. Fields may only ever be appended to a structure, so items beyond the
-        /// ones the structure declares come from a newer definition and are ignored. A field is
-        /// never null, so a value that decodes one is rejected rather than passed to a service.
+        /// ones the structure declares come from a newer definition and are ignored. A null is
+        /// only accepted for a field declared nullable.
         /// </summary>
         static object DecodeStruct (CodedInputStream stream, Type type)
         {
             var encodedStruct = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
-            var fields = TypeUtils.GetStructFields (type);
+            System.Collections.Generic.IList<PropertyInfo> fields;
+            System.Collections.Generic.IList<TypeSpec> specs;
+            TypeUtils.GetStructFieldsAndSpecs (type, out fields, out specs);
             if (encodedStruct.Items.Count < fields.Count)
                 throw new ArgumentException (
                     "Value for " + type.Name + " has " + encodedStruct.Items.Count +
@@ -257,10 +300,16 @@ namespace KRPC.Server.ProtocolBuffers
             var value = Activator.CreateInstance (type);
             for (int i = 0; i < fields.Count; i++) {
                 var field = fields [i];
-                var item = Decode (encodedStruct.Items [i], field.PropertyType);
-                if (item == null)
-                    throw new ArgumentException (
-                        "Field " + field.Name + " of " + type.Name + " is null; struct fields cannot be null");
+                var spec = specs [i];
+                object item;
+                if (spec.Nullable) {
+                    item = DecodeNullable (encodedStruct.Items [i], spec.Type);
+                } else {
+                    item = Decode (encodedStruct.Items [i], spec.Type);
+                    if (item == null)
+                        throw new ArgumentException (
+                            "Field " + field.Name + " of " + type.Name + " is null; the field is not nullable");
+                }
                 field.GetSetMethod ().Invoke (value, new [] { item });
             }
             return value;

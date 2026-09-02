@@ -227,8 +227,8 @@ namespace KRPC.Service.Scanner
                 string fieldDeprecatedReason;
                 var fieldDeprecated = TypeUtils.GetPropertyDeprecated (property, property.GetGetMethod (), out fieldDeprecatedReason);
                 fields.Add (new StructFieldSignature (
-                    Name, name, property.Name, property.PropertyType, property.GetDocumentation (),
-                    fieldDeprecated, fieldDeprecatedReason));
+                    Name, name, property.Name, TypeUtils.GetStructFieldSpec (property),
+                    property.GetDocumentation (), fieldDeprecated, fieldDeprecatedReason));
             }
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (structType, out deprecatedReason);

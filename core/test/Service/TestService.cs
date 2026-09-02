@@ -411,6 +411,28 @@ namespace KRPC.Test.Service
             public int IntField { get; set; }
         }
 
+        /// <summary>
+        /// Documentation string for TestNullableStruct.
+        /// </summary>
+        [KRPCStruct]
+        public struct TestNullableStruct
+        {
+            [KRPCProperty]
+            public int IntField { get; set; }
+
+            [KRPCProperty]
+            public int? NullableIntField { get; set; }
+
+            [KRPCProperty]
+            public TestEnum? NullableEnumField { get; set; }
+
+            [KRPCProperty (Nullable = true)]
+            public string NullableStringField { get; set; }
+
+            [KRPCProperty (Nullable = true)]
+            public TestClass NullableObjectField { get; set; }
+        }
+
         [KRPCProcedure]
         public static TestStruct EchoStruct (TestStruct x)
         {

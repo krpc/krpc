@@ -35,7 +35,7 @@ namespace KRPC.Test.Service
             Assert.AreEqual (75, service.Procedures.Count);
             Assert.AreEqual (3, service.Classes.Count);
             Assert.AreEqual (2, service.Enumerations.Count);
-            Assert.AreEqual (2, service.Structs.Count);
+            Assert.AreEqual (3, service.Structs.Count);
             Assert.AreEqual ("<doc>\n<summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
             MessageAssert.IsNotDeprecated (service);
         }
@@ -651,13 +651,23 @@ namespace KRPC.Test.Service
                     MessageAssert.HasField (str, 0, "StructField", typeof(TestService.TestStruct));
                     MessageAssert.HasField (str, 1, "IntField", typeof(int));
                     MessageAssert.IsNotDeprecated (str);
+                } else if (str.Name == "TestNullableStruct") {
+                    MessageAssert.HasDocumentation (str, "<doc>\n<summary>\nDocumentation string for TestNullableStruct.\n</summary>\n</doc>");
+                    MessageAssert.HasFields (str, 5);
+                    MessageAssert.HasField (str, 0, "IntField", typeof(int));
+                    // A Nullable<T> field is declared by its underlying type T
+                    MessageAssert.HasNullableField (str, 1, "NullableIntField", typeof(int));
+                    MessageAssert.HasNullableField (str, 2, "NullableEnumField", typeof(TestService.TestEnum));
+                    MessageAssert.HasNullableField (str, 3, "NullableStringField", typeof(string));
+                    MessageAssert.HasNullableField (str, 4, "NullableObjectField", typeof(TestService.TestClass));
+                    MessageAssert.IsNotDeprecated (str);
                 } else {
                     Assert.Fail ();
                 }
                 foundStructs++;
             }
-            Assert.AreEqual (2, foundStructs);
-            Assert.AreEqual (2, service.Structs.Count);
+            Assert.AreEqual (3, foundStructs);
+            Assert.AreEqual (3, service.Structs.Count);
         }
 
         [Test]

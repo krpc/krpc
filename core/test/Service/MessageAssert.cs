@@ -128,8 +128,18 @@ namespace KRPC.Test.Service
             Assert.Less (position, str.Fields.Count);
             var field = str.Fields [position];
             Assert.AreEqual (name, field.Name);
-            Assert.AreEqual (type, field.Type);
+            Assert.AreEqual (type, field.Type.Type);
             Assert.AreEqual (documentation, field.Documentation);
+            Assert.IsFalse (field.Type.Nullable);
+        }
+
+        public static void HasNullableField (Struct str, int position, string name, Type type)
+        {
+            Assert.Less (position, str.Fields.Count);
+            var field = str.Fields [position];
+            Assert.AreEqual (name, field.Name);
+            Assert.AreEqual (type, field.Type.Type);
+            Assert.IsTrue (field.Type.Nullable);
         }
 
         public static void IsNotDeprecated (Struct str)

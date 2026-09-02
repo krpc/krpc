@@ -120,7 +120,7 @@ namespace KRPC.Service.KRPC
                     str.Deprecated = structSignature.Deprecated;
                     str.DeprecatedReason = structSignature.DeprecatedReason;
                     foreach (var fieldSignature in structSignature.Fields) {
-                        var field = new StructField (fieldSignature.Name, fieldSignature.Type);
+                        var field = new StructField (fieldSignature.Name, fieldSignature.Spec);
                         if (fieldSignature.Documentation.Length > 0)
                             field.Documentation = fieldSignature.Documentation;
                         field.Deprecated = fieldSignature.Deprecated;

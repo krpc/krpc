@@ -425,12 +425,6 @@ namespace KRPC.Test.Service
             }
         }
 
-        public struct StructWithANullableField
-        {
-            [KRPCProperty (Nullable = true)]
-            public TestService.TestClass Field { get; set; }
-        }
-
         public struct StructWithAGameSceneField
         {
             [KRPCProperty (GameScene = GameScene.Flight)]
@@ -440,7 +434,6 @@ namespace KRPC.Test.Service
         [TestCase (typeof(StructWithoutFields))]
         [TestCase (typeof(StructWithAnInvalidFieldType))]
         [TestCase (typeof(StructWithAFieldWithoutASetter))]
-        [TestCase (typeof(StructWithANullableField))]
         [TestCase (typeof(StructWithAGameSceneField))]
         public void InvalidStructFields (Type type)
         {
@@ -449,6 +442,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(TestService.TestStruct))]
         [TestCase (typeof(TestService.TestNestedStruct))]
+        [TestCase (typeof(TestService.TestNullableStruct))]
         public void ValidStructFields (Type type)
         {
             Assert.DoesNotThrow (() => TypeUtils.ValidateStructFields (type));

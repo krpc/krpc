@@ -190,7 +190,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.StructField ();
             result.Name = field.Name;
-            result.Type = TypeSpec.Create (field.Type).ToProtobufMessage ();
+            result.Type = field.Type.ToProtobufMessage ();
             result.Documentation = field.Documentation;
             result.Deprecated = field.Deprecated;
             result.DeprecatedReason = field.DeprecatedReason;

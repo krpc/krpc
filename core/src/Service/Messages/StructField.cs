@@ -1,5 +1,3 @@
-using System;
-
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591
@@ -7,7 +5,7 @@ namespace KRPC.Service.Messages
     {
         public string Name { get; private set; }
 
-        public Type Type { get; private set; }
+        public TypeSpec Type { get; private set; }
 
         public string Documentation { get; set; }
 
@@ -15,7 +13,7 @@ namespace KRPC.Service.Messages
 
         public string DeprecatedReason { get; set; }
 
-        public StructField (string name, Type type)
+        public StructField (string name, TypeSpec type)
         {
             Name = name;
             Type = type;

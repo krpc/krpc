@@ -342,6 +342,54 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
+        public void StructWithNullableFields ()
+        {
+            var obj = new TestService.TestClass ("foo");
+            var value = new TestService.TestNullableStruct {
+                IntField = 42,
+                NullableIntField = 3,
+                NullableEnumField = TestService.TestEnum.Y,
+                NullableStringField = "jeb",
+                NullableObjectField = obj
+            };
+            var data = Encoder.Encode (value).ToHexString ();
+            var decodeResult = (TestService.TestNullableStruct)Encoder.Decode (
+                data.ToByteString (), typeof(TestService.TestNullableStruct));
+            Assert.AreEqual (42, decodeResult.IntField);
+            Assert.AreEqual (3, decodeResult.NullableIntField);
+            Assert.AreEqual (TestService.TestEnum.Y, decodeResult.NullableEnumField);
+            Assert.AreEqual ("jeb", decodeResult.NullableStringField);
+            Assert.AreSame (obj, decodeResult.NullableObjectField);
+        }
+
+        [Test]
+        public void StructWithNullFields ()
+        {
+            var value = new TestService.TestNullableStruct { IntField = 42 };
+            var data = Encoder.Encode (value).ToHexString ();
+            var decodeResult = (TestService.TestNullableStruct)Encoder.Decode (
+                data.ToByteString (), typeof(TestService.TestNullableStruct));
+            Assert.AreEqual (42, decodeResult.IntField);
+            Assert.IsNull (decodeResult.NullableIntField);
+            Assert.IsNull (decodeResult.NullableEnumField);
+            Assert.IsNull (decodeResult.NullableStringField);
+            Assert.IsNull (decodeResult.NullableObjectField);
+        }
+
+        [Test]
+        public void NullableFieldIsAPresenceBoolFollowedByTheValue ()
+        {
+            var value = new TestService.TestNullableStruct { IntField = 42, NullableIntField = 3 };
+            var data = Encoder.Encode (value).ToHexString ();
+            var items = Schema.KRPC.Tuple.Parser.ParseFrom (data.ToByteString ()).Items;
+            Assert.AreEqual (Encoder.Encode (42).ToHexString (), items [0].ToHexString ());
+            Assert.AreEqual (
+                Encoder.Encode (true).ToHexString () + Encoder.Encode (3).ToHexString (),
+                items [1].ToHexString ());
+            Assert.AreEqual (Encoder.Encode (false).ToHexString (), items [2].ToHexString ());
+        }
+
+        [Test]
         public void EncodeStructWithNullField ()
         {
             var value = new TestService.TestStruct {

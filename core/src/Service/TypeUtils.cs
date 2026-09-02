@@ -132,6 +132,14 @@ namespace KRPC.Service
         static readonly IDictionary<Type, IList<PropertyInfo>> structFields = new Dictionary<Type, IList<PropertyInfo>> ();
 
         /// <summary>
+        /// The fields of every structure type they have been asked for, paired with their
+        /// specs. Encoding a value reads both, so one entry holds both and answers with one
+        /// lookup.
+        /// </summary>
+        static readonly IDictionary<Type, KeyValuePair<IList<PropertyInfo>, IList<TypeSpec>>> structFieldSpecs =
+            new Dictionary<Type, KeyValuePair<IList<PropertyInfo>, IList<TypeSpec>>> ();
+
+        /// <summary>
         /// Returns true if the given type can be used as a kRPC collection type.
         /// </summary>
         public static bool IsACollectionType (Type type)
@@ -580,7 +588,7 @@ namespace KRPC.Service
         /// 2. Every property marked as a field must be a public instance property with both a
         ///    getter and a setter, so that a value can be both read and constructed
         /// 3. Every field must have a valid kRPC type
-        /// 4. A field must not be nullable or restricted to a game scene
+        /// 4. A field must not be restricted to a game scene
         /// 5. There must be at least one field
         /// 6. The structure must not contain itself, directly or through the fields of another
         ///    structure
@@ -593,11 +601,9 @@ namespace KRPC.Service
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " is not a public instance property");
                 if (property.GetGetMethod () == null || property.GetSetMethod () == null)
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " does not have both a getter and a setter");
-                if (!IsAValidType (property.PropertyType))
+                if (!IsAValidType (GetStructFieldType (property)))
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " has type " + property.PropertyType + ", which is not a valid kRPC type");
                 var propertyAttribute = Reflection.GetAttribute<KRPCPropertyAttribute> (property);
-                if (propertyAttribute.Nullable)
-                    throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " is nullable, which struct fields cannot be");
                 if (propertyAttribute.GameScene != GameScene.Inherit)
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " sets a game scene, which struct fields cannot do");
             }
@@ -632,6 +638,7 @@ namespace KRPC.Service
         /// </summary>
         static IEnumerable<Type> StructTypesIn (Type type)
         {
+            type = System.Nullable.GetUnderlyingType (type) ?? type;
             if (IsAStructType (type)) {
                 yield return type;
             } else if (IsACollectionType (type)) {
@@ -827,6 +834,54 @@ namespace KRPC.Service
             if (Reflection.HasAttribute<KRPCPropertyAttribute> (member))
                 return Reflection.GetAttribute<KRPCPropertyAttribute> (member).Nullable;
             throw new ArgumentException ("member is not a kRPC procedure, attribute or property", nameof(member));
+        }
+
+        /// <summary>
+        /// The kRPC type of a structure field. A Nullable&lt;T&gt; field is represented by its
+        /// underlying type T.
+        /// </summary>
+        static Type GetStructFieldType (PropertyInfo field)
+        {
+            return System.Nullable.GetUnderlyingType (field.PropertyType) ?? field.PropertyType;
+        }
+
+        /// <summary>
+        /// Whether a structure field can be null, which it is when its type is Nullable&lt;T&gt;
+        /// or it is marked with KRPCProperty Nullable.
+        /// </summary>
+        static bool GetStructFieldNullable (PropertyInfo field)
+        {
+            return System.Nullable.GetUnderlyingType (field.PropertyType) != null ||
+                Reflection.GetAttribute<KRPCPropertyAttribute> (field).Nullable;
+        }
+
+        /// <summary>
+        /// The type of a structure field, together with whether the field can be null.
+        /// </summary>
+        public static TypeSpec GetStructFieldSpec (PropertyInfo field)
+        {
+            return TypeSpec.Create (field.PropertyType, GetStructFieldNullable (field));
+        }
+
+        /// <summary>
+        /// The fields of the given structure type and their specs, in the order their values
+        /// are encoded in. Built once per structure, as encoding a value reads both for every
+        /// value.
+        /// </summary>
+        public static void GetStructFieldsAndSpecs (
+            Type type, out IList<PropertyInfo> fields, out IList<TypeSpec> specs)
+        {
+            lock (structFieldSpecs) {
+                KeyValuePair<IList<PropertyInfo>, IList<TypeSpec>> entry;
+                if (!structFieldSpecs.TryGetValue (type, out entry)) {
+                    var typeFields = GetStructFields (type);
+                    entry = new KeyValuePair<IList<PropertyInfo>, IList<TypeSpec>> (
+                        typeFields, typeFields.Select (GetStructFieldSpec).ToList ());
+                    structFieldSpecs [type] = entry;
+                }
+                fields = entry.Key;
+                specs = entry.Value;
+            }
         }
 
         /// <summary>
