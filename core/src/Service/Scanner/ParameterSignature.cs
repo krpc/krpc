@@ -58,15 +58,12 @@ namespace KRPC.Service.Scanner
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);
-            info.AddValue ("type", TypeUtils.SerializeType (Type));
+            info.AddValue ("type", TypeUtils.SerializeType (Type, Nullable));
             if (HasDefaultValue) {
                 if (DefaultValue == null)
                     info.AddValue ("default_value", (object)null);
                 else
                     info.AddValue ("default_value", Server.ProtocolBuffers.Encoder.Encode (DefaultValue).ToByteArray ());
-            }
-            if (Nullable) {
-                info.AddValue ("nullable", Nullable);
             }
         }
     }

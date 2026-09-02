@@ -828,9 +828,11 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Serialize a type into a dictionary for use in a service definition.
+        /// Serialize a type into a dictionary for use in a service definition. Nullability
+        /// belongs to the position a value sits in rather than to the value, so the caller
+        /// supplies it.
         /// </summary>
-        public static object SerializeType (Type type)
+        public static object SerializeType (Type type, bool nullable = false)
         {
             if (!IsAValidType (type))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
@@ -905,6 +907,8 @@ namespace KRPC.Service
             }
             if (!result.ContainsKey("code"))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
+            if (nullable)
+                result["nullable"] = true;
             return result;
         }
     }

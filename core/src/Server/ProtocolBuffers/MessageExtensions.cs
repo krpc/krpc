@@ -99,8 +99,7 @@ namespace KRPC.Server.ProtocolBuffers
             result.Name = procedure.Name;
             result.Parameters.Add (procedure.Parameters.Select (ToProtobufMessage));
             if (procedure.ReturnType != null)
-                result.ReturnType = procedure.ReturnType.ToProtobufMessage ();
-            result.ReturnIsNullable = procedure.ReturnIsNullable;
+                result.ReturnType = procedure.ReturnType.ToProtobufMessage (procedure.ReturnIsNullable);
             result.GameScenes.Add (ToProtobufMessage (procedure.GameScene));
             result.Documentation = procedure.Documentation;
             result.Deprecated = procedure.Deprecated;
@@ -133,8 +132,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Parameter ();
             result.Name = parameter.Name;
-            result.Type = parameter.Type.ToProtobufMessage ();
-            result.Nullable = parameter.Nullable;
+            result.Type = parameter.Type.ToProtobufMessage (parameter.Nullable);
             result.HasDefaultValue = parameter.HasDefaultValue;
             if (parameter.HasDefaultValue) {
                 if (parameter.DefaultValue == null)
@@ -209,9 +207,12 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
-        public static Schema.KRPC.Type ToProtobufMessage (this Type type)
+        // Nullability belongs to the position a value sits in rather than to the value, so
+        // the caller supplies it
+        public static Schema.KRPC.Type ToProtobufMessage (this Type type, bool nullable = false)
         {
             var result = new Schema.KRPC.Type ();
+            result.Nullable = nullable;
             if (TypeUtils.IsAValueType (type)) {
                 switch (Type.GetTypeCode (type)) {
                 case TypeCode.Single:
