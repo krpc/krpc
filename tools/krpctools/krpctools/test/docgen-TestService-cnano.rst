@@ -202,6 +202,71 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_EchoDictionaryOfNullableObjects(krpc_connection_t connection, krpc_dictionary_string_nullable_object_t * result, const krpc_dictionary_string_nullable_object_t * d)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoListOfNullableInts(krpc_connection_t connection, krpc_list_nullable_int32_t * result, const krpc_list_nullable_int32_t * l)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoListOfNullableObjects(krpc_connection_t connection, krpc_list_nullable_object_t * result, const krpc_list_nullable_object_t * l)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNestedListOfNullableObjects(krpc_connection_t connection, krpc_list_list_nullable_object_t * result, const krpc_list_list_nullable_object_t * l)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNestedNullableStruct(krpc_connection_t connection, krpc_TestService_TestNestedNullableStruct_t * result, const krpc_TestService_TestNestedNullableStruct_t * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * result, int32_t value)
 
 
@@ -242,6 +307,19 @@ Service documentation string.
 
 
 .. function:: krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, krpc_TestService_TestClass_t value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoTupleWithANullableObject(krpc_connection_t connection, krpc_tuple_int32_nullable_object_t * result, const krpc_tuple_int32_nullable_object_t * t)
 
 
 
@@ -521,6 +599,19 @@ Service documentation string.
 
 .. function:: krpc_error_t krpc_TestService_NullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result)
 .. function:: void krpc_TestService_set_NullableObject(krpc_TestService_TestClass_t value)
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_NullableStructEcho(krpc_connection_t connection, krpc_TestService_TestNullableStruct_t * result, const krpc_TestService_TestNullableStruct_t * x)
+
+
+
+   :Parameters:
 
 
 
@@ -1014,6 +1105,46 @@ Service documentation string.
 
 
    .. member:: krpc_TestService_TestClass_t object_field
+
+
+
+   .. member:: char * string_field
+
+
+
+
+.. type:: krpc_TestService_TestNullableStruct_t
+
+   Nullable struct documentation string.
+
+
+   .. member:: int32_t int_field
+
+
+
+   .. member:: krpc_nullable_int32_t nullable_int_field
+
+
+
+   .. member:: krpc_nullable_enum_t nullable_enum_field
+
+
+
+   .. member:: krpc_nullable_string_t nullable_string_field
+
+
+
+   .. member:: krpc_nullable_object_t nullable_object_field
+
+
+
+
+.. type:: krpc_TestService_TestNestedNullableStruct_t
+
+   Nested nullable struct documentation string.
+
+
+   .. member:: krpc_list_nullable_object_t list_field
 
 
 

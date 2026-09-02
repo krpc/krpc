@@ -34,7 +34,34 @@ class CnanoGenerator(Generator):
         return name
 
     def parse_type(self, typ):
+        """The C type of a value at a slot. A slot carries its null out of band, so the type
+        there is named without its nullability."""
         return self._parse_type(typ)
+
+    def parse_type_at_position(self, typ):
+        """The C type of a value at a position inside another value. A value is stored by
+        value, so there is nowhere to put a null: a position that can hold one takes a
+        generated type of its own, holding the value beside a bool saying whether it is
+        there."""
+        value_type = self._parse_type(typ, in_collection=True)
+        if not typ.nullable:
+            return value_type
+        name = "nullable_%s" % value_type["name"]
+        return {
+            "kind": "nullable",
+            "name": name,
+            "nullable": True,
+            "is_class": False,
+            "ctype": "krpc_%s_t" % name,
+            "cvtype": "krpc_%s_t *" % name,
+            "ccvtype": "const krpc_%s_t *" % name,
+            "getval": "",
+            "getptr": "",
+            "structgetval": "&",
+            "structgetptr": "&",
+            "removeconst": "(krpc_%s_t*)" % name,
+            "value_type": value_type,
+        }
 
     def _parse_type(self, typ, in_collection=False):
         ptr = True
@@ -45,17 +72,17 @@ class CnanoGenerator(Generator):
         elif isinstance(typ, MessageType):
             ctype = "krpc_schema_%s" % typ.python_type.__name__
         elif isinstance(typ, ListType):
-            ctype = "krpc_list_%s_t" % self.parse_type_name(typ.value_type)
+            ctype = "krpc_list_%s_t" % self.parse_type_name_at_position(typ.value_type)
         elif isinstance(typ, SetType):
-            ctype = "krpc_set_%s_t" % self.parse_type_name(typ.value_type)
+            ctype = "krpc_set_%s_t" % self.parse_type_name_at_position(typ.value_type)
         elif isinstance(typ, DictionaryType):
             ctype = "krpc_dictionary_%s_%s_t" % (
-                self.parse_type_name(typ.key_type),
-                self.parse_type_name(typ.value_type),
+                self.parse_type_name_at_position(typ.key_type),
+                self.parse_type_name_at_position(typ.value_type),
             )
         elif isinstance(typ, TupleType):
             ctype = "krpc_tuple_%s_t" % "_".join(
-                self.parse_type_name(t) for t in typ.value_types
+                self.parse_type_name_at_position(t) for t in typ.value_types
             )
         elif isinstance(typ, StructType):
             ctype = "krpc_%s_%s_t" % (
@@ -88,8 +115,12 @@ class CnanoGenerator(Generator):
         #  structgetptr - gets a pointer for a value in a struct
         #                 (equivalent to structgetval then getptr)
         #  removeconst - removes constness from a pointer for a value
+        #  nullable - whether the slot or position holding the value can be null
+        #  is_class - whether the value is an instance of a class
         return {
             "name": self.parse_type_name(typ),
+            "nullable": typ.nullable,
+            "is_class": isinstance(typ, ClassType),
             "ctype": ctype,
             "cvtype": "%s *" % ctype if ptr else ctype,
             "ccvtype": (
@@ -111,12 +142,12 @@ class CnanoGenerator(Generator):
         # named for the field they carry.
         result = self.parse_type(typ)
         if isinstance(typ, TupleType):
-            members = [self._parse_type(t, in_collection=True) for t in typ.value_types]
+            members = [self.parse_type_at_position(t) for t in typ.value_types]
             for i, member in enumerate(members):
                 member["member"] = "e%d" % i
             result.update({"kind": "tuple", "value_types": members})
         elif isinstance(typ, StructType):
-            members = [self._parse_type(t, in_collection=True) for t in typ.field_types]
+            members = [self.parse_type_at_position(t) for t in typ.field_types]
             for name, member in zip(typ.field_names, members):
                 member["member"] = self.parse_name(snake_case(name))
             result.update({"kind": "struct", "value_types": members})
@@ -124,20 +155,34 @@ class CnanoGenerator(Generator):
             result.update(
                 {
                     "kind": "list" if isinstance(typ, ListType) else "set",
-                    "value_type": self._parse_type(typ.value_type, in_collection=True),
+                    "value_type": self.parse_type_at_position(typ.value_type),
                 }
             )
         elif isinstance(typ, DictionaryType):
             result.update(
                 {
                     "kind": "dictionary",
-                    "key_type": self._parse_type(typ.key_type, in_collection=True),
-                    "value_type": self._parse_type(typ.value_type, in_collection=True),
+                    "key_type": self.parse_type_at_position(typ.key_type),
+                    "value_type": self.parse_type_at_position(typ.value_type),
                 }
             )
         else:
             raise RuntimeError("Unknown type " + str(typ))
         return result
+
+    @staticmethod
+    def nullable_types_in(collection_type):
+        """The generated types the given one holds at a position that can hold null, which
+        are declared before it"""
+        members = collection_type.get("value_types", [])
+        for key in ("key_type", "value_type"):
+            if key in collection_type:
+                members = members + [collection_type[key]]
+        return [x for x in members if x.get("kind") == "nullable"]
+
+    def parse_type_name_at_position(self, typ):
+        name = self.parse_type_name(typ)
+        return "nullable_%s" % name if typ.nullable else name
 
     def parse_type_name(self, typ):
         if isinstance(typ, ValueType):
@@ -145,17 +190,17 @@ class CnanoGenerator(Generator):
         if isinstance(typ, MessageType):
             return "message_%s" % typ.python_type.__name__
         if isinstance(typ, ListType):
-            return "list_%s" % self.parse_type_name(typ.value_type)
+            return "list_%s" % self.parse_type_name_at_position(typ.value_type)
         if isinstance(typ, SetType):
-            return "set_%s" % self.parse_type_name(typ.value_type)
+            return "set_%s" % self.parse_type_name_at_position(typ.value_type)
         if isinstance(typ, DictionaryType):
             return "dictionary_%s_%s" % (
-                self.parse_type_name(typ.key_type),
-                self.parse_type_name(typ.value_type),
+                self.parse_type_name_at_position(typ.key_type),
+                self.parse_type_name_at_position(typ.value_type),
             )
         if isinstance(typ, TupleType):
             return "tuple_%s" % "_".join(
-                self.parse_type_name(t) for t in typ.value_types
+                self.parse_type_name_at_position(t) for t in typ.value_types
             )
         if isinstance(typ, StructType):
             return "%s_%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
@@ -189,10 +234,10 @@ class CnanoGenerator(Generator):
 
     def generate_context_parameters(self, name, procedure):
         parameters = super().generate_context_parameters(name, procedure)
-        for i, parameter in enumerate(parameters):
-            if not parameter["nullable"]:
+        for parameter, info in zip(parameters, procedure["parameters"]):
+            typ = as_type(self.types, info["type"])
+            if not typ.nullable:
                 continue
-            typ = as_type(self.types, procedure["parameters"][i]["type"])
             if isinstance(typ, ClassType):
                 parameter["null_check"] = "%s == KRPC_NULL" % parameter["name"]
             else:
@@ -202,10 +247,6 @@ class CnanoGenerator(Generator):
                     parameter["type"]["ccvtype"] = "const %s *" % ctype
                     parameter["type"]["getptr"] = ""
         return parameters
-
-    def _annotate_return(self, return_type, procedure):
-        return_type["nullable"] = procedure.get("return_is_nullable", False)
-        return_type["is_class"] = isinstance(self.get_return_type(procedure), ClassType)
 
     def parse_default_value(self, value, typ):  # pylint: disable=unused-argument
         # No default arguments in C
@@ -225,23 +266,13 @@ class CnanoGenerator(Generator):
             typ["ccvtype"] = typ["cvtype"]
             return typ
 
-        for info in context["procedures"].values():
-            self._annotate_return(info["return_type"], info["procedure"])
-        for class_info in context["classes"].values():
-            for info in class_info["methods"].values():
-                self._annotate_return(info["return_type"], info["procedure"])
-            for info in class_info["static_methods"].values():
-                self._annotate_return(info["return_type"], info["procedure"])
-
         properties = collections.OrderedDict()
         for name, info in context["properties"].items():
             if info["getter"]:
-                getter_return = return_type(info["type"])
-                self._annotate_return(getter_return, info["getter"]["procedure"])
                 properties[name] = {
                     "remote_id": info["getter"]["remote_id"],
                     "parameters": [],
-                    "return_type": getter_return,
+                    "return_type": return_type(info["type"]),
                     "documentation": info["documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
@@ -262,12 +293,10 @@ class CnanoGenerator(Generator):
             class_properties = collections.OrderedDict()
             for name, info in class_info["properties"].items():
                 if info["getter"]:
-                    getter_return = return_type(info["type"])
-                    self._annotate_return(getter_return, info["getter"]["procedure"])
                     class_properties[name] = {
                         "remote_id": info["getter"]["remote_id"],
                         "parameters": [],
-                        "return_type": getter_return,
+                        "return_type": return_type(info["type"]),
                         "documentation": info["documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
@@ -295,14 +324,15 @@ class CnanoGenerator(Generator):
         # follow the collection types it contains. Several kRPC types share one C type, as
         # every class is a krpc_object_t and every enumeration a krpc_enum_t, so collections
         # are deduplicated by what they become in C rather than by what they are here.
-        collection_types = []
+        collection_types = collections.OrderedDict()
         for typ in self._definitions.collection_types(
             sorted(self._collection_types, key=self.parse_type_name)
         ):
             ctype = self.parse_collection_type(typ)
-            if ctype not in collection_types:
-                collection_types.append(ctype)
-        context["collection_types"] = collection_types
+            for nullable_type in self.nullable_types_in(ctype):
+                collection_types.setdefault(nullable_type["name"], nullable_type)
+            collection_types.setdefault(ctype["name"], ctype)
+        context["collection_types"] = list(collection_types.values())
 
         return context
 

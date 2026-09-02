@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string.h>
+
 #include <krpc_cnano/decoder.h>
 #include <krpc_cnano/deprecated.h>
 #include <krpc_cnano/encoder.h>
@@ -17,7 +19,7 @@ KRPC_CHECK(krpc_call(&_call, {{ service_id }}, {{ procedure_id }}, {{ parameters
 KRPC_CHECK(krpc_call(&_call, {{ service_id }}, {{ procedure_id }}, 0, NULL));
 {% endif %}
 {% for x in parameters %}
-{% if x.nullable is defined and x.nullable %}
+{% if x.type.nullable %}
 if ({{ x.null_check }}) {
   KRPC_CHECK(krpc_add_null_argument(&_call, {{ loop.index0 }}));
 } else {
@@ -93,7 +95,13 @@ typedef krpc_object_t krpc_{{ service_name }}_{{ class_name }}_t;
 #ifndef KRPC_TYPE_{{ typ.name | upper }}
 #define KRPC_TYPE_{{ typ.name | upper }}
 
-{% if typ.kind in ('tuple', 'struct') %}
+{% if typ.kind == 'nullable' %}
+typedef struct krpc_{{ typ.name }}_s krpc_{{ typ.name }}_t;
+struct krpc_{{ typ.name }}_s {
+  {{ typ.value_type.ctype }} value;
+  bool has_value;
+};
+{% elif typ.kind in ('tuple', 'struct') %}
 typedef struct krpc_{{ typ.name }}_s krpc_{{ typ.name }}_t;
 struct krpc_{{ typ.name }}_s {
 {% for value_type in typ.value_types %}
@@ -293,7 +301,13 @@ static inline bool krpc_encode_callback_entry_{{ typ.name }}(
 
 static inline krpc_error_t krpc_encode_{{ typ.name }}(
   pb_ostream_t * stream, {{ typ.ccvtype }} value) {
-{% if typ.kind in ('tuple', 'struct') %}
+{% if typ.kind == 'nullable' %}
+  // A nullable position carries a presence bool before its value, and holds nothing else
+  // when that bool is false
+  KRPC_RETURN_ON_ERROR(krpc_encode_bool(stream, value->has_value));
+  if (value->has_value)
+    KRPC_RETURN_ON_ERROR(krpc_encode_{{ typ.value_type.name }}(stream, {{ typ.value_type.structgetval }}value->value));
+{% elif typ.kind in ('tuple', 'struct') %}
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.encode = &krpc_encode_callback_items_{{ typ.name }};
   message.items.arg = {{ typ.removeconst }}{{ typ.getptr }}value;
@@ -416,7 +430,13 @@ static inline bool krpc_decode_callback_entry_{{ typ.name }}(
 
 static inline krpc_error_t krpc_decode_{{ typ.name }}(
   pb_istream_t * stream, {{ typ.ctype }} * value) {
-{% if typ.kind in ('tuple', 'struct') %}
+{% if typ.kind == 'nullable' %}
+  // An absent value is left zeroed, so the member is defined whatever the caller passed in
+  memset(&value->value, 0, sizeof(value->value));
+  KRPC_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->has_value));
+  if (value->has_value)
+    KRPC_RETURN_ON_ERROR(krpc_decode_{{ typ.value_type.name }}(stream, {{ typ.value_type.structgetptr }}value->value));
+{% elif typ.kind in ('tuple', 'struct') %}
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};
   typedef struct State { size_t pos; {{ typ.ctype }} * value; } State;
@@ -475,7 +495,7 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ procedure_name }}({{ proce
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
 static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ method_name }}({{ method_parameters(service_name, class_name, method) }}) {
-{{ call(service_id, method.remote_id, [{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t', 'name': 'uint64', 'getptr': '&'}, 'name': 'instance'}] + method.parameters) | indent(2) }}
+{{ call(service_id, method.remote_id, [{'type': {'ccvtype': 'krpc_'+service_name+'_'+class_name+'_t', 'name': 'uint64', 'getptr': '&', 'nullable': False}, 'name': 'instance'}] + method.parameters) | indent(2) }}
 {{ return(method.return_type) | indent(2) }}
 }
 {% endfor %}
