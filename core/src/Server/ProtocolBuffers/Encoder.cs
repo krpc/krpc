@@ -330,10 +330,8 @@ namespace KRPC.Server.ProtocolBuffers
             var valueTypes = spec.Types.Select (x => x.DeclaredType).ToArray ();
             var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
             var values = new object[valueTypes.Length];
-            for (int i = 0; i < valueTypes.Length; i++) {
-                var item = encodedTuple.Items [i];
-                values [i] = DecodeItem (item, spec.Types [i]);
-            }
+            for (int i = 0; i < valueTypes.Length; i++)
+                values [i] = DecodeItem (encodedTuple.Items [i], spec.Types [i]);
             var tuple = genericType
                 .MakeGenericType (valueTypes)
                 .GetConstructor (valueTypes)
@@ -361,15 +359,7 @@ namespace KRPC.Server.ProtocolBuffers
             for (int i = 0; i < fields.Count; i++) {
                 var field = fields [i];
                 var spec = specs [i];
-                object item;
-                if (spec.Nullable) {
-                    item = DecodeNullable (encodedStruct.Items [i], spec);
-                } else {
-                    item = DecodeValue (encodedStruct.Items [i].CreateCodedInput (), spec);
-                    if (item == null)
-                        throw new ArgumentException (
-                            "Field " + field.Name + " of " + type.Name + " is null; the field is not nullable");
-                }
+                var item = DecodeItem (encodedStruct.Items [i], spec);
                 field.GetSetMethod ().Invoke (value, new [] { item });
             }
             return value;

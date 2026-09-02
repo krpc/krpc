@@ -107,10 +107,12 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
-        public void DecodeClassNone ()
+        public void DecodeClassIdZero ()
         {
-            var value = Encoder.Decode ("00".ToByteString (), TypeSpec.Create (typeof(TestService.TestClass)));
-            Assert.AreEqual (null, value);
+            // Identifiers are allocated from 1, so 0 names no object. A null is carried by
+            // the position holding the value, never by the value itself
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode ("00".ToByteString (), TypeSpec.Create (typeof(TestService.TestClass))));
         }
 
         [TestCase (3.14159265359f, "db0f4940")]
@@ -542,6 +544,30 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
+        public void DecodeClassIdZeroInsideAValue ()
+        {
+            // A class value of id 0 is rejected at every position, so a null reaches a
+            // service only where the position holding it declares one
+            AssertIdZeroRejected (
+                Encode (new List<ulong> { 0 }), typeof(IList<TestService.TestClass>));
+            AssertIdZeroRejected (
+                Encode (new HashSet<ulong> { 0 }), typeof(HashSet<TestService.TestClass>));
+            AssertIdZeroRejected (
+                Encode (new Dictionary<string,ulong> { { "a", 0 } }),
+                typeof(IDictionary<string,TestService.TestClass>));
+            AssertIdZeroRejected (
+                Encode (Tuple.Create (42, (ulong)0)),
+                typeof(Tuple<int,TestService.TestClass>));
+        }
+
+        static void AssertIdZeroRejected (Google.Protobuf.ByteString data, Type type)
+        {
+            var exn = Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data, TypeSpec.Create (type)));
+            StringAssert.Contains ("0 is not an object identifier", exn.Message);
+        }
+
+        [Test]
         public void DecodeStructWithMissingFields ()
         {
             var data = Encode (Tuple.Create (42, "jeb")).ToHexString ();
@@ -550,13 +576,13 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
-        public void DecodeStructWithNullField ()
+        public void DecodeStructWithAnObjectFieldOfIdZero ()
         {
-            // The object id 0 decodes to a null object, which a structure field can never be
             var data = Encode (Tuple.Create (
                 42, "jeb", TestService.TestEnum.Z, (ulong)0, new List<string> ())).ToHexString ();
-            Assert.Throws<ArgumentException> (
+            var exn = Assert.Throws<ArgumentException> (
                 () => Encoder.Decode (data.ToByteString (), TypeSpec.Create (typeof(TestService.TestStruct))));
+            StringAssert.Contains ("0 is not an object identifier", exn.Message);
         }
 
         [Test]

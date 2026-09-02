@@ -109,7 +109,7 @@ end
 local function _encode_item(x, typ)
   local absent = x == nil or x == Types.none
   if not typ.nullable then
-    -- Types.none carries the object id 0, which would encode as a value of the type
+    -- A position that cannot hold null takes a value of its type and nothing else
     if absent then
       error('A null cannot be encoded at a position that cannot hold one')
     end

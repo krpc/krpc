@@ -320,7 +320,7 @@ function Types:coerce_to(value, typ)
   end
   -- Collection types
   -- Coerce tuples to lists
-  if type(value) == 'table' and value._object_id ~= 0 and typ:is_a(Types.ListType) then
+  if type(value) == 'table' and value ~= Types.none and typ:is_a(Types.ListType) then
     local result = typ.lua_type()
     for _, x in ipairs(value) do
       result:append(self:coerce_to(x, typ.value_type))
@@ -328,7 +328,7 @@ function Types:coerce_to(value, typ)
     return result
   end
   -- Coerce lists (with appropriate number of elements) to tuples
-  if type(value) == 'table' and value._object_id ~= 0 and typ:is_a(Types.TupleType) and #(value) == #(typ.value_types) then
+  if type(value) == 'table' and value ~= Types.none and typ:is_a(Types.TupleType) and #(value) == #(typ.value_types) then
     local result = typ.lua_type()
     for i, x in ipairs(value) do
       result:append(self:coerce_to(x, typ.value_types[i]))
@@ -337,7 +337,7 @@ function Types:coerce_to(value, typ)
   end
   -- Coerce lists (with one element per field) to structs, taking their elements as the
   -- fields in order
-  if type(value) == 'table' and value._object_id ~= 0 and typ:is_a(Types.StructType) and #(value) == #(typ.field_types) then
+  if type(value) == 'table' and value ~= Types.none and typ:is_a(Types.StructType) and #(value) == #(typ.field_types) then
     local values = {}
     for i, x in ipairs(value) do
       values[i] = self:coerce_to(x, typ.field_types[i])
@@ -719,11 +719,9 @@ function Types.ClassBase:__tostring()
   return string.format('<%s.%s remote object #%d>', self._service_name, self._class_name, self._object_id)
 end
 
+-- The value a null takes in lua, where nil in a table leaves a hole rather than an entry.
+-- It stands for a null at any position, and is not an instance of any class
 local None = class()
-
-function None:_init()
-  self._object_id = 0
-end
 
 function None:__tostring()
   return 'none'

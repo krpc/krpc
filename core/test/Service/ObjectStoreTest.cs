@@ -142,13 +142,14 @@ namespace KRPC.Test.Service
         }
 
         [Test]
-        public void NullValues ()
+        public void NullIsNotAnInstance ()
         {
+            // A null belongs to the position a value sits in, so no identifier stands for one
             var store = new ObjectStore ();
-            Assert.AreEqual (0, store.AddInstance (null));
+            Assert.Throws<ArgumentNullException> (() => store.AddInstance (null));
+            Assert.Throws<ArgumentNullException> (() => store.GetObjectId (null));
+            Assert.Throws<ArgumentException> (() => store.GetInstance (0));
             Assert.DoesNotThrow (() => store.RemoveInstance (null));
-            Assert.AreEqual (null, store.GetInstance (0));
-            Assert.AreEqual (0, store.GetObjectId (null));
         }
     }
 }
