@@ -1211,7 +1211,7 @@ Vessel
       occupying a part, or the vessel containing the part is not loaded.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Part`
+      :rtype: :class:`Part` or None
       :Game Scenes: Flight
 
    .. method:: eva()

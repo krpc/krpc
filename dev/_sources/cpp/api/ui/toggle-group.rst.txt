@@ -49,7 +49,7 @@ Toggle Group
          be built with its parts visible, inside a panel that is not, and shown all at
          once by making that panel visible.
 
-   .. function:: Toggle selected()
+   .. function:: std::optional<Toggle> selected()
 
       The toggle in the group that is checked, or ``NULL`` if none of them are.
 

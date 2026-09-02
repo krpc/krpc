@@ -142,7 +142,7 @@ Vessel
 
    
 
-   .. function:: Flight flight(ReferenceFrame reference_frame)
+   .. function:: Flight flight(std::optional<ReferenceFrame> reference_frame)
 
       Returns a :func:`Vessel::flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.
@@ -1105,7 +1105,7 @@ Vessel
 
    
 
-   .. function:: Part part()
+   .. function:: std::optional<Part> part()
 
       The part containing the crew member. Returns ``NULL`` if the crew member is not
       occupying a part, or the vessel containing the part is not loaded.

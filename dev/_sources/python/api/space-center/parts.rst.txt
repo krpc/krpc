@@ -48,7 +48,7 @@ Parts
       oriented by its root part.
 
       :Attribute: Can be read or written
-      :rtype: :class:`Part`
+      :rtype: :class:`Part` or None
       :Game Scenes: Flight
 
 
@@ -464,7 +464,7 @@ Part
       parts tree.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Part`
+      :rtype: :class:`Part` or None
    
 
       .. note:: See the discussion on :rst:ref:`python-api-parts-trees-of-parts`.
@@ -776,7 +776,7 @@ Part
       An :attr:`Part.antenna` if the part is an antenna, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Antenna`
+      :rtype: :class:`Antenna` or None
    
 
       .. note::
@@ -789,7 +789,7 @@ Part
       A :attr:`Part.cargo_bay` if the part is a cargo bay, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`CargoBay`
+      :rtype: :class:`CargoBay` or None
    
 
    .. attribute:: control_surface
@@ -798,7 +798,7 @@ Part
       otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ControlSurface`
+      :rtype: :class:`ControlSurface` or None
    
 
    .. attribute:: decoupler
@@ -806,7 +806,7 @@ Part
       A :attr:`Part.decoupler` if the part is a decoupler, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Decoupler`
+      :rtype: :class:`Decoupler` or None
    
 
    .. attribute:: docking_port
@@ -814,7 +814,7 @@ Part
       A :attr:`Part.docking_port` if the part is a docking port, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`DockingPort`
+      :rtype: :class:`DockingPort` or None
    
 
    .. attribute:: engine
@@ -822,7 +822,7 @@ Part
       An :attr:`Part.engine` if the part is an engine, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Engine`
+      :rtype: :class:`Engine` or None
    
 
    .. attribute:: experiment
@@ -831,7 +831,7 @@ Part
       single science experiment, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Experiment`
+      :rtype: :class:`Experiment` or None
    
 
       .. note::
@@ -844,7 +844,7 @@ Part
       A list of :attr:`Part.experiment` objects that the part contains.
 
       :Attribute: Read-only, cannot be set
-      :rtype: list(:class:`Experiment`)
+      :rtype: list(:class:`Experiment`) or None
    
 
    .. attribute:: fairing
@@ -852,7 +852,7 @@ Part
       A :attr:`Part.fairing` if the part is a fairing, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Fairing`
+      :rtype: :class:`Fairing` or None
    
 
    .. attribute:: intake
@@ -860,7 +860,7 @@ Part
       An :attr:`Part.intake` if the part is an intake, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Intake`
+      :rtype: :class:`Intake` or None
    
 
       .. note::
@@ -874,7 +874,7 @@ Part
       A :attr:`Part.leg` if the part is a landing leg, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Leg`
+      :rtype: :class:`Leg` or None
    
 
    .. attribute:: launch_clamp
@@ -882,7 +882,7 @@ Part
       A :attr:`Part.launch_clamp` if the part is a launch clamp, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`LaunchClamp`
+      :rtype: :class:`LaunchClamp` or None
    
 
    .. attribute:: light
@@ -890,7 +890,7 @@ Part
       A :attr:`Part.light` if the part is a light, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Light`
+      :rtype: :class:`Light` or None
    
 
    .. attribute:: parachute
@@ -898,7 +898,7 @@ Part
       A :attr:`Part.parachute` if the part is a parachute, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Parachute`
+      :rtype: :class:`Parachute` or None
    
 
    .. attribute:: radiator
@@ -906,7 +906,7 @@ Part
       A :attr:`Part.radiator` if the part is a radiator, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Radiator`
+      :rtype: :class:`Radiator` or None
    
 
    .. attribute:: resource_drain
@@ -914,7 +914,7 @@ Part
       A :attr:`Part.resource_drain` if the part is a resource drain, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ResourceDrain`
+      :rtype: :class:`ResourceDrain` or None
    
 
    .. attribute:: rcs
@@ -922,7 +922,7 @@ Part
       A :attr:`Part.rcs` if the part is an RCS block/thruster, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RCS`
+      :rtype: :class:`RCS` or None
    
 
    .. attribute:: reaction_wheel
@@ -930,7 +930,7 @@ Part
       A :attr:`Part.reaction_wheel` if the part is a reaction wheel, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ReactionWheel`
+      :rtype: :class:`ReactionWheel` or None
    
 
    .. attribute:: resource_converter
@@ -939,7 +939,7 @@ Part
       otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ResourceConverter`
+      :rtype: :class:`ResourceConverter` or None
    
 
    .. attribute:: resource_harvester
@@ -948,7 +948,7 @@ Part
       otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ResourceHarvester`
+      :rtype: :class:`ResourceHarvester` or None
    
 
    .. attribute:: robotic_controller
@@ -957,7 +957,7 @@ Part
       otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticController`
+      :rtype: :class:`RoboticController` or None
    
 
    .. attribute:: robotic_hinge
@@ -965,7 +965,7 @@ Part
       A :attr:`Part.robotic_hinge` if the part is a robotic hinge, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticHinge`
+      :rtype: :class:`RoboticHinge` or None
    
 
    .. attribute:: robotic_piston
@@ -973,7 +973,7 @@ Part
       A :attr:`Part.robotic_piston` if the part is a robotic piston, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticPiston`
+      :rtype: :class:`RoboticPiston` or None
    
 
    .. attribute:: robotic_rotation
@@ -981,7 +981,7 @@ Part
       A :attr:`Part.robotic_rotation` if the part is a robotic rotation servo, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticRotation`
+      :rtype: :class:`RoboticRotation` or None
    
 
    .. attribute:: robotic_rotor
@@ -989,7 +989,7 @@ Part
       A :attr:`Part.robotic_rotor` if the part is a robotic rotor, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticRotor`
+      :rtype: :class:`RoboticRotor` or None
    
 
    .. attribute:: sensor
@@ -997,7 +997,7 @@ Part
       A :attr:`Part.sensor` if the part is a sensor, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Sensor`
+      :rtype: :class:`Sensor` or None
    
 
    .. attribute:: solar_panel
@@ -1005,7 +1005,7 @@ Part
       A :attr:`Part.solar_panel` if the part is a solar panel, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SolarPanel`
+      :rtype: :class:`SolarPanel` or None
    
 
    .. attribute:: wheel
@@ -1013,7 +1013,7 @@ Part
       A :attr:`Part.wheel` if the part is a wheel, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Wheel`
+      :rtype: :class:`Wheel` or None
    
 
    .. method:: position(reference_frame)
@@ -2464,7 +2464,7 @@ Decoupler
       The part attached to this decoupler's explosive node.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Part`
+      :rtype: :class:`Part` or None
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
@@ -2544,7 +2544,7 @@ Docking Port
       docking port is not docked to anything.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Part`
+      :rtype: :class:`Part` or None
       :Game Scenes: Flight
 
    .. method:: undock()

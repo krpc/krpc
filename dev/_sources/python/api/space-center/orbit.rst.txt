@@ -652,7 +652,7 @@ Orbit
       orbit after the change. Otherwise returns ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Orbit`
+      :rtype: :class:`Orbit` or None
    
 
    .. method:: next_closest_approach(target)

@@ -23,7 +23,7 @@ CelestialBody
 
    
 
-   .. function:: Orbit orbit()
+   .. function:: std::optional<Orbit> orbit()
 
       The orbit of the body.
 

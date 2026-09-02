@@ -64,7 +64,7 @@ Closest Approach
       The vessel doing the approaching, or ``None`` if it is not a vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Vessel`
+      :rtype: :class:`Vessel` or None
    
 
    .. attribute:: body
@@ -73,7 +73,7 @@ Closest Approach
       celestial body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`CelestialBody`
+      :rtype: :class:`CelestialBody` or None
    
 
    .. attribute:: target_vessel
@@ -81,7 +81,7 @@ Closest Approach
       The vessel being approached, or ``None`` if the target is not a vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Vessel`
+      :rtype: :class:`Vessel` or None
    
 
    .. attribute:: target_body
@@ -90,7 +90,7 @@ Closest Approach
       celestial body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`CelestialBody`
+      :rtype: :class:`CelestialBody` or None
    
 
    .. method:: position(reference_frame)

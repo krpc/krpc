@@ -27,7 +27,7 @@ Alarms
 
    
 
-   .. function:: Alarm alarm_with_name(std::string name)
+   .. function:: std::optional<Alarm> alarm_with_name(std::string name)
 
       Returns the first alarm with the given title, or ``NULL`` if no such
       alarm exists. Alarm titles are not guaranteed to be unique; if more than
@@ -193,7 +193,7 @@ Alarms
 
    
 
-   .. function:: Vessel vessel()
+   .. function:: std::optional<Vessel> vessel()
 
       Vessel the alarm references. ``NULL`` if it does not reference a vessel.
 

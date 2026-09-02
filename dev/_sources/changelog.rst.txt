@@ -15,6 +15,10 @@ v0.7.0 - unreleased
 Core
 ^^^^
 
+* Encode and decode values without reflection, cutting the server cost of a call that passes or returns an object by about three quarters (:issue:`1091`)
+* :breaking:`Breaking` Nullability is carried by ``Type.nullable`` at every position a value sits in, replacing ``Parameter.nullable`` and ``Procedure.return_is_nullable`` (:issue:`1091`)
+* A structure field can be nullable, declared by ``Nullable`` on its ``KRPCProperty`` attribute or by a ``Nullable<T>`` field type (:issue:`1091`)
+* A list element, a tuple item and a dictionary value can be nullable, declared by a ``Nullable<T>`` type or by a path of positions on ``KRPCNullable``, such as ``[KRPCNullable (Position.Element)]`` (:issue:`1091`)
 * Add extension members: a service can add methods and properties to a class belonging to another service, declared as C# extension methods annotated with ``KRPCMethod`` or ``KRPCProperty`` (:issue:`1077`)
 * Add structure types: a compound value with named fields, declared with ``KRPCStruct`` on a C# ``struct`` and sent to the client in full (:issue:`1066`)
 * Add a communication protocol carrying protocol buffer messages over a unix domain socket, for clients running on the same machine as the game (:issue:`1065`)
@@ -282,6 +286,7 @@ Debug service
 C-nano client
 ^^^^^^^^^^^^^
 
+* Support a nullable structure field, list element, tuple item and dictionary value, each generated as a type holding the value beside a ``bool`` presence flag (:issue:`1091`)
 * Support structure types, generated as a C struct with a member per field (:issue:`1066`)
 * :breaking:`Breaking` Support null for any nullable type; a nullable non-class return adds a ``bool* returnValueIsNull`` out-parameter and a nullable argument is a pointer (:issue:`1017`)
 * Add ``KRPC_COMMUNICATION_TCP``, building the library to communicate over TCP/IP. A connection is opened with a ``krpc_connection_config_t`` in place of a port name (:issue:`1055`)
@@ -295,6 +300,7 @@ C-nano client
 C# client
 ^^^^^^^^^
 
+* Support a nullable structure field, list element, tuple item and dictionary value; a value-typed one uses the nullable form (``int?``) (:issue:`1091`)
 * Support structure types, a compound value with named fields a service defines, generated as a ``struct`` with a constructor, ``IEquatable``, ``IComparable`` and the comparison operators over its fields (:issue:`1066`)
 * Stream expressions can be multiplied by a constant (:issue:`1062`)
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the nullable form (``int?``) (:issue:`1017`)
@@ -307,9 +313,10 @@ C# client
 C++ client
 ^^^^^^^^^^
 
+* Support a nullable structure field, list element, tuple item and dictionary value (:issue:`1091`)
 * Support structure types, a compound value with named fields a service defines, generated as a ``struct`` with a constructor, equality, ordering and a ``std::hash`` over its fields (:issue:`1066`)
 * Add ``krpc::hash_value`` and the ``krpc::hash`` function object, which hash any type the client carries, so a tuple or a collection can key an unordered container (:issue:`1067`)
-* :breaking:`Breaking` Support null for any nullable type; nullable non-class values use ``std::optional``, changing generated signatures (:issue:`1017`)
+* :breaking:`Breaking` Support null for any nullable type, held as ``std::optional``, changing generated signatures (:issue:`1017`)
 * Add ``krpc::connect_local``, which connects to a server on the same machine over unix domain sockets (:issue:`1065`)
 * Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for (:issue:`1065`)
 * Fix ``Stream::start`` hanging when a stream's only update notification is lost (:issue:`1090`)
@@ -325,6 +332,7 @@ C++ client
 Java client
 ^^^^^^^^^^^
 
+* Support a nullable structure field, list element, tuple item and dictionary value, held as the boxed type (``Integer``, ``Double``, …) where the value is a primitive (:issue:`1091`)
 * Support structure types, a compound value with named fields a service defines, generated as a class with a constructor, getters, ``equals``, ``hashCode`` and ``Comparable`` over its fields (:issue:`1066`)
 * :breaking:`Breaking` Requires Java 17 or later, up from Java 9, for unix domain sockets (:issue:`1065`)
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the boxed type (``Integer``, ``Double``, …) (:issue:`1017`)
@@ -335,6 +343,7 @@ Java client
 Lua client
 ^^^^^^^^^^
 
+* Support a nullable structure field, list element, tuple item and dictionary value, which is ``Types.none`` when absent (:issue:`1091`)
 * Support structure types, built from their field values in order and giving them named access (:issue:`1066`)
 * A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (:issue:`1066`)
 * :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
@@ -349,6 +358,7 @@ Lua client
 Python client
 ^^^^^^^^^^^^^
 
+* Support a nullable structure field, list element, tuple item and dictionary value, which is ``None`` when absent (:issue:`1091`)
 * A service with pre-generated stubs also gains the class members that only the server declares (:issue:`1077`)
 * Support structure types. A value is a named tuple, and a tuple or list with one element per field is accepted where one is expected (:issue:`1066`)
 * A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (:issue:`1066`)
@@ -363,6 +373,7 @@ Python client
 krpctools
 ^^^^^^^^^
 
+* Generate and document the nullable structure fields and collection elements a service defines, for every client (:issue:`1091`)
 * Generate and document the structure types a service defines, for every client (:issue:`1066`)
 * :breaking:`Breaking` A generator module given to ``krpc-clientgen`` by path is constructed with the definitions of every service that was loaded, rather than those of the single service it generates (:issue:`1044`)
 * Support for nullable values across all types (:issue:`1017`)

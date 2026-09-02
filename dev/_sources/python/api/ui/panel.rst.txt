@@ -182,7 +182,7 @@ Panel
       positioned by hand.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Layout`
+      :rtype: :class:`Layout` or None
    
 
    .. method:: add_horizontal_layout()

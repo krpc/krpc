@@ -675,7 +675,7 @@ Control
       vessel is not a kerbal on EVA.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Part`
+      :rtype: :class:`Part` or None
       :Game Scenes: Flight
 
    .. method:: board()
@@ -702,7 +702,7 @@ Control
       or the vessel is not a kerbal on EVA.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Part`
+      :rtype: :class:`Part` or None
       :Game Scenes: Flight
 
    .. method:: grab_ladder()
@@ -755,7 +755,7 @@ Control
       directly on a part, rather than on one of its modules, to an action group.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Module`
+      :rtype: :class:`Module` or None
    
 
    .. attribute:: name

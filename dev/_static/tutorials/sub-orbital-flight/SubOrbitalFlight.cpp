@@ -10,7 +10,7 @@ int main() {
   krpc::services::KRPC krpc(&conn);
   krpc::services::SpaceCenter space_center(&conn);
 
-  auto vessel = space_center.active_vessel();
+  auto vessel = space_center.active_vessel().value();
 
   vessel.auto_pilot().target_pitch_and_heading(90, 90);
   vessel.auto_pilot().set_engaged(true);

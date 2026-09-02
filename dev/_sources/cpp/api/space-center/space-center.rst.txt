@@ -41,8 +41,8 @@ SpaceCenter
 
    
 
-   .. function:: Vessel active_vessel()
-   .. function:: void set_active_vessel(Vessel value)
+   .. function:: std::optional<Vessel> active_vessel()
+   .. function:: void set_active_vessel(std::optional<Vessel> value)
 
       The currently active vessel.
 
@@ -67,22 +67,22 @@ SpaceCenter
 
    
 
-   .. function:: CelestialBody target_body()
-   .. function:: void set_target_body(CelestialBody value)
+   .. function:: std::optional<CelestialBody> target_body()
+   .. function:: void set_target_body(std::optional<CelestialBody> value)
 
       The currently targeted celestial body.
 
       :Game Scenes: Flight
 
-   .. function:: Vessel target_vessel()
-   .. function:: void set_target_vessel(Vessel value)
+   .. function:: std::optional<Vessel> target_vessel()
+   .. function:: void set_target_vessel(std::optional<Vessel> value)
 
       The currently targeted vessel.
 
       :Game Scenes: Flight
 
-   .. function:: DockingPort target_docking_port()
-   .. function:: void set_target_docking_port(DockingPort value)
+   .. function:: std::optional<DockingPort> target_docking_port()
+   .. function:: void set_target_docking_port(std::optional<DockingPort> value)
 
       The currently targeted docking port.
 
@@ -106,7 +106,7 @@ SpaceCenter
 
    
 
-   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, std::vector<std::string> crew, bool recover = true, std::string flag_url = "")
+   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, std::optional<std::vector<std::string>> crew, bool recover = true, std::string flag_url = "")
 
       Launch a vessel.
 
@@ -430,7 +430,7 @@ SpaceCenter
       :returns: The distance to the hit, in meters, or infinity if there was no hit.
    
 
-   .. function:: Part raycast_part(std::tuple<double, double, double> position, std::tuple<double, double, double> direction, ReferenceFrame reference_frame)
+   .. function:: std::optional<Part> raycast_part(std::tuple<double, double, double> position, std::tuple<double, double, double> direction, ReferenceFrame reference_frame)
 
       Cast a ray from a given position in a given direction, and return the part that it hits.
       If no hit occurs, returns ``NULL``.
@@ -468,7 +468,7 @@ SpaceCenter
 
    
 
-   .. function:: CrewMember get_kerbal(std::string name)
+   .. function:: std::optional<CrewMember> get_kerbal(std::string name)
 
       Find a Kerbal by name.
 

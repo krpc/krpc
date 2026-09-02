@@ -34,7 +34,7 @@ Alarms
       one alarm shares the given title, the first one found is returned.
 
       :param str name: The title of the alarm to return.
-      :rtype: :class:`Alarm`
+      :rtype: :class:`Alarm` or None
    
 
    .. staticmethod:: add_alarm(time, [title = 'Alarm'], [description = ''])
@@ -192,7 +192,7 @@ Alarms
       Vessel the alarm references. ``None`` if it does not reference a vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Vessel`
+      :rtype: :class:`Vessel` or None
    
 
    .. attribute:: node

@@ -952,7 +952,6 @@ this field is informational.</p></li>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Parameter</span><span class="w"> </span><span class="na">parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">return_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">return_is_nullable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">GameScene</span><span class="w"> </span><span class="na">game_scenes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">deprecated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
@@ -962,7 +961,6 @@ this field is informational.</p></li>
 <span class="kd">message</span><span class="w"> </span><span class="nc">Parameter</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">nullable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">has_default_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">default_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">default_value_is_null</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
@@ -977,8 +975,8 @@ information.</p></li>
 procedure’s parameters, with the following fields:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the parameter, to allow parameter passing by name.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> - The <a class="reference internal" href="#communication-protocol-type"><span class="std std-ref">type</span></a> of the parameter.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nullable</span></code> - Whether null can be passed as the argument for this parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> - The <a class="reference internal" href="#communication-protocol-type"><span class="std std-ref">type</span></a> of the parameter. Its <code class="docutils literal notranslate"><span class="pre">nullable</span></code>
+field says whether null can be passed as the argument for this parameter.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">has_default_value</span></code> - Whether the parameter has a default value. When it is not set, the
 parameter is required and <code class="docutils literal notranslate"><span class="pre">default_value</span></code> and <code class="docutils literal notranslate"><span class="pre">default_value_is_null</span></code> are unset.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">default_value</span></code> - The default value of the parameter, <a class="reference internal" href="#communication-protocol-protobuf-encoding"><span class="std std-ref">encoded using Protocol Buffer
@@ -1018,8 +1016,8 @@ is set, in which case <code class="docutils literal notranslate"><span class="pr
 </div>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">return_type</span></code> - The <a class="reference internal" href="#communication-protocol-type"><span class="std std-ref">return type</span></a> of the procedure. If the
-procedure does not return anything its type is set to <code class="docutils literal notranslate"><span class="pre">NONE</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">return_is_nullable</span></code> - Whether the procedure can return null.</p></li>
+procedure does not return anything its type is set to <code class="docutils literal notranslate"><span class="pre">NONE</span></code>. Its <code class="docutils literal notranslate"><span class="pre">nullable</span></code> field says
+whether the procedure can return null.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">game_scenes</span></code> - The <a class="reference internal" href="#communication-protocol-game-scene"><span class="std std-ref">game scenes</span></a> that the procedure is
 available in. If this repeated field is empty, the procedure is available in all game scenes.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the procedure, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
@@ -1122,7 +1120,8 @@ order their values are encoded in. The fields are:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the field.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> - The type of the field, as a <a class="reference internal" href="#communication-protocol-type"><span class="std std-ref">Type message</span></a>. A field may have any type a parameter or return value may
-have, including a class, a collection or another structure.</p></li>
+have, including a class, a collection or another structure. Its <code class="docutils literal notranslate"><span class="pre">nullable</span></code> field says
+whether the field can be null.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the field, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">deprecated</span></code> - Whether the field is deprecated. Deprecated fields remain fully functional;
 this field is informational.</p></li>
@@ -1140,14 +1139,23 @@ empty.</p></li>
 the structure’s fields, in the order the <code class="docutils literal notranslate"><span class="pre">fields</span></code> list gives them. This is the encoding of a tuple
 of the field types, so a client can use the codec it already has for tuples. The field names appear
 only in the definition above.</p>
-<p>Two rules follow from that encoding:</p>
-<ul class="simple">
-<li><p>Fields are only ever appended to a structure. A client generated against an older definition may
-receive more items than it has fields for, and ignores the extra items. Fewer items than its
-fields means the definitions do not match, and is an error.</p></li>
-<li><p>A field is never null. The <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field of the enclosing <code class="docutils literal notranslate"><span class="pre">Argument</span></code> or <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code>
-message applies to the structure value as a whole, and carries nothing about its fields.</p></li>
-</ul>
+<p>One rule follows from that encoding: fields are only ever appended to a structure. A client
+generated against an older definition may receive more items than it has fields for, and ignores
+the extra items. Fewer items than its fields means the definitions do not match, and is an error.</p>
+<p>A field whose type is nullable carries a presence bool before its value. The bool is one byte,
+encoded as a <code class="docutils literal notranslate"><span class="pre">BOOL</span></code> value. The field’s ordinary encoding follows it when the bool is true. A
+list element, a tuple item and a dictionary value carry the same bool, in the item of the
+<code class="docutils literal notranslate"><span class="pre">List</span></code>, <code class="docutils literal notranslate"><span class="pre">Tuple</span></code> or <code class="docutils literal notranslate"><span class="pre">DictionaryEntry</span></code> message that holds them. For example, a structure
+whose first field is an <code class="docutils literal notranslate"><span class="pre">SINT32</span></code> and whose second is a nullable <code class="docutils literal notranslate"><span class="pre">CLASS</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Tuple</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">54</span>           <span class="n">the</span> <span class="n">first</span> <span class="n">field</span><span class="p">,</span> <span class="n">unchanged</span>
+<span class="n">Tuple</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">01</span> <span class="mi">07</span>        <span class="n">present</span><span class="p">,</span> <span class="n">then</span> <span class="nb">object</span> <span class="nb">id</span> <span class="mi">7</span>
+<span class="n">Tuple</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">00</span>           <span class="n">null</span>
+</pre></div>
+</div>
+<p>A field that is not nullable is encoded as its value alone, and a null in one is an error. The
+presence bool is what separates a null field from a null structure: <code class="docutils literal notranslate"><span class="pre">is_null</span></code> on the enclosing
+<code class="docutils literal notranslate"><span class="pre">Argument</span></code> or <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message applies to the structure value as a whole, and carries
+nothing about its fields.</p>
 </section>
 <section id="exceptions">
 <h3>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading">#</a></h3>
@@ -1197,6 +1205,7 @@ therefore be used to split the name into its constituent parts.</p>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="na">types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">nullable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 
 <span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">TypeCode</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">NONE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -1246,6 +1255,15 @@ fields are empty. The fields of a structure are read from the <a class="referenc
 order.</p></li>
 </ul>
 <p>For all other types the <code class="docutils literal notranslate"><span class="pre">types</span></code> field is empty.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">nullable</span></code> field says whether the position the type describes can hold null. It is a
+property of that position rather than of the type, so the same type is nullable in one place and
+not in another. The positions that can be nullable are a parameter, a return value, a default
+value, a <a class="reference internal" href="#communication-protocol-structures"><span class="std std-ref">structure field</span></a>, a list element, a tuple item
+and a dictionary value. A dictionary key and a set element cannot.</p>
+<p>How the null itself is carried depends on the position. An argument, a result and a default value
+each have a flag of their own, <code class="docutils literal notranslate"><span class="pre">Argument.is_null</span></code>, <code class="docutils literal notranslate"><span class="pre">ProcedureResult.is_null</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Parameter.default_value_is_null</span></code>. A value nested inside another value has no such flag, and
+carries a leading presence bool instead, in the form the <a class="reference internal" href="#communication-protocol-structures"><span class="std std-ref">Structures</span></a> section shows.</p>
 </section>
 <section id="gamescene">
 <span id="communication-protocol-game-scene"></span><h2>GameScene<a class="headerlink" href="#gamescene" title="Link to this heading">#</a></h2>

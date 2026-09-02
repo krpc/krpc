@@ -45,7 +45,7 @@ InfernalRobotics
          support movement and per-servo control, but not preset, key, speed-factor or
          expanded state, which are only tracked by Infernal Robotics for the active vessel.
 
-   .. function:: ServoGroup servo_group_with_name(SpaceCenter::Vessel vessel, std::string name)
+   .. function:: std::optional<ServoGroup> servo_group_with_name(SpaceCenter::Vessel vessel, std::string name)
 
       Returns the servo group in the given *vessel* with the given *name*,
       or ``NULL`` if none exists. If multiple servo groups have the same name, only one of them is returned.
@@ -57,7 +57,7 @@ InfernalRobotics
 
       :Game Scenes: Flight
 
-   .. function:: Servo servo_with_name(SpaceCenter::Vessel vessel, std::string name)
+   .. function:: std::optional<Servo> servo_with_name(SpaceCenter::Vessel vessel, std::string name)
 
       Returns the servo in the given *vessel* with the given *name* or
       ``NULL`` if none exists. If multiple servos have the same name, only one of them is returned.

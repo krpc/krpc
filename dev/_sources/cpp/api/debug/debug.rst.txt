@@ -94,7 +94,7 @@ Debug
          The pitch, heading and roll match those reported by the vessel's
          :class:`SpaceCenter::Flight`.
 
-   .. function:: void set_position(std::tuple<double, double, double> position, SpaceCenter::ReferenceFrame reference_frame)
+   .. function:: void set_position(std::tuple<double, double, double> position, std::optional<SpaceCenter::ReferenceFrame> reference_frame)
 
       Move the active vessel to the given position, leaving its velocity as it is. To put it
       alongside another vessel, pass a position in that vessel's reference frame.
@@ -112,7 +112,7 @@ Debug
          This is the inverse of :func:`SpaceCenter::Vessel::position` in the same
          reference frame.
 
-   .. function:: void set_velocity(std::tuple<double, double, double> velocity, SpaceCenter::ReferenceFrame reference_frame)
+   .. function:: void set_velocity(std::tuple<double, double, double> velocity, std::optional<SpaceCenter::ReferenceFrame> reference_frame)
 
       Set the velocity of the active vessel, leaving it where it is. The vessel is moved onto the
       orbit that passes through its current position at the new velocity, so this works
@@ -131,7 +131,7 @@ Debug
          This is the inverse of :func:`SpaceCenter::Vessel::velocity` in the same
          reference frame.
 
-   .. function:: void set_pitch_heading_roll(double pitch, double heading, double roll, SpaceCenter::ReferenceFrame reference_frame, SpaceCenter::Vessel vessel)
+   .. function:: void set_pitch_heading_roll(double pitch, double heading, double roll, std::optional<SpaceCenter::ReferenceFrame> reference_frame, std::optional<SpaceCenter::Vessel> vessel)
 
       Set the attitude of a vessel to the given pitch, heading and roll in the given
       reference frame, and stop it rotating. Lets a script start from a fixed, still
@@ -153,7 +153,7 @@ Debug
          The angles match those reported by the vessel's
          :class:`SpaceCenter::Flight`.
 
-   .. function:: void set_direction(std::tuple<double, double, double> direction, double roll, SpaceCenter::ReferenceFrame reference_frame, SpaceCenter::Vessel vessel)
+   .. function:: void set_direction(std::tuple<double, double, double> direction, double roll, std::optional<SpaceCenter::ReferenceFrame> reference_frame, std::optional<SpaceCenter::Vessel> vessel)
 
       Point a vessel along the given direction in the given reference frame, and stop it
       rotating. This is :func:`set_pitch_heading_roll` with a pointing vector instead
@@ -169,7 +169,7 @@ Debug
 
       :Game Scenes: Flight
 
-   .. function:: void apply_rotation(double angle, std::tuple<double, double, double> axis, SpaceCenter::Vessel vessel)
+   .. function:: void apply_rotation(double angle, std::tuple<double, double, double> axis, std::optional<SpaceCenter::Vessel> vessel)
 
       Rotate a vessel about the given axis, in its own reference frame, by the given angle.
 
@@ -181,7 +181,7 @@ Debug
 
       :Game Scenes: Flight
 
-   .. function:: void set_angular_velocity(std::tuple<double, double, double> angular_velocity, SpaceCenter::ReferenceFrame reference_frame, SpaceCenter::Vessel vessel)
+   .. function:: void set_angular_velocity(std::tuple<double, double, double> angular_velocity, std::optional<SpaceCenter::ReferenceFrame> reference_frame, std::optional<SpaceCenter::Vessel> vessel)
 
       Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
       zero vector to stop the vessel rotating.
@@ -200,7 +200,7 @@ Debug
          The whole vessel is put into a rigid rotation about its center of mass, so it spins in
          place rather than shearing apart or translating.
 
-   .. function:: void fill_all_resources(SpaceCenter::Vessel vessel)
+   .. function:: void fill_all_resources(std::optional<SpaceCenter::Vessel> vessel)
 
       Fill every resource tank on a vessel to its maximum capacity.
 
@@ -210,7 +210,7 @@ Debug
 
       :Game Scenes: Flight
 
-   .. function:: void fill_resources(std::string resource_name, SpaceCenter::Vessel vessel)
+   .. function:: void fill_resources(std::string resource_name, std::optional<SpaceCenter::Vessel> vessel)
 
       Fill the tanks of a single resource on a vessel to their maximum capacity.
 

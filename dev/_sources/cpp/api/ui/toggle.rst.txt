@@ -66,8 +66,8 @@ Toggle
          Checking a toggle that belongs to a :class:`ToggleGroup` unchecks the rest
          of that group, whether or not it is on the screen.
 
-   .. function:: ToggleGroup group()
-   .. function:: void set_group(ToggleGroup value)
+   .. function:: std::optional<ToggleGroup> group()
+   .. function:: void set_group(std::optional<ToggleGroup> value)
 
       The group that the toggle belongs to, or ``NULL`` if it does not belong to one.
 

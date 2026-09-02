@@ -28,7 +28,7 @@ KerbalAlarmClock
 
    
 
-   .. function:: Alarm alarm_with_name(std::string name)
+   .. function:: std::optional<Alarm> alarm_with_name(std::string name)
 
       Get the alarm with the given *name*, or ``NULL``
       if no alarms have that name. If more than one alarm has the name,

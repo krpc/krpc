@@ -43,7 +43,7 @@ ReferenceFrame
          creates one repeatedly, for example once per update, should remove each one
          when it is finished with it.
 
-   .. function:: static ReferenceFrame create_hybrid(Client& connection, ReferenceFrame position, ReferenceFrame rotation, ReferenceFrame velocity, ReferenceFrame angular_velocity)
+   .. function:: static ReferenceFrame create_hybrid(Client& connection, ReferenceFrame position, std::optional<ReferenceFrame> rotation, std::optional<ReferenceFrame> velocity, std::optional<ReferenceFrame> angular_velocity)
 
       Create a hybrid reference frame. This is a custom reference frame
       whose components inherited from other reference frames.

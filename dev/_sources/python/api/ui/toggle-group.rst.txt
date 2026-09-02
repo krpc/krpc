@@ -59,7 +59,7 @@ Toggle Group
       The toggle in the group that is checked, or ``None`` if none of them are.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Toggle`
+      :rtype: :class:`Toggle` or None
    
 
    .. attribute:: allow_switch_off

@@ -62,7 +62,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The currently active vessel.
 
    :Attribute: Can be read or written
-   :rtype: :class:`Vessel`
+   :rtype: :class:`Vessel` or None
    
 
 
@@ -107,7 +107,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The currently targeted celestial body.
 
    :Attribute: Can be read or written
-   :rtype: :class:`CelestialBody`
+   :rtype: :class:`CelestialBody` or None
    :Game Scenes: Flight
 
 
@@ -119,7 +119,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The currently targeted vessel.
 
    :Attribute: Can be read or written
-   :rtype: :class:`Vessel`
+   :rtype: :class:`Vessel` or None
    :Game Scenes: Flight
 
 
@@ -131,7 +131,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The currently targeted docking port.
 
    :Attribute: Can be read or written
-   :rtype: :class:`DockingPort`
+   :rtype: :class:`DockingPort` or None
    :Game Scenes: Flight
 
 
@@ -570,7 +570,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :param tuple direction: Direction of the ray, as a unit vector.
    :param ReferenceFrame reference_frame: The reference frame that the position and direction are in.
    :returns: The part that was hit or ``None`` if there was no hit.
-   :rtype: :class:`Part`
+   :rtype: :class:`Part` or None
    :Game Scenes: Flight
 
 
@@ -616,7 +616,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    Find a Kerbal by name.
 
    :param str name:
-   :rtype: :class:`CrewMember`
+   :rtype: :class:`CrewMember` or None
    
 
 

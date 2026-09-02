@@ -32,7 +32,7 @@ CelestialBody
       The orbit of the body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Orbit`
+      :rtype: :class:`Orbit` or None
    
 
    .. attribute:: mass

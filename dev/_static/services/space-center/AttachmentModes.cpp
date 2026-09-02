@@ -10,7 +10,7 @@ using SpaceCenter = krpc::services::SpaceCenter;
 int main() {
   auto conn = krpc::connect();
   SpaceCenter sc(&conn);
-  auto vessel = sc.active_vessel();
+  auto vessel = sc.active_vessel().value();
 
   auto root = vessel.parts().root();
   std::stack<std::pair<SpaceCenter::Part, int> > stack;

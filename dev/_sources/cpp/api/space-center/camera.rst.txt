@@ -115,8 +115,8 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: CelestialBody focussed_body()
-   .. function:: void set_focussed_body(CelestialBody value)
+   .. function:: std::optional<CelestialBody> focussed_body()
+   .. function:: void set_focussed_body(std::optional<CelestialBody> value)
 
       In map mode, the celestial body that the camera is focussed on.
       Returns ``NULL`` if the camera is not focussed on a celestial body.
@@ -124,8 +124,8 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: Vessel focussed_vessel()
-   .. function:: void set_focussed_vessel(Vessel value)
+   .. function:: std::optional<Vessel> focussed_vessel()
+   .. function:: void set_focussed_vessel(std::optional<Vessel> value)
 
       In map mode, the vessel that the camera is focussed on.
       Returns ``NULL`` if the camera is not focussed on a vessel.
@@ -133,8 +133,8 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: Node focussed_node()
-   .. function:: void set_focussed_node(Node value)
+   .. function:: std::optional<Node> focussed_node()
+   .. function:: void set_focussed_node(std::optional<Node> value)
 
       In map mode, the maneuver node that the camera is focussed on.
       Returns ``NULL`` if the camera is not focussed on a maneuver node.
@@ -142,8 +142,8 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: CrewMember focussed_crew_member()
-   .. function:: void set_focussed_crew_member(CrewMember value)
+   .. function:: std::optional<CrewMember> focussed_crew_member()
+   .. function:: void set_focussed_crew_member(std::optional<CrewMember> value)
 
       In IVA mode, the crew member whose view the camera is showing.
       Returns ``NULL`` if no crew member is in view.

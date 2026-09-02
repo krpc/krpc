@@ -41,7 +41,7 @@ This service provides functionality to interact with
    only returns one of them.
 
    :param str name: Name of the alarm to search for.
-   :rtype: :class:`Alarm`
+   :rtype: :class:`Alarm` or None
    
 
 

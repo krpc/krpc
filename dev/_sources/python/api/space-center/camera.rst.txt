@@ -141,7 +141,7 @@ Camera
       Returns an error is the camera is not in map mode.
 
       :Attribute: Can be read or written
-      :rtype: :class:`CelestialBody`
+      :rtype: :class:`CelestialBody` or None
       :Game Scenes: Flight
 
    .. attribute:: focussed_vessel
@@ -151,7 +151,7 @@ Camera
       Returns an error is the camera is not in map mode.
 
       :Attribute: Can be read or written
-      :rtype: :class:`Vessel`
+      :rtype: :class:`Vessel` or None
       :Game Scenes: Flight
 
    .. attribute:: focussed_node
@@ -161,7 +161,7 @@ Camera
       Returns an error is the camera is not in map mode.
 
       :Attribute: Can be read or written
-      :rtype: :class:`Node`
+      :rtype: :class:`Node` or None
       :Game Scenes: Flight
 
    .. attribute:: focussed_crew_member
@@ -174,7 +174,7 @@ Camera
       and in a part whose interior the game has placed them in.
 
       :Attribute: Can be read or written
-      :rtype: :class:`CrewMember`
+      :rtype: :class:`CrewMember` or None
       :Game Scenes: Flight
 
 

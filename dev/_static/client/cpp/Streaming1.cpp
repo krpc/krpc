@@ -7,7 +7,7 @@
 int main() {
   auto conn = krpc::connect();
   krpc::services::SpaceCenter sc(&conn);
-  auto vessel = sc.active_vessel();
+  auto vessel = sc.active_vessel().value();
   auto ref_frame = vessel.orbit().body().reference_frame();
   while (true) {
     auto pos = vessel.position(ref_frame);

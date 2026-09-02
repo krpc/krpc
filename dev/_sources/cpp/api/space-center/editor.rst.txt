@@ -50,7 +50,7 @@ Editor
          directory it came from. Its delta-v figures are recalculated in the
          background afterwards; see :func:`EditorVessel::delta_v_ready`.
 
-   .. function:: void launch_vessel(std::string launch_site, std::vector<std::string> crew, bool recover = true, std::string flag_url = "")
+   .. function:: void launch_vessel(std::string launch_site, std::optional<std::vector<std::string>> crew, bool recover = true, std::string flag_url = "")
 
       Launch the vessel that is being constructed, from the given launch site.
 

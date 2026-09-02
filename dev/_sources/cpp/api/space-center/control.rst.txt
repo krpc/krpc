@@ -632,7 +632,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: Part airlock()
+   .. function:: std::optional<Part> airlock()
 
       The part whose hatch the kerbal is standing at, and so the one
       :func:`Control::board` would put it in. ``NULL`` if it is not at a hatch or the
@@ -659,7 +659,7 @@ Control
          carrying science data that the part cannot store, as the game asks what to do
          with it in that case.
 
-   .. function:: Part ladder()
+   .. function:: std::optional<Part> ladder()
 
       The ladder the kerbal is holding on to, or ``NULL`` if it is not holding one
       or the vessel is not a kerbal on EVA.
@@ -708,7 +708,7 @@ Control
 
    
 
-   .. function:: Module module()
+   .. function:: std::optional<Module> module()
 
       The part module that the action belongs to. Returns ``NULL`` for a
       part-level action that is not associated with a module. This only occurs when

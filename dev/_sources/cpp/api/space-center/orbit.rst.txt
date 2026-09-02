@@ -12,7 +12,7 @@ Orbit
    :func:`Vessel::orbit`, or a celestial body, obtained by calling
    :func:`CelestialBody::orbit`.
 
-   .. function:: static Orbit create_from_position_and_velocity(Client& connection, CelestialBody body, std::tuple<double, double, double> position, std::tuple<double, double, double> velocity, double ut, ReferenceFrame reference_frame)
+   .. function:: static Orbit create_from_position_and_velocity(Client& connection, CelestialBody body, std::tuple<double, double, double> position, std::tuple<double, double, double> velocity, double ut, std::optional<ReferenceFrame> reference_frame)
 
       Create the orbit that passes through a given position at a given velocity.
       The orbit coasts freely under the gravity of the body being orbited, so it
@@ -262,7 +262,7 @@ Orbit
 
    
 
-   .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
+   .. function:: std::tuple<double, double, double> position(std::optional<ReferenceFrame> reference_frame)
 
       The position the orbit has reached at the current time, in the given reference
       frame.
@@ -274,7 +274,7 @@ Orbit
       :returns: The position as a vector.
    
 
-   .. function:: std::tuple<double, double, double> position_at(double ut, ReferenceFrame reference_frame)
+   .. function:: std::tuple<double, double, double> position_at(double ut, std::optional<ReferenceFrame> reference_frame)
 
       The position at a given time, in the specified reference frame.
 
@@ -286,7 +286,7 @@ Orbit
       :returns: The position as a vector.
    
 
-   .. function:: std::tuple<double, double, double> position_at_true_anomaly(double true_anomaly, ReferenceFrame reference_frame)
+   .. function:: std::tuple<double, double, double> position_at_true_anomaly(double true_anomaly, std::optional<ReferenceFrame> reference_frame)
 
       The position at the point in the orbit given by the true anomaly, in the specified
       reference frame.
@@ -299,7 +299,7 @@ Orbit
       :returns: The position as a vector.
    
 
-   .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame)
+   .. function:: std::tuple<double, double, double> velocity(std::optional<ReferenceFrame> reference_frame)
 
       The velocity the orbit has reached at the current time, in the given reference
       frame.
@@ -311,7 +311,7 @@ Orbit
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
    
 
-   .. function:: std::tuple<double, double, double> velocity_at(double ut, ReferenceFrame reference_frame)
+   .. function:: std::tuple<double, double, double> velocity_at(double ut, std::optional<ReferenceFrame> reference_frame)
 
       The velocity at a given time, in the specified reference frame.
 
@@ -323,7 +323,7 @@ Orbit
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
    
 
-   .. function:: std::tuple<double, double, double> velocity_at_true_anomaly(double true_anomaly, ReferenceFrame reference_frame)
+   .. function:: std::tuple<double, double, double> velocity_at_true_anomaly(double true_anomaly, std::optional<ReferenceFrame> reference_frame)
 
       The velocity at the point in the orbit given by the true anomaly, in the specified
       reference frame.
@@ -633,7 +633,7 @@ Orbit
 
    
 
-   .. function:: Orbit next_orbit()
+   .. function:: std::optional<Orbit> next_orbit()
 
       If the object is going to change sphere of influence in the future, returns the new
       orbit after the change. Otherwise returns ``NULL``.

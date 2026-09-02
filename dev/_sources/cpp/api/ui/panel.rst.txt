@@ -186,7 +186,7 @@ Panel
 
    
 
-   .. function:: Layout layout()
+   .. function:: std::optional<Layout> layout()
 
       The layout that arranges the elements of the panel, or ``NULL`` if they are
       positioned by hand.

@@ -37,8 +37,8 @@ Parts
 
       .. note:: See the discussion on :rst:ref:`cpp-api-parts-trees-of-parts`.
 
-   .. function:: Part controlling()
-   .. function:: void set_controlling(Part value)
+   .. function:: std::optional<Part> controlling()
+   .. function:: void set_controlling(std::optional<Part> value)
 
       The part from which the vessel is controlled.
       Returns ``NULL`` if the vessel has no control point, in which case it is
@@ -398,7 +398,7 @@ Part
 
       :Game Scenes: Flight
 
-   .. function:: Part parent()
+   .. function:: std::optional<Part> parent()
 
       The parts parent. Returns ``NULL`` if the part does not have a parent.
       This, in combination with :func:`Part::children`, can be used to traverse the vessels
@@ -646,7 +646,7 @@ Part
 
    
 
-   .. function:: Antenna antenna()
+   .. function:: std::optional<Antenna> antenna()
 
       An :func:`Part::antenna` if the part is an antenna, otherwise ``NULL``.
 
@@ -657,38 +657,38 @@ Part
          If RemoteTech is installed, this will always return ``NULL``.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
-   .. function:: CargoBay cargo_bay()
+   .. function:: std::optional<CargoBay> cargo_bay()
 
       A :func:`Part::cargo_bay` if the part is a cargo bay, otherwise ``NULL``.
 
    
 
-   .. function:: ControlSurface control_surface()
+   .. function:: std::optional<ControlSurface> control_surface()
 
       A :func:`Part::control_surface` if the part is an aerodynamic control surface,
       otherwise ``NULL``.
 
    
 
-   .. function:: Decoupler decoupler()
+   .. function:: std::optional<Decoupler> decoupler()
 
       A :func:`Part::decoupler` if the part is a decoupler, otherwise ``NULL``.
 
    
 
-   .. function:: DockingPort docking_port()
+   .. function:: std::optional<DockingPort> docking_port()
 
       A :func:`Part::docking_port` if the part is a docking port, otherwise ``NULL``.
 
    
 
-   .. function:: Engine engine()
+   .. function:: std::optional<Engine> engine()
 
       An :func:`Part::engine` if the part is an engine, otherwise ``NULL``.
 
    
 
-   .. function:: Experiment experiment()
+   .. function:: std::optional<Experiment> experiment()
 
       An :func:`Part::experiment` if the part contains a
       single science experiment, otherwise ``NULL``.
@@ -700,19 +700,19 @@ Part
          Throws an exception if the part contains more than one experiment.
          In that case, use :func:`Part::experiments` to get the list of experiments in the part.
 
-   .. function:: std::vector<Experiment> experiments()
+   .. function:: std::optional<std::vector<Experiment>> experiments()
 
       A list of :func:`Part::experiment` objects that the part contains.
 
    
 
-   .. function:: Fairing fairing()
+   .. function:: std::optional<Fairing> fairing()
 
       A :func:`Part::fairing` if the part is a fairing, otherwise ``NULL``.
 
    
 
-   .. function:: Intake intake()
+   .. function:: std::optional<Intake> intake()
 
       An :func:`Part::intake` if the part is an intake, otherwise ``NULL``.
 
@@ -724,112 +724,112 @@ Part
          of engine, including liquid fuel rockets, solid rocket boosters and jet engines.
          For RCS thrusters see :func:`Part::rcs`.
 
-   .. function:: Leg leg()
+   .. function:: std::optional<Leg> leg()
 
       A :func:`Part::leg` if the part is a landing leg, otherwise ``NULL``.
 
    
 
-   .. function:: LaunchClamp launch_clamp()
+   .. function:: std::optional<LaunchClamp> launch_clamp()
 
       A :func:`Part::launch_clamp` if the part is a launch clamp, otherwise ``NULL``.
 
    
 
-   .. function:: Light light()
+   .. function:: std::optional<Light> light()
 
       A :func:`Part::light` if the part is a light, otherwise ``NULL``.
 
    
 
-   .. function:: Parachute parachute()
+   .. function:: std::optional<Parachute> parachute()
 
       A :func:`Part::parachute` if the part is a parachute, otherwise ``NULL``.
 
    
 
-   .. function:: Radiator radiator()
+   .. function:: std::optional<Radiator> radiator()
 
       A :func:`Part::radiator` if the part is a radiator, otherwise ``NULL``.
 
    
 
-   .. function:: ResourceDrain resource_drain()
+   .. function:: std::optional<ResourceDrain> resource_drain()
 
       A :func:`Part::resource_drain` if the part is a resource drain, otherwise ``NULL``.
 
    
 
-   .. function:: RCS rcs()
+   .. function:: std::optional<RCS> rcs()
 
       A :func:`Part::rcs` if the part is an RCS block/thruster, otherwise ``NULL``.
 
    
 
-   .. function:: ReactionWheel reaction_wheel()
+   .. function:: std::optional<ReactionWheel> reaction_wheel()
 
       A :func:`Part::reaction_wheel` if the part is a reaction wheel, otherwise ``NULL``.
 
    
 
-   .. function:: ResourceConverter resource_converter()
+   .. function:: std::optional<ResourceConverter> resource_converter()
 
       A :func:`Part::resource_converter` if the part is a resource converter,
       otherwise ``NULL``.
 
    
 
-   .. function:: ResourceHarvester resource_harvester()
+   .. function:: std::optional<ResourceHarvester> resource_harvester()
 
       A :func:`Part::resource_harvester` if the part is a resource harvester,
       otherwise ``NULL``.
 
    
 
-   .. function:: RoboticController robotic_controller()
+   .. function:: std::optional<RoboticController> robotic_controller()
 
       A :func:`Part::robotic_controller` if the part is a robotic controller,
       otherwise ``NULL``.
 
    
 
-   .. function:: RoboticHinge robotic_hinge()
+   .. function:: std::optional<RoboticHinge> robotic_hinge()
 
       A :func:`Part::robotic_hinge` if the part is a robotic hinge, otherwise ``NULL``.
 
    
 
-   .. function:: RoboticPiston robotic_piston()
+   .. function:: std::optional<RoboticPiston> robotic_piston()
 
       A :func:`Part::robotic_piston` if the part is a robotic piston, otherwise ``NULL``.
 
    
 
-   .. function:: RoboticRotation robotic_rotation()
+   .. function:: std::optional<RoboticRotation> robotic_rotation()
 
       A :func:`Part::robotic_rotation` if the part is a robotic rotation servo, otherwise ``NULL``.
 
    
 
-   .. function:: RoboticRotor robotic_rotor()
+   .. function:: std::optional<RoboticRotor> robotic_rotor()
 
       A :func:`Part::robotic_rotor` if the part is a robotic rotor, otherwise ``NULL``.
 
    
 
-   .. function:: Sensor sensor()
+   .. function:: std::optional<Sensor> sensor()
 
       A :func:`Part::sensor` if the part is a sensor, otherwise ``NULL``.
 
    
 
-   .. function:: SolarPanel solar_panel()
+   .. function:: std::optional<SolarPanel> solar_panel()
 
       A :func:`Part::solar_panel` if the part is a solar panel, otherwise ``NULL``.
 
    
 
-   .. function:: Wheel wheel()
+   .. function:: std::optional<Wheel> wheel()
 
       A :func:`Part::wheel` if the part is a wheel, otherwise ``NULL``.
 
@@ -2234,7 +2234,7 @@ Decoupler
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: Part attached_part()
+   .. function:: std::optional<Part> attached_part()
 
       The part attached to this decoupler's explosive node.
 
@@ -2308,7 +2308,7 @@ Docking Port
 
       :Game Scenes: Flight
 
-   .. function:: Part docked_part()
+   .. function:: std::optional<Part> docked_part()
 
       The part that this docking port is docked to. Returns ``NULL`` if this
       docking port is not docked to anything.

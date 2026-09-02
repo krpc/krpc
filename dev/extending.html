@@ -889,7 +889,8 @@ to true. A parameter that may be <code class="docutils literal notranslate"><spa
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>Nullable</strong> – Whether the property can be null. This makes both the getter’s return value
-and the setter’s argument nullable. Defaults to false.</p></li>
+and the setter’s argument nullable, and on a field of a <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> it makes
+the field nullable. Defaults to false.</p></li>
 <li><p><strong>GameScene</strong> – The game scenes in which the property is available. Defaults to inherit this
 setting from the class the property is defined in.</p></li>
 </ul>
@@ -1031,9 +1032,9 @@ service if it has its <code class="docutils literal notranslate"><span class="pr
 <li><p>The struct must either be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have its <code class="docutils literal notranslate"><span class="pre">Service</span></code>
 parameter set to the name of the service it is part of.</p></li>
 <li><p>It must have at least one field, and the type of every field must be a <a class="reference internal" href="#service-api-serializable-types"><span class="std std-ref">serializable type</span></a>.</p></li>
-<li><p>A field must not be nullable and must not restrict the game scenes it is available in, so
-neither the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> nor the <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> parameter of its <a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a>
-attribute may be set.</p></li>
+<li><p>A field must not restrict the game scenes it is available in, so the <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> parameter
+of its <a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute must not be set.</p></li>
+<li><p>A field may be nullable. See <a class="reference internal" href="#service-api-null-values"><span class="std std-ref">Null Values</span></a>.</p></li>
 <li><p>The structure must not contain itself, whether directly or through the fields of another
 structure that it contains.</p></li>
 </ul>
@@ -1067,6 +1068,24 @@ mutable state, or whose members are expensive enough to read one at a time.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">site</span><span class="o">.</span><span class="n">latitude</span><span class="p">)</span>
 </pre></div>
 </div>
+</li>
+<li><p>Declare a structure with two nullable fields:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCStruct]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">CommNodeInfo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">[KRPCProperty]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="na">[KRPCProperty (Nullable = true)]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Vessel</span><span class="w"> </span><span class="n">Vessel</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="na">[KRPCProperty]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">double?</span><span class="w"> </span><span class="n">SignalStrength</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A reference-typed field is made nullable by the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of its
+<a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute. A field whose type is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> needs no
+annotation.</p>
 </li>
 </ul>
 </dd></dl>
@@ -1152,10 +1171,21 @@ syntax. kRPC will detect the default values and use them.</p>
 
 <dl class="csharp attribute">
 <dt class="sig sig-object csharp" id="attribute-KRPCNullable">
-<span class="sig-name descname"><span class="pre">KRPCNullable</span></span><a class="headerlink" href="#attribute-KRPCNullable" title="Link to this definition">#</a></dt>
-<dd><p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to a
+<span class="sig-name descname"><span class="pre">KRPCNullable</span></span> <span class="sig-paren">(</span><em><span class="pre">params</span></em> <a class="reference internal" href="#enum-KRPC.Service.Attributes.Position" title="KRPC.Service.Attributes.Position enum"><span class="pre">KRPC.Service.Attributes.Position</span></a><span class="pre">[]</span> <em><span class="pre">Path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCNullable" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Path</strong> – Optional positions to step through to reach the nullable one, outermost first.
+An empty path, the usual case, is the value itself.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to a
 kRPC procedure or class method parameter to indicate that the parameter is permitted to be
-<code class="docutils literal notranslate"><span class="pre">null</span></code>. It can be applied to a parameter of any serializable type, not only class types.</p>
+<code class="docutils literal notranslate"><span class="pre">null</span></code>. It can be applied to a parameter of any serializable type, not only class types.
+Applied to a method it marks the return value instead. Applied to a property it marks both
+the getter’s return value and the setter’s argument, as <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> on
+<a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> does.</p>
 <p>The server enforces nullability: a call that passes <code class="docutils literal notranslate"><span class="pre">null</span></code> for a parameter that is not
 nullable fails with an error. A parameter is nullable if it is marked with <code class="docutils literal notranslate"><span class="pre">KRPCNullable</span></code>,
 is assigned a default value of <code class="docutils literal notranslate"><span class="pre">null</span></code>, or has a <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> type. See
@@ -1174,6 +1204,58 @@ is assigned a default value of <code class="docutils literal notranslate"><span 
 </div>
 </dd></dl>
 
+<section id="nullable-positions">
+<span id="service-api-nullable-positions"></span><h4>Nullable Positions<a class="headerlink" href="#nullable-positions" title="Link to this heading">#</a></h4>
+<p>Giving <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> a path marks a position nested inside a value, rather than the
+value itself. Each step names a position of the type the step before it reached, outermost first:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">static</span><span class="w"> </span><span class="n">KRPC</span><span class="p">.</span><span class="n">Service</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">Position</span><span class="p">;</span>
+
+<span class="na">[KRPCNullable (Element)]</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">crew</span><span class="w">                       </span><span class="c1">// the vessels may be null</span>
+<span class="na">[KRPCNullable (Value)]</span><span class="w"> </span><span class="n">IDictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">byName</span><span class="w">         </span><span class="c1">// the values may be null</span>
+<span class="na">[KRPCNullable (Item2)]</span><span class="w"> </span><span class="n">Tuple</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">named</span><span class="w">                </span><span class="c1">// the second item may be null</span>
+<span class="na">[KRPCNullable (Element, Element)]</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">byStage</span><span class="w">    </span><span class="c1">// the vessels may be null</span>
+</pre></div>
+</div>
+<p>Without the <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">static</span></code> each position is written <code class="docutils literal notranslate"><span class="pre">Position.Element</span></code>, as <code class="docutils literal notranslate"><span class="pre">GameScene</span></code>
+already is on <a class="reference internal" href="#attribute-KRPCProcedure" title="KRPCProcedure attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>.</p>
+<p>A path step that names no position of the type it is applied to is an error, which the server
+reports when it loads the service. A dictionary key and a set element have no name here, and so
+cannot be made nullable. The positions are:</p>
+<dl class="csharp enum">
+<dt class="sig sig-object csharp" id="enum-KRPC.Service.Attributes.Position">
+<span class="sig-name descname"><span class="pre">enum</span> <span class="pre">KRPC.Service.Attributes.Position</span></span><a class="headerlink" href="#enum-KRPC.Service.Attributes.Position" title="Link to this definition">#</a></dt>
+<dd><dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Service.Attributes.Position.Element">
+<span class="sig-name descname"><span class="pre">Element</span></span><a class="headerlink" href="#value-KRPC.Service.Attributes.Position.Element" title="Link to this definition">#</a></dt>
+<dd><p>The element of a list.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Service.Attributes.Position.Value">
+<span class="sig-name descname"><span class="pre">Value</span></span><a class="headerlink" href="#value-KRPC.Service.Attributes.Position.Value" title="Link to this definition">#</a></dt>
+<dd><p>The value of a dictionary.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Service.Attributes.Position.Item1">
+<span class="sig-name descname"><span class="pre">Item1</span></span><a class="headerlink" href="#value-KRPC.Service.Attributes.Position.Item1" title="Link to this definition">#</a></dt>
+<dd><p>The first item of a tuple. <code class="docutils literal notranslate"><span class="pre">Item2</span></code> to <code class="docutils literal notranslate"><span class="pre">Item7</span></code> name the ones after it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>The attribute may be applied more than once, for a type with several nullable positions:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCNullable]</span>
+<span class="na">[KRPCNullable (Element)]</span>
+<span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">maybeVessels</span><span class="w">                                        </span><span class="c1">// the list, and its vessels</span>
+</pre></div>
+</div>
+<p>A nested position whose type is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> needs no attribute, exactly as a parameter of that
+type does. <code class="docutils literal notranslate"><span class="pre">IList&lt;int?&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">IDictionary&lt;string,</span> <span class="pre">double?&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">Tuple&lt;int?,</span> <span class="pre">string&gt;</span></code> are all
+nullable at the position <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> marks.</p>
+<p>A path that reaches a value-typed position is an error. An <code class="docutils literal notranslate"><span class="pre">int</span></code>, an <code class="docutils literal notranslate"><span class="pre">enum</span></code> and a structure
+hold a null only as <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>, so <code class="docutils literal notranslate"><span class="pre">IList&lt;int&gt;</span></code> must be written <code class="docutils literal notranslate"><span class="pre">IList&lt;int?&gt;</span></code>.</p>
+</section>
 </section>
 <section id="service-api-identifiers">
 <span id="identifiers"></span><h3>Identifiers<a class="headerlink" href="#service-api-identifiers" title="Link to this heading">#</a></h3>
@@ -1205,14 +1287,16 @@ and <code class="docutils literal notranslate"><span class="pre">byte[]</span></
 </section>
 <section id="null-values">
 <span id="service-api-null-values"></span><h3>Null Values<a class="headerlink" href="#null-values" title="Link to this heading">#</a></h3>
-<p>A parameter or return value may be <code class="docutils literal notranslate"><span class="pre">null</span></code> only when it is declared <em>nullable</em>. This applies
-uniformly to every serializable type – class types, <code class="docutils literal notranslate"><span class="pre">string</span></code>, collections and value types
-alike. The server enforces it:</p>
+<p>A parameter, a return value, a structure field or a position nested inside one of them may be
+<code class="docutils literal notranslate"><span class="pre">null</span></code> only when it is declared <em>nullable</em>. This applies uniformly to every serializable
+type – class types, <code class="docutils literal notranslate"><span class="pre">string</span></code>, collections and value types alike. The server enforces it:</p>
 <ul class="simple">
 <li><p>Passing <code class="docutils literal notranslate"><span class="pre">null</span></code> as an argument for a parameter that is not nullable fails the call with an
 error.</p></li>
 <li><p>Returning <code class="docutils literal notranslate"><span class="pre">null</span></code> from a procedure, method or property getter that is not nullable fails the
 call with an error.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">null</span></code> in a structure field that is not nullable fails the call with an error, naming the
+field.</p></li>
 </ul>
 <p>A <strong>parameter</strong> is nullable if any of the following hold:</p>
 <ul class="simple">
@@ -1226,16 +1310,21 @@ itself a declaration that <code class="docutils literal notranslate"><span class
 is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. For a property, <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code> makes the getter’s return value <em>and</em> the
 setter’s argument nullable.</p>
 <p>Return nullability is always declared, as kRPC reads the attribute rather than the method body.</p>
+<p>A <strong>structure field</strong> is nullable if the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of its
+<a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute is set, or if its type is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. Setting
+<code class="docutils literal notranslate"><span class="pre">Nullable</span></code> on a value-typed field is an error. Write the field as <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> instead.</p>
 <section id="nullable-value-types">
 <span id="service-api-nullable-value-types"></span><h4>Nullable Value Types<a class="headerlink" href="#nullable-value-types" title="Link to this heading">#</a></h4>
-<p>A parameter or return value of type <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> – <code class="docutils literal notranslate"><span class="pre">int?</span></code>, <code class="docutils literal notranslate"><span class="pre">float?</span></code>, <code class="docutils literal notranslate"><span class="pre">bool?</span></code>, an
-<code class="docutils literal notranslate"><span class="pre">enum?</span></code> and so on – is automatically nullable; it needs neither <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> nor
-<code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code>. To clients it appears as an ordinary value of type <code class="docutils literal notranslate"><span class="pre">T</span></code> that may be null.</p>
+<p>A parameter, return value or structure field of type <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> – <code class="docutils literal notranslate"><span class="pre">int?</span></code>, <code class="docutils literal notranslate"><span class="pre">float?</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bool?</span></code>, an <code class="docutils literal notranslate"><span class="pre">enum?</span></code> and so on – is automatically nullable; it needs neither
+<a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> nor <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code>. To clients it appears as an ordinary value of
+type <code class="docutils literal notranslate"><span class="pre">T</span></code> that may be null.</p>
 <p>Only value types can be <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. A <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references">nullable reference type</a> annotation such as
 <code class="docutils literal notranslate"><span class="pre">string?</span></code> or <code class="docutils literal notranslate"><span class="pre">IList&lt;int&gt;?</span></code> is a compile-time annotation, and the <code class="docutils literal notranslate"><span class="pre">?</span></code> is erased before kRPC
 reads the type. Such a parameter or return value is treated as non-nullable.</p>
-<p>Use <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code> to make a reference-typed parameter or
-return value nullable.</p>
+<p>Use <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code> to make a reference-typed parameter,
+return value or structure field nullable, and a path on <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> to make a
+reference-typed position nested inside one nullable. See <a class="reference internal" href="#service-api-nullable-positions"><span class="std std-ref">Nullable Positions</span></a>.</p>
 </section>
 </section>
 <section id="events">
@@ -1773,7 +1862,10 @@ and include <cite>LaunchControl.cs</cite> in your project.</p>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-krpc-architecture">The kRPC Architecture</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#service-api">Service API</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#nullable-positions">Nullable Positions</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#service-api-identifiers">Identifiers</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#serializable-types">Serializable Types</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#null-values">Null Values</a><ul class="nav section-nav flex-column">

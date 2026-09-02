@@ -123,7 +123,7 @@ ServoGroup
       or ``None`` if none exists.
 
       :param str name: Name of servo to find.
-      :rtype: :class:`Servo`
+      :rtype: :class:`Servo` or None
       :Game Scenes: Flight
 
    .. attribute:: parts

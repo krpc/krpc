@@ -101,7 +101,7 @@ ServoGroup
 
       :Game Scenes: Flight
 
-   .. function:: Servo servo_with_name(std::string name)
+   .. function:: std::optional<Servo> servo_with_name(std::string name)
 
       Returns the servo with the given *name* from this group,
       or ``NULL`` if none exists.
