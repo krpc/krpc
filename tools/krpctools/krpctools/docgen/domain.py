@@ -15,6 +15,15 @@ class Domain:
     def type(self, typ):
         return self.language.parse_type(typ)
 
+    def type_at_position(self, typ):
+        """The type at a position inside a value, as the client declares it. A language
+        with no separate spelling for a nullable type names the type itself."""
+        return self.type(typ)
+
+    def field_type(self, field):
+        """The type a structure field is declared with"""
+        return self.type_at_position(field.type)
+
     def return_type(self, typ):
         return self.type(typ)
 
