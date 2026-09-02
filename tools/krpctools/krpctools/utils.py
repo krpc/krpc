@@ -58,6 +58,8 @@ def as_protobuf_type(type_info):
         protobuf_type.name = type_info["name"]
     if "types" in type_info:
         protobuf_type.types.extend([as_protobuf_type(t) for t in type_info["types"]])
+    if type_info.get("nullable", False):
+        protobuf_type.nullable = True
     return protobuf_type
 
 

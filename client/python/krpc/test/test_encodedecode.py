@@ -157,6 +157,17 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
+    def test_tuple_with_a_nullable_item(self) -> None:
+        cases: List[Tuple[object, str]] = [
+            ((1, "jeb"), "0a01010a0501036a6562"),
+            ((1, None), "0a01010a0100"),
+        ]
+        typ = self.types.tuple_type(
+            self.types.uint32_type, self.types.nullable(self.types.string_type)
+        )
+        self._run_test_encode_value(typ, cases)
+        self._run_test_decode_value(typ, cases)
+
     def test_struct(self) -> None:
         typ = self.types.struct_type("ServiceName", "StructName")
         typ.set_fields(
@@ -170,6 +181,23 @@ class TestEncodeDecode(unittest.TestCase):
         # A structure carries the values of its fields in order, the same encoding as a
         # tuple of those values
         cases: List[Tuple[object, str]] = [(value, "0a01010a04036a65620a0100")]
+        self._run_test_encode_value(typ, cases)
+        self._run_test_decode_value(typ, cases)
+
+    def test_struct_with_nullable_fields(self) -> None:
+        typ = self.types.struct_type("ServiceName", "NullableStructName")
+        typ.set_fields(
+            [
+                ("count", self.types.uint32_type),
+                ("name", self.types.nullable(self.types.string_type)),
+            ]
+        )
+        # The 01 ahead of the name is its presence bool, and a null field is that bool
+        # alone
+        cases: List[Tuple[object, str]] = [
+            (typ.python_type(count=1, name="jeb"), "0a01010a0501036a6562"),
+            (typ.python_type(count=1, name=None), "0a01010a0100"),
+        ]
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
@@ -197,6 +225,19 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
+    def test_list_of_nullable_values(self) -> None:
+        # A zero is a value like any other, and is told apart from a null by the presence
+        # bool alone
+        cases: List[Tuple[object, str]] = [
+            ([], ""),
+            ([None], "0a0100"),
+            ([0], "0a020100"),
+            ([1, None, 3], "0a0201010a01000a020103"),
+        ]
+        typ = self.types.list_type(self.types.nullable(self.types.uint32_type))
+        self._run_test_encode_value(typ, cases)
+        self._run_test_decode_value(typ, cases)
+
     def test_set(self) -> None:
         cases: List[Tuple[object, str]] = [
             (set(), ""),
@@ -220,6 +261,72 @@ class TestEncodeDecode(unittest.TestCase):
         typ = self.types.dictionary_type(self.types.string_type, self.types.uint32_type)
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
+
+    def test_dictionary_of_nullable_values(self) -> None:
+        cases: List[Tuple[object, str]] = [
+            ({"": 0}, "0a070a010012020100"),
+            ({"": None}, "0a060a0100120100"),
+            (
+                {"foo": 42, "bar": None},
+                "0a090a04036261721201000a0a0a0403666f6f1202012a",
+            ),
+        ]
+        typ = self.types.dictionary_type(
+            self.types.string_type, self.types.nullable(self.types.uint32_type)
+        )
+        self._run_test_encode_value(typ, cases)
+        self._run_test_decode_value(typ, cases)
+
+    def test_nullability_is_read_at_every_position(self) -> None:
+        # A service declares no nullable set element and no nullable dictionary key. The
+        # client reads what the type says at every position rather than naming the ones a
+        # value can be null at
+        set_type = self.types.set_type(self.types.nullable(self.types.uint32_type))
+        set_cases: List[Tuple[object, str]] = [
+            (set([None]), "0a0100"),
+            (set([1]), "0a020101"),
+        ]
+        self._run_test_encode_value(set_type, set_cases)
+        self._run_test_decode_value(set_type, set_cases)
+        dictionary_type = self.types.dictionary_type(
+            self.types.nullable(self.types.string_type), self.types.uint32_type
+        )
+        dictionary_cases: List[Tuple[object, str]] = [
+            ({None: 1}, "0a060a0100120101"),
+            ({"jeb": 1}, "0a0a0a0501036a6562120101"),
+        ]
+        self._run_test_encode_value(dictionary_type, dictionary_cases)
+        self._run_test_decode_value(dictionary_type, dictionary_cases)
+
+    def test_nullable_collection_values(self) -> None:
+        # A nullable position holding a collection carries the presence bool ahead of the
+        # collection's own encoding
+        cases: List[Tuple[object, str]] = [
+            ([None], "0a0100"),
+            ([[]], "0a0101"),
+            ([[1]], "0a04010a0101"),
+        ]
+        typ = self.types.list_type(
+            self.types.nullable(self.types.list_type(self.types.uint32_type))
+        )
+        self._run_test_encode_value(typ, cases)
+        self._run_test_decode_value(typ, cases)
+
+    def test_nullable_struct_values(self) -> None:
+        struct_type = self.types.struct_type("ServiceName", "NestedStructName")
+        struct_type.set_fields([("count", self.types.uint32_type)])
+        typ = self.types.list_type(self.types.nullable(struct_type))
+        cases: List[Tuple[object, str]] = [
+            ([None], "0a0100"),
+            ([struct_type.python_type(count=1)], "0a04010a0101"),
+        ]
+        self._run_test_encode_value(typ, cases)
+        self._run_test_decode_value(typ, cases)
+
+    def test_nullable_value_without_a_presence_bool(self) -> None:
+        # A list holding one item of zero length
+        typ = self.types.list_type(self.types.nullable(self.types.uint32_type))
+        self.assertRaises(EncodingError, Decoder.decode, None, unhexlify("0a00"), typ)
 
 
 if __name__ == "__main__":

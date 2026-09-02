@@ -50,7 +50,11 @@ class Encoder:
 
     @classmethod
     def encode(cls, x: object, typ: TypeBase) -> bytes:
-        """Encode a message or value of the given protocol buffer type"""
+        """Encode a message or value of the given protocol buffer type.
+
+        This encodes a value at a slot, where a null is carried by the is_null flag of the
+        message around it. A value at a position inside another value carries its own
+        presence bool, which _item_encoder writes."""
         # The value types come first, as most arguments are one, and this is on the hot
         # path of every remote procedure call
         if isinstance(typ, ValueType):
@@ -99,10 +103,7 @@ class Encoder:
                     "Tuple has wrong number of elements. "
                     + "Expected %d, got %d." % (len(typ.value_types), len(tuple_obj))
                 )
-            tuple_msg.items.extend(
-                cls.encode(item, value_type)
-                for item, value_type in zip(tuple_obj, typ.value_types)
-            )
+            tuple_msg.items.extend(cls._encode_items(tuple_obj, typ.value_types))
             return tuple_msg.SerializeToString()
         if isinstance(typ, StructType):
             # A structure is encoded as the values of its fields in order, which is the
@@ -114,10 +115,7 @@ class Encoder:
                     "Struct has wrong number of fields. "
                     + "Expected %d, got %d." % (len(typ.field_types), len(struct_obj))
                 )
-            struct_msg.items.extend(
-                cls.encode(item, field_type)
-                for item, field_type in zip(struct_obj, typ.field_types)
-            )
+            struct_msg.items.extend(cls._encode_items(struct_obj, typ.field_types))
             return struct_msg.SerializeToString()
         raise EncodingError("Cannot encode objects of type " + str(type(x)))
 
@@ -134,14 +132,35 @@ class Encoder:
         return size + data
 
     @classmethod
+    def _encode_items(
+        cls, values: Iterable[object], types: Iterable[TypeBase]
+    ) -> List[bytes]:
+        """The encoded value of each item of a tuple or a structure.
+
+        A tuple is encoded on the hot path of every remote procedure call. Extending the
+        protobuf repeated field from a list costs less than from a generator."""
+        return [cls._item_encoder(typ)(value) for value, typ in zip(values, types)]
+
+    @classmethod
     def _item_encoder(cls, typ: TypeBase) -> Callable[[Any], bytes]:
+        """A function that encodes one value at a position of the given type"""
+        encode = cls._value_encoder(typ)
+        if not typ.nullable:
+            return encode
+        # A nullable position carries a presence bool before its value, and holds nothing
+        # else when that bool is false
+        present = cls._encode_value(True, cls._types.bool_type)
+        absent = cls._encode_value(False, cls._types.bool_type)
+        return lambda x: absent if x is None else present + encode(x)
+
+    @classmethod
+    def _value_encoder(cls, typ: TypeBase) -> Callable[[Any], bytes]:
         """A function that encodes one value of the given type.
 
         A collection carries many values of the same type, so working out how to encode
         one of them is worth doing once for the collection rather than once for every
         item in it. The types a collection usually holds are answered directly; anything
-        else falls back to the full encode.
-        """
+        else falls back to the full encode."""
         if isinstance(typ, ValueType):
             encode = _VALUE_ENCODERS.get(typ.code)
             if encode is None:

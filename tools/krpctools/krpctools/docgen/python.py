@@ -42,6 +42,11 @@ class PythonDomain(Domain):
         return name
 
     def type_description(self, typ):
+        description = self._type_description(typ)
+        # Python writes a value that can be null as the type or None
+        return "%s or None" % description if typ.nullable else description
+
+    def _type_description(self, typ):
         if isinstance(typ, ValueType):
             return self.language.parse_type(typ)
         if isinstance(typ, MessageType):
@@ -63,7 +68,7 @@ class PythonDomain(Domain):
             return "set(%s)" % self.type_description(typ.value_type)
         if isinstance(typ, TupleType):
             return "tuple(%s)" % ", ".join(
-                self.type_description(typ) for typ in typ.value_types
+                self.type_description(t) for t in typ.value_types
             )
         raise RuntimeError("Unknown type '%s'" % str(typ))
 

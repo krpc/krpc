@@ -45,8 +45,20 @@ class PythonGenerator(Generator):
         self.language = StubLanguage(service)
 
     def parse_python_type(self, typ):
+        """The expression that builds the type of a slot. A slot carries a null out of band,
+        so its type is named without its nullability."""
         if typ is None:
             return "None"
+        return self._parse_python_type(typ)
+
+    def parse_python_type_at_position(self, typ):
+        """The expression that builds the type at a position inside a value. A position
+        carries a null in the value, so a nullable type is named as one."""
+        if typ.nullable:
+            return "self._client._types.nullable(%s)" % self._parse_python_type(typ)
+        return self._parse_python_type(typ)
+
+    def _parse_python_type(self, typ):
         if isinstance(typ, ValueType):
             mapping = {
                 KRPC.Type.DOUBLE: "double",
@@ -79,33 +91,35 @@ class PythonGenerator(Generator):
             )
         if isinstance(typ, TupleType):
             return "self._client._types.tuple_type(%s)" % ", ".join(
-                self.parse_python_type(x) for x in typ.value_types
+                self.parse_python_type_at_position(x) for x in typ.value_types
             )
         if isinstance(typ, ListType):
-            return "self._client._types.list_type(%s)" % self.parse_python_type(
-                typ.value_type
+            return (
+                "self._client._types.list_type(%s)"
+                % self.parse_python_type_at_position(typ.value_type)
             )
         if isinstance(typ, SetType):
-            return "self._client._types.set_type(%s)" % self.parse_python_type(
-                typ.value_type
+            return (
+                "self._client._types.set_type(%s)"
+                % self.parse_python_type_at_position(typ.value_type)
             )
         if isinstance(typ, DictionaryType):
             return "self._client._types.dictionary_type(%s, %s)" % (
-                self.parse_python_type(typ.key_type),
-                self.parse_python_type(typ.value_type),
+                self.parse_python_type_at_position(typ.key_type),
+                self.parse_python_type_at_position(typ.value_type),
             )
         raise RuntimeError("Unknown type " + typ)
 
-    def parse_type_specification(self, typ, is_nullable=False):
+    def parse_type_specification(self, typ):
         if typ is None:
-            spec = "None"
-        elif isinstance(typ, ValueType):
+            return "None"
+        if isinstance(typ, ValueType):
             spec = self.language.parse_type(typ)
         elif isinstance(typ, MessageType):
             if typ.python_type == KRPC.Event:
                 spec = "Event"
             else:
-                return "KRPC_pb2.%s" % typ.python_type.__name__
+                spec = "KRPC_pb2.%s" % typ.python_type.__name__
         elif isinstance(typ, (ClassType, EnumerationType, StructType)):
             spec = self.language.parse_type(typ)
         elif isinstance(typ, TupleType):
@@ -123,7 +137,7 @@ class PythonGenerator(Generator):
             )
         else:
             raise RuntimeError("Unknown type " + typ)
-        if is_nullable:
+        if typ.nullable:
             return "Optional[%s]" % spec
         return spec
 
@@ -269,18 +283,16 @@ class PythonGenerator(Generator):
                     self.get_return_type(info["procedure"])
                 ),
                 "spec": self.parse_type_specification(
-                    self.get_return_type(info["procedure"]),
-                    info["procedure"].get("return_is_nullable", False),
+                    self.get_return_type(info["procedure"])
                 ),
             }
             pos = 0
             for i, pinfo in enumerate(info["parameters"]):
                 ptype = as_type(self.types, info["procedure"]["parameters"][i]["type"])
-                nullable = info["procedure"]["parameters"][i].get("nullable", False)
                 pinfo["type"] = {
                     "name": pinfo["type"],
                     "python_type": self.parse_python_type(ptype),
-                    "spec": self.parse_type_specification(ptype, nullable),
+                    "spec": self.parse_type_specification(ptype),
                 }
                 pos += 1
 
@@ -297,8 +309,7 @@ class PythonGenerator(Generator):
                         self.get_return_type(info["procedure"])
                     ),
                     "spec": self.parse_type_specification(
-                        self.get_return_type(info["procedure"]),
-                        info["procedure"].get("return_is_nullable", False),
+                        self.get_return_type(info["procedure"])
                     ),
                 }
                 pos = 0
@@ -306,13 +317,10 @@ class PythonGenerator(Generator):
                     ptype = as_type(
                         self.types, info["procedure"]["parameters"][i + 1]["type"]
                     )
-                    nullable = info["procedure"]["parameters"][i + 1].get(
-                        "nullable", False
-                    )
                     pinfo["type"] = {
                         "name": pinfo["type"],
                         "python_type": self.parse_python_type(ptype),
-                        "spec": self.parse_type_specification(ptype, nullable),
+                        "spec": self.parse_type_specification(ptype),
                     }
                     pos += 1
 

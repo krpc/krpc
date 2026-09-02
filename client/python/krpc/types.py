@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import collections
+import copy
 import functools
 import weakref
 from enum import Enum
@@ -102,6 +103,14 @@ def _protobuf_type(
     return protobuf_type
 
 
+def _nullable_protobuf_type(protobuf_type: KRPC.Type, nullable: bool) -> KRPC.Type:
+    """A copy of the given protocol buffer type, marked as the given nullability"""
+    result = KRPC.Type()
+    result.CopyFrom(protobuf_type)
+    result.nullable = nullable
+    return result
+
+
 class Types:
     """A type store. Used to obtain type objects from protocol buffer type
     strings, and stores python types for services and service defined
@@ -164,6 +173,14 @@ class Types:
         if key in self._types:
             return self._types[key]
 
+        # A nullable type is built from the type it is the nullable form of, so that the two
+        # share a python type
+        if protobuf_type.nullable:
+            non_nullable = _nullable_protobuf_type(protobuf_type, False)
+            typ = self.as_type(non_nullable, doc)._as_nullable()
+            self._types[key] = typ
+            return typ
+
         typ: TypeBase
         if protobuf_type.code in VALUE_TYPES:
             typ = ValueType(protobuf_type)
@@ -192,6 +209,20 @@ class Types:
     @classmethod
     def is_none_type(cls, protobuf_type: KRPC.Type) -> bool:
         return protobuf_type.code == KRPC.Type.NONE
+
+    def nullable(self, typ: TypeBase) -> TypeBase:
+        """Get the given type at a position that can hold null"""
+        if typ.nullable:
+            return typ
+        # The nullable form is held on the type itself, so that naming one costs an
+        # attribute lookup on the hot path of every remote procedure call
+        nullable_type = typ._nullable_type
+        if nullable_type is None:
+            nullable_type = typ._as_nullable()
+            self._types.setdefault(
+                nullable_type.protobuf_type.SerializeToString(), nullable_type
+            )
+        return nullable_type
 
     def class_type(
         self, service: str, name: str, doc: Optional[str] = None
@@ -313,11 +344,11 @@ class Types:
     def coerce_to(self, value: object, typ: TypeBase) -> object:
         """Coerce a value to the specified type (specified by a type object).
         Raises ValueError if the coercion is not possible."""
+        # A null stands at a position that can hold one, whatever the type there is
+        if typ.nullable and value is None:
+            return None
         if isinstance(value, typ.python_type):
             return value
-        # A NoneType can be coerced to a ClassType
-        if isinstance(typ, ClassType) and value is None:
-            return None
         # Coerce identical class types from different client connections
         if isinstance(typ, ClassType) and isinstance(value, ClassBase):
             value_type = type(value)
@@ -403,10 +434,29 @@ class TypeBase:
         # The type code the encoder and decoder select on. Held here as well as in the
         # protocol buffer type, as reading it from there is a protocol buffer field access
         self.code = protobuf_type.code
+        # Whether the position a value of this type sits in can hold null
+        self.nullable = protobuf_type.nullable
+        # The nullable form of this type, built on demand by _as_nullable
+        self._nullable_type: Optional[TypeBase] = None
         self._string = string
 
     def __str__(self) -> str:
         return "<type: " + str(self._string) + ">"
+
+    def _as_nullable(self) -> TypeBase:
+        """This type at a position that can hold null.
+
+        A copy of this type, so that the two share a python type and a class has one python
+        type however the position that holds it is declared."""
+        if self.nullable:
+            return self
+        if self._nullable_type is None:
+            typ = copy.copy(self)
+            typ.protobuf_type = _nullable_protobuf_type(self.protobuf_type, True)
+            typ.nullable = True
+            typ._string = self._string + "?"
+            self._nullable_type = typ
+        return self._nullable_type
 
 
 class ValueType(TypeBase):
@@ -468,6 +518,8 @@ class EnumerationType(TypeBase):
         using the given values."""
         assert self.python_type is None
         self.python_type = _create_enum_type(self._enum_name, values, self._doc)
+        if self._nullable_type is not None:
+            self._nullable_type.python_type = self.python_type
 
 
 class StructType(TypeBase):
@@ -516,6 +568,8 @@ class StructType(TypeBase):
                 self._struct_name, self.field_names, self._doc
             )
         self.python_type = python_type
+        if self._nullable_type is not None:
+            self._nullable_type.set_fields(fields, python_type)
 
 
 class TupleType(TypeBase):

@@ -179,12 +179,67 @@ Service documentation string.
 
 
 
+.. staticmethod:: echo_dictionary_of_nullable_objects(d)
+
+
+
+   :param dict d:
+   :rtype: dict(str, :class:`TestClass` or None)
+   
+
+
+
+
+.. staticmethod:: echo_list_of_nullable_ints(l)
+
+
+
+   :param list l:
+   :rtype: list(int or None)
+   
+
+
+
+
+.. staticmethod:: echo_list_of_nullable_objects(l)
+
+
+
+   :param list l:
+   :rtype: list(:class:`TestClass` or None)
+   
+
+
+
+
+.. staticmethod:: echo_nested_list_of_nullable_objects(l)
+
+
+
+   :param list l:
+   :rtype: list(list(:class:`TestClass` or None))
+   
+
+
+
+
+.. staticmethod:: echo_nested_nullable_struct(value)
+
+
+
+   :param TestNestedNullableStruct value:
+   :rtype: :class:`TestNestedNullableStruct`
+   
+
+
+
+
 .. staticmethod:: echo_nullable_int(value)
 
 
 
    :param int value:
-   :rtype: int
+   :rtype: int or None
    
 
 
@@ -195,7 +250,7 @@ Service documentation string.
 
 
    :param list l:
-   :rtype: list(int)
+   :rtype: list(int) or None
    
 
 
@@ -206,7 +261,7 @@ Service documentation string.
 
 
    :param str value:
-   :rtype: str
+   :rtype: str or None
    
 
 
@@ -217,7 +272,18 @@ Service documentation string.
 
 
    :param TestClass value:
-   :rtype: :class:`TestClass`
+   :rtype: :class:`TestClass` or None
+   
+
+
+
+
+.. staticmethod:: echo_tuple_with_a_nullable_object(t)
+
+
+
+   :param tuple t:
+   :rtype: tuple(int, :class:`TestClass` or None)
    
 
 
@@ -455,7 +521,18 @@ Service documentation string.
 
 
    :Attribute: Can be read or written
-   :rtype: :class:`TestClass`
+   :rtype: :class:`TestClass` or None
+   
+
+
+
+
+.. staticmethod:: nullable_struct_echo(x)
+
+
+
+   :param TestNullableStruct x:
+   :rtype: :class:`TestNullableStruct`
    
 
 
@@ -466,7 +543,7 @@ Service documentation string.
 
 
    :Attribute: Can be read or written
-   :rtype: :class:`TestClass`
+   :rtype: :class:`TestClass` or None
    
 
 
@@ -619,7 +696,7 @@ Service documentation string.
 
 
    :param TestStruct x:
-   :rtype: :class:`TestStruct`
+   :rtype: :class:`TestStruct` or None
    
 
 
@@ -740,7 +817,7 @@ Service documentation string.
 
 
       :param TestClass value:
-      :rtype: :class:`TestClass`
+      :rtype: :class:`TestClass` or None
    
 
    .. method:: float_to_string(x)
@@ -771,7 +848,7 @@ Service documentation string.
 
 
       :Attribute: Can be read or written
-      :rtype: :class:`TestClass`
+      :rtype: :class:`TestClass` or None
    
 
    .. method:: object_to_string(other)
@@ -807,7 +884,7 @@ Service documentation string.
 
 
       :param TestClass value:
-      :rtype: :class:`TestClass`
+      :rtype: :class:`TestClass` or None
    
 
    .. attribute:: string_property_private_get
@@ -932,6 +1009,60 @@ Service documentation string.
 
 
       :rtype: :class:`TestClass`
+
+   .. attribute:: string_field
+
+
+
+      :rtype: str
+
+
+.. class:: TestNullableStruct
+
+   Nullable struct documentation string.
+
+
+   .. attribute:: int_field
+
+
+
+      :rtype: int
+
+   .. attribute:: nullable_int_field
+
+
+
+      :rtype: int or None
+
+   .. attribute:: nullable_enum_field
+
+
+
+      :rtype: :class:`TestEnum` or None
+
+   .. attribute:: nullable_string_field
+
+
+
+      :rtype: str or None
+
+   .. attribute:: nullable_object_field
+
+
+
+      :rtype: :class:`TestClass` or None
+
+
+.. class:: TestNestedNullableStruct
+
+   Nested nullable struct documentation string.
+
+
+   .. attribute:: list_field
+
+
+
+      :rtype: list(:class:`TestClass` or None)
 
    .. attribute:: string_field
 
