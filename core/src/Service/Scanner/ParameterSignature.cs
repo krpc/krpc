@@ -25,7 +25,7 @@ namespace KRPC.Service.Scanner
         public object DefaultValue { get; private set; }
 
         /// <summary>
-        /// The type of the parameter, together with whether it can be null.
+        /// The type of the parameter, with the nullability of every position inside it.
         /// </summary>
         public TypeSpec Spec { get; private set; }
 
@@ -43,7 +43,9 @@ namespace KRPC.Service.Scanner
             HasDefaultValue = parameter.HasDefaultValue;
             if (HasDefaultValue)
                 DefaultValue = parameter.DefaultValue;
-            Spec = TypeSpec.Create (parameter.Type, parameter.Nullable);
+            Spec = TypeSpec.Create (
+                parameter.Type, parameter.Nullable, parameter.NullablePaths,
+                "parameter " + Name + " of " + fullProcedureName);
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace KRPC.Service.Scanner
                 if (DefaultValue == null)
                     info.AddValue ("default_value", (object)null);
                 else
-                    info.AddValue ("default_value", Server.ProtocolBuffers.Encoder.Encode (DefaultValue).ToByteArray ());
+                    info.AddValue ("default_value", Server.ProtocolBuffers.Encoder.Encode (DefaultValue, Spec).ToByteArray ());
             }
         }
     }

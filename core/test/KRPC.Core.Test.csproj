@@ -99,6 +99,7 @@
     <Compile Include="Service\TestServiceDeprecated.cs" />
     <Compile Include="Service\TestServiceExtensions.cs" />
     <Compile Include="Service\TestTopLevelClass.cs" />
+    <Compile Include="Service\TypeSpecTest.cs" />
     <Compile Include="Service\TypeUtilsTest.cs" />
     <Compile Include="Service\ValueUtilsTest.cs" />
     <Compile Include="TestingTools.cs" />

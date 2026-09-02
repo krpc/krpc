@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using KRPC.Service.Attributes;
@@ -39,6 +40,11 @@ namespace KRPC.Service
         public bool Nullable { get; internal set; }
 
         /// <summary>
+        /// The nullable positions inside the parameter's type, each named by a path.
+        /// </summary>
+        public IEnumerable<IList<Position>> NullablePaths { get; internal set; }
+
+        /// <summary>
         /// Create parameter information from a reflected parameter.
         /// </summary>
         public ProcedureParameter (ParameterInfo parameter)
@@ -52,7 +58,8 @@ namespace KRPC.Service
             // A parameter is nullable if it has a null default value, itself a declaration that
             // null is valid, or it is marked [KRPCNullable]. The spec reads a Nullable<T> type
             // as nullable on its own
-            Nullable = Reflection.HasAttribute<KRPCNullableAttribute> (parameter)
+            NullablePaths = TypeUtils.GetNullablePaths (parameter).ToList ();
+            Nullable = NullablePaths.Any (path => path.Count == 0)
                 || (HasDefaultValue && DefaultValue == null);
         }
 
@@ -64,6 +71,7 @@ namespace KRPC.Service
             Type = type;
             Name = name;
             DefaultValue = DBNull.Value;
+            NullablePaths = new List<IList<Position>> ();
         }
     }
 }

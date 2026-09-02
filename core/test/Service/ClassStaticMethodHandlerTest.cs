@@ -21,7 +21,7 @@ namespace KRPC.Test.Service
         {
             var instance = new TestService.TestClass ("foo");
             var method = typeof(TestServiceExtensions).GetMethod ("ExtensionMethod");
-            var handler = new ClassStaticMethodHandler (method, false, true);
+            var handler = new ClassStaticMethodHandler (method, false, isExtension: true);
             // The instance is passed as argument 0, as it is the first argument of the static call
             Assert.IsFalse (handler.HasInstance);
             Assert.AreEqual ("foo42", handler.Invoke (null, new object [] { instance, 42 }));
@@ -31,7 +31,7 @@ namespace KRPC.Test.Service
         public void ExtensionMethodProperties ()
         {
             var method = typeof(TestServiceExtensions).GetMethod ("ExtensionMethod");
-            var handler = new ClassStaticMethodHandler (method, false, true);
+            var handler = new ClassStaticMethodHandler (method, false, isExtension: true);
             var parameters = handler.Parameters.ToList ();
             Assert.AreEqual (2, parameters.Count);
             Assert.AreEqual ("this", parameters [0].Name);

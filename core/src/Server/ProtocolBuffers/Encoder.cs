@@ -15,20 +15,23 @@ namespace KRPC.Server.ProtocolBuffers
         static CodedOutputStream cachedStream = new CodedOutputStream (cachedBuffer);
 
         /// <summary>
-        /// Encode an object using the protocol buffer encoding scheme.
+        /// Encode an object using the protocol buffer encoding scheme. The spec names the type
+        /// the value is encoded as, and which of the positions inside it can hold null.
         /// </summary>
-        public static ByteString Encode (object value)
+        public static ByteString Encode (object value, TypeSpec spec)
         {
-            return EncodeObject (value, cachedBuffer, cachedStream);
+            if (spec == null)
+                throw new ArgumentNullException (nameof (spec));
+            return EncodeObject (value, spec, cachedBuffer, cachedStream);
         }
 
-        static ByteString EncodeObject (object value, MemoryStream buffer, CodedOutputStream stream)
+        static ByteString EncodeObject (object value, TypeSpec spec, MemoryStream buffer, CodedOutputStream stream)
         {
             if (value == null) {
                 throw new ArgumentNullException (nameof (value));
             }
             buffer.SetLength (0);
-            WriteObject (value, stream);
+            WriteObject (value, spec, stream);
             stream.Flush ();
             return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
         }
@@ -37,22 +40,42 @@ namespace KRPC.Server.ProtocolBuffers
         /// Encode a value at a position that allows a null: a presence bool, followed by the
         /// value itself when it is present.
         /// </summary>
-        static ByteString EncodeNullableObject (object value, MemoryStream buffer, CodedOutputStream stream)
+        static ByteString EncodeNullableObject (object value, TypeSpec spec, MemoryStream buffer, CodedOutputStream stream)
         {
             buffer.SetLength (0);
             stream.WriteBool (value != null);
             if (value != null)
-                WriteObject (value, stream);
+                WriteObject (value, spec, stream);
             stream.Flush ();
             return ByteString.CopyFrom (buffer.GetBuffer (), 0, (int)buffer.Length);
         }
 
-        static void WriteObject (object value, CodedOutputStream stream)
+        /// <summary>
+        /// Encode one of the values a collection holds, at the position the given spec
+        /// describes.
+        /// </summary>
+        static ByteString EncodeItem (object value, TypeSpec spec, MemoryStream buffer, CodedOutputStream stream)
         {
-            if (value is Enum) {
+            if (spec.Nullable)
+                return EncodeNullableObject (value, spec, buffer, stream);
+            return EncodeObject (value, spec, buffer, stream);
+        }
+
+        /// <summary>
+        /// The error for a null at a position that does not allow one. A null carries nothing
+        /// about where it came from, so the message names the position and the type holding it.
+        /// </summary>
+        static ServiceException NullAt (string position, Type type, string reason)
+        {
+            return new ServiceException (position + " of " + type + " is null; " + reason);
+        }
+
+        static void WriteObject (object value, TypeSpec spec, CodedOutputStream stream)
+        {
+            var type = spec.Type;
+            if (type.IsEnum) {
                 stream.WriteSInt32 ((int)value);
             } else {
-                var type = value.GetType ();
                 switch (Type.GetTypeCode (type)) {
                 case TypeCode.Double:
                     stream.WriteDouble ((double)value);
@@ -84,15 +107,15 @@ namespace KRPC.Server.ProtocolBuffers
                     else if (TypeUtils.IsAClassType (type))
                         stream.WriteUInt64 (ObjectStore.Instance.AddInstance (value));
                     else if (TypeUtils.IsAStructType (type))
-                        WriteStruct (value, stream);
+                        WriteStruct (value, spec, stream);
                     else if (TypeUtils.IsATupleCollectionType (type))
-                        WriteTuple (value, stream);
+                        WriteTuple (value, spec, stream);
                     else if (TypeUtils.IsAListCollectionType (type))
-                        WriteList (value, stream);
+                        WriteList (value, spec, stream);
                     else if (TypeUtils.IsASetCollectionType (type))
-                        WriteSet (value, stream);
+                        WriteSet (value, spec, stream);
                     else if (TypeUtils.IsADictionaryCollectionType (type))
-                        WriteDictionary (value, stream);
+                        WriteDictionary (value, spec, stream);
                     else if (TypeUtils.IsAMessageType (type))
                         WriteMessage (value, stream);
                     else
@@ -102,18 +125,21 @@ namespace KRPC.Server.ProtocolBuffers
             }
         }
 
-        static void WriteTuple (object value, CodedOutputStream stream)
+        static void WriteTuple (object value, TypeSpec spec, CodedOutputStream stream)
         {
             var encodedTuple = new Schema.KRPC.Tuple ();
-            var valueTypes = value.GetType ().GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
-            var tupleType = genericType.MakeGenericType (valueTypes);
+            var tupleType = spec.Type;
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
-                for (int i = 0; i < valueTypes.Length; i++) {
+                for (int i = 0; i < spec.Types.Count; i++) {
                     var property = tupleType.GetProperty ("Item" + (i + 1));
                     var item = property.GetGetMethod ().Invoke (value, null);
-                    encodedTuple.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+                    var itemSpec = spec.Types [i];
+                    if (item == null && !itemSpec.Nullable)
+                        throw NullAt (
+                            "Item " + (i + 1), tupleType, "the item is not nullable");
+                    encodedTuple.Items.Add (
+                        EncodeItem (item, itemSpec, internalBuffer, internalStream));
                 }
             }
             encodedTuple.WriteTo (stream);
@@ -123,10 +149,10 @@ namespace KRPC.Server.ProtocolBuffers
         /// Write a structure value as the values of its fields, in the order the structure
         /// declares them, which is the same encoding as a tuple of those values.
         /// </summary>
-        static void WriteStruct (object value, CodedOutputStream stream)
+        static void WriteStruct (object value, TypeSpec spec, CodedOutputStream stream)
         {
             var encodedStruct = new Schema.KRPC.Tuple ();
-            var type = value.GetType ();
+            var type = spec.Type;
             System.Collections.Generic.IList<PropertyInfo> fields;
             System.Collections.Generic.IList<TypeSpec> specs;
             TypeUtils.GetStructFieldsAndSpecs (type, out fields, out specs);
@@ -134,53 +160,72 @@ namespace KRPC.Server.ProtocolBuffers
                 var internalStream = new CodedOutputStream (internalBuffer);
                 for (int i = 0; i < fields.Count; i++) {
                     var field = fields [i];
+                    var fieldSpec = specs [i];
                     var item = field.GetGetMethod ().Invoke (value, null);
-                    if (specs [i].Nullable) {
-                        encodedStruct.Items.Add (EncodeNullableObject (item, internalBuffer, internalStream));
-                        continue;
-                    }
-                    if (item == null)
-                        throw new ServiceException (
-                            "Field " + field.Name + " of " + type.Name + " is null; the field is not nullable");
-                    encodedStruct.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+                    if (item == null && !fieldSpec.Nullable)
+                        throw NullAt (
+                            "Field " + field.Name, type, "the field is not nullable");
+                    encodedStruct.Items.Add (
+                        EncodeItem (item, fieldSpec, internalBuffer, internalStream));
                 }
             }
             encodedStruct.WriteTo (stream);
         }
 
-        static void WriteList (object value, CodedOutputStream stream)
+        static void WriteList (object value, TypeSpec spec, CodedOutputStream stream)
         {
             var encodedList = new Schema.KRPC.List ();
             var list = (IList)value;
+            var type = spec.Type;
+            var itemSpec = spec.Types [0];
+            var nullable = itemSpec.Nullable;
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
-                foreach (var item in list)
-                    encodedList.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+                foreach (var item in list) {
+                    if (item == null && !nullable)
+                        throw NullAt ("An element", type, "the element is not nullable");
+                    encodedList.Items.Add (
+                        EncodeItem (item, itemSpec, internalBuffer, internalStream));
+                }
             }
             encodedList.WriteTo (stream);
         }
 
-        static void WriteSet (object value, CodedOutputStream stream)
+        static void WriteSet (object value, TypeSpec spec, CodedOutputStream stream)
         {
             var encodedSet = new Schema.KRPC.Set ();
             var set = (IEnumerable)value;
+            var type = spec.Type;
+            var itemSpec = spec.Types [0];
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
-                foreach (var item in set)
-                    encodedSet.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+                foreach (var item in set) {
+                    if (item == null)
+                        throw NullAt ("An element", type, "a set element cannot be null");
+                    encodedSet.Items.Add (
+                        EncodeObject (item, itemSpec, internalBuffer, internalStream));
+                }
             }
             encodedSet.WriteTo (stream);
         }
 
-        static void WriteDictionary (object value, CodedOutputStream stream)
+        static void WriteDictionary (object value, TypeSpec spec, CodedOutputStream stream)
         {
             var encodedDictionary = new Schema.KRPC.Dictionary ();
+            var type = spec.Type;
+            var keySpec = spec.Types [0];
+            var valueSpec = spec.Types [1];
+            var nullable = valueSpec.Nullable;
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
                 foreach (DictionaryEntry entry in (IDictionary) value) {
+                    if (entry.Key == null)
+                        throw NullAt ("A key", type, "a dictionary key cannot be null");
+                    if (entry.Value == null && !nullable)
+                        throw NullAt ("A value", type, "the value is not nullable");
                     var encodedEntry = new Schema.KRPC.DictionaryEntry ();
-                    encodedEntry.Key = EncodeObject (entry.Key, internalBuffer, internalStream);
-                    encodedEntry.Value = EncodeObject (entry.Value, internalBuffer, internalStream);
+                    encodedEntry.Key = EncodeObject (entry.Key, keySpec, internalBuffer, internalStream);
+                    encodedEntry.Value = EncodeItem (entry.Value, valueSpec, internalBuffer, internalStream);
                     encodedDictionary.Entries.Add (encodedEntry);
                 }
             }
@@ -200,26 +245,41 @@ namespace KRPC.Server.ProtocolBuffers
         }
 
         /// <summary>
-        /// Decode a value of the given type.
-        /// Should not be called directly. This interface is used by service client stubs.
+        /// Decode a value of the type the given spec describes, which says which of the
+        /// positions inside it can hold null.
         /// </summary>
-        public static object Decode (ByteString value, Type type)
+        public static object Decode (ByteString value, TypeSpec spec)
         {
-            return DecodeValue (value.CreateCodedInput (), type);
+            return DecodeValue (value.CreateCodedInput (), spec);
         }
 
         /// <summary>
         /// Decode a value at a position that allows a null, which EncodeNullableObject
         /// writes.
         /// </summary>
-        static object DecodeNullable (ByteString value, Type type)
+        static object DecodeNullable (ByteString value, TypeSpec spec)
         {
             var stream = value.CreateCodedInput ();
-            return stream.ReadBool () ? DecodeValue (stream, type) : null;
+            return stream.ReadBool () ? DecodeValue (stream, spec) : null;
         }
 
-        static object DecodeValue (CodedInputStream stream, Type type)
+        /// <summary>
+        /// Decode one of the values a collection holds, at the position the given spec
+        /// describes.
+        /// </summary>
+        static object DecodeItem (ByteString value, TypeSpec spec)
         {
+            if (spec.Nullable)
+                return DecodeNullable (value, spec);
+            return DecodeValue (value.CreateCodedInput (), spec);
+        }
+
+        static object DecodeValue (CodedInputStream stream, TypeSpec spec)
+        {
+            // The spec names the type a value decodes as, with Nullable<T> already unwrapped;
+            // the null itself is read by the caller, from the presence bool or a flag beside
+            // the value
+            var type = spec.Type;
             if (type.IsEnum) {
                 if (TypeUtils.IsAnEnumType (type))
                     return Enum.ToObject (type, stream.ReadSInt32 ());
@@ -249,13 +309,13 @@ namespace KRPC.Server.ProtocolBuffers
                     if (TypeUtils.IsAStructType (type))
                         return DecodeStruct (stream, type);
                     if (TypeUtils.IsATupleCollectionType (type))
-                        return DecodeTuple (stream, type);
+                        return DecodeTuple (stream, spec);
                     if (TypeUtils.IsAListCollectionType (type))
-                        return DecodeList (stream, type);
+                        return DecodeList (stream, spec);
                     if (TypeUtils.IsASetCollectionType (type))
-                        return DecodeSet (stream, type);
+                        return DecodeSet (stream, spec);
                     if (TypeUtils.IsADictionaryCollectionType (type))
-                        return DecodeDictionary (stream, type);
+                        return DecodeDictionary (stream, spec);
                     if (TypeUtils.IsAMessageType (type))
                         return DecodeMessage (stream, type);
                     break;
@@ -264,15 +324,15 @@ namespace KRPC.Server.ProtocolBuffers
             throw new ArgumentException (type + " is not a serializable type");
         }
 
-        static object DecodeTuple (CodedInputStream stream, Type type)
+        static object DecodeTuple (CodedInputStream stream, TypeSpec spec)
         {
             var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
-            var valueTypes = type.GetGenericArguments ().ToArray ();
+            var valueTypes = spec.Types.Select (x => x.DeclaredType).ToArray ();
             var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length);
             var values = new object[valueTypes.Length];
             for (int i = 0; i < valueTypes.Length; i++) {
                 var item = encodedTuple.Items [i];
-                values [i] = Decode (item, valueTypes [i]);
+                values [i] = DecodeItem (item, spec.Types [i]);
             }
             var tuple = genericType
                 .MakeGenericType (valueTypes)
@@ -303,9 +363,9 @@ namespace KRPC.Server.ProtocolBuffers
                 var spec = specs [i];
                 object item;
                 if (spec.Nullable) {
-                    item = DecodeNullable (encodedStruct.Items [i], spec.Type);
+                    item = DecodeNullable (encodedStruct.Items [i], spec);
                 } else {
-                    item = Decode (encodedStruct.Items [i], spec.Type);
+                    item = DecodeValue (encodedStruct.Items [i].CreateCodedInput (), spec);
                     if (item == null)
                         throw new ArgumentException (
                             "Field " + field.Name + " of " + type.Name + " is null; the field is not nullable");
@@ -315,44 +375,47 @@ namespace KRPC.Server.ProtocolBuffers
             return value;
         }
 
-        static object DecodeList (CodedInputStream stream, Type type)
+        static object DecodeList (CodedInputStream stream, TypeSpec spec)
         {
             var encodedList = Schema.KRPC.List.Parser.ParseFrom (stream);
+            var itemSpec = spec.Types [0];
             var list = (IList)(typeof(System.Collections.Generic.List<>)
-                .MakeGenericType (type.GetGenericArguments ().Single ())
+                .MakeGenericType (itemSpec.DeclaredType)
                 .GetConstructor (Type.EmptyTypes)
                 .Invoke (null));
             foreach (var item in encodedList.Items)
-                list.Add (Decode (item, type.GetGenericArguments ().Single ()));
+                list.Add (DecodeItem (item, itemSpec));
             return list;
         }
 
-        static object DecodeSet (CodedInputStream stream, Type type)
+        static object DecodeSet (CodedInputStream stream, TypeSpec spec)
         {
             var encodedSet = Schema.KRPC.Set.Parser.ParseFrom (stream);
+            var itemSpec = spec.Types [0];
             var set = (IEnumerable)(typeof(System.Collections.Generic.HashSet<>)
-                .MakeGenericType (type.GetGenericArguments ().Single ())
+                .MakeGenericType (itemSpec.DeclaredType)
                 .GetConstructor (Type.EmptyTypes)
                 .Invoke (null));
-            MethodInfo methodInfo = type.GetMethod ("Add");
+            MethodInfo methodInfo = spec.Type.GetMethod ("Add");
             foreach (var item in encodedSet.Items) {
-                var decodedItem = Decode (item, type.GetGenericArguments ().Single ());
+                var decodedItem = DecodeValue (item.CreateCodedInput (), itemSpec);
                 methodInfo.Invoke (set, new [] { decodedItem });
             }
             return set;
         }
 
-        static object DecodeDictionary (CodedInputStream stream, Type type)
+        static object DecodeDictionary (CodedInputStream stream, TypeSpec spec)
         {
             var encodedDictionary = Schema.KRPC.Dictionary.Parser.ParseFrom (stream);
+            var keySpec = spec.Types [0];
+            var valueSpec = spec.Types [1];
             var dictionary = (IDictionary)(typeof(System.Collections.Generic.Dictionary<,>)
-                .MakeGenericType (type.GetGenericArguments () [0], type.GetGenericArguments () [1])
+                .MakeGenericType (keySpec.DeclaredType, valueSpec.DeclaredType)
                 .GetConstructor (Type.EmptyTypes)
                 .Invoke (null));
             foreach (var entry in encodedDictionary.Entries) {
-                var key = Decode (entry.Key, type.GetGenericArguments () [0]);
-                var value = Decode (entry.Value, type.GetGenericArguments () [1]);
-                dictionary [key] = value;
+                var key = DecodeValue (entry.Key.CreateCodedInput (), keySpec);
+                dictionary [key] = DecodeItem (entry.Value, valueSpec);
             }
             return dictionary;
         }

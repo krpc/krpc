@@ -73,7 +73,7 @@ namespace KRPC.Server.ProtocolBuffers
                     if (r.Result.Value == null)
                         pr.IsNull = true;
                     else
-                        pr.Value = Encoder.Encode (r.Result.Value);
+                        pr.Value = Encoder.Encode (r.Result.Value, r.Result.Spec);
                 } else if (r.Result.HasError)
                     pr.Error = r.Result.Error.ToProtobufMessage ();
                 streamUpdateMessage.Add (protoResult);

@@ -20,7 +20,7 @@ namespace KRPC.Service.Scanner
         public string FullyQualifiedName { get; private set; }
 
         /// <summary>
-        /// The type of the field, together with whether it can be null.
+        /// The type of the field, with the nullability of every position inside it.
         /// </summary>
         public TypeSpec Spec { get; private set; }
 

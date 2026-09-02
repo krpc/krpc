@@ -64,7 +64,7 @@ namespace KRPC.Service.Scanner
         public bool HasReturnType { get; private set; }
 
         /// <summary>
-        /// The return type of the procedure, together with whether it can be null.
+        /// The return type of the procedure, with the nullability of every position inside it.
         /// </summary>
         public TypeSpec ReturnSpec { get; private set; }
 
@@ -86,7 +86,9 @@ namespace KRPC.Service.Scanner
                 // Check it's a valid return type
                 if (!TypeUtils.IsAValidType (returnType))
                     throw new ServiceException (returnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
-                ReturnSpec = TypeSpec.Create (returnType, handler.ReturnIsNullable);
+                ReturnSpec = TypeSpec.Create (
+                    returnType, handler.ReturnIsNullable, handler.ReturnNullablePaths,
+                    "the return value of " + FullyQualifiedName);
             }
         }
 

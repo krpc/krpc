@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using KRPC.Service.Attributes;
 using KRPC.Utils;
 
 namespace KRPC.Service.Scanner
@@ -138,7 +140,7 @@ namespace KRPC.Service.Scanner
             var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
             AddProcedure (new ProcedureSignature (
                 Name, method.Name, NextProcedureId, method.GetDocumentation (),
-                new ProcedureHandler (method, TypeUtils.GetNullable (method)),
+                new ProcedureHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method)),
                 TypeUtils.GetProcedureGameScene(method, gameScene),
                 deprecated, deprecatedReason));
         }
@@ -152,20 +154,25 @@ namespace KRPC.Service.Scanner
             var getter = property.GetGetMethod ();
             var setter = property.GetSetMethod ();
             var nullable = TypeUtils.GetNullable (property);
+            var nullablePaths = TypeUtils.GetNullablePaths (property).ToList ();
             if (getter != null)
-                AddPropertyProcedure (property, getter, nullable, false);
+                AddPropertyProcedure (property, getter, nullable, nullablePaths, false);
             if (setter != null)
-                AddPropertyProcedure (property, setter, nullable, true);
+                AddPropertyProcedure (property, setter, nullable, nullablePaths, true);
         }
 
-        void AddPropertyProcedure (PropertyInfo property, MethodInfo method, bool nullable, bool isSetter)
+        void AddPropertyProcedure (
+            PropertyInfo property, MethodInfo method, bool nullable,
+            IList<IList<Position>> nullablePaths, bool isSetter)
         {
-            // For a getter the nullable flag makes the return value nullable. For a setter it
-            // makes the synthesized value parameter nullable, which cannot carry the attribute
-            // itself
-            var handler = new ProcedureHandler (method, isSetter ? false : nullable);
-            if (isSetter && nullable)
-                handler.SetValueParameterNullable ();
+            // For a getter the nullable flag and the paths apply to the return value. For a
+            // setter they apply to the synthesized value parameter, which cannot carry the
+            // attribute itself
+            var handler = new ProcedureHandler (
+                method, isSetter ? false : nullable,
+                isSetter ? new List<IList<Position>> () : nullablePaths);
+            if (isSetter)
+                handler.SetValueParameterNullability (nullable, nullablePaths);
             string deprecatedReason;
             var deprecated = TypeUtils.GetPropertyDeprecated (property, method, out deprecatedReason);
             AddProcedure (new ProcedureSignature (
@@ -227,7 +234,7 @@ namespace KRPC.Service.Scanner
                 string fieldDeprecatedReason;
                 var fieldDeprecated = TypeUtils.GetPropertyDeprecated (property, property.GetGetMethod (), out fieldDeprecatedReason);
                 fields.Add (new StructFieldSignature (
-                    Name, name, property.Name, TypeUtils.GetStructFieldSpec (property),
+                    Name, name, property.Name, TypeUtils.GetStructFieldSpec (structType, property),
                     property.GetDocumentation (), fieldDeprecated, fieldDeprecatedReason));
             }
             string deprecatedReason;
@@ -267,13 +274,13 @@ namespace KRPC.Service.Scanner
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
             if (!method.IsStatic) {
-                var handler = new ClassMethodHandler (classType, method, TypeUtils.GetNullable(method));
+                var handler = new ClassMethodHandler (classType, method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method));
                 AddProcedure (new ProcedureSignature (
                     Name, cls + '_' + name, id, method.GetDocumentation (), handler,
                     TypeUtils.GetMethodGameScene(classType, method, classGameScene),
                     deprecated, deprecatedReason));
             } else {
-                var handler = new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method));
+                var handler = new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method));
                 AddProcedure (new ProcedureSignature (
                     Name, cls + "_static_" + name, id, method.GetDocumentation (), handler,
                     TypeUtils.GetMethodGameScene(classType, method, classGameScene),
@@ -293,20 +300,25 @@ namespace KRPC.Service.Scanner
             var getter = property.GetGetMethod ();
             var setter = property.GetSetMethod ();
             var nullable = TypeUtils.GetNullable (property);
+            var nullablePaths = TypeUtils.GetNullablePaths (property).ToList ();
             if (getter != null)
-                AddClassPropertyMethod (cls, classType, property, getter, nullable, false);
+                AddClassPropertyMethod (cls, classType, property, getter, nullable, nullablePaths, false);
             if (setter != null)
-                AddClassPropertyMethod (cls, classType, property, setter, nullable, true);
+                AddClassPropertyMethod (cls, classType, property, setter, nullable, nullablePaths, true);
         }
 
-        void AddClassPropertyMethod (string cls, Type classType, PropertyInfo property, MethodInfo method, bool nullable, bool isSetter)
+        void AddClassPropertyMethod (
+            string cls, Type classType, PropertyInfo property, MethodInfo method, bool nullable,
+            IList<IList<Position>> nullablePaths, bool isSetter)
         {
-            // For a getter the nullable flag makes the return value nullable. For a setter it
-            // makes the synthesized value parameter nullable, which cannot carry the attribute
-            // itself
-            var handler = new ClassMethodHandler (classType, method, isSetter ? false : nullable);
-            if (isSetter && nullable)
-                handler.SetValueParameterNullable ();
+            // For a getter the nullable flag and the paths apply to the return value. For a
+            // setter they apply to the synthesized value parameter, which cannot carry the
+            // attribute itself
+            var handler = new ClassMethodHandler (
+                classType, method, isSetter ? false : nullable,
+                isSetter ? new List<IList<Position>> () : nullablePaths);
+            if (isSetter)
+                handler.SetValueParameterNullability (nullable, nullablePaths);
             var classGameScene = TypeUtils.GetClassGameScene(classType, gameScene);
             string deprecatedReason;
             var deprecated = TypeUtils.GetPropertyDeprecated (property, method, out deprecatedReason);
@@ -330,7 +342,7 @@ namespace KRPC.Service.Scanner
             var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
             AddExtensionProcedure (
                 cls + '_' + method.Name, method, method.GetDocumentation (),
-                new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), true),
+                new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method), true),
                 TypeUtils.GetExtensionMethodGameScene (method, classGameScene),
                 deprecated, deprecatedReason);
         }
@@ -353,7 +365,7 @@ namespace KRPC.Service.Scanner
             AddExtensionProcedure (
                 cls + (isSetter ? "_set_" : "_get_") + property,
                 method, method.GetDocumentation (),
-                new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), true),
+                new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), TypeUtils.GetNullablePaths (method), true),
                 TypeUtils.GetExtensionPropertyGameScene (method, classGameScene),
                 deprecated, deprecatedReason);
         }

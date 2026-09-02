@@ -32,7 +32,7 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (75, service.Procedures.Count);
+            Assert.AreEqual (82, service.Procedures.Count);
             Assert.AreEqual (3, service.Classes.Count);
             Assert.AreEqual (2, service.Enumerations.Count);
             Assert.AreEqual (3, service.Structs.Count);
@@ -189,6 +189,17 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
                     MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "get_NullableByAttributeProperty") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasReturnType (proc, typeof(string), true);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "set_NullableByAttributeProperty") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasNullableParameter (proc, 0, typeof(string), "value");
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "CreateTestObject") {
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, typeof(string), "value");
@@ -224,6 +235,42 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNullableParameter (proc, 0, typeof(TestService.TestEnum), "x");
                     MessageAssert.HasReturnType (proc, typeof(TestService.TestEnum), true);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoListOfNullableInts") {
+                    MessageAssert.HasParameters (proc, 1);
+                    // A Nullable<T> element is declared by its underlying type T
+                    MessageAssert.HasParameter (proc, 0, typeof(IList<int?>), "l");
+                    MessageAssert.HasNullableTypes (proc.Parameters [0].Type, typeof(int));
+                    MessageAssert.HasReturnType (proc, typeof(IList<int?>));
+                    MessageAssert.HasNullableTypes (proc.ReturnType, typeof(int));
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoListOfNullableObjects") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(IList<TestService.TestClass>), "l");
+                    MessageAssert.HasNullableTypes (
+                        proc.Parameters [0].Type, typeof(TestService.TestClass));
+                    MessageAssert.HasReturnType (proc, typeof(IList<TestService.TestClass>));
+                    MessageAssert.HasNullableTypes (proc.ReturnType, typeof(TestService.TestClass));
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoDictionaryOfNullableObjects") {
+                    MessageAssert.HasParameters (proc, 1);
+                    // The key is not nullable, and the value is
+                    MessageAssert.HasNullableTypes (
+                        proc.Parameters [0].Type, typeof(TestService.TestClass));
+                    MessageAssert.HasNullableTypes (proc.ReturnType, typeof(TestService.TestClass));
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoTupleWithANullableObject") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasNullableTypes (
+                        proc.Parameters [0].Type, typeof(TestService.TestClass));
+                    MessageAssert.HasNullableTypes (proc.ReturnType, typeof(TestService.TestClass));
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoNestedListOfNullableObjects") {
+                    MessageAssert.HasParameters (proc, 1);
+                    // The inner lists are not nullable, and the objects they hold are
+                    MessageAssert.HasNullableTypes (
+                        proc.Parameters [0].Type, typeof(TestService.TestClass));
+                    MessageAssert.HasNullableTypes (proc.ReturnType, typeof(TestService.TestClass));
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "EchoNullableList") {
                     MessageAssert.HasParameters (proc, 1);
@@ -573,8 +620,8 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (75, foundProcedures);
-            Assert.AreEqual (75, service.Procedures.Count);
+            Assert.AreEqual (82, foundProcedures);
+            Assert.AreEqual (82, service.Procedures.Count);
         }
 
         [Test]

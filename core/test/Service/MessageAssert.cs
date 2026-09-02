@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using NUnit.Framework;
@@ -71,6 +72,25 @@ namespace KRPC.Test.Service
             Assert.IsTrue (procedure.HasReturnType);
             Assert.AreEqual (returnType, procedure.ReturnType.Type);
             Assert.AreEqual (returnIsNullable, procedure.ReturnType.Nullable);
+        }
+
+        /// <summary>
+        /// Assert that the nullable positions inside the given type are exactly the ones
+        /// holding the given types, in the order the spec reaches them.
+        /// </summary>
+        public static void HasNullableTypes (TypeSpec spec, params Type[] types)
+        {
+            var nullable = new List<Type> ();
+            CollectNullableTypes (spec, nullable, false);
+            CollectionAssert.AreEqual (types, nullable);
+        }
+
+        static void CollectNullableTypes (TypeSpec spec, IList<Type> nullable, bool includeSelf)
+        {
+            if (includeSelf && spec.Nullable)
+                nullable.Add (spec.Type);
+            foreach (var inner in spec.Types)
+                CollectNullableTypes (inner, nullable, true);
         }
 
         public static void HasGameScene (Procedure procedure, GameScene gameScene)

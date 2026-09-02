@@ -139,6 +139,7 @@ namespace KRPC.Service
                 var result = new ProcedureResult ();
                 if (procedure.HasReturnType) {
                     CheckReturnValue (procedure, returnValue);
+                    result.Spec = procedure.ReturnSpec;
                     result.Value = returnValue;
                 }
                 return result;
@@ -169,6 +170,7 @@ namespace KRPC.Service
             var result = new ProcedureResult ();
             if (procedure.HasReturnType) {
                 CheckReturnValue (procedure, returnValue);
+                result.Spec = procedure.ReturnSpec;
                 result.Value = returnValue;
             }
             return result;
@@ -211,6 +213,7 @@ namespace KRPC.Service
                     result.Error = HandleException (e);
                     return;
                 }
+                result.Spec = procedure.ReturnSpec;
                 result.Value = returnValue;
             }
         }
@@ -233,6 +236,7 @@ namespace KRPC.Service
             result.Reset ();
             if (procedure.HasReturnType) {
                 CheckReturnValue (procedure, returnValue);
+                result.Spec = procedure.ReturnSpec;
                 result.Value = returnValue;
             }
         }

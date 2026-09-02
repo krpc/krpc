@@ -42,6 +42,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void EncodeProcedureResultWithValue ()
         {
             var result = new ProcedureResult ();
+            result.Spec = TypeSpec.Create (typeof(int));
             result.Value = 42;
             var wire = result.ToProtobufMessage ();
             Assert.IsFalse (wire.IsNull);
@@ -81,7 +82,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void EncodeParameterWithNullDefault ()
         {
-            var parameter = new Parameter ("x", TypeSpec.Create (typeof(string), true));
+            var parameter = new Parameter ("x", TypeSpec.Create (typeof(string), true, null, "x"));
             parameter.DefaultValue = null;
             var wire = parameter.ToProtobufMessage ();
             Assert.IsTrue (wire.HasDefaultValue);
@@ -94,8 +95,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
         {
             var argument = new Schema.KRPC.Argument ();
             argument.Position = 0;
-            argument.Value = Encoder.Encode ("foo");
-            var message = argument.ToMessage (typeof(string));
+            argument.Value = Encoder.Encode ("foo", TypeSpec.Create (typeof(string)));
+            var message = argument.ToMessage (TypeSpec.Create (typeof(string)));
             Assert.AreEqual ("foo", message.Value);
         }
 
@@ -105,7 +106,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var argument = new Schema.KRPC.Argument ();
             argument.Position = 0;
             argument.IsNull = true;
-            var message = argument.ToMessage (typeof(string));
+            var message = argument.ToMessage (TypeSpec.Create (typeof(string)));
             Assert.IsNull (message.Value);
         }
     }

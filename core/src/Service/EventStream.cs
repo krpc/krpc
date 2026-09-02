@@ -8,6 +8,9 @@ using KRPC.Service.Scanner;
 namespace KRPC.Service
 {
     sealed class EventStream : Stream {
+        // An event carries whether it has fired, which is the type its result is encoded as
+        static readonly TypeSpec BoolSpec = TypeSpec.Create (typeof(bool));
+
         Func<bool> continuation;
         bool shouldRemove;
 
@@ -40,6 +43,7 @@ namespace KRPC.Service
         }
 
         public void Trigger () {
+            Result.Spec = BoolSpec;
             Result.Value = true;
             Changed = true;
         }

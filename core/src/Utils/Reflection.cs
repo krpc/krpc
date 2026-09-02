@@ -125,6 +125,15 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// Return every attribute of type T for the given member, in the order they are
+        /// declared. Does not follow inheritance.
+        /// </summary>
+        public static IEnumerable<T> GetAttributes<T> (ICustomAttributeProvider member)
+        {
+            return member.GetCustomAttributes (typeof(T), false).Cast<T> ();
+        }
+
+        /// <summary>
         /// Return true if member has the attribute of type T. Does not follow inheritance.
         /// </summary>
         public static bool HasAttribute<T> (ICustomAttributeProvider member)

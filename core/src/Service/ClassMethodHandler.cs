@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using KRPC.Service.Attributes;
 
 namespace KRPC.Service
 {
@@ -16,7 +17,7 @@ namespace KRPC.Service
         readonly Func<object, object[], object> invoker;
         readonly ProcedureParameter[] parameters;
 
-        public ClassMethodHandler (Type classType, MethodInfo methodInfo, bool returnIsNullable)
+        public ClassMethodHandler (Type classType, MethodInfo methodInfo, bool returnIsNullable, IEnumerable<IList<Position>> returnNullablePaths = null)
         {
             invoker = BuildInvoker (classType, methodInfo);
             var parameterList = methodInfo.GetParameters ().Select (x => new ProcedureParameter (x)).ToList ();
@@ -24,6 +25,7 @@ namespace KRPC.Service
             parameters = parameterList.ToArray ();
             ReturnType = methodInfo.ReturnType;
             ReturnIsNullable = returnIsNullable;
+            ReturnNullablePaths = returnNullablePaths ?? new List<IList<Position>> ();
         }
 
         public bool HasInstance { get => true; }
@@ -45,13 +47,18 @@ namespace KRPC.Service
 
         public bool ReturnIsNullable { get; private set; }
 
+        public IEnumerable<IList<Position>> ReturnNullablePaths { get; private set; }
+
         /// <summary>
-        /// Mark the property value parameter (the last parameter) as nullable. Used for the setter
-        /// of a nullable property, whose synthesized value parameter cannot carry [KRPCNullable].
+        /// Give the property value parameter (the last parameter) the nullability the property
+        /// declares. Used for the setter of a property, whose synthesized value parameter
+        /// cannot carry [KRPCNullable] itself.
         /// </summary>
-        public void SetValueParameterNullable ()
+        public void SetValueParameterNullability (bool nullable, IEnumerable<IList<Position>> nullablePaths)
         {
-            parameters [parameters.Length - 1].Nullable = true;
+            var parameter = parameters [parameters.Length - 1];
+            parameter.Nullable = nullable;
+            parameter.NullablePaths = nullablePaths;
         }
 
         static Func<object, object[], object> BuildInvoker (Type classType, MethodInfo method)
