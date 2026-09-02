@@ -10,7 +10,14 @@ from krpc.types import (
     TupleType,
 )
 from krpc.utils import snake_case
-from ..utils import lower_camel_case, indent, single_line, as_type, decode_default_value
+from ..utils import (
+    lower_camel_case,
+    indent,
+    single_line,
+    as_type,
+    decode_default_value,
+    is_nullable,
+)
 from .docparser import flatten_deprecation_reason
 
 
@@ -93,7 +100,7 @@ class Generator:
                 )
                 value = decode_default_value(parameter["default_value"], typ, location)
                 info["default_value"] = self.parse_default_value(value, typ)
-            info["nullable"] = parameter.get("nullable", False)
+            info["nullable"] = is_nullable(parameter["type"])
             parameters.append(info)
         return parameters
 
@@ -156,6 +163,7 @@ class Generator:
                         "remote_name": x["name"],
                         "krpc_type": self.as_type(x["type"]),
                         "type": self.parse_type(self.as_type(x["type"])),
+                        "nullable": is_nullable(x["type"]),
                         "documentation": self.parse_documentation(x["documentation"]),
                         "deprecated": x.get("deprecated", False),
                         "deprecated_reason": self.parse_deprecation_reason(
@@ -190,6 +198,7 @@ class Generator:
                     "return_type": self.parse_return_type(
                         self.get_return_type(procedure)
                     ),
+                    "return_is_nullable": is_nullable(procedure.get("return_type")),
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
@@ -204,6 +213,7 @@ class Generator:
                 if property_name not in context["properties"]:
                     context["properties"][property_name] = {
                         "type": self.parse_return_type(self.get_return_type(procedure)),
+                        "return_is_nullable": is_nullable(procedure.get("return_type")),
                         "getter": None,
                         "setter": None,
                         "documentation": self.parse_documentation(
@@ -226,6 +236,7 @@ class Generator:
                 if property_name not in context["properties"]:
                     context["properties"][property_name] = {
                         "type": params[0]["type"],
+                        "return_is_nullable": params[0]["nullable"],
                         "getter": None,
                         "setter": None,
                         "documentation": self.parse_documentation(
@@ -254,6 +265,7 @@ class Generator:
                     "return_type": self.parse_return_type(
                         self.get_return_type(procedure)
                     ),
+                    "return_is_nullable": is_nullable(procedure.get("return_type")),
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
@@ -275,6 +287,7 @@ class Generator:
                     "return_type": self.parse_return_type(
                         self.get_return_type(procedure)
                     ),
+                    "return_is_nullable": is_nullable(procedure.get("return_type")),
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
@@ -291,6 +304,7 @@ class Generator:
                 if property_name not in cls["properties"]:
                     cls["properties"][property_name] = {
                         "type": self.parse_return_type(self.get_return_type(procedure)),
+                        "return_is_nullable": is_nullable(procedure.get("return_type")),
                         "getter": None,
                         "setter": None,
                         "documentation": self.parse_documentation(
@@ -315,6 +329,7 @@ class Generator:
                     params = self.generate_context_parameters(name, procedure)
                     cls["properties"][property_name] = {
                         "type": params[1]["type"],
+                        "return_is_nullable": params[1]["nullable"],
                         "getter": None,
                         "setter": None,
                         "documentation": self.parse_documentation(

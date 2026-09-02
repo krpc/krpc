@@ -41,6 +41,12 @@ def as_type(types, type_info):
     return types.as_type(as_protobuf_type(type_info))
 
 
+def is_nullable(type_info):
+    """Whether the position described by the given type specification can hold null.
+    A procedure that returns nothing gives no specification"""
+    return type_info is not None and type_info.get("nullable", False)
+
+
 def as_protobuf_type(type_info):
     """Convert a type parsed from a JSON service definitions file
     into a protocol buffer type"""
