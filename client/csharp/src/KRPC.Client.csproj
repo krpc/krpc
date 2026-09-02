@@ -30,6 +30,7 @@
     <Compile Include="..\InternalsVisibleTo.cs">
       <Link>InternalsVisibleTo.cs</Link>
     </Compile>
+    <Compile Include="Attributes\KRPCNullableAttribute.cs" />
     <Compile Include="Attributes\KRPCStructAttribute.cs" />
     <Compile Include="Attributes\RPCAttribute.cs" />
     <Compile Include="Connection.cs" />
@@ -39,12 +40,14 @@
     <Compile Include="ExpressionUtils.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="MessageReader.cs" />
+    <Compile Include="ProcedureSpecs.cs" />
     <Compile Include="RPCException.cs" />
     <Compile Include="RemoteObject.cs" />
     <Compile Include="Stream.cs" />
     <Compile Include="StreamImpl.cs" />
     <Compile Include="StreamManager.cs" />
     <Compile Include="TypeInfo.cs" />
+    <Compile Include="TypeSpec.cs" />
     <Compile Include="UnixEndPoint.cs" />
     <Compile Include="ValueUtils.cs" />
     <Compile Include="$(bazel-bin)\protobuf\KRPC.cs">

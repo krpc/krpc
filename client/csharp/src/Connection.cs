@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
 using Google.Protobuf;
 using KRPC.Client.Attributes;
@@ -239,11 +240,12 @@ namespace KRPC.Client
         {
             Expression rpc;
             var call = GetCall (expression, out rpc);
+            var returnSpec = ProcedureSpecs.ReturnSpec (GetRPCAttribute (rpc), rpc.Type);
             if (ExpressionUtils.IsIdentityWrapper (expression.Body, rpc))
-                return new Stream<TResult> (this, call);
+                return new Stream<TResult> (this, call, returnSpec);
 
             var convert = ExpressionUtils.CompileTransform<TResult> (expression.Body, rpc);
-            return new Stream<TResult> (this, call, rpc.Type, convert,
+            return new Stream<TResult> (this, call, returnSpec, convert,
                 ExpressionUtils.FoldedFactor (expression.Body, rpc));
         }
 
@@ -371,15 +373,35 @@ namespace KRPC.Client
             throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
         }
 
+        /// <summary>
+        /// The RPC attribute the stub in the expression carries, which names the procedure and
+        /// the class holding the specs of its values.
+        /// </summary>
+        static RPCAttribute GetRPCAttribute (Expression rpc)
+        {
+            var methodCall = rpc as MethodCallExpression;
+            if (methodCall != null)
+                return GetRPCAttribute (methodCall.Method, "Method called");
+            var member = rpc as MemberExpression;
+            if (member != null)
+                return GetRPCAttribute (member.Member, "Property accessed");
+            throw new ArgumentException (
+                "Invalid expression. Must consist of a method call or property accessor only.");
+        }
+
+        static RPCAttribute GetRPCAttribute (MemberInfo member, string description)
+        {
+            object[] attributes = member.GetCustomAttributes (typeof(RPCAttribute), false);
+            if (attributes.Length != 1)
+                throw new ArgumentException (
+                    "Invalid expression. " + description + " must be backed by a RPC.");
+            return (RPCAttribute)attributes [0];
+        }
+
         internal static ProcedureCall GetCall (MethodCallExpression expression)
         {
             var method = expression.Method;
-
-            // Get the RPCAttribute with service and procedure names
-            object[] attributes = method.GetCustomAttributes (typeof(RPCAttribute), false);
-            if (attributes.Length != 1)
-                throw new ArgumentException ("Invalid expression. Method called must be backed by a RPC.");
-            var attribute = (RPCAttribute)attributes [0];
+            var attribute = GetRPCAttribute (method, "Method called");
 
             // Construct the encoded arguments
             var arguments = new List<ByteString> ();
@@ -394,7 +416,9 @@ namespace KRPC.Client
             // Include class instance argument for class methods
             if (ExpressionUtils.IsAClassMethod (expression)) {
                 var instanceType = method.DeclaringType;
-                arguments.Add (Encoder.Encode (instanceValue, instanceType));
+                arguments.Add (Encoder.Encode (
+                    instanceValue,
+                    ProcedureSpecs.ParameterSpec (attribute, arguments.Count, instanceType)));
             }
 
             // Include arguments from the expression
@@ -408,8 +432,10 @@ namespace KRPC.Client
                 var argumentExpr = Expression.Lambda<Func<object>> (Expression.Convert (argument, typeof(object)));
                 var value = argumentExpr.Compile () ();
                 var type = method.GetParameters () [position].ParameterType;
-                var encodedValue = Encoder.Encode (value, type);
-                arguments.Add (encodedValue);
+                // The arguments are built in the order the procedure declares its parameters,
+                // so the one being added is at the position the count has reached
+                var spec = ProcedureSpecs.ParameterSpec (attribute, arguments.Count, type);
+                arguments.Add (Encoder.Encode (value, spec));
                 position++;
             }
 
@@ -419,12 +445,7 @@ namespace KRPC.Client
         internal static ProcedureCall GetCall (MemberExpression expression)
         {
             var member = expression.Member;
-
-            // Get the RPCAttribute with service and procedure names
-            object[] attributes = member.GetCustomAttributes (typeof(RPCAttribute), false);
-            if (attributes.Length != 1)
-                throw new ArgumentException ("Invalid expression. Property accessed must be backed by a RPC.");
-            var attribute = (RPCAttribute)attributes [0];
+            var attribute = GetRPCAttribute (member, "Property accessed");
 
             // Construct the encoded arguments
             var arguments = new List<ByteString> ();
@@ -439,7 +460,9 @@ namespace KRPC.Client
             // If it's a class property, pass the class instance as an argument
             if (ExpressionUtils.IsAClassProperty (expression)) {
                 var instanceType = member.DeclaringType;
-                arguments.Add (Encoder.Encode (instanceValue, instanceType));
+                arguments.Add (Encoder.Encode (
+                    instanceValue,
+                    ProcedureSpecs.ParameterSpec (attribute, arguments.Count, instanceType)));
             }
 
             return GetCall (attribute.Service, attribute.Procedure, arguments);

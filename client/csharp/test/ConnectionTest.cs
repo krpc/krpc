@@ -402,6 +402,84 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void NullableListElements ()
+        {
+            var ints = new List<int?> { 1, null, 3 };
+            CollectionAssert.AreEqual (
+                ints, Connection.TestService ().EchoListOfNullableInts (ints));
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            var objects = new List<TestClass> { obj, null };
+            CollectionAssert.AreEqual (
+                objects, Connection.TestService ().EchoListOfNullableObjects (objects));
+        }
+
+        [Test]
+        public void NullableDictionaryValues ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            var value = new Dictionary<string,TestClass> { { "a", obj }, { "b", null } };
+            CollectionAssert.AreEqual (
+                value, Connection.TestService ().EchoDictionaryOfNullableObjects (value));
+        }
+
+        [Test]
+        public void NullableTupleItem ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            Assert.AreEqual (
+                Tuple.Create (1, obj),
+                Connection.TestService ().EchoTupleWithANullableObject (Tuple.Create (1, obj)));
+            Assert.AreEqual (
+                Tuple.Create (1, (TestClass)null),
+                Connection.TestService ().EchoTupleWithANullableObject (
+                    Tuple.Create (1, (TestClass)null)));
+        }
+
+        [Test]
+        public void NullableNestedListElements ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            var value = new List<IList<TestClass>> {
+                new List<TestClass> { obj, null }, new List<TestClass> ()
+            };
+            var result = Connection.TestService ().EchoNestedListOfNullableObjects (value);
+            Assert.AreEqual (2, result.Count);
+            CollectionAssert.AreEqual (value [0], result [0]);
+            Assert.AreEqual (0, result [1].Count);
+        }
+
+        [Test]
+        public void NullableStructFields ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            var value = new TestNullableStruct (1, 2, TestEnum.ValueB, "jeb", obj);
+            Assert.AreEqual (value, Connection.TestService ().NullableStructEcho (value));
+        }
+
+        [Test]
+        public void NullStructFields ()
+        {
+            var value = new TestNullableStruct (1, null, null, null, null);
+            var result = Connection.TestService ().NullableStructEcho (value);
+            Assert.AreEqual (1, result.IntField);
+            Assert.IsNull (result.NullableIntField);
+            Assert.IsNull (result.NullableEnumField);
+            Assert.IsNull (result.NullableStringField);
+            Assert.IsNull (result.NullableObjectField);
+        }
+
+        [Test]
+        public void NullableElementOfAStructField ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            var value = new TestNestedNullableStruct (
+                new List<TestClass> { obj, null }, "jeb");
+            var result = Connection.TestService ().EchoNestedNullableStruct (value);
+            CollectionAssert.AreEqual (value.ListField, result.ListField);
+            Assert.AreEqual ("jeb", result.StringField);
+        }
+
+        [Test]
         public void StructDefaultValue ()
         {
             var result = Connection.TestService ().StructDefault ();

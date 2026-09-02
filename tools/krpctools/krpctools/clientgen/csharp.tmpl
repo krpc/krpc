@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 {% macro args(parameters) %}
 var _args = new ByteString[] {
 {% for x in parameters %}
-    global::KRPC.Client.Encoder.Encode ({{x.name_value}}, typeof({{x.type}})){% if not loop.last %},{% endif %}
+    global::KRPC.Client.Encoder.Encode ({{x.name_value}}, {{x.spec}}){% if not loop.last %},{% endif %}
 
 {% endfor %}
 };
@@ -13,12 +13,12 @@ var _args = new ByteString[] {
 {% macro call(service, procedure, has_return, has_args, is_static=False) %}
 {% if has_return %}var _result = {% endif %}connection.Invoke ("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
-{% macro return(type, is_nullable=False) %}
+{% macro return(type, spec, is_nullable=False) %}
 {% if is_nullable %}
 if (_result.IsNull)
     return null;
 {% endif %}
-return ({{type}})global::KRPC.Client.Encoder.Decode (_result.Value, typeof({{type}}), connection);
+return ({{type}})global::KRPC.Client.Encoder.Decode (_result.Value, {{spec}}, connection);
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_value' in x %} = {{x.default_value}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
@@ -49,6 +49,49 @@ namespace KRPC.Client.Services.{{ service_name }}
         public static global::KRPC.Client.Services.{{ service_name }}.Service {{ service_name }} (this global::KRPC.Client.IConnection connection)
         {
             return new global::KRPC.Client.Services.{{ service_name }}.Service (connection);
+        }
+    }
+
+    // The types the stubs encode and decode values of, built once each. A spec names the
+    // positions inside a value that can hold null, which a C# type cannot always say.
+    static class TypeSpecs
+    {
+        {% if type_specs | length > 0 %}
+        {% for typ in type_specs %}
+        internal static readonly global::KRPC.Client.TypeSpec {{ typ.name }} = {{ typ.spec }};
+        {% endfor %}
+
+        {% endif %}
+        // The procedures whose values a C# type cannot describe on its own, which a call
+        // built from an expression looks up by name
+        static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> returnSpecs =
+            new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> {
+            {% for procedure in procedure_specs %}
+            {% if procedure.return_spec %}
+                { "{{ procedure.name }}", {{ procedure.return_spec }} },
+            {% endif %}
+            {% endfor %}
+            };
+
+        static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> parameterSpecs =
+            new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> {
+            {% for procedure in procedure_specs %}
+            {% if procedure.parameter_specs | length > 0 %}
+                { "{{ procedure.name }}", new global::KRPC.Client.TypeSpec[] { {{ procedure.parameter_specs | join(', ') }} } },
+            {% endif %}
+            {% endfor %}
+            };
+
+        public static global::KRPC.Client.TypeSpec ReturnSpec (string procedure)
+        {
+            global::KRPC.Client.TypeSpec spec;
+            return returnSpecs.TryGetValue (procedure, out spec) ? spec : null;
+        }
+
+        public static global::KRPC.Client.TypeSpec[] ParameterSpecs (string procedure)
+        {
+            global::KRPC.Client.TypeSpec[] specs;
+            return parameterSpecs.TryGetValue (procedure, out specs) ? specs : null;
         }
     }
 
@@ -90,13 +133,13 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% endif %}
 {% if procedure.deprecated %}        [global::System.Obsolete{% if procedure.deprecated_reason %} ("{{ procedure.deprecated_reason }}"){% endif %}]
 {% endif %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ procedure_name }}")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ procedure_name }}", typeof(TypeSpecs))]
         public {{ procedure.return_type }} {{ procedure_name }} ({{ sig_parameters(procedure.parameters) }})
         {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=12) }}
 {% endif %}
 {{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0) | indent(width=12) }}
-{% if procedure.return_type != 'void' %}{{ return(procedure.return_type, procedure.return_is_nullable) | indent(width=12) }}
+{% if procedure.return_type != 'void' %}{{ return(procedure.return_type, procedure.return_spec, procedure.return_is_nullable) | indent(width=12) }}
 {% endif %}
         }
         {% endfor %}
@@ -107,18 +150,18 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% if property.deprecated %}        [global::System.Obsolete{% if property.deprecated_reason %} ("{{ property.deprecated_reason }}"){% endif %}]
 {% endif %}
         {% if property.getter %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}", typeof(TypeSpecs))]
         {% endif %}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {
 {{ call(service_name, property.getter.remote_name, true, false) | indent(width=16) }}
-{{ return(property.type, property.return_is_nullable) | indent(width=16) }}
+{{ return(property.type, property.return_spec, property.return_is_nullable) | indent(width=16) }}
             }
         {% endif %}
         {% if property.setter %}
             set {
-{{ args([{'name': 'value', 'name_value': 'value', 'type': property.type}]) | indent(width=16) }}
+{{ args([{'name': 'value', 'name_value': 'value', 'type': property.type, 'spec': property.return_spec}]) | indent(width=16) }}
 {{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
             }
         {% endif %}
@@ -168,6 +211,8 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% if field.documentation %}{{ field.documentation | indent(width=8) }}
 {% endif %}
 {% if field.deprecated %}        [global::System.Obsolete{% if field.deprecated_reason %} ("{{ field.deprecated_reason }}"){% endif %}]
+{% endif %}
+{% if field.attribute is defined %}        [{{ field.attribute }}]
 {% endif %}
         public {{ field.type }} {{ field.name }} { get; private set; }
         {% endfor %}
@@ -326,12 +371,12 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% endif %}
 {% if method.deprecated %}        [global::System.Obsolete{% if method.deprecated_reason %} ("{{ method.deprecated_reason }}"){% endif %}]
 {% endif %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}", typeof(TypeSpecs))]
         public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
         {
-{{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name}] + method.parameters) | indent(width=12) }}
+{{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name, 'spec': cls.spec}] + method.parameters) | indent(width=12) }}
 {{ call(service_name, method.remote_name, method.return_type != 'void', true) | indent(width=12) }}
-{% if method.return_type != 'void' %}{{ return(method.return_type, method.return_is_nullable) | indent(width=12) }}
+{% if method.return_type != 'void' %}{{ return(method.return_type, method.return_spec, method.return_is_nullable) | indent(width=12) }}
 {% endif %}
         }
         {% endfor %}
@@ -342,7 +387,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         /// <param name="connection">A connection object.</param>
 {% if method.deprecated %}        [global::System.Obsolete{% if method.deprecated_reason %} ("{{ method.deprecated_reason }}"){% endif %}]
 {% endif %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ method.remote_name }}", typeof(TypeSpecs))]
         public static {{ method.return_type }} {{ method_name }} ({{ sig_parameters([{'type': 'IConnection', 'name': 'connection'}] + method.parameters) }})
         {
             if (connection == null)
@@ -350,7 +395,7 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}
 {{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true) | indent(width=12) }}
-{% if method.return_type != 'void' %}{{ return(method.return_type, method.return_is_nullable) | indent(width=12) }}
+{% if method.return_type != 'void' %}{{ return(method.return_type, method.return_spec, method.return_is_nullable) | indent(width=12) }}
 {% endif %}
         }
         {% endfor %}
@@ -361,19 +406,19 @@ namespace KRPC.Client.Services.{{ service_name }}
 {% if property.deprecated %}        [global::System.Obsolete{% if property.deprecated_reason %} ("{{ property.deprecated_reason }}"){% endif %}]
 {% endif %}
         {% if property.getter %}
-        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("{{ service_name }}", "{{ property.getter.remote_name }}", typeof(TypeSpecs))]
         {% endif %}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {
-{{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name }]) | indent(width=16) }}
+{{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name, 'spec': cls.spec }]) | indent(width=16) }}
 {{ call(service_name, property.getter.remote_name, true, true) | indent(width=16) }}
-{{ return(property.type, property.return_is_nullable) | indent(width=16) }}
+{{ return(property.type, property.return_spec, property.return_is_nullable) | indent(width=16) }}
             }
         {% endif %}
         {% if property.setter %}
             set {
-{{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name }, {'name': 'value', 'name_value': 'value', 'type': property.type}]) | indent(width=16) }}
+{{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name, 'spec': cls.spec }, {'name': 'value', 'name_value': 'value', 'type': property.type, 'spec': property.return_spec}]) | indent(width=16) }}
 {{ call(service_name, property.setter.remote_name, false, true) | indent(width=16) }}
             }
         {% endif %}

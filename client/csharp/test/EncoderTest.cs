@@ -14,7 +14,7 @@ namespace KRPC.Client.Test
             var call = new Schema.KRPC.ProcedureCall ();
             call.Service = "ServiceName";
             call.Procedure = "ProcedureName";
-            var data = Encoder.Encode (call, typeof(Schema.KRPC.ProcedureCall));
+            var data = Encoder.Encode (call, TypeSpec.For (typeof(Schema.KRPC.ProcedureCall)));
             const string expected = "0a0b536572766963654e616d65120d50726f6365647572654e616d65";
             Assert.AreEqual (expected, data.ToHexString ());
         }
@@ -22,14 +22,14 @@ namespace KRPC.Client.Test
         [Test]
         public void EncodeValue ()
         {
-            var data = Encoder.Encode (300u, typeof(uint));
+            var data = Encoder.Encode (300u, TypeSpec.For (typeof(uint)));
             Assert.AreEqual ("ac02", data.ToHexString ());
         }
 
         [Test]
         public void EncodeUnicodeString ()
         {
-            var data = Encoder.Encode ("\u2122", typeof(string));
+            var data = Encoder.Encode ("\u2122", TypeSpec.For (typeof(string)));
             Assert.AreEqual ("03e284a2", data.ToHexString ());
         }
 
@@ -40,7 +40,7 @@ namespace KRPC.Client.Test
             var obj = new Services.SpaceCenter.Vessel (mockClient.Object, 300);
             Assert.AreEqual (300, obj.id);
             Assert.AreSame (mockClient.Object, obj.connection);
-            var data = Encoder.Encode (obj, typeof(Services.SpaceCenter.Vessel));
+            var data = Encoder.Encode (obj, TypeSpec.For (typeof(Services.SpaceCenter.Vessel)));
             Assert.AreEqual ("ac02", data.ToHexString ());
         }
 
@@ -49,10 +49,10 @@ namespace KRPC.Client.Test
         {
             // A null value is signaled out-of-band by is_null; the encoder returns null to
             // indicate this, regardless of the type.
-            Assert.IsNull (Encoder.Encode (null, typeof(Services.SpaceCenter.Vessel)));
-            Assert.IsNull (Encoder.Encode (null, typeof(string)));
-            Assert.IsNull (Encoder.Encode (null, typeof(int?)));
-            Assert.IsNull (Encoder.Encode (null, typeof(IList<int>)));
+            Assert.IsNull (Encoder.Encode (null, TypeSpec.For (typeof(Services.SpaceCenter.Vessel))));
+            Assert.IsNull (Encoder.Encode (null, TypeSpec.For (typeof(string))));
+            Assert.IsNull (Encoder.Encode (null, TypeSpec.For (typeof(int?))));
+            Assert.IsNull (Encoder.Encode (null, TypeSpec.For (typeof(IList<int>))));
         }
 
         [Test]
@@ -60,9 +60,9 @@ namespace KRPC.Client.Test
         {
             // A Nullable<T> value encodes and decodes as its underlying type.
             int? value = 300;
-            var data = Encoder.Encode (value, typeof(int?));
+            var data = Encoder.Encode (value, TypeSpec.For (typeof(int?)));
             Assert.AreEqual ("d804", data.ToHexString ());
-            var result = (int?)Encoder.Decode (data, typeof(int?), null);
+            var result = (int?)Encoder.Decode (data, TypeSpec.For (typeof(int?)), null);
             Assert.AreEqual (300, result);
         }
 
@@ -70,7 +70,7 @@ namespace KRPC.Client.Test
         public void DecodeMessage ()
         {
             var message = "0a0b536572766963654e616d65120d50726f6365647572654e616d65".ToByteString ();
-            var call = (Schema.KRPC.ProcedureCall)Encoder.Decode (message, typeof(Schema.KRPC.ProcedureCall), null);
+            var call = (Schema.KRPC.ProcedureCall)Encoder.Decode (message, TypeSpec.For (typeof(Schema.KRPC.ProcedureCall)), null);
             Assert.AreEqual ("ServiceName", call.Service);
             Assert.AreEqual ("ProcedureName", call.Procedure);
         }
@@ -78,14 +78,14 @@ namespace KRPC.Client.Test
         [Test]
         public void DecodeValue ()
         {
-            var value = (uint)Encoder.Decode ("ac02".ToByteString (), typeof(uint), null);
+            var value = (uint)Encoder.Decode ("ac02".ToByteString (), TypeSpec.For (typeof(uint)), null);
             Assert.AreEqual (300, value);
         }
 
         [Test]
         public void DecodeUnicodeString ()
         {
-            var value = (string)Encoder.Decode ("03e284a2".ToByteString (), typeof(string), null);
+            var value = (string)Encoder.Decode ("03e284a2".ToByteString (), TypeSpec.For (typeof(string)), null);
             Assert.AreEqual ("\u2122", value);
         }
 
@@ -93,7 +93,7 @@ namespace KRPC.Client.Test
         public void DecodeRemoteObject ()
         {
             var mockClient = new Mock<IConnection> ();
-            var value = (Services.SpaceCenter.Vessel)Encoder.Decode ("ac02".ToByteString (), typeof(Services.SpaceCenter.Vessel), mockClient.Object);
+            var value = (Services.SpaceCenter.Vessel)Encoder.Decode ("ac02".ToByteString (), TypeSpec.For (typeof(Services.SpaceCenter.Vessel)), mockClient.Object);
             Assert.AreEqual (300, value.id);
             Assert.AreSame (mockClient.Object, value.connection);
         }
@@ -106,9 +106,9 @@ namespace KRPC.Client.Test
         [TestCase (float.NaN, "0000c0ff")]
         public void SingleValue (float value, string data)
         {
-            var encodeResult = Encoder.Encode (value, typeof(float));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(float)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (float)Encoder.Decode (data.ToByteString (), typeof(float), null);
+            var decodeResult = (float)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(float)), null);
             Assert.AreEqual (value, decodeResult);
         }
 
@@ -120,9 +120,9 @@ namespace KRPC.Client.Test
         [TestCase (double.NaN, "000000000000f8ff")]
         public void DoubleValue (double value, string data)
         {
-            var encodeResult = Encoder.Encode (value, typeof(double));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(double)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (double)Encoder.Decode (data.ToByteString (), typeof(double), null);
+            var decodeResult = (double)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(double)), null);
             Assert.AreEqual (value, decodeResult);
         }
 
@@ -135,9 +135,9 @@ namespace KRPC.Client.Test
         [TestCase (-2147483648, "ffffffff0f")]
         public void Int32Value (int value, string data)
         {
-            var encodeResult = Encoder.Encode (value, typeof(int));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(int)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (int)Encoder.Decode (data.ToByteString (), typeof(int), null);
+            var decodeResult = (int)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(int)), null);
             Assert.AreEqual (value, decodeResult);
         }
 
@@ -149,9 +149,9 @@ namespace KRPC.Client.Test
         [TestCase (-33, "41")]
         public void Int64Value (long value, string data)
         {
-            var encodeResult = Encoder.Encode (value, typeof(long));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(long)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (long)Encoder.Decode (data.ToByteString (), typeof(long), null);
+            var decodeResult = (long)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(long)), null);
             Assert.AreEqual (value, decodeResult);
         }
 
@@ -162,9 +162,9 @@ namespace KRPC.Client.Test
         [TestCase (uint.MaxValue, "ffffffff0f")]
         public void UInt32Value (uint value, string data)
         {
-            var encodeResult = Encoder.Encode (value, typeof(uint));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(uint)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (uint)Encoder.Decode (data.ToByteString (), typeof(uint), null);
+            var decodeResult = (uint)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(uint)), null);
             Assert.AreEqual (value, decodeResult);
         }
 
@@ -172,7 +172,7 @@ namespace KRPC.Client.Test
         [TestCase (-849)]
         public void InvalidUInt32Value (int value)
         {
-            Assert.Throws<ArgumentException> (() => Encoder.Encode (value, typeof(uint)));
+            Assert.Throws<ArgumentException> (() => Encoder.Encode (value, TypeSpec.For (typeof(uint))));
         }
 
         [TestCase (0u, "00")]
@@ -183,9 +183,9 @@ namespace KRPC.Client.Test
         [TestCase (ulong.MaxValue, "ffffffffffffffffff01")]
         public void UInt64Value (ulong value, string data)
         {
-            var encodeResult = Encoder.Encode (value, typeof(ulong));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(ulong)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (ulong)Encoder.Decode (data.ToByteString (), typeof(ulong), null);
+            var decodeResult = (ulong)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(ulong)), null);
             Assert.AreEqual (value, decodeResult);
         }
 
@@ -193,16 +193,16 @@ namespace KRPC.Client.Test
         [TestCase (-849)]
         public void InvalidUInt64Value (int value)
         {
-            Assert.Throws<ArgumentException> (() => Encoder.Encode (value, typeof(ulong)));
+            Assert.Throws<ArgumentException> (() => Encoder.Encode (value, TypeSpec.For (typeof(ulong))));
         }
 
         [TestCase (true, "01")]
         [TestCase (false, "00")]
         public void BooleanValue (bool value, string data)
         {
-            var encodeResult = Encoder.Encode (value, typeof(bool));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(bool)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (bool)Encoder.Decode (data.ToByteString (), typeof(bool), null);
+            var decodeResult = (bool)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(bool)), null);
             Assert.AreEqual (value, decodeResult);
         }
 
@@ -213,9 +213,9 @@ namespace KRPC.Client.Test
         [TestCase ("Mystery Goo\u2122 Containment Unit", "1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974")]
         public void StringValue (string value, string data)
         {
-            var encodeResult = Encoder.Encode (value, typeof(string));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(string)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (string)Encoder.Decode (data.ToByteString (), typeof(string), null);
+            var decodeResult = (string)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(string)), null);
             Assert.AreEqual (value, decodeResult);
         }
 
@@ -224,9 +224,9 @@ namespace KRPC.Client.Test
         [TestCase ("deadbeef", "04deadbeef")]
         public void BytesValue (string value, string data)
         {
-            var encodeResult = Encoder.Encode (value.ToByteString ().ToByteArray (), typeof(byte[]));
+            var encodeResult = Encoder.Encode (value.ToByteString ().ToByteArray (), TypeSpec.For (typeof(byte[])));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (byte[])Encoder.Decode (data.ToByteString (), typeof(byte[]), null);
+            var decodeResult = (byte[])Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(byte[])), null);
             Assert.AreEqual (value.ToByteString (), decodeResult);
         }
 
@@ -236,9 +236,9 @@ namespace KRPC.Client.Test
         public void ListCollection (IList<uint> values, string data)
         {
             IList<uint> value = new List<uint> (values);
-            var encodeResult = Encoder.Encode (value, typeof(IList<uint>));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(IList<uint>)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (IList<uint>)Encoder.Decode (data.ToByteString (), typeof(IList<uint>), null);
+            var decodeResult = (IList<uint>)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(IList<uint>)), null);
             CollectionAssert.AreEqual (value, decodeResult);
         }
 
@@ -250,9 +250,9 @@ namespace KRPC.Client.Test
             IDictionary<string,uint> value = new Dictionary<string,uint> ();
             for (int i = 0; i < keys.Count; i++)
                 value [keys [i]] = values [i];
-            var encodeResult = Encoder.Encode (value, typeof(IDictionary<string,uint>));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(IDictionary<string,uint>)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (IDictionary<string,uint>)Encoder.Decode (data.ToByteString (), typeof(IDictionary<string,uint>), null);
+            var decodeResult = (IDictionary<string,uint>)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(IDictionary<string,uint>)), null);
             CollectionAssert.AreEqual (value, decodeResult);
         }
 
@@ -262,9 +262,9 @@ namespace KRPC.Client.Test
         public void SetCollection (IList<uint> values, string data)
         {
             ISet<uint> value = new HashSet<uint> (values);
-            var encodeResult = Encoder.Encode (value, typeof(ISet<uint>));
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (typeof(ISet<uint>)));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (ISet<uint>)Encoder.Decode (data.ToByteString (), typeof(ISet<uint>), null);
+            var decodeResult = (ISet<uint>)Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(ISet<uint>)), null);
             CollectionAssert.AreEqual (value, decodeResult);
         }
 
@@ -273,9 +273,9 @@ namespace KRPC.Client.Test
         {
             var value = new Tuple<uint> (1);
             const string data = "0a0101";
-            var encodeResult = Encoder.Encode (value, value.GetType ());
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (value.GetType ()));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (Tuple<uint>)Encoder.Decode (data.ToByteString (), value.GetType (), null);
+            var decodeResult = (Tuple<uint>)Encoder.Decode (data.ToByteString (), TypeSpec.For (value.GetType ()), null);
             Assert.AreEqual (value, decodeResult);
         }
 
@@ -284,10 +284,117 @@ namespace KRPC.Client.Test
         {
             var value = new Tuple<uint,string,bool> (1, "jeb", false);
             const string data = "0a01010a04036a65620a0100";
-            var encodeResult = Encoder.Encode (value, value.GetType ());
+            var encodeResult = Encoder.Encode (value, TypeSpec.For (value.GetType ()));
             Assert.AreEqual (data, encodeResult.ToHexString ());
-            var decodeResult = (Tuple<uint,string,bool>)Encoder.Decode (data.ToByteString (), value.GetType (), null);
+            var decodeResult = (Tuple<uint,string,bool>)Encoder.Decode (data.ToByteString (), TypeSpec.For (value.GetType ()), null);
             Assert.AreEqual (value, decodeResult);
+        }
+
+        // Check that the value encodes to the given data, and that the data decodes back to it
+        static void CheckValue (object value, string data, TypeSpec spec)
+        {
+            Assert.AreEqual (data, Encoder.Encode (value, spec).ToHexString ());
+            Assert.AreEqual (value, Encoder.Decode (data.ToByteString (), spec, null));
+        }
+
+        [Test]
+        public void NullableSpecSharesItsType ()
+        {
+            // A nullable position holds a value of the type it holds anywhere else, so the
+            // nullable form of a type is that type with the position marked
+            Assert.AreEqual (typeof(string), TypeSpec.Null (typeof(string)).Type);
+            Assert.AreEqual (typeof(uint), TypeSpec.For (typeof(uint?)).Type);
+            Assert.AreEqual (
+                typeof(Services.TestService.TestEnum),
+                TypeSpec.For (typeof(Services.TestService.TestEnum?)).Type);
+            Assert.IsTrue (TypeSpec.For (typeof(uint?)).Nullable);
+            Assert.IsFalse (TypeSpec.For (typeof(uint)).Nullable);
+        }
+
+        [Test]
+        public void NullableListElements ()
+        {
+            var spec = TypeSpec.For (typeof(IList<uint?>));
+            CheckValue (new List<uint?> (), string.Empty, spec);
+            CheckValue (new List<uint?> { null }, "0a0100", spec);
+            // A zero is a value like any other, and is told apart from a null by the presence
+            // bool
+            CheckValue (new List<uint?> { 0 }, "0a020100", spec);
+            CheckValue (new List<uint?> { 1, null, 3 }, "0a0201010a01000a020103", spec);
+        }
+
+        [Test]
+        public void NullableDictionaryValues ()
+        {
+            CheckValue (
+                new Dictionary<string,uint?> { { string.Empty, null } },
+                "0a060a0100120100", TypeSpec.For (typeof(IDictionary<string,uint?>)));
+        }
+
+        [Test]
+        public void NullableTupleItem ()
+        {
+            var spec = new TypeSpec (
+                typeof(Tuple<uint,string>),
+                TypeSpec.For (typeof(uint)), TypeSpec.Null (typeof(string)));
+            CheckValue (new Tuple<uint,string> (1, "jeb"), "0a01010a0501036a6562", spec);
+            CheckValue (new Tuple<uint,string> (1, null), "0a01010a0100", spec);
+        }
+
+        [Test]
+        public void NullableCollectionValues ()
+        {
+            // A nullable position holding a collection carries the presence bool ahead of the
+            // collection's own encoding
+            var spec = new TypeSpec (
+                typeof(IList<IList<uint>>), TypeSpec.Null (typeof(IList<uint>)));
+            CheckValue (new List<IList<uint>> { null }, "0a0100", spec);
+            CheckValue (new List<IList<uint>> { new List<uint> () }, "0a0101", spec);
+            CheckValue (new List<IList<uint>> { new List<uint> { 1 } }, "0a04010a0101", spec);
+        }
+
+        [Test]
+        public void NullableStructFields ()
+        {
+            // Each nullable field carries its own presence bool, and a null field is that
+            // bool alone
+            CheckValue (
+                new Services.TestService.TestNullableStruct (1, 2, null, null, null),
+                "0a01020a0201040a01000a01000a0100",
+                TypeSpec.For (typeof(Services.TestService.TestNullableStruct)));
+        }
+
+        [Test]
+        public void NullabilityIsReadAtEveryPosition ()
+        {
+            // A service declares no nullable set element and no nullable dictionary key. The
+            // client reads what the type says at every position rather than naming the ones a
+            // value can be null at
+            CheckValue (
+                new HashSet<uint?> { null }, "0a0100", TypeSpec.For (typeof(ISet<uint?>)));
+            // A C# dictionary rejects a null key, so a key can only be read back where the
+            // presence bool says it is there
+            CheckValue (
+                new Dictionary<string,uint> { { "foo", 1 } }, "0a0a0a050103666f6f120101",
+                new TypeSpec (
+                    typeof(IDictionary<string,uint>), TypeSpec.Null (typeof(string))));
+        }
+
+        [Test]
+        public void NullAtANonNullablePosition ()
+        {
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Encode (
+                    new List<string> { null }, TypeSpec.For (typeof(IList<string>))));
+        }
+
+        [Test]
+        public void NullableValueWithoutPresenceBool ()
+        {
+            // A list holding one item of zero length
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (
+                    "0a00".ToByteString (), TypeSpec.For (typeof(IList<uint?>)), null));
         }
 
         [Test]
@@ -297,7 +404,7 @@ namespace KRPC.Client.Test
             // for one this client has more fields for
             const string data = "0a0101";
             Assert.Throws<ArgumentException> (
-                () => Encoder.Decode (data.ToByteString (), typeof(Tuple<uint,string>), null));
+                () => Encoder.Decode (data.ToByteString (), TypeSpec.For (typeof(Tuple<uint,string>)), null));
         }
     }
 }

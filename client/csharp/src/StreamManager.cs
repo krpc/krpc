@@ -53,7 +53,7 @@ namespace KRPC.Client
                 throw new ObjectDisposedException (GetType ().Name);
         }
 
-        public StreamImpl AddStream (System.Type returnType, ProcedureCall call)
+        public StreamImpl AddStream (TypeSpec returnType, ProcedureCall call)
         {
             CheckDisposed ();
             var id = connection.KRPC ().AddStream (call, false).Id;
@@ -64,7 +64,7 @@ namespace KRPC.Client
             }
         }
 
-        public StreamImpl GetStream (System.Type returnType, ulong id)
+        public StreamImpl GetStream (TypeSpec returnType, ulong id)
         {
             CheckDisposed ();
             lock (updateLock) {

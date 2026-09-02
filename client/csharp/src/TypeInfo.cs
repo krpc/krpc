@@ -67,27 +67,32 @@ namespace KRPC.Client
             } else if (type.IsDefined (typeof(KRPCStructAttribute), false)) {
                 Kind = TypeKind.Struct;
                 var fields = StructFields (type);
-                Arguments = Array.ConvertAll (fields, field => field.PropertyType);
+                var fieldTypes = Array.ConvertAll (fields, field => field.PropertyType);
+                Types = Array.ConvertAll (fields, FieldSpec);
                 Items = StructItems (type, fields);
-                NewTuple = StructConstructor (type, Arguments);
+                NewTuple = StructConstructor (type, fieldTypes);
             } else if (IsATupleType (type)) {
                 Kind = TypeKind.Tuple;
-                Arguments = type.GetGenericArguments ();
-                Items = TupleItems (Arguments);
-                NewTuple = TupleConstructor (Arguments);
+                var itemTypes = type.GetGenericArguments ();
+                Types = Array.ConvertAll (itemTypes, TypeSpec.For);
+                Items = TupleItems (itemTypes);
+                NewTuple = TupleConstructor (itemTypes);
             } else if (IsAGenericType (type, typeof(IList<>))) {
                 Kind = TypeKind.List;
-                Arguments = type.GetGenericArguments ();
-                New = Constructor (typeof(List<>).MakeGenericType (Arguments));
+                var itemTypes = type.GetGenericArguments ();
+                Types = Array.ConvertAll (itemTypes, TypeSpec.For);
+                New = Constructor (typeof(List<>).MakeGenericType (itemTypes));
             } else if (IsAGenericType (type, typeof(ISet<>))) {
                 Kind = TypeKind.Set;
-                Arguments = type.GetGenericArguments ();
-                New = Constructor (typeof(HashSet<>).MakeGenericType (Arguments));
-                Add = SetAdder (type, Arguments [0]);
+                var itemTypes = type.GetGenericArguments ();
+                Types = Array.ConvertAll (itemTypes, TypeSpec.For);
+                New = Constructor (typeof(HashSet<>).MakeGenericType (itemTypes));
+                Add = SetAdder (type, itemTypes [0]);
             } else if (IsAGenericType (type, typeof(IDictionary<,>))) {
                 Kind = TypeKind.Dictionary;
-                Arguments = type.GetGenericArguments ();
-                New = Constructor (typeof(Dictionary<,>).MakeGenericType (Arguments));
+                var itemTypes = type.GetGenericArguments ();
+                Types = Array.ConvertAll (itemTypes, TypeSpec.For);
+                New = Constructor (typeof(Dictionary<,>).MakeGenericType (itemTypes));
             } else if (typeof(IMessage).IsAssignableFrom (type)) {
                 Kind = TypeKind.Message;
             } else if (type.Equals (typeof(Event))) {
@@ -103,10 +108,10 @@ namespace KRPC.Client
         public TypeKind Kind { get; private set; }
 
         /// <summary>
-        /// The types of the values a collection holds: the item types of a tuple, the element
-        /// type of a list or a set, or the key and value types of a dictionary.
+        /// The specs of the values the type holds: the items of a tuple, the fields of a
+        /// structure, the element of a list or a set, or the key and value of a dictionary.
         /// </summary>
-        public Type[] Arguments { get; private set; }
+        public TypeSpec[] Types { get; private set; }
 
         /// <summary>
         /// Build a remote object of the type, given the connection it lives on and its
@@ -125,14 +130,14 @@ namespace KRPC.Client
         public Action<object, object> Add { get; private set; }
 
         /// <summary>
-        /// Build a tuple, or a structure, from its items, in the order <see cref="Arguments"/>
+        /// Build a tuple, or a structure, from its items, in the order <see cref="Types"/>
         /// names them.
         /// </summary>
         public Func<object[], object> NewTuple { get; private set; }
 
         /// <summary>
         /// Take the items out of a tuple, or the fields out of a structure, in the order
-        /// <see cref="Arguments"/> names them.
+        /// <see cref="Types"/> names them.
         /// </summary>
         public Func<object, object>[] Items { get; private set; }
 
@@ -175,6 +180,17 @@ namespace KRPC.Client
             var fields = type.GetProperties (BindingFlags.Public | BindingFlags.Instance);
             Array.Sort (fields, (x, y) => x.MetadataToken.CompareTo (y.MetadataToken));
             return fields;
+        }
+
+        /// <summary>
+        /// The spec of a field of a structure. A field whose type is Nullable&lt;T&gt; declares
+        /// its own nullability; a reference-typed one is marked with KRPCNullable.
+        /// </summary>
+        static TypeSpec FieldSpec (PropertyInfo field)
+        {
+            if (field.IsDefined (typeof(KRPCNullableAttribute), false))
+                return TypeSpec.Null (field.PropertyType);
+            return TypeSpec.For (field.PropertyType);
         }
 
         static Func<object[], object> StructConstructor (Type type, Type[] fieldTypes)

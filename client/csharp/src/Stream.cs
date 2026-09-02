@@ -15,15 +15,20 @@ namespace KRPC.Client
 
         internal Stream (Connection connection, ulong id)
         {
-            stream = connection.StreamManager.GetStream (typeof(TReturnType), id);
+            stream = connection.StreamManager.GetStream (TypeSpec.For (typeof(TReturnType)), id);
         }
 
         internal Stream (Connection connection, ProcedureCall call)
         {
-            stream = connection.StreamManager.AddStream (typeof(TReturnType), call);
+            stream = connection.StreamManager.AddStream (TypeSpec.For (typeof(TReturnType)), call);
         }
 
-        internal Stream (Connection connection, ProcedureCall call, System.Type rpcReturnType,
+        internal Stream (Connection connection, ProcedureCall call, TypeSpec returnType)
+        {
+            stream = connection.StreamManager.AddStream (returnType, call);
+        }
+
+        internal Stream (Connection connection, ProcedureCall call, TypeSpec rpcReturnType,
                          Func<object, TReturnType> convert, object convertKey)
         {
             stream = connection.StreamManager.AddStream (rpcReturnType, call);
