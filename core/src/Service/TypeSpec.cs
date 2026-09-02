@@ -20,6 +20,7 @@ namespace KRPC.Service
             DeclaredType = declaredType;
             Nullable = nullable;
             types = containedTypes;
+            Kind = KindOf (type);
         }
 
         /// <summary>
@@ -38,6 +39,12 @@ namespace KRPC.Service
         /// Whether the position this value sits in can hold null.
         /// </summary>
         public bool Nullable { get; private set; }
+
+        /// <summary>
+        /// What the type is on the wire. Worked out here, once, as the answer costs
+        /// reflection and every value encoded or decoded needs it.
+        /// </summary>
+        public TypeKind Kind { get; private set; }
 
         /// <summary>
         /// The values this one contains, in the order the wire type names them: the element of
@@ -98,6 +105,50 @@ namespace KRPC.Service
                 containedTypes [i] = Build (position.Value, false, innerPaths, location);
             }
             return new TypeSpec (type, declaredType, nullable, containedTypes);
+        }
+
+        /// <summary>
+        /// What the given type is on the wire.
+        /// </summary>
+        static TypeKind KindOf (Type type)
+        {
+            if (type.IsEnum)
+                return TypeUtils.IsAnEnumType (type) ? TypeKind.Enum : TypeKind.UndeclaredEnum;
+            switch (Type.GetTypeCode (type)) {
+            case TypeCode.Double:
+                return TypeKind.Double;
+            case TypeCode.Single:
+                return TypeKind.Single;
+            case TypeCode.Int32:
+                return TypeKind.Int32;
+            case TypeCode.Int64:
+                return TypeKind.Int64;
+            case TypeCode.UInt32:
+                return TypeKind.UInt32;
+            case TypeCode.UInt64:
+                return TypeKind.UInt64;
+            case TypeCode.Boolean:
+                return TypeKind.Boolean;
+            case TypeCode.String:
+                return TypeKind.String;
+            }
+            if (type == typeof(byte[]))
+                return TypeKind.Bytes;
+            if (TypeUtils.IsAClassType (type))
+                return TypeKind.Class;
+            if (TypeUtils.IsAStructType (type))
+                return TypeKind.Struct;
+            if (TypeUtils.IsATupleCollectionType (type))
+                return TypeKind.Tuple;
+            if (TypeUtils.IsAListCollectionType (type))
+                return TypeKind.List;
+            if (TypeUtils.IsASetCollectionType (type))
+                return TypeKind.Set;
+            if (TypeUtils.IsADictionaryCollectionType (type))
+                return TypeKind.Dictionary;
+            if (TypeUtils.IsAMessageType (type))
+                return TypeKind.Message;
+            return TypeKind.Unknown;
         }
 
         /// <summary>

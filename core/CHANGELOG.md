@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Encode and decode values without reflection, cutting the server cost of a call that passes
+  or returns an object by about three quarters (#1091)
 - **Breaking:** Nullability is carried by `Type.nullable` at every position a value sits in,
   replacing `Parameter.nullable` and `Procedure.return_is_nullable` (#1091)
 - A structure field can be nullable, declared by `Nullable` on its `KRPCProperty` attribute

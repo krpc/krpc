@@ -72,56 +72,61 @@ namespace KRPC.Server.ProtocolBuffers
 
         static void WriteObject (object value, TypeSpec spec, CodedOutputStream stream)
         {
-            var type = spec.Type;
-            if (type.IsEnum) {
+            switch (spec.Kind) {
+            case TypeKind.Enum:
+            case TypeKind.UndeclaredEnum:
                 stream.WriteSInt32 ((int)value);
-            } else {
-                switch (Type.GetTypeCode (type)) {
-                case TypeCode.Double:
-                    stream.WriteDouble ((double)value);
-                    break;
-                case TypeCode.Single:
-                    stream.WriteFloat ((float)value);
-                    break;
-                case TypeCode.Int32:
-                    stream.WriteSInt32 ((int)value);
-                    break;
-                case TypeCode.Int64:
-                    stream.WriteSInt64 ((long)value);
-                    break;
-                case TypeCode.UInt32:
-                    stream.WriteUInt32 ((uint)value);
-                    break;
-                case TypeCode.UInt64:
-                    stream.WriteUInt64 ((ulong)value);
-                    break;
-                case TypeCode.Boolean:
-                    stream.WriteBool ((bool)value);
-                    break;
-                case TypeCode.String:
-                    stream.WriteString ((string)value);
-                    break;
-                default:
-                    if (type == typeof(byte[]))
-                        stream.WriteBytes (ByteString.CopyFrom ((byte[])value));
-                    else if (TypeUtils.IsAClassType (type))
-                        stream.WriteUInt64 (ObjectStore.Instance.AddInstance (value));
-                    else if (TypeUtils.IsAStructType (type))
-                        WriteStruct (value, spec, stream);
-                    else if (TypeUtils.IsATupleCollectionType (type))
-                        WriteTuple (value, spec, stream);
-                    else if (TypeUtils.IsAListCollectionType (type))
-                        WriteList (value, spec, stream);
-                    else if (TypeUtils.IsASetCollectionType (type))
-                        WriteSet (value, spec, stream);
-                    else if (TypeUtils.IsADictionaryCollectionType (type))
-                        WriteDictionary (value, spec, stream);
-                    else if (TypeUtils.IsAMessageType (type))
-                        WriteMessage (value, stream);
-                    else
-                        throw new ArgumentException (type + " is not a serializable type");
-                    break;
-                }
+                break;
+            case TypeKind.Double:
+                stream.WriteDouble ((double)value);
+                break;
+            case TypeKind.Single:
+                stream.WriteFloat ((float)value);
+                break;
+            case TypeKind.Int32:
+                stream.WriteSInt32 ((int)value);
+                break;
+            case TypeKind.Int64:
+                stream.WriteSInt64 ((long)value);
+                break;
+            case TypeKind.UInt32:
+                stream.WriteUInt32 ((uint)value);
+                break;
+            case TypeKind.UInt64:
+                stream.WriteUInt64 ((ulong)value);
+                break;
+            case TypeKind.Boolean:
+                stream.WriteBool ((bool)value);
+                break;
+            case TypeKind.String:
+                stream.WriteString ((string)value);
+                break;
+            case TypeKind.Bytes:
+                stream.WriteBytes (ByteString.CopyFrom ((byte[])value));
+                break;
+            case TypeKind.Class:
+                stream.WriteUInt64 (ObjectStore.Instance.AddInstance (value));
+                break;
+            case TypeKind.Struct:
+                WriteStruct (value, spec, stream);
+                break;
+            case TypeKind.Tuple:
+                WriteTuple (value, spec, stream);
+                break;
+            case TypeKind.List:
+                WriteList (value, spec, stream);
+                break;
+            case TypeKind.Set:
+                WriteSet (value, spec, stream);
+                break;
+            case TypeKind.Dictionary:
+                WriteDictionary (value, spec, stream);
+                break;
+            case TypeKind.Message:
+                WriteMessage (value, stream);
+                break;
+            default:
+                throw new ArgumentException (spec.Type + " is not a serializable type");
             }
         }
 
@@ -280,46 +285,41 @@ namespace KRPC.Server.ProtocolBuffers
             // the null itself is read by the caller, from the presence bool or a flag beside
             // the value
             var type = spec.Type;
-            if (type.IsEnum) {
-                if (TypeUtils.IsAnEnumType (type))
-                    return Enum.ToObject (type, stream.ReadSInt32 ());
-            } else {
-                switch (Type.GetTypeCode (type)) {
-                case TypeCode.Double:
-                    return stream.ReadDouble ();
-                case TypeCode.Single:
-                    return stream.ReadFloat ();
-                case TypeCode.Int32:
-                    return stream.ReadSInt32 ();
-                case TypeCode.Int64:
-                    return stream.ReadSInt64 ();
-                case TypeCode.UInt32:
-                    return stream.ReadUInt32 ();
-                case TypeCode.UInt64:
-                    return stream.ReadUInt64 ();
-                case TypeCode.Boolean:
-                    return stream.ReadBool ();
-                case TypeCode.String:
-                    return stream.ReadString ();
-                default:
-                    if (type == typeof(byte[]))
-                        return stream.ReadBytes ().ToByteArray ();
-                    if (TypeUtils.IsAClassType (type))
-                        return ObjectStore.Instance.GetInstance (stream.ReadUInt64 ());
-                    if (TypeUtils.IsAStructType (type))
-                        return DecodeStruct (stream, type);
-                    if (TypeUtils.IsATupleCollectionType (type))
-                        return DecodeTuple (stream, spec);
-                    if (TypeUtils.IsAListCollectionType (type))
-                        return DecodeList (stream, spec);
-                    if (TypeUtils.IsASetCollectionType (type))
-                        return DecodeSet (stream, spec);
-                    if (TypeUtils.IsADictionaryCollectionType (type))
-                        return DecodeDictionary (stream, spec);
-                    if (TypeUtils.IsAMessageType (type))
-                        return DecodeMessage (stream, type);
-                    break;
-                }
+            switch (spec.Kind) {
+            case TypeKind.Enum:
+                return Enum.ToObject (type, stream.ReadSInt32 ());
+            case TypeKind.Double:
+                return stream.ReadDouble ();
+            case TypeKind.Single:
+                return stream.ReadFloat ();
+            case TypeKind.Int32:
+                return stream.ReadSInt32 ();
+            case TypeKind.Int64:
+                return stream.ReadSInt64 ();
+            case TypeKind.UInt32:
+                return stream.ReadUInt32 ();
+            case TypeKind.UInt64:
+                return stream.ReadUInt64 ();
+            case TypeKind.Boolean:
+                return stream.ReadBool ();
+            case TypeKind.String:
+                return stream.ReadString ();
+            case TypeKind.Bytes:
+                return stream.ReadBytes ().ToByteArray ();
+            case TypeKind.Class:
+                return ObjectStore.Instance.GetInstance (stream.ReadUInt64 ());
+            case TypeKind.Struct:
+                return DecodeStruct (stream, type);
+            case TypeKind.Tuple:
+                return DecodeTuple (stream, spec);
+            case TypeKind.List:
+                return DecodeList (stream, spec);
+            case TypeKind.Set:
+                return DecodeSet (stream, spec);
+            case TypeKind.Dictionary:
+                return DecodeDictionary (stream, spec);
+            case TypeKind.Message:
+                return DecodeMessage (stream, type);
             }
             throw new ArgumentException (type + " is not a serializable type");
         }
