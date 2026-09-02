@@ -77,4 +77,9 @@ public class Types {
     type.addTypes(valueType);
     return type.build();
   }
+
+  /** The given type at a position that can hold null. */
+  public static Type nullable(Type type) {
+    return type.toBuilder().setNullable(true).build();
+  }
 }

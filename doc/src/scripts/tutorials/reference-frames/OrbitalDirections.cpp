@@ -4,7 +4,7 @@
 int main() {
   krpc::Client conn = krpc::connect("Orbital directions");
   krpc::services::SpaceCenter space_center(&conn);
-  auto vessel = space_center.active_vessel();
+  auto vessel = space_center.active_vessel().value();
   auto ap = vessel.auto_pilot();
   ap.set_reference_frame(vessel.orbital_reference_frame());
   ap.set_engaged(true);

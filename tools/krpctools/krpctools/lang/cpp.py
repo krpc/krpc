@@ -149,6 +149,15 @@ class CppLanguage(Language):
         return super().parse_name(snake_case(name))
 
     def parse_type(self, typ):
+        """The C++ type of a value. A value that can hold null is a std::optional, at a
+        slot and at a position inside another value alike, as the type is all the codec
+        has to read nullability from."""
+        if typ is not None and typ.nullable:
+            return "std::optional<%s>" % self._parse_type(typ)
+        return self._parse_type(typ)
+
+    def _parse_type(self, typ):
+        """The C++ type a value is spelled with, leaving aside whether it can hold null"""
         if typ is None:
             return "void"
         if isinstance(typ, ValueType):
@@ -185,15 +194,15 @@ class CppLanguage(Language):
             return "true" if value else "false"
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
             return float32_literal(value) + "f"
-        if isinstance(typ, ClassType) and value is None:
+        # A default of null is the default constructed value, which for a nullable position
+        # is the empty std::optional it is declared with
+        if value is None:
             return self.parse_type(typ) + "()"
         if isinstance(typ, EnumerationType):
             return "%s::%s" % (
-                self.parse_type(typ),
+                self._parse_type(typ),
                 self.parse_enum_value_name(value.name),
             )
-        if value is None:
-            return self.parse_type(typ) + "()"
         # A collection is written as a braced initializer list. Parentheses would name a
         # constructor instead, so std::vector<int32_t>(1, 2, 3) is not the vector of those
         # three values it appears to be.
@@ -202,19 +211,19 @@ class CppLanguage(Language):
                 self.parse_default_value(x, typ.field_types[i])
                 for i, x in enumerate(value)
             )
-            return "%s{%s}" % (self.parse_type(typ), ", ".join(values))
+            return "%s{%s}" % (self._parse_type(typ), ", ".join(values))
         if isinstance(typ, TupleType):
             values = (
                 self.parse_default_value(x, typ.value_types[i])
                 for i, x in enumerate(value)
             )
-            return "%s{%s}" % (self.parse_type(typ), ", ".join(values))
+            return "%s{%s}" % (self._parse_type(typ), ", ".join(values))
         if isinstance(typ, ListType):
             values = (self.parse_default_value(x, typ.value_type) for x in value)
-            return "%s{%s}" % (self.parse_type(typ), ", ".join(values))
+            return "%s{%s}" % (self._parse_type(typ), ", ".join(values))
         if isinstance(typ, SetType):
             values = (self.parse_default_value(x, typ.value_type) for x in value)
-            return "%s{%s}" % (self.parse_type(typ), ", ".join(values))
+            return "%s{%s}" % (self._parse_type(typ), ", ".join(values))
         if isinstance(typ, DictionaryType):
             entries = (
                 "{%s, %s}"
@@ -224,7 +233,7 @@ class CppLanguage(Language):
                 )
                 for k, v in value.items()
             )
-            return "%s{%s}" % (self.parse_type(typ), ", ".join(entries))
+            return "%s{%s}" % (self._parse_type(typ), ", ".join(entries))
         return str(value)
 
     def shorten_ref(self, name):

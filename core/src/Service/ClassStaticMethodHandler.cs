@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using KRPC.Service.Attributes;
 
 namespace KRPC.Service
 {
@@ -16,7 +17,7 @@ namespace KRPC.Service
         readonly Func<object, object[], object> invoker;
         readonly ProcedureParameter[] parameters;
 
-        public ClassStaticMethodHandler (MethodInfo methodInfo, bool returnIsNullable, bool isExtension = false)
+        public ClassStaticMethodHandler (MethodInfo methodInfo, bool returnIsNullable, IEnumerable<IList<Position>> returnNullablePaths = null, bool isExtension = false)
         {
             invoker = BuildInvoker (methodInfo);
             parameters = methodInfo.GetParameters ().Select (x => new ProcedureParameter (x)).ToArray ();
@@ -25,6 +26,7 @@ namespace KRPC.Service
                 parameters [0] = new ProcedureParameter (parameters [0].Type, "this");
             ReturnType = methodInfo.ReturnType;
             ReturnIsNullable = returnIsNullable;
+            ReturnNullablePaths = returnNullablePaths ?? new List<IList<Position>> ();
         }
 
         public bool HasInstance { get => false; }
@@ -44,6 +46,8 @@ namespace KRPC.Service
         public Type ReturnType { get; private set; }
 
         public bool ReturnIsNullable { get; private set; }
+
+        public IEnumerable<IList<Position>> ReturnNullablePaths { get; private set; }
 
         static Func<object, object[], object> BuildInvoker (MethodInfo method)
         {

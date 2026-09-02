@@ -409,7 +409,6 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
      string name = 1;
      repeated Parameter parameters = 2;
      Type return_type = 3;
-     bool return_is_nullable = 4;
      repeated GameScene game_scenes = 6;
      string documentation = 5;
      bool deprecated = 7;
@@ -419,7 +418,6 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
    message Parameter {
      string name = 1;
      Type type = 2;
-     bool nullable = 4;
      bool has_default_value = 5;
      bytes default_value = 3;
      bool default_value_is_null = 6;
@@ -435,9 +433,8 @@ The fields are:
 
   * ``name`` - The name of the parameter, to allow parameter passing by name.
 
-  * ``type`` - The :ref:`type <communication-protocol-type>` of the parameter.
-
-  * ``nullable`` - Whether null can be passed as the argument for this parameter.
+  * ``type`` - The :ref:`type <communication-protocol-type>` of the parameter. Its ``nullable``
+    field says whether null can be passed as the argument for this parameter.
 
   * ``has_default_value`` - Whether the parameter has a default value. When it is not set, the
     parameter is required and ``default_value`` and ``default_value_is_null`` are unset.
@@ -473,9 +470,8 @@ The fields are:
        - unset
 
 * ``return_type`` - The :ref:`return type <communication-protocol-type>` of the procedure. If the
-  procedure does not return anything its type is set to ``NONE``.
-
-* ``return_is_nullable`` - Whether the procedure can return null.
+  procedure does not return anything its type is set to ``NONE``. Its ``nullable`` field says
+  whether the procedure can return null.
 
 * ``game_scenes`` - The :ref:`game scenes <communication-protocol-game-scene>` that the procedure is
   available in. If this repeated field is empty, the procedure is available in all game scenes.
@@ -602,7 +598,8 @@ The fields are:
 
   * ``type`` - The type of the field, as a :ref:`Type message
     <communication-protocol-type>`. A field may have any type a parameter or return value may
-    have, including a class, a collection or another structure.
+    have, including a class, a collection or another structure. Its ``nullable`` field says
+    whether the field can be null.
 
   * ``documentation`` - Documentation for the field, as `C# XML documentation`_.
 
@@ -625,14 +622,24 @@ the structure's fields, in the order the ``fields`` list gives them. This is the
 of the field types, so a client can use the codec it already has for tuples. The field names appear
 only in the definition above.
 
-Two rules follow from that encoding:
+One rule follows from that encoding: fields are only ever appended to a structure. A client
+generated against an older definition may receive more items than it has fields for, and ignores
+the extra items. Fewer items than its fields means the definitions do not match, and is an error.
 
-* Fields are only ever appended to a structure. A client generated against an older definition may
-  receive more items than it has fields for, and ignores the extra items. Fewer items than its
-  fields means the definitions do not match, and is an error.
+A field whose type is nullable carries a presence bool before its value. The bool is one byte,
+encoded as a ``BOOL`` value. The field's ordinary encoding follows it when the bool is true. A
+list element, a tuple item and a dictionary value carry the same bool, in the item of the
+``List``, ``Tuple`` or ``DictionaryEntry`` message that holds them. For example, a structure
+whose first field is an ``SINT32`` and whose second is a nullable ``CLASS``::
 
-* A field is never null. The ``is_null`` field of the enclosing ``Argument`` or ``ProcedureResult``
-  message applies to the structure value as a whole, and carries nothing about its fields.
+   Tuple.items[0] = 54           the first field, unchanged
+   Tuple.items[1] = 01 07        present, then object id 7
+   Tuple.items[1] = 00           null
+
+A field that is not nullable is encoded as its value alone, and a null in one is an error. The
+presence bool is what separates a null field from a null structure: ``is_null`` on the enclosing
+``Argument`` or ``ProcedureResult`` message applies to the structure value as a whole, and carries
+nothing about its fields.
 
 Exceptions
 ^^^^^^^^^^
@@ -695,6 +702,7 @@ The ``GetServices`` procedure returns type information about parameters, return 
      string service = 2;
      string name = 3;
      repeated Type types = 4;
+     bool nullable = 5;
 
      enum TypeCode {
        NONE = 0;
@@ -746,6 +754,18 @@ For collection types the ``types`` repeated field will contain the sub-types:
   order.
 
 For all other types the ``types`` field is empty.
+
+The ``nullable`` field says whether the position the type describes can hold null. It is a
+property of that position rather than of the type, so the same type is nullable in one place and
+not in another. The positions that can be nullable are a parameter, a return value, a default
+value, a :ref:`structure field <communication-protocol-structures>`, a list element, a tuple item
+and a dictionary value. A dictionary key and a set element cannot.
+
+How the null itself is carried depends on the position. An argument, a result and a default value
+each have a flag of their own, ``Argument.is_null``, ``ProcedureResult.is_null`` and
+``Parameter.default_value_is_null``. A value nested inside another value has no such flag, and
+carries a leading presence bool instead, in the form the :ref:`Structures
+<communication-protocol-structures>` section shows.
 
 .. _communication-protocol-game-scene:
 

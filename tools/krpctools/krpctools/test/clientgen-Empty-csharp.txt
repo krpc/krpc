@@ -31,6 +31,33 @@ namespace KRPC.Client.Services.EmptyService
         }
     }
 
+    // The types the stubs encode and decode values of, built once each. A spec names the
+    // positions inside a value that can hold null, which a C# type cannot always say.
+    static class TypeSpecs
+    {
+        // The procedures whose values a C# type cannot describe on its own, which a call
+        // built from an expression looks up by name
+        static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> returnSpecs =
+            new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> {
+            };
+
+        static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> parameterSpecs =
+            new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> {
+            };
+
+        public static global::KRPC.Client.TypeSpec ReturnSpec (string procedure)
+        {
+            global::KRPC.Client.TypeSpec spec;
+            return returnSpecs.TryGetValue (procedure, out spec) ? spec : null;
+        }
+
+        public static global::KRPC.Client.TypeSpec[] ParameterSpecs (string procedure)
+        {
+            global::KRPC.Client.TypeSpec[] specs;
+            return parameterSpecs.TryGetValue (procedure, out specs) ? specs : null;
+        }
+    }
+
     /// <summary>
     /// EmptyService service.
     /// </summary>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using NUnit.Framework;
@@ -21,40 +22,40 @@ namespace KRPC.Test.Service
         {
             Assert.Less (position, procedure.Parameters.Count);
             var parameter = procedure.Parameters [position];
-            Assert.AreEqual (type, parameter.Type);
+            Assert.AreEqual (type, parameter.Type.Type);
             Assert.AreEqual (name, parameter.Name);
             Assert.IsFalse (parameter.HasDefaultValue);
             Assert.IsNull (parameter.DefaultValue);
-            Assert.IsFalse (parameter.Nullable);
+            Assert.IsFalse (parameter.Type.Nullable);
         }
 
         public static void HasNullableParameter (Procedure procedure, int position, Type type, string name)
         {
             Assert.Less (position, procedure.Parameters.Count);
             var parameter = procedure.Parameters [position];
-            Assert.AreEqual (type, parameter.Type);
+            Assert.AreEqual (type, parameter.Type.Type);
             Assert.AreEqual (name, parameter.Name);
             Assert.IsFalse (parameter.HasDefaultValue);
             Assert.IsNull (parameter.DefaultValue);
-            Assert.IsTrue (parameter.Nullable);
+            Assert.IsTrue (parameter.Type.Nullable);
         }
 
         public static void HasNullableParameterWithDefaultValue (Procedure procedure, int position, Type type, string name, object defaultValue)
         {
             Assert.Less (position, procedure.Parameters.Count);
             var parameter = procedure.Parameters [position];
-            Assert.AreEqual (type, parameter.Type);
+            Assert.AreEqual (type, parameter.Type.Type);
             Assert.AreEqual (name, parameter.Name);
             Assert.IsTrue (parameter.HasDefaultValue);
             Assert.AreEqual (defaultValue, parameter.DefaultValue);
-            Assert.IsTrue (parameter.Nullable);
+            Assert.IsTrue (parameter.Type.Nullable);
         }
 
         public static void HasParameterWithDefaultValue (Procedure procedure, int position, Type type, string name, object defaultValue)
         {
             Assert.Less (position, procedure.Parameters.Count);
             var parameter = procedure.Parameters [position];
-            Assert.AreEqual (type, parameter.Type);
+            Assert.AreEqual (type, parameter.Type.Type);
             Assert.AreEqual (name, parameter.Name);
             Assert.IsTrue (parameter.HasDefaultValue);
             Assert.AreEqual (defaultValue, parameter.DefaultValue);
@@ -69,8 +70,27 @@ namespace KRPC.Test.Service
         public static void HasReturnType (Procedure procedure, Type returnType, bool returnIsNullable = false)
         {
             Assert.IsTrue (procedure.HasReturnType);
-            Assert.AreEqual (returnType, procedure.ReturnType);
-            Assert.AreEqual (returnIsNullable, procedure.ReturnIsNullable);
+            Assert.AreEqual (returnType, procedure.ReturnType.Type);
+            Assert.AreEqual (returnIsNullable, procedure.ReturnType.Nullable);
+        }
+
+        /// <summary>
+        /// Assert that the nullable positions inside the given type are exactly the ones
+        /// holding the given types, in the order the spec reaches them.
+        /// </summary>
+        public static void HasNullableTypes (TypeSpec spec, params Type[] types)
+        {
+            var nullable = new List<Type> ();
+            CollectNullableTypes (spec, nullable, false);
+            CollectionAssert.AreEqual (types, nullable);
+        }
+
+        static void CollectNullableTypes (TypeSpec spec, IList<Type> nullable, bool includeSelf)
+        {
+            if (includeSelf && spec.Nullable)
+                nullable.Add (spec.Type);
+            foreach (var inner in spec.Types)
+                CollectNullableTypes (inner, nullable, true);
         }
 
         public static void HasGameScene (Procedure procedure, GameScene gameScene)
@@ -128,8 +148,18 @@ namespace KRPC.Test.Service
             Assert.Less (position, str.Fields.Count);
             var field = str.Fields [position];
             Assert.AreEqual (name, field.Name);
-            Assert.AreEqual (type, field.Type);
+            Assert.AreEqual (type, field.Type.Type);
             Assert.AreEqual (documentation, field.Documentation);
+            Assert.IsFalse (field.Type.Nullable);
+        }
+
+        public static void HasNullableField (Struct str, int position, string name, Type type)
+        {
+            Assert.Less (position, str.Fields.Count);
+            var field = str.Fields [position];
+            Assert.AreEqual (name, field.Name);
+            Assert.AreEqual (type, field.Type.Type);
+            Assert.IsTrue (field.Type.Nullable);
         }
 
         public static void IsNotDeprecated (Struct str)

@@ -160,6 +160,56 @@
 
       :Game Scenes: All
 
+   .. method:: System.Collections.Generic.IDictionary<string,TestClass> EchoDictionaryOfNullableObjects(System.Collections.Generic.IDictionary<string,TestClass> d)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<int?> EchoListOfNullableInts(System.Collections.Generic.IList<int?> l)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<TestClass> EchoListOfNullableObjects(System.Collections.Generic.IList<TestClass> l)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<System.Collections.Generic.IList<TestClass>> EchoNestedListOfNullableObjects(System.Collections.Generic.IList<System.Collections.Generic.IList<TestClass>> l)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: TestNestedNullableStruct EchoNestedNullableStruct(TestNestedNullableStruct value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. method:: int EchoNullableInt(int value)
 
 
@@ -191,6 +241,16 @@
       :Game Scenes: All
 
    .. method:: TestClass EchoTestObject(TestClass value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<int,TestClass> EchoTupleWithANullableObject(System.Tuple<int,TestClass> t)
 
 
 
@@ -406,6 +466,16 @@
       :Game Scenes: All
 
    .. property:: TestClass NullableObject { get; set; }
+
+
+
+      :Game Scenes: All
+
+   .. method:: TestNullableStruct NullableStructEcho(TestNullableStruct x)
+
+
+
+      :parameters:
 
 
 
@@ -818,6 +888,46 @@
 
 
    .. property:: TestClass ObjectField { get; set; }
+
+
+
+   .. property:: string StringField { get; set; }
+
+
+
+
+.. struct:: TestNullableStruct
+
+   Nullable struct documentation string.
+
+
+   .. property:: int IntField { get; set; }
+
+
+
+   .. property:: int? NullableIntField { get; set; }
+
+
+
+   .. property:: TestEnum? NullableEnumField { get; set; }
+
+
+
+   .. property:: string NullableStringField { get; set; }
+
+
+
+   .. property:: TestClass NullableObjectField { get; set; }
+
+
+
+
+.. struct:: TestNestedNullableStruct
+
+   Nested nullable struct documentation string.
+
+
+   .. property:: System.Collections.Generic.IList<TestClass> ListField { get; set; }
 
 
 

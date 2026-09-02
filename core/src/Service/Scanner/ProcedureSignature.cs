@@ -64,14 +64,9 @@ namespace KRPC.Service.Scanner
         public bool HasReturnType { get; private set; }
 
         /// <summary>
-        /// Return type of the procedure.
+        /// The return type of the procedure, with the nullability of every position inside it.
         /// </summary>
-        public Type ReturnType { get; private set; }
-
-        /// <summary>
-        /// Whether the return type of the procedure could be null.
-        /// </summary>
-        public bool ReturnIsNullable { get; private set; }
+        public TypeSpec ReturnSpec { get; private set; }
 
         internal ProcedureSignature (string serviceName, string procedureName, uint id, string documentation, IProcedureHandler handler, GameScene gameScene, bool deprecated, string deprecatedReason)
         {
@@ -88,18 +83,12 @@ namespace KRPC.Service.Scanner
             var returnType = handler.ReturnType;
             HasReturnType = (returnType != typeof(void));
             if (HasReturnType) {
-                ReturnIsNullable = handler.ReturnIsNullable;
-                // A Nullable<T> value-type return is represented by its underlying type T, and is
-                // implicitly nullable.
-                var underlyingType = System.Nullable.GetUnderlyingType (returnType);
-                if (underlyingType != null) {
-                    returnType = underlyingType;
-                    ReturnIsNullable = true;
-                }
-                ReturnType = returnType;
                 // Check it's a valid return type
                 if (!TypeUtils.IsAValidType (returnType))
                     throw new ServiceException (returnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
+                ReturnSpec = TypeSpec.Create (
+                    returnType, handler.ReturnIsNullable, handler.ReturnNullablePaths,
+                    "the return value of " + FullyQualifiedName);
             }
         }
 
@@ -110,11 +99,8 @@ namespace KRPC.Service.Scanner
         {
             info.AddValue ("id", Id);
             info.AddValue ("parameters", Parameters);
-            if (ReturnType != null)
-            {
-                info.AddValue("return_type", TypeUtils.SerializeType(ReturnType));
-                info.AddValue("return_is_nullable", ReturnIsNullable);
-            }
+            if (HasReturnType)
+                info.AddValue("return_type", TypeUtils.SerializeType(ReturnSpec));
             if (GameScene != GameScene.All)
                 info.AddValue ("game_scenes", GameSceneUtils.Serialize(GameScene));
             info.AddValue ("documentation", Documentation);

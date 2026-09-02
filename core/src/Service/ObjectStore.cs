@@ -8,7 +8,6 @@ namespace KRPC.Service
     {
         readonly IDictionary<object, ulong> instances = new Dictionary<object, ulong> ();
         readonly IDictionary<ulong, object> objectIds = new Dictionary<ulong, object> ();
-        // Note: 0 is reserved to represent null values
         ulong nextObjectId = 1;
         static ObjectStore instance;
 
@@ -32,11 +31,12 @@ namespace KRPC.Service
         /// Register an instance with the object store, associating a unique object
         /// identifier with the instance that can be passed to clients.
         /// If the instance has already been added, this just returns it's object identifier.
+        /// A null is not an instance: it belongs to the position a value sits in.
         /// </summary>
         public ulong AddInstance (object obj)
         {
             if (obj == null)
-                return 0;
+                throw new ArgumentNullException (nameof (obj));
             ulong existingId;
             if (instances.TryGetValue (obj, out existingId))
                 return existingId;
@@ -112,8 +112,9 @@ namespace KRPC.Service
         /// </summary>
         public object GetInstance (ulong id)
         {
+            // Identifiers are allocated from 1, so 0 was never issued
             if (id == 0ul)
-                return null;
+                throw new ArgumentException ("0 is not an object identifier");
             object result;
             if (objectIds.TryGetValue (id, out result))
                 return result;
@@ -133,7 +134,7 @@ namespace KRPC.Service
         public ulong GetObjectId (object obj)
         {
             if (obj == null)
-                return 0;
+                throw new ArgumentNullException (nameof (obj));
             ulong id;
             if (!instances.TryGetValue (obj, out id))
                 throw new ArgumentException ("Instance not found");

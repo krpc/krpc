@@ -139,6 +139,7 @@ namespace KRPC.Service
                 var result = new ProcedureResult ();
                 if (procedure.HasReturnType) {
                     CheckReturnValue (procedure, returnValue);
+                    result.Spec = procedure.ReturnSpec;
                     result.Value = returnValue;
                 }
                 return result;
@@ -169,6 +170,7 @@ namespace KRPC.Service
             var result = new ProcedureResult ();
             if (procedure.HasReturnType) {
                 CheckReturnValue (procedure, returnValue);
+                result.Spec = procedure.ReturnSpec;
                 result.Value = returnValue;
             }
             return result;
@@ -211,6 +213,7 @@ namespace KRPC.Service
                     result.Error = HandleException (e);
                     return;
                 }
+                result.Spec = procedure.ReturnSpec;
                 result.Value = returnValue;
             }
         }
@@ -233,6 +236,7 @@ namespace KRPC.Service
             result.Reset ();
             if (procedure.HasReturnType) {
                 CheckReturnValue (procedure, returnValue);
+                result.Spec = procedure.ReturnSpec;
                 result.Value = returnValue;
             }
         }
@@ -266,12 +270,12 @@ namespace KRPC.Service
                 var position = argument.Position;
                 var value = argument.Value;
                 var parameter = procedure.Parameters[(int)position];
-                var type = parameter.Type;
+                var type = parameter.Spec.Type;
                 if (value != null && !type.IsInstanceOfType (value))
                     throw new RPCException (
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got " + value.GetType ());
-                if (value == null && !parameter.Nullable)
+                if (value == null && !parameter.Spec.Nullable)
                     throw new RPCException (
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got null");
@@ -315,7 +319,7 @@ namespace KRPC.Service
             for (int i = 0; i < numParameters; i++) {
                 var value = argumentValues [i];
                 var parameter = procedure.Parameters [i];
-                var type = parameter.Type;
+                var type = parameter.Spec.Type;
                 if (!argumentSet [mask]) {
                     // If the argument is not set, set it to the default value
                     if (!parameter.HasDefaultValue)
@@ -326,7 +330,7 @@ namespace KRPC.Service
                     throw new RPCException (
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got " + value.GetType ());
-                } else if (value == null && !parameter.Nullable) {
+                } else if (value == null && !parameter.Spec.Nullable) {
                     // Reject a null argument for a parameter that is not nullable
                     throw new RPCException (
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
@@ -343,16 +347,16 @@ namespace KRPC.Service
         static void CheckReturnValue (ProcedureSignature procedure, object returnValue)
         {
             // Check if the type of the return value is valid
-            if (returnValue != null && !procedure.ReturnType.IsInstanceOfType (returnValue)) {
+            if (returnValue != null && !procedure.ReturnSpec.Type.IsInstanceOfType (returnValue)) {
                 throw new RPCException (
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
-                    "Expected a value of type " + procedure.ReturnType + ", got " + returnValue.GetType ());
+                    "Expected a value of type " + procedure.ReturnSpec.Type + ", got " + returnValue.GetType ());
             }
             // Check if the return value is null, but the procedure is not marked as nullable
-            if (returnValue == null && !procedure.ReturnIsNullable)
+            if (returnValue == null && !procedure.ReturnSpec.Nullable)
                 throw new RPCException (
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
-                    "Expected a non-null value of type " + procedure.ReturnType + ", got null, " +
+                    "Expected a non-null value of type " + procedure.ReturnSpec.Type + ", got null, " +
                     "but the procedure is not marked as nullable.");
         }
 

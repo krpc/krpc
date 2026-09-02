@@ -1,4 +1,5 @@
 #include <iostream>
+#include <optional>
 #include <vector>
 #include <thread>
 #include <krpc.hpp>
@@ -13,15 +14,18 @@ int main() {
   SpaceCenter space_center(&conn);
   InfernalRobotics infernal_robotics(&conn);
 
-  InfernalRobotics::ServoGroup group = infernal_robotics.servo_group_with_name(space_center.active_vessel(), "MyGroup");
-  if (group == InfernalRobotics::ServoGroup())
+  std::optional<InfernalRobotics::ServoGroup> group =
+    infernal_robotics.servo_group_with_name(space_center.active_vessel().value(), "MyGroup");
+  if (!group.has_value()) {
     std::cout << "Group not found" << std::endl;
+    return 1;
+  }
 
-  std::vector<InfernalRobotics::Servo> servos = group.servos();
+  std::vector<InfernalRobotics::Servo> servos = group->servos();
   for (auto servo : servos)
     std::cout << servo.name() << " " << servo.position() << std::endl;
 
-  group.move_right();
+  group->move_right();
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  group.stop();
+  group->stop();
 }

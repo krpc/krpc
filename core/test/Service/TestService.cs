@@ -80,6 +80,13 @@ namespace KRPC.Test.Service
             set { Service.NullableProperty = value; }
         }
 
+        [KRPCProperty]
+        [KRPCNullable]
+        public static string NullableByAttributeProperty {
+            get { return Service.NullableByAttributeProperty; }
+            set { Service.NullableByAttributeProperty = value; }
+        }
+
         [KRPCProcedure]
         public static TestClass CreateTestObject (string value)
         {
@@ -126,6 +133,44 @@ namespace KRPC.Test.Service
         public static IList<string> EchoNullableList ([KRPCNullable] IList<string> l)
         {
             return Service.EchoNullableList (l);
+        }
+
+        [KRPCProcedure]
+        public static IList<int?> EchoListOfNullableInts (IList<int?> l)
+        {
+            return Service.EchoListOfNullableInts (l);
+        }
+
+        [KRPCProcedure]
+        [KRPCNullable (Position.Element)]
+        public static IList<TestClass> EchoListOfNullableObjects (
+            [KRPCNullable (Position.Element)] IList<TestClass> l)
+        {
+            return Service.EchoListOfNullableObjects (l);
+        }
+
+        [KRPCProcedure]
+        [KRPCNullable (Position.Value)]
+        public static IDictionary<string,TestClass> EchoDictionaryOfNullableObjects (
+            [KRPCNullable (Position.Value)] IDictionary<string,TestClass> d)
+        {
+            return Service.EchoDictionaryOfNullableObjects (d);
+        }
+
+        [KRPCProcedure]
+        [KRPCNullable (Position.Item2)]
+        public static Tuple<int,TestClass> EchoTupleWithANullableObject (
+            [KRPCNullable (Position.Item2)] Tuple<int,TestClass> t)
+        {
+            return Service.EchoTupleWithANullableObject (t);
+        }
+
+        [KRPCProcedure]
+        [KRPCNullable (Position.Element, Position.Element)]
+        public static IList<IList<TestClass>> EchoNestedListOfNullableObjects (
+            [KRPCNullable (Position.Element, Position.Element)] IList<IList<TestClass>> l)
+        {
+            return Service.EchoNestedListOfNullableObjects (l);
         }
 
         [KRPCClass (GameScene = GameScene.Flight | GameScene.SpaceCenter)]
@@ -409,6 +454,28 @@ namespace KRPC.Test.Service
 
             [KRPCProperty]
             public int IntField { get; set; }
+        }
+
+        /// <summary>
+        /// Documentation string for TestNullableStruct.
+        /// </summary>
+        [KRPCStruct]
+        public struct TestNullableStruct
+        {
+            [KRPCProperty]
+            public int IntField { get; set; }
+
+            [KRPCProperty]
+            public int? NullableIntField { get; set; }
+
+            [KRPCProperty]
+            public TestEnum? NullableEnumField { get; set; }
+
+            [KRPCProperty (Nullable = true)]
+            public string NullableStringField { get; set; }
+
+            [KRPCProperty (Nullable = true)]
+            public TestClass NullableObjectField { get; set; }
         }
 
         [KRPCProcedure]

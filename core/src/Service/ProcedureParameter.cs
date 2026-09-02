@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using KRPC.Service.Attributes;
@@ -12,7 +13,7 @@ namespace KRPC.Service
     public sealed class ProcedureParameter
     {
         /// <summary>
-        /// Type of the parameter.
+        /// The type the parameter is declared with, which a Nullable&lt;T&gt; keeps.
         /// </summary>
         public Type Type { get; private set; }
 
@@ -34,9 +35,14 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Whether the parameters value could be null.
+        /// Whether the parameter is declared nullable, by an attribute or a null default value.
         /// </summary>
         public bool Nullable { get; internal set; }
+
+        /// <summary>
+        /// The nullable positions inside the parameter's type, each named by a path.
+        /// </summary>
+        public IEnumerable<IList<Position>> NullablePaths { get; internal set; }
 
         /// <summary>
         /// Create parameter information from a reflected parameter.
@@ -45,20 +51,15 @@ namespace KRPC.Service
         {
             Type = parameter.ParameterType;
             Name = parameter.Name;
-            // A Nullable<T> value-type parameter is represented by its underlying type T, and is
-            // implicitly nullable.
-            var underlyingType = System.Nullable.GetUnderlyingType (Type);
-            bool nullableValueType = underlyingType != null;
-            if (nullableValueType)
-                Type = underlyingType;
             bool hasDefaultValue = parameter.IsOptional && (parameter.Attributes & ParameterAttributes.HasDefault) == ParameterAttributes.HasDefault;
             DefaultValue = hasDefaultValue ? parameter.DefaultValue : DBNull.Value;
             if (Reflection.HasAttribute<KRPCDefaultValueAttribute> (parameter))
                 DefaultValue = Reflection.GetAttribute<KRPCDefaultValueAttribute> (parameter).Value;
-            // A parameter is nullable if its type is Nullable<T>, or it has a null default value
-            // (itself a declaration that null is valid), or it is marked [KRPCNullable].
-            Nullable = nullableValueType
-                || Reflection.HasAttribute<KRPCNullableAttribute> (parameter)
+            // A parameter is nullable if it has a null default value, itself a declaration that
+            // null is valid, or it is marked [KRPCNullable]. The spec reads a Nullable<T> type
+            // as nullable on its own
+            NullablePaths = TypeUtils.GetNullablePaths (parameter).ToList ();
+            Nullable = NullablePaths.Any (path => path.Count == 0)
                 || (HasDefaultValue && DefaultValue == null);
         }
 
@@ -70,6 +71,7 @@ namespace KRPC.Service
             Type = type;
             Name = name;
             DefaultValue = DBNull.Value;
+            NullablePaths = new List<IList<Position>> ();
         }
     }
 }

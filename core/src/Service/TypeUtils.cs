@@ -31,7 +31,19 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsAValidType (Type type)
         {
+            // A Nullable<T> is valid wherever T is. It is T at a position that allows a null,
+            // which is how a collection declares a nullable element
+            type = System.Nullable.GetUnderlyingType (type) ?? type;
             return IsAValueType (type) || IsAMessageType (type) || IsAClassType (type) || IsAnEnumType (type) || IsAStructType (type) || IsACollectionType (type);
+        }
+
+        /// <summary>
+        /// Returns true if a value of the given type can be null. A value type holds one only
+        /// as a Nullable&lt;T&gt;.
+        /// </summary>
+        public static bool CanBeNull (Type type)
+        {
+            return !type.IsValueType || System.Nullable.GetUnderlyingType (type) != null;
         }
 
         /// <summary>
@@ -130,6 +142,14 @@ namespace KRPC.Service
         static readonly IDictionary<Type, IList<PropertyInfo>> structFields = new Dictionary<Type, IList<PropertyInfo>> ();
 
         /// <summary>
+        /// The fields of every structure type they have been asked for, paired with their
+        /// specs. Encoding a value reads both, so one entry holds both and answers with one
+        /// lookup.
+        /// </summary>
+        static readonly IDictionary<Type, KeyValuePair<IList<PropertyInfo>, IList<TypeSpec>>> structFieldSpecs =
+            new Dictionary<Type, KeyValuePair<IList<PropertyInfo>, IList<TypeSpec>>> ();
+
+        /// <summary>
         /// Returns true if the given type can be used as a kRPC collection type.
         /// </summary>
         public static bool IsACollectionType (Type type)
@@ -163,6 +183,9 @@ namespace KRPC.Service
         {
             return Reflection.IsGenericType (type, typeof(HashSet<>)) &&
             type.GetGenericArguments ().Length == 1 &&
+            // A set element cannot be nullable. A set of them holds at most one null, which is
+            // rarely wanted, and hashing one costs every client something
+            System.Nullable.GetUnderlyingType (type.GetGenericArguments ().Single ()) == null &&
             IsAValidType (type.GetGenericArguments ().Single ());
         }
 
@@ -578,7 +601,7 @@ namespace KRPC.Service
         /// 2. Every property marked as a field must be a public instance property with both a
         ///    getter and a setter, so that a value can be both read and constructed
         /// 3. Every field must have a valid kRPC type
-        /// 4. A field must not be nullable or restricted to a game scene
+        /// 4. A field must not be restricted to a game scene
         /// 5. There must be at least one field
         /// 6. The structure must not contain itself, directly or through the fields of another
         ///    structure
@@ -591,11 +614,9 @@ namespace KRPC.Service
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " is not a public instance property");
                 if (property.GetGetMethod () == null || property.GetSetMethod () == null)
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " does not have both a getter and a setter");
-                if (!IsAValidType (property.PropertyType))
+                if (!IsAValidType (GetStructFieldType (property)))
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " has type " + property.PropertyType + ", which is not a valid kRPC type");
                 var propertyAttribute = Reflection.GetAttribute<KRPCPropertyAttribute> (property);
-                if (propertyAttribute.Nullable)
-                    throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " is nullable, which struct fields cannot be");
                 if (propertyAttribute.GameScene != GameScene.Inherit)
                     throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " sets a game scene, which struct fields cannot do");
             }
@@ -630,6 +651,7 @@ namespace KRPC.Service
         /// </summary>
         static IEnumerable<Type> StructTypesIn (Type type)
         {
+            type = System.Nullable.GetUnderlyingType (type) ?? type;
             if (IsAStructType (type)) {
                 yield return type;
             } else if (IsACollectionType (type)) {
@@ -828,10 +850,75 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Serialize a type into a dictionary for use in a service definition.
+        /// The kRPC type of a structure field. A Nullable&lt;T&gt; field is represented by its
+        /// underlying type T.
         /// </summary>
-        public static object SerializeType (Type type)
+        static Type GetStructFieldType (PropertyInfo field)
         {
+            return System.Nullable.GetUnderlyingType (field.PropertyType) ?? field.PropertyType;
+        }
+
+        /// <summary>
+        /// Whether a structure field can be null, which it is when its type is Nullable&lt;T&gt;
+        /// or it is marked with KRPCProperty Nullable.
+        /// </summary>
+        static bool GetStructFieldNullable (PropertyInfo field)
+        {
+            return System.Nullable.GetUnderlyingType (field.PropertyType) != null ||
+                Reflection.GetAttribute<KRPCPropertyAttribute> (field).Nullable;
+        }
+
+        /// <summary>
+        /// The spec for a structure field, naming the field and the structure it is in when a
+        /// nullable position cannot be reached.
+        /// </summary>
+        public static TypeSpec GetStructFieldSpec (Type type, PropertyInfo field)
+        {
+            return TypeSpec.Create (
+                field.PropertyType, GetStructFieldNullable (field), GetNullablePaths (field),
+                type.Name + " field " + field.Name);
+        }
+
+        /// <summary>
+        /// The fields of the given structure type and their specs, in the order their values
+        /// are encoded in. Built once per structure, as encoding a value reads both for every
+        /// value.
+        /// </summary>
+        public static void GetStructFieldsAndSpecs (
+            Type type, out IList<PropertyInfo> fields, out IList<TypeSpec> specs)
+        {
+            lock (structFieldSpecs) {
+                KeyValuePair<IList<PropertyInfo>, IList<TypeSpec>> entry;
+                if (!structFieldSpecs.TryGetValue (type, out entry)) {
+                    var typeFields = GetStructFields (type);
+                    entry = new KeyValuePair<IList<PropertyInfo>, IList<TypeSpec>> (
+                        typeFields,
+                        typeFields.Select (field => GetStructFieldSpec (type, field)).ToList ());
+                    structFieldSpecs [type] = entry;
+                }
+                fields = entry.Key;
+                specs = entry.Value;
+            }
+        }
+
+        /// <summary>
+        /// The paths the KRPCNullable attributes on the given member name, each a nullable
+        /// position inside its type.
+        /// </summary>
+        public static IEnumerable<IList<Position>> GetNullablePaths (ICustomAttributeProvider member)
+        {
+            return Reflection.GetAttributes<KRPCNullableAttribute> (member)
+                .Select (attribute => attribute.Path);
+        }
+
+        /// <summary>
+        /// Serialize a type into a dictionary for use in a service definition, from the spec
+        /// that carries the nullability of every position inside it.
+        /// </summary>
+        public static object SerializeType (TypeSpec spec)
+        {
+            var type = spec.Type;
+            var nullable = spec.Nullable;
             if (!IsAValidType (type))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
             var result = new Dictionary<string,object> ();
@@ -880,16 +967,16 @@ namespace KRPC.Service
                 result["name"] = type.Name;
             } else if (IsATupleCollectionType (type)) {
                 result["code"] = "TUPLE";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = spec.Types.Select (SerializeType).ToList ();
             } else if (IsAListCollectionType (type)) {
                 result["code"] = "LIST";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = spec.Types.Select (SerializeType).ToList ();
             } else if (IsASetCollectionType (type)) {
                 result["code"] = "SET";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = spec.Types.Select (SerializeType).ToList ();
             } else if (IsADictionaryCollectionType (type)) {
                 result["code"] = "DICTIONARY";
-                result["types"] = type.GetGenericArguments ().Select (t => SerializeType (t)).ToList ();
+                result["types"] = spec.Types.Select (SerializeType).ToList ();
             } else if (IsAMessageType (type)) {
                 var name = type.ToString ();
                 var camelCase = name.Substring (name.LastIndexOf ('.') + 1);
@@ -905,6 +992,8 @@ namespace KRPC.Service
             }
             if (!result.ContainsKey("code"))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");
+            if (nullable)
+                result["nullable"] = true;
             return result;
         }
     }

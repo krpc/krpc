@@ -18,6 +18,10 @@ namespace KRPC.Test.Service
         {
         }
 
+        public static void MethodWithNullableArg (int? x)
+        {
+        }
+
         [Test]
         public void BasicUsage ()
         {
@@ -35,6 +39,15 @@ namespace KRPC.Test.Service
             Assert.AreEqual ("x", parameter.Name);
             Assert.AreEqual (typeof(int), parameter.Type);
             Assert.IsFalse (parameter.HasDefaultValue);
+        }
+
+        [Test]
+        public void FromMethodNullableArgument ()
+        {
+            var method = typeof(ProcedureParameterTest).GetMethod ("MethodWithNullableArg");
+            var parameter = new ProcedureParameter (method.GetParameters () [0]);
+            // The type is the one the parameter is declared with, which the spec unwraps
+            Assert.AreEqual (typeof(int?), parameter.Type);
         }
 
         [Test]

@@ -434,6 +434,90 @@ TEST_F(test_client, test_structs) {
   KRPC_FREE_LIST(result.list_field);
 }
 
+TEST_F(test_client, test_nullable_struct_fields) {
+  krpc_TestService_TestClass_t obj = KRPC_NULL;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
+
+  krpc_TestService_TestNullableStruct_t value = {
+      0, {0, false}, {0, false}, {NULL, false}, {KRPC_NULL, false}};
+  value.int_field = 1;
+  value.nullable_int_field.value = 2;
+  value.nullable_int_field.has_value = true;
+  value.nullable_enum_field.value = KRPC_TESTSERVICE_TESTENUM_VALUEB;
+  value.nullable_enum_field.has_value = true;
+  value.nullable_string_field.value = (char*)"jeb";
+  value.nullable_string_field.has_value = true;
+  value.nullable_object_field.value = obj;
+  value.nullable_object_field.has_value = true;
+
+  krpc_TestService_TestNullableStruct_t result = {
+      0, {0, false}, {0, false}, {NULL, false}, {KRPC_NULL, false}};
+  ASSERT_EQ(KRPC_OK, krpc_TestService_NullableStructEcho(conn, &result, &value));
+  ASSERT_EQ(1, result.int_field);
+  ASSERT_TRUE(result.nullable_int_field.has_value);
+  ASSERT_EQ(2, result.nullable_int_field.value);
+  ASSERT_TRUE(result.nullable_enum_field.has_value);
+  ASSERT_EQ(KRPC_TESTSERVICE_TESTENUM_VALUEB, result.nullable_enum_field.value);
+  ASSERT_TRUE(result.nullable_string_field.has_value);
+  ASSERT_STREQ("jeb", result.nullable_string_field.value);
+  ASSERT_TRUE(result.nullable_object_field.has_value);
+  ASSERT_EQ(obj, result.nullable_object_field.value);
+
+  krpc_free(result.nullable_string_field.value);
+}
+
+TEST_F(test_client, test_null_struct_fields) {
+  krpc_TestService_TestNullableStruct_t value = {
+      0, {0, false}, {0, false}, {NULL, false}, {KRPC_NULL, false}};
+  value.int_field = 1;
+
+  krpc_TestService_TestNullableStruct_t result = {
+      0, {0, false}, {0, false}, {NULL, false}, {KRPC_NULL, false}};
+  ASSERT_EQ(KRPC_OK, krpc_TestService_NullableStructEcho(conn, &result, &value));
+  ASSERT_EQ(1, result.int_field);
+  ASSERT_FALSE(result.nullable_int_field.has_value);
+  ASSERT_FALSE(result.nullable_enum_field.has_value);
+  ASSERT_FALSE(result.nullable_string_field.has_value);
+  ASSERT_FALSE(result.nullable_object_field.has_value);
+}
+
+TEST_F(test_client, test_nullable_list_elements) {
+  krpc_nullable_int32_t items[3] = {{1, true}, {0, false}, {3, true}};
+  krpc_list_nullable_int32_t list = KRPC_NULL_LIST;
+  list.size = 3;
+  list.items = items;
+
+  krpc_list_nullable_int32_t result = KRPC_NULL_LIST;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoListOfNullableInts(conn, &result, &list));
+  ASSERT_EQ(3u, result.size);
+  ASSERT_TRUE(result.items[0].has_value);
+  ASSERT_EQ(1, result.items[0].value);
+  ASSERT_FALSE(result.items[1].has_value);
+  ASSERT_TRUE(result.items[2].has_value);
+  ASSERT_EQ(3, result.items[2].value);
+
+  KRPC_FREE_LIST(result);
+}
+
+TEST_F(test_client, test_nullable_list_of_objects) {
+  krpc_TestService_TestClass_t obj = KRPC_NULL;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
+
+  krpc_nullable_object_t items[2] = {{obj, true}, {KRPC_NULL, false}};
+  krpc_list_nullable_object_t list = KRPC_NULL_LIST;
+  list.size = 2;
+  list.items = items;
+
+  krpc_list_nullable_object_t result = KRPC_NULL_LIST;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoListOfNullableObjects(conn, &result, &list));
+  ASSERT_EQ(2u, result.size);
+  ASSERT_TRUE(result.items[0].has_value);
+  ASSERT_EQ(obj, result.items[0].value);
+  ASSERT_FALSE(result.items[1].has_value);
+
+  KRPC_FREE_LIST(result);
+}
+
 TEST_F(test_client, test_nested_structs) {
   krpc_TestService_TestClass_t obj = KRPC_NULL;
   ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "bob"));

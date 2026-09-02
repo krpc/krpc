@@ -1,5 +1,15 @@
 from __future__ import annotations
-from typing import cast, Callable, Mapping, Optional, Tuple, Type, TYPE_CHECKING
+from typing import (
+    cast,
+    Callable,
+    Iterable,
+    List,
+    Mapping,
+    Optional,
+    Tuple,
+    Type,
+    TYPE_CHECKING,
+)
 import struct
 import google.protobuf
 
@@ -77,7 +87,11 @@ class Decoder:
 
     @classmethod
     def decode(cls, client: Optional[Client], data: bytes, typ: TypeBase) -> object:
-        """Given a python type, and serialized data, decode the value"""
+        """Given a python type, and serialized data, decode the value.
+
+        This decodes a value at a slot, where a null is carried by the is_null flag of the
+        message around it. A value at a position inside another value carries its own
+        presence bool, which _item_decoder reads."""
         # The value types come first, as most results are one, and this is on the hot path
         # of every remote procedure call
         if isinstance(typ, ValueType):
@@ -110,10 +124,7 @@ class Decoder:
             return set(decode_item(item) for item in msg.items)
         if isinstance(typ, TupleType):
             msg = cast(KRPC.Tuple, cls.decode_message(data, KRPC.Tuple))
-            return tuple(
-                cls.decode(client, item, value_type)
-                for item, value_type in zip(msg.items, typ.value_types)
-            )
+            return tuple(cls._decode_items(client, msg.items, typ.value_types))
         if isinstance(typ, StructType):
             # A structure is encoded as the values of its fields in order, which is the
             # same encoding as a tuple of those values
@@ -125,10 +136,7 @@ class Decoder:
                     % (len(typ.field_types), len(msg.items))
                 )
             return typ.python_type(
-                *[
-                    cls.decode(client, item, field_type)
-                    for item, field_type in zip(msg.items, typ.field_types)
-                ]
+                *cls._decode_items(client, msg.items, typ.field_types)
             )
         raise EncodingError("Cannot decode type %s" % str(typ))
 
@@ -152,7 +160,35 @@ class Decoder:
         return message
 
     @classmethod
+    def _decode_items(
+        cls,
+        client: Optional[Client],
+        items: Iterable[bytes],
+        types: Iterable[TypeBase],
+    ) -> List[object]:
+        """The decoded value of each item of a tuple or a structure"""
+        return [cls._item_decoder(client, typ)(item) for item, typ in zip(items, types)]
+
+    @classmethod
     def _item_decoder(
+        cls, client: Optional[Client], typ: TypeBase
+    ) -> Callable[[bytes], object]:
+        """A function that decodes one value at a position of the given type"""
+        decode = cls._value_decoder(client, typ)
+        if not typ.nullable:
+            return decode
+
+        # The presence bool is one byte, as a bool value always is, and is read from the
+        # data directly
+        def decode_nullable(data: bytes) -> object:
+            if not data:
+                raise EncodingError("A nullable value carries no presence bool")
+            return decode(data[1:]) if data[0] else None
+
+        return decode_nullable
+
+    @classmethod
+    def _value_decoder(
         cls, client: Optional[Client], typ: TypeBase
     ) -> Callable[[bytes], object]:
         """A function that decodes one value of the given type.
@@ -160,8 +196,7 @@ class Decoder:
         A collection carries many values of the same type, so working out how to decode
         one of them is worth doing once for the collection rather than once for every
         item in it. The types a collection usually holds are answered directly; anything
-        else falls back to the full decode.
-        """
+        else falls back to the full decode."""
         if isinstance(typ, ValueType):
             decode = _VALUE_DECODERS.get(typ.code)
             if decode is None:

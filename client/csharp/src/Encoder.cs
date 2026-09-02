@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using System.Text;
 using Google.Protobuf;
@@ -12,93 +11,34 @@ namespace KRPC.Client
     /// </summary>
     public static class Encoder
     {
+        // The presence bool a null carries at a nullable position, written exactly as a bool
+        // value is
+        static readonly ByteString absent = ByteString.CopyFrom (new byte [] { 0 });
+
         /// <summary>
-        /// Encode an object of the given type using the protocol buffer encoding scheme.
+        /// Encode a value at a slot, of the type the given spec describes.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
-        public static ByteString Encode (object value, Type type)
+        /// <remarks>
+        /// A slot carries its null beside the encoded bytes, in the is_null flag of the message
+        /// around it, so a null encodes to nothing and the nullability of the spec is not read
+        /// here. A value inside another value carries a presence bool instead.
+        /// </remarks>
+        public static ByteString Encode (object value, TypeSpec spec)
         {
-            // A Nullable<T> value is boxed to a plain T (or null), so encode it as its
-            // underlying type; the null itself is signaled out-of-band by is_null.
-            type = Nullable.GetUnderlyingType (type) ?? type;
+            if (ReferenceEquals (spec, null))
+                throw new ArgumentNullException (nameof (spec));
             if (value == null)
                 return null;
-            return EncodeValue (value, type);
+            if (!spec.Type.IsInstanceOfType (value))
+                throw new ArgumentException (
+                    "Value of type " + value.GetType () +
+                    " cannot be encoded to type " + spec.Type);
+            return EncoderFor (spec) (value);
         }
 
         /// <summary>
-        /// Encode a value of the given type.
-        /// </summary>
-        /// <remarks>
-        /// A number, a string or an object identifier is a handful of bytes on the wire, and its
-        /// bytes are written into a buffer of that size. A coded output stream carries a buffer
-        /// of several kilobytes of its own, which is far more to allocate for one number than
-        /// writing the number costs. Anything carried by a protobuf message is left to protobuf
-        /// to serialize.
-        /// </remarks>
-        static ByteString EncodeValue (object value, Type type)
-        {
-            if (value == null)
-                throw new ArgumentException ("null cannot be encoded to type " + type);
-            if (!type.IsInstanceOfType (value))
-                throw new ArgumentException ("Value of type " + value.GetType () + " cannot be encoded to type " + type);
-            if (value is Enum)
-                return Varint (EncodeZigZag ((int)value));
-            switch (Type.GetTypeCode (type)) {
-            case TypeCode.Double:
-                return Fixed64 ((ulong)BitConverter.DoubleToInt64Bits ((double)value));
-            case TypeCode.Single:
-                return Fixed32 (ToBits ((float)value));
-            case TypeCode.Int32:
-                return Varint (EncodeZigZag ((int)value));
-            case TypeCode.Int64:
-                return Varint (EncodeZigZag ((long)value));
-            case TypeCode.UInt32:
-                return Varint ((uint)value);
-            case TypeCode.UInt64:
-                return Varint ((ulong)value);
-            case TypeCode.Boolean:
-                return Varint ((bool)value ? 1UL : 0UL);
-            case TypeCode.String:
-                return EncodeString ((string)value);
-            default:
-                return EncodeObject (value, type);
-            }
-        }
-
-        /// <summary>
-        /// Encode a value that is not a number, a string or an enumeration, from what is known
-        /// about its type.
-        /// </summary>
-        static ByteString EncodeObject (object value, Type type)
-        {
-            var info = TypeInfo.For (type);
-            switch (info.Kind) {
-            case TypeKind.Bytes:
-                return EncodeBytes ((byte[])value);
-            case TypeKind.Class:
-                return Varint (((RemoteObject)value).id);
-            case TypeKind.Struct:
-            case TypeKind.Tuple:
-                return EncodeTuple (value, info).ToByteString ();
-            case TypeKind.List:
-                return EncodeList (value, info).ToByteString ();
-            case TypeKind.Set:
-                return EncodeSet (value, info).ToByteString ();
-            case TypeKind.Dictionary:
-                return EncodeDictionary (value, info).ToByteString ();
-            case TypeKind.Message:
-                return ((IMessage)value).ToByteString ();
-            default:
-                throw new ArgumentException (type + " is not a serializable type");
-            }
-        }
-
-        static readonly ConcurrentDictionary<Type, Func<object, ByteString>> encoders =
-            new ConcurrentDictionary<Type, Func<object, ByteString>> ();
-
-        /// <summary>
-        /// A function that encodes one value of the given type.
+        /// A function that encodes one value of the type the given spec describes.
         /// </summary>
         /// <remarks>
         /// A collection carries many values of the same type, and reaching the code that writes
@@ -107,36 +47,69 @@ namespace KRPC.Client
         /// None of those answers change, so a collection asks once and calls what it gets back
         /// for each of its items.
         /// </remarks>
-        static Func<object, ByteString> EncoderFor (Type type)
+        static Func<object, ByteString> EncoderFor (TypeSpec spec)
         {
-            Func<object, ByteString> encode;
-            if (encoders.TryGetValue (type, out encode))
-                return encode;
-            return encoders.GetOrAdd (type, BuildEncoder (type));
+            var encode = spec.valueEncoder;
+            if (encode == null)
+                spec.valueEncoder = encode = BuildEncoder (spec);
+            return encode;
+        }
+
+        /// <summary>
+        /// A function that encodes one of the values a collection or a structure holds, at the
+        /// position the given spec describes. A position that can hold null carries a presence
+        /// bool before its value, and holds nothing else when that bool is false.
+        /// </summary>
+        static Func<object, ByteString> ItemEncoderFor (TypeSpec spec)
+        {
+            var encode = spec.itemEncoder;
+            if (encode == null)
+                spec.itemEncoder = encode = BuildItemEncoder (spec);
+            return encode;
         }
 
         /// <remarks>
         /// A value reached this way is an item of a collection whose type says what its items
-        /// are, so unlike <see cref="EncodeValue"/> this does not ask each one whether it is of
-        /// that type. Asking is a call into the type system, and asking it once per item is what
-        /// made writing a collection cost several times what reading one back costs. A null is
-        /// still rejected, as a collection of a class type can hold one.
+        /// are, so unlike <see cref="Encode"/> this does not ask each one whether it is of that
+        /// type. Asking is a call into the type system, and asking it once per item is what made
+        /// writing a collection cost several times what reading one back costs. A null is still
+        /// rejected, as a collection of a class type can hold one.
         /// </remarks>
-        static Func<object, ByteString> BuildEncoder (Type type)
+        static Func<object, ByteString> BuildItemEncoder (TypeSpec spec)
         {
-            Func<object, ByteString> write = WriterFor (type);
-            return value => {
-                if (value == null)
-                    throw new ArgumentException ("null cannot be encoded to type " + type);
-                return write (value);
-            };
+            var write = EncoderFor (spec);
+            var type = spec.Type;
+            if (!spec.Nullable)
+                return value => {
+                    if (value == null)
+                        throw new ArgumentException ("null cannot be encoded to type " + type);
+                    return write (value);
+                };
+            return value => value == null ? absent : WithPresence (write (value));
+        }
+
+        static ByteString WithPresence (ByteString encoded)
+        {
+            var buffer = new byte [encoded.Length + 1];
+            buffer [0] = 1;
+            encoded.CopyTo (buffer, 1);
+            return ByteString.CopyFrom (buffer, 0, buffer.Length);
         }
 
         /// <summary>
-        /// A function that writes one value of the given type, without checking it first.
+        /// A function that writes one value of the type the given spec describes, without
+        /// checking it first.
         /// </summary>
-        static Func<object, ByteString> WriterFor (Type type)
+        /// <remarks>
+        /// A number, a string or an object identifier is a handful of bytes on the wire, and its
+        /// bytes are written into a buffer of that size. A coded output stream carries a buffer
+        /// of several kilobytes of its own, which is far more to allocate for one number than
+        /// writing the number costs. Anything carried by a protobuf message is left to protobuf
+        /// to serialize.
+        /// </remarks>
+        static Func<object, ByteString> BuildEncoder (TypeSpec spec)
         {
+            var type = spec.Type;
             if (type.IsEnum)
                 return value => Varint (EncodeZigZag ((int)value));
             switch (Type.GetTypeCode (type)) {
@@ -167,13 +140,13 @@ namespace KRPC.Client
                 return value => Varint (((RemoteObject)value).id);
             case TypeKind.Struct:
             case TypeKind.Tuple:
-                return value => EncodeTuple (value, info).ToByteString ();
+                return value => EncodeTuple (value, info, spec);
             case TypeKind.List:
-                return value => EncodeList (value, info).ToByteString ();
+                return value => EncodeList (value, spec);
             case TypeKind.Set:
-                return value => EncodeSet (value, info).ToByteString ();
+                return value => EncodeSet (value, spec);
             case TypeKind.Dictionary:
-                return value => EncodeDictionary (value, info).ToByteString ();
+                return value => EncodeDictionary (value, spec);
             case TypeKind.Message:
                 return value => ((IMessage)value).ToByteString ();
             default:
@@ -181,36 +154,36 @@ namespace KRPC.Client
             }
         }
 
-        static IMessage EncodeTuple (object value, TypeInfo info)
+        static ByteString EncodeTuple (object value, TypeInfo info, TypeSpec spec)
         {
             var encodedTuple = new Schema.KRPC.Tuple ();
-            for (int i = 0; i < info.Arguments.Length; i++)
-                encodedTuple.Items.Add (EncodeValue (info.Items [i] (value), info.Arguments [i]));
-            return encodedTuple;
+            for (int i = 0; i < info.Items.Length; i++)
+                encodedTuple.Items.Add (ItemEncoderFor (spec.At (i)) (info.Items [i] (value)));
+            return encodedTuple.ToByteString ();
         }
 
-        static IMessage EncodeList (object value, TypeInfo info)
+        static ByteString EncodeList (object value, TypeSpec spec)
         {
             var encodedList = new Schema.KRPC.List ();
-            var encodeItem = EncoderFor (info.Arguments [0]);
+            var encodeItem = ItemEncoderFor (spec.At (0));
             foreach (var item in (IList)value)
                 encodedList.Items.Add (encodeItem (item));
-            return encodedList;
+            return encodedList.ToByteString ();
         }
 
-        static IMessage EncodeSet (object value, TypeInfo info)
+        static ByteString EncodeSet (object value, TypeSpec spec)
         {
             var encodedSet = new Schema.KRPC.Set ();
-            var encodeItem = EncoderFor (info.Arguments [0]);
+            var encodeItem = ItemEncoderFor (spec.At (0));
             foreach (var item in (IEnumerable)value)
                 encodedSet.Items.Add (encodeItem (item));
-            return encodedSet;
+            return encodedSet.ToByteString ();
         }
 
-        static IMessage EncodeDictionary (object value, TypeInfo info)
+        static ByteString EncodeDictionary (object value, TypeSpec spec)
         {
-            var encodeKey = EncoderFor (info.Arguments [0]);
-            var encodeValue = EncoderFor (info.Arguments [1]);
+            var encodeKey = ItemEncoderFor (spec.At (0));
+            var encodeValue = ItemEncoderFor (spec.At (1));
             var encodedDictionary = new Schema.KRPC.Dictionary ();
             foreach (DictionaryEntry entry in (IDictionary)value) {
                 var encodedEntry = new Schema.KRPC.DictionaryEntry ();
@@ -218,107 +191,77 @@ namespace KRPC.Client
                 encodedEntry.Value = encodeValue (entry.Value);
                 encodedDictionary.Entries.Add (encodedEntry);
             }
-            return encodedDictionary;
+            return encodedDictionary.ToByteString ();
         }
 
         /// <summary>
-        /// Decode a value of the given type.
+        /// Decode a value at a slot, of the type the given spec describes. The counterpart of
+        /// <see cref="Encode"/>.
         /// Should not be called directly. This interface is used by service client stubs.
+        /// </summary>
+        public static object Decode (ByteString value, TypeSpec spec, IConnection client)
+        {
+            if (ReferenceEquals (spec, null))
+                throw new ArgumentNullException (nameof (spec));
+            return DecoderFor (spec) (value, client);
+        }
+
+        /// <summary>
+        /// A function that decodes one value of the type the given spec describes. The
+        /// counterpart of <see cref="EncoderFor"/>, and there for the same reason.
+        /// </summary>
+        static Func<ByteString, IConnection, object> DecoderFor (TypeSpec spec)
+        {
+            var decode = spec.valueDecoder;
+            if (decode == null)
+                spec.valueDecoder = decode = BuildDecoder (spec);
+            return decode;
+        }
+
+        /// <summary>
+        /// A function that decodes one of the values a collection or a structure holds, which
+        /// <see cref="ItemEncoderFor"/> wrote.
+        /// </summary>
+        static Func<ByteString, IConnection, object> ItemDecoderFor (TypeSpec spec)
+        {
+            var decode = spec.itemDecoder;
+            if (decode == null)
+                spec.itemDecoder = decode = BuildItemDecoder (spec);
+            return decode;
+        }
+
+        static Func<ByteString, IConnection, object> BuildItemDecoder (TypeSpec spec)
+        {
+            var decode = DecoderFor (spec);
+            if (!spec.Nullable)
+                return decode;
+            var type = spec.Type;
+            var decodeValue = decode;
+            // An enumeration decodes to its integer value, which unboxes to the enumeration
+            // itself but not to a Nullable of it
+            if (type.IsEnum)
+                decodeValue = (data, client) => Enum.ToObject (type, decode (data, client));
+            return (data, client) => {
+                if (data.Length == 0)
+                    throw new ArgumentException ("A nullable value carries no presence bool");
+                // The presence bool is one byte, as a bool value always is
+                if (data [0] == 0)
+                    return null;
+                return decodeValue (ByteString.CopyFrom (data.Span.Slice (1)), client);
+            };
+        }
+
+        /// <summary>
+        /// A function that reads one value of the type the given spec describes.
         /// </summary>
         /// <remarks>
         /// The bytes of a number, a string or an object identifier are read where they are, for
         /// the same reason the encoding writes them there: a coded input stream of its own is
         /// more to allocate for one value than reading the value costs.
         /// </remarks>
-        public static object Decode (ByteString value, Type type, IConnection client)
+        static Func<ByteString, IConnection, object> BuildDecoder (TypeSpec spec)
         {
-            if (ReferenceEquals (type, null))
-                throw new ArgumentNullException (nameof (type));
-            // A Nullable<T> value decodes as its underlying type T; a null value is
-            // signaled out-of-band by is_null and never reaches this method.
-            type = Nullable.GetUnderlyingType (type) ?? type;
-            if (type.IsEnum)
-                return DecodeZigZag32 (ReadVarint (value));
-            switch (Type.GetTypeCode (type)) {
-            case TypeCode.Double:
-                return BitConverter.Int64BitsToDouble ((long)ReadFixed64 (value));
-            case TypeCode.Single:
-                return ToSingle (ReadFixed32 (value));
-            case TypeCode.Int32:
-                return DecodeZigZag32 (ReadVarint (value));
-            case TypeCode.Int64:
-                return DecodeZigZag64 (ReadVarint (value));
-            case TypeCode.UInt32:
-                return (uint)ReadVarint (value);
-            case TypeCode.UInt64:
-                return ReadVarint (value);
-            case TypeCode.Boolean:
-                return ReadVarint (value) != 0;
-            case TypeCode.String:
-                return value.CreateCodedInput ().ReadString ();
-            default:
-                return DecodeObject (value, type, client);
-            }
-        }
-
-        /// <summary>
-        /// Decode a value that is not a number, a string or an enumeration, from what is known
-        /// about its type.
-        /// </summary>
-        static object DecodeObject (ByteString value, Type type, IConnection client)
-        {
-            var info = TypeInfo.For (type);
-            switch (info.Kind) {
-            case TypeKind.Bytes:
-                return value.CreateCodedInput ().ReadBytes ().ToByteArray ();
-            case TypeKind.Class:
-                if (client == null)
-                    throw new ArgumentException ("Client not passed when decoding remote object");
-                return info.NewObject (client, ReadVarint (value));
-            case TypeKind.Struct:
-            case TypeKind.Tuple:
-                return DecodeTuple (value, info, client);
-            case TypeKind.List:
-                return DecodeList (value, info, client);
-            case TypeKind.Set:
-                return DecodeSet (value, info, client);
-            case TypeKind.Dictionary:
-                return DecodeDictionary (value, info, client);
-            case TypeKind.Message: {
-                    var message = (IMessage)Activator.CreateInstance (type);
-                    message.MergeFrom (value);
-                    return message;
-                }
-            case TypeKind.Event: {
-                    var message = new Schema.KRPC.Event ();
-                    message.MergeFrom (value);
-                    return new Event ((Connection)client, message);
-                }
-            default:
-                throw new ArgumentException (type + " is not a serializable type");
-            }
-        }
-
-        static readonly ConcurrentDictionary<Type, Func<ByteString, IConnection, object>> decoders =
-            new ConcurrentDictionary<Type, Func<ByteString, IConnection, object>> ();
-
-        /// <summary>
-        /// A function that decodes one value of the given type. The counterpart of
-        /// <see cref="EncoderFor"/>, and there for the same reason.
-        /// </summary>
-        static Func<ByteString, IConnection, object> DecoderFor (Type type)
-        {
-            Func<ByteString, IConnection, object> decode;
-            if (decoders.TryGetValue (type, out decode))
-                return decode;
-            return decoders.GetOrAdd (type, BuildDecoder (type));
-        }
-
-        static Func<ByteString, IConnection, object> BuildDecoder (Type type)
-        {
-            // A Nullable<T> value decodes as its underlying type T; a null value is
-            // signaled out-of-band by is_null and never reaches here.
-            type = Nullable.GetUnderlyingType (type) ?? type;
+            var type = spec.Type;
             if (type.IsEnum)
                 return (value, client) => DecodeZigZag32 (ReadVarint (value));
             switch (Type.GetTypeCode (type)) {
@@ -353,13 +296,13 @@ namespace KRPC.Client
                 };
             case TypeKind.Struct:
             case TypeKind.Tuple:
-                return (value, client) => DecodeTuple (value, info, client);
+                return (value, client) => DecodeTuple (value, info, spec, client);
             case TypeKind.List:
-                return (value, client) => DecodeList (value, info, client);
+                return (value, client) => DecodeList (value, info, spec, client);
             case TypeKind.Set:
-                return (value, client) => DecodeSet (value, info, client);
+                return (value, client) => DecodeSet (value, info, spec, client);
             case TypeKind.Dictionary:
-                return (value, client) => DecodeDictionary (value, info, client);
+                return (value, client) => DecodeDictionary (value, info, spec, client);
             case TypeKind.Message:
                 return (value, client) => {
                     var message = (IMessage)Activator.CreateInstance (type);
@@ -384,50 +327,51 @@ namespace KRPC.Client
         /// ignored. Fewer items than the type names is an error, as the missing ones cannot be
         /// given a value.
         /// </remarks>
-        static object DecodeTuple (ByteString data, TypeInfo info, IConnection client)
+        static object DecodeTuple (
+            ByteString data, TypeInfo info, TypeSpec spec, IConnection client)
         {
             var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (data);
-            var values = new object [info.Arguments.Length];
+            var values = new object [info.Items.Length];
             if (encodedTuple.Items.Count < values.Length)
                 throw new ArgumentException (
                     "Value has " + encodedTuple.Items.Count + " items; expected at least " +
                     values.Length);
             for (int i = 0; i < values.Length; i++)
-                values [i] = Decode (encodedTuple.Items [i], info.Arguments [i], client);
+                values [i] = ItemDecoderFor (spec.At (i)) (encodedTuple.Items [i], client);
             return info.NewTuple (values);
         }
 
-        static object DecodeList (ByteString data, TypeInfo info, IConnection client)
+        static object DecodeList (
+            ByteString data, TypeInfo info, TypeSpec spec, IConnection client)
         {
             var encodedList = Schema.KRPC.List.Parser.ParseFrom (data);
-            var decodeItem = DecoderFor (info.Arguments [0]);
             var list = (IList)info.New ();
+            var decodeItem = ItemDecoderFor (spec.At (0));
             foreach (var item in encodedList.Items)
                 list.Add (decodeItem (item, client));
             return list;
         }
 
-        static object DecodeSet (ByteString data, TypeInfo info, IConnection client)
+        static object DecodeSet (
+            ByteString data, TypeInfo info, TypeSpec spec, IConnection client)
         {
             var encodedSet = Schema.KRPC.Set.Parser.ParseFrom (data);
-            var decodeItem = DecoderFor (info.Arguments [0]);
+            var decodeItem = ItemDecoderFor (spec.At (0));
             var set = info.New ();
             foreach (var item in encodedSet.Items)
                 info.Add (set, decodeItem (item, client));
             return set;
         }
 
-        static object DecodeDictionary (ByteString data, TypeInfo info, IConnection client)
+        static object DecodeDictionary (
+            ByteString data, TypeInfo info, TypeSpec spec, IConnection client)
         {
             var encodedDictionary = Schema.KRPC.Dictionary.Parser.ParseFrom (data);
-            var decodeKey = DecoderFor (info.Arguments [0]);
-            var decodeValue = DecoderFor (info.Arguments [1]);
+            var decodeKey = ItemDecoderFor (spec.At (0));
+            var decodeValue = ItemDecoderFor (spec.At (1));
             var dictionary = (IDictionary)info.New ();
-            foreach (var entry in encodedDictionary.Entries) {
-                var key = decodeKey (entry.Key, client);
-                var value = decodeValue (entry.Value, client);
-                dictionary [key] = value;
-            }
+            foreach (var entry in encodedDictionary.Entries)
+                dictionary [decodeKey (entry.Key, client)] = decodeValue (entry.Value, client);
             return dictionary;
         }
 

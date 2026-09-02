@@ -172,7 +172,6 @@ class Parameter(Appendable):
         types,
         procedure,
         default_value=None,
-        nullable=False,
     ):
         super().__init__()
         self.types = types
@@ -183,7 +182,6 @@ class Parameter(Appendable):
             location = "%s parameter %s" % (procedure, name)
             default_value = decode_default_value(default_value, self.type, location)
         self.default_value = default_value
-        self.nullable = nullable
         self.documentation = documentation
 
 
@@ -198,7 +196,6 @@ class Procedure(Appendable):
         documentation,
         types,
         return_type=None,
-        return_is_nullable=False,
         game_scenes=None,
         deprecated=False,
         deprecated_reason="",
@@ -212,7 +209,6 @@ class Procedure(Appendable):
             self.return_type = as_type(self.types, return_type)
         else:
             self.return_type = None
-        self.return_is_nullable = return_is_nullable
         self.parameters = [
             Parameter(
                 documentation=documentation,
@@ -267,7 +263,6 @@ class ClassMethod(Appendable):
         documentation,
         types,
         return_type=None,
-        return_is_nullable=False,
         game_scenes=None,
         deprecated=False,
         deprecated_reason="",
@@ -283,7 +278,6 @@ class ClassMethod(Appendable):
             self.return_type = as_type(self.types, return_type)
         else:
             self.return_type = None
-        self.return_is_nullable = return_is_nullable
         self.parameters = [
             Parameter(
                 documentation=documentation,
@@ -313,7 +307,6 @@ class ClassStaticMethod(Appendable):
         documentation,
         types,
         return_type=None,
-        return_is_nullable=False,
         game_scenes=None,
         deprecated=False,
         deprecated_reason="",
@@ -329,7 +322,6 @@ class ClassStaticMethod(Appendable):
             self.return_type = as_type(self.types, return_type)
         else:
             self.return_type = None
-        self.return_is_nullable = return_is_nullable
         self.parameters = [
             Parameter(
                 documentation=documentation,

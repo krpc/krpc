@@ -58,6 +58,14 @@ class DeprecatedStruct(NamedTuple):
     """
 
 
+class TestNestedNullableStruct(NamedTuple):
+    """
+    Nested nullable struct documentation string.
+    """
+    list_field: List[Optional[TestClass]]
+    string_field: str
+
+
 class TestStruct(NamedTuple):
     """
     Struct documentation string.
@@ -78,6 +86,17 @@ class TestNestedStruct(NamedTuple):
     struct_field: TestStruct
     object_field: TestClass
     string_field: str
+
+
+class TestNullableStruct(NamedTuple):
+    """
+    Nullable struct documentation string.
+    """
+    int_field: int
+    nullable_int_field: Optional[int]
+    nullable_enum_field: Optional[TestEnum]
+    nullable_string_field: Optional[str]
+    nullable_object_field: Optional[TestClass]
 
 
 class CustomException(RuntimeError):
@@ -443,8 +462,10 @@ class TestService:
     }
     _structs = {
         "DeprecatedStruct": DeprecatedStruct,
+        "TestNestedNullableStruct": TestNestedNullableStruct,
         "TestStruct": TestStruct,
         "TestNestedStruct": TestNestedStruct,
+        "TestNullableStruct": TestNullableStruct,
     }
     _exceptions = {
         "CustomException": CustomException,
@@ -917,6 +938,111 @@ class TestService:
             self._client._types.string_type
         )
 
+    def echo_dictionary_of_nullable_objects(self, d: Dict[str, Optional[TestClass]]) -> Dict[str, Optional[TestClass]]:
+        return self._client._invoke(
+            "TestService",
+            "EchoDictionaryOfNullableObjects",
+            [d],
+            [self._client._types.dictionary_type(self._client._types.string_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))],
+            self._client._types.dictionary_type(self._client._types.string_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
+        )
+
+    def _return_type_echo_dictionary_of_nullable_objects(self) -> TypeBase:
+        return self._client._types.dictionary_type(self._client._types.string_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
+
+    def _build_call_echo_dictionary_of_nullable_objects(self, d: Dict[str, Optional[TestClass]]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EchoDictionaryOfNullableObjects",
+            [d],
+            [self._client._types.dictionary_type(self._client._types.string_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))],
+            self._client._types.dictionary_type(self._client._types.string_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
+        )
+
+    def echo_list_of_nullable_ints(self, l: List[Optional[int]]) -> List[Optional[int]]:
+        return self._client._invoke(
+            "TestService",
+            "EchoListOfNullableInts",
+            [l],
+            [self._client._types.list_type(self._client._types.nullable(self._client._types.sint32_type))],
+            self._client._types.list_type(self._client._types.nullable(self._client._types.sint32_type))
+        )
+
+    def _return_type_echo_list_of_nullable_ints(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.nullable(self._client._types.sint32_type))
+
+    def _build_call_echo_list_of_nullable_ints(self, l: List[Optional[int]]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EchoListOfNullableInts",
+            [l],
+            [self._client._types.list_type(self._client._types.nullable(self._client._types.sint32_type))],
+            self._client._types.list_type(self._client._types.nullable(self._client._types.sint32_type))
+        )
+
+    def echo_list_of_nullable_objects(self, l: List[Optional[TestClass]]) -> List[Optional[TestClass]]:
+        return self._client._invoke(
+            "TestService",
+            "EchoListOfNullableObjects",
+            [l],
+            [self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))],
+            self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
+        )
+
+    def _return_type_echo_list_of_nullable_objects(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
+
+    def _build_call_echo_list_of_nullable_objects(self, l: List[Optional[TestClass]]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EchoListOfNullableObjects",
+            [l],
+            [self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))],
+            self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
+        )
+
+    def echo_nested_list_of_nullable_objects(self, l: List[List[Optional[TestClass]]]) -> List[List[Optional[TestClass]]]:
+        return self._client._invoke(
+            "TestService",
+            "EchoNestedListOfNullableObjects",
+            [l],
+            [self._client._types.list_type(self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass"))))],
+            self._client._types.list_type(self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass"))))
+        )
+
+    def _return_type_echo_nested_list_of_nullable_objects(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass"))))
+
+    def _build_call_echo_nested_list_of_nullable_objects(self, l: List[List[Optional[TestClass]]]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EchoNestedListOfNullableObjects",
+            [l],
+            [self._client._types.list_type(self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass"))))],
+            self._client._types.list_type(self._client._types.list_type(self._client._types.nullable(self._client._types.class_type("TestService", "TestClass"))))
+        )
+
+    def echo_nested_nullable_struct(self, value: TestNestedNullableStruct) -> TestNestedNullableStruct:
+        return self._client._invoke(
+            "TestService",
+            "EchoNestedNullableStruct",
+            [value],
+            [self._client._types.struct_type("TestService", "TestNestedNullableStruct")],
+            self._client._types.struct_type("TestService", "TestNestedNullableStruct")
+        )
+
+    def _return_type_echo_nested_nullable_struct(self) -> TypeBase:
+        return self._client._types.struct_type("TestService", "TestNestedNullableStruct")
+
+    def _build_call_echo_nested_nullable_struct(self, value: TestNestedNullableStruct) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EchoNestedNullableStruct",
+            [value],
+            [self._client._types.struct_type("TestService", "TestNestedNullableStruct")],
+            self._client._types.struct_type("TestService", "TestNestedNullableStruct")
+        )
+
     def echo_nullable_int(self, value: Optional[int]) -> Optional[int]:
         return self._client._invoke(
             "TestService",
@@ -999,6 +1125,27 @@ class TestService:
             [value],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
+        )
+
+    def echo_tuple_with_a_nullable_object(self, t: Tuple[int,Optional[TestClass]]) -> Tuple[int,Optional[TestClass]]:
+        return self._client._invoke(
+            "TestService",
+            "EchoTupleWithANullableObject",
+            [t],
+            [self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))],
+            self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
+        )
+
+    def _return_type_echo_tuple_with_a_nullable_object(self) -> TypeBase:
+        return self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
+
+    def _build_call_echo_tuple_with_a_nullable_object(self, t: Tuple[int,Optional[TestClass]]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EchoTupleWithANullableObject",
+            [t],
+            [self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))],
+            self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.nullable(self._client._types.class_type("TestService", "TestClass")))
         )
 
     def empty_list_default(self, x: List[str] = []) -> List[str]:
@@ -1432,6 +1579,27 @@ class TestService:
             [value],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
+        )
+
+    def nullable_struct_echo(self, x: TestNullableStruct) -> TestNullableStruct:
+        return self._client._invoke(
+            "TestService",
+            "NullableStructEcho",
+            [x],
+            [self._client._types.struct_type("TestService", "TestNullableStruct")],
+            self._client._types.struct_type("TestService", "TestNullableStruct")
+        )
+
+    def _return_type_nullable_struct_echo(self) -> TypeBase:
+        return self._client._types.struct_type("TestService", "TestNullableStruct")
+
+    def _build_call_nullable_struct_echo(self, x: TestNullableStruct) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "NullableStructEcho",
+            [x],
+            [self._client._types.struct_type("TestService", "TestNullableStruct")],
+            self._client._types.struct_type("TestService", "TestNullableStruct")
         )
 
     def on_timer(self, milliseconds: int, repeats: int = 1) -> Event:

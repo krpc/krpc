@@ -109,6 +109,7 @@
     <Compile Include="Service\Attributes\KRPCExceptionAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCMethodAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCNullableAttribute.cs" />
+    <Compile Include="Service\Attributes\Position.cs" />
     <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCPropertyAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />
@@ -176,6 +177,8 @@
     <Compile Include="Service\Services.cs" />
     <Compile Include="Service\Stream.cs" />
     <Compile Include="Service\StreamContinuation.cs" />
+    <Compile Include="Service\TypeKind.cs" />
+    <Compile Include="Service\TypeSpec.cs" />
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="Service\ValueUtils.cs" />
     <Compile Include="Service\YieldException.cs" />

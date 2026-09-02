@@ -21,7 +21,7 @@ namespace KRPC.Client
         float rate = 0;
 
         public StreamImpl (Connection connection, ulong id,
-                           System.Type returnType, object updateLock)
+                           TypeSpec returnType, object updateLock)
         {
             this.connection = connection;
             Id = id;
@@ -31,7 +31,7 @@ namespace KRPC.Client
 
         public ulong Id { get; private set; }
 
-        public System.Type ReturnType { get; private set; }
+        public TypeSpec ReturnType { get; private set; }
 
         public void Start () {
             if (!Started) {

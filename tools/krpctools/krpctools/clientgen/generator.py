@@ -10,7 +10,14 @@ from krpc.types import (
     TupleType,
 )
 from krpc.utils import snake_case
-from ..utils import lower_camel_case, indent, single_line, as_type, decode_default_value
+from ..utils import (
+    lower_camel_case,
+    indent,
+    single_line,
+    as_type,
+    decode_default_value,
+    is_nullable,
+)
 from .docparser import flatten_deprecation_reason
 
 
@@ -93,7 +100,7 @@ class Generator:
                 )
                 value = decode_default_value(parameter["default_value"], typ, location)
                 info["default_value"] = self.parse_default_value(value, typ)
-            info["nullable"] = parameter.get("nullable", False)
+            info["nullable"] = typ.nullable
             parameters.append(info)
         return parameters
 
@@ -181,15 +188,15 @@ class Generator:
             }
 
         for name, procedure in self._get_defs("procedures"):
+            return_type = self.get_return_type(procedure)
             if Attributes.is_a_procedure(name):
                 context["procedures"][self.parse_name(name)] = {
                     "procedure": procedure,
                     "remote_name": name,
                     "remote_id": procedure["id"],
                     "parameters": self.generate_context_parameters(name, procedure),
-                    "return_type": self.parse_return_type(
-                        self.get_return_type(procedure)
-                    ),
+                    "return_type": self.parse_return_type(return_type),
+                    "return_is_nullable": is_nullable(return_type),
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
@@ -203,7 +210,8 @@ class Generator:
                 property_name = self.parse_name(Attributes.get_property_name(name))
                 if property_name not in context["properties"]:
                     context["properties"][property_name] = {
-                        "type": self.parse_return_type(self.get_return_type(procedure)),
+                        "type": self.parse_return_type(return_type),
+                        "return_is_nullable": is_nullable(return_type),
                         "getter": None,
                         "setter": None,
                         "documentation": self.parse_documentation(
@@ -226,6 +234,7 @@ class Generator:
                 if property_name not in context["properties"]:
                     context["properties"][property_name] = {
                         "type": params[0]["type"],
+                        "return_is_nullable": params[0]["nullable"],
                         "getter": None,
                         "setter": None,
                         "documentation": self.parse_documentation(
@@ -251,9 +260,8 @@ class Generator:
                     "remote_name": name,
                     "remote_id": procedure["id"],
                     "parameters": params[1:],
-                    "return_type": self.parse_return_type(
-                        self.get_return_type(procedure)
-                    ),
+                    "return_type": self.parse_return_type(return_type),
+                    "return_is_nullable": is_nullable(return_type),
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
@@ -272,9 +280,8 @@ class Generator:
                     "remote_name": name,
                     "remote_id": procedure["id"],
                     "parameters": self.generate_context_parameters(name, procedure),
-                    "return_type": self.parse_return_type(
-                        self.get_return_type(procedure)
-                    ),
+                    "return_type": self.parse_return_type(return_type),
+                    "return_is_nullable": is_nullable(return_type),
                     "documentation": self.parse_documentation(
                         procedure["documentation"]
                     ),
@@ -290,7 +297,8 @@ class Generator:
                 property_name = self.parse_name(Attributes.get_class_member_name(name))
                 if property_name not in cls["properties"]:
                     cls["properties"][property_name] = {
-                        "type": self.parse_return_type(self.get_return_type(procedure)),
+                        "type": self.parse_return_type(return_type),
+                        "return_is_nullable": is_nullable(return_type),
                         "getter": None,
                         "setter": None,
                         "documentation": self.parse_documentation(
@@ -315,6 +323,7 @@ class Generator:
                     params = self.generate_context_parameters(name, procedure)
                     cls["properties"][property_name] = {
                         "type": params[1]["type"],
+                        "return_is_nullable": params[1]["nullable"],
                         "getter": None,
                         "setter": None,
                         "documentation": self.parse_documentation(

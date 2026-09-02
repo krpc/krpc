@@ -164,7 +164,7 @@
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. property:: {{ domain.return_type(field.type) }} {{ field.name }} {{'{'}} get; set; {{'}'}}
+   .. property:: {{ domain.field_type(field) }} {{ field.name }} {{'{'}} get; set; {{'}'}}
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 

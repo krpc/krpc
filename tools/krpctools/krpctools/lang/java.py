@@ -125,15 +125,22 @@ class JavaLanguage(Language):
     def parse_type(self, typ):
         return self._parse_type(typ)
 
+    def _at_position(self, typ):
+        """The Java type of a value at a position inside a collection. A collection holds
+        its values as objects, so a primitive takes its boxed form there whether the
+        position can hold null or not."""
+        return self._parse_type(typ, True)
+
     def _parse_type(self, typ, in_collection=False):
         if typ is None:
             if in_collection:
                 raise RuntimeError("void type not allowed in collection type")
             return "void"
-        if not in_collection and isinstance(typ, ValueType):
-            return self.type_map[typ.protobuf_type.code]
         if isinstance(typ, ValueType):
-            return self.type_map_classes[typ.protobuf_type.code]
+            # A primitive takes its boxed form at a position that can hold null
+            if in_collection or typ.nullable:
+                return self.type_map_classes[typ.protobuf_type.code]
+            return self.type_map[typ.protobuf_type.code]
         if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
             return "krpc.client.Event"
         if isinstance(typ, MessageType):
@@ -148,16 +155,15 @@ class JavaLanguage(Language):
             return (
                 "org.javatuples."
                 + name
-                + "<%s>"
-                % (",".join(self._parse_type(t, True) for t in typ.value_types))
+                + "<%s>" % (",".join(self._at_position(t) for t in typ.value_types))
             )
         if isinstance(typ, ListType):
-            return "java.util.List<%s>" % self._parse_type(typ.value_type, True)
+            return "java.util.List<%s>" % self._at_position(typ.value_type)
         if isinstance(typ, SetType):
-            return "java.util.Set<%s>" % self._parse_type(typ.value_type, True)
+            return "java.util.Set<%s>" % self._at_position(typ.value_type)
         if isinstance(typ, DictionaryType):
             return "java.util.Map<%s,%s>" % (
-                self._parse_type(typ.key_type, True),
-                self._parse_type(typ.value_type, True),
+                self._at_position(typ.key_type),
+                self._at_position(typ.value_type),
             )
         raise RuntimeError("Unknown type '%s'" % str(typ))

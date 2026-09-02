@@ -51,28 +51,28 @@ inline ServiceA::ServiceA(Client* client):
 inline void ServiceA::frob(ServiceB::Mode mode = ServiceB::Mode::fast) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
-  _args.push_back(encoder::encode(mode));
+  _args.push_back(encoder::encode_arg(mode));
   this->_client->invoke("ServiceA", "Frob", _args);
 }
 
 inline void ServiceA::frob_all(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
-  _args.push_back(encoder::encode(modes));
+  _args.push_back(encoder::encode_arg(modes));
   this->_client->invoke("ServiceA", "FrobAll", _args);
 }
 
 inline ::krpc::schema::ProcedureCall ServiceA::frob_call(ServiceB::Mode mode = ServiceB::Mode::fast) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
-  _args.push_back(encoder::encode(mode));
+  _args.push_back(encoder::encode_arg(mode));
   return this->_client->build_call("ServiceA", "Frob", _args);
 }
 
 inline ::krpc::schema::ProcedureCall ServiceA::frob_all_call(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
-  _args.push_back(encoder::encode(modes));
+  _args.push_back(encoder::encode_arg(modes));
   return this->_client->build_call("ServiceA", "FrobAll", _args);
 }
 }  // namespace services

@@ -43,23 +43,42 @@ class CnanoDomain(Domain):
             return "%s_" % name
         return name
 
+    def type_name_at_position(self, typ):
+        name = self.parse_type_name(typ)
+        return "nullable_%s" % name if typ.nullable else name
+
+    def type_at_position(self, typ):
+        """The C type of a value at a position inside another value. A value is stored by
+        value, so there is nowhere to put a null: a position that can hold one takes a
+        generated type of its own, holding the value beside a bool saying whether it is
+        there."""
+        value_type = self.type(typ)
+        if not typ.nullable:
+            return value_type
+        name = "nullable_%s" % value_type["name"]
+        return {
+            "name": name,
+            "ctype": "krpc_%s_t" % name,
+            "cvtype": "krpc_%s_t *" % name,
+        }
+
     def parse_type_name(self, typ):
         if isinstance(typ, ValueType):
             return self.language.type_name_map[typ.protobuf_type.code]
         if isinstance(typ, MessageType):
             return "message_%s" % typ.python_type.__name__
         if isinstance(typ, ListType):
-            return "list_%s" % self.parse_type_name(typ.value_type)
+            return "list_%s" % self.type_name_at_position(typ.value_type)
         if isinstance(typ, SetType):
-            return "set_%s" % self.parse_type_name(typ.value_type)
+            return "set_%s" % self.type_name_at_position(typ.value_type)
         if isinstance(typ, DictionaryType):
             return "dictionary_%s_%s" % (
-                self.parse_type_name(typ.key_type),
-                self.parse_type_name(typ.value_type),
+                self.type_name_at_position(typ.key_type),
+                self.type_name_at_position(typ.value_type),
             )
         if isinstance(typ, TupleType):
             return "tuple_%s" % "_".join(
-                self.parse_type_name(t) for t in typ.value_types
+                self.type_name_at_position(t) for t in typ.value_types
             )
         if isinstance(typ, ClassType):
             return "object"
@@ -79,17 +98,17 @@ class CnanoDomain(Domain):
         elif isinstance(typ, MessageType):
             ctype = "krpc_schema_%s" % typ.python_type.__name__
         elif isinstance(typ, ListType):
-            ctype = "krpc_list_%s_t" % self.parse_type_name(typ.value_type)
+            ctype = "krpc_list_%s_t" % self.type_name_at_position(typ.value_type)
         elif isinstance(typ, SetType):
-            ctype = "krpc_set_%s_t" % self.parse_type_name(typ.value_type)
+            ctype = "krpc_set_%s_t" % self.type_name_at_position(typ.value_type)
         elif isinstance(typ, DictionaryType):
             ctype = "krpc_dictionary_%s_%s_t" % (
-                self.parse_type_name(typ.key_type),
-                self.parse_type_name(typ.value_type),
+                self.type_name_at_position(typ.key_type),
+                self.type_name_at_position(typ.value_type),
             )
         elif isinstance(typ, TupleType):
             ctype = "krpc_tuple_%s_t" % "_".join(
-                self.parse_type_name(t) for t in typ.value_types
+                self.type_name_at_position(t) for t in typ.value_types
             )
         elif isinstance(typ, (ClassType, EnumerationType)):
             ctype = "krpc_%s_%s_t" % (typ.protobuf_type.service, typ.protobuf_type.name)

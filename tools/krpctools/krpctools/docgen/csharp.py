@@ -49,19 +49,29 @@ class CsharpDomain(Domain):
                 "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
             )
         if isinstance(typ, ListType):
-            return "System.Collections.Generic.IList<%s>" % self.type(typ.value_type)
+            return "System.Collections.Generic.IList<%s>" % self.type_at_position(
+                typ.value_type
+            )
         if isinstance(typ, DictionaryType):
             return "System.Collections.Generic.IDictionary<%s,%s>" % (
                 self.type(typ.key_type),
-                self.type(typ.value_type),
+                self.type_at_position(typ.value_type),
             )
         if isinstance(typ, SetType):
             return "System.Collections.Generic.ISet<%s>" % self.type(typ.value_type)
         if isinstance(typ, TupleType):
             return "System.Tuple<%s>" % ",".join(
-                self.type(typ) for typ in typ.value_types
+                self.type_at_position(t) for t in typ.value_types
             )
         raise RuntimeError("Unknown type '%s'" % str(typ))
+
+    def type_at_position(self, typ):
+        # The docs name a type without its namespace alias, so the nullable form is built on
+        # the name this domain gives rather than the one the client is generated with
+        name = self.type(typ)
+        if typ.nullable and self.language.takes_the_nullable_form(typ):
+            return name + "?"
+        return name
 
     def default_value(self, value, typ):
         if isinstance(typ, StructType):

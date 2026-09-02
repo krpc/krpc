@@ -38,7 +38,7 @@ namespace KRPC.Server.ProtocolBuffers
                 if (procedureResult.Value == null)
                     result.IsNull = true;
                 else
-                    result.Value = Encoder.Encode (procedureResult.Value);
+                    result.Value = Encoder.Encode (procedureResult.Value, procedureResult.Spec);
             }
             if (procedureResult.HasError)
                 result.Error = procedureResult.Error.ToProtobufMessage ();
@@ -100,7 +100,6 @@ namespace KRPC.Server.ProtocolBuffers
             result.Parameters.Add (procedure.Parameters.Select (ToProtobufMessage));
             if (procedure.ReturnType != null)
                 result.ReturnType = procedure.ReturnType.ToProtobufMessage ();
-            result.ReturnIsNullable = procedure.ReturnIsNullable;
             result.GameScenes.Add (ToProtobufMessage (procedure.GameScene));
             result.Documentation = procedure.Documentation;
             result.Deprecated = procedure.Deprecated;
@@ -134,13 +133,12 @@ namespace KRPC.Server.ProtocolBuffers
             var result = new Schema.KRPC.Parameter ();
             result.Name = parameter.Name;
             result.Type = parameter.Type.ToProtobufMessage ();
-            result.Nullable = parameter.Nullable;
             result.HasDefaultValue = parameter.HasDefaultValue;
             if (parameter.HasDefaultValue) {
                 if (parameter.DefaultValue == null)
                     result.DefaultValueIsNull = true;
                 else
-                    result.DefaultValue = Encoder.Encode (parameter.DefaultValue);
+                    result.DefaultValue = Encoder.Encode (parameter.DefaultValue, parameter.Type);
             }
             return result;
         }
@@ -209,9 +207,11 @@ namespace KRPC.Server.ProtocolBuffers
             return result;
         }
 
-        public static Schema.KRPC.Type ToProtobufMessage (this Type type)
+        public static Schema.KRPC.Type ToProtobufMessage (this TypeSpec spec)
         {
+            var type = spec.Type;
             var result = new Schema.KRPC.Type ();
+            result.Nullable = spec.Nullable;
             if (TypeUtils.IsAValueType (type)) {
                 switch (Type.GetTypeCode (type)) {
                 case TypeCode.Single:
@@ -268,18 +268,16 @@ namespace KRPC.Server.ProtocolBuffers
                 result.Name = type.Name;
             } else if (TypeUtils.IsAListCollectionType (type)) {
                 result.Code = Schema.KRPC.Type.Types.TypeCode.List;
-                result.Types_.Add (type.GetGenericArguments () [0].ToProtobufMessage ());
+                result.Types_.Add (spec.Types.Select (ToProtobufMessage));
             } else if (TypeUtils.IsADictionaryCollectionType (type)) {
                 result.Code = Schema.KRPC.Type.Types.TypeCode.Dictionary;
-                result.Types_.Add (type.GetGenericArguments () [0].ToProtobufMessage ());
-                result.Types_.Add (type.GetGenericArguments () [1].ToProtobufMessage ());
+                result.Types_.Add (spec.Types.Select (ToProtobufMessage));
             } else if (TypeUtils.IsASetCollectionType (type)) {
                 result.Code = Schema.KRPC.Type.Types.TypeCode.Set;
-                result.Types_.Add (type.GetGenericArguments () [0].ToProtobufMessage ());
+                result.Types_.Add (spec.Types.Select (ToProtobufMessage));
             } else if (TypeUtils.IsATupleCollectionType (type)) {
                 result.Code = Schema.KRPC.Type.Types.TypeCode.Tuple;
-                foreach (var subType in type.GetGenericArguments())
-                    result.Types_.Add (subType.ToProtobufMessage ());
+                result.Types_.Add (spec.Types.Select (ToProtobufMessage));
             }
             return result;
         }
@@ -345,17 +343,17 @@ namespace KRPC.Server.ProtocolBuffers
                     // Ignore the argument if its position is not valid
                     if (position >= procedureSignature.Parameters.Count)
                         continue;
-                    var type = procedureSignature.Parameters [position].Type;
-                    result.Arguments.Add (argument.ToMessage (type));
+                    var spec = procedureSignature.Parameters [position].Spec;
+                    result.Arguments.Add (argument.ToMessage (spec));
                 }
             } catch (RPCException) {
             }
             return result;
         }
 
-        public static Argument ToMessage (this Schema.KRPC.Argument argument, Type type)
+        public static Argument ToMessage (this Schema.KRPC.Argument argument, TypeSpec spec)
         {
-            var value = argument.IsNull ? null : Encoder.Decode (argument.Value, type);
+            var value = argument.IsNull ? null : Encoder.Decode (argument.Value, spec);
             return new Argument (argument.Position, value);
         }
     }

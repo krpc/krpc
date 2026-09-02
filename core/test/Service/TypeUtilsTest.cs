@@ -47,6 +47,12 @@ namespace KRPC.Test.Service
         [TestCase (typeof(TestService.TestStruct))]
         [TestCase (typeof(TestService.TestNestedStruct))]
         [TestCase (typeof(IList<TestService.TestStruct>))]
+        // A Nullable<T> is valid wherever T is, at a position that allows a null
+        [TestCase (typeof(int?))]
+        [TestCase (typeof(IList<int?>))]
+        [TestCase (typeof(IDictionary<string,int?>))]
+        [TestCase (typeof(Tuple<int?,string>))]
+        [TestCase (typeof(IList<TestService.TestEnum?>))]
         public void IsAValidType (Type type)
         {
             Assert.IsTrue (TypeUtils.IsAValidType (type));
@@ -60,6 +66,10 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IEnumerable<string>))]
         [TestCase (typeof(StructWithoutFields))]
         [TestCase (typeof(IList<StructWithoutFields>))]
+        // A set element and a dictionary key are the two positions that cannot hold a null,
+        // so a Nullable<T> at either one is not a type a service can declare
+        [TestCase (typeof(HashSet<int?>))]
+        [TestCase (typeof(IDictionary<int?,string>))]
         public void IsNotAValidType (Type type)
         {
             Assert.IsFalse (TypeUtils.IsAValidType (type));
@@ -425,30 +435,46 @@ namespace KRPC.Test.Service
             }
         }
 
-        public struct StructWithANullableField
-        {
-            [KRPCProperty (Nullable = true)]
-            public TestService.TestClass Field { get; set; }
-        }
-
         public struct StructWithAGameSceneField
         {
             [KRPCProperty (GameScene = GameScene.Flight)]
             public int Field { get; set; }
         }
 
+        public struct StructWithANullableFieldThatCannotBeNull
+        {
+            [KRPCProperty (Nullable = true)]
+            public int Field { get; set; }
+        }
+
+        public struct StructWithANullableEnumFieldThatCannotBeNull
+        {
+            [KRPCProperty (Nullable = true)]
+            public TestService.TestEnum Field { get; set; }
+        }
+
         [TestCase (typeof(StructWithoutFields))]
         [TestCase (typeof(StructWithAnInvalidFieldType))]
         [TestCase (typeof(StructWithAFieldWithoutASetter))]
-        [TestCase (typeof(StructWithANullableField))]
         [TestCase (typeof(StructWithAGameSceneField))]
         public void InvalidStructFields (Type type)
         {
             Assert.Throws<ServiceException> (() => TypeUtils.ValidateStructFields (type));
         }
 
+        // A field marked nullable whose type holds no null of its own
+
+        [TestCase (typeof(StructWithANullableFieldThatCannotBeNull))]
+        [TestCase (typeof(StructWithANullableEnumFieldThatCannotBeNull))]
+        public void NullableStructFieldThatCannotBeNull (Type type)
+        {
+            Assert.Throws<ServiceException> (
+                () => TypeUtils.GetStructFieldSpec (type, type.GetProperty ("Field")));
+        }
+
         [TestCase (typeof(TestService.TestStruct))]
         [TestCase (typeof(TestService.TestNestedStruct))]
+        [TestCase (typeof(TestService.TestNullableStruct))]
         public void ValidStructFields (Type type)
         {
             Assert.DoesNotThrow (() => TypeUtils.ValidateStructFields (type));
@@ -568,7 +594,7 @@ namespace KRPC.Test.Service
                    "]}", typeof(IList<TestService.TestStruct>))]
         public void SerializeType (string name, Type type)
         {
-            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type)));
+            Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (TypeSpec.Create (type))));
         }
 
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
@@ -576,7 +602,7 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IDictionary<double,string>))]
         public void InvalidSerializeType (Type type)
         {
-            Assert.Throws<ArgumentException> (() => TypeUtils.SerializeType (type));
+            Assert.Throws<ArgumentException> (() => TypeUtils.SerializeType (TypeSpec.Create (type)));
         }
     }
 }

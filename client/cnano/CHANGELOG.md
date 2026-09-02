@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Support a nullable structure field, list element, tuple item and dictionary value, each
+  generated as a type holding the value beside a `bool` presence flag (#1091)
 - Support structure types, generated as a C struct with a member per field (#1066)
 - **Breaking:** Support null for any nullable type; a nullable non-class return adds a
   `bool* returnValueIsNull` out-parameter and a nullable argument is a pointer (#1017)

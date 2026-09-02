@@ -7,7 +7,7 @@ int main() {
   auto conn = krpc::connect();
   krpc::services::KRPC krpc(&conn);
   krpc::services::SpaceCenter sc(&conn);
-  auto flight = sc.active_vessel().flight();
+  auto flight = sc.active_vessel().value().flight();
 
   // Get the remote procedure call as a message object,
   // so it can be passed to the server

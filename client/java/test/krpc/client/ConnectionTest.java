@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -293,6 +294,70 @@ public class ConnectionTest {
     TestService.TestStruct value = new TestService.TestStruct(
         1, "jeb", TestService.TestEnum.VALUE_A, new ArrayList<Integer>());
     assertEquals(value, testService.structEchoNullable(value));
+  }
+
+  @Test
+  public void testNullableListElements() throws RPCException {
+    List<Integer> ints = Arrays.asList(1, null, 3);
+    assertEquals(ints, testService.echoListOfNullableInts(ints));
+    TestService.TestClass obj = testService.createTestObject("jeb");
+    List<TestService.TestClass> objects = Arrays.asList(obj, null);
+    assertEquals(objects, testService.echoListOfNullableObjects(objects));
+  }
+
+  @Test
+  public void testNullableDictionaryValues() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("jeb");
+    Map<String, TestService.TestClass> value = new HashMap<String, TestService.TestClass>();
+    value.put("a", obj);
+    value.put("b", null);
+    assertEquals(value, testService.echoDictionaryOfNullableObjects(value));
+  }
+
+  @Test
+  public void testNullableTupleItem() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("jeb");
+    assertEquals(new Pair<Integer, TestService.TestClass>(1, obj),
+        testService.echoTupleWithANullableObject(new Pair<Integer, TestService.TestClass>(1, obj)));
+    assertEquals(new Pair<Integer, TestService.TestClass>(1, null),
+        testService.echoTupleWithANullableObject(
+            new Pair<Integer, TestService.TestClass>(1, null)));
+  }
+
+  @Test
+  public void testNullableNestedListElements() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("jeb");
+    List<List<TestService.TestClass>> value = Arrays.asList(
+        Arrays.asList(obj, null), Arrays.<TestService.TestClass>asList());
+    assertEquals(value, testService.echoNestedListOfNullableObjects(value));
+  }
+
+  @Test
+  public void testNullableStructFields() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("jeb");
+    TestService.TestNullableStruct value = new TestService.TestNullableStruct(
+        1, 2, TestService.TestEnum.VALUE_B, "jeb", obj);
+    assertEquals(value, testService.nullableStructEcho(value));
+  }
+
+  @Test
+  public void testNullStructFields() throws RPCException {
+    TestService.TestNullableStruct value =
+        new TestService.TestNullableStruct(1, null, null, null, null);
+    TestService.TestNullableStruct result = testService.nullableStructEcho(value);
+    assertEquals(1, result.getIntField());
+    assertNull(result.getNullableIntField());
+    assertNull(result.getNullableEnumField());
+    assertNull(result.getNullableStringField());
+    assertNull(result.getNullableObjectField());
+  }
+
+  @Test
+  public void testNullableElementsOfStructField() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("jeb");
+    TestService.TestNestedNullableStruct value = new TestService.TestNestedNullableStruct(
+        Arrays.asList(obj, null), "jeb");
+    assertEquals(value, testService.echoNestedNullableStruct(value));
   }
 
   @Test

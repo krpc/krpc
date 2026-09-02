@@ -312,8 +312,95 @@ namespace TestServer
             public string StringField { get; set; }
         }
 
+        /// <summary>
+        /// Nullable struct documentation string.
+        /// </summary>
+        [KRPCStruct]
+        public struct TestNullableStruct
+        {
+            [KRPCProperty]
+            public int IntField { get; set; }
+
+            [KRPCProperty]
+            public int? NullableIntField { get; set; }
+
+            [KRPCProperty]
+            public TestEnum? NullableEnumField { get; set; }
+
+            [KRPCProperty (Nullable = true)]
+            public string NullableStringField { get; set; }
+
+            [KRPCProperty (Nullable = true)]
+            public TestClass NullableObjectField { get; set; }
+        }
+
+        /// <summary>
+        /// Nested nullable struct documentation string.
+        /// </summary>
+        [KRPCStruct]
+        public struct TestNestedNullableStruct
+        {
+            [KRPCProperty]
+            [KRPCNullable (Position.Element)]
+            public IList<TestClass> ListField { get; set; }
+
+            [KRPCProperty]
+            public string StringField { get; set; }
+        }
+
+        [KRPCProcedure]
+        public static TestNestedNullableStruct EchoNestedNullableStruct (
+            TestNestedNullableStruct value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure]
+        public static IList<int?> EchoListOfNullableInts (IList<int?> l)
+        {
+            return l;
+        }
+
+        [KRPCProcedure]
+        [KRPCNullable (Position.Element)]
+        public static IList<TestClass> EchoListOfNullableObjects (
+            [KRPCNullable (Position.Element)] IList<TestClass> l)
+        {
+            return l;
+        }
+
+        [KRPCProcedure]
+        [KRPCNullable (Position.Value)]
+        public static IDictionary<string,TestClass> EchoDictionaryOfNullableObjects (
+            [KRPCNullable (Position.Value)] IDictionary<string,TestClass> d)
+        {
+            return d;
+        }
+
+        [KRPCProcedure]
+        [KRPCNullable (Position.Item2)]
+        public static Tuple<int,TestClass> EchoTupleWithANullableObject (
+            [KRPCNullable (Position.Item2)] Tuple<int,TestClass> t)
+        {
+            return t;
+        }
+
+        [KRPCProcedure]
+        [KRPCNullable (Position.Element, Position.Element)]
+        public static IList<IList<TestClass>> EchoNestedListOfNullableObjects (
+            [KRPCNullable (Position.Element, Position.Element)] IList<IList<TestClass>> l)
+        {
+            return l;
+        }
+
         [KRPCProcedure]
         public static TestStruct StructEcho (TestStruct x)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static TestNullableStruct NullableStructEcho (TestNullableStruct x)
         {
             return x;
         }

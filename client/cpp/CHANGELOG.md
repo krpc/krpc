@@ -1,10 +1,11 @@
 ## [v0.7.0] - unreleased
+- Support a nullable structure field, list element, tuple item and dictionary value (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as
   a `struct` with a constructor, equality, ordering and a `std::hash` over its fields (#1066)
 - Add `krpc::hash_value` and the `krpc::hash` function object, which hash any type the client
   carries, so a tuple or a collection can key an unordered container (#1067)
-- **Breaking:** Support null for any nullable type; nullable non-class values use
-  `std::optional`, changing generated signatures (#1017)
+- **Breaking:** Support null for any nullable type, held as `std::optional`, changing
+  generated signatures (#1017)
 - Add `krpc::connect_local`, which connects to a server on the same machine over unix domain
   sockets (#1065)
 - Add a `timeout` parameter to `krpc::connect`, bounding how long a connection is waited for

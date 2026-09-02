@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KRPC.Service.Attributes;
 
 namespace KRPC.Service
 {
@@ -35,5 +36,10 @@ namespace KRPC.Service
         /// Whether the method could return null
         /// </summary>
         bool ReturnIsNullable { get; }
+
+        /// <summary>
+        /// The nullable positions inside the return type, each named by a path
+        /// </summary>
+        IEnumerable<IList<Position>> ReturnNullablePaths { get; }
     }
 }

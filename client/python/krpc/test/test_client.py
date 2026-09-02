@@ -233,6 +233,12 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(obj2, obj.echo_nullable_object(obj2))
         self.assertIsNone(obj.echo_nullable_object(None))
 
+    def test_nullable_class_type_shares_one_python_type(self) -> None:
+        # A nullable class-typed value is the generated class of the non-nullable one, and
+        # not a second class minted for the nullable declaration
+        obj = self.conn.test_service.create_test_object("jeb")
+        self.assertIs(type(obj.echo_nullable_object(obj)), type(obj))
+
     def test_nullable_class_static_method(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
         self.assertEqual(
@@ -275,6 +281,15 @@ class TestClient(ServerTestCase, unittest.TestCase):
     def test_nullable_stream(self) -> None:
         with self.conn.stream(self.conn.test_service.echo_nullable_int, None) as stream:
             self.assertIsNone(stream())
+
+    def test_stream_of_nullable_list_elements(self) -> None:
+        # A stream carries the value itself, so a null inside a collection reaches the
+        # decoder as a presence bool where a null result does not
+        service = self.conn.test_service
+        with self.conn.stream(
+            service.echo_list_of_nullable_ints, [1, None, 3]
+        ) as stream:
+            self.assertEqual([1, None, 3], stream())
 
     def test_class_methods(self) -> None:
         obj = self.conn.test_service.create_test_object("bob")
@@ -521,6 +536,67 @@ class TestClient(ServerTestCase, unittest.TestCase):
         )
         self.assertEqual(value, service.struct_echo_nullable(value))
 
+    def test_nullable_list_elements(self) -> None:
+        service = self.conn.test_service
+        self.assertEqual([1, None, 3], service.echo_list_of_nullable_ints([1, None, 3]))
+        # A zero is a value like any other, and survives a position that could hold a null
+        self.assertEqual([0, None], service.echo_list_of_nullable_ints([0, None]))
+        obj = service.create_test_object("jeb")
+        self.assertEqual(
+            [obj, None], service.echo_list_of_nullable_objects([obj, None])
+        )
+
+    def test_nullable_dictionary_values(self) -> None:
+        service = self.conn.test_service
+        obj = service.create_test_object("jeb")
+        value = {"a": obj, "b": None}
+        self.assertEqual(value, service.echo_dictionary_of_nullable_objects(value))
+
+    def test_nullable_tuple_item(self) -> None:
+        service = self.conn.test_service
+        obj = service.create_test_object("jeb")
+        self.assertEqual((1, obj), service.echo_tuple_with_a_nullable_object((1, obj)))
+        self.assertEqual(
+            (1, None), service.echo_tuple_with_a_nullable_object((1, None))
+        )
+
+    def test_nullable_nested_list_elements(self) -> None:
+        service = self.conn.test_service
+        obj = service.create_test_object("jeb")
+        value = [[obj, None], []]
+        self.assertEqual(value, service.echo_nested_list_of_nullable_objects(value))
+
+    def test_nullable_struct_fields(self) -> None:
+        service = self.conn.test_service
+        obj = service.create_test_object("jeb")
+        value = service.TestNullableStruct(
+            int_field=1,
+            nullable_int_field=2,
+            nullable_enum_field=service.TestEnum.value_b,
+            nullable_string_field="jeb",
+            nullable_object_field=obj,
+        )
+        self.assertEqual(value, service.nullable_struct_echo(value))
+
+    def test_null_struct_fields(self) -> None:
+        service = self.conn.test_service
+        value = service.TestNullableStruct(
+            int_field=1,
+            nullable_int_field=None,
+            nullable_enum_field=None,
+            nullable_string_field=None,
+            nullable_object_field=None,
+        )
+        self.assertEqual(value, service.nullable_struct_echo(value))
+
+    def test_nullable_elements_of_a_struct_field(self) -> None:
+        service = self.conn.test_service
+        obj = service.create_test_object("jeb")
+        value = service.TestNestedNullableStruct(
+            list_field=[obj, None], string_field="jeb"
+        )
+        self.assertEqual(value, service.echo_nested_nullable_struct(value))
+
     def test_struct_default_value(self) -> None:
         service = self.conn.test_service
         self.assertEqual(
@@ -759,7 +835,16 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "counter",
                     "TestStruct",
                     "TestNestedStruct",
+                    "TestNullableStruct",
+                    "TestNestedNullableStruct",
+                    "echo_nested_nullable_struct",
+                    "echo_list_of_nullable_ints",
+                    "echo_list_of_nullable_objects",
+                    "echo_dictionary_of_nullable_objects",
+                    "echo_tuple_with_a_nullable_object",
+                    "echo_nested_list_of_nullable_objects",
                     "struct_echo",
+                    "nullable_struct_echo",
                     "nested_struct_echo",
                     "increment_list_of_structs",
                     "struct_default",

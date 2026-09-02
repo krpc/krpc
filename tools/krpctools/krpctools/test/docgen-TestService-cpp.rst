@@ -166,7 +166,7 @@
 
    
 
-   .. function:: int32_t echo_nullable_int(int32_t value)
+   .. function:: std::map<std::string, std::optional<TestClass>> echo_dictionary_of_nullable_objects(std::map<std::string, std::optional<TestClass>> d)
 
 
 
@@ -176,7 +176,7 @@
 
    
 
-   .. function:: std::vector<int32_t> echo_nullable_list(std::vector<int32_t> l)
+   .. function:: std::vector<std::optional<int32_t>> echo_list_of_nullable_ints(std::vector<std::optional<int32_t>> l)
 
 
 
@@ -186,7 +186,7 @@
 
    
 
-   .. function:: std::string echo_nullable_string(std::string value)
+   .. function:: std::vector<std::optional<TestClass>> echo_list_of_nullable_objects(std::vector<std::optional<TestClass>> l)
 
 
 
@@ -196,7 +196,67 @@
 
    
 
-   .. function:: TestClass echo_test_object(TestClass value)
+   .. function:: std::vector<std::vector<std::optional<TestClass>>> echo_nested_list_of_nullable_objects(std::vector<std::vector<std::optional<TestClass>>> l)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestNestedNullableStruct echo_nested_nullable_struct(TestNestedNullableStruct value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<int32_t> echo_nullable_int(std::optional<int32_t> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<std::vector<int32_t>> echo_nullable_list(std::optional<std::vector<int32_t>> l)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<std::string> echo_nullable_string(std::optional<std::string> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<TestClass> echo_test_object(std::optional<TestClass> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::tuple<int32_t, std::optional<TestClass>> echo_tuple_with_a_nullable_object(std::tuple<int32_t, std::optional<TestClass>> t)
 
 
 
@@ -411,15 +471,25 @@
 
    
 
-   .. function:: TestClass nullable_object()
-   .. function:: void set_nullable_object(TestClass value)
+   .. function:: std::optional<TestClass> nullable_object()
+   .. function:: void set_nullable_object(std::optional<TestClass> value)
 
 
 
    
 
-   .. function:: TestClass object_property()
-   .. function:: void set_object_property(TestClass value)
+   .. function:: TestNullableStruct nullable_struct_echo(TestNullableStruct x)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<TestClass> object_property()
+   .. function:: void set_object_property(std::optional<TestClass> value)
 
 
 
@@ -446,7 +516,7 @@
 
    
 
-   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", TestClass obj)
+   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestClass> obj)
 
 
 
@@ -539,7 +609,7 @@
 
    
 
-   .. function:: TestStruct struct_echo_nullable(TestStruct x)
+   .. function:: std::optional<TestStruct> struct_echo_nullable(std::optional<TestStruct> x)
 
 
 
@@ -640,7 +710,7 @@
 
    Class documentation string.
 
-   .. function:: TestClass echo_nullable_object(TestClass value)
+   .. function:: std::optional<TestClass> echo_nullable_object(std::optional<TestClass> value)
 
 
 
@@ -674,14 +744,14 @@
 
    
 
-   .. function:: TestClass object_property()
-   .. function:: void set_object_property(TestClass value)
+   .. function:: std::optional<TestClass> object_property()
+   .. function:: void set_object_property(std::optional<TestClass> value)
 
 
 
    
 
-   .. function:: std::string object_to_string(TestClass other)
+   .. function:: std::string object_to_string(std::optional<TestClass> other)
 
 
 
@@ -691,7 +761,7 @@
 
    
 
-   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", TestClass obj)
+   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestClass> obj)
 
 
 
@@ -715,7 +785,7 @@
 
    
 
-   .. function:: static TestClass static_nullable_object(Client& connection, TestClass value)
+   .. function:: static std::optional<TestClass> static_nullable_object(Client& connection, std::optional<TestClass> value)
 
 
 
@@ -833,6 +903,48 @@
 
 
    .. member:: TestClass object_field
+
+
+
+   .. member:: std::string string_field
+
+
+
+
+.. namespace:: krpc::services::TestService
+.. struct:: TestNullableStruct
+
+   Nullable struct documentation string.
+
+
+   .. member:: int32_t int_field
+
+
+
+   .. member:: std::optional<int32_t> nullable_int_field
+
+
+
+   .. member:: std::optional<TestEnum> nullable_enum_field
+
+
+
+   .. member:: std::optional<std::string> nullable_string_field
+
+
+
+   .. member:: std::optional<TestClass> nullable_object_field
+
+
+
+
+.. namespace:: krpc::services::TestService
+.. struct:: TestNestedNullableStruct
+
+   Nested nullable struct documentation string.
+
+
+   .. member:: std::vector<std::optional<TestClass>> list_field
 
 
 

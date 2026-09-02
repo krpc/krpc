@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import krpc.client.services.TestService;
 import krpc.client.services.TestService.CustomException;
 import krpc.client.services.TestService.TestClass;
@@ -62,6 +64,20 @@ public class StreamTest {
         connection.addStream(TestService.class, "echoNullableInt", (Object) null);
     for (int i = 0; i < 5; i++) {
       assertNull(stream.get());
+      pause();
+    }
+  }
+
+  @Test
+  public void testNullableListElements()
+      throws RPCException, StreamException, NoSuchMethodException {
+    // A stream carries the value itself, so a null inside a collection reaches the decoder
+    // as a presence bool where a null result does not
+    List<Integer> value = Arrays.asList(1, null, 3);
+    Stream<List<Integer>> stream =
+        connection.addStream(TestService.class, "echoListOfNullableInts", value);
+    for (int i = 0; i < 5; i++) {
+      assertEquals(value, stream.get());
       pause();
     }
   }

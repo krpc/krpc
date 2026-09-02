@@ -227,6 +227,90 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(int, typ.value_type.python_type)
         self.check_protobuf_type(Type.UINT32, "", "", 0, typ.value_type.protobuf_type)
 
+    def test_nullable_types(self) -> None:
+        types = Types()
+        typ = types.nullable(types.uint32_type)
+        self.assertTrue(isinstance(typ, ValueType))
+        self.assertTrue(typ.nullable)
+        self.assertFalse(types.uint32_type.nullable)
+        self.assertTrue(typ.protobuf_type.nullable)
+        self.assertEqual("<type: uint32?>", str(typ))
+        # The nullable form of a type is the same type in every position that names it
+        self.assertIs(typ, types.nullable(typ))
+        self.assertIs(typ, types.nullable(types.uint32_type))
+        self.assertIs(typ, types.as_type(typ.protobuf_type))
+
+    def test_nullable_type_shares_its_python_type(self) -> None:
+        types = Types()
+        # Nullability belongs to the position a value sits in, so a class has one python
+        # type however the position that holds it is declared
+        cls = types.class_type("ServiceName", "ClassName")
+        self.assertIs(cls.python_type, types.nullable(cls).python_type)
+        enumeration = types.enumeration_type("ServiceName", "EnumName")
+        nullable_enumeration = types.nullable(enumeration)
+        enumeration.set_values({"a": {"value": 0, "doc": ""}})
+        self.assertIs(enumeration.python_type, nullable_enumeration.python_type)
+        struct = types.struct_type("ServiceName", "StructName")
+        nullable_struct = types.nullable(struct)
+        struct.set_fields([("count", types.uint32_type)])
+        self.assertIs(struct.python_type, nullable_struct.python_type)
+        self.assertEqual(struct.field_types, nullable_struct.field_types)
+
+    def test_nullable_list_types(self) -> None:
+        types = Types()
+        typ = types.list_type(types.nullable(types.uint32_type))
+        self.assertTrue(isinstance(typ, ListType))
+        self.assertTrue(typ.value_type.nullable)
+        self.check_protobuf_type(Type.LIST, "", "", 1, typ.protobuf_type)
+        self.assertTrue(typ.protobuf_type.types[0].nullable)
+        self.assertEqual("<type: List(uint32?)>", str(typ))
+        # A nullable element makes a list type of its own
+        self.assertIsNot(types.list_type(types.uint32_type), typ)
+
+    def test_nullable_dictionary_types(self) -> None:
+        types = Types()
+        typ = types.dictionary_type(
+            types.string_type, types.nullable(types.uint32_type)
+        )
+        self.assertTrue(isinstance(typ, DictionaryType))
+        self.assertFalse(typ.key_type.nullable)
+        self.assertTrue(typ.value_type.nullable)
+        self.check_protobuf_type(Type.DICTIONARY, "", "", 2, typ.protobuf_type)
+        self.assertFalse(typ.protobuf_type.types[0].nullable)
+        self.assertTrue(typ.protobuf_type.types[1].nullable)
+        self.assertEqual("<type: Dict(string,uint32?)>", str(typ))
+        self.assertIsNot(
+            types.dictionary_type(types.string_type, types.uint32_type), typ
+        )
+
+    def test_nullable_tuple_types(self) -> None:
+        types = Types()
+        typ = types.tuple_type(types.sint32_type, types.nullable(types.string_type))
+        self.assertTrue(isinstance(typ, TupleType))
+        self.assertEqual([False, True], [t.nullable for t in typ.value_types])
+        self.check_protobuf_type(Type.TUPLE, "", "", 2, typ.protobuf_type)
+        self.assertFalse(typ.protobuf_type.types[0].nullable)
+        self.assertTrue(typ.protobuf_type.types[1].nullable)
+        self.assertEqual("<type: Tuple(sint32,string?)>", str(typ))
+        self.assertIsNot(types.tuple_type(types.sint32_type, types.string_type), typ)
+
+    def test_nullable_set_types(self) -> None:
+        types = Types()
+        typ = types.set_type(types.nullable(types.uint32_type))
+        self.assertTrue(typ.value_type.nullable)
+        self.assertEqual("<type: Set(uint32?)>", str(typ))
+
+    def test_struct_with_nullable_fields(self) -> None:
+        types = Types()
+        typ = types.struct_type("ServiceName", "NullableStructName")
+        typ.set_fields(
+            [("count", types.uint32_type), ("name", types.nullable(types.string_type))]
+        )
+        self.assertEqual([False, True], [t.nullable for t in typ.field_types])
+        value = typ.python_type(count=42, name=None)
+        self.assertEqual(42, value.count)
+        self.assertIsNone(value.name)
+
     def test_struct_comparison(self) -> None:
         types = Types()
         typ = types.struct_type("ServiceName", "ComparableStruct")
@@ -268,6 +352,38 @@ class TestTypes(unittest.TestCase):
         # A value with the wrong number of fields is not a value of the structure
         self.assertRaises(ValueError, types.coerce_to, (42,), typ)
         self.assertRaises(ValueError, types.coerce_to, (42, "jeb", 1), typ)
+
+    def test_coerce_to_struct_with_a_nullable_field(self) -> None:
+        types = Types()
+        typ = types.struct_type("ServiceName", "CoercedNullableStruct")
+        typ.set_fields(
+            [("count", types.uint32_type), ("name", types.nullable(types.string_type))]
+        )
+        expected = typ.python_type(count=42, name=None)
+        for value in ((42, None), [42, None]):
+            self.assertEqual(expected, types.coerce_to(value, typ))
+        # A null in a field that cannot hold one is not a value of the structure
+        self.assertRaises(ValueError, types.coerce_to, (None, "jeb"), typ)
+
+    def test_coerce_to_collection_holding_a_null(self) -> None:
+        types = Types()
+        list_type = types.list_type(types.nullable(types.sint32_type))
+        self.assertEqual([1, None, 3], types.coerce_to((1, None, 3), list_type))
+        tuple_type = types.tuple_type(
+            types.sint32_type, types.nullable(types.string_type)
+        )
+        self.assertEqual((1, None), types.coerce_to([1, None], tuple_type))
+        # A null in a position that cannot hold one is not a value of the collection
+        self.assertRaises(
+            ValueError, types.coerce_to, (1, None), types.list_type(types.sint32_type)
+        )
+        # A class type is no different, though a class value carries a null of its own
+        self.assertRaises(
+            ValueError,
+            types.coerce_to,
+            (None,),
+            types.list_type(types.class_type("ServiceName", "ClassName")),
+        )
 
     def test_coerce_to(self) -> None:
         types = Types()

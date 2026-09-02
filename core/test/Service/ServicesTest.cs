@@ -304,6 +304,18 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void ExecuteCallWithNullArgumentToAPropertySetterMarkedNullable ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.SetupSet (x => x.NullableByAttributeProperty = null);
+            TestService.Service = mock.Object;
+            var result = Run (
+                Call ("TestService", "set_NullableByAttributeProperty", Arg (0, null)));
+            CheckResultEmpty (result);
+            mock.VerifySet (x => x.NullableByAttributeProperty = null, Times.Once ());
+        }
+
+        [Test]
         public void ExecuteCallWithNullableStringArgumentAndReturn ()
         {
             var mock = new Mock<ITestService> (MockBehavior.Strict);

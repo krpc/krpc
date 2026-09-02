@@ -103,6 +103,28 @@ local function _delimited(tag, data)
   return tag .. _encode_varint(data:len()) .. data
 end
 
+-- Encode one value at a position inside another value, which the given type describes. A
+-- nullable position carries a presence bool before its value, and holds nothing else when that
+-- bool is false.
+local function _encode_item(x, typ)
+  local absent = x == nil or x == Types.none
+  if not typ.nullable then
+    -- A position that cannot hold null takes a value of its type and nothing else
+    if absent then
+      error('A null cannot be encoded at a position that cannot hold one')
+    end
+    return encoder.encode(x, typ)
+  end
+  local encode_bool = _value_encoders[Types.BOOL]
+  if absent then
+    return encode_bool(false)
+  end
+  return encode_bool(true) .. encoder.encode(x, typ)
+end
+
+-- Encode a value at a slot, where a null is carried by the is_null flag of the message around
+-- it. A value at a position inside another value carries its own presence bool, which
+-- _encode_item writes.
 function encoder.encode(x, typ)
   local code = typ.code
   local encode_value = _value_encoders[code]
@@ -115,7 +137,7 @@ function encoder.encode(x, typ)
     local count = 0
     for item in x:iter() do
       count = count + 1
-      parts[count] = _delimited(_ITEMS, encoder.encode(item, value_type))
+      parts[count] = _delimited(_ITEMS, _encode_item(item, value_type))
     end
     return _concat(parts)
   elseif code == Types.DICTIONARY then
@@ -124,8 +146,8 @@ function encoder.encode(x, typ)
     local parts = {}
     local count = 0
     for key,value in tablex.sort(x) do
-      local entry = _delimited(_ENTRY_KEY, encoder.encode(key, key_type)) ..
-                    _delimited(_ENTRY_VALUE, encoder.encode(value, value_type))
+      local entry = _delimited(_ENTRY_KEY, _encode_item(key, key_type)) ..
+                    _delimited(_ENTRY_VALUE, _encode_item(value, value_type))
       count = count + 1
       parts[count] = _delimited(_ENTRIES, entry)
     end
@@ -136,15 +158,14 @@ function encoder.encode(x, typ)
     local count = 0
     for item in pairs(x) do
       count = count + 1
-      parts[count] = _delimited(_ITEMS, encoder.encode(item, value_type))
+      parts[count] = _delimited(_ITEMS, _encode_item(item, value_type))
     end
     return _concat(parts)
   elseif code == Types.TUPLE then
+    local value_types = typ.value_types
     local parts = {}
-    local count = 0
-    for _,item in ipairs(tablex.zip(x, typ.value_types)) do
-      count = count + 1
-      parts[count] = _delimited(_ITEMS, encoder.encode(item[1], item[2]))
+    for i = 1, #value_types do
+      parts[i] = _delimited(_ITEMS, _encode_item(x[i], value_types[i]))
     end
     return _concat(parts)
   elseif code == Types.STRUCT then
@@ -154,7 +175,7 @@ function encoder.encode(x, typ)
     local field_types = typ.field_types
     local parts = {}
     for i = 1, #field_names do
-      parts[i] = _delimited(_ITEMS, encoder.encode(x[field_names[i]], field_types[i]))
+      parts[i] = _delimited(_ITEMS, _encode_item(x[field_names[i]], field_types[i]))
     end
     return _concat(parts)
   elseif typ:is_a(Types.MessageType) then

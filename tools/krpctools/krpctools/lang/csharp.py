@@ -145,7 +145,7 @@ class CsharpLanguage(Language):
             return "global::KRPC.Schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, TupleType):
             return "systemAlias::Tuple<%s>" % ",".join(
-                self._parse_type(t) for t in typ.value_types
+                self._at_position(t) for t in typ.value_types
             )
         if isinstance(typ, ListType):
             if interface:
@@ -154,7 +154,7 @@ class CsharpLanguage(Language):
                 name = "List"
             return "global::System.Collections.Generic.%s<%s>" % (
                 name,
-                self._parse_type(typ.value_type),
+                self._at_position(typ.value_type),
             )
         if isinstance(typ, SetType):
             if interface:
@@ -170,7 +170,7 @@ class CsharpLanguage(Language):
             return "global::System.Collections.Generic.%s<%s,%s>" % (
                 name,
                 self._parse_type(typ.key_type),
-                self._parse_type(typ.value_type),
+                self._at_position(typ.value_type),
             )
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return "global::KRPC.Client.Services.%s.%s" % (
@@ -178,6 +178,26 @@ class CsharpLanguage(Language):
                 typ.protobuf_type.name,
             )
         raise RuntimeError("Unknown type '%s'" % str(typ))
+
+    def _at_position(self, typ):
+        """The C# type of a value at a position inside a collection. A value type takes the
+        nullable form T? where the position can hold null; a reference type is nullable in C#
+        already, and the generated stub names the position for the encoder instead."""
+        name = self._parse_type(typ)
+        if typ.nullable and self.takes_the_nullable_form(typ):
+            return name + "?"
+        return name
+
+    @staticmethod
+    def takes_the_nullable_form(typ):
+        """Whether a value at a nullable position is written T?, which a C# value type is
+        and a reference type is not."""
+        if isinstance(typ, (EnumerationType, StructType)):
+            return True
+        return isinstance(typ, ValueType) and typ.protobuf_type.code not in (
+            Type.STRING,
+            Type.BYTES,
+        )
 
     def parse_default_value(self, value, typ):
         special = self.parse_special_value(value, typ)

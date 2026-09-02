@@ -31,6 +31,82 @@ namespace KRPC.Client.Services.TestService
         }
     }
 
+    // The types the stubs encode and decode values of, built once each. A spec names the
+    // positions inside a value that can hold null, which a C# type cannot always say.
+    static class TypeSpecs
+    {
+        internal static readonly global::KRPC.Client.TypeSpec Spec0 = global::KRPC.Client.TypeSpec.For (typeof(float));
+        internal static readonly global::KRPC.Client.TypeSpec Spec1 = global::KRPC.Client.TypeSpec.For (typeof(double));
+        internal static readonly global::KRPC.Client.TypeSpec Spec2 = global::KRPC.Client.TypeSpec.For (typeof(int));
+        internal static readonly global::KRPC.Client.TypeSpec Spec3 = global::KRPC.Client.TypeSpec.For (typeof(long));
+        internal static readonly global::KRPC.Client.TypeSpec Spec4 = global::KRPC.Client.TypeSpec.For (typeof(bool));
+        internal static readonly global::KRPC.Client.TypeSpec Spec5 = global::KRPC.Client.TypeSpec.For (typeof(string));
+        internal static readonly global::KRPC.Client.TypeSpec Spec6 = global::KRPC.Client.TypeSpec.For (typeof(byte[]));
+        internal static readonly global::KRPC.Client.TypeSpec Spec7 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestClass));
+        internal static readonly global::KRPC.Client.TypeSpec Spec8 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<int>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec9 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestEnum));
+        internal static readonly global::KRPC.Client.TypeSpec Spec10 = new global::KRPC.Client.TypeSpec (typeof(global::KRPC.Client.Services.TestService.TestNestedNullableStruct), new global::KRPC.Client.TypeSpec (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>), global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.TestService.TestClass))));
+        internal static readonly global::KRPC.Client.TypeSpec Spec11 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<int?>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec12 = new global::KRPC.Client.TypeSpec (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>), global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.TestService.TestClass)));
+        internal static readonly global::KRPC.Client.TypeSpec Spec13 = new global::KRPC.Client.TypeSpec (typeof(global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.TestService.TestClass>), global::KRPC.Client.TypeSpec.For (typeof(string)), global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.TestService.TestClass)));
+        internal static readonly global::KRPC.Client.TypeSpec Spec14 = new global::KRPC.Client.TypeSpec (typeof(systemAlias::Tuple<int,global::KRPC.Client.Services.TestService.TestClass>), global::KRPC.Client.TypeSpec.For (typeof(int)), global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.TestService.TestClass)));
+        internal static readonly global::KRPC.Client.TypeSpec Spec15 = new global::KRPC.Client.TypeSpec (typeof(global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>>), new global::KRPC.Client.TypeSpec (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>), global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.TestService.TestClass))));
+        internal static readonly global::KRPC.Client.TypeSpec Spec16 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestStruct));
+        internal static readonly global::KRPC.Client.TypeSpec Spec17 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestNullableStruct));
+        internal static readonly global::KRPC.Client.TypeSpec Spec18 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestNestedStruct));
+        internal static readonly global::KRPC.Client.TypeSpec Spec19 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec20 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IDictionary<string,int>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec21 = global::KRPC.Client.TypeSpec.For (typeof(genericCollectionsAlias::ISet<int>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec22 = global::KRPC.Client.TypeSpec.For (typeof(systemAlias::Tuple<int,long>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec23 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec24 = global::KRPC.Client.TypeSpec.For (typeof(systemAlias::Tuple<int,bool>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec25 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IDictionary<int,bool>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec26 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec27 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<string>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec28 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec29 = global::KRPC.Client.TypeSpec.For (typeof(uint));
+        internal static readonly global::KRPC.Client.TypeSpec Spec30 = global::KRPC.Client.TypeSpec.For (typeof(ulong));
+        internal static readonly global::KRPC.Client.TypeSpec Spec31 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.DeprecatedClass));
+        internal static readonly global::KRPC.Client.TypeSpec Spec32 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<double>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec33 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<float>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec34 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<long>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec35 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Event));
+        internal static readonly global::KRPC.Client.TypeSpec Spec36 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<uint>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec37 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<ulong>));
+
+        // The procedures whose values a C# type cannot describe on its own, which a call
+        // built from an expression looks up by name
+        static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> returnSpecs =
+            new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec> {
+                { "EchoNestedNullableStruct", TypeSpecs.Spec10 },
+                { "EchoListOfNullableObjects", TypeSpecs.Spec12 },
+                { "EchoDictionaryOfNullableObjects", TypeSpecs.Spec13 },
+                { "EchoTupleWithANullableObject", TypeSpecs.Spec14 },
+                { "EchoNestedListOfNullableObjects", TypeSpecs.Spec15 },
+            };
+
+        static readonly global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> parameterSpecs =
+            new global::System.Collections.Generic.Dictionary<string, global::KRPC.Client.TypeSpec[]> {
+                { "EchoNestedNullableStruct", new global::KRPC.Client.TypeSpec[] { TypeSpecs.Spec10 } },
+                { "EchoListOfNullableObjects", new global::KRPC.Client.TypeSpec[] { TypeSpecs.Spec12 } },
+                { "EchoDictionaryOfNullableObjects", new global::KRPC.Client.TypeSpec[] { TypeSpecs.Spec13 } },
+                { "EchoTupleWithANullableObject", new global::KRPC.Client.TypeSpec[] { TypeSpecs.Spec14 } },
+                { "EchoNestedListOfNullableObjects", new global::KRPC.Client.TypeSpec[] { TypeSpecs.Spec15 } },
+            };
+
+        public static global::KRPC.Client.TypeSpec ReturnSpec (string procedure)
+        {
+            global::KRPC.Client.TypeSpec spec;
+            return returnSpecs.TryGetValue (procedure, out spec) ? spec : null;
+        }
+
+        public static global::KRPC.Client.TypeSpec[] ParameterSpecs (string procedure)
+        {
+            global::KRPC.Client.TypeSpec[] specs;
+            return parameterSpecs.TryGetValue (procedure, out specs) ? specs : null;
+        }
+    }
+
     /// <summary>
     /// TestService service.
     /// </summary>
@@ -50,666 +126,736 @@ namespace KRPC.Client.Services.TestService
             serverConnection.AddExceptionType ("TestService", "DeprecatedException", typeof (DeprecatedException));
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "AddMultipleValues")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "AddMultipleValues", typeof(TypeSpecs))]
         public string AddMultipleValues (float x, int y, long z)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x, typeof(float)),
-                global::KRPC.Client.Encoder.Encode (y, typeof(int)),
-                global::KRPC.Client.Encoder.Encode (z, typeof(long))
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (y, TypeSpecs.Spec2),
+                global::KRPC.Client.Encoder.Encode (z, TypeSpecs.Spec3)
             };
             var _result = connection.Invoke ("TestService", "AddMultipleValues", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "AddToObjectList")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "AddToObjectList", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass> AddToObjectList (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass> l, string value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (l, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>)),
-                global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                global::KRPC.Client.Encoder.Encode (l, TypeSpecs.Spec28),
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec5)
             };
             var _result = connection.Invoke ("TestService", "AddToObjectList", _args);
-            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>), connection);
+            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec28, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BlockingProcedure")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BlockingProcedure", typeof(TypeSpecs))]
         public int BlockingProcedure (int n, int sum = 0)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (n, typeof(int)),
-                global::KRPC.Client.Encoder.Encode (sum, typeof(int))
+                global::KRPC.Client.Encoder.Encode (n, TypeSpecs.Spec2),
+                global::KRPC.Client.Encoder.Encode (sum, TypeSpecs.Spec2)
             };
             var _result = connection.Invoke ("TestService", "BlockingProcedure", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BoolToString")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BoolToString", typeof(TypeSpecs))]
         public string BoolToString (bool value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(bool))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("TestService", "BoolToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BytesToHexString")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BytesToHexString", typeof(TypeSpecs))]
         public string BytesToHexString (byte[] value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(byte[]))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec6)
             };
             var _result = connection.Invoke ("TestService", "BytesToHexString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Counter")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Counter", typeof(TypeSpecs))]
         public int Counter (string id = "", int divisor = 1)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (id, typeof(string)),
-                global::KRPC.Client.Encoder.Encode (divisor, typeof(int))
+                global::KRPC.Client.Encoder.Encode (id, TypeSpecs.Spec5),
+                global::KRPC.Client.Encoder.Encode (divisor, TypeSpecs.Spec2)
             };
             var _result = connection.Invoke ("TestService", "Counter", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
         /// <summary>
         /// Returns a struct whose IntField counts the number of times it has been called,
         /// so that a stream on it changes on every update.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CounterStruct")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CounterStruct", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestStruct CounterStruct (string id = "")
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (id, typeof(string))
+                global::KRPC.Client.Encoder.Encode (id, TypeSpecs.Spec5)
             };
             var _result = connection.Invoke ("TestService", "CounterStruct", _args);
-            return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestStruct), connection);
+            return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CreateTestObject")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CreateTestObject", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass CreateTestObject (string value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec5)
             };
             var _result = connection.Invoke ("TestService", "CreateTestObject", _args);
-            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec7, connection);
         }
 
         /// <summary>
         /// Deprecated procedure documentation string.
         /// </summary>
         [global::System.Obsolete ("Use FloatToString instead.")]
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedProcedure")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedProcedure", typeof(TypeSpecs))]
         public string DeprecatedProcedure (float value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(float))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("TestService", "DeprecatedProcedure", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
         /// <summary>
         /// Deprecated procedure with no reason documentation string.
         /// </summary>
         [global::System.Obsolete]
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedProcedureNoMessage")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedProcedureNoMessage", typeof(TypeSpecs))]
         public string DeprecatedProcedureNoMessage (float value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(float))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("TestService", "DeprecatedProcedureNoMessage", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DictionaryDefault")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DictionaryDefault", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IDictionary<int,bool> DictionaryDefault (global::System.Collections.Generic.IDictionary<int,bool> x = null)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.Dictionary<int,bool> {{ 1, false }, { 2, true }}, typeof(global::System.Collections.Generic.IDictionary<int,bool>))
+                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.Dictionary<int,bool> {{ 1, false }, { 2, true }}, TypeSpecs.Spec25)
             };
             var _result = connection.Invoke ("TestService", "DictionaryDefault", _args);
-            return (global::System.Collections.Generic.IDictionary<int,bool>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IDictionary<int,bool>), connection);
+            return (global::System.Collections.Generic.IDictionary<int,bool>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec25, connection);
         }
 
         /// <summary>
         /// Procedure whose defaults are the special values of double.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DoubleSpecialDefaults")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DoubleSpecialDefaults", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<double> DoubleSpecialDefaults (double nan = double.NaN, double infinity = double.PositiveInfinity, double negativeInfinity = double.NegativeInfinity, double maximum = double.MaxValue, double lowest = double.MinValue)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (nan, typeof(double)),
-                global::KRPC.Client.Encoder.Encode (infinity, typeof(double)),
-                global::KRPC.Client.Encoder.Encode (negativeInfinity, typeof(double)),
-                global::KRPC.Client.Encoder.Encode (maximum, typeof(double)),
-                global::KRPC.Client.Encoder.Encode (lowest, typeof(double))
+                global::KRPC.Client.Encoder.Encode (nan, TypeSpecs.Spec1),
+                global::KRPC.Client.Encoder.Encode (infinity, TypeSpecs.Spec1),
+                global::KRPC.Client.Encoder.Encode (negativeInfinity, TypeSpecs.Spec1),
+                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec1),
+                global::KRPC.Client.Encoder.Encode (lowest, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("TestService", "DoubleSpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<double>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<double>), connection);
+            return (global::System.Collections.Generic.IList<double>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec32, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DoubleToString")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DoubleToString", typeof(TypeSpecs))]
         public string DoubleToString (double value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(double))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("TestService", "DoubleToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableInt")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoDictionaryOfNullableObjects", typeof(TypeSpecs))]
+        public global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.TestService.TestClass> EchoDictionaryOfNullableObjects (global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.TestService.TestClass> d)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (d, TypeSpecs.Spec13)
+            };
+            var _result = connection.Invoke ("TestService", "EchoDictionaryOfNullableObjects", _args);
+            return (global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec13, connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoListOfNullableInts", typeof(TypeSpecs))]
+        public global::System.Collections.Generic.IList<int?> EchoListOfNullableInts (global::System.Collections.Generic.IList<int?> l)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (l, TypeSpecs.Spec11)
+            };
+            var _result = connection.Invoke ("TestService", "EchoListOfNullableInts", _args);
+            return (global::System.Collections.Generic.IList<int?>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec11, connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoListOfNullableObjects", typeof(TypeSpecs))]
+        public global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass> EchoListOfNullableObjects (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass> l)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (l, TypeSpecs.Spec12)
+            };
+            var _result = connection.Invoke ("TestService", "EchoListOfNullableObjects", _args);
+            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec12, connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNestedListOfNullableObjects", typeof(TypeSpecs))]
+        public global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>> EchoNestedListOfNullableObjects (global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>> l)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (l, TypeSpecs.Spec15)
+            };
+            var _result = connection.Invoke ("TestService", "EchoNestedListOfNullableObjects", _args);
+            return (global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec15, connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNestedNullableStruct", typeof(TypeSpecs))]
+        public global::KRPC.Client.Services.TestService.TestNestedNullableStruct EchoNestedNullableStruct (global::KRPC.Client.Services.TestService.TestNestedNullableStruct value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec10)
+            };
+            var _result = connection.Invoke ("TestService", "EchoNestedNullableStruct", _args);
+            return (global::KRPC.Client.Services.TestService.TestNestedNullableStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec10, connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableInt", typeof(TypeSpecs))]
         public int? EchoNullableInt (int? value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(int?))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec2)
             };
             var _result = connection.Invoke ("TestService", "EchoNullableInt", _args);
             if (_result.IsNull)
                 return null;
-            return (int?)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int?), connection);
+            return (int?)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableList")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableList", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<int> EchoNullableList (global::System.Collections.Generic.IList<int> l)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (l, typeof(global::System.Collections.Generic.IList<int>))
+                global::KRPC.Client.Encoder.Encode (l, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("TestService", "EchoNullableList", _args);
             if (_result.IsNull)
                 return null;
-            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
+            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableString")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableString", typeof(TypeSpecs))]
         public string EchoNullableString (string value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec5)
             };
             var _result = connection.Invoke ("TestService", "EchoNullableString", _args);
             if (_result.IsNull)
                 return null;
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoTestObject")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoTestObject", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass EchoTestObject (global::KRPC.Client.Services.TestService.TestClass value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec7)
             };
             var _result = connection.Invoke ("TestService", "EchoTestObject", _args);
             if (_result.IsNull)
                 return null;
-            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec7, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EmptyListDefault")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoTupleWithANullableObject", typeof(TypeSpecs))]
+        public systemAlias::Tuple<int,global::KRPC.Client.Services.TestService.TestClass> EchoTupleWithANullableObject (systemAlias::Tuple<int,global::KRPC.Client.Services.TestService.TestClass> t)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (t, TypeSpecs.Spec14)
+            };
+            var _result = connection.Invoke ("TestService", "EchoTupleWithANullableObject", _args);
+            return (systemAlias::Tuple<int,global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec14, connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EmptyListDefault", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<string> EmptyListDefault (global::System.Collections.Generic.IList<string> x = null)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<string> {  }, typeof(global::System.Collections.Generic.IList<string>))
+                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<string> {  }, TypeSpecs.Spec27)
             };
             var _result = connection.Invoke ("TestService", "EmptyListDefault", _args);
-            return (global::System.Collections.Generic.IList<string>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<string>), connection);
+            return (global::System.Collections.Generic.IList<string>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec27, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumDefaultArg")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumDefaultArg", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestEnum EnumDefaultArg (global::KRPC.Client.Services.TestService.TestEnum x = global::KRPC.Client.Services.TestService.TestEnum.ValueC)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestEnum))
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec9)
             };
             var _result = connection.Invoke ("TestService", "EnumDefaultArg", _args);
-            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
+            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec9, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumEcho")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumEcho", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestEnum EnumEcho (global::KRPC.Client.Services.TestService.TestEnum x)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestEnum))
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec9)
             };
             var _result = connection.Invoke ("TestService", "EnumEcho", _args);
-            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
+            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec9, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumListDefault")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumListDefault", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum> EnumListDefault (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum> x = null)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<global::KRPC.Client.Services.TestService.TestEnum> { global::KRPC.Client.Services.TestService.TestEnum.ValueB, global::KRPC.Client.Services.TestService.TestEnum.ValueC }, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>))
+                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<global::KRPC.Client.Services.TestService.TestEnum> { global::KRPC.Client.Services.TestService.TestEnum.ValueB, global::KRPC.Client.Services.TestService.TestEnum.ValueC }, TypeSpecs.Spec26)
             };
             var _result = connection.Invoke ("TestService", "EnumListDefault", _args);
-            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>), connection);
+            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec26, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumReturn")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumReturn", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestEnum EnumReturn ()
         {
             var _result = connection.Invoke ("TestService", "EnumReturn");
-            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
+            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec9, connection);
         }
 
         /// <summary>
         /// Procedure whose defaults are the special values of float, plus a finite fraction
         /// that no float can hold exactly.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "FloatSpecialDefaults")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "FloatSpecialDefaults", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<float> FloatSpecialDefaults (float nan = float.NaN, float infinity = float.PositiveInfinity, float negativeInfinity = float.NegativeInfinity, float maximum = float.MaxValue, float lowest = float.MinValue, float fraction = 0.1f)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (nan, typeof(float)),
-                global::KRPC.Client.Encoder.Encode (infinity, typeof(float)),
-                global::KRPC.Client.Encoder.Encode (negativeInfinity, typeof(float)),
-                global::KRPC.Client.Encoder.Encode (maximum, typeof(float)),
-                global::KRPC.Client.Encoder.Encode (lowest, typeof(float)),
-                global::KRPC.Client.Encoder.Encode (fraction, typeof(float))
+                global::KRPC.Client.Encoder.Encode (nan, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (infinity, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (negativeInfinity, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (lowest, TypeSpecs.Spec0),
+                global::KRPC.Client.Encoder.Encode (fraction, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("TestService", "FloatSpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<float>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<float>), connection);
+            return (global::System.Collections.Generic.IList<float>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec33, connection);
         }
 
         /// <summary>
         /// Procedure documentation string.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "FloatToString")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "FloatToString", typeof(TypeSpecs))]
         public string FloatToString (float value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(float))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("TestService", "FloatToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementDictionary")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementDictionary", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IDictionary<string,int> IncrementDictionary (global::System.Collections.Generic.IDictionary<string,int> d)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (d, typeof(global::System.Collections.Generic.IDictionary<string,int>))
+                global::KRPC.Client.Encoder.Encode (d, TypeSpecs.Spec20)
             };
             var _result = connection.Invoke ("TestService", "IncrementDictionary", _args);
-            return (global::System.Collections.Generic.IDictionary<string,int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IDictionary<string,int>), connection);
+            return (global::System.Collections.Generic.IDictionary<string,int>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec20, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementList")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementList", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<int> IncrementList (global::System.Collections.Generic.IList<int> l)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (l, typeof(global::System.Collections.Generic.IList<int>))
+                global::KRPC.Client.Encoder.Encode (l, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("TestService", "IncrementList", _args);
-            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
+            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementListOfStructs")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementListOfStructs", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct> IncrementListOfStructs (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct> l)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (l, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct>))
+                global::KRPC.Client.Encoder.Encode (l, TypeSpecs.Spec19)
             };
             var _result = connection.Invoke ("TestService", "IncrementListOfStructs", _args);
-            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct>), connection);
+            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec19, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementNestedCollection")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementNestedCollection", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>> IncrementNestedCollection (global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>> d)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (d, typeof(global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>))
+                global::KRPC.Client.Encoder.Encode (d, TypeSpecs.Spec23)
             };
             var _result = connection.Invoke ("TestService", "IncrementNestedCollection", _args);
-            return (global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>), connection);
+            return (global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec23, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementSet")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementSet", typeof(TypeSpecs))]
         public genericCollectionsAlias::ISet<int> IncrementSet (genericCollectionsAlias::ISet<int> h)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (h, typeof(genericCollectionsAlias::ISet<int>))
+                global::KRPC.Client.Encoder.Encode (h, TypeSpecs.Spec21)
             };
             var _result = connection.Invoke ("TestService", "IncrementSet", _args);
-            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(genericCollectionsAlias::ISet<int>), connection);
+            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec21, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementTuple")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementTuple", typeof(TypeSpecs))]
         public systemAlias::Tuple<int,long> IncrementTuple (systemAlias::Tuple<int,long> t)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (t, typeof(systemAlias::Tuple<int,long>))
+                global::KRPC.Client.Encoder.Encode (t, TypeSpecs.Spec22)
             };
             var _result = connection.Invoke ("TestService", "IncrementTuple", _args);
-            return (systemAlias::Tuple<int,long>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(systemAlias::Tuple<int,long>), connection);
+            return (systemAlias::Tuple<int,long>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec22, connection);
         }
 
         /// <summary>
         /// Procedure whose defaults are the extremes of int.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int32SpecialDefaults")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int32SpecialDefaults", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<int> Int32SpecialDefaults (int maximum = int.MaxValue, int minimum = int.MinValue)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (maximum, typeof(int)),
-                global::KRPC.Client.Encoder.Encode (minimum, typeof(int))
+                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec2),
+                global::KRPC.Client.Encoder.Encode (minimum, TypeSpecs.Spec2)
             };
             var _result = connection.Invoke ("TestService", "Int32SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
+            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int32ToString")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int32ToString", typeof(TypeSpecs))]
         public string Int32ToString (int value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(int))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec2)
             };
             var _result = connection.Invoke ("TestService", "Int32ToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
         /// <summary>
         /// Procedure whose defaults are the extremes of long.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int64SpecialDefaults")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int64SpecialDefaults", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<long> Int64SpecialDefaults (long maximum = long.MaxValue, long minimum = long.MinValue)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (maximum, typeof(long)),
-                global::KRPC.Client.Encoder.Encode (minimum, typeof(long))
+                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec3),
+                global::KRPC.Client.Encoder.Encode (minimum, TypeSpecs.Spec3)
             };
             var _result = connection.Invoke ("TestService", "Int64SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<long>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<long>), connection);
+            return (global::System.Collections.Generic.IList<long>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec34, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int64ToString")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int64ToString", typeof(TypeSpecs))]
         public string Int64ToString (long value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(long))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec3)
             };
             var _result = connection.Invoke ("TestService", "Int64ToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ListDefault")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ListDefault", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<int> ListDefault (global::System.Collections.Generic.IList<int> x = null)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<int> { 1, 2, 3 }, typeof(global::System.Collections.Generic.IList<int>))
+                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<int> { 1, 2, 3 }, TypeSpecs.Spec8)
             };
             var _result = connection.Invoke ("TestService", "ListDefault", _args);
-            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
+            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec8, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "NestedStructEcho")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "NestedStructEcho", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestNestedStruct NestedStructEcho (global::KRPC.Client.Services.TestService.TestNestedStruct x)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestNestedStruct))
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec18)
             };
             var _result = connection.Invoke ("TestService", "NestedStructEcho", _args);
-            return (global::KRPC.Client.Services.TestService.TestNestedStruct)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestNestedStruct), connection);
+            return (global::KRPC.Client.Services.TestService.TestNestedStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec18, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "NotNullableObject")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "NotNullableObject", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass NotNullableObject (global::KRPC.Client.Services.TestService.TestClass value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec7)
             };
             var _result = connection.Invoke ("TestService", "NotNullableObject", _args);
-            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec7, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OnTimer")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "NullableStructEcho", typeof(TypeSpecs))]
+        public global::KRPC.Client.Services.TestService.TestNullableStruct NullableStructEcho (global::KRPC.Client.Services.TestService.TestNullableStruct x)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec17)
+            };
+            var _result = connection.Invoke ("TestService", "NullableStructEcho", _args);
+            return (global::KRPC.Client.Services.TestService.TestNullableStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec17, connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OnTimer", typeof(TypeSpecs))]
         public global::KRPC.Client.Event OnTimer (uint milliseconds, uint repeats = 1)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (milliseconds, typeof(uint)),
-                global::KRPC.Client.Encoder.Encode (repeats, typeof(uint))
+                global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec29),
+                global::KRPC.Client.Encoder.Encode (repeats, TypeSpecs.Spec29)
             };
             var _result = connection.Invoke ("TestService", "OnTimer", _args);
-            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Event), connection);
+            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec35, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OnTimerUsingLambda")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OnTimerUsingLambda", typeof(TypeSpecs))]
         public global::KRPC.Client.Event OnTimerUsingLambda (uint milliseconds)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (milliseconds, typeof(uint))
+                global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec29)
             };
             var _result = connection.Invoke ("TestService", "OnTimerUsingLambda", _args);
-            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Event), connection);
+            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec35, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OptionalArguments")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OptionalArguments", typeof(TypeSpecs))]
         public string OptionalArguments (string x, string y = "foo", string z = "bar", global::KRPC.Client.Services.TestService.TestClass obj = null)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x, typeof(string)),
-                global::KRPC.Client.Encoder.Encode (y, typeof(string)),
-                global::KRPC.Client.Encoder.Encode (z, typeof(string)),
-                global::KRPC.Client.Encoder.Encode (obj, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec5),
+                global::KRPC.Client.Encoder.Encode (y, TypeSpecs.Spec5),
+                global::KRPC.Client.Encoder.Encode (z, TypeSpecs.Spec5),
+                global::KRPC.Client.Encoder.Encode (obj, TypeSpecs.Spec7)
             };
             var _result = connection.Invoke ("TestService", "OptionalArguments", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ResetCustomExceptionLater")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ResetCustomExceptionLater", typeof(TypeSpecs))]
         public void ResetCustomExceptionLater ()
         {
             connection.Invoke ("TestService", "ResetCustomExceptionLater");
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ResetInvalidOperationExceptionLater")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ResetInvalidOperationExceptionLater", typeof(TypeSpecs))]
         public void ResetInvalidOperationExceptionLater ()
         {
             connection.Invoke ("TestService", "ResetInvalidOperationExceptionLater");
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ReturnNullWhenNotAllowed")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ReturnNullWhenNotAllowed", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass ReturnNullWhenNotAllowed ()
         {
             var _result = connection.Invoke ("TestService", "ReturnNullWhenNotAllowed");
-            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec7, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "SetDefault")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "SetDefault", typeof(TypeSpecs))]
         public genericCollectionsAlias::ISet<int> SetDefault (genericCollectionsAlias::ISet<int> x = null)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.HashSet<int> { 1, 2, 3 }, typeof(genericCollectionsAlias::ISet<int>))
+                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.HashSet<int> { 1, 2, 3 }, TypeSpecs.Spec21)
             };
             var _result = connection.Invoke ("TestService", "SetDefault", _args);
-            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(genericCollectionsAlias::ISet<int>), connection);
+            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec21, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StringToInt32")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StringToInt32", typeof(TypeSpecs))]
         public int StringToInt32 (string value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec5)
             };
             var _result = connection.Invoke ("TestService", "StringToInt32", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StructDefault")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StructDefault", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestStruct StructDefault (global::KRPC.Client.Services.TestService.TestStruct? x = null)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x ?? new global::KRPC.Client.Services.TestService.TestStruct (42, "jeb", global::KRPC.Client.Services.TestService.TestEnum.ValueB, new global::System.Collections.Generic.List<int> { 1, 2, 3 }), typeof(global::KRPC.Client.Services.TestService.TestStruct?))
+                global::KRPC.Client.Encoder.Encode (x ?? new global::KRPC.Client.Services.TestService.TestStruct (42, "jeb", global::KRPC.Client.Services.TestService.TestEnum.ValueB, new global::System.Collections.Generic.List<int> { 1, 2, 3 }), TypeSpecs.Spec16)
             };
             var _result = connection.Invoke ("TestService", "StructDefault", _args);
-            return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestStruct), connection);
+            return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StructEcho")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StructEcho", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestStruct StructEcho (global::KRPC.Client.Services.TestService.TestStruct x)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestStruct))
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec16)
             };
             var _result = connection.Invoke ("TestService", "StructEcho", _args);
-            return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestStruct), connection);
+            return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StructEchoNullable")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StructEchoNullable", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestStruct? StructEchoNullable (global::KRPC.Client.Services.TestService.TestStruct? x)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestStruct?))
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec16)
             };
             var _result = connection.Invoke ("TestService", "StructEchoNullable", _args);
             if (_result.IsNull)
                 return null;
-            return (global::KRPC.Client.Services.TestService.TestStruct?)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestStruct?), connection);
+            return (global::KRPC.Client.Services.TestService.TestStruct?)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec16, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentException")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentException", typeof(TypeSpecs))]
         public int ThrowArgumentException ()
         {
             var _result = connection.Invoke ("TestService", "ThrowArgumentException");
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentNullException")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentNullException", typeof(TypeSpecs))]
         public int ThrowArgumentNullException (string foo)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (foo, typeof(string))
+                global::KRPC.Client.Encoder.Encode (foo, TypeSpecs.Spec5)
             };
             var _result = connection.Invoke ("TestService", "ThrowArgumentNullException", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentOutOfRangeException")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentOutOfRangeException", typeof(TypeSpecs))]
         public int ThrowArgumentOutOfRangeException (int foo)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (foo, typeof(int))
+                global::KRPC.Client.Encoder.Encode (foo, TypeSpecs.Spec2)
             };
             var _result = connection.Invoke ("TestService", "ThrowArgumentOutOfRangeException", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowCustomException")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowCustomException", typeof(TypeSpecs))]
         public int ThrowCustomException ()
         {
             var _result = connection.Invoke ("TestService", "ThrowCustomException");
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowCustomExceptionLater")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowCustomExceptionLater", typeof(TypeSpecs))]
         public int ThrowCustomExceptionLater ()
         {
             var _result = connection.Invoke ("TestService", "ThrowCustomExceptionLater");
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowInvalidOperationException")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowInvalidOperationException", typeof(TypeSpecs))]
         public int ThrowInvalidOperationException ()
         {
             var _result = connection.Invoke ("TestService", "ThrowInvalidOperationException");
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowInvalidOperationExceptionLater")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowInvalidOperationExceptionLater", typeof(TypeSpecs))]
         public int ThrowInvalidOperationExceptionLater ()
         {
             var _result = connection.Invoke ("TestService", "ThrowInvalidOperationExceptionLater");
-            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TupleDefault")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TupleDefault", typeof(TypeSpecs))]
         public systemAlias::Tuple<int,bool> TupleDefault (systemAlias::Tuple<int,bool> x = null)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x ?? new systemAlias::Tuple<int,bool> (1, false), typeof(systemAlias::Tuple<int,bool>))
+                global::KRPC.Client.Encoder.Encode (x ?? new systemAlias::Tuple<int,bool> (1, false), TypeSpecs.Spec24)
             };
             var _result = connection.Invoke ("TestService", "TupleDefault", _args);
-            return (systemAlias::Tuple<int,bool>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(systemAlias::Tuple<int,bool>), connection);
+            return (systemAlias::Tuple<int,bool>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec24, connection);
         }
 
         /// <summary>
         /// Procedure whose default is the largest uint.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Uint32SpecialDefaults")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Uint32SpecialDefaults", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<uint> Uint32SpecialDefaults (uint maximum = uint.MaxValue)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (maximum, typeof(uint))
+                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec29)
             };
             var _result = connection.Invoke ("TestService", "Uint32SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<uint>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<uint>), connection);
+            return (global::System.Collections.Generic.IList<uint>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec36, connection);
         }
 
         /// <summary>
         /// Procedure whose default is the largest ulong.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Uint64SpecialDefaults")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Uint64SpecialDefaults", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<ulong> Uint64SpecialDefaults (ulong maximum = ulong.MaxValue)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (maximum, typeof(ulong))
+                global::KRPC.Client.Encoder.Encode (maximum, TypeSpecs.Spec30)
             };
             var _result = connection.Invoke ("TestService", "Uint64SpecialDefaults", _args);
-            return (global::System.Collections.Generic.IList<ulong>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<ulong>), connection);
+            return (global::System.Collections.Generic.IList<ulong>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec37, connection);
         }
 
         /// <summary>
         /// Deprecated property documentation string.
         /// </summary>
         [global::System.Obsolete ("Use StringProperty instead.")]
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_DeprecatedProperty")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_DeprecatedProperty", typeof(TypeSpecs))]
         public string DeprecatedProperty {
             get {
                 var _result = connection.Invoke ("TestService", "get_DeprecatedProperty");
-                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
             }
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec5)
                 };
                 connection.Invoke ("TestService", "set_DeprecatedProperty", _args);
             }
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_NullableObject")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_NullableObject", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass NullableObject {
             get {
                 var _result = connection.Invoke ("TestService", "get_NullableObject");
                 if (_result.IsNull)
                     return null;
-                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec7, connection);
             }
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec7)
                 };
                 connection.Invoke ("TestService", "set_NullableObject", _args);
             }
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_ObjectProperty")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_ObjectProperty", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass ObjectProperty {
             get {
                 var _result = connection.Invoke ("TestService", "get_ObjectProperty");
                 if (_result.IsNull)
                     return null;
-                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec7, connection);
             }
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec7)
                 };
                 connection.Invoke ("TestService", "set_ObjectProperty", _args);
             }
@@ -718,15 +864,15 @@ namespace KRPC.Client.Services.TestService
         /// <summary>
         /// Property documentation string.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_StringProperty")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_StringProperty", typeof(TypeSpecs))]
         public string StringProperty {
             get {
                 var _result = connection.Invoke ("TestService", "get_StringProperty");
-                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
             }
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec5)
                 };
                 connection.Invoke ("TestService", "set_StringProperty", _args);
             }
@@ -735,17 +881,17 @@ namespace KRPC.Client.Services.TestService
         public string StringPropertyPrivateGet {
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec5)
                 };
                 connection.Invoke ("TestService", "set_StringPropertyPrivateGet", _args);
             }
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_StringPropertyPrivateSet")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_StringPropertyPrivateSet", typeof(TypeSpecs))]
         public string StringPropertyPrivateSet {
             get {
                 var _result = connection.Invoke ("TestService", "get_StringPropertyPrivateSet");
-                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
             }
         }
     }
@@ -905,6 +1051,120 @@ namespace KRPC.Client.Services.TestService
         /// Returns true if the first DeprecatedStruct does not order before the second.
         /// </summary>
         public static bool operator >= (DeprecatedStruct lhs, DeprecatedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
+    }
+
+    /// <summary>
+    /// Nested nullable struct documentation string.
+    /// </summary>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    public struct TestNestedNullableStruct : IEquatable<TestNestedNullableStruct>, IComparable<TestNestedNullableStruct>
+    {
+        /// <summary>
+        /// Construct a TestNestedNullableStruct from the values of its fields.
+        /// </summary>
+        public TestNestedNullableStruct (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass> listField, string stringField) : this ()
+        {
+            ListField = listField;
+            StringField = stringField;
+        }
+
+        public global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass> ListField { get; private set; }
+
+        public string StringField { get; private set; }
+
+        /// <summary>
+        /// Returns true if this TestNestedNullableStruct is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is TestNestedNullableStruct && Equals ((TestNestedNullableStruct)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this TestNestedNullableStruct is equal to the given one.
+        /// </summary>
+        public bool Equals (TestNestedNullableStruct other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (ListField, other.ListField) && global::KRPC.Client.ValueUtils.Equal (StringField, other.StringField);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this TestNestedNullableStruct.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ListField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StringField);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two TestNestedNullableStruct values are equal.
+        /// </summary>
+        public static bool operator == (TestNestedNullableStruct lhs, TestNestedNullableStruct rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two TestNestedNullableStruct values are not equal.
+        /// </summary>
+        public static bool operator != (TestNestedNullableStruct lhs, TestNestedNullableStruct rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Compares this TestNestedNullableStruct with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two TestNestedNullableStructs that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (TestNestedNullableStruct other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>>.Default.Compare (ListField, other.ListField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<string>.Default.Compare (StringField, other.StringField);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNestedNullableStruct orders before the second.
+        /// </summary>
+        public static bool operator < (TestNestedNullableStruct lhs, TestNestedNullableStruct rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNestedNullableStruct orders after the second.
+        /// </summary>
+        public static bool operator > (TestNestedNullableStruct lhs, TestNestedNullableStruct rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNestedNullableStruct does not order after the second.
+        /// </summary>
+        public static bool operator <= (TestNestedNullableStruct lhs, TestNestedNullableStruct rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNestedNullableStruct does not order before the second.
+        /// </summary>
+        public static bool operator >= (TestNestedNullableStruct lhs, TestNestedNullableStruct rhs)
         {
             return lhs.CompareTo (rhs) >= 0;
         }
@@ -1162,6 +1422,143 @@ namespace KRPC.Client.Services.TestService
         }
     }
 
+    /// <summary>
+    /// Nullable struct documentation string.
+    /// </summary>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    public struct TestNullableStruct : IEquatable<TestNullableStruct>, IComparable<TestNullableStruct>
+    {
+        /// <summary>
+        /// Construct a TestNullableStruct from the values of its fields.
+        /// </summary>
+        public TestNullableStruct (int intField, int? nullableIntField, global::KRPC.Client.Services.TestService.TestEnum? nullableEnumField, string nullableStringField, global::KRPC.Client.Services.TestService.TestClass nullableObjectField) : this ()
+        {
+            IntField = intField;
+            NullableIntField = nullableIntField;
+            NullableEnumField = nullableEnumField;
+            NullableStringField = nullableStringField;
+            NullableObjectField = nullableObjectField;
+        }
+
+        public int IntField { get; private set; }
+
+        public int? NullableIntField { get; private set; }
+
+        public global::KRPC.Client.Services.TestService.TestEnum? NullableEnumField { get; private set; }
+
+        [global::KRPC.Client.Attributes.KRPCNullable]
+        public string NullableStringField { get; private set; }
+
+        [global::KRPC.Client.Attributes.KRPCNullable]
+        public global::KRPC.Client.Services.TestService.TestClass NullableObjectField { get; private set; }
+
+        /// <summary>
+        /// Returns true if this TestNullableStruct is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is TestNullableStruct && Equals ((TestNullableStruct)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this TestNullableStruct is equal to the given one.
+        /// </summary>
+        public bool Equals (TestNullableStruct other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (IntField, other.IntField) && global::KRPC.Client.ValueUtils.Equal (NullableIntField, other.NullableIntField) && global::KRPC.Client.ValueUtils.Equal (NullableEnumField, other.NullableEnumField) && global::KRPC.Client.ValueUtils.Equal (NullableStringField, other.NullableStringField) && global::KRPC.Client.ValueUtils.Equal (NullableObjectField, other.NullableObjectField);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this TestNullableStruct.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (IntField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (NullableIntField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (NullableEnumField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (NullableStringField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (NullableObjectField);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two TestNullableStruct values are equal.
+        /// </summary>
+        public static bool operator == (TestNullableStruct lhs, TestNullableStruct rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two TestNullableStruct values are not equal.
+        /// </summary>
+        public static bool operator != (TestNullableStruct lhs, TestNullableStruct rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Compares this TestNullableStruct with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two TestNullableStructs that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (TestNullableStruct other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<int>.Default.Compare (IntField, other.IntField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<int?>.Default.Compare (NullableIntField, other.NullableIntField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<global::KRPC.Client.Services.TestService.TestEnum?>.Default.Compare (NullableEnumField, other.NullableEnumField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<string>.Default.Compare (NullableStringField, other.NullableStringField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<global::KRPC.Client.Services.TestService.TestClass>.Default.Compare (NullableObjectField, other.NullableObjectField);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNullableStruct orders before the second.
+        /// </summary>
+        public static bool operator < (TestNullableStruct lhs, TestNullableStruct rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNullableStruct orders after the second.
+        /// </summary>
+        public static bool operator > (TestNullableStruct lhs, TestNullableStruct rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNullableStruct does not order after the second.
+        /// </summary>
+        public static bool operator <= (TestNullableStruct lhs, TestNullableStruct rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNullableStruct does not order before the second.
+        /// </summary>
+        public static bool operator >= (TestNullableStruct lhs, TestNullableStruct rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
+    }
+
     [Serializable]
     public class CustomException : global::KRPC.Client.RPCException
     {
@@ -1251,14 +1648,14 @@ namespace KRPC.Client.Services.TestService
         /// Deprecated method documentation string.
         /// </summary>
         [global::System.Obsolete ("Use TestClass.GetValue instead.")]
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedClass_DeprecatedMethod")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DeprecatedClass_DeprecatedMethod", typeof(TypeSpecs))]
         public string DeprecatedMethod ()
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (this, typeof(TestService.DeprecatedClass))
+                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec31)
             };
             var _result = connection.Invoke ("TestService", "DeprecatedClass_DeprecatedMethod", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
     }
 
@@ -1274,133 +1671,133 @@ namespace KRPC.Client.Services.TestService
         {
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_EchoNullableObject")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_EchoNullableObject", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass EchoNullableObject (global::KRPC.Client.Services.TestService.TestClass value)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
-                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7),
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec7)
             };
             var _result = connection.Invoke ("TestService", "TestClass_EchoNullableObject", _args);
             if (_result.IsNull)
                 return null;
-            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec7, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_FloatToString")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_FloatToString", typeof(TypeSpecs))]
         public string FloatToString (float x)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
-                global::KRPC.Client.Encoder.Encode (x, typeof(float))
+                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7),
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec0)
             };
             var _result = connection.Invoke ("TestService", "TestClass_FloatToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
         /// <summary>
         /// Method documentation string.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_GetValue")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_GetValue", typeof(TypeSpecs))]
         public string GetValue ()
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass))
+                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7)
             };
             var _result = connection.Invoke ("TestService", "TestClass_GetValue", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_ObjectToString")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_ObjectToString", typeof(TypeSpecs))]
         public string ObjectToString (global::KRPC.Client.Services.TestService.TestClass other)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
-                global::KRPC.Client.Encoder.Encode (other, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7),
+                global::KRPC.Client.Encoder.Encode (other, TypeSpecs.Spec7)
             };
             var _result = connection.Invoke ("TestService", "TestClass_ObjectToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_OptionalArguments")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_OptionalArguments", typeof(TypeSpecs))]
         public string OptionalArguments (string x, string y = "foo", string z = "bar", global::KRPC.Client.Services.TestService.TestClass obj = null)
         {
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
-                global::KRPC.Client.Encoder.Encode (x, typeof(string)),
-                global::KRPC.Client.Encoder.Encode (y, typeof(string)),
-                global::KRPC.Client.Encoder.Encode (z, typeof(string)),
-                global::KRPC.Client.Encoder.Encode (obj, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7),
+                global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec5),
+                global::KRPC.Client.Encoder.Encode (y, TypeSpecs.Spec5),
+                global::KRPC.Client.Encoder.Encode (z, TypeSpecs.Spec5),
+                global::KRPC.Client.Encoder.Encode (obj, TypeSpecs.Spec7)
             };
             var _result = connection.Invoke ("TestService", "TestClass_OptionalArguments", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
         /// <param name="connection">A connection object.</param>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticMethod")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticMethod", typeof(TypeSpecs))]
         public static string StaticMethod (IConnection connection, string a = "", string b = "")
         {
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (a, typeof(string)),
-                global::KRPC.Client.Encoder.Encode (b, typeof(string))
+                global::KRPC.Client.Encoder.Encode (a, TypeSpecs.Spec5),
+                global::KRPC.Client.Encoder.Encode (b, TypeSpecs.Spec5)
             };
             var _result = connection.Invoke ("TestService", "TestClass_static_StaticMethod", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
         /// <param name="connection">A connection object.</param>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticNullableObject")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticNullableObject", typeof(TypeSpecs))]
         public static global::KRPC.Client.Services.TestService.TestClass StaticNullableObject (IConnection connection, global::KRPC.Client.Services.TestService.TestClass value)
         {
             if (connection == null)
                 throw new ArgumentNullException (nameof (connection));
             var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec7)
             };
             var _result = connection.Invoke ("TestService", "TestClass_static_StaticNullableObject", _args);
             if (_result.IsNull)
                 return null;
-            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec7, connection);
         }
 
         /// <summary>
         /// Property documentation string.
         /// </summary>
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_IntProperty")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_IntProperty", typeof(TypeSpecs))]
         public int IntProperty {
             get {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass))
+                    global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7)
                 };
                 var _result = connection.Invoke ("TestService", "TestClass_get_IntProperty", _args);
-                return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+                return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
             }
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
-                    global::KRPC.Client.Encoder.Encode (value, typeof(int))
+                    global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7),
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec2)
                 };
                 connection.Invoke ("TestService", "TestClass_set_IntProperty", _args);
             }
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_ObjectProperty")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_ObjectProperty", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass ObjectProperty {
             get {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass))
+                    global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7)
                 };
                 var _result = connection.Invoke ("TestService", "TestClass_get_ObjectProperty", _args);
                 if (_result.IsNull)
                     return null;
-                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec7, connection);
             }
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
-                    global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                    global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7),
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec7)
                 };
                 connection.Invoke ("TestService", "TestClass_set_ObjectProperty", _args);
             }
@@ -1409,21 +1806,21 @@ namespace KRPC.Client.Services.TestService
         public string StringPropertyPrivateGet {
             set {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
-                    global::KRPC.Client.Encoder.Encode (value, typeof(string))
+                    global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7),
+                    global::KRPC.Client.Encoder.Encode (value, TypeSpecs.Spec5)
                 };
                 connection.Invoke ("TestService", "TestClass_set_StringPropertyPrivateGet", _args);
             }
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_StringPropertyPrivateSet")]
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_StringPropertyPrivateSet", typeof(TypeSpecs))]
         public string StringPropertyPrivateSet {
             get {
                 var _args = new ByteString[] {
-                    global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass))
+                    global::KRPC.Client.Encoder.Encode (this, TypeSpecs.Spec7)
                 };
                 var _result = connection.Invoke ("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
-                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
             }
         }
     }

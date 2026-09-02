@@ -289,7 +289,8 @@ to add functionality to the kRPC server.
    :parameters:
 
     * **Nullable** -- Whether the property can be null. This makes both the getter's return value
-      and the setter's argument nullable. Defaults to false.
+      and the setter's argument nullable, and on a field of a :csharp:attr:`KRPCStruct` it makes
+      the field nullable. Defaults to false.
 
     * **GameScene** -- The game scenes in which the property is available. Defaults to inherit this
       setting from the class the property is defined in.
@@ -440,9 +441,10 @@ to add functionality to the kRPC server.
    * It must have at least one field, and the type of every field must be a :ref:`serializable type
      <service-api-serializable-types>`.
 
-   * A field must not be nullable and must not restrict the game scenes it is available in, so
-     neither the ``Nullable`` nor the ``GameScene`` parameter of its :csharp:attr:`KRPCProperty`
-     attribute may be set.
+   * A field must not restrict the game scenes it is available in, so the ``GameScene`` parameter
+     of its :csharp:attr:`KRPCProperty` attribute must not be set.
+
+   * A field may be nullable. See :ref:`service-api-null-values`.
 
    * The structure must not contain itself, whether directly or through the fields of another
      structure that it contains.
@@ -482,6 +484,26 @@ to add functionality to the kRPC server.
         conn = krpc.connect()
         site = conn.space_center.launch_sites[0]
         print(site.name, site.latitude)
+
+   * Declare a structure with two nullable fields:
+
+     .. code-block:: csharp
+
+        [KRPCStruct]
+        public struct CommNodeInfo {
+            [KRPCProperty]
+            public string Name { get; set; }
+
+            [KRPCProperty (Nullable = true)]
+            public Vessel Vessel { get; set; }
+
+            [KRPCProperty]
+            public double? SignalStrength { get; set; }
+        }
+
+     A reference-typed field is made nullable by the ``Nullable`` parameter of its
+     :csharp:attr:`KRPCProperty` attribute. A field whose type is ``Nullable<T>`` needs no
+     annotation.
 
 .. csharp:attribute:: KRPCException (string Service, Type MappedException)
 
@@ -558,11 +580,19 @@ to add functionality to the kRPC server.
             ...
         }
 
-.. csharp:attribute:: KRPCNullable
+.. csharp:attribute:: KRPCNullable (params KRPC.Service.Attributes.Position[] Path)
+
+   :parameters:
+
+    * **Path** -- Optional positions to step through to reach the nullable one, outermost first.
+      An empty path, the usual case, is the value itself.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a
    kRPC procedure or class method parameter to indicate that the parameter is permitted to be
    ``null``. It can be applied to a parameter of any serializable type, not only class types.
+   Applied to a method it marks the return value instead. Applied to a property it marks both
+   the getter's return value and the setter's argument, as ``Nullable`` on
+   :csharp:attr:`KRPCProperty` does.
 
    The server enforces nullability: a call that passes ``null`` for a parameter that is not
    nullable fails with an error. A parameter is nullable if it is marked with ``KRPCNullable``,
@@ -582,6 +612,59 @@ to add functionality to the kRPC server.
               ...
           }
       }
+
+.. _service-api-nullable-positions:
+
+Nullable Positions
+""""""""""""""""""
+
+Giving :csharp:attr:`KRPCNullable` a path marks a position nested inside a value, rather than the
+value itself. Each step names a position of the type the step before it reached, outermost first:
+
+.. code-block:: csharp
+
+   using static KRPC.Service.Attributes.Position;
+
+   [KRPCNullable (Element)] IList<Vessel> crew                       // the vessels may be null
+   [KRPCNullable (Value)] IDictionary<string, Vessel> byName         // the values may be null
+   [KRPCNullable (Item2)] Tuple<string, Vessel> named                // the second item may be null
+   [KRPCNullable (Element, Element)] IList<IList<Vessel>> byStage    // the vessels may be null
+
+Without the ``using static`` each position is written ``Position.Element``, as ``GameScene``
+already is on :csharp:attr:`KRPCProcedure`.
+
+A path step that names no position of the type it is applied to is an error, which the server
+reports when it loads the service. A dictionary key and a set element have no name here, and so
+cannot be made nullable. The positions are:
+
+.. csharp:enum:: KRPC.Service.Attributes.Position
+
+   .. csharp:value:: Element
+
+      The element of a list.
+
+   .. csharp:value:: Value
+
+      The value of a dictionary.
+
+   .. csharp:value:: Item1
+
+      The first item of a tuple. ``Item2`` to ``Item7`` name the ones after it.
+
+The attribute may be applied more than once, for a type with several nullable positions:
+
+.. code-block:: csharp
+
+   [KRPCNullable]
+   [KRPCNullable (Element)]
+   IList<Vessel> maybeVessels                                        // the list, and its vessels
+
+A nested position whose type is ``Nullable<T>`` needs no attribute, exactly as a parameter of that
+type does. ``IList<int?>``, ``IDictionary<string, double?>`` and ``Tuple<int?, string>`` are all
+nullable at the position ``Nullable<T>`` marks.
+
+A path that reaches a value-typed position is an error. An ``int``, an ``enum`` and a structure
+hold a null only as ``Nullable<T>``, so ``IList<int>`` must be written ``IList<int?>``.
 
 .. _service-api-identifiers:
 
@@ -628,15 +711,18 @@ following types are serializable:
 Null Values
 ^^^^^^^^^^^
 
-A parameter or return value may be ``null`` only when it is declared *nullable*. This applies
-uniformly to every serializable type -- class types, ``string``, collections and value types
-alike. The server enforces it:
+A parameter, a return value, a structure field or a position nested inside one of them may be
+``null`` only when it is declared *nullable*. This applies uniformly to every serializable
+type -- class types, ``string``, collections and value types alike. The server enforces it:
 
 * Passing ``null`` as an argument for a parameter that is not nullable fails the call with an
   error.
 
 * Returning ``null`` from a procedure, method or property getter that is not nullable fails the
   call with an error.
+
+* A ``null`` in a structure field that is not nullable fails the call with an error, naming the
+  field.
 
 A **parameter** is nullable if any of the following hold:
 
@@ -654,22 +740,28 @@ setter's argument nullable.
 
 Return nullability is always declared, as kRPC reads the attribute rather than the method body.
 
+A **structure field** is nullable if the ``Nullable`` parameter of its
+:csharp:attr:`KRPCProperty` attribute is set, or if its type is ``Nullable<T>``. Setting
+``Nullable`` on a value-typed field is an error. Write the field as ``Nullable<T>`` instead.
+
 .. _service-api-nullable-value-types:
 
 Nullable Value Types
 """"""""""""""""""""
 
-A parameter or return value of type ``Nullable<T>`` -- ``int?``, ``float?``, ``bool?``, an
-``enum?`` and so on -- is automatically nullable; it needs neither :csharp:attr:`KRPCNullable` nor
-``Nullable = true``. To clients it appears as an ordinary value of type ``T`` that may be null.
+A parameter, return value or structure field of type ``Nullable<T>`` -- ``int?``, ``float?``,
+``bool?``, an ``enum?`` and so on -- is automatically nullable; it needs neither
+:csharp:attr:`KRPCNullable` nor ``Nullable = true``. To clients it appears as an ordinary value of
+type ``T`` that may be null.
 
 Only value types can be ``Nullable<T>``. A `nullable reference type
 <https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references>`_ annotation such as
 ``string?`` or ``IList<int>?`` is a compile-time annotation, and the ``?`` is erased before kRPC
 reads the type. Such a parameter or return value is treated as non-nullable.
 
-Use :csharp:attr:`KRPCNullable` or ``Nullable = true`` to make a reference-typed parameter or
-return value nullable.
+Use :csharp:attr:`KRPCNullable` or ``Nullable = true`` to make a reference-typed parameter,
+return value or structure field nullable, and a path on :csharp:attr:`KRPCNullable` to make a
+reference-typed position nested inside one nullable. See :ref:`service-api-nullable-positions`.
 
 Events
 ^^^^^^

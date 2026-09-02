@@ -129,6 +129,26 @@ local function _decode_entry(data)
   return key, value
 end
 
+-- Decode one value at a position inside another value, which the given type describes. A
+-- nullable position carries a presence bool before its value, and holds nothing else when that
+-- bool is false.
+local function _decode_item(data, typ)
+  if not typ.nullable then
+    return decoder.decode(data, typ)
+  end
+  -- The presence bool is one byte, as a bool value always is
+  if data:len() == 0 then
+    error('A nullable value carries no presence bool')
+  end
+  if not _value_decoders[Types.BOOL](data:sub(1, 1)) then
+    return Types.none
+  end
+  return decoder.decode(data:sub(2), typ)
+end
+
+-- Decode a value at a slot, where a null is carried by the is_null flag of the message around
+-- it. A value at a position inside another value carries its own presence bool, which
+-- _decode_item reads.
 function decoder.decode(data, typ)
   local code = typ.code
   local decode_value = _value_decoders[code]
@@ -140,7 +160,7 @@ function decoder.decode(data, typ)
     local value_type = typ.value_type
     local result = List{}
     for i = 1, count do
-      result[i] = decoder.decode(items[i], value_type)
+      result[i] = _decode_item(items[i], value_type)
     end
     return result
   elseif code == Types.DICTIONARY then
@@ -150,7 +170,7 @@ function decoder.decode(data, typ)
     local result = Map{}
     for i = 1, count do
       local key, value = _decode_entry(entries[i])
-      result[decoder.decode(key, key_type)] = decoder.decode(value, value_type)
+      result[_decode_item(key, key_type)] = _decode_item(value, value_type)
     end
     return result
   elseif code == Types.SET then
@@ -158,7 +178,7 @@ function decoder.decode(data, typ)
     local value_type = typ.value_type
     local result = Set{}
     for i = 1, count do
-      result[decoder.decode(items[i], value_type)] = true
+      result[_decode_item(items[i], value_type)] = true
     end
     return result
   elseif code == Types.TUPLE then
@@ -166,7 +186,7 @@ function decoder.decode(data, typ)
     local value_types = typ.value_types
     local result = List{}
     for i = 1, count do
-      result[i] = decoder.decode(items[i], value_types[i])
+      result[i] = _decode_item(items[i], value_types[i])
     end
     return result
   elseif code == Types.STRUCT then
@@ -179,7 +199,7 @@ function decoder.decode(data, typ)
     end
     local values = {}
     for i = 1, #field_types do
-      values[i] = decoder.decode(items[i], field_types[i])
+      values[i] = _decode_item(items[i], field_types[i])
     end
     return typ.lua_type(unpack(values))
   elseif typ:is_a(Types.MessageType) then

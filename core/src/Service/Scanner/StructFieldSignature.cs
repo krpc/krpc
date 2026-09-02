@@ -20,9 +20,9 @@ namespace KRPC.Service.Scanner
         public string FullyQualifiedName { get; private set; }
 
         /// <summary>
-        /// Type of the field.
+        /// The type of the field, with the nullability of every position inside it.
         /// </summary>
-        public Type Type { get; private set; }
+        public TypeSpec Spec { get; private set; }
 
         /// <summary>
         /// Documentation for the field.
@@ -42,11 +42,11 @@ namespace KRPC.Service.Scanner
         /// <summary>
         /// Create a signature for a field of a structure.
         /// </summary>
-        public StructFieldSignature (string serviceName, string structName, string fieldName, Type type, string documentation, bool deprecated, string deprecatedReason)
+        public StructFieldSignature (string serviceName, string structName, string fieldName, TypeSpec spec, string documentation, bool deprecated, string deprecatedReason)
         {
             Name = fieldName;
             FullyQualifiedName = serviceName + "." + structName + "." + Name;
-            Type = type;
+            Spec = spec;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;
             DeprecatedReason = deprecatedReason;
@@ -58,7 +58,7 @@ namespace KRPC.Service.Scanner
         public void GetObjectData (SerializationInfo info, StreamingContext context)
         {
             info.AddValue ("name", Name);
-            info.AddValue ("type", TypeUtils.SerializeType (Type));
+            info.AddValue ("type", TypeUtils.SerializeType (Spec));
             info.AddValue ("documentation", Documentation);
             if (Deprecated) {
                 info.AddValue ("deprecated", true);

@@ -14,6 +14,7 @@
 #include <string>
 #include <thread>  // NOLINT(build/c++11)
 #include <tuple>
+#include <type_traits>
 #include <unordered_set>
 #include <vector>
 
@@ -148,12 +149,12 @@ TEST_F(test_client, test_class_as_return_value) {
 }
 
 TEST_F(test_client, test_class_none_value) {
-  krpc::services::TestService::TestClass none;
-  ASSERT_EQ(none, test_service.echo_test_object(none));
+  std::optional<krpc::services::TestService::TestClass> none;
+  ASSERT_FALSE(test_service.echo_test_object(none).has_value());
   krpc::services::TestService::TestClass object = test_service.create_test_object("bob");
   ASSERT_EQ("bobnull", object.object_to_string(none));
   test_service.set_object_property(none);
-  ASSERT_EQ(none, test_service.object_property());
+  ASSERT_FALSE(test_service.object_property().has_value());
 }
 
 TEST_F(test_client, test_nullable_non_class_values) {
@@ -167,33 +168,35 @@ TEST_F(test_client, test_nullable_non_class_values) {
   ASSERT_FALSE(test_service.echo_nullable_list(std::nullopt).has_value());
 }
 
-TEST_F(test_client, test_non_nullable_parameter_rejects_null) {
-  // A null argument to a parameter that is not nullable is rejected by the server
-  krpc::services::TestService::TestClass none;
-  ASSERT_THROW(test_service.not_nullable_object(none), krpc::RPCError);
-}
+// The C++ type of a parameter carries whether it can hold null, so a null at a parameter
+// that is not nullable is rejected by the compiler rather than by the server
+static_assert(std::is_invocable_v<decltype(&krpc::services::TestService::echo_test_object),
+                                  krpc::services::TestService&, std::nullopt_t>);
+static_assert(!std::is_invocable_v<decltype(&krpc::services::TestService::not_nullable_object),
+                                   krpc::services::TestService&, std::nullopt_t>);
 
 TEST_F(test_client, test_nullable_class_method) {
-  krpc::services::TestService::TestClass none;
+  std::optional<krpc::services::TestService::TestClass> none;
   krpc::services::TestService::TestClass obj = test_service.create_test_object("jeb");
   krpc::services::TestService::TestClass obj2 = test_service.create_test_object("bob");
   ASSERT_EQ(obj2, obj.echo_nullable_object(obj2));
-  ASSERT_EQ(none, obj.echo_nullable_object(none));
+  ASSERT_FALSE(obj.echo_nullable_object(none).has_value());
 }
 
 TEST_F(test_client, test_nullable_class_static_method) {
-  krpc::services::TestService::TestClass none;
+  std::optional<krpc::services::TestService::TestClass> none;
   krpc::services::TestService::TestClass obj = test_service.create_test_object("jeb");
   ASSERT_EQ(obj, krpc::services::TestService::TestClass::static_nullable_object(conn, obj));
-  ASSERT_EQ(none, krpc::services::TestService::TestClass::static_nullable_object(conn, none));
+  auto result = krpc::services::TestService::TestClass::static_nullable_object(conn, none);
+  ASSERT_FALSE(result.has_value());
 }
 
 TEST_F(test_client, test_nullable_property) {
-  krpc::services::TestService::TestClass none;
+  std::optional<krpc::services::TestService::TestClass> none;
   krpc::services::TestService::TestClass obj = test_service.create_test_object("jeb");
   // ObjectProperty is nullable and its setter accepts null
   test_service.set_object_property(none);
-  ASSERT_EQ(none, test_service.object_property());
+  ASSERT_FALSE(test_service.object_property().has_value());
   // NullableObject is nullable for reads, but its setter guards against null, so writing
   // null raises the server's ArgumentNullException
   test_service.set_nullable_object(obj);
@@ -394,6 +397,59 @@ TEST_F(test_client, test_collections_of_structs) {
   ASSERT_EQ(2, result.size());
   ASSERT_EQ(1, result[0].int_field);
   ASSERT_EQ(2, result[1].int_field);
+}
+
+TEST_F(test_client, test_nullable_struct_fields) {
+  auto obj = test_service.create_test_object("jeb");
+  krpc::services::TestService::TestNullableStruct value(
+      1, 2, krpc::services::TestService::TestEnum::value_b, "jeb", obj);
+  auto result = test_service.nullable_struct_echo(value);
+  ASSERT_EQ(value, result);
+  ASSERT_EQ(2, result.nullable_int_field);
+  ASSERT_EQ(krpc::services::TestService::TestEnum::value_b, result.nullable_enum_field);
+  ASSERT_EQ("jeb", result.nullable_string_field);
+  ASSERT_EQ(obj, result.nullable_object_field);
+}
+
+TEST_F(test_client, test_null_struct_fields) {
+  // A position inside a value is an optional, and an empty one is null
+  krpc::services::TestService::TestNullableStruct value(1, {}, {}, {}, {});
+  auto result = test_service.nullable_struct_echo(value);
+  ASSERT_EQ(1, result.int_field);
+  ASSERT_FALSE(result.nullable_int_field.has_value());
+  ASSERT_FALSE(result.nullable_enum_field.has_value());
+  ASSERT_FALSE(result.nullable_string_field.has_value());
+  ASSERT_FALSE(result.nullable_object_field.has_value());
+}
+
+TEST_F(test_client, test_nullable_list_elements) {
+  std::vector<std::optional<int32_t>> ints{1, {}, 3};
+  ASSERT_EQ(ints, test_service.echo_list_of_nullable_ints(ints));
+  auto obj = test_service.create_test_object("jeb");
+  std::vector<std::optional<krpc::services::TestService::TestClass>> objects{obj, {}};
+  ASSERT_EQ(objects, test_service.echo_list_of_nullable_objects(objects));
+}
+
+TEST_F(test_client, test_nullable_dictionary_values) {
+  auto obj = test_service.create_test_object("jeb");
+  std::map<std::string, std::optional<krpc::services::TestService::TestClass>> value{{"a", obj},
+                                                                                     {"b", {}}};
+  ASSERT_EQ(value, test_service.echo_dictionary_of_nullable_objects(value));
+}
+
+TEST_F(test_client, test_nullable_tuple_item) {
+  auto obj = test_service.create_test_object("jeb");
+  std::tuple<int32_t, std::optional<krpc::services::TestService::TestClass>> present{1, obj};
+  ASSERT_EQ(present, test_service.echo_tuple_with_a_nullable_object(present));
+  std::tuple<int32_t, std::optional<krpc::services::TestService::TestClass>> absent{1, {}};
+  ASSERT_EQ(absent, test_service.echo_tuple_with_a_nullable_object(absent));
+}
+
+TEST_F(test_client, test_nullable_nested_list_elements) {
+  auto obj = test_service.create_test_object("jeb");
+  std::vector<std::vector<std::optional<krpc::services::TestService::TestClass>>> value{{obj, {}},
+                                                                                        {}};
+  ASSERT_EQ(value, test_service.echo_nested_list_of_nullable_objects(value));
 }
 
 TEST_F(test_client, test_struct_default_value) {

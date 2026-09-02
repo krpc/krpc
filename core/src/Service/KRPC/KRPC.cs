@@ -73,13 +73,11 @@ namespace KRPC.Service.KRPC
                 var service = new Messages.Service (serviceSignature.Name);
                 foreach (var procedureSignature in serviceSignature.Procedures.Values) {
                     var procedure = new Procedure (procedureSignature.Name);
-                    if (procedureSignature.HasReturnType) {
-                        procedure.ReturnType = procedureSignature.ReturnType;
-                        procedure.ReturnIsNullable = procedureSignature.ReturnIsNullable;
-                    }
+                    if (procedureSignature.HasReturnType)
+                        procedure.ReturnType = procedureSignature.ReturnSpec;
                     foreach (var parameterSignature in procedureSignature.Parameters) {
                         var parameter = new Parameter (
-                            parameterSignature.Name, parameterSignature.Type, parameterSignature.Nullable);
+                            parameterSignature.Name, parameterSignature.Spec);
                         if (parameterSignature.HasDefaultValue)
                             parameter.DefaultValue = parameterSignature.DefaultValue;
                         procedure.Parameters.Add (parameter);
@@ -122,7 +120,7 @@ namespace KRPC.Service.KRPC
                     str.Deprecated = structSignature.Deprecated;
                     str.DeprecatedReason = structSignature.DeprecatedReason;
                     foreach (var fieldSignature in structSignature.Fields) {
-                        var field = new StructField (fieldSignature.Name, fieldSignature.Type);
+                        var field = new StructField (fieldSignature.Name, fieldSignature.Spec);
                         if (fieldSignature.Documentation.Length > 0)
                             field.Documentation = fieldSignature.Documentation;
                         field.Deprecated = fieldSignature.Deprecated;

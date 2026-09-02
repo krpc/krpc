@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using KRPC.Client.Services.TestService;
@@ -163,6 +164,36 @@ namespace KRPC.Client.Test
             for (int i = 0; i < 5; i++) {
                 Assert.IsNull (x.Get ());
                 Assert.IsNull (y.Get ());
+                Wait ();
+            }
+        }
+
+        [Test]
+        public void NullableListElements ()
+        {
+            // A stream carries the value itself, so a null inside a collection reaches the
+            // decoder as a presence bool where a null result does not
+            var value = new List<int?> { 1, null, 3 };
+            var x = Connection.AddStream (
+                () => Connection.TestService ().EchoListOfNullableInts (value));
+            for (int i = 0; i < 5; i++) {
+                CollectionAssert.AreEqual (value, x.Get ());
+                Wait ();
+            }
+        }
+
+        [Test]
+        public void NullableObjectListElements ()
+        {
+            // A stream is built from an expression, which has only the C# types of the
+            // values it passes. A nullable element of a class type is invisible there, and
+            // is read from the specs the generated service declares
+            var obj = Connection.TestService ().CreateTestObject ("bob");
+            var value = new List<TestClass> { obj, null };
+            var x = Connection.AddStream (
+                () => Connection.TestService ().EchoListOfNullableObjects (value));
+            for (int i = 0; i < 5; i++) {
+                CollectionAssert.AreEqual (value, x.Get ());
                 Wait ();
             }
         }

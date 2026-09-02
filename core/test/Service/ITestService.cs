@@ -25,6 +25,8 @@ namespace KRPC.Test.Service
 
         string NullableProperty { get; set; }
 
+        string NullableByAttributeProperty { get; set; }
+
         TestService.TestClass CreateTestObject (string value);
 
         void DeleteTestObject (TestService.TestClass obj);
@@ -40,6 +42,19 @@ namespace KRPC.Test.Service
         TestService.TestEnum? EchoNullableEnum (TestService.TestEnum? x);
 
         IList<string> EchoNullableList (IList<string> l);
+
+        IList<int?> EchoListOfNullableInts (IList<int?> l);
+
+        IList<TestService.TestClass> EchoListOfNullableObjects (IList<TestService.TestClass> l);
+
+        IDictionary<string,TestService.TestClass> EchoDictionaryOfNullableObjects (
+            IDictionary<string,TestService.TestClass> d);
+
+        Tuple<int,TestService.TestClass> EchoTupleWithANullableObject (
+            Tuple<int,TestService.TestClass> t);
+
+        IList<IList<TestService.TestClass>> EchoNestedListOfNullableObjects (
+            IList<IList<TestService.TestClass>> l);
 
         void ProcedureSingleOptionalArgNoReturn (string x);
 
