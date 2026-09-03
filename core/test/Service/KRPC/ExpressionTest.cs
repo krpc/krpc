@@ -165,6 +165,28 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void ConditionalOperatorsShortCircuit ()
+        {
+            // Dividing by zero throws, so the second operand shows whether it was
+            // evaluated at all
+            var fails = Expression.Equal (
+                Expression.Divide (Expression.ConstantInt (1), Expression.ConstantInt (0)),
+                Expression.ConstantInt (0));
+            Assert.IsFalse (Eval<bool> (
+                Expression.ConditionalAnd (Expression.ConstantBool (false), fails)));
+            Assert.IsTrue (Eval<bool> (
+                Expression.ConditionalOr (Expression.ConstantBool (true), fails)));
+            Assert.Throws<System.DivideByZeroException> (() => Eval<bool> (
+                Expression.And (Expression.ConstantBool (false), fails)));
+            Assert.Throws<System.DivideByZeroException> (() => Eval<bool> (
+                Expression.Or (Expression.ConstantBool (true), fails)));
+            Assert.IsTrue (Eval<bool> (Expression.ConditionalAnd (
+                Expression.ConstantBool (true), Expression.ConstantBool (true))));
+            Assert.IsFalse (Eval<bool> (Expression.ConditionalOr (
+                Expression.ConstantBool (false), Expression.ConstantBool (false))));
+        }
+
+        [Test]
         public void ExclusiveOr ()
         {
             Assert.IsFalse (Eval<bool> (Expression.ExclusiveOr (

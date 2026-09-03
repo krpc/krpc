@@ -278,7 +278,7 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Boolean and operator.
+        /// Boolean and operator. Both operands are evaluated.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
@@ -289,7 +289,7 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Boolean or operator.
+        /// Boolean or operator. Both operands are evaluated.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
@@ -297,6 +297,30 @@ namespace KRPC.Service.KRPC
         public static Expression Or(Expression arg0, Expression arg1)
         {
             return new Expression(LinqExpression.Or(arg0, arg1));
+        }
+
+        /// <summary>
+        /// Conditional boolean and operator. The second operand is only evaluated
+        /// when the first is true.
+        /// </summary>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        [KRPCMethod]
+        public static Expression ConditionalAnd (Expression arg0, Expression arg1)
+        {
+            return new Expression (LinqExpression.AndAlso (arg0, arg1));
+        }
+
+        /// <summary>
+        /// Conditional boolean or operator. The second operand is only evaluated
+        /// when the first is false.
+        /// </summary>
+        /// <param name="arg0"></param>
+        /// <param name="arg1"></param>
+        [KRPCMethod]
+        public static Expression ConditionalOr (Expression arg0, Expression arg1)
+        {
+            return new Expression (LinqExpression.OrElse (arg0, arg1));
         }
 
         /// <summary>
