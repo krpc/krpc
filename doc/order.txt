@@ -40,6 +40,8 @@ KRPC.Expression.LessThan
 KRPC.Expression.LessThanOrEqual
 KRPC.Expression.And
 KRPC.Expression.Or
+KRPC.Expression.ConditionalAnd
+KRPC.Expression.ConditionalOr
 KRPC.Expression.ExclusiveOr
 KRPC.Expression.Not
 KRPC.Expression.Conditional
