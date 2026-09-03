@@ -198,6 +198,8 @@
     computer (#1093)
   - Apply `Control.Throttle` on a RemoteTech vessel regardless of signal delay and
     connection, matching the other control axes (#1093)
+  - **Breaking:** `SpaceCenter.ActionGroupAction` is a structure, so
+    `Control.GetActionGroupActions` sends every field of each action in one call (#1132)
 
 - Parts
   - **Breaking:** `RCS.TranslationOverride` thrusts along the right, up and forward axes it
@@ -283,6 +285,9 @@
 - Communications
   - A `CommLink` is identified by the two nodes it joins and reports the link between them as
     it is now. One whose nodes are gone raises `KRPC.ObjectDestroyedException` (#1051)
+  - **Breaking:** `SpaceCenter.CommNode` is a structure, so `CommLink.Start` and `CommLink.End`
+    send every field of a node in one call (#1132)
+  - **Breaking:** `CommNode.Vessel` returns `null` for a node that is not a vessel (#1132)
 
 ## [v0.6.0]
 
