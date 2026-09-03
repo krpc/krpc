@@ -160,6 +160,10 @@
   - Setting `Control.StageLock` leaves the in-game Alt+L shortcut in step with it (#1022)
   - Add `Control.PrecisionMode`, the precision control mode that the Caps Lock key
     toggles (#1082)
+  - Fix control inputs being applied twice each tick to a vessel with a RemoteTech flight
+    computer (#1093)
+  - Apply `Control.Throttle` on a RemoteTech vessel regardless of signal delay and
+    connection, matching the other control axes (#1093)
 
 - Parts
   - **Breaking:** `RCS.TranslationOverride` thrusts along the right, up and forward axes it
