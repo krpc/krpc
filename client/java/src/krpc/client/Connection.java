@@ -528,6 +528,99 @@ public class Connection implements AutoCloseable {
   }
 
   /**
+   * Create a stream from a server side function. On each update, the value
+   * of the stream is the result of evaluating the function on the server.
+   * The type parameter must correspond to the function's return type,
+   * which is reported by the server.
+   *
+   * @param function
+   *            The function to evaluate on each stream update.
+   *
+   * @return A stream object.
+   */
+  public <T> Stream<T> addStream(krpc.client.services.KRPC.Expression function)
+      throws StreamException, RPCException {
+    krpc.client.services.KRPC krpcService = krpc.client.services.KRPC.newInstance(this);
+    KRPC.Type returnType = expressionReturnType(function);
+    if (returnType == null) {
+      throw new StreamException("The function does not evaluate to a value");
+    }
+    KRPC.Stream stream = krpcService.addFunctionStream(function, false);
+    return new Stream<T>(this, returnType, stream.getId());
+  }
+
+  /**
+   * Run a function on the server, within a single physics tick, and return
+   * the value it produces. Null for a function with no result, and for one
+   * whose value is null. The type of the value is reported by the server.
+   *
+   * @param function
+   *            The function to evaluate.
+   *
+   * @return The value the function evaluates to.
+   */
+  @SuppressWarnings("unchecked")
+  public <T> T runFunction(krpc.client.services.KRPC.Expression function)
+      throws RPCException {
+    krpc.client.services.KRPC krpcService = krpc.client.services.KRPC.newInstance(this);
+    byte[] data = krpcService.runFunction(function);
+    // A null value is signaled out of band by is_null, which the stub reports as no
+    // data at all
+    if (data == null) {
+      return null;
+    }
+    KRPC.Type returnType = expressionReturnType(function);
+    if (returnType == null) {
+      return null;
+    }
+    return (T) Encoder.decode(ByteString.copyFrom(data), returnType, this);
+  }
+
+  /**
+   * The protocol buffer type message describing the values a server side function
+   * evaluates to, by expression object identifier, and null for a function that
+   * evaluates to no value. Introspecting a type costs a round trip per property.
+   * A function's return type does not change, so it is introspected once.
+   */
+  private final Map<Long, KRPC.Type> expressionReturnTypes = new HashMap<Long, KRPC.Type>();
+
+  private KRPC.Type expressionReturnType(krpc.client.services.KRPC.Expression expression)
+      throws RPCException {
+    synchronized (expressionReturnTypes) {
+      if (expressionReturnTypes.containsKey(expression.id)) {
+        return expressionReturnTypes.get(expression.id);
+      }
+    }
+    // Introspect outside the lock, as it makes a round trip per property. Two threads
+    // asking for the same function's type both introspect it, and store the same result
+    KRPC.Type returnType =
+        expression.getHasReturnType() ? buildType(expression.getReturnType()) : null;
+    synchronized (expressionReturnTypes) {
+      expressionReturnTypes.put(expression.id, returnType);
+    }
+    return returnType;
+  }
+
+  /**
+   * Build the protocol buffer type message describing the type of the values
+   * a server side function evaluates to, by introspecting its return type
+   * on the server.
+   */
+  private KRPC.Type buildType(krpc.client.services.KRPC.Type remoteType) throws RPCException {
+    KRPC.Type.Builder builder = KRPC.Type.newBuilder();
+    builder.setCode(KRPC.Type.TypeCode.forNumber(remoteType.getCode().getValue()));
+    String service = remoteType.getService();
+    if (!service.isEmpty()) {
+      builder.setService(service);
+      builder.setName(remoteType.getName());
+    }
+    for (krpc.client.services.KRPC.Type subType : remoteType.getTypes()) {
+      builder.addTypes(buildType(subType));
+    }
+    return builder.build();
+  }
+
+  /**
    * Get the procedure call message for a static method call.
    *
    * @param clazz
