@@ -167,6 +167,7 @@ nitpick_ignore = [
     ('c:identifier', 'krpc_schema_Status'),
     ('c:identifier', 'krpc_schema_Services'),
     ('c:identifier', 'krpc_schema_Stream'),
+    ('c:identifier', 'krpc_nullable_object_t'),
     ('c:identifier', 'krpc_tuple_double_double_t'),
     ('c:identifier', 'krpc_tuple_double_double_double_t'),
     ('c:identifier', 'krpc_tuple_double_double_double_double_t'),
@@ -183,6 +184,8 @@ nitpick_ignore = [
     ('c:identifier', 'krpc_list_list_string_t'),
     ('c:identifier', 'krpc_list_tuple_double_double_double_t'),
     ('c:identifier', 'krpc_list_tuple_bytes_string_string_t'),
+    ('c:identifier', 'krpc_list_SpaceCenter_ActionGroupAction_t'),
+    ('c:identifier', 'krpc_list_SpaceCenter_CommLink_t'),
     ('c:identifier', 'krpc_set_object_t'),
     ('c:identifier', 'krpc_set_string_t'),
     ('c:identifier', 'krpc_dictionary_string_string_t'),
@@ -319,3 +322,24 @@ def setup(app):
                                         node, contnode)
 
     app.add_domain(KRPCPythonDomain, override=True)
+
+    # The C# domain has no struct directive, so a kRPC structure is described
+    # with one added here. It carries the keyword the generated client declares,
+    # and the type role resolves against it as it does against a class.
+    from sphinx import addnodes
+    from sphinx.domains import ObjType
+    from sphinx_csharp.csharp import (
+        CSharpClass, CSharpDomain, parse_type_signature)
+
+    class CSharpStruct(CSharpClass):
+        def handle_signature(self, sig, signode):
+            name = 'struct %s' % sig
+            signode += addnodes.desc_name(name, name)
+            return self.get_fullname(parse_type_signature(sig)[0])
+
+    class KRPCCSharpDomain(CSharpDomain):
+        object_types = dict(
+            CSharpDomain.object_types, struct=ObjType('struct', 'type'))
+        directives = dict(CSharpDomain.directives, struct=CSharpStruct)
+
+    app.add_domain(KRPCCSharpDomain, override=True)
