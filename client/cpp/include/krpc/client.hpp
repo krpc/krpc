@@ -47,6 +47,13 @@ class Client {
   void add_exception_thrower(const std::string& service, const std::string& name,
                              const std::function<void(std::string)>& thrower);
 
+  /** The type of the values the server side function with the given object id evaluates to,
+      when it has been stored. A code of NONE is a function that evaluates to no value. */
+  bool get_function_return_type(uint64_t id, schema::Type* type) const;
+  /** Store the type of the values a server side function evaluates to. A function's return
+      type does not change, and introspecting one costs a round trip per property. */
+  void set_function_return_type(uint64_t id, const schema::Type& type);
+
  private:
   friend class StreamManager;
   void throw_exception(const schema::Error& error) const;
@@ -103,6 +110,8 @@ class Client {
   // on both the calling thread and the stream update thread. Held by shared pointer as the
   // client is copyable and a mutex is not.
   std::shared_ptr<std::mutex> exception_throwers_lock;
+  std::map<uint64_t, schema::Type> function_return_types;
+  std::shared_ptr<std::mutex> function_return_types_lock;
 };
 
 }  // namespace krpc

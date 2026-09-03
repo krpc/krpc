@@ -16,7 +16,10 @@ namespace krpc {
 
 class StreamImpl;
 
-Client::Client() : lock(new std::mutex), exception_throwers_lock(new std::mutex) {}
+Client::Client()
+    : lock(new std::mutex),
+      exception_throwers_lock(new std::mutex),
+      function_return_types_lock(new std::mutex) {}
 
 Client::Client(const std::string& name, const std::string& address, unsigned int rpc_port,
                unsigned int stream_port, std::chrono::milliseconds timeout)
@@ -26,7 +29,9 @@ Client::Client(const std::string& name, const std::string& address, unsigned int
 
 Client::Client(const std::string& name, std::shared_ptr<Connection> rpc,
                const std::shared_ptr<Connection>& stream)
-    : lock(new std::mutex), exception_throwers_lock(new std::mutex) {
+    : lock(new std::mutex),
+      exception_throwers_lock(new std::mutex),
+      function_return_types_lock(new std::mutex) {
   // Connect to RPC server
   rpc_connection = std::move(rpc);
   rpc_connection->connect();
@@ -132,6 +137,19 @@ void Client::add_exception_thrower(const std::string& service, const std::string
                                    const std::function<void(std::string)>& thrower) {
   std::lock_guard<std::mutex> guard(*exception_throwers_lock);
   exception_throwers[std::make_pair(service, name)] = thrower;
+}
+
+bool Client::get_function_return_type(uint64_t id, schema::Type* type) const {
+  std::lock_guard<std::mutex> guard(*function_return_types_lock);
+  auto entry = function_return_types.find(id);
+  if (entry == function_return_types.end()) return false;
+  *type = entry->second;
+  return true;
+}
+
+void Client::set_function_return_type(uint64_t id, const schema::Type& type) {
+  std::lock_guard<std::mutex> guard(*function_return_types_lock);
+  function_return_types[id] = type;
 }
 
 void Client::throw_exception(const schema::Error& error) const {
