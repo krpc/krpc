@@ -42,6 +42,20 @@ def compile_function(client: Client, func: Callable) -> Any:  # type: ignore[typ
     return _Compiler(client, func).compile()
 
 
+def defer(call: Any) -> None:  # pylint: disable=unused-argument
+    """Start a call to a procedure that pauses execution, such as
+    SpaceCenter.warp_to, without waiting for it.
+
+    Written as a statement within a function passed to
+    Client.compile_function, where the compiler reads the call it is given
+    rather than making it. The call is started where it appears, the function
+    carries on, and any value the procedure returns is discarded."""
+    raise FunctionCompilationError(
+        "krpc.defer marks a call within a function compiled by "
+        "Client.compile_function, and cannot be called directly"
+    )
+
+
 _BINARY_OPS: Dict[type, Tuple[str, Callable[[Any, Any], Any]]] = {
     ast.Add: ("add", operator.add),
     ast.Sub: ("subtract", operator.sub),
@@ -136,6 +150,9 @@ class _Compiler:
         # The statement compiler for the function body being compiled, when
         # there is one; used by assignment expressions
         self._active_statements: Any = None
+        # The call krpc.defer was given, cleared by the remote call that
+        # consumes it
+        self._deferred_call: Optional[ast.Call] = None
         if client._expression_metadata is None:
             client._expression_metadata = Metadata(client)
         self._metadata: Metadata = client._expression_metadata
@@ -150,7 +167,7 @@ class _Compiler:
                 raise FunctionCompilationError(
                     "The function to compile must take no arguments"
                 )
-            result = self._compile(node.body)
+            result = self._compile_statement(node.body)
         else:
             if node.args.args or node.args.posonlyargs or node.args.kwonlyargs:
                 raise FunctionCompilationError(
@@ -244,6 +261,31 @@ class _Compiler:
         if method is None:
             raise self._error(node, "unsupported syntax (%s)" % type(node).__name__)
         return method(node)
+
+    def _compile_statement(self, node: ast.AST) -> _Result:
+        """Compile an expression that appears as a statement. A deferred call
+        produces no value, so it is only allowed here."""
+        if self._is_deferred_call(node):
+            return self._compile_deferred_call(cast(ast.Call, node))
+        return self._compile(node)
+
+    def _is_deferred_call(self, node: ast.AST) -> bool:
+        """Whether the node is a call of krpc.defer. Only a name, and an
+        attribute named defer, are looked up, so compiling an ordinary
+        statement resolves nothing extra."""
+        if not isinstance(node, ast.Call):
+            return False
+        func = node.func
+        try:
+            if isinstance(func, ast.Name):
+                target = self._lookup(func.id)
+                return target.is_value and target.value is defer
+            if isinstance(func, ast.Attribute) and func.attr == "defer":
+                target = self._compile(func.value)
+                return target.is_value and getattr(target.value, "defer", None) is defer
+        except FunctionCompilationError:
+            return False
+        return False
 
     def _compile_constant(self, node: ast.Constant) -> _Result:
         return _Result(value=node.value, is_value=True)
@@ -340,6 +382,10 @@ class _Compiler:
             method = getattr(base.value, func.attr, None)
             if method is None:
                 raise self._error(node, "cannot resolve method '%s'" % func.attr)
+            if method is defer:
+                raise self._error(
+                    node, "a deferred call can only be used as a statement"
+                )
             if method in _MATH_FUNCTIONS:
                 return self._compile_math_call(node, method)
             return self._compile_client_call(node, method)
@@ -351,6 +397,10 @@ class _Compiler:
                 owner, member = bound
                 return self._compile_remote_call(
                     node, member, _Result(value=owner, is_value=True)
+                )
+            if target.value is defer:
+                raise self._error(
+                    node, "a deferred call can only be used as a statement"
                 )
             if target.value in _MATH_FUNCTIONS:
                 return self._compile_math_call(node, target.value)
@@ -431,6 +481,27 @@ class _Compiler:
             ),
             ptype=ptype,
         )
+
+    def _compile_deferred_call(self, node: ast.Call) -> _Result:
+        """Compile krpc.defer(call): start the call where it appears and carry
+        on without waiting for it. The node is a statement and has no value."""
+        if len(node.args) != 1 or node.keywords:
+            raise self._error(node, "defer takes a single remote call")
+        call = node.args[0]
+        if not isinstance(call, ast.Call):
+            raise self._error(node, "defer takes a call to a remote procedure")
+        previous = self._deferred_call
+        self._deferred_call = call
+        try:
+            result = self._compile(call)
+            # The remote call clears the mark, so a mark still set means the
+            # call was of something else, such as a builtin or a local function
+            deferred = self._deferred_call is None
+        finally:
+            self._deferred_call = previous
+        if not deferred:
+            raise self._error(node, "defer takes a call to a remote procedure")
+        return _Result(expression=result.expression, ptype=None)
 
     def _compile_math_call(
         self, node: ast.Call, func: Callable  # type: ignore[type-arg]
@@ -687,7 +758,13 @@ class _Compiler:
                 while len(args) < position:
                     args.append(None)
                 args.append(values[position])
-        return self._call_node(node, service, procedure, args)
+        # Only a remote procedure call can be deferred, and only the call
+        # krpc.defer was given. A StdLib call reaches _call_node with the same
+        # node, so the mark is consumed here rather than there
+        deferred = node is self._deferred_call
+        if deferred:
+            self._deferred_call = None
+        return self._call_node(node, service, procedure, args, deferred=deferred)
 
     def _compile_binop(self, node: ast.BinOp) -> _Result:
         if isinstance(node.op, ast.FloorDiv):
@@ -1629,6 +1706,7 @@ class _Compiler:
         service: str,
         procedure: KRPC.Procedure,
         args: List[Optional[_Result]],
+        deferred: bool = False,
     ) -> _Result:
         call = KRPC.ProcedureCall()
         call.service = service
@@ -1643,6 +1721,11 @@ class _Compiler:
             parameter = parameters[position] if position < len(parameters) else None
             expressions[position] = self._argument_expression(
                 node, arg, procedure, parameter
+            )
+        if deferred:
+            return _Result(
+                expression=self._expr.deferred_call_with_arguments(call, expressions),
+                ptype=None,
             )
         return _Result(
             expression=self._expr.call_with_arguments(call, expressions),

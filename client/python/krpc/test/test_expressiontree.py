@@ -1,6 +1,7 @@
 import math
 import unittest
 
+from krpc import defer
 from krpc.test.servertestcase import ServerTestCase
 
 REMOTE_PROPERTY_COMPARISON = """\
@@ -16,6 +17,18 @@ Equal<Boolean>
       Parameter<String> returnValue#0
     Parameter<String> returnValue#0
   Constant<String> "foo"
+"""
+
+DEFERRED_CALL = """\
+Call<Void> static Services.ExecuteDeferredCall
+  Constant<ProcedureSignature> TestService.BlockingProcedure
+  Lambda<Action> ()
+    Block<Void>
+      Call<Void> static Services.CheckExpressionGameScene
+        Constant<ProcedureSignature> TestService.BlockingProcedure
+      Call<Int32> static TestService.BlockingProcedure
+        Constant<Int32> 3
+        Constant<Int32> 0
 """
 
 TRUE_DIVISION = """\
@@ -208,6 +221,12 @@ class TestExpressionTree(ServerTestCase, unittest.TestCase):
         self.check(
             REMOTE_PROPERTY_COMPARISON,
             lambda: self.conn.test_service.string_property == "foo",
+        )
+
+    def test_deferred_call(self):
+        self.check(
+            DEFERRED_CALL,
+            lambda: defer(self.conn.test_service.blocking_procedure(3)),
         )
 
     def test_true_division(self):

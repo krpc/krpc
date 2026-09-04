@@ -246,6 +246,9 @@ the same result on the server:
   properties of remote objects and services, and remote calls as statements for their effects.
   A local variable can be mutated, augmented with ``total += x``, appended to, and assigned to
   by list and dictionary element.
+* ``krpc.defer(call)`` starts a call to a procedure that pauses execution, such as
+  ``SpaceCenter.warp_to``, without waiting for it. It is a statement, the value the procedure
+  returns is discarded, and it is how a compiled function calls such a procedure at all.
 * A local variable takes its type from its first assignment, so annotate an assignment of an
   empty collection, for example ``result: list[int] = []``. A function that returns a value
   must end with a return statement.
@@ -305,6 +308,22 @@ Client API Reference
                            Defaults as ``rpc_path`` does. Pass ``None`` to connect without stream
                            support.
    :param bool use_pregenerated_stubs: As for :func:`krpc.connect`.
+
+.. function:: krpc.defer(call)
+
+   Start a call to a procedure that pauses execution, such as ``SpaceCenter.warp_to``, without
+   waiting for it. Written as a statement in a function compiled by
+   :meth:`krpc.client.Client.compile_function`, where the compiler reads the call it is given
+   rather than making it. The value the procedure returns is discarded.
+
+   :param call: The call to start.
+
+   .. note::
+
+      Two consequences of the syntax. ``mypy`` reports ``func-returns-value`` for a deferred
+      call to a procedure that returns nothing, since the call appears as an argument. Calling
+      ``defer`` outside a compiled function makes the call in the ordinary way, then raises
+      :class:`krpc.error.FunctionCompilationError`.
 
 .. class:: krpc.client.Client
 
