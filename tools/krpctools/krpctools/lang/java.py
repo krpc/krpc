@@ -120,7 +120,10 @@ class JavaLanguage(Language):
 
     @staticmethod
     def parse_const_name(name):
-        return snake_case(name).upper()
+        # Drop the keyword-escaping trailing underscore parse_name adds. A const
+        # name is upper case and a Java keyword lower case, so the two never
+        # collide, and a kRPC identifier carries no underscore of its own
+        return snake_case(name.rstrip("_")).upper()
 
     def parse_type(self, typ):
         return self._parse_type(typ)
