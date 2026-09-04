@@ -99,7 +99,7 @@ class _StatementCompiler:
             elif isinstance(statement, ast.Expr):
                 if isinstance(statement.value, ast.Constant):
                     continue  # docstring or a constant with no effect
-                result = self._compiler._compile(statement.value)
+                result = self._compiler._compile_statement(statement.value)
                 if not result.is_value:
                     compiled.append(result.expression)
             elif isinstance(statement, ast.Pass):
