@@ -288,7 +288,7 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
         doc = _documentation(enumeration, name)
         values = dict(
             (
-                str(snake_case(value.name)),
+                _member_name(value.name),
                 {"value": value.value, "doc": _documentation(value, name)},
             )
             for value in enumeration.values
