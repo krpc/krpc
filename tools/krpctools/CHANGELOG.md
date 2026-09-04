@@ -1,4 +1,14 @@
 ## [v0.7.0] - unreleased
+- Fix the python stubs for a service that names a type the KRPC service defines failing to
+  import (#1094)
+- Fix a generated python exception type not naming the service and class it was built from
+  (#1094)
+- Fix a python documentation reference to a member whose name is a keyword naming the
+  unescaped form (#1094)
+- Fix C++ documentation escaping a keyword member name twice in a declaration and not at all
+  in a cross reference (#1094)
+- Fix a generated Java enumeration member carrying an escaping suffix, such as `DOUBLE__` in
+  place of `DOUBLE` (#1094)
 - Generate and document the nullable structure fields and collection elements a service
   defines, for every client (#1091)
 - Generate and document the structure types a service defines, for every client (#1066)

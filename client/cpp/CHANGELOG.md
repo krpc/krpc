@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Fix a stream of a value whose type a service defines, such as an enumeration or a structure,
+  failing to compile (#1094)
 - Support a nullable structure field, list element, tuple item and dictionary value (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as
   a `struct` with a constructor, equality, ordering and a `std::hash` over its fields (#1066)
