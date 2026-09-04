@@ -198,17 +198,13 @@ namespace KRPC.Client
         {
             var method = node.Method;
             var attribute = GetRPCAttribute (method);
-            if (attribute != null) {
-                var arguments = new List<Result> ();
-                int position = 0;
-                if (ExpressionUtils.IsAClassMethod (node))
-                    arguments.Add (CompileNode (node.Object));
-                else if (ExpressionUtils.IsAClassStaticMethod (node))
-                    position = 1;  // Skip the connection argument
-                for (; position < node.Arguments.Count; position++)
-                    arguments.Add (CompileNode (node.Arguments [position]));
-                return CallNode (attribute, arguments);
-            }
+            if (attribute != null)
+                return CompileRPC (node, attribute, false);
+            // Recognized ahead of the client side fold below, which would invoke the
+            // marker for real when the lambda it is given makes no call
+            if (method.DeclaringType == typeof(Function) &&
+                method.Name == nameof (Function.Defer))
+                return CompileDeferredCall (node);
             if (method.DeclaringType == typeof(Enumerable))
                 return CompileEnumerableCall (node);
             if (method.DeclaringType == typeof(Math) && !IsClientSide (node)) {
@@ -571,6 +567,42 @@ namespace KRPC.Client
             }
         }
 
+        /// <summary>
+        /// Compile a call to a procedure of a service, with its arguments.
+        /// </summary>
+        Result CompileRPC (MethodCallExpression node, RPCAttribute attribute, bool deferred)
+        {
+            var arguments = new List<Result> ();
+            int position = 0;
+            if (ExpressionUtils.IsAClassMethod (node))
+                arguments.Add (CompileNode (node.Object));
+            else if (ExpressionUtils.IsAClassStaticMethod (node))
+                position = 1;  // Skip the connection argument
+            for (; position < node.Arguments.Count; position++)
+                arguments.Add (CompileNode (node.Arguments [position]));
+            return CallNode (attribute, arguments, deferred);
+        }
+
+        /// <summary>
+        /// Compile Function.Defer (() => call): the call is started where it appears and
+        /// the function carries on without waiting for it. The node is a statement and
+        /// produces no value.
+        /// </summary>
+        Result CompileDeferredCall (MethodCallExpression node)
+        {
+            var argument = node.Arguments [0];
+            if (argument is UnaryExpression quote && quote.NodeType == ExpressionType.Quote)
+                argument = quote.Operand;
+            var lambda = argument as LambdaExpression;
+            if (lambda == null || lambda.Parameters.Count > 0)
+                throw Error (node, "Function.Defer takes a lambda with no arguments");
+            var call = lambda.Body as MethodCallExpression;
+            var attribute = call == null ? null : GetRPCAttribute (call.Method);
+            if (attribute == null)
+                throw Error (node, "Function.Defer takes a call to a remote procedure");
+            return CompileRPC (call, attribute, true);
+        }
+
         ServerExpression CompileFunction (Expression node)
         {
             if (node is UnaryExpression quote && quote.NodeType == ExpressionType.Quote)
@@ -807,7 +839,7 @@ namespace KRPC.Client
             return Result.FromExpression (ServerExpression.CreateList (connection, expressions));
         }
 
-        Result CallNode (RPCAttribute attribute, IList<Result> arguments)
+        Result CallNode (RPCAttribute attribute, IList<Result> arguments, bool deferred = false)
         {
             var call = new Schema.KRPC.ProcedureCall ();
             call.Service = attribute.Service;
@@ -815,6 +847,9 @@ namespace KRPC.Client
             var expressions = new Dictionary<int, ServerExpression> ();
             foreach (var argument in arguments)
                 expressions [expressions.Count] = ToExpression (argument, null);
+            if (deferred)
+                return Result.FromExpression (
+                    ServerExpression.DeferredCallWithArguments (connection, call, expressions));
             return Result.FromExpression (
                 ServerExpression.CallWithArguments (connection, call, expressions));
         }

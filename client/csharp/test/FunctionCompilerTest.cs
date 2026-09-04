@@ -392,6 +392,57 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void TestDeferredCall ()
+        {
+            // The function carries on without waiting for the call, so it returns
+            // instead of reporting the pause
+            var testService = Connection.TestService ();
+            Connection.RunFunction (
+                () => Function.Defer (() => testService.BlockingProcedure (3, 0)));
+            // The server reports the pause as KRPC.InvalidOperationException
+            var exn = Assert.Throws<InvalidOperationException> (
+                () => Connection.RunFunction (() => testService.BlockingProcedure (3, 0)));
+            StringAssert.Contains ("paused execution", exn.Message);
+        }
+
+        [Test]
+        public void TestDeferredCallWithComputedArguments ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("deferred");
+            obj.IntProperty = 3;
+            var testService = Connection.TestService ();
+            Connection.RunFunction (
+                () => Function.Defer (
+                    () => testService.BlockingProcedure (obj.IntProperty, 0)));
+        }
+
+        [Test]
+        public void TestDeferredCallOnARemoteObject ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("deferredobject");
+            Connection.RunFunction (() => Function.Defer (() => obj.ObjectToString (obj)));
+        }
+
+        [Test]
+        public void TestDeferOfSomethingOtherThanARemoteCall ()
+        {
+            // Misuse in value position is a C# compile error, as Defer returns nothing,
+            // so the compiler only sees what it was given to start
+            var values = new List<int> ();
+            Assert.Throws<FunctionCompilationException> (
+                () => Connection.CompileFunction (() => Function.Defer (() => values.Add (1))));
+            Action action = () => { };
+            Assert.Throws<FunctionCompilationException> (
+                () => Connection.CompileFunction (() => Function.Defer (action)));
+        }
+
+        [Test]
+        public void TestDeferCalledDirectly ()
+        {
+            Assert.Throws<InvalidOperationException> (() => Function.Defer (() => { }));
+        }
+
+        [Test]
         public void TestStructField ()
         {
             var testService = Connection.TestService ();

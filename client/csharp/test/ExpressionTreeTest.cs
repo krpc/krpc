@@ -27,6 +27,34 @@ namespace KRPC.Client.Test
             Assert.AreEqual (expected, Dump (expression));
         }
 
+        string Dump (Expression<Action> expression)
+        {
+            return Connection.TestService ().DumpExpressionTree (
+                Connection.CompileFunction (expression));
+        }
+
+        void Check (string expected, Expression<Action> expression)
+        {
+            Assert.AreEqual (expected, Dump (expression));
+        }
+
+        [Test]
+        public void TestDeferredCall ()
+        {
+            var testService = Connection.TestService ();
+            Check (
+                "Call<Void> static Services.ExecuteDeferredCall\n" +
+                "  Constant<ProcedureSignature> TestService.BlockingProcedure\n" +
+                "  Lambda<Action> ()\n" +
+                "    Block<Void>\n" +
+                "      Call<Void> static Services.CheckExpressionGameScene\n" +
+                "        Constant<ProcedureSignature> TestService.BlockingProcedure\n" +
+                "      Call<Int32> static TestService.BlockingProcedure\n" +
+                "        Constant<Int32> 3\n" +
+                "        Constant<Int32> 0\n",
+                () => Function.Defer (() => testService.BlockingProcedure (3, 0)));
+        }
+
         [Test]
         public void TestRemotePropertyComparison ()
         {

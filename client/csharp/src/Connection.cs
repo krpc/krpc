@@ -269,6 +269,16 @@ namespace KRPC.Client
         }
 
         /// <summary>
+        /// Compile a lambda expression with no result, taking no arguments, into a server
+        /// side function that runs on the server for its effects.
+        /// </summary>
+        public Services.KRPC.Expression CompileFunction (Expression<Action> expression)
+        {
+            CheckDisposed ();
+            return FunctionCompiler.Compile (this, expression, expressionRemoteTypes);
+        }
+
+        /// <summary>
         /// Create an event from a boolean lambda expression, compiled into a server side
         /// function that is evaluated on the server on each stream update.
         /// </summary>
