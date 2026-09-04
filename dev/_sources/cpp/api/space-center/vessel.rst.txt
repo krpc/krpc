@@ -1237,7 +1237,7 @@ Vessel
    See :func:`CrewMember::suit_type`.
 
 
-   .. enumerator:: default__
+   .. enumerator:: default_
 
       Default.
 

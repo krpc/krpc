@@ -600,7 +600,7 @@ SpaceCenter
    See :func:`altimeter_mode`.
 
 
-   .. enumerator:: default__
+   .. enumerator:: default_
 
       The altimeter is in the default mode.
 

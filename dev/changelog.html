@@ -916,6 +916,7 @@
 <section id="id1">
 <h3>C++ client<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fix a stream of a value whose type a service defines, such as an enumeration or a structure, failing to compile (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>
 <li><p>Support a nullable structure field, list element, tuple item and dictionary value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1091">#1091</a>)</p></li>
 <li><p>Support structure types, a compound value with named fields a service defines, generated as a <code class="docutils literal notranslate"><span class="pre">struct</span></code> with a constructor, equality, ordering and a <code class="docutils literal notranslate"><span class="pre">std::hash</span></code> over its fields (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc::hash_value</span></code> and the <code class="docutils literal notranslate"><span class="pre">krpc::hash</span></code> function object, which hash any type the client carries, so a tuple or a collection can key an unordered container (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1067">#1067</a>)</p></li>
@@ -961,6 +962,7 @@
 <section id="python-client">
 <h3>Python client<a class="headerlink" href="#python-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>A dynamically created service escapes an enumeration member whose name is a python keyword, such as <code class="docutils literal notranslate"><span class="pre">Class</span></code> to <code class="docutils literal notranslate"><span class="pre">class_</span></code>, matching the pre-generated stubs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>
 <li><p>Support a nullable structure field, list element, tuple item and dictionary value, which is <code class="docutils literal notranslate"><span class="pre">None</span></code> when absent (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1091">#1091</a>)</p></li>
 <li><p>A service with pre-generated stubs also gains the class members that only the server declares (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1077">#1077</a>)</p></li>
 <li><p>Support structure types. A value is a named tuple, and a tuple or list with one element per field is accepted where one is expected (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
@@ -976,6 +978,11 @@
 <section id="krpctools">
 <h3>krpctools<a class="headerlink" href="#krpctools" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fix the python stubs for a service that names a type the KRPC service defines failing to import (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>
+<li><p>Fix a generated python exception type not naming the service and class it was built from (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>
+<li><p>Fix a python documentation reference to a member whose name is a keyword naming the unescaped form (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>
+<li><p>Fix C++ documentation escaping a keyword member name twice in a declaration and not at all in a cross reference (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>
+<li><p>Fix a generated Java enumeration member carrying an escaping suffix, such as <code class="docutils literal notranslate"><span class="pre">DOUBLE__</span></code> in place of <code class="docutils literal notranslate"><span class="pre">DOUBLE</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>
 <li><p>Generate and document the nullable structure fields and collection elements a service defines, for every client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1091">#1091</a>)</p></li>
 <li><p>Generate and document the structure types a service defines, for every client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> A generator module given to <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code> by path is constructed with the definitions of every service that was loaded, rather than those of the single service it generates (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>

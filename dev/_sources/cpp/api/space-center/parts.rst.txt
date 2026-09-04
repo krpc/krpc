@@ -1705,12 +1705,12 @@ Module
       An integer field. Access using :func:`PartField::int_value`.
 
 
-   .. enumerator:: float__
+   .. enumerator:: float_
 
       A single precision floating point field. Access using :func:`PartField::float_value`.
 
 
-   .. enumerator:: double__
+   .. enumerator:: double_
 
       A double precision floating point field. Access using :func:`PartField::double_value`.
 

@@ -136,7 +136,7 @@ Expressions
 
    
 
-   .. function:: static Expression and__(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression and_(Client& connection, Expression arg0, Expression arg1)
 
       Boolean and operator.
 
@@ -147,7 +147,7 @@ Expressions
 
    
 
-   .. function:: static Expression or__(Client& connection, Expression arg0, Expression arg1)
+   .. function:: static Expression or_(Client& connection, Expression arg0, Expression arg1)
 
       Boolean or operator.
 
@@ -169,7 +169,7 @@ Expressions
 
    
 
-   .. function:: static Expression not__(Client& connection, Expression arg)
+   .. function:: static Expression not_(Client& connection, Expression arg)
 
       Boolean negation operator.
 
@@ -565,28 +565,28 @@ Expressions
 
    A server side expression.
 
-   .. function:: static Type double__(Client& connection)
+   .. function:: static Type double_(Client& connection)
 
       Double type.
 
 
    
 
-   .. function:: static Type float__(Client& connection)
+   .. function:: static Type float_(Client& connection)
 
       Float type.
 
 
    
 
-   .. function:: static Type int__(Client& connection)
+   .. function:: static Type int_(Client& connection)
 
       Int type.
 
 
    
 
-   .. function:: static Type bool__(Client& connection)
+   .. function:: static Type bool_(Client& connection)
 
       Bool type.
 

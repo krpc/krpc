@@ -315,6 +315,7 @@ C# client
 C++ client
 ^^^^^^^^^^
 
+* Fix a stream of a value whose type a service defines, such as an enumeration or a structure, failing to compile (:issue:`1094`)
 * Support a nullable structure field, list element, tuple item and dictionary value (:issue:`1091`)
 * Support structure types, a compound value with named fields a service defines, generated as a ``struct`` with a constructor, equality, ordering and a ``std::hash`` over its fields (:issue:`1066`)
 * Add ``krpc::hash_value`` and the ``krpc::hash`` function object, which hash any type the client carries, so a tuple or a collection can key an unordered container (:issue:`1067`)
@@ -360,6 +361,7 @@ Lua client
 Python client
 ^^^^^^^^^^^^^
 
+* A dynamically created service escapes an enumeration member whose name is a python keyword, such as ``Class`` to ``class_``, matching the pre-generated stubs (:issue:`1094`)
 * Support a nullable structure field, list element, tuple item and dictionary value, which is ``None`` when absent (:issue:`1091`)
 * A service with pre-generated stubs also gains the class members that only the server declares (:issue:`1077`)
 * Support structure types. A value is a named tuple, and a tuple or list with one element per field is accepted where one is expected (:issue:`1066`)
@@ -375,6 +377,11 @@ Python client
 krpctools
 ^^^^^^^^^
 
+* Fix the python stubs for a service that names a type the KRPC service defines failing to import (:issue:`1094`)
+* Fix a generated python exception type not naming the service and class it was built from (:issue:`1094`)
+* Fix a python documentation reference to a member whose name is a keyword naming the unescaped form (:issue:`1094`)
+* Fix C++ documentation escaping a keyword member name twice in a declaration and not at all in a cross reference (:issue:`1094`)
+* Fix a generated Java enumeration member carrying an escaping suffix, such as ``DOUBLE__`` in place of ``DOUBLE`` (:issue:`1094`)
 * Generate and document the nullable structure fields and collection elements a service defines, for every client (:issue:`1091`)
 * Generate and document the structure types a service defines, for every client (:issue:`1066`)
 * :breaking:`Breaking` A generator module given to ``krpc-clientgen`` by path is constructed with the definitions of every service that was loaded, rather than those of the single service it generates (:issue:`1044`)
