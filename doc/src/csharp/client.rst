@@ -214,6 +214,9 @@ the same result on the server:
   is implicitly converted to a list.
 * Reading a field of a structure a service defines reads that field of it on the server, and
   constructing one with ``new`` builds it there.
+* :meth:`Function.Defer` starts a call to a procedure that pauses execution, such as
+  ``SpaceCenter.WarpTo``, without waiting for it. An expression tree carries a single
+  expression, so it is the whole body of the lambda.
 
 Anything else cannot run on the server, and throws :type:`FunctionCompilationException`
 describing the unsupported construct.
@@ -300,6 +303,11 @@ Client API Reference
       server side function object, which may be a statement block built with the expression
       API.
 
+   .. method:: KRPC.Client.Services.KRPC.Expression CompileFunction(Expression<Action> expression)
+
+      Compile a lambda expression with no result into a server side function that runs on the
+      server for its effects.
+
    .. method:: KRPC.Schema.KRPC.ProcedureCall GetCall(LambdaExpression expression)
 
       Returns a procedure call message for the given lambda expression. This allows descriptions of
@@ -309,6 +317,16 @@ Client API Reference
    .. method:: void Dispose()
 
       Closes the connection and frees the resources associated with it.
+
+.. class:: Function
+
+   Markers the server side function compiler recognizes within a lambda expression.
+
+   .. method:: static void Defer(Action call)
+
+      Start a call to a procedure that pauses execution, such as ``SpaceCenter.WarpTo``,
+      without waiting for it. The value the procedure returns is discarded. Calling it outside
+      a compiled lambda throws ``InvalidOperationException``.
 
 .. class:: FunctionCompilationException
 
