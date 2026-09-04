@@ -314,6 +314,33 @@ and C++ have ``void`` overloads for it.
    stream update. Use ``run_function`` for effects, and keep event and stream functions to
    pure computation.
 
+Deferring a Call
+^^^^^^^^^^^^^^^^
+
+A few procedures pause execution and resume on a later tick, among them
+``SpaceCenter.WarpTo`` and ``SpaceCenter.LaunchVessel``. A function starts one without waiting
+for it, and carries on:
+
+.. tabs::
+
+   .. group-tab:: C#
+
+      .. literalinclude:: /scripts/client/csharp/DeferredCall.cs
+
+   .. group-tab:: Python
+
+      .. literalinclude:: /scripts/client/python/DeferredCall.py
+
+Python spells it ``defer(call)``, imported from ``krpc``, and C# spells it
+``Function.Defer(() => call)``. Both are statements, and both discard whatever the procedure
+returns, so a procedure whose result you need cannot be deferred. See
+:ref:`server-side-functions-deferred-calls` for what the function sees afterwards and where
+a failure is reported.
+
+In C# the compiled lambda is an expression tree, which carries a single expression, so
+``Function.Defer`` is the whole body of a ``RunFunction`` or ``CompileFunction`` call. Python
+places it anywhere a statement goes, including inside a loop or a conditional.
+
 The Standard Library
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -392,7 +419,8 @@ Some semantics differ slightly from running the same code in your program:
   procedure, which is chosen when the function is compiled.
 * In C#, lambdas passed to ``CompileFunction``, ``AddEvent`` or ``AddStream`` are expression
   trees, so the C# language rules for expression trees apply. Most notably, every argument of a
-  call must be given, including the optional ones.
+  call must be given, including the optional ones, and a lambda carries a single expression
+  rather than a sequence of statements.
 
 The full lists of supported constructs are in the
 `Python client documentation <../python/client.html>`_ and the
@@ -713,6 +741,8 @@ returning 6:
 
       .. literalinclude:: /scripts/client/python/FunctionStatements.py
 
+.. _server-side-functions-deferred-calls:
+
 Deferred Calls
 ^^^^^^^^^^^^^^
 
@@ -787,6 +817,9 @@ worth knowing:
 * **Only a run-once function can defer a call.** An event or stream evaluates its function on
   every update, and would start the call again each time, so one containing a deferred call is
   an error.
+
+The Python and C# compilers produce this node from ``defer(call)`` and
+``Function.Defer(() => call)``, described above.
 
 Object Constants
 ^^^^^^^^^^^^^^^^
@@ -991,12 +1024,11 @@ stream whose result carries an error. Build a new event or stream once the condi
 the error clears.
 
 **Procedures that pause.** A small number of RPCs pause execution and resume on a later tick.
-Such a procedure cannot produce a value within a function's single-tick evaluation, and there
-is no way to resume the function around it: the only way to make progress would be to evaluate
-it again from the start, repeating everything it had already done. Calling one with
-:meth:`Expression.call` is therefore reported as an error, by a run-once function and by an
-event or stream alike. Start it with :meth:`Expression.deferred_call` instead, described
-above. Functions that only read values, the vast majority, are unaffected.
+Such a procedure cannot produce a value within a function's single-tick evaluation, so calling
+one with :meth:`Expression.call` is an error, in a run-once function, an event or a stream. A
+run-once function can start it with :meth:`Expression.deferred_call` instead, which the
+compilers spell ``defer(call)`` and ``Function.Defer(() => call)``. Functions that only read
+values, the vast majority, are unaffected.
 
 **Loops run to completion.** A ``while`` loop is evaluated within a single tick, and runs to
 its end before the game continues. A loop whose condition never becomes false hangs the game,
