@@ -62,5 +62,46 @@ namespace KRPC.Test
                 core.Remove (second.Id);
             }
         }
+
+        [Test]
+        public void DeferredCallsAreCancelledOnceNoServerIsRunning ()
+        {
+            CallContext.GameScene = GameScene.Flight;
+            var runs = 0;
+            System.Action again = null;
+            again = () => {
+                runs++;
+                throw new YieldException<System.Action> (again);
+            };
+            var service = new Mock<global::KRPC.Test.Service.ITestService> (MockBehavior.Strict);
+            service.Setup (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()))
+                .Callback ((int n) => again ());
+            global::KRPC.Test.Service.TestService.Service = service.Object;
+
+            var core = Core.Instance;
+            var first = new TestServer ().Server;
+            var second = new TestServer ().Server;
+            core.Add (first);
+            core.Add (second);
+            try {
+                first.Start ();
+                second.Start ();
+                var call = new ProcedureCall ("TestService", "BlockingProcedureNoReturn");
+                call.Arguments.Add (new Argument (0, 1));
+                global::KRPC.Service.KRPC.Expression.DeferredCall (call).Runner ();
+                Assert.AreEqual (1, runs);
+
+                first.Stop ();
+                core.RunDeferredCalls ();
+                Assert.AreEqual (2, runs);
+
+                second.Stop ();
+                core.RunDeferredCalls ();
+                Assert.AreEqual (2, runs);
+            } finally {
+                core.Remove (first.Id);
+                core.Remove (second.Id);
+            }
+        }
     }
 }

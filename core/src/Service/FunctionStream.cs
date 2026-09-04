@@ -16,6 +16,7 @@ namespace KRPC.Service
             // Check that the type of the value produced can be sent to the client
             spec = TypeSpec.Create (function.GetValidReturnType ());
             function.CheckMarkersBound ();
+            function.CheckNoDeferredCalls ();
             evaluate = function.Evaluator;
         }
 

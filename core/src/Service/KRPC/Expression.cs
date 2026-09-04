@@ -60,7 +60,8 @@ namespace KRPC.Service.KRPC
         internal const string YieldedMessage =
             "A procedure called by the function paused execution, to resume on a " +
             "later tick. A function is evaluated within a single tick, so a " +
-            "procedure that does this cannot be called from one.";
+            "procedure that does this cannot be called from one. Use a deferred " +
+            "call to start it without waiting for it.";
 
         /// <summary>
         /// A delegate that evaluates the expression and returns its value.
@@ -155,6 +156,16 @@ namespace KRPC.Service.KRPC
                 return;
             new MarkerChecker ().Visit (internalExpression);
             markersChecked = true;
+        }
+
+        /// <summary>
+        /// Throws if the expression contains a deferred call. A stream or event evaluates
+        /// its function on every update, so a deferred call in one would start the
+        /// procedure again on every update.
+        /// </summary>
+        internal void CheckNoDeferredCalls ()
+        {
+            new DeferredCallChecker ().Visit (internalExpression);
         }
 
         static readonly Dictionary<Tuple<System.Type, object>, Expression> constants =
@@ -424,7 +435,13 @@ namespace KRPC.Service.KRPC
         public static Expression ConstantObject (ulong value)
         {
             var instance = ObjectStore.Instance.GetInstance (value);
-            return new Expression (LinqExpression.Constant (instance, GetClassType (instance)));
+            var type = GetClassType (instance);
+            // A function built from within a function would bypass the checks made on it
+            if (TypeUtils.GetClassServiceName (type) == "KRPC")
+                throw new ArgumentException (
+                    "An object of the KRPC service, such as an Expression, cannot be a " +
+                    "constant in a function");
+            return new Expression (LinqExpression.Constant (instance, type));
         }
 
         /// <summary>
@@ -472,7 +489,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression Call(ProcedureCall call)
         {
-            return BuildCall (call, null);
+            return BuildCall (call, null, false);
         }
 
         /// <summary>
@@ -492,15 +509,56 @@ namespace KRPC.Service.KRPC
         {
             if (ReferenceEquals (args, null))
                 throw new ArgumentNullException (nameof (args));
-            return BuildCall (call, args);
+            return BuildCall (call, args, false);
         }
 
-        static Expression BuildCall (ProcedureCall call, IDictionary<int, Expression> args)
+        /// <summary>
+        /// An RPC call that a function does not wait for, used as a statement.
+        /// The call is started where it appears. If the procedure pauses execution,
+        /// the server runs the rest of it on later ticks and the function carries
+        /// on. Any value the procedure returns is discarded.
+        /// </summary>
+        /// <remarks>
+        /// This is how a function calls a procedure that pauses execution, such as
+        /// <c>SpaceCenter.WarpTo</c>. The function reads game state from before the
+        /// call completes. A failure after the function has finished is written to
+        /// the server's log, and the call is canceled if the client that started it
+        /// disconnects. A deferred call can only be used in a function run with
+        /// <see cref="KRPC.RunFunction"/>.
+        /// </remarks>
+        /// <param name="call">The RPC to call.</param>
+        [KRPCMethod]
+        public static Expression DeferredCall (ProcedureCall call)
+        {
+            return BuildCall (call, null, true);
+        }
+
+        /// <summary>
+        /// An RPC call that a function does not wait for, where some or all of the
+        /// arguments are computed by expressions. Combines
+        /// <see cref="DeferredCall"/> and <see cref="CallWithArguments"/>.
+        /// </summary>
+        /// <param name="call">The RPC to call.</param>
+        /// <param name="args">Expressions computing the call's arguments, by position.</param>
+        [KRPCMethod]
+        public static Expression DeferredCallWithArguments (ProcedureCall call, IDictionary<int, Expression> args)
+        {
+            if (ReferenceEquals (args, null))
+                throw new ArgumentNullException (nameof (args));
+            return BuildCall (call, args, true);
+        }
+
+        static Expression BuildCall (ProcedureCall call, IDictionary<int, Expression> args, bool deferred)
         {
             if (ReferenceEquals (call, null))
                 throw new ArgumentNullException (nameof (call));
             var services = Services.Instance;
             var procedure = services.GetProcedureSignature(call);
+            // The KRPC service builds and runs functions, and manages the client's streams
+            if (call.Service == "KRPC")
+                throw new InvalidOperationException (
+                    "A function cannot call " + procedure.FullyQualifiedName +
+                    ", as procedures of the KRPC service cannot be called from a function");
 
             var parameters = procedure.Parameters;
             var numParameters = parameters.Count;
@@ -566,19 +624,47 @@ namespace KRPC.Service.KRPC
                     arguments [i - firstArgument] = expr.Type == parameterType
                         ? expr : LinqExpression.Convert (expr, parameterType);
             }
-            LinqExpression callExpr;
-            if (hasInstance) {
-                var instanceExpr = exprValues [0] ??
+            LinqExpression instanceExpr = null;
+            if (hasInstance)
+                instanceExpr = exprValues [0] ??
                     LinqExpression.Constant (constValues [0], parameters [0].Spec.Type);
-                callExpr = LinqExpression.Call (instanceExpr, method, arguments);
-            } else {
-                callExpr = LinqExpression.Call (method, arguments);
-            }
 
             var procedureExpr = LinqExpression.Constant (procedure);
             var sceneCheck = LinqExpression.Call (
                 typeof (Services).GetMethod (nameof (Services.CheckExpressionGameScene)),
                 procedureExpr);
+
+            // The call is started inside the function and its value discarded.
+            // Only a pause detaches the rest of it. The arguments are evaluated
+            // into variables first, as a pause in one belongs to the function
+            if (deferred) {
+                var variables = new List<ParameterExpression> ();
+                var assignments = new List<LinqExpression> ();
+                Func<LinqExpression, LinqExpression> evaluated = value => {
+                    if (value is ConstantExpression)
+                        return value;
+                    var variable = LinqExpression.Variable (value.Type);
+                    variables.Add (variable);
+                    assignments.Add (LinqExpression.Assign (variable, value));
+                    return variable;
+                };
+                if (hasInstance)
+                    instanceExpr = evaluated (instanceExpr);
+                for (int i = 0; i < arguments.Length; i++)
+                    arguments [i] = evaluated (arguments [i]);
+                var deferredCall = LinqExpression.Call (
+                    typeof (Services).GetMethod (nameof (Services.ExecuteDeferredCall)),
+                    procedureExpr,
+                    LinqExpression.Lambda<Action> (
+                        LinqExpression.Block (typeof (void), sceneCheck,
+                            BuildMethodCall (instanceExpr, method, arguments))));
+                if (variables.Count == 0)
+                    return new Expression (deferredCall);
+                assignments.Add (deferredCall);
+                return new Expression (LinqExpression.Block (typeof (void), variables, assignments));
+            }
+
+            var callExpr = BuildMethodCall (instanceExpr, method, arguments);
 
             if (!procedure.HasReturnType)
                 return new Expression (LinqExpression.Block (typeof (void), sceneCheck, callExpr));
@@ -601,6 +687,14 @@ namespace KRPC.Service.KRPC
                 LinqExpression.Assign (returnValue, callExpr),
                 returnValueCheck,
                 returnValue));
+        }
+
+        static LinqExpression BuildMethodCall (
+            LinqExpression instance, MethodInfo method, LinqExpression [] arguments)
+        {
+            return instance == null
+                ? LinqExpression.Call (method, arguments)
+                : LinqExpression.Call (instance, method, arguments);
         }
 
         /// <summary>
@@ -2942,6 +3036,24 @@ namespace KRPC.Service.KRPC
                     if (method.Name == nameof (ReturnMarker) || method.Name == nameof (ReturnVoidMarker))
                         throw new InvalidOperationException ("return used outside of a function");
                 }
+                return base.VisitMethodCall (node);
+            }
+        }
+
+        /// <summary>
+        /// Finds the calls that deferred call nodes compile to.
+        /// </summary>
+        sealed class DeferredCallChecker : ExpressionVisitor
+        {
+            protected override LinqExpression VisitMethodCall (MethodCallExpression node)
+            {
+                var method = node.Method;
+                if (method.DeclaringType == typeof (Services) &&
+                    method.Name == nameof (Services.ExecuteDeferredCall))
+                    throw new InvalidOperationException (
+                        "A deferred call can only be used in a function run with RunFunction. " +
+                        "An event or stream evaluates its function on every update, " +
+                        "which would start the call again on every update.");
                 return base.VisitMethodCall (node);
             }
         }

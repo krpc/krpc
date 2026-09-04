@@ -167,6 +167,17 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void DeferredCallRejected ()
+        {
+            var expr = Expression.Block (new List<Expression> {
+                Expression.DeferredCall (BuildProcedureCall ("ProcedureNoArgsNoReturn")),
+                Expression.ConstantInt (1)
+            });
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => new FunctionStream (expr));
+        }
+
+        [Test]
         public void StreamsOverOneFunctionAreEqual ()
         {
             var expr = Expression.Add (

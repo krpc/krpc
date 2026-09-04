@@ -196,6 +196,26 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Starts a call that a server side function does not wait for. The call runs
+        /// within the function's evaluation, so a failure to start it propagates to
+        /// whatever is evaluating the function.
+        /// A procedure that pauses execution is detached from the function: the core
+        /// runs the rest of the call on later updates, and the function carries on.
+        /// The call belongs to the client that started it, and is canceled if that
+        /// client disconnects.
+        /// </summary>
+        public static void ExecuteDeferredCall (ProcedureSignature procedure, Action call)
+        {
+            if (ReferenceEquals (call, null))
+                throw new ArgumentNullException (nameof (call));
+            try {
+                call ();
+            } catch (YieldException e) {
+                Core.Instance.AddDeferredCall (new DeferredCall (procedure, e, CallContext.Client));
+            }
+        }
+
+        /// <summary>
         /// Whether a caught exception reaches a client under the given kRPC exception
         /// type. Called from a compiled server side function, at the top of a catch
         /// block naming an exception. A catch for a CLR exception type also catches its

@@ -276,7 +276,8 @@ namespace KRPC.Service.KRPC
         /// <remarks>
         /// Each update is evaluated within a single physics tick, so procedures that
         /// pause execution and resume on a later tick cannot be used within the
-        /// function. Calling one produces an error on the stream.
+        /// function. Calling one produces an error on the stream, and a function
+        /// containing a <see cref="Expression.DeferredCall"/> is an error.
         /// </remarks>
         [KRPCProcedure]
         public static Messages.Stream AddFunctionStream (Expression function, bool start = true)
@@ -301,8 +302,9 @@ namespace KRPC.Service.KRPC
         /// </summary>
         /// <remarks>
         /// Procedures that pause execution and resume on a later tick cannot be
-        /// used within the function. A null within the value, such as an element
-        /// of a list the function returns, is an error naming the position.
+        /// used within the function. Use <see cref="Expression.DeferredCall"/> to
+        /// start one without waiting for it. A null within the value, such as an
+        /// element of a list the function returns, is an error naming the position.
         /// </remarks>
         [KRPCProcedure (Nullable = true)]
         public static byte[] RunFunction (Expression function)
@@ -338,7 +340,8 @@ namespace KRPC.Service.KRPC
         /// <remarks>
         /// Each update is evaluated within a single physics tick, so procedures that
         /// pause execution and resume on a later tick cannot be used within the
-        /// function. Calling one produces an error on the event's stream.
+        /// function. Calling one produces an error on the event's stream, and a function
+        /// containing a <see cref="Expression.DeferredCall"/> is an error.
         /// </remarks>
         [KRPCProcedure]
         public static Messages.Event AddEvent(Expression function)
@@ -348,6 +351,7 @@ namespace KRPC.Service.KRPC
             if (((LinqExpression)function).Type != typeof(bool))
                 throw new ArgumentException ("The function must evaluate to a boolean value");
             function.CheckMarkersBound ();
+            function.CheckNoDeferredCalls ();
             var func = LinqExpression.Lambda<Func<bool>>(function).Compile();
             return new Event((evnt) => {
                 try {

@@ -91,6 +91,22 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void DeferredCall ()
+        {
+            // The call is wrapped in a function the server runs, and its value discarded
+            Check (
+                "Call<Void> static Services.ExecuteDeferredCall\n" +
+                "  Constant<ProcedureSignature> TestService.ProcedureSingleOptionalArgNoReturn\n" +
+                "  Lambda<Action> ()\n" +
+                "    Block<Void>\n" +
+                "      Call<Void> static Services.CheckExpressionGameScene\n" +
+                "        Constant<ProcedureSignature> TestService.ProcedureSingleOptionalArgNoReturn\n" +
+                "      Call<Void> static TestService.ProcedureSingleOptionalArgNoReturn\n" +
+                "        Constant<String> \"foo\"\n",
+                Expression.DeferredCall (BuildProcedureCall ("ProcedureSingleOptionalArgNoReturn")));
+        }
+
+        [Test]
         public void CallPerElement ()
         {
             // The function parameter provides the instance argument of the call

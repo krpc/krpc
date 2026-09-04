@@ -713,6 +713,81 @@ returning 6:
 
       .. literalinclude:: /scripts/client/python/FunctionStatements.py
 
+Deferred Calls
+^^^^^^^^^^^^^^
+
+The factory API defers a call to a procedure that pauses with :meth:`Expression.deferred_call`,
+and the function carries on without waiting for it. This warps to one minute from the time the
+function runs, with the target time computed on the server:
+
+.. tabs::
+
+   .. group-tab:: C#
+
+      .. code-block:: csharp
+
+         var ut = Connection.GetCall (() => spaceCenter.UT);
+         System.Linq.Expressions.Expression<Action> warpTo =
+             () => spaceCenter.WarpTo (0, 100000, 2);
+         var expr = Expression.DeferredCallWithArguments (
+             connection, Connection.GetCall (warpTo),
+             new Dictionary<int, Expression> {
+                 { 0, Expression.Add (connection, Expression.Call (connection, ut),
+                                      Expression.ConstantDouble (connection, 60)) }
+             });
+         connection.RunFunction (expr);
+
+   .. group-tab:: C++
+
+      .. code-block:: cpp
+
+         auto ut = sc.ut_call();
+         auto warp = sc.warp_to_call(0, 100000, 2);
+         auto expr = Expr::deferred_call_with_arguments(conn, warp,
+           std::map<int32_t, Expr>({
+             {0, Expr::add(conn, Expr::call(conn, ut), Expr::constant_double(conn, 60))}}));
+         krpc::run_function(expr);
+
+   .. group-tab:: Java
+
+      .. code-block:: java
+
+         ProcedureCall ut = connection.getCall(SpaceCenter.class, "getUT");
+         ProcedureCall warp = connection.getCall(SpaceCenter.class, "warpTo", 0.0, 100000f, 2f);
+         Expression expr = Expression.deferredCallWithArguments(
+             connection, warp,
+             Collections.singletonMap(0, Expression.add(
+                 connection, Expression.call(connection, ut),
+                 Expression.constantDouble(connection, 60))));
+         connection.runFunction(expr);
+
+   .. group-tab:: Python
+
+      .. code-block:: python
+
+         ut = conn.get_call(getattr, conn.space_center, "ut")
+         warp = conn.get_call(conn.space_center.warp_to, 0)
+         expr = expression.deferred_call_with_arguments(warp, {
+             0: expression.add(expression.call(ut), expression.constant_double(60)),
+         })
+         conn.krpc.run_function(expr)
+
+A deferred call is a statement, and any value the procedure returns is discarded: a deferred
+``Undock`` cannot hand the function the vessel it produced. Three further consequences are
+worth knowing:
+
+* **The function sees the game as it was before the call completes.** Everything after the
+  deferred call reads state from the tick the function ran in.
+* **A failure after the pause reaches the server's log only.** The function has finished by
+  then. A failure to start the call, such as the procedure being unavailable in the current
+  game scene, is reported as usual.
+* **The call runs until it completes or your client disconnects.** A canceled call leaves its
+  effect part way through, so a canceled ``WarpTo`` leaves the game warping. The server
+  stopping cancels every deferred call.
+* **Only a run-once function can defer a call.** An event or stream evaluates its function on
+  every update, and would start the call again each time, so one containing a deferred call is
+  an error.
+
 Object Constants
 ^^^^^^^^^^^^^^^^
 
@@ -918,9 +993,10 @@ the error clears.
 **Procedures that pause.** A small number of RPCs pause execution and resume on a later tick.
 Such a procedure cannot produce a value within a function's single-tick evaluation, and there
 is no way to resume the function around it: the only way to make progress would be to evaluate
-it again from the start, repeating everything it had already done. Calling one is therefore
-reported as an error, by a run-once function and by an event or stream alike. Functions that
-only read values, the vast majority, are unaffected.
+it again from the start, repeating everything it had already done. Calling one with
+:meth:`Expression.call` is therefore reported as an error, by a run-once function and by an
+event or stream alike. Start it with :meth:`Expression.deferred_call` instead, described
+above. Functions that only read values, the vast majority, are unaffected.
 
 **Loops run to completion.** A ``while`` loop is evaluated within a single tick, and runs to
 its end before the game continues. A loop whose condition never becomes false hangs the game,
