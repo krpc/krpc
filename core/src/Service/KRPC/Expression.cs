@@ -1055,91 +1055,71 @@ namespace KRPC.Service.KRPC
             return new Expression (LinqExpression.New (dictionaryType.GetConstructor (System.Type.EmptyTypes)));
         }
 
+        // Appending is named apart from Add, which is numerical addition
+
         /// <summary>
-        /// A statement that adds a value to the end of a list.
+        /// A statement that adds a value to a list or a set. The value goes on the end
+        /// of a list, and one a set already holds is not added again.
         /// </summary>
-        /// <param name="list">The list to add to.</param>
+        /// <param name="collection">The list or set to add to.</param>
         /// <param name="value">The value to add.</param>
         [KRPCMethod]
-        public static Expression ListAdd (Expression list, Expression value)
+        public static Expression Append (Expression collection, Expression value)
         {
-            if (ReferenceEquals (list, null))
-                throw new ArgumentNullException (nameof (list));
+            if (ReferenceEquals (collection, null))
+                throw new ArgumentNullException (nameof (collection));
             if (ReferenceEquals (value, null))
                 throw new ArgumentNullException (nameof (value));
-            var valueType = GetEnumerableValueType (list);
+            if (IsADictionary (collection))
+                throw new InvalidOperationException (
+                    "An entry is added to a dictionary with Set, which takes its key.");
+            var valueType = GetEnumerableValueType (collection);
+            if (IsASet (collection)) {
+                var setAdd = typeof (ISet<>).MakeGenericType (valueType).GetMethod ("Add");
+                // Discard the added/already-present result so this is a statement
+                return new Expression (LinqExpression.Block (typeof (void),
+                    LinqExpression.Call (
+                        collection, setAdd, ConvertElement (value, valueType))));
+            }
+            CheckIsAList (collection);
             var add = typeof (ICollection<>).MakeGenericType (valueType).GetMethod ("Add");
             return new Expression (LinqExpression.Call (
-                list, add, ConvertElement (value, valueType)));
+                collection, add, ConvertElement (value, valueType)));
         }
 
         /// <summary>
-        /// A statement that sets the element at an index of a list.
+        /// A statement that sets the element at an index of a list, or the value
+        /// stored under a key of a dictionary. A key the dictionary does not hold is
+        /// added.
         /// </summary>
-        /// <param name="list">The list to modify.</param>
-        /// <param name="index">The zero indexed position of the element to set.</param>
+        /// <param name="collection">The list or dictionary to modify.</param>
+        /// <param name="index">The zero indexed position of the element to set,
+        /// or the key of the entry to set.</param>
         /// <param name="value">The value to set the element to.</param>
         [KRPCMethod]
-        public static Expression ListSet (Expression list, Expression index, Expression value)
+        public static Expression Set (Expression collection, Expression index, Expression value)
         {
-            if (ReferenceEquals (list, null))
-                throw new ArgumentNullException (nameof (list));
+            if (ReferenceEquals (collection, null))
+                throw new ArgumentNullException (nameof (collection));
             if (ReferenceEquals (index, null))
                 throw new ArgumentNullException (nameof (index));
             if (ReferenceEquals (value, null))
                 throw new ArgumentNullException (nameof (value));
+            if (IsADictionary (collection)) {
+                var types = DictionaryTypes (collection);
+                var entry = typeof (IDictionary<,>).MakeGenericType (types).GetProperty ("Item");
+                return new Expression (LinqExpression.Assign (
+                    LinqExpression.Property (
+                        collection, entry, ConvertElement (index, types [0])),
+                    ConvertElement (value, types [1])));
+            }
+            var valueType = GetEnumerableValueType (collection);
+            CheckIsAList (collection);
             CheckIsAnInt (index, nameof (index));
-            var valueType = GetEnumerableValueType (list);
             var item = typeof (IList<>).MakeGenericType (valueType).GetProperty ("Item");
             return new Expression (LinqExpression.Assign (
-                LinqExpression.Property (list, item, index),
+                LinqExpression.Property (collection, item, index),
                 ConvertElement (value, valueType)));
-        }
-
-        /// <summary>
-        /// A statement that adds a value to a set. Has no effect if the set
-        /// already contains the value.
-        /// </summary>
-        /// <param name="set">The set to add to.</param>
-        /// <param name="value">The value to add.</param>
-        [KRPCMethod]
-        public static Expression SetAdd (Expression set, Expression value)
-        {
-            if (ReferenceEquals (set, null))
-                throw new ArgumentNullException (nameof (set));
-            if (ReferenceEquals (value, null))
-                throw new ArgumentNullException (nameof (value));
-            var valueType = GetEnumerableValueType (set);
-            var add = typeof (HashSet<>).MakeGenericType (valueType).GetMethod ("Add");
-            // Discard the added/already-present result so this is a statement
-            return new Expression (LinqExpression.Block (typeof (void),
-                LinqExpression.Call (set, add, ConvertElement (value, valueType))));
-        }
-
-        /// <summary>
-        /// A statement that sets the value for a key of a dictionary, adding an
-        /// entry if the key is not present.
-        /// </summary>
-        /// <param name="dictionary">The dictionary to modify.</param>
-        /// <param name="key">The key of the entry to set.</param>
-        /// <param name="value">The value to set the entry to.</param>
-        [KRPCMethod]
-        public static Expression DictionarySet (Expression dictionary, Expression key, Expression value)
-        {
-            if (ReferenceEquals (dictionary, null))
-                throw new ArgumentNullException (nameof (dictionary));
-            if (ReferenceEquals (key, null))
-                throw new ArgumentNullException (nameof (key));
-            if (ReferenceEquals (value, null))
-                throw new ArgumentNullException (nameof (value));
-            var types = dictionary.Type.GetGenericArguments ();
-            if (types.Length != 2)
-                throw new InvalidOperationException ("Expected a dictionary");
-            var item = typeof (IDictionary<,>).MakeGenericType (types).GetProperty ("Item");
-            return new Expression (LinqExpression.Assign (
-                LinqExpression.Property (
-                    dictionary, item, ConvertElement (key, types [0])),
-                ConvertElement (value, types [1])));
         }
 
         /// <summary>
@@ -1741,24 +1721,34 @@ namespace KRPC.Service.KRPC
             return new Expression (LinqExpression.Call (join, separator, values));
         }
 
-        // Removing from a collection and emptying one. They pair with ListAdd,
-        // SetAdd and DictionarySet
+        // Removing from a collection and emptying one. They pair with Add and Set
 
         /// <summary>
-        /// Remove the first occurrence of a value from a list.
+        /// Remove a value from a list or a set, or the entry stored under a key from
+        /// a dictionary. The first occurrence is removed from a list.
         /// </summary>
-        /// <returns>Whether the value was in the list.</returns>
-        /// <param name="list">The list.</param>
-        /// <param name="value">The value to remove.</param>
+        /// <returns>Whether the collection held the value.</returns>
+        /// <param name="collection">The list, set or dictionary.</param>
+        /// <param name="value">The value to remove, or the key of the entry to
+        /// remove.</param>
         [KRPCMethod]
-        public static Expression ListRemove (Expression list, Expression value)
+        public static Expression Remove (Expression collection, Expression value)
         {
+            if (ReferenceEquals (collection, null))
+                throw new ArgumentNullException (nameof (collection));
             if (ReferenceEquals (value, null))
                 throw new ArgumentNullException (nameof (value));
-            var valueType = GetEnumerableValueType (list);
+            if (IsADictionary (collection)) {
+                var types = DictionaryTypes (collection);
+                var removeEntry = typeof (IDictionary<,>).MakeGenericType (types).GetMethod ("Remove");
+                return new Expression (LinqExpression.Call (
+                    collection, removeEntry, ConvertElement (value, types [0])));
+            }
+            var valueType = GetEnumerableValueType (collection);
+            CheckIsAListOrASet (collection);
             var remove = typeof (ICollection<>).MakeGenericType (valueType).GetMethod ("Remove");
             return new Expression (LinqExpression.Call (
-                list, remove, ConvertElement (value, valueType)));
+                collection, remove, ConvertElement (value, valueType)));
         }
 
         /// <summary>
@@ -1767,81 +1757,36 @@ namespace KRPC.Service.KRPC
         /// <param name="list">The list.</param>
         /// <param name="index">The position of the value, counting from zero.</param>
         [KRPCMethod]
-        public static Expression ListRemoveAt (Expression list, Expression index)
+        public static Expression RemoveAt (Expression list, Expression index)
         {
-            CheckIsAnInt (index, nameof (index));
             var valueType = GetEnumerableValueType (list);
+            CheckIsAList (list);
+            CheckIsAnInt (index, nameof (index));
             var removeAt = typeof (IList<>).MakeGenericType (valueType).GetMethod ("RemoveAt");
             return new Expression (LinqExpression.Call (list, removeAt, index));
         }
 
         /// <summary>
-        /// Remove every value from a list.
+        /// Remove every value from a list or a set, or every entry from a dictionary.
         /// </summary>
-        /// <param name="list">The list.</param>
+        /// <param name="collection">The list, set or dictionary.</param>
         [KRPCMethod]
-        public static Expression ListClear (Expression list)
+        public static Expression Clear (Expression collection)
         {
-            return new Expression (ClearCall (list, typeof (ICollection<>)));
-        }
-
-        /// <summary>
-        /// Remove a value from a set.
-        /// </summary>
-        /// <returns>Whether the value was in the set.</returns>
-        /// <param name="set">The set.</param>
-        /// <param name="value">The value to remove.</param>
-        [KRPCMethod]
-        public static Expression SetRemove (Expression set, Expression value)
-        {
-            if (ReferenceEquals (value, null))
-                throw new ArgumentNullException (nameof (value));
-            var valueType = GetEnumerableValueType (set);
-            var remove = typeof (ICollection<>).MakeGenericType (valueType).GetMethod ("Remove");
+            if (ReferenceEquals (collection, null))
+                throw new ArgumentNullException (nameof (collection));
+            if (IsADictionary (collection)) {
+                var types = DictionaryTypes (collection);
+                return new Expression (LinqExpression.Call (
+                    collection,
+                    typeof (ICollection<>)
+                        .MakeGenericType (typeof (KeyValuePair<,>).MakeGenericType (types))
+                        .GetMethod ("Clear")));
+            }
+            var valueType = GetEnumerableValueType (collection);
+            CheckIsAListOrASet (collection);
             return new Expression (LinqExpression.Call (
-                set, remove, ConvertElement (value, valueType)));
-        }
-
-        /// <summary>
-        /// Remove every value from a set.
-        /// </summary>
-        /// <param name="set">The set.</param>
-        [KRPCMethod]
-        public static Expression SetClear (Expression set)
-        {
-            return new Expression (ClearCall (set, typeof (ICollection<>)));
-        }
-
-        /// <summary>
-        /// Remove a key, and the value stored under it, from a dictionary.
-        /// </summary>
-        /// <returns>Whether the key was in the dictionary.</returns>
-        /// <param name="dictionary">The dictionary.</param>
-        /// <param name="key">The key to remove.</param>
-        [KRPCMethod]
-        public static Expression DictionaryRemove (Expression dictionary, Expression key)
-        {
-            if (ReferenceEquals (key, null))
-                throw new ArgumentNullException (nameof (key));
-            var types = DictionaryTypes (dictionary);
-            var remove = typeof (IDictionary<,>).MakeGenericType (types).GetMethod ("Remove");
-            return new Expression (LinqExpression.Call (
-                dictionary, remove, ConvertElement (key, types [0])));
-        }
-
-        /// <summary>
-        /// Remove every key and value from a dictionary.
-        /// </summary>
-        /// <param name="dictionary">The dictionary.</param>
-        [KRPCMethod]
-        public static Expression DictionaryClear (Expression dictionary)
-        {
-            var types = DictionaryTypes (dictionary);
-            return new Expression (LinqExpression.Call (
-                dictionary,
-                typeof (ICollection<>)
-                    .MakeGenericType (typeof (KeyValuePair<,>).MakeGenericType (types))
-                    .GetMethod ("Clear")));
+                collection, typeof (ICollection<>).MakeGenericType (valueType).GetMethod ("Clear")));
         }
 
         internal static IList<TKey> DictionaryKeysHelper<TKey, TValue> (
@@ -2128,13 +2073,6 @@ namespace KRPC.Service.KRPC
                 .GetMethod (helper, BindingFlags.Static | BindingFlags.NonPublic)
                 .MakeGenericMethod (types);
             return LinqExpression.Call (method, dictionary);
-        }
-
-        static LinqExpression ClearCall (Expression collection, System.Type declaringType)
-        {
-            var valueType = GetEnumerableValueType (collection);
-            return LinqExpression.Call (
-                collection, declaringType.MakeGenericType (valueType).GetMethod ("Clear"));
         }
 
         /// <summary>
@@ -2911,11 +2849,42 @@ namespace KRPC.Service.KRPC
         /// </summary>
         static void CheckIsNotADictionary (Expression expression)
         {
-            if (global::KRPC.Utils.Reflection.IsGenericType (
-                    expression.Type, typeof (IDictionary<,>)))
+            if (IsADictionary (expression))
                 throw new InvalidOperationException (
                     "A dictionary cannot be used as a collection of values. Use " +
                     "DictionaryKeys or DictionaryValues to obtain a list of them.");
+        }
+
+        // Which kind of collection an expression produces. A list and a set are both
+        // ICollection, so the operations that only make sense for one of them ask
+        static bool IsAList (Expression expression)
+        {
+            return global::KRPC.Utils.Reflection.IsGenericType (
+                expression.Type, typeof (IList<>));
+        }
+
+        static bool IsASet (Expression expression)
+        {
+            return global::KRPC.Utils.Reflection.IsGenericType (
+                expression.Type, typeof (ISet<>));
+        }
+
+        static bool IsADictionary (Expression expression)
+        {
+            return global::KRPC.Utils.Reflection.IsGenericType (
+                expression.Type, typeof (IDictionary<,>));
+        }
+
+        static void CheckIsAList (Expression expression)
+        {
+            if (!IsAList (expression))
+                throw new InvalidOperationException ("Expected a list");
+        }
+
+        static void CheckIsAListOrASet (Expression expression)
+        {
+            if (!IsAList (expression) && !IsASet (expression))
+                throw new InvalidOperationException ("Expected a list or a set");
         }
 
         /// <summary>
