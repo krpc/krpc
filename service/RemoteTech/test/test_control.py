@@ -3,13 +3,8 @@ import unittest
 import krpctest
 
 
-class TestControlThrottleRemoteTechConnected(krpctest.TestCase):
-    """Throttle is applied to a vessel that is controllable via RemoteTech.
-
-    Regression test for the throttle gate in PilotAddon.HandleThrottle: throttle
-    must follow RemoteTech's controllability rule rather than either being
-    blocked when the vessel is controllable, or leaking through when it is not.
-    """
+class TestControlRemoteTechConnected(krpctest.TestCase):
+    """Control inputs are applied to a vessel that is controllable via RemoteTech."""
 
     mods = ["RemoteTech"]
 
@@ -25,8 +20,6 @@ class TestControlThrottleRemoteTechConnected(krpctest.TestCase):
         cls.engine.active = True
 
     def test_throttle_applied(self):
-        # On the launch pad the uncrewed probe's antenna reaches the ground
-        # station, so it is controllable and throttle should be applied.
         comms = self.rt.comms(self.vessel)
         self.assertFalse(comms.has_local_control)
         self.assertTrue(comms.has_connection)
@@ -37,13 +30,24 @@ class TestControlThrottleRemoteTechConnected(krpctest.TestCase):
         self.wait(1)
         self.assertAlmostEqual(0, self.engine.throttle, places=2)
 
+    def test_pitch_applied_once(self):
+        """RemoteTech runs kRPC's fly-by-wire callback as a sanctioned pilot, so the
+        callback must not also be on the vessel's own callback list."""
+        self.assertTrue(self.rt.comms(self.vessel).has_connection)
+        self.control.sas = False
+        self.control.pitch = 0.5
+        self.wait(1)
+        self.assertAlmostEqual(0.5, self.control.pitch, places=2)
+        self.control.pitch = 0
 
-class TestControlThrottleRemoteTechNoConnection(krpctest.TestCase):
-    """Throttle is dropped for a vessel that is not controllable via RemoteTech.
+
+class TestControlRemoteTechNoConnection(krpctest.TestCase):
+    """Throttle is applied to a vessel that RemoteTech cannot reach.
 
     The uncrewed probe is placed far from Kerbin so its antenna cannot reach any
-    ground station: with no local control and no connection it cannot be
-    controlled, and throttle set over kRPC must not be applied.
+    ground station. kRPC flies the vessel as a RemoteTech sanctioned pilot, which
+    the flight computer's signal delay and connection rules do not apply to, so
+    the throttle follows the other control axes and is applied.
     """
 
     mods = ["RemoteTech"]
@@ -60,12 +64,15 @@ class TestControlThrottleRemoteTechNoConnection(krpctest.TestCase):
         cls.engine = next(iter(cls.vessel.parts.engines))
         cls.engine.active = True
 
-    def test_throttle_blocked(self):
+    def test_throttle_applied(self):
         comms = self.rt.comms(self.vessel)
         self.assertFalse(comms.has_local_control)
         self.assertFalse(comms.has_connection)
         self.control.throttle = 1
         self.wait(1.5)
+        self.assertAlmostEqual(1, self.engine.throttle, places=2)
+        self.control.throttle = 0
+        self.wait(1)
         self.assertAlmostEqual(0, self.engine.throttle, places=2)
 
 

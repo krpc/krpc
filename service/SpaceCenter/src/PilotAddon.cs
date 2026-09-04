@@ -69,6 +69,13 @@ namespace KRPC.SpaceCenter
 
             public bool ThrottleUpdated { get; set; }
 
+            /// <summary>
+            /// The throttle kRPC latched onto the game, or null when it holds no throttle.
+            /// Held so that it can be re-applied to a vessel whose RemoteTech flight computer
+            /// rewrites the throttle every tick.
+            /// </summary>
+            public float? LatchedThrottle { get; set; }
+
             public float Pitch {
                 get { return state.pitch; }
                 set { state.pitch = value.Clamp (-1f, 1f); }
@@ -266,6 +273,15 @@ namespace KRPC.SpaceCenter
         /// Set of FlyByWire callbacks that have been registered with RemoteTech.
         /// </summary>
         static HashSet<Vessel> remoteTechSanctionedDelegates = new HashSet<Vessel> ();
+
+        // Physics ticks between registering the sanctioned pilots again. RemoteTech drops
+        // them when a flight computer changes vessel, which docking and undocking do, and
+        // every call into its API searches each satellite in the game. Half a second picks a
+        // dropped pilot back up without paying that search every tick
+        const int RegisterSanctionedPilotsTicks = 25;
+        static int registerSanctionedPilotsCountdown;
+        static bool registerSanctionedPilots;
+
         /// <summary>
         /// The attitude controller for each vessel. Owned here rather than by the AutoPilot
         /// service objects, which are transient API surface objects, so controller state (the
@@ -348,6 +364,8 @@ namespace KRPC.SpaceCenter
             manualInputClients.Clear ();
             controlDelegates.Clear ();
             remoteTechSanctionedDelegates.Clear ();
+            registerSanctionedPilotsCountdown = 0;
+            registerSanctionedPilots = false;
             attitudeControllers.Clear ();
             controllers.Clear ();
         }
@@ -446,6 +464,9 @@ namespace KRPC.SpaceCenter
         public void FixedUpdate ()
         {
             CheckClients ();
+            registerSanctionedPilots = --registerSanctionedPilotsCountdown <= 0;
+            if (registerSanctionedPilots)
+                registerSanctionedPilotsCountdown = RegisterSanctionedPilotsTicks;
             foreach (var vessel in FlightGlobals.Vessels) {
                 // If the vessel is controllable, pilot it
                 if (vessel.rootPart != null)
@@ -455,14 +476,33 @@ namespace KRPC.SpaceCenter
 
         static void Fly (Vessel vessel)
         {
-            if (!controlDelegates.ContainsKey (vessel)) {
-                Action<FlightCtrlState> action = s => OnFlyByWire (vessel, s);
+            Action<FlightCtrlState> action;
+            if (!controlDelegates.TryGetValue (vessel, out action)) {
+                action = s => OnFlyByWire (vessel, s);
                 controlDelegates [vessel] = action;
                 vessel.OnFlyByWire += new FlightInputCallback (action);
             }
-            if (RemoteTech.IsAvailable && !remoteTechSanctionedDelegates.Contains (vessel) && RemoteTech.HasFlightComputer (vessel.id)) {
-                RemoteTech.AddSanctionedPilot (vessel.id, controlDelegates [vessel]);
+            if (!RemoteTech.IsAvailable)
+                return;
+            // RemoteTech runs a sanctioned pilot from its own fly-by-wire hook, after the
+            // flight computer's commands. The vessel's callback would merge the inputs a
+            // second time in the same tick. Take the sanctioned pilot instead, and put the
+            // callback back when the flight computer goes away
+            if (remoteTechSanctionedDelegates.Contains (vessel)) {
+                // Reconcile a vessel already flown as a sanctioned pilot now and then
+                if (!registerSanctionedPilots)
+                    return;
+                if (RemoteTech.HasFlightComputer (vessel.id)) {
+                    RemoteTech.AddSanctionedPilot (vessel.id, action);
+                } else {
+                    remoteTechSanctionedDelegates.Remove (vessel);
+                    RemoteTech.RemoveSanctionedPilot (vessel.id, action);
+                    vessel.OnFlyByWire += new FlightInputCallback (action);
+                }
+            } else if (RemoteTech.HasFlightComputer (vessel.id)) {
                 remoteTechSanctionedDelegates.Add (vessel);
+                RemoteTech.AddSanctionedPilot (vessel.id, action);
+                vessel.OnFlyByWire -= new FlightInputCallback (action);
             }
         }
 
@@ -475,7 +515,7 @@ namespace KRPC.SpaceCenter
             // Manual inputs
             if (!manualInputs.ContainsKey (vessel))
                 manualInputs [vessel] = new ControlInputs (vessel);
-            HandleThrottle (vessel, manualInputs [vessel]);
+            HandleThrottle (vessel, state, manualInputs [vessel]);
             inputs.Add (manualInputs [vessel]);
 
             // Auto-pilot inputs. The control loop runs at the point in the server's update
@@ -515,19 +555,6 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// Whether kRPC is permitted to send control inputs to the vessel.
-        /// When RemoteTech is installed this requires the vessel to be controllable via
-        /// RemoteTech: either local (crewed) control, or a connection to a command station
-        /// (a ground station or a crewed command station).
-        /// </summary>
-        static bool HasControlConnection (Vessel vessel)
-        {
-            if (!RemoteTech.IsAvailable)
-                return true;
-            return RemoteTech.HasLocalControl (vessel.id) || RemoteTech.HasAnyConnection (vessel.id);
-        }
-
-        /// <summary>
         /// Apply the manually set throttle to the vessel.
         ///
         /// Throttle is handled differently to the other control axes. Rather than being
@@ -536,24 +563,32 @@ namespace KRPC.SpaceCenter
         /// frames and stays in sync with the throttle gauge. The input is consumed once
         /// handled so that it is not also re-applied via the per-frame FlightCtrlState in
         /// ControlInputs.Add.
+        ///
+        /// A RemoteTech flight computer rebuilds the control state from its own queue before
+        /// this runs. That delays the latched throttle, and zeroes it when the connection
+        /// drops. kRPC flies the vessel as a sanctioned pilot, which RemoteTech runs after
+        /// both, so re-apply the latched throttle to this frame's state. The latch is
+        /// released once the game's throttle moves on its own, which hands the throttle back
+        /// to the player and to the flight computer.
         /// </summary>
-        static void HandleThrottle (Vessel vessel, ControlInputs inputs)
+        static void HandleThrottle (Vessel vessel, FlightCtrlState state, ControlInputs inputs)
         {
-            if (!inputs.ThrottleUpdated)
-                return;
             if (FlightGlobals.ActiveVessel != vessel)
                 return;
-            // If RemoteTech is controlling the vessel and there is no control connection,
-            // drop the input. Note: the input has to be consumed, or the per-frame
-            // FlightCtrlState in ControlInputs.Add re-applies it
-            if (!HasControlConnection (vessel)) {
+            if (inputs.ThrottleUpdated) {
+                FlightInputHandler.state.mainThrottle = inputs.Throttle;
+                inputs.LatchedThrottle = FlightInputHandler.state.mainThrottle;
                 inputs.Throttle = 0f;
                 inputs.ThrottleUpdated = false;
-                return;
             }
-            FlightInputHandler.state.mainThrottle = inputs.Throttle;
-            inputs.Throttle = 0f;
-            inputs.ThrottleUpdated = false;
+            if (!inputs.LatchedThrottle.HasValue || !remoteTechSanctionedDelegates.Contains (vessel))
+                return;
+            // Anything else that moves the throttle, a keypress or the throttle cutoff, writes
+            // the same field. Take that as the player taking the throttle back
+            if (inputs.LatchedThrottle.Value != FlightInputHandler.state.mainThrottle)
+                inputs.LatchedThrottle = null;
+            else
+                state.mainThrottle = inputs.LatchedThrottle.Value;
         }
     }
 }
