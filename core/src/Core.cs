@@ -120,6 +120,7 @@ namespace KRPC
             if (tickHoldClient != null && tickHoldClient.Guid == client.Guid)
                 ReleaseTickHold ();
             clientScheduler.Remove (client);
+            CancelDeferredCalls (client);
             EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
 
@@ -217,11 +218,13 @@ namespace KRPC
             server.OnStopped += (s, e) => {
                 Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' stopped");
                 AnyRunning = Servers.Any (x => x.Running);
-                // The object store and the expression constants are shared by every
-                // server, so they are only emptied once they have all stopped
+                // The object store, the expression constants and the deferred calls are
+                // shared by every server, so they are only emptied once they have all
+                // stopped
                 if (!AnyRunning) {
                     ObjectStore.Clear ();
                     Service.KRPC.Expression.ClearConstants ();
+                    ClearDeferredCalls ("No server is running.");
                 }
                 EventHandlerExtensions.Invoke (OnServerStopped, this, new ServerStoppedEventArgs ((Server.Server)s));
             };
@@ -398,6 +401,7 @@ namespace KRPC
             // many times the poll loop runs. OnAfterCalls is raised before the stream update,
             // so that streams observe what the handlers did.
             EventHandlerExtensions.Invoke (OnBeforeCalls, this);
+            RunDeferredCalls ();
             RPCServerUpdate ();
             EventHandlerExtensions.Invoke (OnAfterCalls, this);
             StreamServerUpdate ();
@@ -444,6 +448,58 @@ namespace KRPC
         /// should be adapted to.
         /// </summary>
         bool heldTick;
+
+        List<DeferredCall> deferredCalls = new List<DeferredCall> ();
+
+        /// <summary>
+        /// Add a call that a server side function detached from itself by pausing
+        /// execution.
+        /// </summary>
+        internal void AddDeferredCall (DeferredCall call)
+        {
+            deferredCalls.Add (call);
+        }
+
+        /// <summary>
+        /// Run the calls that server side functions deferred, dropping the ones that
+        /// complete. They run ahead of the calls clients made, and outside the
+        /// update's time limit.
+        /// </summary>
+        internal void RunDeferredCalls ()
+        {
+            int remaining = 0;
+            for (int i = 0; i < deferredCalls.Count; i++) {
+                if (!deferredCalls [i].Run ())
+                    deferredCalls [remaining++] = deferredCalls [i];
+            }
+            deferredCalls.RemoveRange (remaining, deferredCalls.Count - remaining);
+        }
+
+        /// <summary>
+        /// Cancel the calls a client deferred, called when it disconnects.
+        /// </summary>
+        void CancelDeferredCalls (IClient client)
+        {
+            int remaining = 0;
+            for (int i = 0; i < deferredCalls.Count; i++) {
+                var call = deferredCalls [i];
+                if (ReferenceEquals (call.Client, null) || call.Client.Guid != client.Guid)
+                    deferredCalls [remaining++] = call;
+                else
+                    call.Cancel ("The client that started it disconnected.");
+            }
+            deferredCalls.RemoveRange (remaining, deferredCalls.Count - remaining);
+        }
+
+        /// <summary>
+        /// Cancel every deferred call, giving the reason.
+        /// </summary>
+        void ClearDeferredCalls (string reason)
+        {
+            for (int i = 0; i < deferredCalls.Count; i++)
+                deferredCalls [i].Cancel (reason);
+            deferredCalls.Clear ();
+        }
 
         Stopwatch rpcTimer = new Stopwatch ();
         Stopwatch rpcPollTimeout = new Stopwatch ();

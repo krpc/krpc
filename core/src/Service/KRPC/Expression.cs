@@ -60,7 +60,8 @@ namespace KRPC.Service.KRPC
         internal const string YieldedMessage =
             "A procedure called by the function paused execution, to resume on a " +
             "later tick. A function is evaluated within a single tick, so a " +
-            "procedure that does this cannot be called from one.";
+            "procedure that does this cannot be called from one. Use a deferred " +
+            "call to start it without waiting for it.";
 
         /// <summary>
         /// A delegate that evaluates the expression and returns its value.
@@ -383,7 +384,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression Call(ProcedureCall call)
         {
-            return BuildCall (call, null);
+            return BuildCall (call, null, false);
         }
 
         /// <summary>
@@ -403,10 +404,45 @@ namespace KRPC.Service.KRPC
         {
             if (ReferenceEquals (args, null))
                 throw new ArgumentNullException (nameof (args));
-            return BuildCall (call, args);
+            return BuildCall (call, args, false);
         }
 
-        static Expression BuildCall (ProcedureCall call, IDictionary<int, Expression> args)
+        /// <summary>
+        /// An RPC call that a function does not wait for, used as a statement.
+        /// The call is started where it appears. If the procedure pauses execution,
+        /// the server runs the rest of it on later ticks and the function carries
+        /// on. Any value the procedure returns is discarded.
+        /// </summary>
+        /// <remarks>
+        /// This is how a function calls a procedure that pauses execution, such as
+        /// <c>SpaceCenter.WarpTo</c>. The function reads game state from before the
+        /// call completes. A failure after the function has finished is written to
+        /// the server's log, and the call is canceled if the client that started it
+        /// disconnects.
+        /// </remarks>
+        /// <param name="call">The RPC to call.</param>
+        [KRPCMethod]
+        public static Expression DeferredCall (ProcedureCall call)
+        {
+            return BuildCall (call, null, true);
+        }
+
+        /// <summary>
+        /// An RPC call that a function does not wait for, where some or all of the
+        /// arguments are computed by expressions. Combines
+        /// <see cref="DeferredCall"/> and <see cref="CallWithArguments"/>.
+        /// </summary>
+        /// <param name="call">The RPC to call.</param>
+        /// <param name="args">Expressions computing the call's arguments, by position.</param>
+        [KRPCMethod]
+        public static Expression DeferredCallWithArguments (ProcedureCall call, IDictionary<int, Expression> args)
+        {
+            if (ReferenceEquals (args, null))
+                throw new ArgumentNullException (nameof (args));
+            return BuildCall (call, args, true);
+        }
+
+        static Expression BuildCall (ProcedureCall call, IDictionary<int, Expression> args, bool deferred)
         {
             if (ReferenceEquals (call, null))
                 throw new ArgumentNullException (nameof (call));
@@ -490,6 +526,15 @@ namespace KRPC.Service.KRPC
             var sceneCheck = LinqExpression.Call (
                 typeof (Services).GetMethod (nameof (Services.CheckExpressionGameScene)),
                 procedureExpr);
+
+            // The call is started inside the function and its value discarded.
+            // Only a pause detaches the rest of it
+            if (deferred)
+                return new Expression (LinqExpression.Call (
+                    typeof (Services).GetMethod (nameof (Services.ExecuteDeferredCall)),
+                    procedureExpr,
+                    LinqExpression.Lambda<Action> (
+                        LinqExpression.Block (typeof (void), sceneCheck, callExpr))));
 
             if (!procedure.HasReturnType)
                 return new Expression (LinqExpression.Block (typeof (void), sceneCheck, callExpr));
