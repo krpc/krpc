@@ -100,7 +100,8 @@ class TestNullableStruct(NamedTuple):
 
 
 class CustomException(RuntimeError):
-    pass
+    _service_name = 'TestService'
+    _class_name = 'CustomException'
 
 
 class DeprecatedException(RuntimeError):
@@ -109,7 +110,8 @@ class DeprecatedException(RuntimeError):
 
     Deprecated exception documentation string.
     """
-    pass
+    _service_name = 'TestService'
+    _class_name = 'DeprecatedException'
 
 
 class DeprecatedClass(ClassBase):
