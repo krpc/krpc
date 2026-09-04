@@ -272,6 +272,157 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void DeferredCallDiscardsTheResult ()
+        {
+            var mock = new Mock<global::KRPC.Test.Service.ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("foo");
+            global::KRPC.Test.Service.TestService.Service = mock.Object;
+            var expr = Expression.DeferredCall (BuildProcedureCall ("ProcedureNoArgsReturns"));
+            Assert.IsFalse (expr.HasReturnType);
+            expr.Runner ();
+            mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
+        }
+
+        [Test]
+        public void DeferredCallWithArgumentsRunsTheProcedure ()
+        {
+            var mock = new Mock<global::KRPC.Test.Service.ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureSingleArgNoReturn ("foo"));
+            global::KRPC.Test.Service.TestService.Service = mock.Object;
+            var expr = Expression.DeferredCallWithArguments (
+                BuildProcedureCall ("ProcedureSingleArgNoReturn"),
+                new Dictionary<int, Expression> { { 0, Expression.ConstantString ("foo") } });
+            expr.Runner ();
+            mock.Verify (x => x.ProcedureSingleArgNoReturn ("foo"), Times.Once ());
+        }
+
+        [Test]
+        public void DeferredCallFailingToStartIsReported ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var expr = Expression.DeferredCall (BuildProcedureCall (
+                "TestClass_MethodAvailableInSpecifiedGameScene", new Argument (0, obj)));
+            Assert.Throws<global::KRPC.Service.RPCException> (() => expr.Runner ());
+        }
+
+        [Test]
+        public void DeferredCallThatPausesRunsOnLaterUpdates ()
+        {
+            // The function carries on as soon as the procedure pauses, and the core
+            // runs what is left of the call on the updates that follow
+            var runs = 0;
+            System.Action last = () => runs++;
+            System.Action next = () => {
+                runs++;
+                throw new global::KRPC.Service.YieldException<System.Action> (last);
+            };
+            var mock = new Mock<global::KRPC.Test.Service.ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()))
+                .Callback ((int n) => {
+                    runs++;
+                    throw new global::KRPC.Service.YieldException<System.Action> (next);
+                });
+            global::KRPC.Test.Service.TestService.Service = mock.Object;
+            var expr = Expression.DeferredCall (BuildProcedureCall (
+                "BlockingProcedureNoReturn", new Argument (0, 1)));
+            expr.Runner ();
+            Assert.AreEqual (1, runs);
+            global::KRPC.Core.Instance.RunDeferredCalls ();
+            Assert.AreEqual (2, runs);
+            global::KRPC.Core.Instance.RunDeferredCalls ();
+            Assert.AreEqual (3, runs);
+            global::KRPC.Core.Instance.RunDeferredCalls ();
+            Assert.AreEqual (3, runs);
+        }
+
+        [Test]
+        public void DeferredCallFailingAfterItPausesIsNotReported ()
+        {
+            // Nothing is waiting for the call once it is detached, so the failure is
+            // logged and the call dropped
+            System.Action fail = () => {
+                throw new global::KRPC.Service.KRPC.InvalidOperationException ("failed");
+            };
+            var mock = new Mock<global::KRPC.Test.Service.ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()))
+                .Callback ((int n) => {
+                    throw new global::KRPC.Service.YieldException<System.Action> (fail);
+                });
+            global::KRPC.Test.Service.TestService.Service = mock.Object;
+            var expr = Expression.DeferredCall (BuildProcedureCall (
+                "BlockingProcedureNoReturn", new Argument (0, 1)));
+            expr.Runner ();
+            Assert.DoesNotThrow (() => global::KRPC.Core.Instance.RunDeferredCalls ());
+            Assert.DoesNotThrow (() => global::KRPC.Core.Instance.RunDeferredCalls ());
+        }
+
+        // A call that never finishes, counting each run and pausing again
+        static Expression DeferCallThatNeverFinishes (System.Action run)
+        {
+            System.Action again = null;
+            again = () => {
+                run ();
+                throw new global::KRPC.Service.YieldException<System.Action> (again);
+            };
+            var mock = new Mock<global::KRPC.Test.Service.ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.BlockingProcedureNoReturn (It.IsAny<int> ()))
+                .Callback ((int n) => again ());
+            global::KRPC.Test.Service.TestService.Service = mock.Object;
+            return Expression.DeferredCall (BuildProcedureCall (
+                "BlockingProcedureNoReturn", new Argument (0, 1)));
+        }
+
+        static void StartDeferredCall (Expression expr, ScriptedClient client)
+        {
+            global::KRPC.Service.CallContext.Set (client);
+            try {
+                expr.Runner ();
+            } finally {
+                global::KRPC.Service.CallContext.Clear ();
+            }
+        }
+
+        [Test]
+        public void DeferredCallIsCancelledWhenItsClientDisconnects ()
+        {
+            var runs = 0;
+            var expr = DeferCallThatNeverFinishes (() => runs++);
+            var core = global::KRPC.Core.Instance;
+            var client = new ScriptedClient (0, 0);
+            core.RPCClientConnected (client);
+            StartDeferredCall (expr, client);
+            Assert.AreEqual (1, runs);
+            core.RunDeferredCalls ();
+            Assert.AreEqual (2, runs);
+
+            core.RPCClientDisconnected (client);
+            core.RunDeferredCalls ();
+            Assert.AreEqual (2, runs);
+        }
+
+        [Test]
+        public void DeferredCallOutlivesAnotherClientDisconnecting ()
+        {
+            var runs = 0;
+            var expr = DeferCallThatNeverFinishes (() => runs++);
+            var core = global::KRPC.Core.Instance;
+            var owner = new ScriptedClient (0, 0);
+            var other = new ScriptedClient (0, 0);
+            core.RPCClientConnected (owner);
+            core.RPCClientConnected (other);
+            StartDeferredCall (expr, owner);
+            Assert.AreEqual (1, runs);
+
+            core.RPCClientDisconnected (other);
+            core.RunDeferredCalls ();
+            Assert.AreEqual (2, runs);
+
+            core.RPCClientDisconnected (owner);
+            core.RunDeferredCalls ();
+            Assert.AreEqual (2, runs);
+        }
+
+        [Test]
         public void BlockVariablesAndWhile ()
         {
             // sum = 0; i = 0

@@ -117,6 +117,7 @@
     <Compile Include="Service\CallContext.cs" />
     <Compile Include="Service\ClassMethodHandler.cs" />
     <Compile Include="Service\ClassStaticMethodHandler.cs" />
+    <Compile Include="Service\DeferredCall.cs" />
     <Compile Include="Service\DocumentationException.cs" />
     <Compile Include="Service\DocumentationUtils.cs" />
     <Compile Include="Service\Event.cs" />

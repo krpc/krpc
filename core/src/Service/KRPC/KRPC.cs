@@ -276,7 +276,8 @@ namespace KRPC.Service.KRPC
         /// <remarks>
         /// Each update is evaluated within a single physics tick, so procedures that
         /// pause execution and resume on a later tick cannot be used within the
-        /// function. Calling one produces an error on the stream.
+        /// function. Calling one produces an error on the stream. Use
+        /// <see cref="Expression.DeferredCall"/> to start one without waiting for it.
         /// </remarks>
         [KRPCProcedure]
         public static Messages.Stream AddFunctionStream (Expression function, bool start = true)
@@ -301,8 +302,9 @@ namespace KRPC.Service.KRPC
         /// </summary>
         /// <remarks>
         /// Procedures that pause execution and resume on a later tick cannot be
-        /// used within the function. A null within the value, such as an element
-        /// of a list the function returns, is an error naming the position.
+        /// used within the function. Use <see cref="Expression.DeferredCall"/> to
+        /// start one without waiting for it. A null within the value, such as an
+        /// element of a list the function returns, is an error naming the position.
         /// </remarks>
         [KRPCProcedure (Nullable = true)]
         public static byte[] RunFunction (Expression function)
@@ -338,7 +340,8 @@ namespace KRPC.Service.KRPC
         /// <remarks>
         /// Each update is evaluated within a single physics tick, so procedures that
         /// pause execution and resume on a later tick cannot be used within the
-        /// function. Calling one produces an error on the event's stream.
+        /// function. Calling one produces an error on the event's stream. Use
+        /// <see cref="Expression.DeferredCall"/> to start one without waiting for it.
         /// </remarks>
         [KRPCProcedure]
         public static Messages.Event AddEvent(Expression function)

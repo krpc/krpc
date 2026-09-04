@@ -39,6 +39,8 @@ KRPC.Expression.ConstantEnum
 KRPC.Expression.ConstantObject
 KRPC.Expression.Call
 KRPC.Expression.CallWithArguments
+KRPC.Expression.DeferredCall
+KRPC.Expression.DeferredCallWithArguments
 KRPC.Expression.Equal
 KRPC.Expression.NotEqual
 KRPC.Expression.GreaterThan
