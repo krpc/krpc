@@ -554,14 +554,14 @@ namespace KRPC.Test.Service.KRPC
             CollectionAssert.AreEqual (
                 new List<int> { 1, 3 },
                 Eval<IList<int>> (Build (
-                    Expression.ListRemove (values, Expression.ConstantInt (2)))));
+                    Expression.Remove (values, Expression.ConstantInt (2)))));
             CollectionAssert.AreEqual (
                 new List<int> { 2, 3 },
                 Eval<IList<int>> (Build (
-                    Expression.ListRemoveAt (values, Expression.ConstantInt (0)))));
+                    Expression.RemoveAt (values, Expression.ConstantInt (0)))));
             CollectionAssert.IsEmpty (
-                Eval<IList<int>> (Build (Expression.ListClear (values))));
-            Assert.IsFalse (Eval<bool> (Expression.ListRemove (
+                Eval<IList<int>> (Build (Expression.Clear (values))));
+            Assert.IsFalse (Eval<bool> (Expression.Remove (
                 list, Expression.ConstantInt (99))));
         }
 
@@ -584,8 +584,8 @@ namespace KRPC.Test.Service.KRPC
                     });
             }
             Assert.AreEqual (1, Eval<int> (Build (
-                Expression.SetRemove (values, Expression.ConstantInt (2)))));
-            Assert.AreEqual (0, Eval<int> (Build (Expression.SetClear (values))));
+                Expression.Remove (values, Expression.ConstantInt (2)))));
+            Assert.AreEqual (0, Eval<int> (Build (Expression.Clear (values))));
         }
 
         [Test]
@@ -612,8 +612,25 @@ namespace KRPC.Test.Service.KRPC
                     });
             }
             Assert.AreEqual (1, Eval<int> (Build (
-                Expression.DictionaryRemove (values, Expression.ConstantString ("a")))));
-            Assert.AreEqual (0, Eval<int> (Build (Expression.DictionaryClear (values))));
+                Expression.Remove (values, Expression.ConstantString ("a")))));
+            Assert.AreEqual (0, Eval<int> (Build (Expression.Clear (values))));
+        }
+
+        [Test]
+        public void ListOperationsRejectASet ()
+        {
+            var values = Expression.CreateSet (new HashSet<Expression> {
+                Expression.ConstantInt (1)
+            });
+            foreach (var build in new List<TestDelegate> {
+                () => Expression.Set (
+                    values, Expression.ConstantInt (0), Expression.ConstantInt (2)),
+                () => Expression.RemoveAt (values, Expression.ConstantInt (0))
+            }) {
+                var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                    build);
+                StringAssert.Contains ("Expected a list", exn.Message);
+            }
         }
 
         [Test]
@@ -734,7 +751,7 @@ namespace KRPC.Test.Service.KRPC
             foreach (var build in new List<TestDelegate> {
                 () => Expression.First (Expression.ConstantString ("abc")),
                 () => Expression.Distinct (Expression.ConstantString ("abc")),
-                () => Expression.ListClear (Expression.ConstantString ("abc"))
+                () => Expression.Clear (Expression.ConstantString ("abc"))
             }) {
                 var exn = Assert.Catch (build);
                 StringAssert.Contains ("string is not a collection", exn.Message);
@@ -844,13 +861,16 @@ namespace KRPC.Test.Service.KRPC
                 () => Expression.ToList (dictionary),
                 () => Expression.Select (dictionary, Expression.Lambda (
                     new List<Expression> { parameter }, parameter)),
-                () => Expression.ForEach (parameter, dictionary, Expression.ListClear (list)),
-                () => Expression.ListAdd (dictionary, Expression.ConstantString ("a"))
+                () => Expression.ForEach (parameter, dictionary, Expression.Clear (list))
             }) {
                 var exn = Assert.Catch (build);
                 StringAssert.Contains (
                     "dictionary cannot be used as a collection of values", exn.Message);
             }
+            // Appending names the operation that adds an entry instead
+            var append = Assert.Catch (
+                () => Expression.Append (dictionary, Expression.ConstantString ("a")));
+            StringAssert.Contains ("added to a dictionary with Set", append.Message);
             // Reading the keys or the values gives a list, and counting works directly
             Assert.AreEqual (3, Eval<int> (Expression.Count (dictionary)));
             Assert.AreEqual (
@@ -1009,7 +1029,7 @@ namespace KRPC.Test.Service.KRPC
                 new List<Expression> {
                     Expression.Assign (result, Expression.CreateEmptyList (Type.Int ())),
                     Expression.ForEach (x, list,
-                        Expression.ListAdd (result, Expression.Multiply (x, Expression.ConstantInt (2)))),
+                        Expression.Append (result, Expression.Multiply (x, Expression.ConstantInt (2)))),
                     result
                 });
             CollectionAssert.AreEqual (new [] { 2, 4, 6, 8, 10 }, Eval<IList<int>> (expr));
@@ -1023,9 +1043,9 @@ namespace KRPC.Test.Service.KRPC
                 new List<Expression> { numbers },
                 new List<Expression> {
                     Expression.Assign (numbers, Expression.CreateEmptyList (Type.Int ())),
-                    Expression.ListAdd (numbers, Expression.ConstantInt (1)),
-                    Expression.ListAdd (numbers, Expression.ConstantInt (2)),
-                    Expression.ListSet (numbers, Expression.ConstantInt (0), Expression.ConstantInt (10)),
+                    Expression.Append (numbers, Expression.ConstantInt (1)),
+                    Expression.Append (numbers, Expression.ConstantInt (2)),
+                    Expression.Set (numbers, Expression.ConstantInt (0), Expression.ConstantInt (10)),
                     numbers
                 });
             CollectionAssert.AreEqual (new [] { 10, 2 }, Eval<IList<int>> (expr));
@@ -1035,8 +1055,8 @@ namespace KRPC.Test.Service.KRPC
                 new List<Expression> { values },
                 new List<Expression> {
                     Expression.Assign (values, Expression.CreateEmptyDictionary (Type.String (), Type.Int ())),
-                    Expression.DictionarySet (values, Expression.ConstantString ("a"), Expression.ConstantInt (1)),
-                    Expression.DictionarySet (values, Expression.ConstantString ("a"), Expression.ConstantInt (2)),
+                    Expression.Set (values, Expression.ConstantString ("a"), Expression.ConstantInt (1)),
+                    Expression.Set (values, Expression.ConstantString ("a"), Expression.ConstantInt (2)),
                     Expression.Get (values, Expression.ConstantString ("a"))
                 });
             Assert.AreEqual (2, Eval<int> (dictionaryExpr));
@@ -1046,8 +1066,8 @@ namespace KRPC.Test.Service.KRPC
                 new List<Expression> { seen },
                 new List<Expression> {
                     Expression.Assign (seen, Expression.CreateEmptySet (Type.Int ())),
-                    Expression.SetAdd (seen, Expression.ConstantInt (1)),
-                    Expression.SetAdd (seen, Expression.ConstantInt (1)),
+                    Expression.Append (seen, Expression.ConstantInt (1)),
+                    Expression.Append (seen, Expression.ConstantInt (1)),
                     Expression.Count (seen)
                 });
             Assert.AreEqual (1, Eval<int> (setExpr));
@@ -1061,13 +1081,13 @@ namespace KRPC.Test.Service.KRPC
                 new List<Expression> { values },
                 new List<Expression> {
                     Expression.Assign (values, Expression.CreateEmptyList (Type.Double ())),
-                    Expression.ListAdd (values, Expression.ConstantInt (1)),
+                    Expression.Append (values, Expression.ConstantInt (1)),
                     values
                 });
             CollectionAssert.AreEqual (new [] { 1.0 }, Eval<IList<double>> (widened));
 
             var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => Expression.ListAdd (
+                () => Expression.Append (
                     Expression.CreateEmptyList (Type.Int ()),
                     Expression.ConstantDouble (1.5)));
             StringAssert.Contains ("No implicit conversion", exn.Message);
@@ -1077,7 +1097,7 @@ namespace KRPC.Test.Service.KRPC
                 new List<Expression> { numbers },
                 new List<Expression> {
                     Expression.Assign (numbers, Expression.CreateEmptyList (Type.Int ())),
-                    Expression.ListAdd (numbers, Expression.Cast (
+                    Expression.Append (numbers, Expression.Cast (
                         Expression.ConstantDouble (2.5), Type.Int ())),
                     numbers
                 });
@@ -1094,7 +1114,7 @@ namespace KRPC.Test.Service.KRPC
                 new List<Expression> {
                     Expression.Assign (values, Expression.CreateEmptyDictionary (
                         Type.Long (), Type.Int ())),
-                    Expression.DictionarySet (
+                    Expression.Set (
                         values, Expression.ConstantInt (1), Expression.ConstantInt (2)),
                     Expression.Get (values, Expression.ConstantInt (1))
                 });
@@ -1249,7 +1269,7 @@ namespace KRPC.Test.Service.KRPC
             StringAssert.Contains ("Expected an integer", exn.Message);
             var numbers = Expression.Variable ("numbers", Type.ListType (Type.Int ()));
             Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => Expression.ListSet (
+                () => Expression.Set (
                     numbers, Expression.ConstantDouble (0), Expression.ConstantInt (1)));
         }
 
@@ -2046,6 +2066,50 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (1, Eval<int> (Expression.Get (dictionary, Expression.ConstantString ("a"))));
             Assert.AreEqual (2, Eval<int> (Expression.Get (dictionary, Expression.ConstantString ("b"))));
             Assert.AreEqual (3, Eval<int> (Expression.Get (dictionary, Expression.ConstantString ("c"))));
+        }
+
+        [Test]
+        public void GetDictionaryMissingKey ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Eval<int> (Expression.Get (dictionary, Expression.ConstantString ("z"))));
+        }
+
+        [Test]
+        public void ContainsKey ()
+        {
+            Assert.IsTrue (Eval<bool> (Expression.ContainsKey (dictionary, Expression.ConstantString ("a"))));
+            Assert.IsFalse (Eval<bool> (Expression.ContainsKey (dictionary, Expression.ConstantString ("z"))));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.ContainsKey (list, Expression.ConstantInt (1)));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.ContainsKey (tuple, Expression.ConstantInt (1)));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Contains (dictionary, Expression.ConstantString ("a")));
+        }
+
+        [Test]
+        public void SkipAndTakeCountIsAnInt ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Skip (list, Expression.ConstantDouble (1)));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Take (list, Expression.ConstantLong (1)));
+        }
+
+        [Test]
+        public void AppendToASplitString ()
+        {
+            var parts = Expression.Variable ("parts", Type.ListType (Type.String ()));
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { parts },
+                new List<Expression> {
+                    Expression.Assign (parts, Expression.StringSplit (
+                        Expression.ConstantString ("a,b"), Expression.ConstantString (","))),
+                    Expression.Append (parts, Expression.ConstantString ("c")),
+                    parts
+                });
+            CollectionAssert.AreEqual (new [] { "a", "b", "c" }, Eval<IList<string>> (expr));
         }
 
         [Test]
