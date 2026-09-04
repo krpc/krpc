@@ -39,14 +39,13 @@ class CppDomain(Domain):
         return ".. namespace:: krpc::services::%s" % name
 
     def method_name(self, name):
-        if snake_case(name) in self.language.keywords:
-            return "%s_" % name
-        return name
+        """The C++ name of a member. A name that is a keyword is suffixed with an
+        underscore, as the client generator does, and the suffix is added after the
+        name is converted so that the two agree."""
+        return self.language.parse_name(name)
 
     def enumeration_name(self, name):
-        if snake_case(name) in self.language.keywords:
-            return "%s_" % name
-        return name
+        return self.language.parse_name(name)
 
     def type_description(self, typ):
         if typ is None:
@@ -90,7 +89,7 @@ class CppDomain(Domain):
                 StructField,
             )
         ):
-            name[-1] = snake_case(name[-1])
+            name[-1] = self.method_name(name[-1])
         if isinstance(obj, (Property, ClassProperty)) and obj.getter is None:
             name[-1] = "set_" + name[-1]
         return self.shorten_ref(".".join(name)).replace(".", "::")

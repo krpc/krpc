@@ -74,6 +74,9 @@ class PythonDomain(Domain):
 
     def ref(self, obj):
         name = obj.fullname
+        # A procedure, property or method is documented under the name the client
+        # generates for it, which escapes a python keyword; an enumeration value
+        # or a structure field is documented under its plain snake case name
         if any(
             isinstance(obj, cls)
             for cls in (
@@ -82,10 +85,12 @@ class PythonDomain(Domain):
                 ClassMethod,
                 ClassStaticMethod,
                 ClassProperty,
-                EnumerationValue,
-                StructField,
             )
         ):
+            name = name.split(".")
+            name[-1] = self.method_name(name[-1])
+            name = ".".join(name)
+        elif any(isinstance(obj, cls) for cls in (EnumerationValue, StructField)):
             name = name.split(".")
             name[-1] = snake_case(name[-1])
             name = ".".join(name)

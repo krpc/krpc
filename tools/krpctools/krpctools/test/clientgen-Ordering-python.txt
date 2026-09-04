@@ -9,7 +9,7 @@ from krpc.types import TypeBase, ClassBase, WrappedClass, DocEnum, StaticMethod
 from krpc.event import Event
 if TYPE_CHECKING:
     from krpc.services import Client
-from krpc.services import serviceb
+from krpc.services import serviceb as _service_serviceb
 
 
 class ServiceA:
@@ -55,7 +55,7 @@ class ServiceA:
     _exceptions = {
     }
 
-    def frob(self, mode: serviceb.Mode = serviceb.Mode.fast) -> None:
+    def frob(self, mode: _service_serviceb.Mode = _service_serviceb.Mode.fast) -> None:
         """
         Defaults to a member of another service's enumeration.
         """
@@ -70,7 +70,7 @@ class ServiceA:
     def _return_type_frob(self) -> TypeBase:
         return None
 
-    def _build_call_frob(self, mode: serviceb.Mode = serviceb.Mode.fast) -> KRPC_pb2.ProcedureCall:
+    def _build_call_frob(self, mode: _service_serviceb.Mode = _service_serviceb.Mode.fast) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "ServiceA",
             "Frob",
@@ -79,7 +79,7 @@ class ServiceA:
             None
         )
 
-    def frob_all(self, modes: List[serviceb.Mode] = [serviceb.Mode.fast]) -> None:
+    def frob_all(self, modes: List[_service_serviceb.Mode] = [_service_serviceb.Mode.fast]) -> None:
         """
         Defaults to a collection containing a member of another service's enumeration.
         """
@@ -94,7 +94,7 @@ class ServiceA:
     def _return_type_frob_all(self) -> TypeBase:
         return None
 
-    def _build_call_frob_all(self, modes: List[serviceb.Mode] = [serviceb.Mode.fast]) -> KRPC_pb2.ProcedureCall:
+    def _build_call_frob_all(self, modes: List[_service_serviceb.Mode] = [_service_serviceb.Mode.fast]) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "ServiceA",
             "FrobAll",

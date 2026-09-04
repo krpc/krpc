@@ -10,7 +10,7 @@ from krpc.event import Event
 if TYPE_CHECKING:
     from krpc.services import Client
 {% for service in dependencies %}
-from krpc.services import {{service|lower()}}
+from krpc.services import {{service|lower()}} as _service_{{service|lower()}}
 {% endfor %}
 
 {% macro arg_list(parameters) %}
@@ -49,7 +49,8 @@ class {{struct_name}}(NamedTuple):
 class {{exception_name}}(RuntimeError):
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% endif %}
-    pass
+    _service_name = '{{ service_name }}'
+    _class_name = '{{ exception_name }}'
 
 
 {% endfor %}

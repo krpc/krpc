@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- A dynamically created service escapes an enumeration member whose name is a python keyword,
+  such as `Class` to `class_`, matching the pre-generated stubs (#1094)
 - Support a nullable structure field, list element, tuple item and dictionary value, which is
   `None` when absent (#1091)
 - A service with pre-generated stubs also gains the class members that only the server
