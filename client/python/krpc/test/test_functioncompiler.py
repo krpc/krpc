@@ -709,6 +709,17 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         with self.assertRaises(FunctionCompilationError):
             self.conn.compile_function(lambda: f"{obj.int_property:.2f}")
 
+    def test_client_call_statement_is_an_error(self):
+        calls = []
+
+        def logged():
+            calls.append(1)
+            return 1
+
+        with self.assertRaises(FunctionCompilationError):
+            self.conn.compile_function(logged)
+        self.assertEqual([], calls)
+
     def test_range(self):
         obj = self.conn.test_service.create_test_object("range")
         obj.int_property = 4
