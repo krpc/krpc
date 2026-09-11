@@ -22,7 +22,8 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly Part part;
         // A thruster belongs either to an engine or to a set of RCS thrusters, so one of
-        // these two references is unset
+        // these two references is unset. A part can carry both. The transform index runs
+        // within a module, so a thruster is identified by its module as well
         ModuleRef engineRef;
         ModuleRef rcsRef;
         ModuleRef gimbalRef;
@@ -74,7 +75,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Thruster other)
         {
-            return !ReferenceEquals (other, null) && part == other.part && transformIndex == other.transformIndex;
+            return
+            !ReferenceEquals (other, null) &&
+            part == other.part &&
+            engineRef == other.engineRef &&
+            rcsRef == other.rcsRef &&
+            transformIndex == other.transformIndex;
         }
 
         /// <summary>
@@ -82,7 +88,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Hash.Of (part).And (transformIndex);
+            return Hash.Of (part)
+                .And (engineRef)
+                .And (rcsRef)
+                .And (transformIndex);
         }
 
         /// <summary>

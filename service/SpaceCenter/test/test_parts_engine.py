@@ -553,6 +553,21 @@ class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
         engine.mode = "ClosedCycle"
         self.check_engine(engine)
 
+    def test_multi_mode_engine_thrusters(self):
+        engine = self.get_engine("RAPIER")  # CR-7 R.A.P.I.E.R. Engine
+        # Read the thrusters of one mode, then check that the other mode's are
+        # thrusters of their own rather than the ones already read
+        engine.mode = "AirBreathing"
+        self.set_idle(engine)
+        self.assertEqual(0, sum(t.thrust for t in engine.thrusters))
+        engine.mode = "ClosedCycle"
+        self.set_throttle(engine, 1)
+        self.assertGreater(engine.thrust, 0)
+        self.assertAlmostEqual(
+            engine.thrust, sum(t.thrust for t in engine.thrusters), delta=1
+        )
+        self.set_idle(engine)
+
 
 class TestPartsEngineReverser(krpctest.TestCase, EngineTestBase):
     @classmethod
