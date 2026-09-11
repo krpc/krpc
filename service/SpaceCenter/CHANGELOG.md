@@ -172,6 +172,10 @@
     `RCS.OverrideForce` and `RCS.OverrideTorque`, what a given demand would apply (#1080)
   - Add `Thruster.Thrust`, the thrust a single nozzle of an engine or RCS block is producing
     (#1080)
+  - Fix `Engine.Thrusters` and `RCS.Thrusters` giving the same thrusters on a part that
+    carries both an engine and an RCS module (#1096)
+  - Fix `Engine.Thrusters` on a multi-mode engine giving the previous mode's thrusters after a
+    mode switch (#1096)
   - `RCS.AvailableForce` and `RCS.AvailableTorque`, and the vessel level force, torque and
     acceleration properties that include them, account for precision mode (#1082)
   - Precision mode leaves a block driven by `RCS.InputOverride` at full thrust (#1082)
