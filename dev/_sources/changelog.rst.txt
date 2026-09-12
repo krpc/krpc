@@ -155,6 +155,8 @@ SpaceCenter service
   * :breaking:`Breaking` ``RCS.TranslationOverride`` thrusts along the right, up and forward axes it documents (:issue:`1080`)
   * Add ``RCS.Force`` and ``RCS.Torque``, the force and torque a block is applying, and ``RCS.OverrideForce`` and ``RCS.OverrideTorque``, what a given demand would apply (:issue:`1080`)
   * Add ``Thruster.Thrust``, the thrust a single nozzle of an engine or RCS block is producing (:issue:`1080`)
+  * Fix ``Engine.Thrusters`` and ``RCS.Thrusters`` giving the same thrusters on a part that carries both an engine and an RCS module (:issue:`1096`)
+  * Fix ``Engine.Thrusters`` on a multi-mode engine giving the previous mode's thrusters after a mode switch (:issue:`1096`)
   * ``RCS.AvailableForce`` and ``RCS.AvailableTorque``, and the vessel level force, torque and acceleration properties that include them, account for precision mode (:issue:`1082`)
   * Precision mode leaves a block driven by ``RCS.InputOverride`` at full thrust (:issue:`1082`)
   * ``RCS.Thrusters``, ``RCS.AvailableForce`` and ``RCS.AvailableTorque`` count only the nozzles of the part's selected variant (:issue:`1079`)
