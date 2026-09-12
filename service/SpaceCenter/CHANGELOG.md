@@ -19,6 +19,8 @@
     omni-decoupler such as a stack separator (#1043)
   - Working with many stages, vessel resources, communication links or resource converters no
     longer slows the server down (#1071)
+  - `SpaceCenter.RevertToLaunch` returns once the scene has reloaded, as `SpaceCenter.Load`
+    does. Vessel data read straight after the call is that of the reverted vessel (#1097)
 
 - Editor
   - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space plane

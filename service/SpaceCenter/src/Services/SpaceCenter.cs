@@ -607,6 +607,7 @@ namespace KRPC.SpaceCenter.Services
             {
                 CloseDialogs();
                 FlightDriver.RevertToLaunch();
+                throw new YieldException<Action> (() => WaitForVesselSwitch(0));
             }
         }
 

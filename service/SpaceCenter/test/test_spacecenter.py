@@ -526,6 +526,38 @@ class TestWarpInSpace(krpctest.TestCase, WarpTestBase):
         cls.landed = False
 
 
+class TestRevertToLaunch(krpctest.TestCase):
+    # Regression for RevertToLaunch returning before the scene reload had settled. A
+    # client reading vessel data on its next call saw the vessel as it was before the
+    # revert, and a placeholder mass for every part.
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Basic")
+        cls.remove_other_vessels()
+        cls.sc = cls.connect().space_center
+
+    def test_the_vessel_is_settled_when_the_call_returns(self):
+        vessel = self.sc.active_vessel
+        masses = sorted(round(part.mass) for part in vessel.parts.all)
+
+        # Fly for a few seconds, so that the state to revert from differs from the launch
+        # state in situation, mission elapsed time and the mass of the fuel tank.
+        vessel.control.throttle = 1
+        vessel.control.activate_next_stage()
+        self.wait_until(lambda: vessel.met > 5, message="the vessel to fly")
+
+        self.assertTrue(self.sc.can_revert_to_launch)
+        self.sc.revert_to_launch()
+
+        # Read on the calls straight after the revert, with nothing waiting on the reload.
+        vessel = self.sc.active_vessel
+        self.assertEqual(self.sc.VesselSituation.pre_launch, vessel.situation)
+        self.assertLess(vessel.met, 1)
+        self.assertEqual(masses, sorted(round(part.mass) for part in vessel.parts.all))
+
+
 class TestSpaceCenterCareer(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
