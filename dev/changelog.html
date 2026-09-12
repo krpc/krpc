@@ -645,6 +645,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">SpaceCenter.Control.State</span></code> and <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Control.Source</span></code> are taken from the control level that KSP gates a vessel’s control on, rather than from its node in the communication network (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1043">#1043</a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">SpaceCenter.Decoupler.Decouple</span></code> returns the separated vessel when it fires an omni-decoupler such as a stack separator (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1043">#1043</a>)</p></li>
 <li><p>Working with many stages, vessel resources, communication links or resource converters no longer slows the server down (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1071">#1071</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SpaceCenter.RevertToLaunch</span></code> returns once the scene has reloaded, as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Load</span></code> does. Vessel data read straight after the call is that of the reverted vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1097">#1097</a>)</p></li>
 </ul>
 </li>
 <li><p>Editor</p>

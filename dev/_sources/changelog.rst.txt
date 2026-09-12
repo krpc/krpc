@@ -59,6 +59,7 @@ SpaceCenter service
   * ``SpaceCenter.Control.State`` and ``SpaceCenter.Control.Source`` are taken from the control level that KSP gates a vessel's control on, rather than from its node in the communication network (:issue:`1043`)
   * ``SpaceCenter.Decoupler.Decouple`` returns the separated vessel when it fires an omni-decoupler such as a stack separator (:issue:`1043`)
   * Working with many stages, vessel resources, communication links or resource converters no longer slows the server down (:issue:`1071`)
+  * ``SpaceCenter.RevertToLaunch`` returns once the scene has reloaded, as ``SpaceCenter.Load`` does. Vessel data read straight after the call is that of the reverted vessel (:issue:`1097`)
 
 * Editor
 
