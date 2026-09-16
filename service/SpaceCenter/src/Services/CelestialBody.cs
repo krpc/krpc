@@ -530,7 +530,7 @@ namespace KRPC.SpaceCenter.Services
         public string BiomeAt (double latitude, double longitude)
         {
             CheckHasBiomes ();
-            return InternalBody.BiomeMap.GetAtt (latitude, longitude).name;
+            return ScienceUtil.GetExperimentBiome (InternalBody, latitude, longitude);
         }
 
         void CheckHasBiomes ()

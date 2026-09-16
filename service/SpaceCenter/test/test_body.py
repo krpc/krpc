@@ -78,7 +78,9 @@ class TestBody(krpctest.TestCase):
             sorted(kerbin.biomes),
         )
         self.assertEqual("Water", kerbin.biome_at(0, 0))
-        self.assertEqual("Grasslands", kerbin.biome_at(42, 4))
+        self.assertEqual("Shores", kerbin.biome_at(-0.0972, -74.5577))
+        self.assertEqual("Grasslands", kerbin.biome_at(-20, 100))
+        self.assertEqual("Northern Ice Shelf", kerbin.biome_at(89, 0))
         self.assertEqual(18000, kerbin.flying_high_altitude_threshold)
         self.assertEqual(250000, kerbin.space_high_altitude_threshold)
 
@@ -140,7 +142,8 @@ class TestBody(krpctest.TestCase):
             sorted(mun.biomes),
         )
         self.assertEqual("Lowlands", mun.biome_at(0, 0))
-        self.assertEqual("Highlands", mun.biome_at(42, 4))
+        self.assertEqual("Northern Basin", mun.biome_at(40, 17))
+        self.assertEqual("Highlands", mun.biome_at(-20, 100))
         self.assertEqual(18000, mun.flying_high_altitude_threshold)
         self.assertEqual(60000, mun.space_high_altitude_threshold)
 
@@ -168,7 +171,8 @@ class TestBody(krpctest.TestCase):
             sorted(minmus.biomes),
         )
         self.assertEqual("Greater Flats", minmus.biome_at(0, 0))
-        self.assertEqual("Midlands", minmus.biome_at(42, 4))
+        self.assertEqual("Lowlands", minmus.biome_at(42, 4))
+        self.assertEqual("Poles", minmus.biome_at(89, 0))
         self.assertEqual(18000, minmus.flying_high_altitude_threshold)
         self.assertEqual(30000, minmus.space_high_altitude_threshold)
 
