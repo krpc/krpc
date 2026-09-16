@@ -186,12 +186,78 @@ Some procedures return event objects of type :class:`krpc.event.Event`. These al
 until an event occurs, by calling :class:`krpc.event.Event.wait`. Under the hood, these are
 implemented using streams and condition variables.
 
-Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression ``mean_altitude > 1000`` and then creates an event that will be triggered when the
-expression returns true:
+Custom events can also be created from a server side function, which is code that runs inside
+the game. For example, the following builds the function ``mean_altitude > 1000`` and then creates
+an event that will be triggered when the function returns true:
 
 .. literalinclude:: /scripts/client/python/Event.py
+
+Function Streams
+----------------
+
+A server side function can also stream the result of a computation, by passing it to
+:meth:`krpc.client.Client.add_function_stream`. Values are computed on the server on each
+stream update, so complex telemetry arrives without the round trip latency of multiple RPCs,
+and without the values changing between calls. The function can evaluate to any type that can
+be sent to a client, including collections and objects. For example, the following streams the
+vessel's altitude, converted to kilometers on the server:
+
+.. literalinclude:: /scripts/client/python/FunctionStream.py
+
+.. _python-client-compiling-functions:
+
+Compiling Python Functions
+--------------------------
+
+Instead of building a function from the expression factory methods directly, a python function
+or lambda that takes no arguments can be compiled into a server side function using
+:meth:`krpc.client.Client.compile_function`. :meth:`krpc.client.Client.add_event` and
+:meth:`krpc.client.Client.add_function_stream` also accept functions directly:
+
+.. literalinclude:: /scripts/client/python/CompiledFunction.py
+
+The compiler translates the function's source code into a server side function that computes
+the same result on the server:
+
+* Attribute accesses and method calls on remote objects and services become calls embedded in
+  the function, re-invoked on each evaluation. This includes calls on the elements of
+  collections inside comprehensions.
+* Captured variables, literals, and any sub-expression that does not involve the server are
+  evaluated once, when the function is compiled, and embedded as constants.
+* Arithmetic and comparison operators, bitwise operators, boolean operators, conditional
+  expressions (``a if condition else b``), assignment expressions (``:=``),
+  tuple/list/set/dictionary constructors, indexing, slices (without a step), f-strings (without
+  format specifiers) and ``in`` are translated to the corresponding expression operators.
+  Division follows python's true division semantics, with ``//`` as floor division. ``and`` and
+  ``or`` short-circuit on the server as they do locally; ``&`` and ``|`` evaluate both
+  operands.
+* Comprehensions, including dictionary comprehensions and multiple ``for`` clauses with
+  optional conditions, are translated to the server's collection operations. So are the builtin
+  functions ``len``, ``sum``, ``min``, ``max``, ``any``, ``all``, ``sorted`` (with an optional
+  ``key`` lambda), ``abs``, ``round``, ``int``, ``float`` and ``str``. Calls to ``math`` module
+  functions with server side arguments are compiled to the ``StdLib`` service's procedures.
+* Reading an attribute of a structure a service defines reads that field of it on the server.
+  Calling the structure type builds one there, with its field values given by position, by
+  field name, or both.
+* Local function definitions with annotated parameter types, and lambdas without parameters
+  assigned to names, compile to server side functions, and calls to them to invocations.
+* A plain function may contain statements: ``if``/``elif``/``else``, ``while`` and ``for``
+  loops with ``break`` and ``continue``, early returns, local variables, assignment to the
+  properties of remote objects and services, and remote calls as statements for their effects.
+  A local variable can be mutated, augmented with ``total += x``, appended to, and assigned to
+  by list and dictionary element.
+* ``krpc.defer(call)`` starts a call to a procedure that pauses execution, such as
+  ``SpaceCenter.warp_to``, without waiting for it. It is a statement, the value the procedure
+  returns is discarded, and it is how a compiled function calls such a procedure at all.
+* A local variable takes its type from its first assignment, so annotate an assignment of an
+  empty collection, for example ``result: list[int] = []``. A function that returns a value
+  must end with a return statement.
+* Exceptions: ``raise`` for the exceptions a service declares, and ``try``/``except``, whose
+  ``as`` name is bound to the message of the exception.
+
+A construct with no server side equivalent, such as string formatting or a call to a client
+side function with server side arguments, raises
+:class:`krpc.error.FunctionCompilationError` naming it.
 
 Client API Reference
 --------------------
@@ -243,6 +309,22 @@ Client API Reference
                            support.
    :param bool use_pregenerated_stubs: As for :func:`krpc.connect`.
 
+.. function:: krpc.defer(call)
+
+   Start a call to a procedure that pauses execution, such as ``SpaceCenter.warp_to``, without
+   waiting for it. Written as a statement in a function compiled by
+   :meth:`krpc.client.Client.compile_function`, where the compiler reads the call it is given
+   rather than making it. The value the procedure returns is discarded.
+
+   :param call: The call to start.
+
+   .. note::
+
+      Two consequences of the syntax. ``mypy`` reports ``func-returns-value`` for a deferred
+      call to a procedure that returns nothing, since the call appears as an argument. Calling
+      ``defer`` outside a compiled function makes the call in the ordinary way, then raises
+      :class:`krpc.error.FunctionCompilationError`.
+
 .. class:: krpc.client.Client
 
    This class provides the interface for communicating with the server. It is dynamically populated
@@ -259,6 +341,43 @@ Client API Reference
       Allows use of the ``with`` statement to create a stream and automatically remove it from the
       server when it goes out of scope. The function to be streamed should be passed as *func*, and
       its arguments as *args* and *kwargs*.
+
+   .. method:: add_function_stream(function)
+
+      Create a stream that evaluates the given server side function (a ``KRPC.Expression``
+      object) on each update and streams the value it evaluates to. The type of the stream's
+      values is reported by the server, from the function's return type. Returns a
+      :class:`krpc.stream.Stream` object.
+
+   .. method:: function_stream(function)
+
+      Allows use of the ``with`` statement to create a function stream and automatically
+      remove it from the server when it goes out of scope.
+
+   .. method:: compile_function(func)
+
+      Compile a python function or lambda, taking no arguments, into a server side function
+      (a ``KRPC.Expression`` object) that computes the same result on the server. Remote
+      procedure calls made by the function are re-invoked on each evaluation; other values
+      are captured when the function is compiled. Raises
+      :class:`krpc.error.FunctionCompilationError` for constructs that cannot run on the
+      server.
+
+   .. method:: add_event(function)
+
+      Create an event from a server side function, that must evaluate to a boolean value.
+      The function may also be given as a python function or lambda taking no arguments,
+      which is compiled using :meth:`compile_function`. Returns a
+      :class:`krpc.event.Event` object.
+
+   .. method:: run_function(function)
+
+      Run a function on the server, within a single physics tick, and return the value it
+      produces. ``None`` for a function with no result, and for one whose value is null. The
+      function may be given as a ``KRPC.Expression`` object, or as a python function or lambda
+      taking no arguments, which is compiled using :meth:`compile_function`. This is the
+      intended way to use functions with side effects, which would otherwise re-run on every
+      update of an event or stream.
 
    .. attribute:: stream_update_condition
 
@@ -313,6 +432,12 @@ Client API Reference
 
       Some of this functionality is used internally by the python client (for example to create and
       remove streams) and therefore does not need to be used directly from application code.
+
+.. class:: krpc.error.FunctionCompilationError
+
+   Raised when a python function cannot be compiled into a server side function. The error
+   message describes the unsupported construct. See
+   :ref:`python-client-compiling-functions`.
 
 .. class:: krpc.stream.Stream
 

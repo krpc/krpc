@@ -1,4 +1,11 @@
 ## [v0.7.0] - unreleased
+- Add `Connection.runFunction`, which runs a server side function on the server within a single
+  physics tick and returns the value it produces, decoded using the type the server reports
+  (#1069)
+- Add a `Connection.addStream` overload taking a server side function, which streams the value
+  one computes, decoded the same way (#1069)
+- Make `RemoteObject.id` public, matching the C# client, so that an object can be passed to
+  `Expression.constantObject` (#1069)
 - Support a nullable structure field, list element, tuple item and dictionary value, held as
   the boxed type (`Integer`, `Double`, …) where the value is a primitive (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as

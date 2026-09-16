@@ -166,6 +166,18 @@
 
    
 
+   .. function:: std::string dump_expression_tree(KRPC::Expression expression)
+
+      Returns a dump of the expression tree of the given server side expression,
+      as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+      verify the trees that the expression API generates.
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::map<std::string, std::optional<TestClass>> echo_dictionary_of_nullable_objects(std::map<std::string, std::optional<TestClass>> d)
 
 

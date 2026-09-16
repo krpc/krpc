@@ -269,12 +269,89 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Create an event from a server side expression.
+        /// Add a stream that evaluates a server side function on each update and
+        /// streams its value, and return the stream's identifier. The type of the
+        /// stream's values is given by <see cref="Expression.ReturnType"/>.
         /// </summary>
+        /// <remarks>
+        /// Each update is evaluated within a single physics tick, so procedures that
+        /// pause execution and resume on a later tick cannot be used within the
+        /// function. Calling one produces an error on the stream. Use
+        /// <see cref="Expression.DeferredCall"/> to start one without waiting for it.
+        /// </remarks>
         [KRPCProcedure]
-        public static Messages.Event AddEvent(Expression expression)
+        public static Messages.Stream AddFunctionStream (Expression function, bool start = true)
         {
-            var func = LinqExpression.Lambda<Func<bool>>(expression).Compile();
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            var functionStream = new FunctionStream (function);
+            var core = Core.Instance;
+            var stream = new Messages.Stream (core.AddStream (CallContext.Client, functionStream, false));
+            if (start)
+                core.StartStream (CallContext.Client, stream.Id);
+            return stream;
+        }
+
+        /// <summary>
+        /// Run a server side function once and return the value it produces,
+        /// encoded using the protocol buffer serialization scheme for its return
+        /// type. The whole evaluation happens within a single physics tick. A
+        /// function that does not produce a value is evaluated for its effects,
+        /// and an empty result is returned. A function whose value is null
+        /// produces a null result.
+        /// </summary>
+        /// <remarks>
+        /// Procedures that pause execution and resume on a later tick cannot be
+        /// used within the function. Use <see cref="Expression.DeferredCall"/> to
+        /// start one without waiting for it. A null within the value, such as an
+        /// element of a list the function returns, is an error naming the position.
+        /// </remarks>
+        [KRPCProcedure (Nullable = true)]
+        public static byte[] RunFunction (Expression function)
+        {
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            function.CheckMarkersBound ();
+            var internalExpression = (LinqExpression)function;
+            try {
+                if (internalExpression.Type == typeof (void)) {
+                    function.Runner ();
+                    return new byte [0];
+                }
+                // Check that the type of the value produced can be sent to the client
+                // before evaluating, so a function whose value cannot be sent does not
+                // perform its effects first
+                var spec = TypeSpec.Create (function.GetValidReturnType ());
+                var value = function.Evaluator ();
+                // A null is carried by the result's is_null flag, the channel an
+                // ordinary nullable return uses, rather than encoded into the payload
+                if (ReferenceEquals (value, null))
+                    return null;
+                return Server.ProtocolBuffers.Encoder.Encode (value, spec).ToByteArray ();
+            } catch (YieldException) {
+                throw new InvalidOperationException (Expression.YieldedMessage);
+            }
+        }
+
+        /// <summary>
+        /// Create an event from a server side function.
+        /// The function must evaluate to a boolean value.
+        /// </summary>
+        /// <remarks>
+        /// Each update is evaluated within a single physics tick, so procedures that
+        /// pause execution and resume on a later tick cannot be used within the
+        /// function. Calling one produces an error on the event's stream. Use
+        /// <see cref="Expression.DeferredCall"/> to start one without waiting for it.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Messages.Event AddEvent(Expression function)
+        {
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            if (((LinqExpression)function).Type != typeof(bool))
+                throw new ArgumentException ("The function must evaluate to a boolean value");
+            function.CheckMarkersBound ();
+            var func = LinqExpression.Lambda<Func<bool>>(function).Compile();
             return new Event((evnt) => func()).Message;
         }
 

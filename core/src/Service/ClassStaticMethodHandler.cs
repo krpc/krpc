@@ -19,6 +19,7 @@ namespace KRPC.Service
 
         public ClassStaticMethodHandler (MethodInfo methodInfo, bool returnIsNullable, IEnumerable<IList<Position>> returnNullablePaths = null, bool isExtension = false)
         {
+            Method = methodInfo;
             invoker = BuildInvoker (methodInfo);
             parameters = methodInfo.GetParameters ().Select (x => new ProcedureParameter (x)).ToArray ();
             // Clients expect the instance parameter of a class member to be named "this"
@@ -30,6 +31,8 @@ namespace KRPC.Service
         }
 
         public bool HasInstance { get => false; }
+
+        public MethodInfo Method { get; private set; }
 
         /// <summary>
         /// Invokes the static method.

@@ -100,6 +100,35 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// The CLR exception types that a kRPC exception, named by the service it is
+        /// declared in and its name, reaches a client as.
+        /// </summary>
+        /// <remarks>
+        /// This is the exception's own type together with every type mapped onto it by
+        /// <see cref="Attributes.KRPCExceptionAttribute.MappedException"/>. Services throw
+        /// the CLR exception types rather than the kRPC ones, and
+        /// <see cref="HandleException"/> applies the mapping as the exception leaves, so
+        /// catching only the kRPC type would miss the exceptions a procedure actually
+        /// throws while the client still saw them under this name.
+        /// </remarks>
+        public IList<Type> GetExceptionTypes (string service, string name)
+        {
+            ServiceSignature signature;
+            if (!Signatures.TryGetValue (service, out signature))
+                throw new KRPC.ArgumentException ("Service \"" + service + "\" not found");
+            ExceptionSignature exception;
+            if (!signature.Exceptions.TryGetValue (name, out exception))
+                throw new KRPC.ArgumentException (
+                    "Exception \"" + name + "\" not found in service \"" + service + "\"");
+            var type = exception.UnderlyingType;
+            var types = new List<Type> { type };
+            types.AddRange (MappedExceptionTypes
+                .Where (x => x.Value == type && x.Key != type)
+                .Select (x => x.Key));
+            return types;
+        }
+
+        /// <summary>
         /// Executes a procedure call and returns the result.
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.
@@ -150,6 +179,65 @@ namespace KRPC.Service
             } catch (System.Exception e) {
                 return new ProcedureResult { Error = HandleException (e) };
             }
+        }
+
+        /// <summary>
+        /// Checks that a procedure is available in the current game scene, throwing
+        /// RPCException if not. Called from a compiled server side function, which
+        /// invokes the procedure's method directly rather than through
+        /// <see cref="ExecuteCall(ProcedureSignature, Func{object})"/>, before each
+        /// invocation. The error is thrown rather than returned, so that it
+        /// propagates to the stream or event evaluating the function.
+        /// </summary>
+        public static void CheckExpressionGameScene (ProcedureSignature procedure)
+        {
+            if ((CallContext.GameScene & procedure.GameScene) == 0)
+                throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
+        }
+
+        /// <summary>
+        /// Starts a call that a server side function does not wait for. The call runs
+        /// within the function's evaluation, so a failure to start it propagates to
+        /// whatever is evaluating the function.
+        /// A procedure that pauses execution is detached from the function: the core
+        /// runs the rest of the call on later updates, and the function carries on.
+        /// The call belongs to the client that started it, and is canceled if that
+        /// client disconnects.
+        /// </summary>
+        public static void ExecuteDeferredCall (ProcedureSignature procedure, Action call)
+        {
+            if (ReferenceEquals (call, null))
+                throw new ArgumentNullException (nameof (call));
+            try {
+                call ();
+            } catch (YieldException e) {
+                Core.Instance.AddDeferredCall (new DeferredCall (procedure, e, CallContext.Client));
+            }
+        }
+
+        /// <summary>
+        /// Whether a caught exception reaches a client under the given kRPC exception
+        /// type. Called from a compiled server side function, at the top of a catch
+        /// block naming an exception. A catch for a CLR exception type also catches its
+        /// subclasses, and <see cref="HandleException"/> maps each type on its own, so
+        /// the subclasses arrive at the client under their own names or under none.
+        /// </summary>
+        public static bool ExpressionExceptionIsNamed (System.Exception exn, Type name)
+        {
+            return Instance.GetMappedExceptionType (exn.GetType ()) == name;
+        }
+
+        /// <summary>
+        /// Checks a return value produced by a procedure invoked from a compiled
+        /// server side function, throwing RPCException if it is null and the
+        /// procedure is not permitted to return null. The invocation is a direct,
+        /// statically typed call, so a null value is the only way the result can
+        /// fail to conform to the procedure's return type.
+        /// </summary>
+        public static void CheckExpressionReturnValue (ProcedureSignature procedure, object returnValue)
+        {
+            if (ReferenceEquals (returnValue, null))
+                CheckReturnValue (procedure, null);
         }
 
         /// <summary>

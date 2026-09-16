@@ -223,7 +223,7 @@ function TestClient:test_client_members()
   -- benchmark is the server-side benchmarks the test server exposes
   -- test_service2 owns the class that an extension member of test_service returns
   luaunit.assertEquals(
-    Set{'krpc', 'test_service', 'test_service2', 'benchmark'},
+    Set{'krpc', 'std_lib', 'test_service', 'test_service2', 'benchmark'},
     Set(filter_private(tablex.keys(self.conn)))
   )
 end
@@ -500,7 +500,9 @@ function TestClient:test_krpc_service_members()
     {'Expression',
      'GameScene',
      'Type',
+     'TypeCode',
      'add_event',
+     'add_function_stream',
      'add_stream',
      'get_client_id',
      'get_client_name',
@@ -514,6 +516,7 @@ function TestClient:test_krpc_service_members()
      'next_tick',
      'release_tick',
      'remove_stream',
+     'run_function',
      'set_game_scene',
      'set_paused',
      'set_stream_rate',
@@ -547,6 +550,7 @@ function TestClient:test_test_service_service_members()
      'dictionary_default',
      'double_special_defaults',
      'double_to_string',
+     'dump_expression_tree',
      'echo_dictionary_of_nullable_objects',
      'echo_list_of_nullable_ints',
      'echo_list_of_nullable_objects',

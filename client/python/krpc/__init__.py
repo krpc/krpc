@@ -6,6 +6,7 @@ import tempfile
 from typing import cast, Optional
 from krpc.connection import Connection, LocalConnection
 from krpc.client import Client
+from krpc.functioncompiler import defer
 from krpc.encoder import Encoder
 from krpc.error import ConnectionError  # pylint: disable=redefined-builtin
 from krpc.decoder import Decoder
