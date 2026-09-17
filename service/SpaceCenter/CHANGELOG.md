@@ -98,6 +98,8 @@
   - Add `Orbit.ReferenceFrame` and `Orbit.OrbitalReferenceFrame`, centered on the point an
     orbit has reached at the current time (#1046)
   - Add `Orbit.Remove`, which releases the memory the server holds for a created orbit (#1072)
+  - **Breaking:** Fix `CelestialBody.BiomeAt` treating its latitude and longitude as radians.
+    It takes degrees, as documented (#1099)
   - **Breaking:** A `ClosestApproach` reads the two orbits as they are now, so its estimate
     follows them as the game runs. Asking for the same approach again gives the same
     object (#1072)
