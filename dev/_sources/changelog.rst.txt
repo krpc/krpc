@@ -107,6 +107,7 @@ SpaceCenter service
   * Add ``Orbit.CreateFromPositionAndVelocity`` and ``Orbit.CreateFromOrbitalElements``, which build an orbit that coasts freely under gravity without an object in the game to follow (:issue:`1046`)
   * Add ``Orbit.ReferenceFrame`` and ``Orbit.OrbitalReferenceFrame``, centered on the point an orbit has reached at the current time (:issue:`1046`)
   * Add ``Orbit.Remove``, which releases the memory the server holds for a created orbit (:issue:`1072`)
+  * :breaking:`Breaking` Fix ``CelestialBody.BiomeAt`` treating its latitude and longitude as radians. It takes degrees, as documented (:issue:`1099`)
   * :breaking:`Breaking` A ``ClosestApproach`` reads the two orbits as they are now, so its estimate follows them as the game runs. Asking for the same approach again gives the same object (:issue:`1072`)
   * Add ``Orbit.VelocityAt``, giving the velocity at a given time in a given reference frame (:issue:`1046`)
   * ``Orbit.Epoch`` is documented as the universal time at which the mean anomaly at epoch is measured. It was described as the time since that point (:issue:`1046`)
