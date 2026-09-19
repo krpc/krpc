@@ -21,6 +21,8 @@
     longer slows the server down (#1071)
   - `SpaceCenter.RevertToLaunch` returns once the scene has reloaded, as `SpaceCenter.Load`
     does. Vessel data read straight after the call is that of the reverted vessel (#1097)
+  - Setting `SpaceCenter.ActiveVessel` from the space center or tracking station keeps the
+    game's contracts (#1102)
 
 - Editor
   - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space plane

@@ -201,5 +201,40 @@ class TestContracts(krpctest.TestCase):
         self.assertCountEqual([], [x.title for x in self.cm.failed_contracts])
 
 
+class TestContractsVesselSwitch(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save("krpctest_career", always_load=True)
+        cls.conn = cls.connect()
+        cls.space_center = cls.conn.space_center
+
+    def check_contracts(self):
+        cm = self.space_center.contract_manager
+        return sorted(x.title for x in cm.all_contracts), sorted(
+            x.title for x in cm.completed_contracts
+        )
+
+    def switch_vessel_from(self, scene):
+        # Writing active_vessel outside flight enters flight from the in-memory game,
+        # which loads the contract system's config nodes a second time. KSP loads
+        # contracts a frame after the scene's scenario modules, so wait for the scene
+        # to finish reading them before switching
+        before = self.check_contracts()
+        self.assertNotEqual(([], []), before)
+        self._set_game_scene(scene)
+        self.wait_until(
+            lambda: len(self.space_center.contract_manager.all_contracts) > 0,
+            message="contracts to load in the %s scene" % scene,
+        )
+        self.space_center.active_vessel = self.space_center.vessels[0]
+        self.assertEqual(before, self.check_contracts())
+
+    def test_switch_vessel_from_space_center(self):
+        self.switch_vessel_from(self.conn.krpc.GameScene.space_center)
+
+    def test_switch_vessel_from_tracking_station(self):
+        self.switch_vessel_from(self.conn.krpc.GameScene.tracking_station)
+
+
 if __name__ == "__main__":
     unittest.main()
