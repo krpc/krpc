@@ -703,6 +703,19 @@ namespace KRPC.SpaceCenter.Services
             get { return 6.67408e-11; }
         }
 
+        /// <summary>
+        /// The multiplier the game applies to every buoyant force.
+        /// </summary>
+        /// <remarks>
+        /// Stock KSP sets it to 1.2. A buoyant force is a fifth larger than
+        /// <a href="https://en.wikipedia.org/wiki/Archimedes%27_principle">Archimedes'
+        /// principle</a> alone gives.
+        /// </remarks>
+        [KRPCProperty]
+        public static double BuoyancyScalar {
+            get { return PhysicsGlobals.BuoyancyScalar; }
+        }
+
         // The warp RPCs are gated to the flight scene because they are defined in terms
         // of the active vessel: the rails-warp altitude limits, the physics-warp fallback
         // and CanRailsWarpAt all read its state. KSP can also warp on rails in the space

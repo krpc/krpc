@@ -121,6 +121,7 @@ SpaceCenter.AltimeterMode.ASL
 SpaceCenter.AltimeterMode.AGL
 SpaceCenter.UT
 SpaceCenter.G
+SpaceCenter.BuoyancyScalar
 SpaceCenter.WarpMode
 SpaceCenter.WarpRate
 SpaceCenter.WarpFactor
@@ -317,6 +318,8 @@ SpaceCenter.CelestialBody.IsStar
 SpaceCenter.CelestialBody.HasSolidSurface
 SpaceCenter.CelestialBody.HasAtmosphere
 SpaceCenter.CelestialBody.AtmosphereDepth
+SpaceCenter.CelestialBody.HasOcean
+SpaceCenter.CelestialBody.OceanDensity
 SpaceCenter.CelestialBody.AtmosphericDensityAtPosition
 SpaceCenter.CelestialBody.HasAtmosphericOxygen
 SpaceCenter.CelestialBody.TemperatureAt
