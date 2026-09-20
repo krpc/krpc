@@ -449,6 +449,23 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// <c>true</c> if the body has an ocean.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasOcean {
+            get { return InternalBody.ocean; }
+        }
+
+        /// <summary>
+        /// The density of the body's ocean, in <math>kg/m^3</math>.
+        /// Returns zero if the body has no ocean.
+        /// </summary>
+        [KRPCProperty]
+        public double OceanDensity {
+            get { return InternalBody.ocean ? InternalBody.oceanDensity * 1000d : 0d; }
+        }
+
+        /// <summary>
         /// The atmospheric density at the given position, in <math>kg/m^3</math>,
         /// in the given reference frame.
         /// </summary>
