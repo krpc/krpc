@@ -158,6 +158,77 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The volume of water the vessel displaces when fully submerged, in
+        /// <math>m^3</math>.
+        /// </summary>
+        [KRPCProperty]
+        public double Displacement {
+            get { return InternalShipConstruct.Parts.Sum (StockBuoyancy.Displacement); }
+        }
+
+        /// <summary>
+        /// The point the buoyant force acts through with the vessel fully submerged.
+        /// Returns <c>null</c> if no part of the vessel displaces any water.
+        /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
+        /// <remarks>
+        /// A hull at rest carries this on the same vertical line as
+        /// <see cref="CenterOfMass"/>. Compare the two in the same reference frame to see
+        /// which way an untrimmed hull will roll.
+        /// </remarks>
+        [KRPCMethod (Nullable = true)]
+        public Tuple3 CenterOfBuoyancy (ReferenceFrame referenceFrame)
+        {
+            var center = StockBuoyancy.FullySubmerged (InternalShipConstruct.Parts).CenterOfBuoyancy;
+            if (!center.HasValue)
+                return null;
+            return referenceFrame.PositionFromWorldSpace (center.Value).ToTuple ();
+        }
+
+        /// <summary>
+        /// The buoyant force on the vessel when fully submerged in a fluid of the given
+        /// density, in Newtons.
+        /// </summary>
+        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        /// <remarks>
+        /// Compare this with the vessel's weight to see whether the hull floats. It applies
+        /// <see cref="SpaceCenter.BuoyancyScalar"/> and each part's
+        /// <see cref="Parts.Part.BuoyancyMultiplier"/>, so the result is what the game would
+        /// do to the vessel.
+        /// </remarks>
+        [KRPCMethod]
+        public double BuoyantForceAt (double density, double gravity)
+        {
+            return InternalShipConstruct.Parts.Sum (
+                part => StockBuoyancy.BuoyantForceAt (part, density * 0.001d, gravity)) * 1000d;
+        }
+
+        /// <summary>
+        /// The torque the buoyant force exerts about the vessel's center of mass when fully
+        /// submerged in a fluid of the given density, under gravity acting down the editor.
+        /// </summary>
+        /// <returns>A vector pointing along the axis of the torque, with its magnitude
+        /// equal to the strength of the torque in newton-meters.</returns>
+        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// torque vector is in.</param>
+        /// <remarks>
+        /// A hull trimmed level carries zero torque.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple3 BuoyantTorqueAt (double density, double gravity, ReferenceFrame referenceFrame)
+        {
+            var ship = InternalShipConstruct;
+            var torque = StockBuoyancy.FullySubmerged (ship.Parts).Torque (
+                density * 0.001d, gravity, Vector3d.down, ship.WorldCenterOfMass ());
+            return referenceFrame.DirectionFromWorldSpace (torque * 1000d).ToTuple ();
+        }
+
+        /// <summary>
         /// The total cost of the vessel, including resources, in funds.
         /// </summary>
         [KRPCProperty]
