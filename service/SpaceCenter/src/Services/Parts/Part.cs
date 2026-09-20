@@ -309,6 +309,159 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The volume of water the part displaces when fully submerged, in <math>m^3</math>.
+        /// </summary>
+        /// <remarks>
+        /// See <see cref="DisplacedVolume"/> for the volume it is displacing now.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public double Displacement {
+            get { return StockBuoyancy.Displacement (InternalPart); }
+        }
+
+        /// <summary>
+        /// The multiplier applied to the buoyant force on the part. One for most parts.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float BuoyancyMultiplier {
+            get { return InternalPart.buoyancy; }
+        }
+
+        /// <summary>
+        /// The buoyant force on the part when fully submerged in a fluid of the given
+        /// density, in Newtons.
+        /// </summary>
+        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        /// <remarks>
+        /// Applies <see cref="SpaceCenter.BuoyancyScalar"/> and
+        /// <see cref="BuoyancyMultiplier"/>, so the result is what the game would do to the
+        /// part rather than what
+        /// <a href="https://en.wikipedia.org/wiki/Archimedes%27_principle">Archimedes'
+        /// principle</a> alone gives.
+        /// </remarks>
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
+        public double BuoyantForceAt (double density, double gravity)
+        {
+            return StockBuoyancy.BuoyantForceAt (InternalPart, density * 0.001d, gravity) * 1000d;
+        }
+
+        /// <summary>
+        /// Whether the part is in contact with water.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public bool Splashed {
+            get {
+                var buoyancy = Buoyancy;
+                return buoyancy != null && buoyancy.splashed;
+            }
+        }
+
+        /// <summary>
+        /// The fraction of the part below the waterline, between 0 and 1.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public double SubmergedPortion {
+            get { return Buoyancy == null ? 0d : InternalPart.submergedPortion; }
+        }
+
+        /// <summary>
+        /// The volume of water the part is displacing, in <math>m^3</math>.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public double DisplacedVolume {
+            get { return Displacement * SubmergedPortion; }
+        }
+
+        /// <summary>
+        /// The depth of the part below the waterline, in meters, measured at
+        /// <see cref="CenterOfDisplacement"/>. Negative above the waterline. Returns zero
+        /// if the body the vessel is at has no ocean.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public double Depth {
+            get { return Buoyancy == null ? 0d : InternalPart.depth; }
+        }
+
+        /// <summary>
+        /// The depth of the shallowest point of the part below the waterline, in meters.
+        /// Returns zero if the body the vessel is at has no ocean.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public double MinDepth {
+            get { return Buoyancy == null ? 0d : InternalPart.minDepth; }
+        }
+
+        /// <summary>
+        /// The depth of the deepest point of the part below the waterline, in meters.
+        /// Returns zero if the body the vessel is at has no ocean.
+        /// </summary>
+        /// <remarks>
+        /// The game ramps the buoyant force in over the first fraction of a meter of this
+        /// depth.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public double MaxDepth {
+            get { return Buoyancy == null ? 0d : InternalPart.maxDepth; }
+        }
+
+        /// <summary>
+        /// The dynamic pressure of the water acting on the part, in Pascals.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float SubmergedDynamicPressure {
+            get {
+                if (Buoyancy == null)
+                    return 0f;
+                return (float)InternalPart.submergedDynamicPressurekPa * 1000f;
+            }
+        }
+
+        /// <summary>
+        /// The multiplier applied to the drag on the part while it is submerged.
+        /// </summary>
+        /// <remarks>
+        /// The game sets this high on splashdown and eases it down as the part moves through
+        /// the water. It climbs back once the part slows to a crawl, so a hull under way
+        /// reads lower than one lying still.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public double SubmergedDragMultiplier {
+            get { return Buoyancy == null ? 0d : InternalPart.submergedDragScalar; }
+        }
+
+        /// <summary>
+        /// The multiplier applied to the lift on the part while it is submerged.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public double SubmergedLiftMultiplier {
+            get { return Buoyancy == null ? 0d : InternalPart.submergedLiftScalar; }
+        }
+
+        /// <summary>
+        /// The multiplier applied to the angular drag on the part while it is submerged.
+        /// </summary>
+        /// <remarks>
+        /// Part of the part's configuration rather than a live readout, so it reads the same
+        /// in the editor and at a body with no ocean.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float WaterAngularDragMultiplier {
+            get { return InternalPart.waterAngularDragMultiplier; }
+        }
+
+        /// <summary>
+        /// The game's buoyancy state for the part, or <c>null</c> when the body the vessel
+        /// is at has no ocean.
+        /// </summary>
+        PartBuoyancy Buoyancy {
+            get {
+                var part = InternalPart;
+                return StockBuoyancy.HasOcean (part) ? part.partBuoyancy : null;
+            }
+        }
+
+        /// <summary>
         /// The impact tolerance of the part, in meters per second.
         /// </summary>
         [KRPCProperty]
@@ -917,6 +1070,62 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             CheckNoFAR ();
             return referenceFrame.DirectionFromWorldSpace (WorldDrag).ToTuple ();
+        }
+
+        /// <summary>
+        /// The point the buoyant force on the part acts at, in the given reference frame.
+        /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
+        /// <remarks>
+        /// A submerged part reports the point the game applied the force at, which it shifts
+        /// towards the submerged part of the hull. Any other part reports its configured
+        /// center of buoyancy.
+        /// </remarks>
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
+        public Tuple3 CenterOfBuoyancy (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace (
+                StockBuoyancy.CenterOfBuoyancy (InternalPart)).ToTuple ();
+        }
+
+        /// <summary>
+        /// The point the depth of the part is measured at, in the given reference frame.
+        /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
+        public Tuple3 CenterOfDisplacement (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace (
+                StockBuoyancy.CenterOfDisplacement (InternalPart)).ToTuple ();
+        }
+
+        /// <summary>
+        /// The buoyant force currently acting on the part.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// vector is in.</param>
+        /// <remarks>
+        /// The buoyant force on its own. The water drag and lift the game applies alongside
+        /// it are reported by <see cref="SubmergedDragMultiplier"/> and
+        /// <see cref="SubmergedLiftMultiplier"/>.
+        /// </remarks>
+        [KRPCMethod (GameScene = GameScene.Flight)]
+        public Tuple3 BuoyantForce (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (WorldBuoyantForce).ToTuple ();
+        }
+
+        /// <summary>
+        /// The buoyant force acting on the part, in world space, in Newtons.
+        /// </summary>
+        Vector3d WorldBuoyantForce {
+            get { return StockBuoyancy.BuoyantForce (InternalPart) * 1000d; }
         }
 
         /// <summary>
