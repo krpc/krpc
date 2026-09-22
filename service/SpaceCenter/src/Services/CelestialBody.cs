@@ -518,13 +518,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the air pressure, in Pascals, for the specified
+        /// Gets the static pressure, in Pascals, for the specified
         /// altitude above sea level, in meters.
         /// </summary>
+        /// <remarks>
+        /// Below sea level on a body with an ocean, this includes the pressure of the water.
+        /// </remarks>
         [KRPCMethod]
         public double PressureAt (double altitude)
         {
-            return StockAerodynamics.GetPressure (altitude, InternalBody);
+            var body = InternalBody;
+            var radius = body.Radius + altitude;
+            var water = StockBuoyancy.WaterPressure (body, -altitude, body.gravParameter / (radius * radius));
+            return StockAerodynamics.GetPressure (altitude, body) + water * 1000d;
         }
 
         /// <summary>
