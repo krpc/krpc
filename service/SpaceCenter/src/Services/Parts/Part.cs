@@ -309,6 +309,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The static pressure acting on the part, in Pascals. Below the waterline this
+        /// includes the pressure of the water.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public float StaticPressure {
+            get { return (float)(InternalPart.staticPressureAtm * 101325d); }
+        }
+
+        /// <summary>
         /// The volume of water the part displaces when fully submerged, in <math>m^3</math>.
         /// </summary>
         /// <remarks>
@@ -499,6 +508,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public double MaxSkinTemperature {
             get { return InternalPart.skinMaxTemp; }
+        }
+
+        /// <summary>
+        /// Maximum pressure that the part can survive, in Pascals.
+        /// </summary>
+        /// <remarks>
+        /// With part pressure limits enabled in the difficulty settings, the part is destroyed
+        /// when <see cref="StaticPressure"/> plus <see cref="DynamicPressure"/> exceeds this.
+        /// </remarks>
+        [KRPCProperty]
+        public double MaxPressure {
+            get { return InternalPart.maxPressure * 1000d; }
         }
 
         /// <summary>

@@ -658,12 +658,20 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The static atmospheric pressure acting on the vessel, in Pascals.
+        /// The static pressure acting on the vessel, in Pascals.
         /// </summary>
+        /// <remarks>
+        /// Below the waterline this includes the pressure of the water above the vessel's
+        /// center of mass.
+        /// </remarks>
         [KRPCProperty]
         public float StaticPressure {
             get {
-                return (float)InternalVessel.staticPressurekPa * 1000f;
+                var vessel = InternalVessel;
+                var depth = -FlightGlobals.getAltitudeAtPos (WorldCoM, vessel.mainBody);
+                var water = StockBuoyancy.WaterPressure (
+                    vessel.mainBody, depth, vessel.gravityTrue.magnitude);
+                return (float)((vessel.staticPressurekPa + water) * 1000d);
             }
         }
 
