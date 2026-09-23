@@ -110,6 +110,12 @@ namespace KRPC.SpaceCenter.Services
                     int vesselIndex = HighLogic.CurrentGame.flightState.protoVessels.FindIndex((ProtoVessel pv) => pv.vesselID == value.InternalVessel.id);
                     if (vesselIndex == -1)
                         throw new InvalidOperationException("No vessel found");
+                    // Entering flight resumes from the in-memory game, which loads the
+                    // scenario modules a second time. KSP's contract loader strips the
+                    // type key out of each contract node as it reads it, so a second
+                    // pass drops every contract in the game. Rebuild the scenario nodes
+                    // from the live modules first, as saving does
+                    HighLogic.CurrentGame.scenarios = ScenarioRunner.GetUpdatedProtoModules();
                     FlightDriver.StartAndFocusVessel(HighLogic.CurrentGame, vesselIndex);
                 }
                 
