@@ -36,12 +36,18 @@ namespace KRPC.Service.Scanner
         public string DeprecatedReason { get; private set; }
 
         /// <summary>
+        /// The CLR type of the exception.
+        /// </summary>
+        public Type UnderlyingType { get; private set; }
+
+        /// <summary>
         /// Create an exception signature
         /// </summary>
-        public ExceptionSignature (string serviceName, string className, string documentation, bool deprecated, string deprecatedReason)
+        public ExceptionSignature (string serviceName, string className, Type exnType, string documentation, bool deprecated, string deprecatedReason)
         {
             Name = className;
             FullyQualifiedName = serviceName + "." + Name;
+            UnderlyingType = exnType;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;
             DeprecatedReason = deprecatedReason;

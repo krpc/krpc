@@ -10,7 +10,11 @@ public abstract class RemoteObject implements Serializable, Comparable<RemoteObj
   private static final long serialVersionUID = 3164247842142774386L;
 
   protected final transient Connection connection;
-  final long id;
+  /**
+   * The identifier used to reference the object over the communication
+   * protocol, for example to pass to KRPC.Expression.constantObject.
+   */
+  public final long id;
 
   /** Creates a new RemoteObject wrapping the given id. */
   protected RemoteObject(Connection connection, long id) {

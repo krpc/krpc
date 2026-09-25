@@ -30,9 +30,12 @@ SCRIPTS_DIR = os.path.join("doc", "src", "scripts")
 #   service from extending.rst, which has no generated stub.
 # - DockingGuidance.py passes 1 to curses' window.keypad, which typeshed
 #   declares as taking a bool.
+# - DeferredCall.py passes a call to krpc.defer, which reads the call it is
+#   given rather than the value of one.
 ALLOWED = {
     ("ServiceAPIExample.py", "attr-defined"),
     ("DockingGuidance.py", "arg-type"),
+    ("DeferredCall.py", "func-returns-value"),
 }
 
 ERROR_LINE = re.compile(r"^(?P<path>[^:]+):\d+: error: .*\[(?P<code>[a-z-]+)\]$")

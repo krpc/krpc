@@ -218,6 +218,21 @@ public class TestService {
         return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
+    /**
+     * Returns a dump of the expression tree of the given server side expression,
+     * as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+     * verify the trees that the expression API generates.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "DumpExpressionTree", types = _Types.class)
+    public String dumpExpressionTree(krpc.client.services.KRPC.Expression expression) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(expression, krpc.client.Types.createClass("KRPC", "Expression"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "DumpExpressionTree", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+    }
+
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoDictionaryOfNullableObjects", types = _Types.class)
     public java.util.Map<String,krpc.client.services.TestService.TestClass> echoDictionaryOfNullableObjects(java.util.Map<String,krpc.client.services.TestService.TestClass> d) throws RPCException {
@@ -1696,6 +1711,8 @@ public class TestService {
             PARAMETER_TYPES.put("DoubleSpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
             RETURN_TYPES.put("DoubleToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("DoubleToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
+            RETURN_TYPES.put("DumpExpressionTree", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("DumpExpressionTree", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("KRPC", "Expression") });
             RETURN_TYPES.put("EchoDictionaryOfNullableObjects", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))));
             PARAMETER_TYPES.put("EchoDictionaryOfNullableObjects", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))) });
             RETURN_TYPES.put("EchoListOfNullableInts", krpc.client.Types.createList(krpc.client.Types.nullable(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))));
@@ -1768,11 +1785,11 @@ public class TestService {
             PARAMETER_TYPES.put("ResetCustomExceptionLater", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ResetInvalidOperationExceptionLater", null);
             PARAMETER_TYPES.put("ResetInvalidOperationExceptionLater", new krpc.schema.KRPC.Type[] {  });
-            RETURN_TYPES.put("ReturnNullWhenNotAllowed", krpc.client.Types.createClass("TestService", "TestClass"));
-            PARAMETER_TYPES.put("ReturnNullWhenNotAllowed", new krpc.schema.KRPC.Type[] {  });
         }
 
         private static void initTypes1() {
+            RETURN_TYPES.put("ReturnNullWhenNotAllowed", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("ReturnNullWhenNotAllowed", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("SetDefault", krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("SetDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("StringToInt32", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));

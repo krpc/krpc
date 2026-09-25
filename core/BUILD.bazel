@@ -63,6 +63,10 @@ csharp_library(
     internals_visible_to = [
         "KRPC.Core.Test",
         "TestingTools",
+        # TestServer exposes the expression tree printer as a test-only RPC
+        "TestServer",
+        "TestServer.Debug",
+        "TestService",
         "DynamicProxyGenAssembly2",
         # The Benchmark service runs a call through Services, the server's own dispatch path
         "KRPC.Benchmark",
@@ -87,6 +91,10 @@ csharp_library(
     internals_visible_to = [
         "KRPC.Core.Test",
         "TestingTools",
+        # TestServer exposes the expression tree printer as a test-only RPC
+        "TestServer",
+        "TestServer.Debug",
+        "TestService",
         "DynamicProxyGenAssembly2",
         # The Benchmark service runs a call through Services, the server's own dispatch path
         "KRPC.Benchmark",
@@ -125,6 +133,14 @@ genrule(
         "//tools/TestServer:__pkg__",
         "//tools/krpctools:__pkg__",
     ],
+)
+
+service_definitions(
+    name = "StdLibServiceDefinitions",
+    out = "KRPC.StdLib.json",
+    assemblies = [":KRPC.Core"],
+    service = "StdLib",
+    visibility = ["//visibility:public"],
 )
 
 csharp_assembly_info(

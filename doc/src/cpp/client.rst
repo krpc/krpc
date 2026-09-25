@@ -230,12 +230,24 @@ Some procedures return event objects of type :class:`krpc::Event`. These allow y
 event occurs, by calling :func:`krpc::Event::wait`. Under the hood, these are implemented using
 streams and condition variables.
 
-Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression ``mean_altitude > 1000`` and then creates an event that will be triggered when the
-expression returns true:
+Custom events can also be created from a server side function, which is code that runs inside
+the game. For example, the following builds the function ``mean_altitude > 1000`` and then creates
+an event that will be triggered when the function returns true:
 
 .. literalinclude:: /scripts/client/cpp/Event.cpp
+
+Function Streams
+----------------
+
+A server side function can also stream the result of a computation, by passing it to
+:func:`krpc::add_function_stream` (defined in ``krpc/function_stream.hpp``). Values are
+computed on the server on each stream update, so complex telemetry arrives without the round
+trip latency of multiple RPCs, and without the values changing between calls. The function can
+evaluate to any type that can be sent to a client, including collections and objects, and the
+template type must correspond to the function's return type. For example, the following streams
+the vessel's altitude, converted to kilometers on the server:
+
+.. literalinclude:: /scripts/client/cpp/FunctionStream.cpp
 
 Client API Reference
 --------------------
@@ -260,6 +272,21 @@ Client API Reference
       * **timeout** (*std::chrono::milliseconds*) -- How long to wait for a connection before
         giving up. Defaults to zero, which waits indefinitely. A network that drops a connection
         attempt rather than refusing it otherwise leaves the client waiting.
+
+.. function:: template <typename T> Stream<T> add_function_stream(const services::KRPC::Expression& function)
+
+   Create a stream from a server side function, defined in ``krpc/function_stream.hpp``. On
+   each update, the value of the stream is the result of evaluating the function on the
+   server. The template type must correspond to the function's return type.
+
+.. function:: template <typename T> T run_function(const services::KRPC::Expression& function)
+
+   Run a function on the server, within a single physics tick, and return the value it
+   produces. Defined in ``krpc/function_stream.hpp``. The template type must correspond to
+   the function's return type. A function whose value is null leaves the result default
+   constructed, so naming ``std::optional<T>`` as the template type is what makes the null
+   visible, as it is for :class:`krpc::Stream`. An overload without the template type runs a
+   function with no result, for its effects.
 
 .. function:: Client connect_local(const std::string& name = "", const std::string& rpc_path = "", const std::string& stream_path = "")
 

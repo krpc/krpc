@@ -1,4 +1,23 @@
 ## [v0.7.0] - unreleased
+- Add `Client.compile_function`, which compiles a python function or lambda taking no arguments
+  into a server side function that computes the same result on the server (#1069)
+- Evaluate the calls a function makes on remote objects and services on the server, and
+  everything else once when compiling it (#1069)
+- Accept most of the language: operators, comparisons, conditionals, comprehensions, f-strings,
+  slices, string and collection operations, the builtins and `math` module calls (#1069)
+- Accept statements in a function with a body: `if`, `while`, `for` with `break` and `continue`,
+  `del`, `raise`, `try`/`except`/`finally`, local variables, assignment to remote properties and
+  early `return` (#1069)
+- Raise `FunctionCompilationError` naming an unsupported construct (#1069)
+- Add `Client.run_function`, which runs a server side function on the server within a single
+  physics tick and returns the value it produces (#1069)
+- Add `Client.add_function_stream` and the `Client.function_stream` context manager, which
+  stream the value a server side function computes (#1069)
+- Create an event from a server side function with `Client.add_event` (#1069)
+- Compile a python function or lambda passed directly to `run_function`, `add_function_stream`,
+  `function_stream` or `add_event` (#1069)
+- Add `krpc.defer`, which starts a call to a procedure that pauses execution, such as
+  `SpaceCenter.warp_to`, without waiting for it (#1069)
 - A dynamically created service escapes an enumeration member whose name is a python keyword,
   such as `Class` to `class_`, matching the pre-generated stubs (#1094)
 - Support a nullable structure field, list element, tuple item and dictionary value, which is

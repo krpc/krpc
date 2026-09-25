@@ -60,6 +60,17 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// Returns a dump of the expression tree of the given server side expression,
+        /// as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+        /// verify the trees that the expression API generates.
+        /// </summary>
+        [KRPCProcedure]
+        public static string DumpExpressionTree (KRPC.Service.KRPC.Expression expression)
+        {
+            return KRPC.Service.KRPC.ExpressionTreePrinter.Print (expression);
+        }
+
+        /// <summary>
         /// Quit the game, closing Kerbal Space Program and returning to the desktop.
         /// Works from any scene, including in-flight, and skips the confirmation dialog
         /// that the main-menu quit button normally shows.
