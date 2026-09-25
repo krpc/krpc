@@ -77,6 +77,7 @@
     <Compile Include="ExtensionMethods\StagingExtensions.cs" />
     <Compile Include="ExtensionMethods\StockAerodynamics.cs" />
     <Compile Include="ExtensionMethods\StockAeroReadout.cs" />
+    <Compile Include="ExtensionMethods\StockBuoyancy.cs" />
     <Compile Include="ExtensionMethods\TargetableExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselControlStateExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselExtensions.cs" />

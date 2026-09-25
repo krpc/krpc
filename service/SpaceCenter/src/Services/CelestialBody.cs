@@ -449,6 +449,23 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// <c>true</c> if the body has an ocean.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasOcean {
+            get { return InternalBody.ocean; }
+        }
+
+        /// <summary>
+        /// The density of the body's ocean, in <math>kg/m^3</math>.
+        /// Returns zero if the body has no ocean.
+        /// </summary>
+        [KRPCProperty]
+        public double OceanDensity {
+            get { return InternalBody.ocean ? InternalBody.oceanDensity * 1000d : 0d; }
+        }
+
+        /// <summary>
         /// The atmospheric density at the given position, in <math>kg/m^3</math>,
         /// in the given reference frame.
         /// </summary>
@@ -501,13 +518,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the air pressure, in Pascals, for the specified
+        /// Gets the static pressure, in Pascals, for the specified
         /// altitude above sea level, in meters.
         /// </summary>
+        /// <remarks>
+        /// Below sea level on a body with an ocean, this includes the pressure of the water.
+        /// </remarks>
         [KRPCMethod]
         public double PressureAt (double altitude)
         {
-            return StockAerodynamics.GetPressure (altitude, InternalBody);
+            var body = InternalBody;
+            var radius = body.Radius + altitude;
+            var water = StockBuoyancy.WaterPressure (body, -altitude, body.gravParameter / (radius * radius));
+            return StockAerodynamics.GetPressure (altitude, body) + water * 1000d;
         }
 
         /// <summary>

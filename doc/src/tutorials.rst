@@ -12,6 +12,7 @@ of kRPC.
    tutorials/launch-into-orbit
    tutorials/pitch-heading-roll
    tutorials/parts
+   tutorials/buoyancy
    tutorials/docking-guidance
    tutorials/user-interface
    tutorials/object-lifetime

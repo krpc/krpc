@@ -658,12 +658,256 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The static atmospheric pressure acting on the vessel, in Pascals.
+        /// The static pressure acting on the vessel, in Pascals.
         /// </summary>
+        /// <remarks>
+        /// Below the waterline this includes the pressure of the water above the vessel's
+        /// center of mass.
+        /// </remarks>
         [KRPCProperty]
         public float StaticPressure {
             get {
-                return (float)InternalVessel.staticPressurekPa * 1000f;
+                var vessel = InternalVessel;
+                var depth = -FlightGlobals.getAltitudeAtPos (WorldCoM, vessel.mainBody);
+                var water = StockBuoyancy.WaterPressure (
+                    vessel.mainBody, depth, vessel.gravityTrue.magnitude);
+                return (float)((vessel.staticPressurekPa + water) * 1000d);
+            }
+        }
+
+        /// <summary>
+        /// The volume of water the vessel displaces when fully submerged, in
+        /// <math>m^3</math>.
+        /// </summary>
+        [KRPCProperty]
+        public double Displacement {
+            get {
+                double displacement = 0d;
+                foreach (var part in InternalVessel.Parts)
+                    displacement += StockBuoyancy.Displacement (part);
+                return displacement;
+            }
+        }
+
+        /// <summary>
+        /// The volume of water the vessel is displacing, in <math>m^3</math>.
+        /// </summary>
+        [KRPCProperty]
+        public double DisplacedVolume {
+            get {
+                var vessel = InternalVessel;
+                if (!StockBuoyancy.HasOcean (vessel))
+                    return 0d;
+                double volume = 0d;
+                foreach (var part in vessel.Parts)
+                    volume += StockBuoyancy.Displacement (part) * part.submergedPortion;
+                return volume;
+            }
+        }
+
+        /// <summary>
+        /// The fraction of the vessel below the waterline, between 0 and 1. This is
+        /// <see cref="DisplacedVolume"/> over <see cref="Displacement"/>.
+        /// </summary>
+        [KRPCProperty]
+        public double SubmergedPortion {
+            get {
+                var vessel = InternalVessel;
+                if (!StockBuoyancy.HasOcean (vessel))
+                    return 0d;
+                double displacement = 0d;
+                double volume = 0d;
+                foreach (var part in vessel.Parts) {
+                    var partDisplacement = StockBuoyancy.Displacement (part);
+                    displacement += partDisplacement;
+                    volume += partDisplacement * part.submergedPortion;
+                }
+                return displacement > 0d ? volume / displacement : 0d;
+            }
+        }
+
+        /// <summary>
+        /// The point the total buoyant force on the vessel acts through, in reference frame
+        /// <see cref="ReferenceFrame"/>. Returns <c>null</c> if no part of the vessel is in
+        /// the water.
+        /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <remarks>
+        /// A hull at rest carries this on the same vertical line as
+        /// <see cref="CenterOfMass"/>. A horizontal offset between the two turns the weight
+        /// and the buoyancy into a couple that rolls or pitches the vessel.
+        /// </remarks>
+        [KRPCProperty (Nullable = true)]
+        public Tuple3 CenterOfBuoyancy {
+            get {
+                var vessel = InternalVessel;
+                if (!StockBuoyancy.HasOcean (vessel))
+                    return null;
+                var weighted = Vector3d.zero;
+                double total = 0d;
+                foreach (var part in vessel.Parts) {
+                    var position = StockBuoyancy.CenterOfBuoyancy (part);
+                    var force = StockBuoyancy.BuoyantForce (part, position).magnitude;
+                    if (force <= 0d)
+                        continue;
+                    weighted += position * force;
+                    total += force;
+                }
+                if (total <= 0d)
+                    return null;
+                return referenceFrame.PositionFromWorldSpace (weighted / total).ToTuple ();
+            }
+        }
+
+        /// <summary>
+        /// The total buoyant force acting on the vessel, in reference frame
+        /// <see cref="ReferenceFrame"/>.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        /// <remarks>
+        /// A vessel floating at rest carries a buoyant force equal to its weight.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 BuoyantForce {
+            get { return referenceFrame.DirectionFromWorldSpace (WorldBuoyantForce).ToTuple (); }
+        }
+
+        /// <summary>
+        /// The acceleration of the vessel due to the buoyant force acting on it
+        /// (<see cref="BuoyantForce"/> divided by the vessel's mass),
+        /// in reference frame <see cref="ReferenceFrame"/>.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the vessel is accelerated,
+        /// with its magnitude equal to the acceleration in <math>m/s^2</math>.</returns>
+        [KRPCProperty]
+        public Tuple3 BuoyantAcceleration {
+            get {
+                var mass = new Vessel (InternalVessel).Mass;
+                return referenceFrame.DirectionFromWorldSpace (WorldBuoyantForce / mass).ToTuple ();
+            }
+        }
+
+        /// <summary>
+        /// The torque the buoyant force exerts on the vessel about its center of mass,
+        /// in reference frame <see cref="ReferenceFrame"/>.
+        /// </summary>
+        /// <returns>A vector pointing along the axis of the torque, with its magnitude
+        /// equal to the strength of the torque in newton-meters.</returns>
+        [KRPCProperty]
+        public Tuple3 BuoyantTorque {
+            get {
+                var vessel = InternalVessel;
+                if (!StockBuoyancy.HasOcean (vessel))
+                    return Vector3d.zero.ToTuple ();
+                var com = WorldCoM;
+                var torque = Vector3d.zero;
+                foreach (var part in vessel.Parts) {
+                    var position = StockBuoyancy.CenterOfBuoyancy (part);
+                    var force = StockBuoyancy.BuoyantForce (part, position);
+                    torque += Vector3d.Cross (position - com, force);
+                }
+                return referenceFrame.DirectionFromWorldSpace (torque * 1000d).ToTuple ();
+            }
+        }
+
+        /// <summary>
+        /// The point the buoyant force acts through with the vessel fully submerged, in
+        /// reference frame <see cref="ReferenceFrame"/>. Returns <c>null</c> if no part of
+        /// the vessel displaces any water.
+        /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <remarks>
+        /// The point is fixed relative to the hull. <see cref="CenterOfBuoyancy"/> moves as
+        /// the vessel rides the waves.
+        /// </remarks>
+        [KRPCProperty (Nullable = true)]
+        public Tuple3 FullySubmergedCenterOfBuoyancy {
+            get {
+                var center = StockBuoyancy.FullySubmerged (InternalVessel.Parts).CenterOfBuoyancy;
+                if (!center.HasValue)
+                    return null;
+                return referenceFrame.PositionFromWorldSpace (center.Value).ToTuple ();
+            }
+        }
+
+        /// <summary>
+        /// The buoyant force on the vessel when fully submerged in a fluid of the given
+        /// density, in Newtons.
+        /// </summary>
+        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        [KRPCMethod]
+        public double BuoyantForceAt (double density, double gravity)
+        {
+            return InternalVessel.Parts.Sum (
+                part => StockBuoyancy.BuoyantForceAt (part, density * 0.001d, gravity)) * 1000d;
+        }
+
+        /// <summary>
+        /// The torque the buoyant force exerts about the vessel's center of mass when fully
+        /// submerged in a fluid of the given density, in reference frame
+        /// <see cref="ReferenceFrame"/>. Gravity acts towards the center of the body.
+        /// </summary>
+        /// <returns>A vector pointing along the axis of the torque, with its magnitude
+        /// equal to the strength of the torque in newton-meters.</returns>
+        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        [KRPCMethod]
+        public Tuple3 BuoyantTorqueAt (double density, double gravity)
+        {
+            var vessel = InternalVessel;
+            var com = WorldCoM;
+            var torque = StockBuoyancy.FullySubmerged (vessel.Parts).Torque (
+                density * 0.001d, gravity, vessel.mainBody.position - com, com);
+            return referenceFrame.DirectionFromWorldSpace (torque * 1000d).ToTuple ();
+        }
+
+        /// <summary>
+        /// The depth of the center of mass of the vessel below the waterline, in meters.
+        /// Negative above the waterline.
+        /// </summary>
+        [KRPCProperty]
+        public double Depth {
+            get {
+                var vessel = InternalVessel;
+                if (!StockBuoyancy.HasOcean (vessel))
+                    return 0d;
+                return -FlightGlobals.getAltitudeAtPos ((Vector3d)vessel.CoM, vessel.mainBody)
+                    + vessel.waterOffset;
+            }
+        }
+
+        /// <summary>
+        /// The dynamic pressure of the water acting on the vessel, in Pascals.
+        /// Returns zero if no part of the vessel is below the waterline.
+        /// </summary>
+        [KRPCProperty]
+        public float SubmergedDynamicPressure {
+            get {
+                var vessel = InternalVessel;
+                if (!StockBuoyancy.HasOcean (vessel))
+                    return 0f;
+                // The game charges this pressure to the submerged parts alone
+                if (!vessel.Parts.Any (part => part.submergedPortion > 0d))
+                    return 0f;
+                return (float)(0.5d * vessel.mainBody.oceanDensity * 1000d
+                    * vessel.srf_velocity.sqrMagnitude);
+            }
+        }
+
+        /// <summary>
+        /// The total buoyant force acting on the vessel, in world space, in Newtons.
+        /// </summary>
+        Vector3d WorldBuoyantForce {
+            get {
+                var vessel = InternalVessel;
+                if (!StockBuoyancy.HasOcean (vessel))
+                    return Vector3d.zero;
+                var force = Vector3d.zero;
+                foreach (var part in vessel.Parts)
+                    force += StockBuoyancy.BuoyantForce (part);
+                return force * 1000d;
             }
         }
 
