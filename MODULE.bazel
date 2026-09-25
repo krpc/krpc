@@ -479,8 +479,8 @@ http_archive(
 http_file(
     name = "module_manager",
     downloaded_file_path = "ModuleManager.4.2.3.dll",
-    sha256 = "95847827ab293b9e82a19b7efb97ffea3e98cc03b181862536ac8eb572e30d7d",
-    url = "https://ksp.sarbian.com/jenkins/job/ModuleManager/163/artifact/ModuleManager.4.2.3.dll",
+    sha256 = "d6cc22d3a5b29854bc71b3b6cb4302364597ed850537bfc1603bbce51ccfb8e5",
+    url = "https://github.com/sarbian/ModuleManager/releases/download/v4.2.3/ModuleManager.4.2.3.dll",
 )
 
 # ----------------------- Third-party mods (integration testing) -------------------------
@@ -580,14 +580,13 @@ http_archive(
 # FAR's ModularFlightIntegrator dependency, which lets several mods hook the game's flight
 # integrator at once. It is a hard dependency: without it KSP does not load FAR's assembly at
 # all, so FARAPI is missing and kRPC reports FAR as not installed. Installed only alongside
-# FAR, never requested on its own. The archive holds the GameData subdir at its root, so add
-# the GameData prefix the other mod archives already have.
+# FAR, never requested on its own. ModularFlightIntegrator has no release download of its own,
+# so we take the copy bundled in the FAR archive.
 http_archive(
     name = "modular_flight_integrator",
-    add_prefix = "GameData",
     build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/ModularFlightIntegrator/**']), visibility = ['//visibility:public'])",
-    sha256 = "0134c0950298e8703f27809f918fc57b6f9f7202a9ad988decbf1ac924fdd9e7",
-    url = "https://ksp.sarbian.com/jenkins/job/ModularFlightIntegrator/40/artifact/ModularFlightIntegrator-1.2.10.0.zip",
+    sha256 = "422c6b404e7d050844f9b41218205d0bb85aed1a6e66941019d55b0ed0a30e8e",
+    url = "https://github.com/KSPModStewards/Ferram-Aerospace-Research/releases/download/v0.16.1.2_Marangoni/FAR_0_16_1_2_Marangoni.zip",
 )
 
 # FAR's other hard dependency: the Unity job-system assemblies (Unity.Mathematics and
