@@ -9,11 +9,9 @@ KRPC
 {{ mark_documented(services['KRPC'].members['AddStream']) }}
 {{ mark_documented(services['KRPC'].members['RemoveStream']) }}
 {{ mark_documented(services['KRPC'].members['SetStreamRate']) }}
-{{ mark_documented(services['KRPC'].members['AddEvent']) }}
 {{ services['KRPC'].remove('AddStream') or '' }}
 {{ services['KRPC'].remove('RemoveStream') or '' }}
 {{ services['KRPC'].remove('SetStreamRate') or '' }}
-{{ services['KRPC'].remove('AddEvent') or '' }}
 
 {{ macros.service(services['KRPC']) }}
 {{ macros.enumeration(services['KRPC'].enumerations['GameScene']) }}

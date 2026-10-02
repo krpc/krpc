@@ -85,7 +85,6 @@
     <Compile Include="Service\GameStateTest.cs" />
     <Compile Include="Service\ITestService.cs" />
     <Compile Include="Service\InvalidExtensions.cs" />
-    <Compile Include="Service\KRPC\ExpressionTest.cs" />
     <Compile Include="Service\KRPC\KRPCTest.cs" />
     <Compile Include="Service\MessageAssert.cs" />
     <Compile Include="Service\MortalObject.cs" />

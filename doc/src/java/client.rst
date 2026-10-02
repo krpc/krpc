@@ -172,19 +172,12 @@ called once, with the exception.
 
 .. _java-client-events:
 
-Custom Events
--------------
+Events
+------
 
 Some procedures return event objects of type :type:`Event`. These allow you to wait
 until an event occurs, by calling :meth:`Event.waitFor`. Under the hood, these are
 implemented using streams and condition variables.
-
-Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression ``MeanAltitude > 1000`` and then creates an event that will be triggered when the
-expression returns true:
-
-.. literalinclude:: /scripts/client/java/CustomEvent.java
 
 A call to ``waitFor`` returns straight away if the event has fired since the previous call on the
 same event object, so no firing is missed between two calls. Several firings between two calls make
@@ -254,14 +247,12 @@ Client API Reference
    .. method:: krpc.schema.KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
 
       Returns a procedure call message for the given static method call. This allows descriptions of
-      procedure calls to be passed to the server, for example when constructing custom events. See
-      :rst:ref:`java-client-events`.
+      procedure calls to be passed to the server.
 
    .. method:: krpc.schema.KRPC.ProcedureCall getCall(RemoteObject instance, String method, Object... args)
 
       Returns a procedure call message for the given method call. This allows descriptions of
-      procedure calls to be passed to the server, for example when constructing custom events. See
-      :rst:ref:`java-client-events`.
+      procedure calls to be passed to the server.
 
    .. method:: void close()
 

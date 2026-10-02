@@ -105,37 +105,11 @@ namespace KRPC.Test.Service
         }
 
         [Test]
-        public void AProcedureReturningAnEventCannotBeStreamed ()
-        {
-            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => new ProcedureCallStream (new ProcedureCall ("KRPC", "AddEvent")));
-            StringAssert.Contains ("KRPC.AddEvent returns an event, and cannot be streamed", exn.Message);
-        }
-
-        [Test]
-        public void AProcedureReturningAnEventCannotBeCalledInAnExpression ()
-        {
-            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => global::KRPC.Service.KRPC.Expression.Call (new ProcedureCall ("KRPC", "AddEvent")));
-            StringAssert.Contains (
-                "KRPC.AddEvent returns an event, and cannot be used in an expression", exn.Message);
-        }
-
-        [Test]
         public void AProcedureReturningAStreamCannotBeStreamed ()
         {
             var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
                 () => new ProcedureCallStream (new ProcedureCall ("KRPC", "AddStream")));
             StringAssert.Contains ("KRPC.AddStream returns a stream, and cannot be streamed", exn.Message);
-        }
-
-        [Test]
-        public void AProcedureReturningAStreamCannotBeCalledInAnExpression ()
-        {
-            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => global::KRPC.Service.KRPC.Expression.Call (new ProcedureCall ("KRPC", "AddStream")));
-            StringAssert.Contains (
-                "KRPC.AddStream returns a stream, and cannot be used in an expression", exn.Message);
         }
     }
 }

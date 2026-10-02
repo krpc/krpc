@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
-using LinqExpression = System.Linq.Expressions.Expression;
 
 namespace KRPC.Service.KRPC
 {
@@ -275,16 +273,6 @@ namespace KRPC.Service.KRPC
         public static void RemoveStream (ulong id)
         {
             Core.Instance.RemoveStream (CallContext.Client, id);
-        }
-
-        /// <summary>
-        /// Create an event from a server side expression.
-        /// </summary>
-        [KRPCProcedure]
-        public static Messages.Event AddEvent(Expression expression)
-        {
-            var func = LinqExpression.Lambda<Func<bool>>(expression).Compile();
-            return new Event((evnt) => func()).Message;
         }
 
         /// <summary>

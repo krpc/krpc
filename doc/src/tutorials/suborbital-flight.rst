@@ -8,7 +8,7 @@ returns them safely back to Kerbin. It covers the following topics:
 
 * Controlling a rocket (activating stages, setting the throttle)
 * Using the auto pilot to point the vessel in a specific direction
-* Using events to wait for things to happen in game
+* Waiting for things to happen in game
 * Tracking the amount of resources in the vessel
 * Tracking flight and orbital data (such as altitude and apoapsis altitude)
 
@@ -49,19 +49,19 @@ name for our script that will appear in the server window in game:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 10
+         :lines: 9
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 9-11
+         :lines: 8-9
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 20-22
+         :lines: 16-17
 
    .. group-tab:: Lua
 
@@ -90,19 +90,19 @@ instructions to the rocket:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 12
+         :lines: 11
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 13
+         :lines: 11
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 24
+         :lines: 19
 
    .. group-tab:: Lua
 
@@ -132,19 +132,19 @@ instructs the auto-pilot to hold a pitch and heading of 90° (vertically upwards
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 14-17
+         :lines: 13-16
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 15-18
+         :lines: 13-16
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 26-29
+         :lines: 21-24
 
    .. group-tab:: Lua
 
@@ -175,19 +175,19 @@ We're now ready to launch by activating the first stage (equivalent to pressing 
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 19-20
+         :lines: 18-19
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 20-21
+         :lines: 18-19
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 31-32
+         :lines: 26-27
 
    .. group-tab:: Lua
 
@@ -202,9 +202,8 @@ We're now ready to launch by activating the first stage (equivalent to pressing 
          :lines: 13-14
 
 The rocket has a solid fuel stage that will quickly run out, and will need to be jettisoned. We can
-monitor the amount of solid fuel in the rocket using an event that is triggered when there is very
-little solid fuel left in the rocket. When the event is triggered, we can activate the next stage to
-jettison the boosters:
+check the amount of solid fuel in the rocket once a second, until there is very little left. We then
+activate the next stage to jettison the boosters:
 
 .. tabs::
 
@@ -218,19 +217,19 @@ jettison the boosters:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 23-29
+         :lines: 21-25
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 26-32
+         :lines: 21-25
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 34-47
+         :lines: 29-34
 
    .. group-tab:: Lua
 
@@ -242,18 +241,16 @@ jettison the boosters:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 16-24
+         :lines: 16-19
 
 In this bit of code, ``vessel.resources`` returns a :class:`Resources` object that is used to get
-information about the resources in the rocket. The code creates the expression
-``vessel.resources.amount('SolidFuel') < 0.1`` on the server, using the expression API. This
-expression is then used to drive an event, which is triggered when the expression returns true.
+information about the resources in the rocket.
 
 Part Three: Reaching Apoapsis
 -----------------------------
 
 Next we will execute a gravity turn when the rocket reaches a sufficiently high altitude. The
-following uses an event to wait until the altitude of the rocket reaches 10km:
+following waits until the altitude of the rocket reaches 10km:
 
 .. tabs::
 
@@ -267,19 +264,19 @@ following uses an event to wait until the altitude of the rocket reaches 10km:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 36-42
+         :lines: 27-28
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 39-45
+         :lines: 27-28
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 50-58
+         :lines: 36-38
 
    .. group-tab:: Lua
 
@@ -291,7 +288,7 @@ following uses an event to wait until the altitude of the rocket reaches 10km:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 26-33
+         :lines: 21-22
 
 In this bit of code, calling ``vessel.flight()`` returns a :class:`Flight` object that is used to
 get all sorts of information about the rocket, such as the direction it is pointing in and its
@@ -312,19 +309,19 @@ this, we simply reconfigure the auto-pilot:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 45-46
+         :lines: 30-31
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 48-49
+         :lines: 30-31
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 61-62
+         :lines: 40-41
 
    .. group-tab:: Lua
 
@@ -336,9 +333,9 @@ this, we simply reconfigure the auto-pilot:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 35-36
+         :lines: 24-25
 
-Now we wait until the apoapsis reaches 100km (again, using an event), then reduce the throttle to
+Now we wait until the apoapsis reaches 100km, then reduce the throttle to
 zero, jettison the launch stage and turn off the auto-pilot:
 
 .. tabs::
@@ -353,19 +350,19 @@ zero, jettison the launch stage and turn off the auto-pilot:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 48-62
+         :lines: 33-40
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 51-65
+         :lines: 33-40
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 64-81
+         :lines: 43-51
 
    .. group-tab:: Lua
 
@@ -377,7 +374,7 @@ zero, jettison the launch stage and turn off the auto-pilot:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 38-51
+         :lines: 27-34
 
 In this bit of code, ``vessel.orbit`` returns an :class:`Orbit` object that contains all the
 information about the orbit of the rocket.
@@ -402,19 +399,19 @@ happens - the script will continue to work.
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 64-74
+         :lines: 42-45
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 67-77
+         :lines: 42-45
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 83-96
+         :lines: 53-57
 
    .. group-tab:: Lua
 
@@ -426,7 +423,7 @@ happens - the script will continue to work.
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 53-61
+         :lines: 36-39
 
 The parachutes should have now been deployed. The next bit of code will repeatedly print out the
 altitude of the capsule until its speed reaches zero -- which will happen when it lands:
@@ -443,19 +440,19 @@ altitude of the capsule until its speed reaches zero -- which will happen when i
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 76-81
+         :lines: 47-52
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 79-83
+         :lines: 47-51
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 98-103
+         :lines: 59-64
 
    .. group-tab:: Lua
 
@@ -467,7 +464,7 @@ altitude of the capsule until its speed reaches zero -- which will happen when i
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 63-66
+         :lines: 41-44
 
 This bit of code uses the ``vessel.flight()`` function, as before, but this time it is passed a
 :class:`ReferenceFrame` parameter. We want to get the vertical speed of the capsule relative to the

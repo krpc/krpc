@@ -1,6 +1,5 @@
 using System;
 using KRPC.Client;
-using KRPC.Client.Services.KRPC;
 using KRPC.Client.Services.SpaceCenter;
 
 class SubOrbitalFlight
@@ -19,41 +18,20 @@ class SubOrbitalFlight
         Console.WriteLine ("Launch!");
         vessel.Control.ActivateNextStage ();
 
-        {
-            var solidFuel = Connection.GetCall(() => vessel.Resources.Amount("SolidFuel"));
-            var expr = Expression.LessThan(
-                conn, Expression.Call(conn, solidFuel), Expression.ConstantFloat(conn, 0.1f));
-            var evnt = conn.KRPC().AddEvent(expr);
-            lock (evnt.Condition) {
-                evnt.Wait();
-            }
-        }
+        while (vessel.Resources.Amount ("SolidFuel") > 0.1)
+            System.Threading.Thread.Sleep (1000);
 
         Console.WriteLine ("Booster separation");
         vessel.Control.ActivateNextStage ();
 
-        {
-            var meanAltitude = Connection.GetCall(() => vessel.Flight(null).MeanAltitude);
-            var expr = Expression.GreaterThan(
-                conn, Expression.Call(conn, meanAltitude), Expression.ConstantDouble(conn, 10000));
-            var evnt = conn.KRPC().AddEvent(expr);
-            lock (evnt.Condition) {
-                evnt.Wait();
-            }
-        }
+        while (vessel.Flight ().MeanAltitude < 10000)
+            System.Threading.Thread.Sleep (1000);
 
         Console.WriteLine ("Gravity turn");
         vessel.AutoPilot.TargetPitchAndHeading (60, 90);
 
-        {
-            var apoapsisAltitude = Connection.GetCall(() => vessel.Orbit.ApoapsisAltitude);
-            var expr = Expression.GreaterThan(
-                conn, Expression.Call(conn, apoapsisAltitude), Expression.ConstantDouble(conn, 100000));
-            var evnt = conn.KRPC().AddEvent(expr);
-            lock (evnt.Condition) {
-                evnt.Wait();
-            }
-        }
+        while (vessel.Orbit.ApoapsisAltitude < 100000)
+            System.Threading.Thread.Sleep (1000);
 
         Console.WriteLine ("Launch stage separation");
         vessel.Control.Throttle = 0;
@@ -61,15 +39,8 @@ class SubOrbitalFlight
         vessel.Control.ActivateNextStage ();
         vessel.AutoPilot.Engaged = false;
 
-        {
-            var srfAltitude = Connection.GetCall(() => vessel.Flight(null).SurfaceAltitude);
-            var expr = Expression.LessThan(
-                conn, Expression.Call(conn, srfAltitude), Expression.ConstantDouble(conn, 1000));
-            var evnt = conn.KRPC().AddEvent(expr);
-            lock (evnt.Condition) {
-                evnt.Wait();
-            }
-        }
+        while (vessel.Flight ().SurfaceAltitude > 1000)
+            System.Threading.Thread.Sleep (1000);
 
         vessel.Control.ActivateNextStage ();
 

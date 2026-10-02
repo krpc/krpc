@@ -240,19 +240,12 @@ To handle an ending in a callback, add an end callback with
 
 .. _cpp-client-events:
 
-Custom Events
--------------
+Events
+------
 
 Some procedures return event objects of type :class:`krpc::Event`. These allow you to wait until an
 event occurs, by calling :func:`krpc::Event::wait`. Under the hood, these are implemented using
 streams and condition variables.
-
-Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression ``mean_altitude > 1000`` and then creates an event that will be triggered when the
-expression returns true:
-
-.. literalinclude:: /scripts/client/cpp/Event.cpp
 
 A call to ``wait`` returns straight away if the event has fired since the previous call on the same
 event object, so no firing is missed between two calls. Several firings between two calls make

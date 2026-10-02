@@ -194,19 +194,12 @@ To handle an ending in a callback, add an end callback with
 
 .. _python-client-events:
 
-Custom Events
--------------
+Events
+------
 
 Some procedures return event objects of type :class:`krpc.event.Event`. These allow you to wait
 until an event occurs, by calling :class:`krpc.event.Event.wait`. Under the hood, these are
 implemented using streams and condition variables.
-
-Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression ``mean_altitude > 1000`` and then creates an event that will be triggered when the
-expression returns true:
-
-.. literalinclude:: /scripts/client/python/Event.py
 
 A call to ``wait`` returns straight away if the event has fired since the previous call on the same
 event object, so no firing is missed between two calls. Several firings between two calls make
@@ -310,8 +303,7 @@ Client API Reference
    .. method:: get_call(func, *args, **kwargs)
 
       Converts a call to function *func* with arguments *args* and *kwargs* into a message
-      object. This allows descriptions of procedure calls to be passed to the server, for example
-      when constructing custom events. See :ref:`python-client-events`.
+      object. This allows descriptions of procedure calls to be passed to the server.
 
    .. method:: close()
 

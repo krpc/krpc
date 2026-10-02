@@ -181,24 +181,6 @@ TEST_F(test_event, test_event_remove_callback) {
   ASSERT_TRUE(called2.test_and_set());
 }
 
-TEST_F(test_event, test_custom_event) {
-  typedef krpc::services::KRPC::Expression Expr;
-  auto counter = Expr::call(conn, test_service.counter_call("test_event.test_custom_event"));
-  auto expr = Expr::equal(
-      conn, Expr::multiply(conn, Expr::constant_int(conn, 2), Expr::constant_int(conn, 10)),
-      counter);
-  auto event = krpc.add_event(expr);
-  event.acquire();
-  event.wait();
-  // The event fires when the server-side counter reaches 20. The counter
-  // increments on every expression evaluation, so the value read back is >= 21
-  // (20 at the trigger, plus this read); the exact figure depends on how many
-  // more times the server evaluated the expression first, so assert the lower
-  // bound to avoid flaking under load.
-  ASSERT_GE(test_service.counter("test_event.test_custom_event"), 21);
-  event.release();
-}
-
 TEST_F(test_event, test_default_constructable) {
   krpc::Event e;
   ASSERT_FALSE(e);
@@ -290,18 +272,6 @@ TEST_F(test_event, test_two_threads_wait_on_one_event) {
   first.join();
   second.join();
   ASSERT_EQ(2, woke.load());
-}
-
-TEST_F(test_event, test_error_ends_the_event) {
-  typedef krpc::services::KRPC::Expression Expr;
-  auto expr =
-      Expr::equal(conn, Expr::call(conn, test_service.throw_invalid_operation_exception_call()),
-                  Expr::constant_int(conn, 0));
-  auto event = krpc.add_event(expr);
-  event.acquire();
-  EXPECT_THROW(event.wait(), krpc::services::KRPC::InvalidOperationException);
-  EXPECT_THROW(event.wait(), krpc::services::KRPC::InvalidOperationException);
-  event.release();
 }
 
 TEST_F(test_event, test_remove_wakes_an_event_wait) {
