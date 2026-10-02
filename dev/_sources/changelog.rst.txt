@@ -330,6 +330,7 @@ C++ client
 * Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for (:issue:`1065`)
 * Fix ``Stream::start`` hanging when a stream's only update notification is lost (:issue:`1090`)
 * Fix a race between a stream update arriving and a stream update callback being added or removed (:issue:`1090`)
+* Fix a stream on a client with no stream connection crashing instead of throwing ``krpc::StreamError`` (:issue:`1109`)
 * Fix a removed stream returning the value it last received (:issue:`1090`)
 * Fix a thread waiting on a stream being left blocked when the stream is removed (:issue:`1090`)
 * Fix a service with a collection of enumerations in a procedure signature failing to compile (:issue:`1044`)
