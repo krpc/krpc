@@ -320,6 +320,7 @@ C# client
 C++ client
 ^^^^^^^^^^
 
+* Fix a data race reading a stream's value while an update for it arrives (:issue:`1108`)
 * Fix a stream of a value whose type a service defines, such as an enumeration or a structure, failing to compile (:issue:`1094`)
 * Support a nullable structure field, list element, tuple item and dictionary value (:issue:`1091`)
 * Support structure types, a compound value with named fields a service defines, generated as a ``struct`` with a constructor, equality, ordering and a ``std::hash`` over its fields (:issue:`1066`)
