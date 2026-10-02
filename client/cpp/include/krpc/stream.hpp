@@ -100,14 +100,15 @@ template <typename T>
 inline T Stream<T>::operator()() {
   check_exists();
   if (!impl->has_started()) start();
-  std::string data = impl->get_data();
+  bool is_null = false;
+  std::string data = impl->get_data(&is_null);
   // A null value is signaled out-of-band by is_null, and leaves the value default
   // constructed, which for a nullable stream is an empty optional.
   T value{};
   // Unqualified, so that argument dependent lookup finds the overload for a type a
   // service defines at the point this template is used
   using decoder::decode;
-  if (!impl->is_null()) decode(value, data, impl->get_client());
+  if (!is_null) decode(value, data, impl->get_client());
   return value;
 }
 
@@ -152,10 +153,10 @@ inline void Stream<T>::wait(double timeout) {
 template <typename T>
 inline int Stream<T>::add_callback(const Callback& callback) {
   check_exists();
-  auto callback_wrapper = [this, callback](const std::string& data) {
+  auto callback_wrapper = [this, callback](const std::string& data, bool is_null) {
     T value{};
     using decoder::decode;
-    if (!this->impl->is_null()) decode(value, data, this->impl->get_client());
+    if (!is_null) decode(value, data, this->impl->get_client());
     callback(value);
   };
   return impl->add_callback(callback_wrapper);

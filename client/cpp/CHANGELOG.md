@@ -1,4 +1,5 @@
 ## [v0.7.0] - unreleased
+- Fix a data race reading a stream's value while an update for it arrives (#1108)
 - Fix a stream of a value whose type a service defines, such as an enumeration or a structure,
   failing to compile (#1094)
 - Support a nullable structure field, list element, tuple item and dictionary value (#1091)
