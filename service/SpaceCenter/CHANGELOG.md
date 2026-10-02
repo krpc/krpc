@@ -156,6 +156,28 @@
     installed when there is no relative airflow (#1032)
   - Fix `Flight.StallFraction` returning `NaN` for a vessel with no lifting surfaces (#1032)
 
+- Buoyancy
+  - Add `Flight.Displacement`, `Flight.DisplacedVolume`, `Flight.SubmergedPortion`,
+    `Flight.CenterOfBuoyancy`, `Flight.BuoyantForce`, `Flight.BuoyantAcceleration`,
+    `Flight.Depth` and `Flight.SubmergedDynamicPressure`, for boats and submarines (#1103)
+  - Add `Part.Displacement`, `Part.DisplacedVolume`, `Part.BuoyancyMultiplier`,
+    `Part.CenterOfBuoyancy`, `Part.CenterOfDisplacement` and `Part.BuoyantForce` (#1103)
+  - Add `Part.Splashed`, `Part.SubmergedPortion`, `Part.Depth`, `Part.MinDepth`,
+    `Part.MaxDepth`, `Part.SubmergedDynamicPressure`, `Part.SubmergedDragMultiplier`,
+    `Part.SubmergedLiftMultiplier` and `Part.WaterAngularDragMultiplier` (#1103)
+  - Add `Part.BuoyantForceAt` and `EditorVessel.BuoyantForceAt`, the buoyant force when
+    fully submerged in a fluid of a given density under a given gravity (#1103)
+  - Add `Flight.BuoyantTorque`, `Flight.FullySubmergedCenterOfBuoyancy`,
+    `Flight.BuoyantForceAt` and `Flight.BuoyantTorqueAt` (#1103)
+  - Add `EditorVessel.Displacement`, `EditorVessel.CenterOfBuoyancy` and
+    `EditorVessel.BuoyantTorqueAt`, so a hull can be trimmed before launch (#1103)
+  - Add `Part.StaticPressure` and `Part.MaxPressure` (#1103)
+  - Fix `Flight.StaticPressure` and `CelestialBody.PressureAt` to include the water pressure
+    below sea level (#1103)
+  - Add `CelestialBody.HasOcean` and `CelestialBody.OceanDensity` (#1103)
+  - Add `SpaceCenter.BuoyancyScalar`, the multiplier the game applies to every buoyant
+    force (#1103)
+
 - Control
   - A Kerbal on EVA can be driven through `Vessel.Control`. The translation inputs walk it
     about and fly its jetpack, `Control.RCS` deploys and stows the jetpack, and
