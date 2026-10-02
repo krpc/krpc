@@ -270,13 +270,140 @@ Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_StaticPressure(krpc_connection_t connection, float * result)
 
-      The static atmospheric pressure acting on the vessel, in Pascals.
+      The static pressure acting on the vessel, in Pascals.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Below the waterline this includes the pressure of the water above the vessel's
+         center of mass.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_StaticPressureAtMSL(krpc_connection_t connection, float * result)
 
       The static atmospheric pressure at mean sea level, in Pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Displacement(krpc_connection_t connection, double * result)
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_DisplacedVolume(krpc_connection_t connection, double * result)
+
+      The volume of water the vessel is displacing, in :math:`m^3`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_SubmergedPortion(krpc_connection_t connection, double * result)
+
+      The fraction of the vessel below the waterline, between 0 and 1. This is
+      :func:`krpc_SpaceCenter_Flight_DisplacedVolume` over :func:`krpc_SpaceCenter_Flight_Displacement`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_CenterOfBuoyancy(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The point the total buoyant force on the vessel acts through, in reference frame
+      :type:`krpc_SpaceCenter_ReferenceFrame_t`. Returns ``nullptr`` if no part of the vessel is in
+      the water.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :func:`krpc_SpaceCenter_Flight_CenterOfMass`. A horizontal offset between the two turns the weight
+         and the buoyancy into a couple that rolls or pitches the vessel.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_BuoyantForce(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The total buoyant force acting on the vessel, in reference frame
+      :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A vessel floating at rest carries a buoyant force equal to its weight.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_BuoyantAcceleration(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The acceleration of the vessel due to the buoyant force acting on it
+      (:func:`krpc_SpaceCenter_Flight_BuoyantForce` divided by the vessel's mass),
+      in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`m/s^2`.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_BuoyantTorque(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The torque the buoyant force exerts on the vessel about its center of mass,
+      in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_FullySubmergedCenterOfBuoyancy(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The point the buoyant force acts through with the vessel fully submerged, in
+      reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`. Returns ``nullptr`` if no part of
+      the vessel displaces any water.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The point is fixed relative to the hull. :func:`krpc_SpaceCenter_Flight_CenterOfBuoyancy` moves as
+         the vessel rides the waves.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_BuoyantForceAt(krpc_connection_t connection, double * result, double density, double gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :Parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_BuoyantTorqueAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double density, double gravity)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, in reference frame
+      :type:`krpc_SpaceCenter_ReferenceFrame_t`. Gravity acts towards the center of the body.
+
+      :Parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_Depth(krpc_connection_t connection, double * result)
+
+      The depth of the center of mass of the vessel below the waterline, in meters.
+      Negative above the waterline.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_SubmergedDynamicPressure(krpc_connection_t connection, float * result)
+
+      The dynamic pressure of the water acting on the vessel, in Pascals.
+      Returns zero if no part of the vessel is below the waterline.
 
       :Game Scenes: Flight
 

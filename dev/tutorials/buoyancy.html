@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Control Loops &#8212; kRPC vdev documentation</title>
+    <title>Boats and Submarines &#8212; kRPC vdev documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/control-loops';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/buoyancy';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
@@ -54,11 +54,11 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/control-loops.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/buoyancy.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="AutoPilot" href="autopilot.html" />
-    <link rel="prev" title="Object Lifetime" href="object-lifetime.html" />
+    <link rel="next" title="Docking Guidance" href="docking-guidance.html" />
+    <link rel="prev" title="Interacting with Parts" href="parts.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -545,11 +545,11 @@
 <li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Control Loops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
 </ul>
 </div>
@@ -594,7 +594,7 @@
     
     <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Control Loops</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Boats and Submarines</span></li>
   </ul>
 </nav>
 </div>
@@ -611,125 +611,118 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="control-loops">
-<span id="tutorial-control-loops"></span><h1>Control Loops<a class="headerlink" href="#control-loops" title="Link to this heading">#</a></h1>
-<p>A control loop reads the game state, computes something from it and writes the result back,
-over and over. The game runs its physics on a fixed step, 50 times a second. A loop that flies
-a vessel needs to read and write once per step, acting on the state it read.</p>
-<section id="the-receive-timeout">
-<h2>The Receive Timeout<a class="headerlink" href="#the-receive-timeout" title="Link to this heading">#</a></h2>
-<p>The server executes calls inside the game’s physics update, and waits a short while between
-them for a client’s next call. That wait is the <strong>receive timeout</strong>, one millisecond by
-default.</p>
-<p>A control loop spends its time between the calls: it reads, then computes, then writes.
-Computing for longer than a millisecond is easy in Python or Lua, and each call then lands in
-a different physics tick.</p>
-<p>An iteration of five calls therefore costs five ticks, and the state the last write was
-computed from is five ticks old.</p>
-<p>The receive timeout is a server-wide setting, and the server spends it on every idle update
-for every client.</p>
-</section>
-<section id="holding-a-tick">
-<span id="id1"></span><h2>Holding a Tick<a class="headerlink" href="#holding-a-tick" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">hold_tick</span></code> holds the game on its current physics tick, and <code class="docutils literal notranslate"><span class="pre">release_tick</span></code> lets it move
-on. Every call made in between is executed before the game advances. A whole read, compute and
-write then happens in the state of one tick:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">hold_tick</span><span class="p">()</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">pitch</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">pitch</span>
-        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="n">control_law</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span>
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
+  <section id="boats-and-submarines">
+<h1>Boats and Submarines<a class="headerlink" href="#boats-and-submarines" title="Link to this heading">#</a></h1>
+<p>A hull floats when the water it pushes aside weighs more than the hull does.
+<a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.displacement" title="SpaceCenter.Flight.displacement"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.displacement</span></code></a> is the volume of water the vessel pushes aside when it is
+fully submerged, and <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.buoyant_force_at" title="SpaceCenter.Flight.buoyant_force_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Flight.buoyant_force_at()</span></code></a> is the force that volume pushes back
+with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">body</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span>
+<span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+<span class="n">displacement</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">displacement</span>
+<span class="n">buoyancy</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">buoyant_force_at</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">ocean_density</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">surface_gravity</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Release the tick even when the code in between fails, as the <code class="docutils literal notranslate"><span class="pre">finally</span></code> above does. The game
-stays on the held tick until the hold is released or times out.</p>
-</section>
-<section id="consecutive-ticks">
-<h2>Consecutive Ticks<a class="headerlink" href="#consecutive-ticks" title="Link to this heading">#</a></h2>
-<p>That loop gets whole ticks, but not consecutive ones. The <code class="docutils literal notranslate"><span class="pre">hold_tick</span></code> opening an iteration
-is itself a call the server has to be waiting for. A program that spends longer than the
-receive timeout between releasing one tick and holding the next skips ticks, and cannot tell
-which ones.</p>
-<p><code class="docutils literal notranslate"><span class="pre">next_tick</span></code> closes that gap. It releases the tick being held and holds the one immediately
-after it, in a single call. The game then runs no tick the loop has not held:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">next_tick</span><span class="p">()</span>
-        <span class="n">pitch</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">pitch</span>
-        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="n">control_law</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span>
-<span class="k">finally</span><span class="p">:</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
+<p>Compare that force with the vessel’s weight. A hull with more buoyancy than its weight
+floats. A submarine trims its tanks to move between the two.
+<a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.Part.displacement" title="SpaceCenter.Part.displacement"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.displacement</span></code></a> and <a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.Part.buoyant_force_at" title="SpaceCenter.Part.buoyant_force_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Part.buoyant_force_at()</span></code></a> give the same figures for one
+part.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.buoyant_force_at" title="SpaceCenter.Flight.buoyant_force_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Flight.buoyant_force_at()</span></code></a> applies <a class="reference internal" href="../python/api/space-center/space-center.html#SpaceCenter.buoyancy_scalar" title="SpaceCenter.buoyancy_scalar"><code class="xref py py-attr docutils literal notranslate"><span class="pre">SpaceCenter.buoyancy_scalar</span></code></a>, which is 1.2
+in stock KSP. A buoyant force in the game is a fifth larger than
+<a class="reference external" href="https://en.wikipedia.org/wiki/Archimedes%27_principle">Archimedes’ principle</a> alone
+gives.</p>
+</div>
+<section id="trim">
+<h2>Trim<a class="headerlink" href="#trim" title="Link to this heading">#</a></h2>
+<p>A hull at rest carries its center of buoyancy on the same vertical line as its center of
+mass. A horizontal offset between the two turns the weight and the buoyancy into a couple
+that rolls or pitches the hull. That offset is the trim.</p>
+<p>Read both in the vessel’s surface reference frame. Its x axis points up, so the trim is
+what the other two axes carry:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span><span class="p">)</span>
+<span class="n">center_of_buoyancy</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">center_of_buoyancy</span>
+<span class="n">center_of_mass</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">center_of_mass</span>
 </pre></div>
 </div>
-<p>The call returns once the next tick is held. The loop therefore runs at one iteration per
-physics tick, and the game advances one tick per call. With no tick held, <code class="docutils literal notranslate"><span class="pre">next_tick</span></code> holds
-the soonest one it can, and is the only call the loop needs to open with.</p>
+<p><a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.center_of_buoyancy" title="SpaceCenter.Flight.center_of_buoyancy"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.center_of_buoyancy</span></code></a> is <code class="docutils literal notranslate"><span class="pre">None</span></code> when no part of the vessel is in the water.
+The same pair is available in the editor as <a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.EditorVessel.center_of_buoyancy" title="SpaceCenter.EditorVessel.center_of_buoyancy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EditorVessel.center_of_buoyancy()</span></code></a> and
+<a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.EditorVessel.center_of_mass" title="SpaceCenter.EditorVessel.center_of_mass"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EditorVessel.center_of_mass()</span></code></a>, so a hull can be trimmed before it is launched.</p>
+<p>The couple is also available as a torque about the center of mass. A hull trimmed level
+carries zero torque:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">torque</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">buoyant_torque_at</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">ocean_density</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">surface_gravity</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.buoyant_torque_at" title="SpaceCenter.Flight.buoyant_torque_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Flight.buoyant_torque_at()</span></code></a> is the torque with the hull fully submerged. It holds
+steady while the hull rides the waves, where <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.buoyant_torque" title="SpaceCenter.Flight.buoyant_torque"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.buoyant_torque</span></code></a> follows the
+live waterline. <a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.EditorVessel.buoyant_torque_at" title="SpaceCenter.EditorVessel.buoyant_torque_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EditorVessel.buoyant_torque_at()</span></code></a> gives the same figure in the editor.</p>
 </section>
-<section id="a-worked-example">
-<h2>A Worked Example<a class="headerlink" href="#a-worked-example" title="Link to this heading">#</a></h2>
-<p>Holding a vessel’s pitch with a proportional controller, one iteration per tick:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+<section id="submersion">
+<h2>Submersion<a class="headerlink" href="#submersion" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.submerged_portion" title="SpaceCenter.Flight.submerged_portion"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.submerged_portion</span></code></a> is the fraction of the vessel below the waterline, and
+<a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.depth" title="SpaceCenter.Flight.depth"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.depth</span></code></a> is how far its center of mass sits below the surface. The same pair
+is available per part, alongside <a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.Part.splashed" title="SpaceCenter.Part.splashed"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.splashed</span></code></a> and the depth of the part’s
+shallowest and deepest points.</p>
+</section>
+<section id="pressure">
+<h2>Pressure<a class="headerlink" href="#pressure" title="Link to this heading">#</a></h2>
+<p>Below the waterline, <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.static_pressure" title="SpaceCenter.Flight.static_pressure"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.static_pressure</span></code></a> and <a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.Part.static_pressure" title="SpaceCenter.Part.static_pressure"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.static_pressure</span></code></a>
+include the weight of the water. With part pressure limits enabled in the difficulty
+settings, a part is destroyed when its pressure exceeds <a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.Part.max_pressure" title="SpaceCenter.Part.max_pressure"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.max_pressure</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">part</span><span class="o">.</span><span class="n">static_pressure</span> <span class="o">+</span> <span class="n">part</span><span class="o">.</span><span class="n">dynamic_pressure</span> <span class="o">&gt;</span> <span class="n">part</span><span class="o">.</span><span class="n">max_pressure</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;is over its pressure limit&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.pressure_at" title="SpaceCenter.CelestialBody.pressure_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CelestialBody.pressure_at()</span></code></a> takes a negative altitude for a point under the sea, to
+plan how deep a dive can go.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
+<p>This script reports whether the active vessel floats, and how far its center of buoyancy
+sits from its center of mass:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;pitch hold&#39;</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Buoyancy Trim&quot;</span><span class="p">)</span>
 <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-<span class="n">target_pitch</span> <span class="o">=</span> <span class="mi">45</span>
+<span class="n">body</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
-        <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">next_tick</span><span class="p">()</span>
-        <span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
-        <span class="n">error</span> <span class="o">=</span> <span class="n">target_pitch</span> <span class="o">-</span> <span class="n">flight</span><span class="o">.</span><span class="n">pitch</span>
-        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">error</span><span class="p">))</span>
-<span class="k">finally</span><span class="p">:</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">release_tick</span><span class="p">()</span>
-    <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">body</span><span class="o">.</span><span class="n">has_ocean</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; has no ocean&quot;</span><span class="p">)</span>
+
+<span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span><span class="p">)</span>
+
+<span class="c1"># The fully submerged figures, which do not depend on where the vessel is</span>
+<span class="n">buoyancy</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">buoyant_force_at</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">ocean_density</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">surface_gravity</span><span class="p">)</span>
+<span class="n">torque</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">buoyant_torque_at</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">ocean_density</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">surface_gravity</span><span class="p">)</span>
+<span class="n">weight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">mass</span> <span class="o">*</span> <span class="n">body</span><span class="o">.</span><span class="n">surface_gravity</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Displacement:  </span><span class="si">%.1f</span><span class="s2"> m^3&quot;</span> <span class="o">%</span> <span class="n">flight</span><span class="o">.</span><span class="n">displacement</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Buoyancy:      </span><span class="si">%.0f</span><span class="s2"> N fully submerged&quot;</span> <span class="o">%</span> <span class="n">buoyancy</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Weight:        </span><span class="si">%.0f</span><span class="s2"> N&quot;</span> <span class="o">%</span> <span class="n">weight</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Floats:        </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">buoyancy</span> <span class="o">&gt;</span> <span class="n">weight</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Torque:        </span><span class="si">%.0f</span><span class="s2"> N m fully submerged&quot;</span> <span class="o">%</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="o">*</span><span class="n">torque</span><span class="p">))</span>
+
+<span class="c1"># The trim, read in the surface reference frame. Its x axis points up, so the y and z</span>
+<span class="c1"># axes span the horizontal. A horizontal offset between the two centers tips the hull</span>
+<span class="c1"># until they line up again.</span>
+<span class="n">center_of_buoyancy</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">center_of_buoyancy</span>
+
+<span class="k">if</span> <span class="n">center_of_buoyancy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trim:          vessel is out of the water&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">center_of_mass</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">center_of_mass</span>
+    <span class="n">north</span> <span class="o">=</span> <span class="n">center_of_buoyancy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">center_of_mass</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">east</span> <span class="o">=</span> <span class="n">center_of_buoyancy</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">center_of_mass</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Submerged:     </span><span class="si">%.0f%%</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">flight</span><span class="o">.</span><span class="n">submerged_portion</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trim:          </span><span class="si">%.2f</span><span class="s2"> m horizontally&quot;</span> <span class="o">%</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">north</span><span class="p">,</span> <span class="n">east</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trim north:    </span><span class="si">%+.2f</span><span class="s2"> m&quot;</span> <span class="o">%</span> <span class="n">north</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trim east:     </span><span class="si">%+.2f</span><span class="s2"> m&quot;</span> <span class="o">%</span> <span class="n">east</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Every iteration reads the pitch of one tick and writes a command that acts on that same tick.
-The 500 iterations cover 500 consecutive ticks, ten seconds of game time.</p>
-<p>To actually fly a vessel, use the <a class="reference internal" href="autopilot.html#using-the-autopilot"><span class="std std-ref">autopilot</span></a>, which implements a
-far better control law than the one above.</p>
-</section>
-<section id="the-autopilot">
-<h2>The AutoPilot<a class="headerlink" href="#the-autopilot" title="Link to this heading">#</a></h2>
-<p>The autopilot’s own control loop also runs once per physics tick. By default it runs after the
-calls of that tick, so a target set inside a held tick is flown on that tick.</p>
-<p><code class="docutils literal notranslate"><span class="pre">AutoPilot.update_mode</span></code> chooses where in the tick the loop runs. Its manual mode splits the
-tick at <code class="docutils literal notranslate"><span class="pre">update</span></code>: calls before it set what the loop flies the tick with, and calls after it
-read what the loop did. See <a class="reference internal" href="autopilot.html#autopilot-update-mode"><span class="std std-ref">when the control loop runs</span></a>.</p>
-</section>
-<section id="the-cost-of-a-hold">
-<h2>The Cost of a Hold<a class="headerlink" href="#the-cost-of-a-hold" title="Link to this heading">#</a></h2>
-<p>A hold costs real time. The game renders no frame, takes no input and runs no physics while a
-tick is held. A hold of five milliseconds costs five milliseconds of the update it happens in,
-and a hold of a hundred leaves the game running at about ten frames a second.</p>
-<p>A loop using <code class="docutils literal notranslate"><span class="pre">next_tick</span></code> holds every tick, and the game runs at the rate of the loop for as
-long as the loop runs. Physics runs on a fixed time step. A game whose ticks are held runs
-slower than real time and simulates every tick in turn.</p>
-<p>Keep the held section short, and keep anything that does not need the tick, such as logging or
-plotting, outside it.</p>
-</section>
-<section id="limits-of-a-hold">
-<h2>Limits of a Hold<a class="headerlink" href="#limits-of-a-hold" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>A hold ends by itself after the <strong>tick hold timeout</strong>, one second by default, and when the
-client disconnects. The timeout is a server setting, in the advanced section of the server
-window, as it bounds how long the server’s owner has their game frozen.</p></li>
-<li><p>One client holds the tick at a time, and only a client making a call can hold it. A second
-client’s attempt is refused, as is a hold attempted from a stream or an event.</p></li>
-<li><p>Streams do not update while a tick is held, as the server sends stream updates once it has
-finished executing calls. Read with calls inside a hold. A wait for a stream or an event
-there runs the hold out to its timeout.</p></li>
-<li><p>Calling a procedure that takes more than one tick to finish, such as staging or warping,
-ends the hold. Such a call can only finish in the tick the hold is holding back.</p></li>
-<li><p>A tick lost to the timeout is not reported. The next <code class="docutils literal notranslate"><span class="pre">next_tick</span></code> takes whatever tick it
-lands on, so a loop that has to know whether it kept up reads the game’s own clock through
-<code class="docutils literal notranslate"><span class="pre">SpaceCenter.ut</span></code>.</p></li>
-<li><p>A hold gains nothing while the game is paused, since physics is not advancing, and it blocks
-the pause menu for as long as it lasts.</p></li>
-</ul>
 </section>
 </section>
 
@@ -744,20 +737,20 @@ the pause menu for as long as it lasts.</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="object-lifetime.html"
+       href="parts.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Object Lifetime</p>
+        <p class="prev-next-title">Interacting with Parts</p>
       </div>
     </a>
     <a class="right-next"
-       href="autopilot.html"
+       href="docking-guidance.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">AutoPilot</p>
+        <p class="prev-next-title">Docking Guidance</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -780,20 +773,17 @@ the pause menu for as long as it lasts.</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-receive-timeout">The Receive Timeout</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#holding-a-tick">Holding a Tick</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consecutive-ticks">Consecutive Ticks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example">A Worked Example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-autopilot">The AutoPilot</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cost-of-a-hold">The Cost of a Hold</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limits-of-a-hold">Limits of a Hold</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trim">Trim</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submersion">Submersion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pressure">Pressure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/tutorials/control-loops.rst.txt">
+    <a href="../_sources/tutorials/buoyancy.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

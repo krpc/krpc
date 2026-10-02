@@ -1027,6 +1027,95 @@ in row-major order.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel12displacementEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel12displacementEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel12displacementEv"></span><span id="krpc::services::SpaceCenter::EditorVessel::displacement"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">displacement</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel12displacementEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume of water the vessel displaces when fully submerged, in
+<span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel18center_of_buoyancyE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel18center_of_buoyancyE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel18center_of_buoyancyE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::EditorVessel::center_of_buoyancy__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">center_of_buoyancy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel18center_of_buoyancyE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The point the buoyant force acts through with the vessel fully submerged.
+Returns <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if no part of the vessel displaces any water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A hull at rest carries this on the same vertical line as
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel14center_of_massE14ReferenceFrame" title="krpc::services::SpaceCenter::EditorVessel::center_of_mass"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">EditorVessel::center_of_mass()</span></code></a>. Compare the two in the same reference frame to see
+which way an untrimmed hull will roll.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel16buoyant_force_atEdd">
+<span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel16buoyant_force_atEdd"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel16buoyant_force_atEdd"></span><span id="krpc::services::SpaceCenter::EditorVessel::buoyant_force_at__double.double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyant_force_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">density</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gravity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel16buoyant_force_atEdd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The buoyant force on the vessel when fully submerged in a fluid of the given
+density, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compare this with the vessel’s weight to see whether the hull floats. It applies
+<a class="reference internal" href="space-center.html#_CPPv4N4krpc8services11SpaceCenter15buoyancy_scalarEv" title="krpc::services::SpaceCenter::buoyancy_scalar"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">buoyancy_scalar()</span></code></a> and each part’s
+<a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4Part19buoyancy_multiplierEv" title="krpc::services::SpaceCenter::Part::buoyancy_multiplier"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::buoyancy_multiplier()</span></code></a>, so the result is what the game would
+do to the vessel.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel17buoyant_torque_atEdd14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel17buoyant_torque_atEdd14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel17buoyant_torque_atEdd14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::EditorVessel::buoyant_torque_at__double.double.ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyant_torque_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">density</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gravity</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel17buoyant_torque_atEdd14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque the buoyant force exerts about the vessel’s center of mass when fully
+submerged in a fluid of the given density, under gravity acting down the editor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame that the returned torque vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A hull trimmed level carries zero torque.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel4costEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel4costEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel4costEv"></span><span id="krpc::services::SpaceCenter::EditorVessel::cost"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cost</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel4costEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The total cost of the vessel, including resources, in funds.</p>

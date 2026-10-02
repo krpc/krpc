@@ -1286,6 +1286,199 @@ Returns zero if the part is massless.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part15static_pressureEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part15static_pressureEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part15static_pressureEv"></span><span id="krpc::services::SpaceCenter::Part::static_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">static_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part15static_pressureEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The static pressure acting on the part, in Pascals. Below the waterline this
+includes the pressure of the water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part12displacementEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part12displacementEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part12displacementEv"></span><span id="krpc::services::SpaceCenter::Part::displacement"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">displacement</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part12displacementEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume of water the part displaces when fully submerged, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part16displaced_volumeEv" title="krpc::services::SpaceCenter::Part::displaced_volume"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::displaced_volume()</span></code></a> for the volume it is displacing now.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part19buoyancy_multiplierEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part19buoyancy_multiplierEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part19buoyancy_multiplierEv"></span><span id="krpc::services::SpaceCenter::Part::buoyancy_multiplier"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyancy_multiplier</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part19buoyancy_multiplierEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The multiplier applied to the buoyant force on the part. One for most parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part16buoyant_force_atEdd">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part16buoyant_force_atEdd"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part16buoyant_force_atEdd"></span><span id="krpc::services::SpaceCenter::Part::buoyant_force_at__double.double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyant_force_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">density</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gravity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part16buoyant_force_atEdd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The buoyant force on the part when fully submerged in a fluid of the given
+density, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Applies <a class="reference internal" href="space-center.html#_CPPv4N4krpc8services11SpaceCenter15buoyancy_scalarEv" title="krpc::services::SpaceCenter::buoyancy_scalar"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">buoyancy_scalar()</span></code></a> and
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part19buoyancy_multiplierEv" title="krpc::services::SpaceCenter::Part::buoyancy_multiplier"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::buoyancy_multiplier()</span></code></a>, so the result is what the game would do to the
+part rather than what
+<a class="reference external" href="https://en.wikipedia.org/wiki/Archimedes%27_principle">Archimedes’ principle</a> alone gives.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part8splashedEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part8splashedEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part8splashedEv"></span><span id="krpc::services::SpaceCenter::Part::splashed"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">splashed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part8splashedEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the part is in contact with water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part17submerged_portionEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part17submerged_portionEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part17submerged_portionEv"></span><span id="krpc::services::SpaceCenter::Part::submerged_portion"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submerged_portion</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part17submerged_portionEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The fraction of the part below the waterline, between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part16displaced_volumeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part16displaced_volumeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part16displaced_volumeEv"></span><span id="krpc::services::SpaceCenter::Part::displaced_volume"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">displaced_volume</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part16displaced_volumeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume of water the part is displacing, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part5depthEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part5depthEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part5depthEv"></span><span id="krpc::services::SpaceCenter::Part::depth"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">depth</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part5depthEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The depth of the part below the waterline, in meters, measured at
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part22center_of_displacementE14ReferenceFrame" title="krpc::services::SpaceCenter::Part::center_of_displacement"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::center_of_displacement()</span></code></a>. Negative above the waterline. Returns zero
+if the body the vessel is at has no ocean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part9min_depthEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part9min_depthEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part9min_depthEv"></span><span id="krpc::services::SpaceCenter::Part::min_depth"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min_depth</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part9min_depthEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The depth of the shallowest point of the part below the waterline, in meters.
+Returns zero if the body the vessel is at has no ocean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part9max_depthEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part9max_depthEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part9max_depthEv"></span><span id="krpc::services::SpaceCenter::Part::max_depth"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_depth</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part9max_depthEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The depth of the deepest point of the part below the waterline, in meters.
+Returns zero if the body the vessel is at has no ocean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game ramps the buoyant force in over the first fraction of a meter of this
+depth.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part26submerged_dynamic_pressureEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part26submerged_dynamic_pressureEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part26submerged_dynamic_pressureEv"></span><span id="krpc::services::SpaceCenter::Part::submerged_dynamic_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submerged_dynamic_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part26submerged_dynamic_pressureEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The dynamic pressure of the water acting on the part, in Pascals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part25submerged_drag_multiplierEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part25submerged_drag_multiplierEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part25submerged_drag_multiplierEv"></span><span id="krpc::services::SpaceCenter::Part::submerged_drag_multiplier"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submerged_drag_multiplier</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part25submerged_drag_multiplierEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The multiplier applied to the drag on the part while it is submerged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game sets this high on splashdown and eases it down as the part moves through
+the water. It climbs back once the part slows to a crawl, so a hull under way
+reads lower than one lying still.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part25submerged_lift_multiplierEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part25submerged_lift_multiplierEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part25submerged_lift_multiplierEv"></span><span id="krpc::services::SpaceCenter::Part::submerged_lift_multiplier"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submerged_lift_multiplier</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part25submerged_lift_multiplierEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The multiplier applied to the lift on the part while it is submerged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part29water_angular_drag_multiplierEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part29water_angular_drag_multiplierEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part29water_angular_drag_multiplierEv"></span><span id="krpc::services::SpaceCenter::Part::water_angular_drag_multiplier"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">water_angular_drag_multiplier</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part29water_angular_drag_multiplierEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The multiplier applied to the angular drag on the part while it is submerged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Part of the part’s configuration rather than a live readout, so it reads the same
+in the editor and at a body with no ocean.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part16impact_toleranceEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter4Part16impact_toleranceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part16impact_toleranceEv"></span><span id="krpc::services::SpaceCenter::Part::impact_tolerance"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">impact_tolerance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part16impact_toleranceEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The impact tolerance of the part, in meters per second.</p>
@@ -1323,6 +1516,17 @@ Returns zero if the part is massless.</p>
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part20max_skin_temperatureEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter4Part20max_skin_temperatureEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part20max_skin_temperatureEv"></span><span id="krpc::services::SpaceCenter::Part::max_skin_temperature"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_skin_temperature</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part20max_skin_temperatureEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Maximum temperature that the skin of the part can survive, in Kelvin.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part12max_pressureEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part12max_pressureEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part12max_pressureEv"></span><span id="krpc::services::SpaceCenter::Part::max_pressure"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part12max_pressureEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Maximum pressure that the part can survive, in Pascals.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>With part pressure limits enabled in the difficulty settings, the part is destroyed
+when <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part15static_pressureEv" title="krpc::services::SpaceCenter::Part::static_pressure"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::static_pressure()</span></code></a> plus <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part16dynamic_pressureEv" title="krpc::services::SpaceCenter::Part::dynamic_pressure"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::dynamic_pressure()</span></code></a> exceeds this.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1878,6 +2082,75 @@ currently acting on the part.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Not available when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part18center_of_buoyancyE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part18center_of_buoyancyE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part18center_of_buoyancyE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Part::center_of_buoyancy__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">center_of_buoyancy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part18center_of_buoyancyE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The point the buoyant force on the part acts at, in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A submerged part reports the point the game applied the force at, which it shifts
+towards the submerged part of the hull. Any other part reports its configured
+center of buoyancy.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part22center_of_displacementE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part22center_of_displacementE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part22center_of_displacementE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Part::center_of_displacement__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">center_of_displacement</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part22center_of_displacementE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The point the depth of the part is measured at, in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part13buoyant_forceE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter4Part13buoyant_forceE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part13buoyant_forceE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Part::buoyant_force__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyant_force</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part13buoyant_forceE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The buoyant force currently acting on the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame that the returned vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The buoyant force on its own. The water drag and lift the game applies alongside
+it are reported by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part25submerged_drag_multiplierEv" title="krpc::services::SpaceCenter::Part::submerged_drag_multiplier"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::submerged_drag_multiplier()</span></code></a> and
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part25submerged_lift_multiplierEv" title="krpc::services::SpaceCenter::Part::submerged_lift_multiplier"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::submerged_lift_multiplier()</span></code></a>.</p>
 </div>
 </dd></dl>
 

@@ -272,6 +272,18 @@ SpaceCenter
 
       :Game Scenes: All
 
+   .. property:: double BuoyancyScalar { get; }
+
+      The multiplier the game applies to every buoyant force.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Stock KSP sets it to 1.2. A buoyant force is a fifth larger than
+         `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
    .. property:: float WarpRate { get; }
 
       The current warp rate. This is the rate at which time is passing for

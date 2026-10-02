@@ -1009,6 +1009,19 @@ when over water.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_HasOcean">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_HasOcean</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_HasOcean" title="Link to this definition">#</a><br /></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the body has an ocean.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_OceanDensity">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_OceanDensity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_OceanDensity" title="Link to this definition">#</a><br /></dt>
+<dd><p>The density of the body’s ocean, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.
+Returns zero if the body has no ocean.</p>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_AtmosphericDensityAtPosition">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_AtmosphericDensityAtPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_AtmosphericDensityAtPosition" title="Link to this definition">#</a><br /></dt>
 <dd><p>The atmospheric density at the given position, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>,
@@ -1069,12 +1082,16 @@ for trajectory prediction.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_PressureAt">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_PressureAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">altitude</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_PressureAt" title="Link to this definition">#</a><br /></dt>
-<dd><p>Gets the air pressure, in Pascals, for the specified
+<dd><p>Gets the static pressure, in Pascals, for the specified
 altitude above sea level, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Below sea level on a body with an ocean, this includes the pressure of the water.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">

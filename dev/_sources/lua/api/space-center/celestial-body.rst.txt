@@ -249,6 +249,21 @@ CelestialBody
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: has_ocean: boolean
+
+      ``True`` if the body has an ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: ocean_density: number
+
+      The density of the body's ocean, in :math:`kg/m^3`.
+      Returns zero if the body has no ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
    .. method:: atmospheric_density_at_position(position, reference_frame)
 
       The atmospheric density at the given position, in :math:`kg/m^3`,
@@ -295,11 +310,15 @@ CelestialBody
 
    .. method:: pressure_at(altitude)
 
-      Gets the air pressure, in Pascals, for the specified
+      Gets the static pressure, in Pascals, for the specified
       altitude above sea level, in meters.
 
       :param number altitude:
       :rtype: number
+
+      .. note::
+
+         Below sea level on a body with an ocean, this includes the pressure of the water.
 
    .. attribute:: biomes: Set
 

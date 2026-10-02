@@ -269,6 +269,19 @@ CelestialBody
 
       :Game Scenes: All
 
+   .. property:: bool HasOcean { get; }
+
+      ``true`` if the body has an ocean.
+
+      :Game Scenes: All
+
+   .. property:: double OceanDensity { get; }
+
+      The density of the body's ocean, in :math:`kg/m^3`.
+      Returns zero if the body has no ocean.
+
+      :Game Scenes: All
+
    .. method:: double AtmosphericDensityAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
       The atmospheric density at the given position, in :math:`kg/m^3`,
@@ -325,7 +338,7 @@ CelestialBody
 
    .. method:: double PressureAt(double altitude)
 
-      Gets the air pressure, in Pascals, for the specified
+      Gets the static pressure, in Pascals, for the specified
       altitude above sea level, in meters.
 
       :parameters:
@@ -333,6 +346,11 @@ CelestialBody
 
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Below sea level on a body with an ocean, this includes the pressure of the water.
 
    .. property:: System.Collections.Generic.ISet<string> Biomes { get; }
 

@@ -374,6 +374,22 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. attribute:: buoyancy_scalar
+
+   The multiplier the game applies to every buoyant force.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: float
+   
+
+   .. note::
+
+      Stock KSP sets it to 1.2. A buoyant force is a fifth larger than
+      `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
+
+
+
 .. attribute:: warp_rate
 
    The current warp rate. This is the rate at which time is passing for

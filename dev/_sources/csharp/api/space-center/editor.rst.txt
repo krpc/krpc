@@ -233,6 +233,71 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. property:: double Displacement { get; }
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: System.Tuple<double,double,double> CenterOfBuoyancy(ReferenceFrame referenceFrame)
+
+      The point the buoyant force acts through with the vessel fully submerged.
+      Returns ``null`` if no part of the vessel displaces any water.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :meth:`EditorVessel.CenterOfMass`. Compare the two in the same reference frame to see
+         which way an untrimmed hull will roll.
+
+   .. method:: double BuoyantForceAt(double density, double gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Compare this with the vessel's weight to see whether the hull floats. It applies
+         :prop:`SpaceCenter.BuoyancyScalar <SpaceCenter.SpaceCenter.BuoyancyScalar>` and each part's
+         :prop:`Part.BuoyancyMultiplier`, so the result is what the game would
+         do to the vessel.
+
+   .. method:: System.Tuple<double,double,double> BuoyantTorqueAt(double density, double gravity, ReferenceFrame referenceFrame)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, under gravity acting down the editor.
+
+      :parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+       * **referenceFrame** -- The reference frame that the returned torque vector is in.
+
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A hull trimmed level carries zero torque.
+
    .. property:: float Cost { get; }
 
       The total cost of the vessel, including resources, in funds.

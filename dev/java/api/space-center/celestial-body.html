@@ -1009,6 +1009,19 @@ when over water.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.getHasOcean()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getHasOcean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.getHasOcean()" title="Link to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the body has an ocean.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.getOceanDensity()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getOceanDensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.getOceanDensity()" title="Link to this definition">#</a></dt>
+<dd><p>The density of the body’s ocean, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.
+Returns zero if the body has no ocean.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.atmosphericDensityAtPosition(org.javatuples.Triplet, ReferenceFrame)">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">atmosphericDensityAtPosition</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">position</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.atmosphericDensityAtPosition(org.javatuples.Triplet, ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The atmospheric density at the given position, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>,
@@ -1072,7 +1085,7 @@ for trajectory prediction.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.pressureAt(double)">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">pressureAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">altitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.pressureAt(double)" title="Link to this definition">#</a></dt>
-<dd><p>Gets the air pressure, in Pascals, for the specified
+<dd><p>Gets the static pressure, in Pascals, for the specified
 altitude above sea level, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1081,6 +1094,10 @@ altitude above sea level, in meters.</p>
 </ul>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Below sea level on a body with an ocean, this includes the pressure of the water.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">

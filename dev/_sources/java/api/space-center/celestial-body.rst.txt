@@ -249,6 +249,21 @@ CelestialBody
 
    
 
+   .. method:: boolean getHasOcean()
+
+
+      ``true`` if the body has an ocean.
+
+   
+
+   .. method:: double getOceanDensity()
+
+
+      The density of the body's ocean, in :math:`kg/m^3`.
+      Returns zero if the body has no ocean.
+
+   
+
    .. method:: double atmosphericDensityAtPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
 
       The atmospheric density at the given position, in :math:`kg/m^3`,
@@ -295,11 +310,15 @@ CelestialBody
 
    .. method:: double pressureAt(double altitude)
 
-      Gets the air pressure, in Pascals, for the specified
+      Gets the static pressure, in Pascals, for the specified
       altitude above sea level, in meters.
 
       :param double altitude:
    
+
+      .. note::
+
+         Below sea level on a body with an ocean, this includes the pressure of the water.
 
    .. method:: java.util.Set<String> getBiomes()
 

@@ -1307,6 +1307,199 @@ Returns zero if the part is massless.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getStaticPressure()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStaticPressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getStaticPressure()" title="Link to this definition">#</a></dt>
+<dd><p>The static pressure acting on the part, in Pascals. Below the waterline this
+includes the pressure of the water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getDisplacement()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDisplacement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getDisplacement()" title="Link to this definition">#</a></dt>
+<dd><p>The volume of water the part displaces when fully submerged, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getDisplacedVolume()" title="krpc.client.services.SpaceCenter.Part.getDisplacedVolume()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getDisplacedVolume()</span></code></a> for the volume it is displacing now.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getBuoyancyMultiplier()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getBuoyancyMultiplier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getBuoyancyMultiplier()" title="Link to this definition">#</a></dt>
+<dd><p>The multiplier applied to the buoyant force on the part. One for most parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.buoyantForceAt(double, double)">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">buoyantForceAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">density</span></em>, <span class="pre">double</span><em> <span class="pre">gravity</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.buoyantForceAt(double, double)" title="Link to this definition">#</a></dt>
+<dd><p>The buoyant force on the part when fully submerged in a fluid of the given
+density, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Applies <a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getBuoyancyScalar()" title="krpc.client.services.SpaceCenter.SpaceCenter.getBuoyancyScalar()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getBuoyancyScalar()</span></code></a> and
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getBuoyancyMultiplier()" title="krpc.client.services.SpaceCenter.Part.getBuoyancyMultiplier()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getBuoyancyMultiplier()</span></code></a>, so the result is what the game would do to the
+part rather than what
+<a class="reference external" href="https://en.wikipedia.org/wiki/Archimedes%27_principle">Archimedes’ principle</a> alone gives.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getSplashed()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSplashed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getSplashed()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the part is in contact with water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getSubmergedPortion()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSubmergedPortion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getSubmergedPortion()" title="Link to this definition">#</a></dt>
+<dd><p>The fraction of the part below the waterline, between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getDisplacedVolume()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDisplacedVolume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getDisplacedVolume()" title="Link to this definition">#</a></dt>
+<dd><p>The volume of water the part is displacing, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getDepth()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDepth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getDepth()" title="Link to this definition">#</a></dt>
+<dd><p>The depth of the part below the waterline, in meters, measured at
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.centerOfDisplacement(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Part.centerOfDisplacement(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.centerOfDisplacement(ReferenceFrame)</span></code></a>. Negative above the waterline. Returns zero
+if the body the vessel is at has no ocean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getMinDepth()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMinDepth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getMinDepth()" title="Link to this definition">#</a></dt>
+<dd><p>The depth of the shallowest point of the part below the waterline, in meters.
+Returns zero if the body the vessel is at has no ocean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getMaxDepth()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMaxDepth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getMaxDepth()" title="Link to this definition">#</a></dt>
+<dd><p>The depth of the deepest point of the part below the waterline, in meters.
+Returns zero if the body the vessel is at has no ocean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game ramps the buoyant force in over the first fraction of a meter of this
+depth.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getSubmergedDynamicPressure()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSubmergedDynamicPressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getSubmergedDynamicPressure()" title="Link to this definition">#</a></dt>
+<dd><p>The dynamic pressure of the water acting on the part, in Pascals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getSubmergedDragMultiplier()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSubmergedDragMultiplier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getSubmergedDragMultiplier()" title="Link to this definition">#</a></dt>
+<dd><p>The multiplier applied to the drag on the part while it is submerged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game sets this high on splashdown and eases it down as the part moves through
+the water. It climbs back once the part slows to a crawl, so a hull under way
+reads lower than one lying still.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getSubmergedLiftMultiplier()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSubmergedLiftMultiplier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getSubmergedLiftMultiplier()" title="Link to this definition">#</a></dt>
+<dd><p>The multiplier applied to the lift on the part while it is submerged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getWaterAngularDragMultiplier()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getWaterAngularDragMultiplier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getWaterAngularDragMultiplier()" title="Link to this definition">#</a></dt>
+<dd><p>The multiplier applied to the angular drag on the part while it is submerged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Part of the part’s configuration rather than a live readout, so it reads the same
+in the editor and at a body with no ocean.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getImpactTolerance()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getImpactTolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getImpactTolerance()" title="Link to this definition">#</a></dt>
 <dd><p>The impact tolerance of the part, in meters per second.</p>
@@ -1344,6 +1537,17 @@ Returns zero if the part is massless.</p>
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getMaxSkinTemperature()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMaxSkinTemperature</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getMaxSkinTemperature()" title="Link to this definition">#</a></dt>
 <dd><p>Maximum temperature that the skin of the part can survive, in Kelvin.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.getMaxPressure()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMaxPressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.getMaxPressure()" title="Link to this definition">#</a></dt>
+<dd><p>Maximum pressure that the part can survive, in Pascals.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>With part pressure limits enabled in the difficulty settings, the part is destroyed
+when <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getStaticPressure()" title="krpc.client.services.SpaceCenter.Part.getStaticPressure()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getStaticPressure()</span></code></a> plus <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getDynamicPressure()" title="krpc.client.services.SpaceCenter.Part.getDynamicPressure()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getDynamicPressure()</span></code></a> exceeds this.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -1899,6 +2103,75 @@ currently acting on the part.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Not available when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.centerOfBuoyancy(ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">centerOfBuoyancy</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.centerOfBuoyancy(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The point the buoyant force on the part acts at, in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A submerged part reports the point the game applied the force at, which it shifts
+towards the submerged part of the hull. Any other part reports its configured
+center of buoyancy.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.centerOfDisplacement(ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">centerOfDisplacement</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.centerOfDisplacement(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The point the depth of the part is measured at, in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.buoyantForce(ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">buoyantForce</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.buoyantForce(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The buoyant force currently acting on the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The buoyant force on its own. The water drag and lift the game applies alongside
+it are reported by <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getSubmergedDragMultiplier()" title="krpc.client.services.SpaceCenter.Part.getSubmergedDragMultiplier()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getSubmergedDragMultiplier()</span></code></a> and
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getSubmergedLiftMultiplier()" title="krpc.client.services.SpaceCenter.Part.getSubmergedLiftMultiplier()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getSubmergedLiftMultiplier()</span></code></a>.</p>
 </div>
 </dd></dl>
 

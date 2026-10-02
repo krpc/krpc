@@ -1002,6 +1002,95 @@ in row-major order.</p>
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.Displacement">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">Displacement</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.Displacement" title="Link to this definition">#</a></dt>
+<dd><p>The volume of water the vessel displaces when fully submerged, in
+<span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfBuoyancy">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">CenterOfBuoyancy</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfBuoyancy" title="Link to this definition">#</a></dt>
+<dd><p>The point the buoyant force acts through with the vessel fully submerged.
+Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if no part of the vessel displaces any water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A hull at rest carries this on the same vertical line as
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfMass" title="KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfMass method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">EditorVessel.CenterOfMass</span></code></a>. Compare the two in the same reference frame to see
+which way an untrimmed hull will roll.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.EditorVessel.BuoyantForceAt">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">BuoyantForceAt</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">density</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">gravity</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.EditorVessel.BuoyantForceAt" title="Link to this definition">#</a></dt>
+<dd><p>The buoyant force on the vessel when fully submerged in a fluid of the given
+density, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compare this with the vessel’s weight to see whether the hull floats. It applies
+<a class="reference internal" href="space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.BuoyancyScalar" title="KRPC.Client.Services.SpaceCenter.SpaceCenter.BuoyancyScalar property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">SpaceCenter.BuoyancyScalar</span></code></a> and each part’s
+<a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.BuoyancyMultiplier" title="KRPC.Client.Services.SpaceCenter.Part.BuoyancyMultiplier property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.BuoyancyMultiplier</span></code></a>, so the result is what the game would
+do to the vessel.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.EditorVessel.BuoyantTorqueAt">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">BuoyantTorqueAt</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">density</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">gravity</span></em>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.EditorVessel.BuoyantTorqueAt" title="Link to this definition">#</a></dt>
+<dd><p>The torque the buoyant force exerts about the vessel’s center of mass when fully
+submerged in a fluid of the given density, under gravity acting down the editor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned torque vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A hull trimmed level carries zero torque.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.Cost">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Cost</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.Cost" title="Link to this definition">#</a></dt>
 <dd><p>The total cost of the vessel, including resources, in funds.</p>

@@ -487,6 +487,133 @@ Part
 
       :Game Scenes: Flight
 
+   .. function:: float static_pressure()
+
+      The static pressure acting on the part, in Pascals. Below the waterline this
+      includes the pressure of the water.
+
+      :Game Scenes: Flight
+
+   .. function:: double displacement()
+
+      The volume of water the part displaces when fully submerged, in :math:`m^3`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         See :func:`Part::displaced_volume` for the volume it is displacing now.
+
+   .. function:: float buoyancy_multiplier()
+
+      The multiplier applied to the buoyant force on the part. One for most parts.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: double buoyant_force_at(double density, double gravity)
+
+      The buoyant force on the part when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :Parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applies :func:`buoyancy_scalar` and
+         :func:`Part::buoyancy_multiplier`, so the result is what the game would do to the
+         part rather than what
+         `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
+   .. function:: bool splashed()
+
+      Whether the part is in contact with water.
+
+      :Game Scenes: Flight
+
+   .. function:: double submerged_portion()
+
+      The fraction of the part below the waterline, between 0 and 1.
+
+      :Game Scenes: Flight
+
+   .. function:: double displaced_volume()
+
+      The volume of water the part is displacing, in :math:`m^3`.
+
+      :Game Scenes: Flight
+
+   .. function:: double depth()
+
+      The depth of the part below the waterline, in meters, measured at
+      :func:`Part::center_of_displacement`. Negative above the waterline. Returns zero
+      if the body the vessel is at has no ocean.
+
+      :Game Scenes: Flight
+
+   .. function:: double min_depth()
+
+      The depth of the shallowest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Game Scenes: Flight
+
+   .. function:: double max_depth()
+
+      The depth of the deepest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game ramps the buoyant force in over the first fraction of a meter of this
+         depth.
+
+   .. function:: float submerged_dynamic_pressure()
+
+      The dynamic pressure of the water acting on the part, in Pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: double submerged_drag_multiplier()
+
+      The multiplier applied to the drag on the part while it is submerged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game sets this high on splashdown and eases it down as the part moves through
+         the water. It climbs back once the part slows to a crawl, so a hull under way
+         reads lower than one lying still.
+
+   .. function:: double submerged_lift_multiplier()
+
+      The multiplier applied to the lift on the part while it is submerged.
+
+      :Game Scenes: Flight
+
+   .. function:: float water_angular_drag_multiplier()
+
+      The multiplier applied to the angular drag on the part while it is submerged.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Part of the part's configuration rather than a live readout, so it reads the same
+         in the editor and at a body with no ocean.
+
    .. function:: double impact_tolerance()
 
       The impact tolerance of the part, in meters per second.
@@ -516,6 +643,17 @@ Part
       Maximum temperature that the skin of the part can survive, in Kelvin.
 
    
+
+   .. function:: double max_pressure()
+
+      Maximum pressure that the part can survive, in Pascals.
+
+   
+
+      .. note::
+
+         With part pressure limits enabled in the difficulty settings, the part is destroyed
+         when :func:`Part::static_pressure` plus :func:`Part::dynamic_pressure` exceeds this.
 
    .. function:: float thermal_mass()
 
@@ -950,6 +1088,53 @@ Part
       .. note::
 
          Not available when the Ferram Aerospace Research mod is installed.
+
+   .. function:: std::tuple<double, double, double> center_of_buoyancy(ReferenceFrame reference_frame)
+
+      The point the buoyant force on the part acts at, in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A submerged part reports the point the game applied the force at, which it shifts
+         towards the submerged part of the hull. Any other part reports its configured
+         center of buoyancy.
+
+   .. function:: std::tuple<double, double, double> center_of_displacement(ReferenceFrame reference_frame)
+
+      The point the depth of the part is measured at, in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: std::tuple<double, double, double> buoyant_force(ReferenceFrame reference_frame)
+
+      The buoyant force currently acting on the part.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned vector is in.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The buoyant force on its own. The water drag and lift the game applies alongside
+         it are reported by :func:`Part::submerged_drag_multiplier` and
+         :func:`Part::submerged_lift_multiplier`.
 
    .. function:: std::tuple<double, double, double> moment_of_inertia()
 

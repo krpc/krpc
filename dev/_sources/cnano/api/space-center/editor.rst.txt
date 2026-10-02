@@ -238,6 +238,71 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Displacement(krpc_connection_t connection, double * result)
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CenterOfBuoyancy(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The point the buoyant force acts through with the vessel fully submerged.
+      Returns ``nullptr`` if no part of the vessel displaces any water.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :func:`krpc_SpaceCenter_EditorVessel_CenterOfMass`. Compare the two in the same reference frame to see
+         which way an untrimmed hull will roll.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BuoyantForceAt(krpc_connection_t connection, double * result, double density, double gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :Parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Compare this with the vessel's weight to see whether the hull floats. It applies
+         :func:`krpc_SpaceCenter_BuoyancyScalar` and each part's
+         :func:`krpc_SpaceCenter_Part_BuoyancyMultiplier`, so the result is what the game would
+         do to the vessel.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BuoyantTorqueAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double density, double gravity, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, under gravity acting down the editor.
+
+      :Parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+       * **referenceFrame** -- The reference frame that the returned torque vector is in.
+
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A hull trimmed level carries zero torque.
+
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Cost(krpc_connection_t connection, float * result)
 
       The total cost of the vessel, including resources, in funds.

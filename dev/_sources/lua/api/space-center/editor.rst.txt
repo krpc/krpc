@@ -228,6 +228,60 @@ Editor
       :Attribute: Read-only, cannot be set
       :rtype: List
 
+   .. attribute:: displacement: number
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: center_of_buoyancy(reference_frame)
+
+      The point the buoyant force acts through with the vessel fully submerged.
+      Returns ``nil`` if no part of the vessel displaces any water.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: Tuple
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :meth:`SpaceCenter.EditorVessel.center_of_mass`. Compare the two in the same reference frame to see
+         which way an untrimmed hull will roll.
+
+   .. method:: buoyant_force_at(density, gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :param number density: The density of the fluid, in :math:`kg/m^3`.
+      :param number gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :rtype: number
+
+      .. note::
+
+         Compare this with the vessel's weight to see whether the hull floats. It applies
+         :attr:`SpaceCenter.buoyancy_scalar <SpaceCenter.SpaceCenter.buoyancy_scalar>` and each part's
+         :attr:`SpaceCenter.Part.buoyancy_multiplier`, so the result is what the game would
+         do to the vessel.
+
+   .. method:: buoyant_torque_at(density, gravity, reference_frame)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, under gravity acting down the editor.
+
+      :param number density: The density of the fluid, in :math:`kg/m^3`.
+      :param number gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned torque vector is in.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :rtype: Tuple
+
+      .. note::
+
+         A hull trimmed level carries zero torque.
+
    .. attribute:: cost: number
 
       The total cost of the vessel, including resources, in funds.

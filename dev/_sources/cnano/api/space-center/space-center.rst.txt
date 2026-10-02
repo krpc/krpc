@@ -369,6 +369,20 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. function:: krpc_error_t krpc_SpaceCenter_BuoyancyScalar(krpc_connection_t connection, double * result)
+
+   The multiplier the game applies to every buoyant force.
+
+   
+
+   .. note::
+
+      Stock KSP sets it to 1.2. A buoyant force is a fifth larger than
+      `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
+
+
+
 .. function:: krpc_error_t krpc_SpaceCenter_WarpRate(krpc_connection_t connection, float * result)
 
    The current warp rate. This is the rate at which time is passing for
