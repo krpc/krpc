@@ -99,7 +99,7 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   if (!result.has_error()) {
     for (const auto& callback : callbacks) {
       try {
-        callback.second(result.value());
+        callback.second(result.value(), result.is_null());
       } catch (const std::exception& exn) {
         std::cerr << "kRPC: exception thrown by a stream callback: " << exn.what() << "\n";
       } catch (...) {

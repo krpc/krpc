@@ -41,13 +41,13 @@ void StreamImpl::set_rate(float value) {
 
 bool StreamImpl::has_started() const { return started; }
 
-const std::string& StreamImpl::get_data() {
+std::string StreamImpl::get_data(bool* is_null) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
   if (!updated) throw StreamError("Stream has no value");
   if (exception) std::rethrow_exception(exception);
+  *is_null = _is_null;
   return data;
 }
-
-bool StreamImpl::is_null() const { return _is_null; }
 
 void StreamImpl::update(const std::string& data, bool is_null,
                         const std::exception_ptr& exception) {
