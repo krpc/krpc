@@ -633,3 +633,11 @@ TEST_F(test_stream, test_equality) {
   ASSERT_TRUE(s2 == s1);
   ASSERT_FALSE(s2 != s1);
 }
+
+TEST_F(test_stream, test_stream_without_a_stream_connection) {
+  // A stream port of zero connects without streams, which connect_local cannot express
+  if (get_rpc_path() != nullptr) GTEST_SKIP();
+  auto client = krpc::connect("NoStreams", "localhost", get_rpc_port(), 0);
+  krpc::services::TestService service(&client);
+  ASSERT_THROW(service.string_property_stream(), krpc::StreamError);
+}

@@ -52,8 +52,11 @@ class Client {
   void throw_exception(const schema::Error& error) const;
   schema::ProcedureResult send_request(const schema::Request& request);
   static void add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args);
+  StreamManager& streams() const;
 
  public:
+  /** Throw a StreamError if the client has no connection to the stream server. */
+  void check_stream_connection() const;
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
   std::shared_ptr<StreamImpl> get_stream(uint64_t id);
   void remove_stream(uint64_t id);
