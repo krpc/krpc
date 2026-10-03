@@ -930,6 +930,7 @@
 <li><p>Add a <code class="docutils literal notranslate"><span class="pre">timeout</span></code> parameter to the <code class="docutils literal notranslate"><span class="pre">Connection</span></code> constructor, bounding how long a connection is waited for (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1065">#1065</a>)</p></li>
 <li><p>Reduce the cost of a remote procedure call, encoding and decoding without a protobuf stream and parsing a response straight out of the read buffer (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1056">#1056</a>)</p></li>
 <li><p>Reduce the cost of a call that returns a collection or an object (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1056">#1056</a>)</p></li>
+<li><p>Fix an <code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code> from the server carrying its message as the parameter name (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1111">#1111</a>)</p></li>
 </ul>
 </section>
 <section id="id1">

@@ -328,6 +328,7 @@ C# client
 * Add a ``timeout`` parameter to the ``Connection`` constructor, bounding how long a connection is waited for (:issue:`1065`)
 * Reduce the cost of a remote procedure call, encoding and decoding without a protobuf stream and parsing a response straight out of the read buffer (:issue:`1056`)
 * Reduce the cost of a call that returns a collection or an object (:issue:`1056`)
+* Fix an ``ArgumentException`` from the server carrying its message as the parameter name (:issue:`1111`)
 
 
 C++ client
