@@ -500,7 +500,7 @@ namespace KRPC.Client
                 if (key == "KRPC.InvalidOperationException")
                     return new InvalidOperationException (message);
                 if (key == "KRPC.ArgumentException")
-                    return new ArgumentException (string.Empty, message);
+                    return new ArgumentException (message);
                 if (key == "KRPC.ArgumentNullException")
                     return new ArgumentNullException (string.Empty, message);
                 if (key == "KRPC.ArgumentOutOfRangeException")

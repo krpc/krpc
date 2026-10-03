@@ -14,6 +14,7 @@
 - Reduce the cost of a remote procedure call, encoding and decoding without a protobuf stream
   and parsing a response straight out of the read buffer (#1056)
 - Reduce the cost of a call that returns a collection or an object (#1056)
+- Fix an `ArgumentException` from the server carrying its message as the parameter name (#1111)
 
 ## [v0.6.0]
 - **Breaking:** Requires .NET Framework 4.7.2 or later (#948)
