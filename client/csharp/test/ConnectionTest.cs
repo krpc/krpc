@@ -584,7 +584,8 @@ namespace KRPC.Client.Test
         public void ArgumentException ()
         {
             var exn = Assert.Throws<System.ArgumentException> (() => Connection.TestService ().ThrowArgumentException ());
-            Assert.That (exn.Message, Does.Contain ("Invalid argument"));
+            Assert.That (exn.Message, Does.StartWith ("Invalid argument"));
+            Assert.That (exn.ParamName, Is.Null);
         }
 
         [Test]
