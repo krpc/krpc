@@ -135,22 +135,33 @@ Stage
 
    .. function:: float start_mass()
 
-      Start mass for this stage, in kg.
+      The mass of the vessel after the stage activates, in kg.
 
    
 
    .. function:: float end_mass()
 
-      End mass for this stage, in kg.
+      The mass of the vessel when the stage burns out, in kg.
 
    
 
    .. function:: float dry_mass()
 
-      Dry mass for this stage, in kg.
+      The dry mass of the vessel after the stage activates, in kg.
 
    
 
+      .. note::
+
+         Includes the parts of all later stages.
+
    .. function:: float fuel_mass()
 
-      Fuel mass for this stage, in kg.
+      The fuel mass of the vessel when the stage activates, in kg.
+
+   
+
+      .. note::
+
+         Includes the fuel of all later stages, and the fuel left in the parts the stage
+         decouples. The stage burns :func:`Stage::start_mass` minus :func:`Stage::end_mass`.

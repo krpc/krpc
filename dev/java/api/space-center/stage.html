@@ -829,25 +829,34 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getStartMass()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStartMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getStartMass()" title="Link to this definition">#</a></dt>
-<dd><p>Start mass for this stage, in kg.</p>
+<dd><p>The mass of the vessel after the stage activates, in kg.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getEndMass()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getEndMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getEndMass()" title="Link to this definition">#</a></dt>
-<dd><p>End mass for this stage, in kg.</p>
+<dd><p>The mass of the vessel when the stage burns out, in kg.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getDryMass()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDryMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getDryMass()" title="Link to this definition">#</a></dt>
-<dd><p>Dry mass for this stage, in kg.</p>
+<dd><p>The dry mass of the vessel after the stage activates, in kg.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Includes the parts of all later stages.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getFuelMass()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFuelMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getFuelMass()" title="Link to this definition">#</a></dt>
-<dd><p>Fuel mass for this stage, in kg.</p>
+<dd><p>The fuel mass of the vessel when the stage activates, in kg.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Includes the fuel of all later stages, and the fuel left in the parts the stage
+decouples. The stage burns <a class="reference internal" href="#krpc.client.services.SpaceCenter.Stage.getStartMass()" title="krpc.client.services.SpaceCenter.Stage.getStartMass()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stage.getStartMass()</span></code></a> minus <a class="reference internal" href="#krpc.client.services.SpaceCenter.Stage.getEndMass()" title="krpc.client.services.SpaceCenter.Stage.getEndMass()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stage.getEndMass()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

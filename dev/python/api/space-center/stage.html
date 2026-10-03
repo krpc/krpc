@@ -950,7 +950,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Stage.start_mass">
 <span class="sig-name descname"><span class="pre">start_mass</span></span><a class="headerlink" href="#SpaceCenter.Stage.start_mass" title="Link to this definition">#</a></dt>
-<dd><p>Start mass for this stage, in kg.</p>
+<dd><p>The mass of the vessel after the stage activates, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -964,7 +964,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Stage.end_mass">
 <span class="sig-name descname"><span class="pre">end_mass</span></span><a class="headerlink" href="#SpaceCenter.Stage.end_mass" title="Link to this definition">#</a></dt>
-<dd><p>End mass for this stage, in kg.</p>
+<dd><p>The mass of the vessel when the stage burns out, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -978,7 +978,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Stage.dry_mass">
 <span class="sig-name descname"><span class="pre">dry_mass</span></span><a class="headerlink" href="#SpaceCenter.Stage.dry_mass" title="Link to this definition">#</a></dt>
-<dd><p>Dry mass for this stage, in kg.</p>
+<dd><p>The dry mass of the vessel after the stage activates, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -987,12 +987,16 @@ Calling this on a decouple stage raises an error.</p>
 <dd class="field-even"><p>float</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Includes the parts of all later stages.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Stage.fuel_mass">
 <span class="sig-name descname"><span class="pre">fuel_mass</span></span><a class="headerlink" href="#SpaceCenter.Stage.fuel_mass" title="Link to this definition">#</a></dt>
-<dd><p>Fuel mass for this stage, in kg.</p>
+<dd><p>The fuel mass of the vessel when the stage activates, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1001,6 +1005,11 @@ Calling this on a decouple stage raises an error.</p>
 <dd class="field-even"><p>float</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Includes the fuel of all later stages, and the fuel left in the parts the stage
+decouples. The stage burns <a class="reference internal" href="#SpaceCenter.Stage.start_mass" title="SpaceCenter.Stage.start_mass"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Stage.start_mass</span></code></a> minus <a class="reference internal" href="#SpaceCenter.Stage.end_mass" title="SpaceCenter.Stage.end_mass"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Stage.end_mass</span></code></a>.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

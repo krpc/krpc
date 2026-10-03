@@ -148,25 +148,36 @@ Stage
    .. method:: float getStartMass()
 
 
-      Start mass for this stage, in kg.
+      The mass of the vessel after the stage activates, in kg.
 
    
 
    .. method:: float getEndMass()
 
 
-      End mass for this stage, in kg.
+      The mass of the vessel when the stage burns out, in kg.
 
    
 
    .. method:: float getDryMass()
 
 
-      Dry mass for this stage, in kg.
+      The dry mass of the vessel after the stage activates, in kg.
 
    
+
+      .. note::
+
+         Includes the parts of all later stages.
 
    .. method:: float getFuelMass()
 
 
-      Fuel mass for this stage, in kg.
+      The fuel mass of the vessel when the stage activates, in kg.
+
+   
+
+      .. note::
+
+         Includes the fuel of all later stages, and the fuel left in the parts the stage
+         decouples. The stage burns :meth:`Stage.getStartMass()` minus :meth:`Stage.getEndMass()`.

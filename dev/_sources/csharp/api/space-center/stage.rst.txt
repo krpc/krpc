@@ -137,24 +137,35 @@ Stage
 
    .. property:: float StartMass { get; }
 
-      Start mass for this stage, in kg.
+      The mass of the vessel after the stage activates, in kg.
 
       :Game Scenes: All
 
    .. property:: float EndMass { get; }
 
-      End mass for this stage, in kg.
+      The mass of the vessel when the stage burns out, in kg.
 
       :Game Scenes: All
 
    .. property:: float DryMass { get; }
 
-      Dry mass for this stage, in kg.
+      The dry mass of the vessel after the stage activates, in kg.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Includes the parts of all later stages.
 
    .. property:: float FuelMass { get; }
 
-      Fuel mass for this stage, in kg.
+      The fuel mass of the vessel when the stage activates, in kg.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Includes the fuel of all later stages, and the fuel left in the parts the stage
+         decouples. The stage burns :prop:`Stage.StartMass` minus :prop:`Stage.EndMass`.

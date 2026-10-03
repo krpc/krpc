@@ -907,7 +907,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.StartMass">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">StartMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.StartMass" title="Link to this definition">#</a></dt>
-<dd><p>Start mass for this stage, in kg.</p>
+<dd><p>The mass of the vessel after the stage activates, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -918,7 +918,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.EndMass">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">EndMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.EndMass" title="Link to this definition">#</a></dt>
-<dd><p>End mass for this stage, in kg.</p>
+<dd><p>The mass of the vessel when the stage burns out, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -929,23 +929,32 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.DryMass">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">DryMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.DryMass" title="Link to this definition">#</a></dt>
-<dd><p>Dry mass for this stage, in kg.</p>
+<dd><p>The dry mass of the vessel after the stage activates, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Includes the parts of all later stages.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.FuelMass">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">FuelMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.FuelMass" title="Link to this definition">#</a></dt>
-<dd><p>Fuel mass for this stage, in kg.</p>
+<dd><p>The fuel mass of the vessel when the stage activates, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Includes the fuel of all later stages, and the fuel left in the parts the stage
+decouples. The stage burns <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Stage.StartMass" title="KRPC.Client.Services.SpaceCenter.Stage.StartMass property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Stage.StartMass</span></code></a> minus <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Stage.EndMass" title="KRPC.Client.Services.SpaceCenter.Stage.EndMass property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Stage.EndMass</span></code></a>.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

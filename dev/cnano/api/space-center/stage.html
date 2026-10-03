@@ -829,25 +829,34 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_StartMass">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_StartMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_StartMass" title="Link to this definition">#</a><br /></dt>
-<dd><p>Start mass for this stage, in kg.</p>
+<dd><p>The mass of the vessel after the stage activates, in kg.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_EndMass">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_EndMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_EndMass" title="Link to this definition">#</a><br /></dt>
-<dd><p>End mass for this stage, in kg.</p>
+<dd><p>The mass of the vessel when the stage burns out, in kg.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_DryMass">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_DryMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_DryMass" title="Link to this definition">#</a><br /></dt>
-<dd><p>Dry mass for this stage, in kg.</p>
+<dd><p>The dry mass of the vessel after the stage activates, in kg.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Includes the parts of all later stages.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_FuelMass">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_FuelMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_FuelMass" title="Link to this definition">#</a><br /></dt>
-<dd><p>Fuel mass for this stage, in kg.</p>
+<dd><p>The fuel mass of the vessel when the stage activates, in kg.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Includes the fuel of all later stages, and the fuel left in the parts the stage
+decouples. The stage burns <a class="reference internal" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_StartMass" title="krpc_SpaceCenter_Stage_StartMass"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Stage_StartMass()</span></code></a> minus <a class="reference internal" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_EndMass" title="krpc_SpaceCenter_Stage_EndMass"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Stage_EndMass()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

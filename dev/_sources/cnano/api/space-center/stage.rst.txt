@@ -135,22 +135,33 @@ Stage
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_StartMass(krpc_connection_t connection, float * result)
 
-      Start mass for this stage, in kg.
+      The mass of the vessel after the stage activates, in kg.
 
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_EndMass(krpc_connection_t connection, float * result)
 
-      End mass for this stage, in kg.
+      The mass of the vessel when the stage burns out, in kg.
 
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_DryMass(krpc_connection_t connection, float * result)
 
-      Dry mass for this stage, in kg.
+      The dry mass of the vessel after the stage activates, in kg.
 
    
 
+      .. note::
+
+         Includes the parts of all later stages.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_FuelMass(krpc_connection_t connection, float * result)
 
-      Fuel mass for this stage, in kg.
+      The fuel mass of the vessel when the stage activates, in kg.
+
+   
+
+      .. note::
+
+         Includes the fuel of all later stages, and the fuel left in the parts the stage
+         decouples. The stage burns :func:`krpc_SpaceCenter_Stage_StartMass` minus :func:`krpc_SpaceCenter_Stage_EndMass`.
