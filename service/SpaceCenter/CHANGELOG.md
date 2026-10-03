@@ -77,6 +77,7 @@
     available in flight without opening the game's own delta-v app first (#1076)
   - Add `Vessel.RecalculateDeltaV`, which recalculates the figures and waits for them, and
     `Vessel.DeltaVReady`, which reports whether they are current (#1076)
+  - Document that the `Stage` mass figures include all later stages (#1112)
 
 - Autopilot
   - Setting `AutoPilot.TargetDirection` keeps the target roll, rather than clearing it (#1054)
