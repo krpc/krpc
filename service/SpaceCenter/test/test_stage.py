@@ -43,6 +43,24 @@ class TestStage(krpctest.TestCase):
         resources = stage.resources()
         self.assertIsNotNone(resources)
 
+    def test_stage_masses_cover_later_stages(self):
+        self.wait_until(lambda: self.vessel.delta_v_ready, message="delta-v ready")
+        parts = self.vessel.parts.all
+        stages = self.vessel.stages
+        for stage in stages:
+            # The parts still attached after the stage activates
+            attached = [p for p in parts if p.decouple_stage < stage.number]
+            self.assertAlmostEqual(
+                sum(p.dry_mass for p in attached), stage.dry_mass, delta=1
+            )
+        # The first stage to activate drops nothing, so it holds the whole vessel
+        first = max(stages, key=lambda s: s.number)
+        self.assertAlmostEqual(self.vessel.mass, first.start_mass, delta=1)
+        self.assertAlmostEqual(self.vessel.dry_mass, first.dry_mass, delta=1)
+        self.assertAlmostEqual(
+            self.vessel.mass - self.vessel.dry_mass, first.fuel_mass, delta=1
+        )
+
     def test_decouple_stage_throws(self):
         decouple_stage = self.vessel.decouple_stages[0]
         with self.assertRaises(RuntimeError) as cm:

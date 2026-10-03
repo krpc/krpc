@@ -241,26 +241,33 @@ namespace KRPC.SpaceCenter.Services
         public float BurnTime => Figure (stage => (float)stage.stageBurnTime);
 
         /// <summary>
-        /// Start mass for this stage, in kg.
+        /// The mass of the vessel after the stage activates, in kg.
         /// </summary>
         [KRPCProperty]
         public float StartMass => Figure (stage => stage.startMass * 1000f);
 
         /// <summary>
-        /// End mass for this stage, in kg.
+        /// The mass of the vessel when the stage burns out, in kg.
         /// </summary>
         [KRPCProperty]
         public float EndMass => Figure (stage => stage.endMass * 1000f);
 
         /// <summary>
-        /// Dry mass for this stage, in kg.
+        /// The dry mass of the vessel after the stage activates, in kg.
         /// </summary>
+        /// <remarks>
+        /// Includes the parts of all later stages.
+        /// </remarks>
         [KRPCProperty]
         public float DryMass => Figure (stage => stage.dryMass * 1000f);
 
         /// <summary>
-        /// Fuel mass for this stage, in kg.
+        /// The fuel mass of the vessel when the stage activates, in kg.
         /// </summary>
+        /// <remarks>
+        /// Includes the fuel of all later stages, and the fuel left in the parts the stage
+        /// decouples. The stage burns <see cref="StartMass" /> minus <see cref="EndMass" />.
+        /// </remarks>
         [KRPCProperty]
         public float FuelMass => Figure (stage => stage.fuelMass * 1000f);
 
