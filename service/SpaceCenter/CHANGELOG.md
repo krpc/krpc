@@ -23,6 +23,8 @@
     does. Vessel data read straight after the call is that of the reverted vessel (#1097)
   - Setting `SpaceCenter.ActiveVessel` from the space center or tracking station keeps the
     game's contracts (#1102)
+  - The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and
+    setting `SpaceCenter.Alarm.EventOffset`, change when the alarm goes off (#1114)
 
 - Editor
   - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space plane

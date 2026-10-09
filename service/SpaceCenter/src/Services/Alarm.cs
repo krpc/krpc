@@ -175,6 +175,10 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Seconds between the alarm going off and the event it references.
         /// </summary>
+        /// <remarks>
+        /// For a maneuver alarm that includes the burn time, setting this sets the margin
+        /// before the start of the burn, and the value read back includes half the burn time.
+        /// </remarks>
         [KRPCProperty]
         public double EventOffset
         {
@@ -182,7 +186,17 @@ namespace KRPC.SpaceCenter.Services
                 return InternalAlarm.eventOffset;
             }
             set {
-                InternalAlarm.eventOffset = value;
+                var alarm = InternalAlarm;
+                // The game recomputes the event offset of an orbit event or maneuver alarm
+                // from its margin entry on every update
+                var flightNodeAlarm = alarm as AlarmTypeFlightNodeBase;
+                if (flightNodeAlarm != null)
+                    flightNodeAlarm.marginEntry = value;
+                var maneuverAlarm = alarm as AlarmTypeManeuver;
+                if (maneuverAlarm != null)
+                    maneuverAlarm.marginEntry = value;
+                alarm.ut += alarm.eventOffset - value;
+                alarm.eventOffset = value;
             }
         }
 
