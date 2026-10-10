@@ -922,6 +922,11 @@ This id will remain constant between the old and new alarms.</p>
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Alarm16set_event_offsetEd">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Alarm16set_event_offsetEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Alarm16set_event_offsetEd"></span><span id="krpc::services::SpaceCenter::Alarm::set_event_offset__double"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_event_offset</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Alarm16set_event_offsetEd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Seconds between the alarm going off and the event it references.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a maneuver alarm that includes the burn time, setting this sets the margin
+before the start of the burn, and the value read back includes half the burn time.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">

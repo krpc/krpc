@@ -193,6 +193,11 @@ Alarms
 
    
 
+      .. note::
+
+         For a maneuver alarm that includes the burn time, setting this sets the margin
+         before the start of the burn, and the value read back includes half the burn time.
+
    .. function:: std::optional<Vessel> vessel()
 
       Vessel the alarm references. ``NULL`` if it does not reference a vessel.

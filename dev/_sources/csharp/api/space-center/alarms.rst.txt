@@ -190,6 +190,12 @@ Alarms
 
       :Game Scenes: All
 
+
+      .. note::
+
+         For a maneuver alarm that includes the burn time, setting this sets the margin
+         before the start of the burn, and the value read back includes half the burn time.
+
    .. property:: Vessel Vessel { get; }
 
       Vessel the alarm references. ``null`` if it does not reference a vessel.

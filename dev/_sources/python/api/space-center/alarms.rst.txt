@@ -187,6 +187,11 @@ Alarms
       :rtype: float
    
 
+      .. note::
+
+         For a maneuver alarm that includes the burn time, setting this sets the margin
+         before the start of the burn, and the value read back includes half the burn time.
+
    .. attribute:: vessel
 
       Vessel the alarm references. ``None`` if it does not reference a vessel.

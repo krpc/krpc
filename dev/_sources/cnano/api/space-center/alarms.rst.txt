@@ -193,6 +193,11 @@ Alarms
 
    
 
+      .. note::
+
+         For a maneuver alarm that includes the burn time, setting this sets the margin
+         before the start of the burn, and the value read back includes half the burn time.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
 
       Vessel the alarm references. ``nullptr`` if it does not reference a vessel.

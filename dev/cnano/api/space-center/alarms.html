@@ -922,6 +922,11 @@ This id will remain constant between the old and new alarms.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Alarm_t.krpc_SpaceCenter_Alarm_set_EventOffset">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Alarm_set_EventOffset</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Alarm_t.krpc_SpaceCenter_Alarm_set_EventOffset" title="Link to this definition">#</a><br /></dt>
 <dd><p>Seconds between the alarm going off and the event it references.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a maneuver alarm that includes the burn time, setting this sets the margin
+before the start of the burn, and the value read back includes half the burn time.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
