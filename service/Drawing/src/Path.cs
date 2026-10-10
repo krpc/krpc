@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using UnityEngine;
@@ -15,12 +17,26 @@ namespace KRPC.Drawing
         // The width of an arrow head at its base, as a multiple of the thickness of the path.
         // The head is twice as long as it is wide.
         const float arrowWidth = 4f;
+        // The largest number of keys a Unity gradient holds
+        const int maxColors = 8;
+        // The length of a dash, and of the gap after it, as a multiple of the thickness
+        const float dashLength = 4f;
+        // The turn in degrees at a vertex past which it is a corner, where the dashes restart
+        const float cornerAngle = 30f;
+        // The most dash and gap pieces drawn between two corners
+        const int maxDashes = 4096;
+
+        static Texture2D dashTexture;
 
         readonly LineRenderer renderer;
         readonly LineRenderer startHead;
         readonly LineRenderer endHead;
+        readonly TextMesh label;
+        readonly MeshRenderer labelRenderer;
         readonly List<Vector3> points = new List<Vector3> ();
-        Tuple3 color;
+        Material headMaterial;
+        string labelText = string.Empty;
+        IList<Tuple3> colors;
         float thickness;
         float arrowSize = 1f;
 
@@ -35,6 +51,15 @@ namespace KRPC.Drawing
             renderer.positionCount = 0;
             startHead = CreateHead ("StartArrow");
             endHead = CreateHead ("EndArrow");
+            var labelObject = new GameObject (GameObject.name + ".Label");
+            labelObject.transform.SetParent (GameObject.transform, false);
+            label = labelObject.AddComponent<TextMesh> ();
+            label.text = string.Empty;
+            label.fontSize = 12;
+            label.anchor = TextAnchor.LowerCenter;
+            labelRenderer = labelObject.GetComponent<MeshRenderer> ();
+            labelRenderer.material = label.font.material;
+            labelRenderer.enabled = false;
             Color = new Tuple3 (1, 1, 1);
             Thickness = 0.1f;
         }
@@ -80,6 +105,7 @@ namespace KRPC.Drawing
                 Hide ();
                 return;
             }
+            DrawLabel ();
 
             // Arrow heads take their length from the end of the path, and share it between
             // them when the path is shorter than both
@@ -94,16 +120,20 @@ namespace KRPC.Drawing
                 endLength *= scale;
             }
             if (StartArrow)
-                DrawHead (startHead, TrimStart (points, startLength), startTip, startLength);
+                DrawHead (startHead, TrimStart (points, startLength), startTip, startLength, colors [0]);
             if (EndArrow) {
                 points.Reverse ();
                 var endBase = TrimStart (points, endLength);
                 points.Reverse ();
-                DrawHead (endHead, endBase, endTip, endLength);
+                DrawHead (endHead, endBase, endTip, endLength, colors [colors.Count - 1]);
             }
             startHead.enabled = Visible && StartArrow;
             endHead.enabled = Visible && EndArrow;
 
+            if (Dashed)
+                Dash (points);
+            renderer.textureMode = Dashed ? LineTextureMode.RepeatPerSegment : LineTextureMode.Stretch;
+            renderer.sharedMaterial.mainTexture = Dashed ? DashTexture : null;
             renderer.enabled = Visible;
             GameObject.layer = View.Layer;
             renderer.positionCount = points.Count;
@@ -112,11 +142,45 @@ namespace KRPC.Drawing
             renderer.widthMultiplier = thickness;
         }
 
+        /// <summary>
+        /// Destroy the path.
+        /// </summary>
+        public override void Destroy ()
+        {
+            UnityEngine.Object.Destroy (headMaterial);
+            base.Destroy ();
+        }
+
         void Hide ()
         {
             renderer.enabled = false;
             startHead.enabled = false;
             endHead.enabled = false;
+            labelRenderer.enabled = false;
+        }
+
+        // The label sits halfway along the path, facing the camera
+        void DrawLabel ()
+        {
+            labelRenderer.enabled = Visible && label.text.Length > 0 && View.Camera != null;
+            if (!labelRenderer.enabled)
+                return;
+            var half = 0.5f * Length (points);
+            var position = points [points.Count - 1];
+            for (int i = 1; i < points.Count; i++) {
+                var segment = Vector3.Distance (points [i - 1], points [i]);
+                if (segment >= half) {
+                    position = Vector3.MoveTowards (points [i - 1], points [i], half);
+                    break;
+                }
+                half -= segment;
+            }
+            var transform = labelRenderer.transform;
+            labelRenderer.gameObject.layer = View.Layer;
+            transform.position = position;
+            transform.rotation = View.Camera.transform.rotation;
+            transform.localScale = Vector3.one * View.SizeAt (position);
+            label.color = renderer.colorGradient.Evaluate (0.5f);
         }
 
         float HeadLength (Vector3 tip)
@@ -124,17 +188,88 @@ namespace KRPC.Drawing
             return 2f * arrowWidth * arrowSize * thickness * View.SizeAt (tip);
         }
 
-        void DrawHead (LineRenderer head, Vector3 headBase, Vector3 tip, float length)
+        void DrawHead (LineRenderer head, Vector3 headBase, Vector3 tip, float length, Tuple3 color)
         {
             head.gameObject.layer = View.Layer;
-            head.sharedMaterial = renderer.sharedMaterial;
-            head.startColor = renderer.startColor;
-            head.endColor = renderer.endColor;
+            // A head is drawn solid, so it has a material of its own without the dash texture
+            if (headMaterial == null || headMaterial.shader != renderer.sharedMaterial.shader) {
+                UnityEngine.Object.Destroy (headMaterial);
+                headMaterial = new Material (renderer.sharedMaterial.shader);
+            }
+            head.sharedMaterial = headMaterial;
+            head.startColor = color.ToColor ();
+            head.endColor = color.ToColor ();
             head.SetPosition (0, headBase);
             head.SetPosition (1, tip);
             head.widthMultiplier = 1f;
             head.startWidth = 0.5f * length;
             head.endWidth = 0f;
+        }
+
+        // A two texel texture, the first lit and the second clear, stretched over one dash and gap
+        static Texture2D DashTexture {
+            get {
+                if (dashTexture == null) {
+                    dashTexture = new Texture2D (2, 1, TextureFormat.RGBA32, false);
+                    dashTexture.filterMode = FilterMode.Point;
+                    dashTexture.wrapMode = TextureWrapMode.Repeat;
+                    dashTexture.SetPixels (new [] { UnityEngine.Color.white, UnityEngine.Color.clear });
+                    dashTexture.Apply ();
+                }
+                return dashTexture;
+            }
+        }
+
+        // The length of one dash and gap at the given point
+        float DashPeriod (Vector3 point)
+        {
+            return 2f * dashLength * thickness * View.SizeAt (point);
+        }
+
+        // Split the path into pieces of one dash and gap each, each drawn with one repeat of
+        // the dash texture. The pieces restart at each corner, so that the corner is drawn.
+        void Dash (List<Vector3> path)
+        {
+            var dashed = new List<Vector3> { path [0] };
+            var runStart = 0;
+            for (int i = 1; i < path.Count; i++) {
+                if (i == path.Count - 1 ||
+                    Vector3.Angle (path [i] - path [i - 1], path [i + 1] - path [i]) > cornerAngle) {
+                    DashRun (path, runStart, i, dashed);
+                    runStart = i;
+                }
+            }
+            path.Clear ();
+            path.AddRange (dashed);
+        }
+
+        // Add the pieces between two corners, sized by the dash length along the way. A curve
+        // between the corners is drawn through the ends of the pieces.
+        void DashRun (List<Vector3> path, int start, int end, List<Vector3> dashed)
+        {
+            // The number of pieces that fit along each segment
+            var counts = new float [end - start];
+            var total = 0f;
+            for (int i = 0; i < counts.Length; i++) {
+                var a = path [start + i];
+                var b = path [start + i + 1];
+                var period = DashPeriod (0.5f * (a + b));
+                counts [i] = period > 0f ? Vector3.Distance (a, b) / period : 0f;
+                total += counts [i];
+            }
+            var pieces = Mathf.Clamp (Mathf.RoundToInt (total), 1, maxDashes);
+            var step = total / pieces;
+            var next = 1;
+            var reached = 0f;
+            for (int i = 0; i < counts.Length; i++) {
+                while (next < pieces && counts [i] > 0f && reached + counts [i] >= next * step) {
+                    var fraction = (next * step - reached) / counts [i];
+                    dashed.Add (Vector3.Lerp (path [start + i], path [start + i + 1], fraction));
+                    next++;
+                }
+                reached += counts [i];
+            }
+            dashed.Add (path [end]);
         }
 
         static float Length (IList<Vector3> points)
@@ -187,15 +322,35 @@ namespace KRPC.Drawing
         /// <summary>
         /// The color of the path.
         /// </summary>
+        /// <remarks>
+        /// For a path drawn with more than one color, this is the color at its start.
+        /// </remarks>
         [KRPCProperty]
         public Tuple3 Color {
-            get { return color; }
+            get { return colors [0]; }
+            set { Colors = new [] { value }; }
+        }
+
+        /// <summary>
+        /// The colors of the path, blended evenly from its start to its end.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the list is empty or holds more than 8 colors.
+        /// </remarks>
+        [KRPCProperty]
+        public IList<Tuple3> Colors {
+            get { return colors; }
             set {
+                if (value.Count == 0 || value.Count > maxColors)
+                    throw new ArgumentException ("A path has between 1 and " + maxColors + " colors");
                 var lineRenderer = LineRenderer;
-                color = value;
-                var rgbColor = color.ToColor ();
-                lineRenderer.startColor = rgbColor;
-                lineRenderer.endColor = rgbColor;
+                colors = value.ToList ();
+                var keys = new GradientColorKey [colors.Count];
+                for (int i = 0; i < keys.Length; i++)
+                    keys [i] = new GradientColorKey (colors [i].ToColor (), keys.Length == 1 ? 0f : (float)i / (keys.Length - 1));
+                var gradient = new Gradient ();
+                gradient.SetKeys (keys, new [] { new GradientAlphaKey (1f, 0f) });
+                lineRenderer.colorGradient = gradient;
             }
         }
 
@@ -219,6 +374,25 @@ namespace KRPC.Drawing
             get { return arrowSize; }
             set { arrowSize = value; }
         }
+
+        /// <summary>
+        /// Text drawn halfway along the path, facing the camera. Empty for no label.
+        /// </summary>
+        [KRPCProperty]
+        public string Label {
+            get { return labelText; }
+            set {
+                CheckExists ();
+                labelText = value;
+                label.text = value;
+            }
+        }
+
+        /// <summary>
+        /// Whether the path is drawn as a dashed line.
+        /// </summary>
+        [KRPCProperty]
+        public bool Dashed { get; set; }
 
         /// <summary>
         /// The thickness of the path.
