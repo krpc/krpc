@@ -130,6 +130,21 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// Draw the path of an orbit in the scene.
+        /// </summary>
+        /// <param name="orbit">The orbit.</param>
+        /// <param name="visible">Whether the path is visible.</param>
+        /// <remarks>
+        /// The path follows the orbit as it changes, and ends where the orbit leaves the
+        /// sphere of influence of its body.
+        /// </remarks>
+        [KRPCProcedure (GameScene = GameScene.Flight | GameScene.TrackingStation)]
+        public static OrbitPath AddOrbit (SpaceCenter.Services.Orbit orbit, bool visible = true)
+        {
+            return new OrbitPath (orbit, visible);
+        }
+
+        /// <summary>
         /// Draw text in the scene.
         /// </summary>
         /// <param name="text">The string to draw.</param>

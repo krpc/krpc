@@ -51,6 +51,7 @@
     <Compile Include="FramedPath.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="NavballMarker.cs" />
+    <Compile Include="OrbitPath.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Polyline.cs" />
