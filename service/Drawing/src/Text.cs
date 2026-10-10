@@ -47,8 +47,11 @@ namespace KRPC.Drawing
                 return;
             }
             renderer.enabled = Visible;
-            renderer.transform.position = ReferenceFrame.PositionToWorldSpace (position);
+            GameObject.layer = View.Layer;
+            var viewPosition = View.ToView (ReferenceFrame.PositionToWorldSpace (position));
+            renderer.transform.position = viewPosition;
             renderer.transform.rotation = ReferenceFrame.RotationToWorldSpace (rotation);
+            renderer.transform.localScale = Vector3.one * View.SizeAt (viewPosition);
         }
 
         /// <summary>

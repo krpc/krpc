@@ -7,7 +7,7 @@ namespace KRPC.Drawing
     /// <summary>
     /// Addon for doing the drawing
     /// </summary>
-    [KSPAddon (KSPAddon.Startup.Flight, false)]
+    [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
     public sealed class Addon : ClientCleanupAddon
     {
         static readonly ClientOwnedObjects<IDrawable> objects =
@@ -48,6 +48,7 @@ namespace KRPC.Drawing
         {
             Sweep ();
             objects.RemoveDestroyed ();
+            View.Update ();
             foreach (var obj in objects.Items)
                 obj.Update ();
         }

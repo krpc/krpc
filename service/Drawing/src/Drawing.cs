@@ -10,13 +10,14 @@ using Tuple4 = System.Tuple<double, double, double, double>;
 namespace KRPC.Drawing
 {
     /// <summary>
-    /// Provides functionality for drawing objects in the flight scene.
+    /// Provides functionality for drawing objects in the flight scene, the map view, the editor
+    /// and the tracking station.
     /// </summary>
     /// <remarks>
     /// For drawing and interacting with the user interface, see the UI service.
     /// Objects drawn by a client are removed when that client disconnects.
     /// </remarks>
-    [KRPCService (Id = 3, GameScene = GameScene.Flight)]
+    [KRPCService (Id = 3, GameScene = GameScene.Flight | GameScene.Editor | GameScene.TrackingStation)]
     public static class Drawing
     {
         /// <summary>
@@ -52,7 +53,7 @@ namespace KRPC.Drawing
         /// <param name="referenceFrame">Reference frame that the direction is in.</param>
         /// <param name="length">The length of the line.</param>
         /// <param name="visible">Whether the line is visible.</param>
-        [KRPCProcedure]
+        [KRPCProcedure (GameScene = GameScene.Flight)]
         public static Line AddDirectionFromCom(Tuple3 direction, ReferenceFrame referenceFrame, float length = 10f, bool visible = true)
         {
             var activeVesselRefFrame = SpaceCenter.Services.SpaceCenter.ActiveVessel.ReferenceFrame;
@@ -97,7 +98,7 @@ namespace KRPC.Drawing
         /// <param name="direction">Direction that the marker points in.</param>
         /// <param name="referenceFrame">Reference frame that the direction is in.</param>
         /// <param name="visible">Whether the marker is visible.</param>
-        [KRPCProcedure]
+        [KRPCProcedure (GameScene = GameScene.Flight)]
         public static NavballMarker AddNavballMarker (Tuple3 direction, ReferenceFrame referenceFrame, bool visible = true)
         {
             return new NavballMarker (direction.ToVector (), referenceFrame, visible);

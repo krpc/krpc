@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
@@ -14,7 +15,7 @@ namespace KRPC.Drawing
     /// <summary>
     /// A marker drawn on the navball. Created using <see cref="Drawing.AddNavballMarker" />.
     /// </summary>
-    [KRPCClass (Service = "Drawing")]
+    [KRPCClass (Service = "Drawing", GameScene = GameScene.Flight)]
     public class NavballMarker : IDrawable
     {
         // The game database directory holding the icons a marker can be drawn with

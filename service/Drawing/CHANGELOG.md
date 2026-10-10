@@ -1,5 +1,6 @@
 ## [v0.7.0] - unreleased
 
+- Draw lines, polygons and text in the map view, the editor and the tracking station (#1115)
 - **Breaking:** Removing a drawing object another client created, or one the server no longer
   holds, reports that it is not among those this client created (#1072)
 - Line, polygon, text and navball marker objects raise `KRPC.ObjectDestroyedException` once

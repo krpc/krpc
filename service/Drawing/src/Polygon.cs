@@ -14,6 +14,8 @@ namespace KRPC.Drawing
     [KRPCClass (Service = "Drawing")]
     public class Polygon : Drawable<Polygon>
     {
+        static readonly AnimationCurve constantWidth = AnimationCurve.Constant (0f, 1f, 1f);
+
         readonly LineRenderer renderer;
         IList<Vector3d> vertices;
         Tuple3 color;
@@ -46,11 +48,38 @@ namespace KRPC.Drawing
                 renderer.enabled = false;
                 return;
             }
-            renderer.enabled = Visible;
             var numVertices = vertices.Count;
-            for (int i = 0; i < numVertices; i++)
-                renderer.SetPosition (i, ReferenceFrame.PositionToWorldSpace (vertices [i]));
-            renderer.SetPosition (numVertices, ReferenceFrame.PositionToWorldSpace (vertices [0]));
+            if (numVertices == 0) {
+                renderer.enabled = false;
+                return;
+            }
+            renderer.enabled = Visible;
+            GameObject.layer = View.Layer;
+            if (renderer.positionCount != numVertices + 1)
+                renderer.positionCount = numVertices + 1;
+            var positions = new Vector3 [numVertices + 1];
+            for (int i = 0; i <= numVertices; i++)
+                positions [i] = View.ToView (ReferenceFrame.PositionToWorldSpace (vertices [i % numVertices]));
+            renderer.SetPositions (positions);
+            renderer.widthCurve = View.Scaled ? WidthCurve (positions) : constantWidth;
+            renderer.widthMultiplier = thickness;
+        }
+
+        // The width at each vertex, keyed by the fraction of the distance along the outline
+        static AnimationCurve WidthCurve (Vector3[] positions)
+        {
+            var widths = new Keyframe [positions.Length];
+            var length = 0f;
+            for (int i = 0; i < positions.Length; i++) {
+                if (i > 0)
+                    length += Vector3.Distance (positions [i - 1], positions [i]);
+                widths [i] = new Keyframe (length, View.SizeAt (positions [i]));
+            }
+            if (length > 0f) {
+                for (int i = 0; i < widths.Length; i++)
+                    widths [i].time /= length;
+            }
+            return new AnimationCurve (widths);
         }
 
         /// <summary>
