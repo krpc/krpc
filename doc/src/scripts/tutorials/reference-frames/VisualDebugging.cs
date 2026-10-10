@@ -10,9 +10,15 @@ class VisualDebugging
         var conn = new Connection ("Visual Debugging");
         var vessel = conn.SpaceCenter ().ActiveVessel;
 
+        // Draw the axes of the surface reference frame
+        conn.Drawing ().AddAxes (vessel.SurfaceReferenceFrame);
+
+        // Draw the direction of the surface velocity, as a labeled arrow
         var refFrame = vessel.SurfaceVelocityReferenceFrame;
-        conn.Drawing ().AddDirectionFromCom(
+        var line = conn.Drawing ().AddDirectionFromCom(
             new Tuple<double, double, double>(0, 1, 0), refFrame);
+        line.EndArrow = true;
+        line.Label = "Surface velocity";
         while (true) {
         }
     }
