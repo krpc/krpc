@@ -50,7 +50,10 @@
     <Compile Include="Drawable.cs" />
     <Compile Include="Drawing.cs" />
     <Compile Include="FramedPath.cs" />
+    <Compile Include="Image.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="MapMarker.cs" />
+    <Compile Include="MapMarkerIcon.cs" />
     <Compile Include="NavballMarker.cs" />
     <Compile Include="OrbitPath.cs" />
     <Compile Include="Path.cs" />

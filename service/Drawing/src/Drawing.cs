@@ -245,6 +245,34 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// Draw a marker in the map view, with one of the game's own map icons.
+        /// </summary>
+        /// <param name="position">Position of the marker.</param>
+        /// <param name="referenceFrame">Reference frame that the position is in.</param>
+        /// <param name="icon">The icon that the marker is drawn with.</param>
+        /// <param name="caption">The caption shown when the mouse is over the marker.</param>
+        /// <param name="visible">Whether the marker is visible.</param>
+        [KRPCProcedure (GameScene = GameScene.Flight | GameScene.TrackingStation)]
+        public static MapMarker AddMapMarker (Tuple3 position, ReferenceFrame referenceFrame, MapMarkerIcon icon = MapMarkerIcon.Generic, string caption = "", bool visible = true)
+        {
+            return new MapMarker (position.ToVector (), referenceFrame, icon, caption, visible);
+        }
+
+        /// <summary>
+        /// Load an image that markers can be drawn with, from the contents of a PNG or JPEG
+        /// file. The transparency of a PNG image is kept.
+        /// </summary>
+        /// <param name="data">The contents of the image file.</param>
+        /// <remarks>
+        /// Throws an exception if the data is not a PNG or JPEG image.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Image AddImage (byte[] data)
+        {
+            return new Image (data);
+        }
+
+        /// <summary>
         /// Remove all objects being drawn.
         /// </summary>
         /// <param name="clientOnly">If true, only remove objects created by the calling client.</param>
