@@ -15,35 +15,35 @@ Line
 
       Start position of the line.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_Drawing_Line_End(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
    .. function:: void krpc_Drawing_Line_set_End(const krpc_tuple_double_double_double_t * value)
 
       End position of the line.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_Drawing_Line_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
    .. function:: void krpc_Drawing_Line_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
 
       Reference frame for the positions of the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_Drawing_Line_Visible(krpc_connection_t connection, bool * result)
    .. function:: void krpc_Drawing_Line_set_Visible(bool value)
 
       Whether the object is visible.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_Drawing_Line_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
    .. function:: void krpc_Drawing_Line_set_Color(const krpc_tuple_double_double_double_t * value)
 
       Set the color
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_Drawing_Line_Material(krpc_connection_t connection, char * * result)
    .. function:: void krpc_Drawing_Line_set_Material(const char * value)
@@ -51,18 +51,18 @@ Line
       Material used to render the object.
       Creates the material from a shader with the given name.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_Drawing_Line_Thickness(krpc_connection_t connection, float * result)
    .. function:: void krpc_Drawing_Line_set_Thickness(float value)
 
       Set the thickness
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_Drawing_Line_Remove(krpc_connection_t connection)
 
       Remove the object.
 
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

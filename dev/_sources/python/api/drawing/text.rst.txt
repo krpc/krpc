@@ -16,7 +16,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: rotation
 
@@ -24,7 +24,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: tuple(float, float, float, float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: reference_frame
 
@@ -32,7 +32,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: :class:`SpaceCenter.ReferenceFrame`
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: visible
 
@@ -40,13 +40,13 @@ Text
 
       :Attribute: Can be read or written
       :rtype: bool
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: remove()
 
       Remove the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: content
 
@@ -54,7 +54,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: str
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: font
 
@@ -62,14 +62,14 @@ Text
 
       :Attribute: Can be read or written
       :rtype: str
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. staticmethod:: available_fonts()
 
       A list of all available fonts.
 
       :rtype: list(str)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: size
 
@@ -77,7 +77,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: int
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: character_size
 
@@ -85,7 +85,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: float
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: style
 
@@ -93,7 +93,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: :class:`UI.FontStyle`
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: color
 
@@ -101,7 +101,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: material
 
@@ -110,7 +110,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: str
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: alignment
 
@@ -118,7 +118,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: :class:`UI.TextAlignment`
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: line_spacing
 
@@ -126,7 +126,7 @@ Text
 
       :Attribute: Can be read or written
       :rtype: float
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: anchor
 
@@ -134,4 +134,4 @@ Text
 
       :Attribute: Can be read or written
       :rtype: :class:`UI.TextAnchor`
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

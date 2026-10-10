@@ -14,97 +14,97 @@ Text
 
       Position of the text.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: System.Tuple<double,double,double,double> Rotation { get; set; }
 
       Rotation of the text as a quaternion.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
 
       Reference frame for the positions of the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: bool Visible { get; set; }
 
       Whether the object is visible.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: void Remove()
 
       Remove the object.
 
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: string Content { get; set; }
 
       The text string
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: string Font { get; set; }
 
       Name of the font
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: static System.Collections.Generic.IList<string> AvailableFonts(IConnection connection, )
 
       A list of all available fonts.
 
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: int Size { get; set; }
 
       Font size.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: float CharacterSize { get; set; }
 
       Character size.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: UI.FontStyle Style { get; set; }
 
       Font style.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: System.Tuple<double,double,double> Color { get; set; }
 
       Set the color
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: string Material { get; set; }
 
       Material used to render the object.
       Creates the material from a shader with the given name.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: UI.TextAlignment Alignment { get; set; }
 
       Alignment.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: float LineSpacing { get; set; }
 
       Line spacing.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. property:: UI.TextAnchor Anchor { get; set; }
 
       Anchor.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

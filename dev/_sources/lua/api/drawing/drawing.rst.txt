@@ -8,7 +8,8 @@ Drawing
 
 .. module:: Drawing
 
-Provides functionality for drawing objects in the flight scene.
+Provides functionality for drawing objects in the flight scene, the map view, the editor
+and the tracking station.
 
 .. note::
 

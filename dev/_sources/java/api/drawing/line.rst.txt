@@ -16,7 +16,7 @@ Line
 
       Start position of the line.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getEnd()
 
@@ -24,7 +24,7 @@ Line
 
       End position of the line.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
 
@@ -32,7 +32,7 @@ Line
 
       Reference frame for the positions of the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: boolean getVisible()
 
@@ -40,7 +40,7 @@ Line
 
       Whether the object is visible.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getColor()
 
@@ -48,7 +48,7 @@ Line
 
       Set the color
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: String getMaterial()
 
@@ -57,7 +57,7 @@ Line
       Material used to render the object.
       Creates the material from a shader with the given name.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: float getThickness()
 
@@ -65,10 +65,10 @@ Line
 
       Set the thickness
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: void remove()
 
       Remove the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

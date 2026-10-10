@@ -225,6 +225,7 @@ SpaceCenter service
 Drawing service
 ^^^^^^^^^^^^^^^
 
+* Draw lines, polygons and text in the map view, the editor and the tracking station (:issue:`1115`)
 * :breaking:`Breaking` Removing a drawing object another client created, or one the server no longer holds, reports that it is not among those this client created (:issue:`1072`)
 * Line, polygon, text and navball marker objects raise ``KRPC.ObjectDestroyedException`` once the object they draw is gone, and are freed (:issue:`1051`)
 * A drawing object whose reference frame is defined against something the game has destroyed is not drawn, rather than failing on every frame (:issue:`1051`)

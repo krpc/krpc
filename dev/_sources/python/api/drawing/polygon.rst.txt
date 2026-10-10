@@ -16,7 +16,7 @@ Polygon
 
       :Attribute: Can be read or written
       :rtype: list(tuple(float, float, float))
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: reference_frame
 
@@ -24,7 +24,7 @@ Polygon
 
       :Attribute: Can be read or written
       :rtype: :class:`SpaceCenter.ReferenceFrame`
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: visible
 
@@ -32,13 +32,13 @@ Polygon
 
       :Attribute: Can be read or written
       :rtype: bool
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: remove()
 
       Remove the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: color
 
@@ -46,7 +46,7 @@ Polygon
 
       :Attribute: Can be read or written
       :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: material
 
@@ -55,7 +55,7 @@ Polygon
 
       :Attribute: Can be read or written
       :rtype: str
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: thickness
 
@@ -63,4 +63,4 @@ Polygon
 
       :Attribute: Can be read or written
       :rtype: float
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

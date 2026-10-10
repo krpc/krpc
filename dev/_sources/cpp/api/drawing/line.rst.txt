@@ -15,35 +15,35 @@ Line
 
       Start position of the line.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: std::tuple<double, double, double> end()
    .. function:: void set_end(std::tuple<double, double, double> value)
 
       End position of the line.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: SpaceCenter::ReferenceFrame reference_frame()
    .. function:: void set_reference_frame(SpaceCenter::ReferenceFrame value)
 
       Reference frame for the positions of the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: bool visible()
    .. function:: void set_visible(bool value)
 
       Whether the object is visible.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: std::tuple<double, double, double> color()
    .. function:: void set_color(std::tuple<double, double, double> value)
 
       Set the color
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: std::string material()
    .. function:: void set_material(std::string value)
@@ -51,18 +51,18 @@ Line
       Material used to render the object.
       Creates the material from a shader with the given name.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: float thickness()
    .. function:: void set_thickness(float value)
 
       Set the thickness
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. function:: void remove()
 
       Remove the object.
 
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

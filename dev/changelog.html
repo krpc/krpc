@@ -827,6 +827,7 @@
 <section id="drawing-service">
 <h3>Drawing service<a class="headerlink" href="#drawing-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Draw lines, polygons and text in the map view, the editor and the tracking station (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1115">#1115</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Removing a drawing object another client created, or one the server no longer holds, reports that it is not among those this client created (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1072">#1072</a>)</p></li>
 <li><p>Line, polygon, text and navball marker objects raise <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> once the object they draw is gone, and are freed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
 <li><p>A drawing object whose reference frame is defined against something the game has destroyed is not drawn, rather than failing on every frame (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
