@@ -67,6 +67,31 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// Draw the axes of a reference frame in the scene, as arrows from its origin.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame.</param>
+        /// <param name="length">The length of each axis.</param>
+        /// <param name="visible">Whether the axes are visible.</param>
+        /// <returns>The lines for the x, y and z axes, colored red, green and blue.</returns>
+        [KRPCProcedure]
+        public static IList<Line> AddAxes (ReferenceFrame referenceFrame, float length = 10f, bool visible = true)
+        {
+            var axes = new [] {
+                new Tuple3 (1, 0, 0),
+                new Tuple3 (0, 1, 0),
+                new Tuple3 (0, 0, 1)
+            };
+            var lines = new List<Line> ();
+            foreach (var axis in axes) {
+                var line = new Line (Vector3d.zero, axis.ToVector () * length, referenceFrame, visible);
+                line.Color = axis;
+                line.EndArrow = true;
+                lines.Add (line);
+            }
+            return lines;
+        }
+
+        /// <summary>
         /// Draw a polygon in the scene, defined by a list of vertices.
         /// </summary>
         /// <param name="vertices">Vertices of the polygon.</param>

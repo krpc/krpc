@@ -13,7 +13,7 @@ def draw_all(drawing, ref):
     point = drawing.add_point((0, 0, 0), ref)
     text = drawing.add_text("Jebediah Kerman", ref, (0, 0, 0), (0, 0, 0, 1))
     text.face_camera = True
-    return [line, polygon, polyline, circle, arc, point, text]
+    return [line, polygon, polyline, circle, arc, point, text] + drawing.add_axes(ref)
 
 
 class TestMapView(krpctest.TestCase):
