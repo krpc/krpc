@@ -85,5 +85,79 @@ class TestAlarm(krpctest.TestCase):
             _ = alarm.destination_body
 
 
+class TestAlarmEventOffset(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        # The game only adds a burn time to a maneuver alarm for a vessel with an engine
+        cls.launch_vessel_from_vab("Basic")
+        cls.remove_other_vessels()
+        conn = cls.connect()
+        cls.set_orbit("Kerbin", 1000000, 0.1, 0, 0, 0, 1, conn.space_center.ut)
+        cls.conn = conn
+        cls.space_center = cls.conn.space_center
+        cls.alarm_manager = cls.space_center.alarm_manager
+        cls.vessel = cls.space_center.active_vessel
+
+    def tearDown(self):
+        for alarm in list(self.alarm_manager.alarms):
+            alarm.remove()
+        self.vessel.control.remove_nodes()
+
+    def check(self, alarm, event_time, offset):
+        # The game computes the burn start of a maneuver from the previous frame
+        self.assertAlmostEqual(offset, alarm.event_offset, delta=0.1)
+        self.assertAlmostEqual(event_time(), alarm.time + alarm.event_offset, delta=1)
+
+    def check_offset(self, alarm, event_time):
+        # The game recomputes the alarm time from the margin on its next update
+        self.wait()
+        self.check(alarm, event_time, 300)
+        alarm.event_offset = 500
+        self.check(alarm, event_time, 500)
+        self.wait()
+        self.check(alarm, event_time, 500)
+
+    def test_apoapsis_alarm(self):
+        orbit = self.vessel.orbit
+        alarm = self.alarm_manager.add_apoapsis_alarm(self.vessel, offset=300)
+        self.check_offset(alarm, lambda: self.space_center.ut + orbit.time_to_apoapsis)
+
+    def test_periapsis_alarm(self):
+        orbit = self.vessel.orbit
+        alarm = self.alarm_manager.add_periapsis_alarm(self.vessel, offset=300)
+        self.check_offset(alarm, lambda: self.space_center.ut + orbit.time_to_periapsis)
+
+    def test_maneuver_node_alarm(self):
+        node = self.vessel.control.add_node(self.space_center.ut + 3600)
+        alarm = self.alarm_manager.add_maneuver_node_alarm(
+            self.vessel, node, offset=300
+        )
+        self.check(alarm, lambda: node.ut, 300)
+        self.check_offset(alarm, lambda: node.ut)
+
+    def test_maneuver_node_alarm_without_burn_time(self):
+        node = self.vessel.control.add_node(self.space_center.ut + 3600, prograde=100)
+        alarm = self.alarm_manager.add_maneuver_node_alarm(
+            self.vessel, node, offset=300, add_burn_time=False
+        )
+        self.check_offset(alarm, lambda: node.ut)
+
+    def test_maneuver_node_alarm_with_burn_time(self):
+        node = self.vessel.control.add_node(self.space_center.ut + 3600, prograde=100)
+        alarm = self.alarm_manager.add_maneuver_node_alarm(
+            self.vessel, node, offset=300, add_burn_time=True
+        )
+        self.wait()
+        # The event offset includes half the burn time
+        burn = alarm.event_offset - 300
+        self.assertGreater(burn, 0.5)
+        self.assertAlmostEqual(node.ut, alarm.time + alarm.event_offset, delta=1)
+        alarm.event_offset = 500
+        self.wait()
+        self.assertAlmostEqual(500 + burn, alarm.event_offset, delta=0.1)
+        self.assertAlmostEqual(node.ut, alarm.time + alarm.event_offset, delta=1)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -134,6 +134,7 @@ namespace KRPC.SpaceCenter.Services
             {
                 title = title,
                 description = description,
+                marginEntry = offset,
                 eventOffset = offset,
                 actions =
                 {
@@ -160,6 +161,8 @@ namespace KRPC.SpaceCenter.Services
             {
                 title = title,
                 description = description,
+                marginEntry = offset,
+                eventOffset = offset,
                 actions =
                 {
                     warp = AlarmActions.WarpEnum.KillWarp,
@@ -167,7 +170,6 @@ namespace KRPC.SpaceCenter.Services
                 },
                 vesselId = vessel.InternalVessel.persistentId
             };
-            alarm.eventOffset = offset;
             AlarmClockScenario.AddAlarm(alarm);
             return new Alarm(alarm);
         }
@@ -188,6 +190,7 @@ namespace KRPC.SpaceCenter.Services
             {
                 title = title,
                 description = description,
+                marginEntry = offset,
                 eventOffset = offset,
                 useBurnTimeMargin = addBurnTime,
                 actions =
@@ -196,7 +199,7 @@ namespace KRPC.SpaceCenter.Services
                     message = AlarmActions.MessageEnum.Yes
                 },
                 vesselId = vessel.InternalVessel.persistentId,
-            Maneuver = node.InternalNode
+                Maneuver = node.InternalNode
             };
 
             AlarmClockScenario.AddAlarm(alarm);
@@ -217,6 +220,7 @@ namespace KRPC.SpaceCenter.Services
             {
                 title = title,
                 description = description,
+                marginEntry = offset,
                 eventOffset = offset,
                 actions =
                 {
