@@ -46,8 +46,13 @@ namespace KRPC.Drawing
                 return;
             }
             renderer.enabled = Visible;
-            renderer.SetPosition (0, ReferenceFrame.PositionToWorldSpace (start));
-            renderer.SetPosition (1, ReferenceFrame.PositionToWorldSpace (end));
+            GameObject.layer = View.Layer;
+            var startPosition = View.ToView (ReferenceFrame.PositionToWorldSpace (start));
+            var endPosition = View.ToView (ReferenceFrame.PositionToWorldSpace (end));
+            renderer.SetPosition (0, startPosition);
+            renderer.SetPosition (1, endPosition);
+            renderer.startWidth = thickness * View.SizeAt (startPosition);
+            renderer.endWidth = thickness * View.SizeAt (endPosition);
         }
 
         // The line renderer, checked to still exist.
