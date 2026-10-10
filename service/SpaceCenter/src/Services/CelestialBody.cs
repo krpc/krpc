@@ -261,6 +261,41 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Create a reference frame fixed to the surface at the given latitude and longitude.
+        /// <list type="bullet">
+        /// <item><description>The origin is the given altitude above the surface, at the
+        /// given latitude and longitude.</description></item>
+        /// <item><description>The axes rotate with the body.</description></item>
+        /// <item><description>The x-axis points out from the center of the body.
+        /// </description></item>
+        /// <item><description>The y-axis points north.</description></item>
+        /// <item><description>The z-axis points east.</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="altitude">Altitude of the origin above the surface, in meters.</param>
+        /// <remarks>
+        /// Each call returns a new frame, as for <see cref="ReferenceFrame.CreateRelative"/>.
+        /// </remarks>
+        [KRPCMethod]
+        public ReferenceFrame SurfaceReferenceFrame (double latitude, double longitude, double altitude = 0)
+        {
+            var bodyFrame = ReferenceFrame;
+            var up = InternalBody.GetSurfaceNVector (latitude, longitude);
+            // The normal a quarter turn further along the meridian points north, at the poles too
+            var north = InternalBody.GetSurfaceNVector (latitude + 90, longitude);
+            var east = Vector3d.Cross (up, north);
+            var height = SurfaceHeight (latitude, longitude) + altitude;
+            var position = bodyFrame.PositionFromWorldSpace (
+                InternalBody.GetWorldSurfacePosition (latitude, longitude, height));
+            var rotation = bodyFrame.RotationFromWorldSpace (GeometryExtensions.LookRotation2 (east, north));
+            return ReferenceFrame.CreateRelative (
+                bodyFrame, position.ToTuple (), rotation.ToTuple (),
+                Vector3d.zero.ToTuple (), Vector3d.zero.ToTuple ());
+        }
+
+        /// <summary>
         /// The normal to the sphere at mean sea level, at the given latitude and longitude,
         /// in the given reference frame. This points straight up, away from the center of
         /// the body, and takes no account of the shape of the terrain.
