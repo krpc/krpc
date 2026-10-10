@@ -25,6 +25,9 @@ class TestLine(krpctest.TestCase):
         self.assertEqual((1, 1, 1), line.color)
         self.assertEqual("Legacy Shaders/Particles/Additive", line.material)
         self.assertAlmostEqual(0.1, line.thickness)
+        self.assertFalse(line.start_arrow)
+        self.assertFalse(line.end_arrow)
+        self.assertAlmostEqual(1, line.arrow_size)
         line.remove()
         self.assertRaises(self.destroyed, line.remove)
 
@@ -54,6 +57,25 @@ class TestLine(krpctest.TestCase):
         line.visible = True
         self.assertTrue(line.visible)
         self.assertAlmostEqual(1.234, line.thickness)
+        line.remove()
+
+    def test_arrows(self):
+        line = self.add_line()
+        line.start_arrow = True
+        line.end_arrow = True
+        line.arrow_size = 2.5
+        line.visible = True
+        self.wait()
+        self.assertTrue(line.start_arrow)
+        self.assertTrue(line.end_arrow)
+        self.assertAlmostEqual(2.5, line.arrow_size)
+        line.remove()
+
+    def test_arrows_on_a_short_line(self):
+        line = self.drawing.add_line((0, 0, 0), (0, 0.01, 0), self.ref)
+        line.end_arrow = True
+        self.wait()
+        self.assertTrue(line.end_arrow)
         line.remove()
 
 
