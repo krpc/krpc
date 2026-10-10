@@ -57,7 +57,10 @@ namespace KRPC.Drawing
             GameObject.layer = View.Layer;
             var viewPosition = View.ToView (ReferenceFrame.PositionToWorldSpace (position));
             renderer.transform.position = viewPosition;
-            renderer.transform.rotation = ReferenceFrame.RotationToWorldSpace (rotation);
+            if (FaceCamera && View.Camera != null)
+                renderer.transform.rotation = View.Camera.transform.rotation;
+            else
+                renderer.transform.rotation = ReferenceFrame.RotationToWorldSpace (rotation);
             renderer.transform.localScale = Vector3.one * View.SizeAt (viewPosition);
         }
 
@@ -84,6 +87,12 @@ namespace KRPC.Drawing
             get { return rotation.ToTuple (); }
             set { rotation = value.ToQuaternion (); }
         }
+
+        /// <summary>
+        /// Whether the text turns to face the camera, in place of its <see cref="Rotation" />.
+        /// </summary>
+        [KRPCProperty]
+        public bool FaceCamera { get; set; }
 
         /// <summary>
         /// Destroy the drawable.

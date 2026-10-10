@@ -145,6 +145,18 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// Draw a point in the scene, as a dot that keeps its size on screen.
+        /// </summary>
+        /// <param name="position">Position of the point.</param>
+        /// <param name="referenceFrame">Reference frame that the position is in.</param>
+        /// <param name="visible">Whether the point is visible.</param>
+        [KRPCProcedure]
+        public static Point AddPoint (Tuple3 position, ReferenceFrame referenceFrame, bool visible = true)
+        {
+            return new Point (position.ToVector (), referenceFrame, visible);
+        }
+
+        /// <summary>
         /// Draw text in the scene.
         /// </summary>
         /// <param name="text">The string to draw.</param>

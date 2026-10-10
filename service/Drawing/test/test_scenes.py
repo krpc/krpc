@@ -4,9 +4,16 @@ import krpctest
 
 def draw_all(drawing, ref):
     line = drawing.add_line((0, 0, 0), (0, 10, 0), ref)
+    line.end_arrow = True
     polygon = drawing.add_polygon([(0, 0, 0), (0, 10, 0), (10, 0, 0)], ref)
+    polyline = drawing.add_polyline([(0, 0, 0), (0, 10, 0), (10, 0, 0)], ref)
+    circle = drawing.add_circle((0, 0, 0), (0, 1, 0), 10, ref)
+    arc = drawing.add_arc((0, 0, 0), (0, 1, 0), (1, 0, 0), 4, 10, ref)
+    arc.end_arrow = True
+    point = drawing.add_point((0, 0, 0), ref)
     text = drawing.add_text("Jebediah Kerman", ref, (0, 0, 0), (0, 0, 0, 1))
-    return [line, polygon, text]
+    text.face_camera = True
+    return [line, polygon, polyline, circle, arc, point, text]
 
 
 class TestMapView(krpctest.TestCase):
@@ -38,6 +45,15 @@ class TestMapView(krpctest.TestCase):
                 self.assertTrue(obj.visible)
                 obj.remove()
                 self.assertRaises(self.destroyed, obj.remove)
+
+    def test_orbit(self):
+        mun = self.conn.space_center.bodies["Mun"]
+        for orbit in (self.vessel.orbit, mun.orbit):
+            path = self.drawing.add_orbit(orbit)
+            path.end_arrow = True
+            self.wait()
+            self.assertEqual(orbit, path.orbit)
+            path.remove()
 
     def test_switch_view(self):
         line = self.drawing.add_line((0, 0, 0), (0, 10, 0), self.vessel.reference_frame)
@@ -88,6 +104,8 @@ class TestEditor(krpctest.TestCase):
         self.assertRaises(
             RuntimeError, self.drawing.add_direction_from_com, (0, 1, 0), self.ref
         )
+        mun = self.conn.space_center.bodies["Mun"]
+        self.assertRaises(RuntimeError, self.drawing.add_orbit, mun.orbit)
 
     def test_leaving_the_editor_destroys_drawings(self):
         line = self.drawing.add_line((0, 0, 0), (0, 10, 0), self.ref)
@@ -119,6 +137,14 @@ class TestTrackingStation(krpctest.TestCase):
             self.assertTrue(obj.visible)
             obj.remove()
             self.assertRaises(self.destroyed, obj.remove)
+
+    def test_orbit(self):
+        mun = self.conn.space_center.bodies["Mun"]
+        path = self.drawing.add_orbit(mun.orbit)
+        path.end_arrow = True
+        self.wait()
+        self.assertEqual(mun.orbit, path.orbit)
+        path.remove()
 
 
 if __name__ == "__main__":

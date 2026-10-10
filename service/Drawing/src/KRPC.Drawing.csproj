@@ -53,6 +53,7 @@
     <Compile Include="NavballMarker.cs" />
     <Compile Include="OrbitPath.cs" />
     <Compile Include="Path.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Polyline.cs" />
     <Compile Include="Text.cs" />

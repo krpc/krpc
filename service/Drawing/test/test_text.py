@@ -38,6 +38,7 @@ class TestText(krpctest.TestCase):
         self.assertEqual(self.alignment.left, text.alignment)
         self.assertEqual(1, text.line_spacing)
         self.assertEqual(self.anchor.upper_left, text.anchor)
+        self.assertFalse(text.face_camera)
         text.remove()
         self.assertRaises(self.destroyed, text.remove)
 
@@ -62,6 +63,13 @@ class TestText(krpctest.TestCase):
         self.assertEqual(self.anchor.upper_right, text.anchor)
         text.remove()
         self.assertRaises(self.destroyed, text.remove)
+
+    def test_face_camera(self):
+        text = self.add_text()
+        text.face_camera = True
+        self.wait()
+        self.assertTrue(text.face_camera)
+        text.remove()
 
 
 if __name__ == "__main__":
