@@ -38,6 +38,13 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// Whether the text can be drawn.
+        /// </summary>
+        protected override bool CanBeDrawn {
+            get { return CanBeDrawnIn (ReferenceFrame); }
+        }
+
+        /// <summary>
         /// Update the text.
         /// </summary>
         public override void Update ()
@@ -53,6 +60,12 @@ namespace KRPC.Drawing
             renderer.transform.rotation = ReferenceFrame.RotationToWorldSpace (rotation);
             renderer.transform.localScale = Vector3.one * View.SizeAt (viewPosition);
         }
+
+        /// <summary>
+        /// Reference frame for the positions of the object.
+        /// </summary>
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame { get; set; }
 
         /// <summary>
         /// Position of the text.

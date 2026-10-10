@@ -20,8 +20,6 @@ namespace KRPC.Drawing
         // the on-screen size it is drawn with in scaled space
         const float referenceDistance = 50f;
 
-        static Camera camera;
-
         /// <summary>
         /// Whether drawables are drawn in scaled space.
         /// </summary>
@@ -35,19 +33,27 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// The camera that renders the view.
+        /// </summary>
+        public static Camera Camera { get; private set; }
+
+        /// <summary>
         /// Update the view for the current frame.
         /// </summary>
         public static void Update ()
         {
             if (HighLogic.LoadedScene == GameScenes.TRACKSTATION) {
                 Scaled = true;
-                camera = PlanetariumCamera.Camera;
+                Camera = PlanetariumCamera.Camera;
             } else if (HighLogic.LoadedSceneIsEditor) {
                 Scaled = false;
-                camera = null;
+                Camera = EditorLogic.fetch == null ? null : EditorLogic.fetch.editorCamera;
             } else {
                 Scaled = MapView.MapIsEnabled;
-                camera = Scaled ? PlanetariumCamera.Camera : null;
+                if (Scaled)
+                    Camera = PlanetariumCamera.Camera;
+                else
+                    Camera = FlightCamera.fetch == null ? null : FlightCamera.fetch.mainCamera;
             }
         }
 
@@ -64,9 +70,20 @@ namespace KRPC.Drawing
         /// </summary>
         public static float SizeAt (Vector3 position)
         {
-            if (!Scaled || camera == null)
+            if (!Scaled || Camera == null)
                 return 1f;
-            return Vector3.Distance (camera.transform.position, position) / referenceDistance;
+            return Vector3.Distance (Camera.transform.position, position) / referenceDistance;
+        }
+
+        /// <summary>
+        /// The size of one pixel on screen at the given position in the space of the view.
+        /// </summary>
+        public static float PixelSize (Vector3 position)
+        {
+            if (Camera == null)
+                return 0f;
+            var distance = Vector3.Distance (Camera.transform.position, position);
+            return 2f * distance * Mathf.Tan (0.5f * Camera.fieldOfView * Mathf.Deg2Rad) / Camera.pixelHeight;
         }
     }
 }

@@ -46,8 +46,10 @@
     <Compile Include="Addon.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Drawing.cs" />
+    <Compile Include="FramedPath.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="NavballMarker.cs" />
+    <Compile Include="Path.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="View.cs" />
