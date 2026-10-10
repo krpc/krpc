@@ -44,6 +44,8 @@
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Addon.cs" />
+    <Compile Include="Arc.cs" />
+    <Compile Include="Circle.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Drawing.cs" />
     <Compile Include="FramedPath.cs" />
@@ -51,6 +53,7 @@
     <Compile Include="NavballMarker.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Polygon.cs" />
+    <Compile Include="Polyline.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="View.cs" />
     <Compile Include="IDrawable.cs" />

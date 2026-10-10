@@ -79,6 +79,57 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// Draw an open line through a list of vertices in the scene.
+        /// </summary>
+        /// <param name="vertices">Vertices of the line.</param>
+        /// <param name="referenceFrame">Reference frame that the vertices are in.</param>
+        /// <param name="visible">Whether the line is visible.</param>
+        [KRPCProcedure]
+        public static Polyline AddPolyline (IList<Tuple3> vertices, ReferenceFrame referenceFrame, bool visible = true)
+        {
+            return new Polyline (vertices.Select (x => x.ToVector ()).ToList (), referenceFrame, visible);
+        }
+
+        /// <summary>
+        /// Draw a circle in the scene.
+        /// </summary>
+        /// <param name="center">Position of the center of the circle.</param>
+        /// <param name="normal">Normal of the plane of the circle.</param>
+        /// <param name="radius">Radius of the circle, in meters.</param>
+        /// <param name="referenceFrame">Reference frame that the position and normal are in.</param>
+        /// <param name="visible">Whether the circle is visible.</param>
+        /// <remarks>
+        /// Throws an exception if the normal is zero.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Circle AddCircle (Tuple3 center, Tuple3 normal, double radius, ReferenceFrame referenceFrame, bool visible = true)
+        {
+            Circle.CheckNormal (normal.ToVector ());
+            return new Circle (center.ToVector (), normal.ToVector (), radius, referenceFrame, visible);
+        }
+
+        /// <summary>
+        /// Draw an arc of a circle in the scene.
+        /// </summary>
+        /// <param name="center">Position of the center of the arc.</param>
+        /// <param name="normal">Normal of the plane of the arc.</param>
+        /// <param name="startDirection">Direction from the center to the start of the arc.</param>
+        /// <param name="angle">Angle of the arc, in radians.</param>
+        /// <param name="radius">Radius of the arc, in meters.</param>
+        /// <param name="referenceFrame">Reference frame that the position and directions are in.</param>
+        /// <param name="visible">Whether the arc is visible.</param>
+        /// <remarks>
+        /// The arc turns counterclockwise about the normal, seen from the side it points to.
+        /// Throws an exception if the normal is zero, or the start direction is parallel to it.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Arc AddArc (Tuple3 center, Tuple3 normal, Tuple3 startDirection, double angle, double radius, ReferenceFrame referenceFrame, bool visible = true)
+        {
+            Arc.CheckPlane (normal.ToVector (), startDirection.ToVector ());
+            return new Arc (center.ToVector (), normal.ToVector (), startDirection.ToVector (), angle, radius, referenceFrame, visible);
+        }
+
+        /// <summary>
         /// Draw text in the scene.
         /// </summary>
         /// <param name="text">The string to draw.</param>
