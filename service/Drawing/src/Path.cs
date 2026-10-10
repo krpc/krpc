@@ -13,7 +13,6 @@ namespace KRPC.Drawing
     /// </summary>
     public abstract class Path<T> : Drawable<T>
     {
-        static readonly AnimationCurve constantWidth = AnimationCurve.Constant (0f, 1f, 1f);
         // The width of an arrow head at its base, as a multiple of the thickness of the path.
         // The head is twice as long as it is wide.
         const float arrowWidth = 4f;
@@ -138,7 +137,7 @@ namespace KRPC.Drawing
             GameObject.layer = View.Layer;
             renderer.positionCount = points.Count;
             renderer.SetPositions (points.ToArray ());
-            renderer.widthCurve = View.Scaled ? WidthCurve (points) : constantWidth;
+            renderer.widthCurve = View.WidthCurve (points);
             renderer.widthMultiplier = thickness;
         }
 
@@ -292,23 +291,6 @@ namespace KRPC.Drawing
             }
             points [0] = Vector3.MoveTowards (points [0], points [1], length);
             return points [0];
-        }
-
-        // The width at each point, keyed by the fraction of the distance along the path
-        static AnimationCurve WidthCurve (IList<Vector3> points)
-        {
-            var widths = new Keyframe [points.Count];
-            var length = 0f;
-            for (int i = 0; i < points.Count; i++) {
-                if (i > 0)
-                    length += Vector3.Distance (points [i - 1], points [i]);
-                widths [i] = new Keyframe (length, View.SizeAt (points [i]));
-            }
-            if (length > 0f) {
-                for (int i = 0; i < widths.Length; i++)
-                    widths [i].time /= length;
-            }
-            return new AnimationCurve (widths);
         }
 
         // The line renderer, checked to still exist.

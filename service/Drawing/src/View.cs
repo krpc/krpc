@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KRPC.Drawing
@@ -19,6 +20,8 @@ namespace KRPC.Drawing
         // The distance from the camera, in meters, at which a drawable in the flight scene has
         // the on-screen size it is drawn with in scaled space
         const float referenceDistance = 50f;
+
+        static readonly AnimationCurve constantWidth = AnimationCurve.Constant (0f, 1f, 1f);
 
         /// <summary>
         /// Whether drawables are drawn in scaled space.
@@ -76,6 +79,14 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// Convert a length in meters to the space of the view.
+        /// </summary>
+        public static float ToViewLength (double length)
+        {
+            return (float)(Scaled ? length * ScaledSpace.InverseScaleFactor : length);
+        }
+
+        /// <summary>
         /// The size of one pixel on screen at the given position in the space of the view.
         /// </summary>
         public static float PixelSize (Vector3 position)
@@ -84,6 +95,29 @@ namespace KRPC.Drawing
                 return 0f;
             var distance = Vector3.Distance (Camera.transform.position, position);
             return 2f * distance * Mathf.Tan (0.5f * Camera.fieldOfView * Mathf.Deg2Rad) / Camera.pixelHeight;
+        }
+
+        /// <summary>
+        /// The width curve of a line through the given points in the space of the view, which
+        /// sizes the line at each point. It is keyed by the fraction of the distance along
+        /// the line.
+        /// </summary>
+        public static AnimationCurve WidthCurve (IList<Vector3> points)
+        {
+            if (!Scaled)
+                return constantWidth;
+            var widths = new Keyframe [points.Count];
+            var length = 0f;
+            for (int i = 0; i < points.Count; i++) {
+                if (i > 0)
+                    length += Vector3.Distance (points [i - 1], points [i]);
+                widths [i] = new Keyframe (length, SizeAt (points [i]));
+            }
+            if (length > 0f) {
+                for (int i = 0; i < widths.Length; i++)
+                    widths [i].time /= length;
+            }
+            return new AnimationCurve (widths);
         }
     }
 }

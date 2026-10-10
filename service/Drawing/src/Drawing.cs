@@ -20,6 +20,14 @@ namespace KRPC.Drawing
     [KRPCService (Id = 3, GameScene = GameScene.Flight | GameScene.Editor | GameScene.TrackingStation)]
     public static class Drawing
     {
+        static class QuaternionIdentity
+        {
+            public static object Create ()
+            {
+                return new Tuple4 (0, 0, 0, 1);
+            }
+        }
+
         /// <summary>
         /// Draw a line in the scene.
         /// </summary>
@@ -170,6 +178,22 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// Draw the edges of a box in the scene.
+        /// </summary>
+        /// <param name="center">Position of the center of the box.</param>
+        /// <param name="size">Lengths of the sides of the box along its x, y and z axes, in meters.</param>
+        /// <param name="referenceFrame">Reference frame that the position and rotation are in.</param>
+        /// <param name="rotation">Rotation of the box, as a quaternion.</param>
+        /// <param name="visible">Whether the box is visible.</param>
+        [KRPCProcedure]
+        public static Box AddBox (
+            Tuple3 center, Tuple3 size, ReferenceFrame referenceFrame,
+            [KRPCDefaultValue (typeof(QuaternionIdentity))] Tuple4 rotation, bool visible = true)
+        {
+            return new Box (center.ToVector (), size.ToVector (), rotation.ToQuaternion (), referenceFrame, visible);
+        }
+
+        /// <summary>
         /// Draw a point in the scene, as a dot that keeps its size on screen.
         /// </summary>
         /// <param name="position">Position of the point.</param>
@@ -179,6 +203,19 @@ namespace KRPC.Drawing
         public static Point AddPoint (Tuple3 position, ReferenceFrame referenceFrame, bool visible = true)
         {
             return new Point (position.ToVector (), referenceFrame, visible);
+        }
+
+        /// <summary>
+        /// Draw a solid sphere in the scene.
+        /// </summary>
+        /// <param name="center">Position of the center of the sphere.</param>
+        /// <param name="radius">Radius of the sphere, in meters.</param>
+        /// <param name="referenceFrame">Reference frame that the position is in.</param>
+        /// <param name="visible">Whether the sphere is visible.</param>
+        [KRPCProcedure]
+        public static Sphere AddSphere (Tuple3 center, double radius, ReferenceFrame referenceFrame, bool visible = true)
+        {
+            return new Sphere (center.ToVector (), radius, referenceFrame, visible);
         }
 
         /// <summary>
