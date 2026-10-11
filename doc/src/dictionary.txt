@@ -136,6 +136,7 @@ pdflatex
 periapsis
 physicsless
 plugin
+polyline
 pre
 prebuilt
 prograde

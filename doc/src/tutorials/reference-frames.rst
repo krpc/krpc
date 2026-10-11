@@ -397,10 +397,11 @@ References frames can be confusing, and choosing the correct one is a challenge
 in itself. To aid debugging, kRPCs drawing functionality can be used to
 visualize direction vectors in-game.
 
-:meth:`Drawing.add_direction_from_com` will draw a direction vector, starting from the
-center of mass of the active vessel. For example, the following code draws the
-direction of the current vessels velocity relative to the surface of the body it
-is orbiting:
+:meth:`Drawing.add_axes` draws the axes of a reference frame as red, green and blue
+arrows, for the x, y and z axes. :meth:`Drawing.add_direction_from_com` draws a
+direction vector, starting from the center of mass of the active vessel. The
+following code draws the axes of :attr:`Vessel.surface_reference_frame`, and a
+labeled arrow in the direction of the vessel's velocity relative to the surface:
 
 .. tabs::
 
@@ -829,8 +830,10 @@ which is the signed angle of attack in the vessel's pitch plane, in the range
 Landing Site
 ^^^^^^^^^^^^
 
-This example computes a reference frame that is located on the surface of a body
+This example creates a reference frame that is located on the surface of a body
 at a given altitude, which could be used as the target for a landing auto pilot.
+:meth:`CelestialBody.surface_reference_frame` creates the frame, and
+:meth:`Drawing.add_axes` draws it.
 
 .. tabs::
 

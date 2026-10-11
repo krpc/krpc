@@ -44,11 +44,24 @@
       <Link>AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Addon.cs" />
+    <Compile Include="Arc.cs" />
+    <Compile Include="Box.cs" />
+    <Compile Include="Circle.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Drawing.cs" />
+    <Compile Include="FramedPath.cs" />
+    <Compile Include="Image.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="MapMarker.cs" />
+    <Compile Include="MapMarkerIcon.cs" />
     <Compile Include="NavballMarker.cs" />
+    <Compile Include="OrbitPath.cs" />
+    <Compile Include="Path.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="Polygon.cs" />
+    <Compile Include="Polyline.cs" />
+    <Compile Include="Sphere.cs" />
+    <Compile Include="SphereShape.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="View.cs" />
     <Compile Include="IDrawable.cs" />

@@ -25,6 +25,9 @@ class TestLine(krpctest.TestCase):
         self.assertEqual((1, 1, 1), line.color)
         self.assertEqual("Legacy Shaders/Particles/Additive", line.material)
         self.assertAlmostEqual(0.1, line.thickness)
+        self.assertFalse(line.start_arrow)
+        self.assertFalse(line.end_arrow)
+        self.assertAlmostEqual(1, line.arrow_size)
         line.remove()
         self.assertRaises(self.destroyed, line.remove)
 
@@ -47,6 +50,47 @@ class TestLine(krpctest.TestCase):
         self.assertEqual((1, 0, 0), line.color)
         line.remove()
 
+    def test_colors(self):
+        line = self.add_line()
+        self.assertEqual([(1, 1, 1)], line.colors)
+        line.colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+        line.end_arrow = True
+        line.visible = True
+        self.wait()
+        self.assertEqual([(1, 0, 0), (0, 1, 0), (0, 0, 1)], line.colors)
+        self.assertEqual((1, 0, 0), line.color)
+        line.color = (0, 1, 1)
+        self.assertEqual([(0, 1, 1)], line.colors)
+        line.remove()
+
+    def test_colors_out_of_range(self):
+        line = self.add_line()
+        self.assertRaises(ValueError, setattr, line, "colors", [])
+        self.assertRaises(ValueError, setattr, line, "colors", [(1, 1, 1)] * 9)
+        self.assertEqual([(1, 1, 1)], line.colors)
+        line.remove()
+
+    def test_dashed(self):
+        line = self.add_line()
+        self.assertFalse(line.dashed)
+        line.dashed = True
+        line.end_arrow = True
+        line.visible = True
+        self.wait()
+        self.assertTrue(line.dashed)
+        line.remove()
+
+    def test_label(self):
+        line = self.add_line()
+        self.assertEqual("", line.label)
+        line.label = "Prograde"
+        line.visible = True
+        self.wait()
+        self.assertEqual("Prograde", line.label)
+        line.remove()
+        self.assertEqual("Prograde", line.label)
+        self.assertRaises(self.destroyed, setattr, line, "label", "")
+
     def test_thickness(self):
         line = self.add_line()
         self.assertFalse(line.visible)
@@ -54,6 +98,25 @@ class TestLine(krpctest.TestCase):
         line.visible = True
         self.assertTrue(line.visible)
         self.assertAlmostEqual(1.234, line.thickness)
+        line.remove()
+
+    def test_arrows(self):
+        line = self.add_line()
+        line.start_arrow = True
+        line.end_arrow = True
+        line.arrow_size = 2.5
+        line.visible = True
+        self.wait()
+        self.assertTrue(line.start_arrow)
+        self.assertTrue(line.end_arrow)
+        self.assertAlmostEqual(2.5, line.arrow_size)
+        line.remove()
+
+    def test_arrows_on_a_short_line(self):
+        line = self.drawing.add_line((0, 0, 0), (0, 0.01, 0), self.ref)
+        line.end_arrow = True
+        self.wait()
+        self.assertTrue(line.end_arrow)
         line.remove()
 
 

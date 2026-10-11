@@ -41,6 +41,8 @@ namespace KRPC.Drawing
         Tuple3 color;
         string icon;
         float size;
+        // The image the marker is showing in place of its icon
+        Image shownImage;
 
         internal NavballMarker (Vector3d markerDirection, ReferenceFrame referenceFrame, bool visible)
         {
@@ -95,6 +97,11 @@ namespace KRPC.Drawing
                 ReferenceFrame.GameObjectState != GameObjectState.Live) {
                 GameObject.SetActive (false);
                 return;
+            }
+            var image = Image.IsLive (Image) ? Image : null;
+            if (!ReferenceEquals (image, shownImage)) {
+                material.SetTexture ("_MainTexture", image != null ? image.Texture : IconTexture);
+                shownImage = image;
             }
             Vector3 worldDirection = ReferenceFrame.DirectionToWorldSpace (direction).normalized;
             var position = navBall.attitudeGymbal * (worldDirection * navBall.VectorUnitScale);
@@ -208,9 +215,21 @@ namespace KRPC.Drawing
                 if (!AvailableIcons ().Contains (value))
                     throw new ArgumentException ("Icon does not exist");
                 icon = value;
-                Material.SetTexture ("_MainTexture", GameDatabase.Instance.GetTexture (iconDirectory + icon, false));
+                if (!Image.IsLive (Image))
+                    Material.SetTexture ("_MainTexture", IconTexture);
             }
         }
+
+        Texture2D IconTexture {
+            get { return GameDatabase.Instance.GetTexture (iconDirectory + icon, false); }
+        }
+
+        /// <summary>
+        /// The image that the marker is drawn with in place of its icon, or null to draw the
+        /// icon.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Image Image { get; set; }
 
         /// <summary>
         /// Size of the marker, relative to the size of the navball's own markers.

@@ -85,15 +85,21 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
-        /// Whether the drawable can be drawn where it is asked to be. A reference frame is
+        /// Whether the drawable can be drawn.
+        /// </summary>
+        protected virtual bool CanBeDrawn {
+            get { return GameObjectState == GameObjectState.Live; }
+        }
+
+        /// <summary>
+        /// Whether the drawable can be drawn in the given reference frame. A reference frame is
         /// defined against things the game can destroy, and a drawable is left where it is
         /// rather than removed when that happens, as it can be given another frame.
         /// </summary>
-        protected bool CanBeDrawn {
-            get {
-                return GameObjectState == GameObjectState.Live &&
-                ReferenceFrame.GameObjectState == GameObjectState.Live;
-            }
+        protected bool CanBeDrawnIn (ReferenceFrame referenceFrame)
+        {
+            return GameObjectState == GameObjectState.Live &&
+            referenceFrame.GameObjectState == GameObjectState.Live;
         }
 
         /// <summary>
@@ -105,12 +111,6 @@ namespace KRPC.Drawing
             CheckExists ();
             Addon.RemoveObject (this);
         }
-
-        /// <summary>
-        /// Reference frame for the positions of the object.
-        /// </summary>
-        [KRPCProperty]
-        public ReferenceFrame ReferenceFrame { get; set; }
 
         /// <summary>
         /// Whether the object is visible.

@@ -18,42 +18,11 @@ class LandingSite
 
         // Determine landing site reference frame
         // (orientation: x=zenith, y=north, z=east)
-        var landingPosition = body.SurfacePosition(
-            landingLatitude, landingLongitude, body.ReferenceFrame);
-        var qLong = Tuple.Create(
-          0.0,
-          Math.Sin(-landingLongitude * 0.5 * Math.PI / 180.0),
-          0.0,
-          Math.Cos(-landingLongitude * 0.5 * Math.PI / 180.0)
-        );
-        var qLat = Tuple.Create(
-          0.0,
-          0.0,
-          Math.Sin(landingLatitude * 0.5 * Math.PI / 180.0),
-          Math.Cos(landingLatitude * 0.5 * Math.PI / 180.0)
-        );
-        var landingReferenceFrame =
-          ReferenceFrame.CreateRelative(
-            conn,
-            ReferenceFrame.CreateRelative(
-              conn,
-              ReferenceFrame.CreateRelative(
-                conn,
-                body.ReferenceFrame,
-                landingPosition,
-                qLong),
-              Tuple.Create(0.0, 0.0, 0.0),
-              qLat),
-            Tuple.Create(landingAltitude, 0.0, 0.0));
+        var landingReferenceFrame = body.SurfaceReferenceFrame(
+            landingLatitude, landingLongitude, landingAltitude);
 
         // Draw axes
-        var zero = Tuple.Create(0.0, 0.0, 0.0);
-        conn.Drawing().AddLine(
-            zero, Tuple.Create(1.0, 0.0, 0.0), landingReferenceFrame);
-        conn.Drawing().AddLine(
-            zero, Tuple.Create(0.0, 1.0, 0.0), landingReferenceFrame);
-        conn.Drawing().AddLine(
-            zero, Tuple.Create(0.0, 0.0, 1.0), landingReferenceFrame);
+        conn.Drawing().AddAxes(landingReferenceFrame);
 
         while (true)
           System.Threading.Thread.Sleep (1000);

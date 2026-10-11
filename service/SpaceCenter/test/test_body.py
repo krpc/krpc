@@ -305,6 +305,35 @@ class TestBody(krpctest.TestCase):
                     # away from the body rather than into it
                     self.assertGreater(dot(normal, up), 0)
 
+    def test_surface_reference_frame(self):
+        kerbin = self.space_center.bodies["Kerbin"]
+        body_frame = kerbin.reference_frame
+        sc = self.space_center
+        for lat, lon in SURFACE_COORDINATES:
+            frame = kerbin.surface_reference_frame(lat, lon, 10)
+            height = kerbin.surface_height(lat, lon) + 10
+            self.assertAlmostEqual(
+                kerbin.position_at_altitude(lat, lon, height, body_frame),
+                sc.transform_position((0, 0, 0), frame, body_frame),
+                delta=0.01,
+            )
+            up = sc.transform_direction((1, 0, 0), frame, body_frame)
+            north = sc.transform_direction((0, 1, 0), frame, body_frame)
+            east = sc.transform_direction((0, 0, 1), frame, body_frame)
+            self.assertAlmostEqual(
+                kerbin.msl_normal(lat, lon, body_frame), up, places=4
+            )
+            self.assertAlmostEqual(0, dot(north, up), places=4)
+            self.assertAlmostEqual(0, dot(east, up), places=4)
+            # The body frame's y-axis points to the north pole, and its z-axis to 90E
+            lon_rad = math.radians(lon)
+            self.assertAlmostEqual(
+                (-math.sin(lon_rad), 0, math.cos(lon_rad)), east, places=4
+            )
+            if abs(lat) < 90:
+                self.assertGreater(north[1], 0)
+            frame.remove()
+
     def test_surface_normal_over_water(self):
         kerbin = self.space_center.bodies["Kerbin"]
         frame = kerbin.reference_frame

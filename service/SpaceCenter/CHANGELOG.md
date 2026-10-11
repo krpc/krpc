@@ -95,6 +95,8 @@
   - Add `CelestialBody.SurfaceNormal`, `CelestialBody.BedrockNormal` and
     `CelestialBody.MSLNormal`, the slope of the terrain at a given latitude and longitude
     (#1030)
+  - Add `CelestialBody.SurfaceReferenceFrame`, a reference frame fixed to the surface at a
+    given latitude and longitude (#1116)
   - Fix `ClosestApproach.Velocity` and `ClosestApproach.TargetVelocity` being offset by the
     velocity of the frame the active vessel's reference body moves in (#1047)
   - Add `Orbit.CreateFromPositionAndVelocity` and `Orbit.CreateFromOrbitalElements`, which

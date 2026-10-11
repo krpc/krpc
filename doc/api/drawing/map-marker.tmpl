@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('Drawing') }}
+{% import domain.macros as macros with context %}
+
+MapMarker
+=========
+
+{{ macros.class(services['Drawing'].classes['MapMarker']) }}
+{{ macros.enumeration(services['Drawing'].enumerations['MapMarkerIcon']) }}
