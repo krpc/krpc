@@ -167,6 +167,20 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
+.. attribute:: game_state_loads: number
+
+   The number of game states that have finished loading.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+   .. note::
+
+      Increases once a game load, quickload, revert or scene change has finished.
+
+
+
+
 
 .. class:: GameScene
 

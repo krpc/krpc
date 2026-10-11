@@ -173,6 +173,19 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
+.. function:: krpc_error_t krpc_KRPC_GameStateLoads(krpc_connection_t connection, uint32_t * result)
+
+   The number of game states that have finished loading.
+
+   
+
+   .. note::
+
+      Increases once a game load, quickload, revert or scene change has finished.
+
+
+
+
 
 .. type:: krpc_KRPC_GameScene_t
 

@@ -601,6 +601,7 @@
 <section id="core">
 <h3>Core<a class="headerlink" href="#core" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPC.GameStateLoads</span></code>, the number of game states that have finished loading (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1121">#1121</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code>, for an object that exists but is not loaded, such as a part of an unloaded vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1120">#1120</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Throw <code class="docutils literal notranslate"><span class="pre">KRPC.UnsupportedSceneException</span></code> for a procedure called outside its game scenes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1119">#1119</a>)</p></li>
 <li><p>Encode and decode values without reflection, cutting the server cost of a call that passes or returns an object by about three quarters (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1091">#1091</a>)</p></li>

@@ -146,6 +146,16 @@ KRPC
 
    
 
+   .. function:: uint32_t game_state_loads()
+
+      The number of game states that have finished loading.
+
+   
+
+      .. note::
+
+         Increases once a game load, quickload, revert or scene change has finished.
+
 
 
 .. namespace:: krpc::services::KRPC

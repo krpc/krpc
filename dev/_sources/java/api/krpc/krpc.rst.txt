@@ -138,6 +138,17 @@ KRPC
 
    
 
+   .. method:: int getGameStateLoads()
+
+
+      The number of game states that have finished loading.
+
+   
+
+      .. note::
+
+         Increases once a game load, quickload, revert or scene change has finished.
+
 
 
 .. type:: public enum GameScene

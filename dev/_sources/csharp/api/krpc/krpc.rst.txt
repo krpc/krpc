@@ -141,6 +141,17 @@ KRPC
 
       :Game Scenes: All
 
+   .. property:: uint GameStateLoads { get; }
+
+      The number of game states that have finished loading.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Increases once a game load, quickload, revert or scene change has finished.
+
 
 
 .. enum:: GameScene

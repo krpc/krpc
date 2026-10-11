@@ -15,6 +15,7 @@ v0.7.0 - unreleased
 Core
 ^^^^
 
+* Add ``KRPC.GameStateLoads``, the number of game states that have finished loading (:issue:`1121`)
 * Add ``KRPC.ObjectNotLoadedException``, for an object that exists but is not loaded, such as a part of an unloaded vessel (:issue:`1120`)
 * :breaking:`Breaking` Throw ``KRPC.UnsupportedSceneException`` for a procedure called outside its game scenes (:issue:`1119`)
 * Encode and decode values without reflection, cutting the server cost of a call that passes or returns an object by about three quarters (:issue:`1091`)
