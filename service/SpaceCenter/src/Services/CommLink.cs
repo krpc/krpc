@@ -3,6 +3,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -95,7 +96,7 @@ namespace KRPC.SpaceCenter.Services
                 return new ObjectDestroyedException (
                     "The comm link no longer exists, as the vessel whose control path it " +
                     "was part of, or one of the nodes it joins, is gone.");
-            return new InvalidOperationException (
+            return new ObjectNotLoadedException (
                 "The comm link is not part of the vessel's control path at the moment. " +
                 "It can be used again if the path takes it again.");
         }

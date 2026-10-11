@@ -2,6 +2,7 @@ using System;
 using KRPC.Service;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.SpaceCenter
 {
@@ -83,7 +84,7 @@ namespace KRPC.SpaceCenter
                 return new ObjectDestroyedException (
                     "The vessel " + id + " no longer exists. " +
                     "It was destroyed or recovered, or belongs to a game that is no longer loaded.");
-            return new InvalidOperationException (
+            return new ObjectNotLoadedException (
                 "The vessel " + id + " is not loaded, as the game is between states and " +
                 "does not currently know which vessels exist. " +
                 "It can be used again once the game has finished loading.");

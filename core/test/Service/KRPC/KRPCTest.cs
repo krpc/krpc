@@ -159,13 +159,16 @@ namespace KRPC.Test.Service.KRPC
                 } else if (exception.Name == "ObjectDestroyedException") {
                     MessageAssert.HasDocumentation (exception,
                         "<doc>\n<summary>\nThe game object that a service object refers to no longer exists,\nso the object cannot be used. For example, the part it represents\nwas destroyed, or the vessel it belongs to was recovered.\n</summary>\n</doc>");
+                } else if (exception.Name == "ObjectNotLoadedException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nThe game object that a service object refers to exists, but is not loaded.\nFor example, the game is loading, or the vessel carrying the part is unloaded.\n</summary>\n</doc>");
                 } else if (exception.Name == "UnsupportedSceneException") {
                     MessageAssert.HasDocumentation (exception,
                         "<doc>\n<summary>\nThe procedure is not available in the current game scene.\n</summary>\n</doc>");
                 }
                 foundExceptions++;
             }
-            Assert.AreEqual (6, foundExceptions);
+            Assert.AreEqual (7, foundExceptions);
         }
 
         [Test]

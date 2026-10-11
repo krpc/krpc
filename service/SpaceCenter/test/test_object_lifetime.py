@@ -445,16 +445,9 @@ class TestObjectLifetimeUnloaded(krpctest.TestCase):
         cls.other = next(v for v in cls.space_center.vessels if v != cls.vessel)
 
     def assert_not_loaded(self, obj, attribute):
-        """Assert that reading the attribute says the object is not loaded.
-
-        Not loaded and destroyed have to be told apart, and asserting on RuntimeError
-        cannot do it: the client builds ObjectDestroyedException as a subclass of
-        RuntimeError, and the not-loaded error is a RuntimeError itself, so either one
-        satisfies an assertion made against the base class.
-        """
-        with self.assertRaises(RuntimeError) as raised:
+        """Assert that reading the attribute says the object is not loaded."""
+        with self.assertRaises(self.conn.krpc.ObjectNotLoadedException) as raised:
             getattr(obj, attribute)
-        self.assertNotIsInstance(raised.exception, self.destroyed)
         self.assertIn("not loaded", str(raised.exception))
 
     def test_parts_of_an_unloaded_vessel(self):

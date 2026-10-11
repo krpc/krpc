@@ -5,6 +5,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
 
@@ -113,7 +114,7 @@ namespace KRPC.SpaceCenter.Services
             if (GameObjectState == GameObjectState.Destroyed)
                 return new ObjectDestroyedException (
                     "The maneuver node no longer exists, as it is not in the vessel's flight plan.");
-            return new InvalidOperationException (
+            return new ObjectNotLoadedException (
                 "The maneuver node is not loaded, as the game is not computing a flight " +
                 "plan for the vessel it belongs to. It can be used again once the game does.");
         }

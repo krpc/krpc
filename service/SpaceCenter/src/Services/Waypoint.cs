@@ -3,6 +3,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -68,14 +69,24 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The state of the waypoint. It is live while the game's waypoint manager lists
-        /// it, and destroyed once a running manager stops listing it. A game with no
-        /// waypoint manager leaves the waypoint dormant.
+        /// it, and destroyed once a running manager in a settled game stops listing it. A
+        /// game with no waypoint manager, or one still loading its contracts, leaves the
+        /// waypoint dormant.
         /// </summary>
+        /// <remarks>
+        /// A contract's waypoints are added when the contract system parses its contracts,
+        /// a frame after the scene loads it.
+        /// </remarks>
         public GameObjectState GameObjectState {
             get {
                 if (FinePrint.WaypointManager.Instance () == null)
                     return GameObjectState.Dormant;
-                return Find () != null ? GameObjectState.Live : GameObjectState.Destroyed;
+                if (Find () != null)
+                    return GameObjectState.Live;
+                var contractsLoading =
+                    Contracts.ContractSystem.Instance != null && !Contracts.ContractSystem.loaded;
+                return GameState.Settled && !contractsLoading ?
+                    GameObjectState.Destroyed : GameObjectState.Dormant;
             }
         }
 
@@ -107,7 +118,7 @@ namespace KRPC.SpaceCenter.Services
             if (GameObjectState == GameObjectState.Destroyed)
                 return new ObjectDestroyedException (
                     "The waypoint no longer exists, as the game no longer has a waypoint with its id.");
-            return new InvalidOperationException (
+            return new ObjectNotLoadedException (
                 "The waypoint is not loaded, as the game has no waypoint manager running. " +
                 "It can be used again once the game does.");
         }

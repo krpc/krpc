@@ -4,6 +4,7 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.InfernalRobotics
 {
@@ -52,16 +53,15 @@ namespace KRPC.InfernalRobotics
 
         /// <summary>
         /// The state of the group. It takes the state of its vessel, and is destroyed once
-        /// a vessel the mod reports on has no group of the name. A mod that has yet to
-        /// start leaves the group dormant, as its controller tracks the active vessel
-        /// alone.
+        /// a loaded vessel has no group of the name. An unloaded vessel leaves the group
+        /// dormant, as the groups are found from the vessel's parts.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
                 var state = vessel.GameObjectState;
                 if (state != GameObjectState.Live)
                     return state;
-                if (!IRWrapper.AssemblyExists)
+                if (!vessel.InternalVessel.loaded)
                     return GameObjectState.Dormant;
                 return Find () != null ? GameObjectState.Live : GameObjectState.Destroyed;
             }
@@ -95,8 +95,8 @@ namespace KRPC.InfernalRobotics
                 return new ObjectDestroyedException (
                     "The servo group no longer exists, as its vessel no longer has a group " +
                     "of its name.");
-            return new InvalidOperationException (
-                "The servo group is not available, as Infernal Robotics is not installed.");
+            return new ObjectNotLoadedException (
+                "The servo group is not loaded, as its vessel is not loaded.");
         }
 
         /// <summary>
