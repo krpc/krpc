@@ -507,6 +507,7 @@ function TestClient:test_krpc_service_members()
      'get_clients',
      'get_current_game_scene',
      'get_game_scene',
+     'get_game_state_loads',
      'get_paused',
      'get_services',
      'get_status',

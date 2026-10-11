@@ -39,6 +39,27 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void ALoadIsCountedOnceSettled ()
+        {
+            var loads = GameState.Loads;
+            GameState.Changed ();
+            Assert.AreEqual (loads, GameState.Loads);
+            GameState.Sweep ();
+            Assert.AreEqual (loads + 1, GameState.Loads);
+        }
+
+        [Test]
+        public void ARequestedSweepIsNotALoad ()
+        {
+            GameState.Changed ();
+            GameState.Sweep ();
+            var loads = GameState.Loads;
+            GameState.RequestSweep ();
+            GameState.Sweep ();
+            Assert.AreEqual (loads, GameState.Loads);
+        }
+
+        [Test]
         public void SweepsTheObjectStore ()
         {
             var store = ObjectStore.Instance;

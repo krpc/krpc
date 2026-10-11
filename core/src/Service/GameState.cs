@@ -19,6 +19,12 @@ namespace KRPC.Service
         public static uint Generation { get; private set; }
 
         /// <summary>
+        /// The number of game states that have finished loading, counted when
+        /// <see cref="Settled" /> goes from false to true.
+        /// </summary>
+        public static uint Loads { get; private set; }
+
+        /// <summary>
         /// Whether the object store is waiting to be swept.
         /// </summary>
         public static bool SweepPending { get; private set; }
@@ -83,6 +89,8 @@ namespace KRPC.Service
         public static void Sweep ()
         {
             SweepPending = false;
+            if (!settled)
+                Loads++;
             settled = true;
             var removed = ObjectStore.Instance.Sweep ();
             if (removed > 0)

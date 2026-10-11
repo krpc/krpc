@@ -1,4 +1,5 @@
 ## [v0.7.0] - unreleased
+- Add `KRPC.GameStateLoads`, the number of game states that have finished loading (#1121)
 - Add `KRPC.ObjectNotLoadedException`, for an object that exists but is not loaded, such as a
   part of an unloaded vessel (#1120)
 - **Breaking:** Throw `KRPC.UnsupportedSceneException` for a procedure called outside its game
