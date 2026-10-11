@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Add `KRPC.ObjectNotLoadedException`, for an object that exists but is not loaded, such as a
+  part of an unloaded vessel (#1120)
 - **Breaking:** Throw `KRPC.UnsupportedSceneException` for a procedure called outside its game
   scenes (#1119)
 - Encode and decode values without reflection, cutting the server cost of a call that passes

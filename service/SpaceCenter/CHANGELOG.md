@@ -248,8 +248,8 @@
     part has been destroyed raises `KRPC.ObjectDestroyedException` (#885)
   - Part modules, and the objects built on them, read the modules of the loaded game, so they
     keep working across a quickload (#764)
-  - Using a part of a vessel that the game has unloaded raises an error saying that the part
-    is not loaded (#1051)
+  - Using a part of a vessel that the game has unloaded raises
+    `KRPC.ObjectNotLoadedException` (#1051)
   - The fields, events and actions of a part module read the loaded game's module (#764)
   - A `ScienceSubject` belongs to the game state it was read from, and using one after that
     state has been replaced raises `KRPC.ObjectDestroyedException` (#771)
