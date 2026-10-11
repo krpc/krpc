@@ -572,9 +572,18 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
 </ul>
 </details></li>
@@ -947,6 +956,36 @@ reference frame. When over water, this is the position at the bottom of the sea-
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.CelestialBody.SurfaceReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">SurfaceReferenceFrame</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">latitude</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">longitude</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">altitude</span></em><em> <span class="pre">=</span> <span class="pre">0.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.CelestialBody.SurfaceReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>Create a reference frame fixed to the surface at the given latitude and longitude.</p>
+<ul class="simple">
+<li><p>The origin is the given altitude above the surface, at the
+given latitude and longitude.</p></li>
+<li><p>The axes rotate with the body.</p></li>
+<li><p>The x-axis points out from the center of the body.</p></li>
+<li><p>The y-axis points north.</p></li>
+<li><p>The z-axis points east.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>altitude</strong> – Altitude of the origin above the surface, in meters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call returns a new frame, as for <a class="reference internal" href="reference-frame.html#method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateRelative" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateRelative method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ReferenceFrame.CreateRelative</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp method">

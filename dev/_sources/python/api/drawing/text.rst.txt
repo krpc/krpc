@@ -26,6 +26,14 @@ Text
       :rtype: tuple(float, float, float, float)
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
+   .. attribute:: face_camera
+
+      Whether the text turns to face the camera, in place of its :attr:`Text.rotation`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
    .. attribute:: reference_frame
 
       Reference frame for the positions of the object.

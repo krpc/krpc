@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/cnano/api/drawing/drawing.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Line" href="line.html" />
+    <link rel="next" title="Arc" href="arc.html" />
     <link rel="prev" title="Drawing API" href="../drawing.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -571,9 +571,18 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 </ul>
 </details></li>
@@ -759,6 +768,27 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddAxes">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddAxes</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">length</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddAxes" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw the axes of a reference frame in the scene, as arrows from its origin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame.</p></li>
+<li><p><strong>length</strong> – The length of each axis.</p></li>
+<li><p><strong>visible</strong> – Whether the axes are visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lines for the x, y and z axes, colored red, green and blue.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_Drawing_AddPolygon">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddPolygon</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="polygon.html#c.krpc_Drawing_Polygon_t" title="krpc_Drawing_Polygon_t"><span class="n"><span class="pre">krpc_Drawing_Polygon_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_list_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">vertices</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddPolygon" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a polygon in the scene, defined by a list of vertices.</p>
@@ -768,6 +798,154 @@ Objects drawn by a client are removed when that client disconnects.</p>
 <li><p><strong>vertices</strong> – Vertices of the polygon.</p></li>
 <li><p><strong>referenceFrame</strong> – Reference frame that the vertices are in.</p></li>
 <li><p><strong>visible</strong> – Whether the polygon is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddPolyline">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddPolyline</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="polyline.html#c.krpc_Drawing_Polyline_t" title="krpc_Drawing_Polyline_t"><span class="n"><span class="pre">krpc_Drawing_Polyline_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_list_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">vertices</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddPolyline" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw an open line through a list of vertices in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> – Vertices of the line.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame that the vertices are in.</p></li>
+<li><p><strong>visible</strong> – Whether the line is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddCircle">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddCircle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="circle.html#c.krpc_Drawing_Circle_t" title="krpc_Drawing_Circle_t"><span class="n"><span class="pre">krpc_Drawing_Circle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">center</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">normal</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">radius</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddCircle" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw a circle in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – Position of the center of the circle.</p></li>
+<li><p><strong>normal</strong> – Normal of the plane of the circle.</p></li>
+<li><p><strong>radius</strong> – Radius of the circle, in meters.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame that the position and normal are in.</p></li>
+<li><p><strong>visible</strong> – Whether the circle is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the normal is zero.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddArc">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddArc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="arc.html#c.krpc_Drawing_Arc_t" title="krpc_Drawing_Arc_t"><span class="n"><span class="pre">krpc_Drawing_Arc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">center</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">normal</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">startDirection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">angle</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">radius</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddArc" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw an arc of a circle in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – Position of the center of the arc.</p></li>
+<li><p><strong>normal</strong> – Normal of the plane of the arc.</p></li>
+<li><p><strong>startDirection</strong> – Direction from the center to the start of the arc.</p></li>
+<li><p><strong>angle</strong> – Angle of the arc, in radians.</p></li>
+<li><p><strong>radius</strong> – Radius of the arc, in meters.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame that the position and directions are in.</p></li>
+<li><p><strong>visible</strong> – Whether the arc is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arc turns counterclockwise about the normal, seen from the side it points to.
+Throws an exception if the normal is zero, or the start direction is parallel to it.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddOrbit">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddOrbit</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="orbit-path.html#c.krpc_Drawing_OrbitPath_t" title="krpc_Drawing_OrbitPath_t"><span class="n"><span class="pre">krpc_Drawing_OrbitPath_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="../space-center/orbit.html#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">orbit</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddOrbit" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw the path of an orbit in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orbit</strong> – The orbit.</p></li>
+<li><p><strong>visible</strong> – Whether the path is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The path follows the orbit as it changes, and ends where the orbit leaves the
+sphere of influence of its body.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddPoint">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddPoint</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="point.html#c.krpc_Drawing_Point_t" title="krpc_Drawing_Point_t"><span class="n"><span class="pre">krpc_Drawing_Point_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddPoint" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw a point in the scene, as a dot that keeps its size on screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> – Position of the point.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> – Whether the point is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddBox">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddBox</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="box.html#c.krpc_Drawing_Box_t" title="krpc_Drawing_Box_t"><span class="n"><span class="pre">krpc_Drawing_Box_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">center</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">size</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rotation</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddBox" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw the edges of a box in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – Position of the center of the box.</p></li>
+<li><p><strong>size</strong> – Lengths of the sides of the box along its x, y and z axes, in meters.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame that the position and rotation are in.</p></li>
+<li><p><strong>rotation</strong> – Rotation of the box, as a quaternion.</p></li>
+<li><p><strong>visible</strong> – Whether the box is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddSphere">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddSphere</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="sphere.html#c.krpc_Drawing_Sphere_t" title="krpc_Drawing_Sphere_t"><span class="n"><span class="pre">krpc_Drawing_Sphere_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">center</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">radius</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddSphere" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw a solid sphere in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – Position of the center of the sphere.</p></li>
+<li><p><strong>radius</strong> – Radius of the sphere, in meters.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> – Whether the sphere is visible.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -815,6 +993,47 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddMapMarker">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddMapMarker</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="map-marker.html#c.krpc_Drawing_MapMarker_t" title="krpc_Drawing_MapMarker_t"><span class="n"><span class="pre">krpc_Drawing_MapMarker_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span>, <a class="reference internal" href="map-marker.html#c.krpc_Drawing_MapMarkerIcon_t" title="krpc_Drawing_MapMarkerIcon_t"><span class="n"><span class="pre">krpc_Drawing_MapMarkerIcon_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">icon</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">caption</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddMapMarker" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw a marker in the map view, with one of the game’s own map icons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> – Position of the marker.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame that the position is in.</p></li>
+<li><p><strong>icon</strong> – The icon that the marker is drawn with.</p></li>
+<li><p><strong>caption</strong> – The caption shown when the mouse is over the marker.</p></li>
+<li><p><strong>visible</strong> – Whether the marker is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Drawing_AddImage">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_AddImage</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="image.html#c.krpc_Drawing_Image_t" title="krpc_Drawing_Image_t"><span class="n"><span class="pre">krpc_Drawing_Image_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="n"><span class="pre">krpc_bytes_t</span></span><span class="w"> </span><span class="n"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_AddImage" title="Link to this definition">#</a><br /></dt>
+<dd><p>Load an image that markers can be drawn with, from the contents of a PNG or JPEG
+file. The transparency of a PNG image is kept.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The contents of the image file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the data is not a PNG or JPEG image.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_Drawing_Clear">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Drawing_Clear</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">clientOnly</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Drawing_Clear" title="Link to this definition">#</a><br /></dt>
 <dd><p>Remove all objects being drawn.</p>
@@ -852,11 +1071,11 @@ Objects drawn by a client are removed when that client disconnects.</p>
       </div>
     </a>
     <a class="right-next"
-       href="line.html"
+       href="arc.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Line</p>
+        <p class="prev-next-title">Arc</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

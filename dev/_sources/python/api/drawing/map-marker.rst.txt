@@ -1,0 +1,221 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Drawing
+
+MapMarker
+=========
+
+
+.. class:: MapMarker
+
+   A marker drawn in the map view, with one of the game's own map icons. Created using
+   :meth:`add_map_marker`.
+
+   .. attribute:: position
+
+      Position of the marker.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight, Tracking Station
+
+   .. attribute:: reference_frame
+
+      Reference frame that the position of the marker is in.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight, Tracking Station
+
+   .. attribute:: visible
+
+      Whether the marker is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Tracking Station
+
+   .. attribute:: icon
+
+      The icon that the marker is drawn with.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`MapMarkerIcon`
+      :Game Scenes: Flight, Tracking Station
+
+   .. attribute:: image
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Image` or None
+      :Game Scenes: Flight, Tracking Station
+
+   .. attribute:: caption
+
+      The caption shown when the mouse is over the marker.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight, Tracking Station
+
+   .. attribute:: color
+
+      The color of the marker.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: remove()
+
+      Remove the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+
+
+.. class:: MapMarkerIcon
+
+   The icon a :class:`MapMarker` is drawn with, from the game's own map icons.
+
+
+   .. data:: generic
+
+      A plain marker.
+
+
+   .. data:: celestial_body
+
+      A celestial body.
+
+
+   .. data:: apoapsis
+
+      An apoapsis.
+
+
+   .. data:: periapsis
+
+      A periapsis.
+
+
+   .. data:: ascending_node
+
+      An ascending node.
+
+
+   .. data:: descending_node
+
+      A descending node.
+
+
+   .. data:: maneuver_node
+
+      A maneuver node.
+
+
+   .. data:: encounter
+
+      An encounter with a sphere of influence.
+
+
+   .. data:: escape
+
+      An escape from a sphere of influence.
+
+
+   .. data:: impact
+
+      An impact with the surface.
+
+
+   .. data:: close_approach
+
+      A closest approach to a target.
+
+
+   .. data:: intersect
+
+      An intersection with the orbit of a target.
+
+
+   .. data:: ship
+
+      A ship.
+
+
+   .. data:: probe
+
+      A probe.
+
+
+   .. data:: relay
+
+      A relay.
+
+
+   .. data:: station
+
+      A station.
+
+
+   .. data:: base
+
+      A base.
+
+
+   .. data:: lander
+
+      A lander.
+
+
+   .. data:: rover
+
+      A rover.
+
+
+   .. data:: plane
+
+      A plane.
+
+
+   .. data:: eva
+
+      A kerbal on EVA.
+
+
+   .. data:: flag
+
+      A flag.
+
+
+   .. data:: debris
+
+      Debris.
+
+
+   .. data:: space_object
+
+      An asteroid or comet.
+
+
+   .. data:: deployed_science
+
+      Deployed science equipment.
+
+
+   .. data:: launch_site
+
+      A launch site.
+
+
+   .. data:: runway
+
+      A runway.
+
+
+   .. data:: ksc
+
+      The Kerbal Space Center.

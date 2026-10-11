@@ -106,6 +106,7 @@ SpaceCenter service
   * An ``Orbit`` reads the orbit of the vessel, celestial body or maneuver node it belongs to as it is now, so it keeps working across a load (:issue:`764`)
   * A ``ClosestApproach`` is freed once either of the orbits it describes is gone (:issue:`1051`)
   * Add ``CelestialBody.SurfaceNormal``, ``CelestialBody.BedrockNormal`` and ``CelestialBody.MSLNormal``, the slope of the terrain at a given latitude and longitude (:issue:`1030`)
+  * Add ``CelestialBody.SurfaceReferenceFrame``, a reference frame fixed to the surface at a given latitude and longitude (:issue:`1116`)
   * Fix ``ClosestApproach.Velocity`` and ``ClosestApproach.TargetVelocity`` being offset by the velocity of the frame the active vessel's reference body moves in (:issue:`1047`)
   * Add ``Orbit.CreateFromPositionAndVelocity`` and ``Orbit.CreateFromOrbitalElements``, which build an orbit that coasts freely under gravity without an object in the game to follow (:issue:`1046`)
   * Add ``Orbit.ReferenceFrame`` and ``Orbit.OrbitalReferenceFrame``, centered on the point an orbit has reached at the current time (:issue:`1046`)
@@ -225,6 +226,16 @@ SpaceCenter service
 Drawing service
 ^^^^^^^^^^^^^^^
 
+* Add ``Drawing.AddPolyline``, ``Drawing.AddCircle`` and ``Drawing.AddArc`` (:issue:`1116`)
+* Add ``Drawing.AddOrbit``, which draws the path of an orbit (:issue:`1116`)
+* Add ``Drawing.AddPoint``, which draws a dot that keeps its size on screen (:issue:`1116`)
+* Add ``Drawing.AddAxes``, which draws the axes of a reference frame (:issue:`1116`)
+* Add arrow heads to lines, polygons and the new paths, with ``StartArrow``, ``EndArrow`` and ``ArrowSize`` (:issue:`1116`)
+* Add ``Text.FaceCamera``, which turns text to face the camera (:issue:`1116`)
+* Add ``Colors``, ``Dashed`` and ``Label`` to lines, polygons and the new paths (:issue:`1116`)
+* Add ``Drawing.AddBox`` and ``Drawing.AddSphere`` (:issue:`1116`)
+* Add ``Drawing.AddMapMarker``, which draws a marker in the map view with one of the game's own map icons (:issue:`1116`)
+* Add ``Drawing.AddImage``, which loads a PNG or JPEG image to draw map and navball markers with (:issue:`1116`)
 * Draw lines, polygons and text in the map view, the editor and the tracking station (:issue:`1115`)
 * :breaking:`Breaking` Removing a drawing object another client created, or one the server no longer holds, reports that it is not among those this client created (:issue:`1072`)
 * Line, polygon, text and navball marker objects raise ``KRPC.ObjectDestroyedException`` once the object they draw is gone, and are freed (:issue:`1051`)

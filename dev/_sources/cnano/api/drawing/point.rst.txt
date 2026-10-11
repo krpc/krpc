@@ -1,0 +1,62 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Point
+=====
+
+
+.. type:: krpc_Drawing_Point_t
+
+   A point, drawn as a dot that keeps its size on screen. Created using
+   :func:`krpc_Drawing_AddPoint`.
+
+   .. function:: krpc_error_t krpc_Drawing_Point_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_Point_set_Position(const krpc_tuple_double_double_double_t * value)
+
+      Position of the point.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Point_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: void krpc_Drawing_Point_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Point_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_Drawing_Point_set_Visible(bool value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Point_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_Point_set_Color(const krpc_tuple_double_double_double_t * value)
+
+      The color of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Point_Size(krpc_connection_t connection, float * result)
+   .. function:: void krpc_Drawing_Point_set_Size(float value)
+
+      Diameter of the point, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Point_Material(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_Drawing_Point_set_Material(const char * value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Point_Remove(krpc_connection_t connection)
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

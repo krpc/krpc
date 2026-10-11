@@ -57,8 +57,8 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/java/api/drawing/polygon.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Text" href="text.html" />
-    <link rel="prev" title="NavballMarker" href="navball-marker.html" />
+    <link rel="next" title="Polyline" href="polyline.html" />
+    <link rel="prev" title="Point" href="point.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -571,9 +571,18 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 </ul>
 </details></li>
@@ -747,9 +756,54 @@
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.remove()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.remove()" title="Link to this definition">#</a></dt>
-<dd><p>Remove the object.</p>
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getColor()">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getColor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getColor()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setColor(org.javatuples.Triplet)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setColor</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setColor(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+<dd><p>The color of the path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a path drawn with more than one color, this is the color at its start.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getColors()">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getColors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getColors()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setColors(java.util.List)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setColors</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setColors(java.util.List)" title="Link to this definition">#</a></dt>
+<dd><p>The colors of the path, blended evenly from its start to its end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the list is empty or holds more than 8 colors.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getThickness()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThickness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getThickness()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setThickness(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setThickness</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setThickness(float)" title="Link to this definition">#</a></dt>
+<dd><p>The thickness of the path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
@@ -758,14 +812,78 @@
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getColor()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getColor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getColor()" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getStartArrow()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getStartArrow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getStartArrow()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setColor(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setColor</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setColor(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
-<dd><p>Set the color</p>
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setStartArrow(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setStartArrow</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setStartArrow(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether an arrow head is drawn at the start.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getEndArrow()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEndArrow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getEndArrow()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setEndArrow(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEndArrow</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setEndArrow(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether an arrow head is drawn at the end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getArrowSize()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getArrowSize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getArrowSize()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setArrowSize(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setArrowSize</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setArrowSize(float)" title="Link to this definition">#</a></dt>
+<dd><p>The size of the arrow heads, relative to the thickness.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getDashed()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDashed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getDashed()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setDashed(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDashed</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setDashed(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the path is drawn as a dashed line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getLabel()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getLabel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getLabel()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setLabel(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLabel</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setLabel(String)" title="Link to this definition">#</a></dt>
+<dd><p>Text drawn halfway along the path, facing the camera. Empty for no label.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
@@ -791,14 +909,9 @@ Creates the material from a shader with the given name.</p>
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.getThickness()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThickness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.getThickness()" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.setThickness(float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setThickness</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.setThickness(float)" title="Link to this definition">#</a></dt>
-<dd><p>Set the thickness</p>
+<dt class="sig sig-object java" id="krpc.client.services.Drawing.Polygon.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.Drawing.Polygon.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
@@ -821,20 +934,20 @@ Creates the material from a shader with the given name.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="navball-marker.html"
+       href="point.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">NavballMarker</p>
+        <p class="prev-next-title">Point</p>
       </div>
     </a>
     <a class="right-next"
-       href="text.html"
+       href="polyline.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Text</p>
+        <p class="prev-next-title">Polyline</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

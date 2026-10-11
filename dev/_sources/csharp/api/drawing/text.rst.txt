@@ -22,6 +22,12 @@ Text
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
+   .. property:: bool FaceCamera { get; set; }
+
+      Whether the text turns to face the camera, in place of its :prop:`Text.Rotation`.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
    .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
 
       Reference frame for the positions of the object.

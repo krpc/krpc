@@ -58,7 +58,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="User Interface API" href="../ui.html" />
-    <link rel="prev" title="Polygon" href="polygon.html" />
+    <link rel="prev" title="Sphere" href="sphere.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -571,9 +571,18 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Text</a></li>
 </ul>
 </details></li>
@@ -722,6 +731,20 @@
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="Drawing.Drawing.Text.face_camera">
+<span class="sig-name descname"><span class="pre">face_camera</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#Drawing.Drawing.Text.face_camera" title="Link to this definition">#</a></dt>
+<dd><p>Whether the text turns to face the camera, in place of its <a class="reference internal" href="#Drawing.Drawing.Text.rotation" title="Drawing.Drawing.Text.rotation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">Drawing.Text.rotation</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -927,12 +950,12 @@ Creates the material from a shader with the given name.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="polygon.html"
+       href="sphere.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Polygon</p>
+        <p class="prev-next-title">Sphere</p>
       </div>
     </a>
     <a class="right-next"

@@ -1,0 +1,67 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Drawing
+
+Point
+=====
+
+
+.. type:: public class Point
+
+   A point, drawn as a dot that keeps its size on screen. Created using
+   :meth:`addPoint(org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
+
+   .. method:: void setPosition(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Position of the point.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(SpaceCenter.ReferenceFrame value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getColor()
+
+   .. method:: void setColor(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The color of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: float getSize()
+
+   .. method:: void setSize(float value)
+
+      Diameter of the point, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: String getMaterial()
+
+   .. method:: void setMaterial(String value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: void remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

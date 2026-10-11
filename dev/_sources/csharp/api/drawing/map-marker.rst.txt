@@ -1,0 +1,208 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+MapMarker
+=========
+
+
+.. class:: MapMarker
+
+   A marker drawn in the map view, with one of the game's own map icons. Created using
+   :meth:`Drawing.AddMapMarker <Drawing.Drawing.AddMapMarker>`.
+
+   .. property:: System.Tuple<double,double,double> Position { get; set; }
+
+      Position of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame that the position of the marker is in.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the marker is visible.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: MapMarkerIcon Icon { get; set; }
+
+      The icon that the marker is drawn with.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: Image Image { get; set; }
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: string Caption { get; set; }
+
+      The caption shown when the mouse is over the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. property:: System.Tuple<double,double,double> Color { get; set; }
+
+      The color of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: void Remove()
+
+      Remove the marker.
+
+
+      :Game Scenes: Flight, Tracking Station
+
+
+
+.. enum:: MapMarkerIcon
+
+   The icon a :type:`MapMarker` is drawn with, from the game's own map icons.
+
+
+   .. value:: Generic
+
+      A plain marker.
+
+
+   .. value:: CelestialBody
+
+      A celestial body.
+
+
+   .. value:: Apoapsis
+
+      An apoapsis.
+
+
+   .. value:: Periapsis
+
+      A periapsis.
+
+
+   .. value:: AscendingNode
+
+      An ascending node.
+
+
+   .. value:: DescendingNode
+
+      A descending node.
+
+
+   .. value:: ManeuverNode
+
+      A maneuver node.
+
+
+   .. value:: Encounter
+
+      An encounter with a sphere of influence.
+
+
+   .. value:: Escape
+
+      An escape from a sphere of influence.
+
+
+   .. value:: Impact
+
+      An impact with the surface.
+
+
+   .. value:: CloseApproach
+
+      A closest approach to a target.
+
+
+   .. value:: Intersect
+
+      An intersection with the orbit of a target.
+
+
+   .. value:: Ship
+
+      A ship.
+
+
+   .. value:: Probe
+
+      A probe.
+
+
+   .. value:: Relay
+
+      A relay.
+
+
+   .. value:: Station
+
+      A station.
+
+
+   .. value:: Base
+
+      A base.
+
+
+   .. value:: Lander
+
+      A lander.
+
+
+   .. value:: Rover
+
+      A rover.
+
+
+   .. value:: Plane
+
+      A plane.
+
+
+   .. value:: EVA
+
+      A kerbal on EVA.
+
+
+   .. value:: Flag
+
+      A flag.
+
+
+   .. value:: Debris
+
+      Debris.
+
+
+   .. value:: SpaceObject
+
+      An asteroid or comet.
+
+
+   .. value:: DeployedScience
+
+      Deployed science equipment.
+
+
+   .. value:: LaunchSite
+
+      A launch site.
+
+
+   .. value:: Runway
+
+      A runway.
+
+
+   .. value:: KSC
+
+      The Kerbal Space Center.

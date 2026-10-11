@@ -58,7 +58,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="User Interface API" href="../ui.html" />
-    <link rel="prev" title="Polygon" href="polygon.html" />
+    <link rel="prev" title="Sphere" href="sphere.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -571,9 +571,18 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Text</a></li>
 </ul>
 </details></li>
@@ -723,6 +732,22 @@
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Text12set_rotationENSt5tupleIddddEE">
 <span id="_CPPv3N4krpc8services7Drawing4Text12set_rotationENSt5tupleIddddEE"></span><span id="_CPPv2N4krpc8services7Drawing4Text12set_rotationENSt5tupleIddddEE"></span><span id="krpc::services::Drawing::Text::set_rotation__std::tuple:double.double.double.double:"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_rotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Text12set_rotationENSt5tupleIddddEE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Rotation of the text as a quaternion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Text11face_cameraEv">
+<span id="_CPPv3N4krpc8services7Drawing4Text11face_cameraEv"></span><span id="_CPPv2N4krpc8services7Drawing4Text11face_cameraEv"></span><span id="krpc::services::Drawing::Text::face_camera"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">face_camera</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Text11face_cameraEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Text15set_face_cameraEb">
+<span id="_CPPv3N4krpc8services7Drawing4Text15set_face_cameraEb"></span><span id="_CPPv2N4krpc8services7Drawing4Text15set_face_cameraEb"></span><span id="krpc::services::Drawing::Text::set_face_camera__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_face_camera</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Text15set_face_cameraEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the text turns to face the camera, in place of its <a class="reference internal" href="#_CPPv4N4krpc8services7Drawing4Text8rotationEv" title="krpc::services::Drawing::Text::rotation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Text::rotation()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
@@ -960,12 +985,12 @@ Creates the material from a shader with the given name.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="polygon.html"
+       href="sphere.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Polygon</p>
+        <p class="prev-next-title">Sphere</p>
       </div>
     </a>
     <a class="right-next"

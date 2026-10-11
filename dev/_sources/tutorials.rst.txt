@@ -15,6 +15,7 @@ of kRPC.
    tutorials/buoyancy
    tutorials/docking-guidance
    tutorials/user-interface
+   tutorials/drawing
    tutorials/object-lifetime
    tutorials/control-loops
    tutorials/autopilot

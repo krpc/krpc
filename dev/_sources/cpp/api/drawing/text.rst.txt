@@ -24,6 +24,13 @@ Text
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
+   .. function:: bool face_camera()
+   .. function:: void set_face_camera(bool value)
+
+      Whether the text turns to face the camera, in place of its :func:`Text::rotation`.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
    .. function:: SpaceCenter::ReferenceFrame reference_frame()
    .. function:: void set_reference_frame(SpaceCenter::ReferenceFrame value)
 

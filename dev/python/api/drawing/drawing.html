@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/python/api/drawing/drawing.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Line" href="line.html" />
+    <link rel="next" title="Arc" href="arc.html" />
     <link rel="prev" title="Drawing API" href="../drawing.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -571,9 +571,18 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 </ul>
 </details></li>
@@ -768,6 +777,30 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_axes">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e+01</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_axes" title="Link to this definition">#</a></dt>
+<dd><p>Draw the axes of a reference frame in the scene, as arrows from its origin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – The reference frame.</p></li>
+<li><p><strong>length</strong> (<em>float</em>) – The length of each axis.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the axes are visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lines for the x, y and z axes, colored red, green and blue.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list(<a class="reference internal" href="line.html#Drawing.Line" title="Drawing.Line"><code class="xref py py-class docutils literal notranslate"><span class="pre">Line</span></code></a>)</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="Drawing.add_polygon">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_polygon" title="Link to this definition">#</a></dt>
 <dd><p>Draw a polygon in the scene, defined by a list of vertices.</p>
@@ -781,6 +814,175 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="polygon.html#Drawing.Polygon" title="Drawing.Polygon"><code class="xref py py-class docutils literal notranslate"><span class="pre">Polygon</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_polyline">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_polyline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_polyline" title="Link to this definition">#</a></dt>
+<dd><p>Draw an open line through a list of vertices in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (<em>list</em>) – Vertices of the line.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame that the vertices are in.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the line is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="polyline.html#Drawing.Polyline" title="Drawing.Polyline"><code class="xref py py-class docutils literal notranslate"><span class="pre">Polyline</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_circle">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_circle" title="Link to this definition">#</a></dt>
+<dd><p>Draw a circle in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>tuple</em>) – Position of the center of the circle.</p></li>
+<li><p><strong>normal</strong> (<em>tuple</em>) – Normal of the plane of the circle.</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Radius of the circle, in meters.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame that the position and normal are in.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the circle is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="circle.html#Drawing.Circle" title="Drawing.Circle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Circle</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the normal is zero.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_arc">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_arc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_arc" title="Link to this definition">#</a></dt>
+<dd><p>Draw an arc of a circle in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>tuple</em>) – Position of the center of the arc.</p></li>
+<li><p><strong>normal</strong> (<em>tuple</em>) – Normal of the plane of the arc.</p></li>
+<li><p><strong>start_direction</strong> (<em>tuple</em>) – Direction from the center to the start of the arc.</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – Angle of the arc, in radians.</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Radius of the arc, in meters.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame that the position and directions are in.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the arc is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="arc.html#Drawing.Arc" title="Drawing.Arc"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arc</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arc turns counterclockwise about the normal, seen from the side it points to.
+Throws an exception if the normal is zero, or the start direction is parallel to it.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_orbit">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_orbit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orbit</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_orbit" title="Link to this definition">#</a></dt>
+<dd><p>Draw the path of an orbit in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orbit</strong> (<a class="reference internal" href="../space-center/orbit.html#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><em>SpaceCenter.Orbit</em></a>) – The orbit.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the path is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="orbit-path.html#Drawing.OrbitPath" title="Drawing.OrbitPath"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrbitPath</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The path follows the orbit as it changes, and ends where the orbit leaves the
+sphere of influence of its body.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_point">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_point" title="Link to this definition">#</a></dt>
+<dd><p>Draw a point in the scene, as a dot that keeps its size on screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<em>tuple</em>) – Position of the point.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the point is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="point.html#Drawing.Point" title="Drawing.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_box">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.0)</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_box" title="Link to this definition">#</a></dt>
+<dd><p>Draw the edges of a box in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>tuple</em>) – Position of the center of the box.</p></li>
+<li><p><strong>size</strong> (<em>tuple</em>) – Lengths of the sides of the box along its x, y and z axes, in meters.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame that the position and rotation are in.</p></li>
+<li><p><strong>rotation</strong> (<em>tuple</em>) – Rotation of the box, as a quaternion.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the box is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="box.html#Drawing.Box" title="Drawing.Box"><code class="xref py py-class docutils literal notranslate"><span class="pre">Box</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_sphere">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_sphere" title="Link to this definition">#</a></dt>
+<dd><p>Draw a solid sphere in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>tuple</em>) – Position of the center of the sphere.</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Radius of the sphere, in meters.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the sphere is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="sphere.html#Drawing.Sphere" title="Drawing.Sphere"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sphere</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
@@ -833,6 +1035,51 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_map_marker">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_map_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MapMarkerIcon.generic</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_map_marker" title="Link to this definition">#</a></dt>
+<dd><p>Draw a marker in the map view, with one of the game’s own map icons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<em>tuple</em>) – Position of the marker.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame that the position is in.</p></li>
+<li><p><strong>icon</strong> (<a class="reference internal" href="map-marker.html#Drawing.MapMarkerIcon" title="Drawing.MapMarkerIcon"><em>MapMarkerIcon</em></a>) – The icon that the marker is drawn with.</p></li>
+<li><p><strong>caption</strong> (<em>str</em>) – The caption shown when the mouse is over the marker.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the marker is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="map-marker.html#Drawing.MapMarker" title="Drawing.MapMarker"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapMarker</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Drawing.add_image">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_image" title="Link to this definition">#</a></dt>
+<dd><p>Load an image that markers can be drawn with, from the contents of a PNG or JPEG
+file. The transparency of a PNG image is kept.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>bytes</em>) – The contents of the image file.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="image.html#Drawing.Image" title="Drawing.Image"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the data is not a PNG or JPEG image.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="Drawing.clear">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">client_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.clear" title="Link to this definition">#</a></dt>
 <dd><p>Remove all objects being drawn.</p>
@@ -868,11 +1115,11 @@ Objects drawn by a client are removed when that client disconnects.</p>
       </div>
     </a>
     <a class="right-next"
-       href="line.html"
+       href="arc.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Line</p>
+        <p class="prev-next-title">Arc</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

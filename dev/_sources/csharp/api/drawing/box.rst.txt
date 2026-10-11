@@ -1,0 +1,67 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+Box
+===
+
+
+.. class:: Box
+
+   The edges of a box. Created using :meth:`Drawing.AddBox <Drawing.Drawing.AddBox>`.
+
+   .. property:: System.Tuple<double,double,double> Center { get; set; }
+
+      Position of the center of the box.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double> Size { get; set; }
+
+      Lengths of the sides of the box along its x, y and z axes, in meters.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double,double> Rotation { get; set; }
+
+      Rotation of the box, as a quaternion.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame for the position and rotation of the box.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double> Color { get; set; }
+
+      The color of the edges.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: float Thickness { get; set; }
+
+      The thickness of the edges.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: string Material { get; set; }
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

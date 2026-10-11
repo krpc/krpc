@@ -24,6 +24,13 @@ Text
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
+   .. function:: krpc_error_t krpc_Drawing_Text_FaceCamera(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_Drawing_Text_set_FaceCamera(bool value)
+
+      Whether the text turns to face the camera, in place of its :func:`krpc_Drawing_Text_Rotation`.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
    .. function:: krpc_error_t krpc_Drawing_Text_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
    .. function:: void krpc_Drawing_Text_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
 

@@ -1,0 +1,122 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+Circle
+======
+
+
+.. class:: Circle
+
+   A circle. Created using :meth:`Drawing.add_circle`.
+
+   .. attribute:: center: Tuple
+
+      Position of the center of the circle.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: normal: Tuple
+
+      Normal of the plane of the circle.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: radius: number
+
+      Radius of the circle, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+   .. attribute:: visible: boolean
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: color: Tuple
+
+      The color of the path.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+      .. note::
+
+         For a path drawn with more than one color, this is the color at its start.
+
+   .. attribute:: colors: List
+
+      The colors of the path, blended evenly from its start to its end.
+
+      :Attribute: Can be read or written
+      :rtype: List
+
+      .. note::
+
+         Throws an exception if the list is empty or holds more than 8 colors.
+
+   .. attribute:: thickness: number
+
+      The thickness of the path.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: start_arrow: boolean
+
+      Whether an arrow head is drawn at the start.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: end_arrow: boolean
+
+      Whether an arrow head is drawn at the end.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: arrow_size: number
+
+      The size of the arrow heads, relative to the thickness.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: dashed: boolean
+
+      Whether the path is drawn as a dashed line.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: label: string
+
+      Text drawn halfway along the path, facing the camera. Empty for no label.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: material: string
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. method:: remove()
+
+      Remove the object.

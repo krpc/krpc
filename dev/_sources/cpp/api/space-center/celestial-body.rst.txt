@@ -161,6 +161,29 @@ CelestialBody
       :returns: Position as a vector.
    
 
+   .. function:: ReferenceFrame surface_reference_frame(double latitude, double longitude, double altitude = 0.0)
+
+      Create a reference frame fixed to the surface at the given latitude and longitude.
+
+      * The origin is the given altitude above the surface, at the
+        given latitude and longitude.
+      * The axes rotate with the body.
+      * The x-axis points out from the center of the body.
+      * The y-axis points north.
+      * The z-axis points east.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **altitude** -- Altitude of the origin above the surface, in meters.
+
+   
+
+      .. note::
+
+         Each call returns a new frame, as for :func:`ReferenceFrame::create_relative`.
+
    .. function:: std::tuple<double, double, double> msl_normal(double latitude, double longitude, ReferenceFrame reference_frame)
 
       The normal to the sphere at mean sea level, at the given latitude and longitude,

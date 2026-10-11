@@ -1,0 +1,114 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Drawing
+
+Polyline
+========
+
+
+.. class:: Polyline
+
+   A line through a list of vertices, open at its ends. Created using
+   :func:`add_polyline`.
+
+   .. function:: std::vector<std::tuple<double, double, double>> vertices()
+   .. function:: void set_vertices(std::vector<std::tuple<double, double, double>> value)
+
+      Vertices for the polyline.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: SpaceCenter::ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(SpaceCenter::ReferenceFrame value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: std::tuple<double, double, double> color()
+   .. function:: void set_color(std::tuple<double, double, double> value)
+
+      The color of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         For a path drawn with more than one color, this is the color at its start.
+
+   .. function:: std::vector<std::tuple<double, double, double>> colors()
+   .. function:: void set_colors(std::vector<std::tuple<double, double, double>> value)
+
+      The colors of the path, blended evenly from its start to its end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the list is empty or holds more than 8 colors.
+
+   .. function:: float thickness()
+   .. function:: void set_thickness(float value)
+
+      The thickness of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: bool start_arrow()
+   .. function:: void set_start_arrow(bool value)
+
+      Whether an arrow head is drawn at the start.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: bool end_arrow()
+   .. function:: void set_end_arrow(bool value)
+
+      Whether an arrow head is drawn at the end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: float arrow_size()
+   .. function:: void set_arrow_size(float value)
+
+      The size of the arrow heads, relative to the thickness.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: bool dashed()
+   .. function:: void set_dashed(bool value)
+
+      Whether the path is drawn as a dashed line.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: std::string label()
+   .. function:: void set_label(std::string value)
+
+      Text drawn halfway along the path, facing the camera. Empty for no label.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: std::string material()
+   .. function:: void set_material(std::string value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

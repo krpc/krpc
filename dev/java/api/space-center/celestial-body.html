@@ -572,9 +572,18 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
 </ul>
 </details></li>
@@ -874,6 +883,33 @@ reference frame. When over water, this is the position at the bottom of the sea-
 <dd class="field-even"><p>Position as a vector.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.surfaceReferenceFrame(double, double, double)">
+ <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">surfaceReferenceFrame</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">latitude</span></em>, <span class="pre">double</span><em> <span class="pre">longitude</span></em>, <span class="pre">double</span><em> <span class="pre">altitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.surfaceReferenceFrame(double, double, double)" title="Link to this definition">#</a></dt>
+<dd><p>Create a reference frame fixed to the surface at the given latitude and longitude.</p>
+<ul class="simple">
+<li><p>The origin is the given altitude above the surface, at the
+given latitude and longitude.</p></li>
+<li><p>The axes rotate with the body.</p></li>
+<li><p>The x-axis points out from the center of the body.</p></li>
+<li><p>The y-axis points north.</p></li>
+<li><p>The z-axis points east.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Longitude in degrees.</p></li>
+<li><p><strong>altitude</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Altitude of the origin above the surface, in meters.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call returns a new frame, as for <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame.createRelative(Connection, ReferenceFrame, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet, org.javatuples.Triplet)" title="krpc.client.services.SpaceCenter.ReferenceFrame.createRelative(Connection, ReferenceFrame, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet, org.javatuples.Triplet)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ReferenceFrame.createRelative(ReferenceFrame,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Quartet&lt;Double,Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;)</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">

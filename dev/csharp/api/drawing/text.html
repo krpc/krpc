@@ -58,7 +58,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="User Interface API" href="../ui.html" />
-    <link rel="prev" title="Polygon" href="polygon.html" />
+    <link rel="prev" title="Sphere" href="sphere.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -571,9 +571,18 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Text</a></li>
 </ul>
 </details></li>
@@ -713,6 +722,17 @@
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.Drawing.Text.Rotation">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Rotation</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.Drawing.Text.Rotation" title="Link to this definition">#</a></dt>
 <dd><p>Rotation of the text as a quaternion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.Drawing.Text.FaceCamera">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">FaceCamera</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.Drawing.Text.FaceCamera" title="Link to this definition">#</a></dt>
+<dd><p>Whether the text turns to face the camera, in place of its <a class="reference internal" href="#property-KRPC.Client.Services.Drawing.Text.Rotation" title="KRPC.Client.Services.Drawing.Text.Rotation property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Text.Rotation</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
@@ -890,12 +910,12 @@ Creates the material from a shader with the given name.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="polygon.html"
+       href="sphere.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Polygon</p>
+        <p class="prev-next-title">Sphere</p>
       </div>
     </a>
     <a class="right-next"

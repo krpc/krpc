@@ -26,6 +26,14 @@ Text
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
+   .. method:: boolean getFaceCamera()
+
+   .. method:: void setFaceCamera(boolean value)
+
+      Whether the text turns to face the camera, in place of its :meth:`Text.getRotation()`.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
    .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
 
    .. method:: void setReferenceFrame(SpaceCenter.ReferenceFrame value)

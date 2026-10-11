@@ -1,0 +1,114 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Polyline
+========
+
+
+.. type:: krpc_Drawing_Polyline_t
+
+   A line through a list of vertices, open at its ends. Created using
+   :func:`krpc_Drawing_AddPolyline`.
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_Vertices(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_Polyline_set_Vertices(const krpc_list_tuple_double_double_double_t * value)
+
+      Vertices for the polyline.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: void krpc_Drawing_Polyline_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_Drawing_Polyline_set_Visible(bool value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_Polyline_set_Color(const krpc_tuple_double_double_double_t * value)
+
+      The color of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         For a path drawn with more than one color, this is the color at its start.
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_Colors(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_Polyline_set_Colors(const krpc_list_tuple_double_double_double_t * value)
+
+      The colors of the path, blended evenly from its start to its end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the list is empty or holds more than 8 colors.
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_Thickness(krpc_connection_t connection, float * result)
+   .. function:: void krpc_Drawing_Polyline_set_Thickness(float value)
+
+      The thickness of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_StartArrow(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_Drawing_Polyline_set_StartArrow(bool value)
+
+      Whether an arrow head is drawn at the start.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_EndArrow(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_Drawing_Polyline_set_EndArrow(bool value)
+
+      Whether an arrow head is drawn at the end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_ArrowSize(krpc_connection_t connection, float * result)
+   .. function:: void krpc_Drawing_Polyline_set_ArrowSize(float value)
+
+      The size of the arrow heads, relative to the thickness.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_Dashed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_Drawing_Polyline_set_Dashed(bool value)
+
+      Whether the path is drawn as a dashed line.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_Label(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_Drawing_Polyline_set_Label(const char * value)
+
+      Text drawn halfway along the path, facing the camera. Empty for no label.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_Material(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_Drawing_Polyline_set_Material(const char * value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polyline_Remove(krpc_connection_t connection)
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

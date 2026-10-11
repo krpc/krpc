@@ -46,6 +46,13 @@ NavballMarker
 
       :Game Scenes: Flight
 
+   .. property:: Image Image { get; set; }
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Game Scenes: Flight
+
    .. method:: static System.Collections.Generic.IList<string> AvailableIcons(IConnection connection, )
 
       A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".

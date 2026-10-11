@@ -1,0 +1,215 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+MapMarker
+=========
+
+
+.. type:: krpc_Drawing_MapMarker_t
+
+   A marker drawn in the map view, with one of the game's own map icons. Created using
+   :func:`krpc_Drawing_AddMapMarker`.
+
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_MapMarker_set_Position(const krpc_tuple_double_double_double_t * value)
+
+      Position of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: void krpc_Drawing_MapMarker_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
+
+      Reference frame that the position of the marker is in.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_Drawing_MapMarker_set_Visible(bool value)
+
+      Whether the marker is visible.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_Icon(krpc_connection_t connection, krpc_Drawing_MapMarkerIcon_t * result)
+   .. function:: void krpc_Drawing_MapMarker_set_Icon(krpc_Drawing_MapMarkerIcon_t value)
+
+      The icon that the marker is drawn with.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_Image(krpc_connection_t connection, krpc_Drawing_Image_t * result)
+   .. function:: void krpc_Drawing_MapMarker_set_Image(krpc_Drawing_Image_t value)
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_Caption(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_Drawing_MapMarker_set_Caption(const char * value)
+
+      The caption shown when the mouse is over the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_MapMarker_set_Color(const krpc_tuple_double_double_double_t * value)
+
+      The color of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_Remove(krpc_connection_t connection)
+
+      Remove the marker.
+
+
+      :Game Scenes: Flight, Tracking Station
+
+
+
+.. type:: krpc_Drawing_MapMarkerIcon_t
+
+   The icon a :type:`krpc_Drawing_MapMarker_t` is drawn with, from the game's own map icons.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_GENERIC
+
+      A plain marker.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_CELESTIALBODY
+
+      A celestial body.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_APOAPSIS
+
+      An apoapsis.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_PERIAPSIS
+
+      A periapsis.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_ASCENDINGNODE
+
+      An ascending node.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_DESCENDINGNODE
+
+      A descending node.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_MANEUVERNODE
+
+      A maneuver node.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_ENCOUNTER
+
+      An encounter with a sphere of influence.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_ESCAPE
+
+      An escape from a sphere of influence.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_IMPACT
+
+      An impact with the surface.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_CLOSEAPPROACH
+
+      A closest approach to a target.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_INTERSECT
+
+      An intersection with the orbit of a target.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_SHIP
+
+      A ship.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_PROBE
+
+      A probe.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_RELAY
+
+      A relay.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_STATION
+
+      A station.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_BASE
+
+      A base.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_LANDER
+
+      A lander.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_ROVER
+
+      A rover.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_PLANE
+
+      A plane.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_EVA
+
+      A kerbal on EVA.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_FLAG
+
+      A flag.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_DEBRIS
+
+      Debris.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_SPACEOBJECT
+
+      An asteroid or comet.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_DEPLOYEDSCIENCE
+
+      Deployed science equipment.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_LAUNCHSITE
+
+      A launch site.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_RUNWAY
+
+      A runway.
+
+
+   .. macro:: KRPC_DRAWING_MAPMARKERICON_KSC
+
+      The Kerbal Space Center.

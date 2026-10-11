@@ -1,0 +1,56 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+Point
+=====
+
+
+.. class:: Point
+
+   A point, drawn as a dot that keeps its size on screen. Created using
+   :meth:`Drawing.AddPoint <Drawing.Drawing.AddPoint>`.
+
+   .. property:: System.Tuple<double,double,double> Position { get; set; }
+
+      Position of the point.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double> Color { get; set; }
+
+      The color of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: float Size { get; set; }
+
+      Diameter of the point, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: string Material { get; set; }
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

@@ -34,17 +34,77 @@ Polygon
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: void remove()
-
-      Remove the object.
-
-      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
-
    .. method:: org.javatuples.Triplet<Double,Double,Double> getColor()
 
    .. method:: void setColor(org.javatuples.Triplet<Double,Double,Double> value)
 
-      Set the color
+      The color of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         For a path drawn with more than one color, this is the color at its start.
+
+   .. method:: java.util.List<org.javatuples.Triplet<Double,Double,Double>> getColors()
+
+   .. method:: void setColors(java.util.List<org.javatuples.Triplet<Double,Double,Double>> value)
+
+      The colors of the path, blended evenly from its start to its end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the list is empty or holds more than 8 colors.
+
+   .. method:: float getThickness()
+
+   .. method:: void setThickness(float value)
+
+      The thickness of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getStartArrow()
+
+   .. method:: void setStartArrow(boolean value)
+
+      Whether an arrow head is drawn at the start.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getEndArrow()
+
+   .. method:: void setEndArrow(boolean value)
+
+      Whether an arrow head is drawn at the end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: float getArrowSize()
+
+   .. method:: void setArrowSize(float value)
+
+      The size of the arrow heads, relative to the thickness.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getDashed()
+
+   .. method:: void setDashed(boolean value)
+
+      Whether the path is drawn as a dashed line.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: String getLabel()
+
+   .. method:: void setLabel(String value)
+
+      Text drawn halfway along the path, facing the camera. Empty for no label.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
@@ -57,10 +117,8 @@ Polygon
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: float getThickness()
+   .. method:: void remove()
 
-   .. method:: void setThickness(float value)
-
-      Set the thickness
+      Remove the object.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

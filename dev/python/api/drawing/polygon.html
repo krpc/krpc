@@ -57,8 +57,8 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/python/api/drawing/polygon.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Text" href="text.html" />
-    <link rel="prev" title="NavballMarker" href="navball-marker.html" />
+    <link rel="next" title="Polyline" href="polyline.html" />
+    <link rel="prev" title="Point" href="point.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -571,9 +571,18 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 </ul>
 </details></li>
@@ -749,11 +758,59 @@
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="Drawing.Polygon.remove">
-<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.Polygon.remove" title="Link to this definition">#</a></dt>
-<dd><p>Remove the object.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Drawing.Polygon.color">
+<span class="sig-name descname"><span class="pre">color</span></span><a class="headerlink" href="#Drawing.Polygon.color" title="Link to this definition">#</a></dt>
+<dd><p>The color of the path.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple(float, float, float)</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a path drawn with more than one color, this is the color at its start.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Drawing.Polygon.colors">
+<span class="sig-name descname"><span class="pre">colors</span></span><a class="headerlink" href="#Drawing.Polygon.colors" title="Link to this definition">#</a></dt>
+<dd><p>The colors of the path, blended evenly from its start to its end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list(tuple(float, float, float))</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the list is empty or holds more than 8 colors.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Drawing.Polygon.thickness">
+<span class="sig-name descname"><span class="pre">thickness</span></span><a class="headerlink" href="#Drawing.Polygon.thickness" title="Link to this definition">#</a></dt>
+<dd><p>The thickness of the path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
 </dd>
@@ -761,15 +818,83 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="Drawing.Polygon.color">
-<span class="sig-name descname"><span class="pre">color</span></span><a class="headerlink" href="#Drawing.Polygon.color" title="Link to this definition">#</a></dt>
-<dd><p>Set the color</p>
+<dt class="sig sig-object py" id="Drawing.Polygon.start_arrow">
+<span class="sig-name descname"><span class="pre">start_arrow</span></span><a class="headerlink" href="#Drawing.Polygon.start_arrow" title="Link to this definition">#</a></dt>
+<dd><p>Whether an arrow head is drawn at the start.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(float, float, float)</p>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Drawing.Polygon.end_arrow">
+<span class="sig-name descname"><span class="pre">end_arrow</span></span><a class="headerlink" href="#Drawing.Polygon.end_arrow" title="Link to this definition">#</a></dt>
+<dd><p>Whether an arrow head is drawn at the end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Drawing.Polygon.arrow_size">
+<span class="sig-name descname"><span class="pre">arrow_size</span></span><a class="headerlink" href="#Drawing.Polygon.arrow_size" title="Link to this definition">#</a></dt>
+<dd><p>The size of the arrow heads, relative to the thickness.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Drawing.Polygon.dashed">
+<span class="sig-name descname"><span class="pre">dashed</span></span><a class="headerlink" href="#Drawing.Polygon.dashed" title="Link to this definition">#</a></dt>
+<dd><p>Whether the path is drawn as a dashed line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="Drawing.Polygon.label">
+<span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#Drawing.Polygon.label" title="Link to this definition">#</a></dt>
+<dd><p>Text drawn halfway along the path, facing the camera. Empty for no label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
@@ -795,17 +920,11 @@ Creates the material from a shader with the given name.</p>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="Drawing.Polygon.thickness">
-<span class="sig-name descname"><span class="pre">thickness</span></span><a class="headerlink" href="#Drawing.Polygon.thickness" title="Link to this definition">#</a></dt>
-<dd><p>Set the thickness</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Drawing.Polygon.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.Polygon.remove" title="Link to this definition">#</a></dt>
+<dd><p>Remove the object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
 </dd>
@@ -827,20 +946,20 @@ Creates the material from a shader with the given name.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="navball-marker.html"
+       href="point.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">NavballMarker</p>
+        <p class="prev-next-title">Point</p>
       </div>
     </a>
     <a class="right-next"
-       href="text.html"
+       href="polyline.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Text</p>
+        <p class="prev-next-title">Polyline</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

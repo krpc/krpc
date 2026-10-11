@@ -154,6 +154,26 @@ CelestialBody
       :returns: Position as a vector.
       :rtype: Tuple
 
+   .. method:: surface_reference_frame(latitude, longitude, [altitude = 0.0])
+
+      Create a reference frame fixed to the surface at the given latitude and longitude.
+
+      * The origin is the given altitude above the surface, at the
+        given latitude and longitude.
+      * The axes rotate with the body.
+      * The x-axis points out from the center of the body.
+      * The y-axis points north.
+      * The z-axis points east.
+
+      :param number latitude: Latitude in degrees.
+      :param number longitude: Longitude in degrees.
+      :param number altitude: Altitude of the origin above the surface, in meters.
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+      .. note::
+
+         Each call returns a new frame, as for :meth:`SpaceCenter.ReferenceFrame.create_relative`.
+
    .. method:: msl_normal(latitude, longitude, reference_frame)
 
       The normal to the sphere at mean sea level, at the given latitude and longitude,

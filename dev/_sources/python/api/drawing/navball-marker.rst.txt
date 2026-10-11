@@ -56,6 +56,15 @@ NavballMarker
       :rtype: str
       :Game Scenes: Flight
 
+   .. attribute:: image
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Image` or None
+      :Game Scenes: Flight
+
    .. staticmethod:: available_icons()
 
       A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".

@@ -24,6 +24,13 @@ Text
       :Attribute: Can be read or written
       :rtype: Tuple
 
+   .. attribute:: face_camera: boolean
+
+      Whether the text turns to face the camera, in place of its :attr:`Drawing.Text.rotation`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
    .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
 
       Reference frame for the positions of the object.

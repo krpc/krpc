@@ -1,0 +1,72 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+Box
+===
+
+
+.. class:: Box
+
+   The edges of a box. Created using :meth:`Drawing.add_box`.
+
+   .. attribute:: center: Tuple
+
+      Position of the center of the box.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: size: Tuple
+
+      Lengths of the sides of the box along its x, y and z axes, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: rotation: Tuple
+
+      Rotation of the box, as a quaternion.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      Reference frame for the position and rotation of the box.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+   .. attribute:: visible: boolean
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: color: Tuple
+
+      The color of the edges.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: thickness: number
+
+      The thickness of the edges.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: material: string
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. method:: remove()
+
+      Remove the object.

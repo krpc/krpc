@@ -60,6 +60,19 @@ Drawing
 
       :Game Scenes: Flight
 
+   .. function:: std::vector<Line> add_axes(SpaceCenter::ReferenceFrame reference_frame, float length = 1e+01f, bool visible = true)
+
+      Draw the axes of a reference frame in the scene, as arrows from its origin.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame.
+       * **length** -- The length of each axis.
+       * **visible** -- Whether the axes are visible.
+
+      :returns: The lines for the x, y and z axes, colored red, green and blue.
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
    .. function:: Polygon add_polygon(std::vector<std::tuple<double, double, double>> vertices, SpaceCenter::ReferenceFrame reference_frame, bool visible = true)
 
       Draw a polygon in the scene, defined by a list of vertices.
@@ -69,6 +82,115 @@ Drawing
        * **vertices** -- Vertices of the polygon.
        * **reference_frame** -- Reference frame that the vertices are in.
        * **visible** -- Whether the polygon is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: Polyline add_polyline(std::vector<std::tuple<double, double, double>> vertices, SpaceCenter::ReferenceFrame reference_frame, bool visible = true)
+
+      Draw an open line through a list of vertices in the scene.
+
+      :Parameters:
+
+       * **vertices** -- Vertices of the line.
+       * **reference_frame** -- Reference frame that the vertices are in.
+       * **visible** -- Whether the line is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: Circle add_circle(std::tuple<double, double, double> center, std::tuple<double, double, double> normal, double radius, SpaceCenter::ReferenceFrame reference_frame, bool visible = true)
+
+      Draw a circle in the scene.
+
+      :Parameters:
+
+       * **center** -- Position of the center of the circle.
+       * **normal** -- Normal of the plane of the circle.
+       * **radius** -- Radius of the circle, in meters.
+       * **reference_frame** -- Reference frame that the position and normal are in.
+       * **visible** -- Whether the circle is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the normal is zero.
+
+   .. function:: Arc add_arc(std::tuple<double, double, double> center, std::tuple<double, double, double> normal, std::tuple<double, double, double> start_direction, double angle, double radius, SpaceCenter::ReferenceFrame reference_frame, bool visible = true)
+
+      Draw an arc of a circle in the scene.
+
+      :Parameters:
+
+       * **center** -- Position of the center of the arc.
+       * **normal** -- Normal of the plane of the arc.
+       * **start_direction** -- Direction from the center to the start of the arc.
+       * **angle** -- Angle of the arc, in radians.
+       * **radius** -- Radius of the arc, in meters.
+       * **reference_frame** -- Reference frame that the position and directions are in.
+       * **visible** -- Whether the arc is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The arc turns counterclockwise about the normal, seen from the side it points to.
+         Throws an exception if the normal is zero, or the start direction is parallel to it.
+
+   .. function:: OrbitPath add_orbit(SpaceCenter::Orbit orbit, bool visible = true)
+
+      Draw the path of an orbit in the scene.
+
+      :Parameters:
+
+       * **orbit** -- The orbit.
+       * **visible** -- Whether the path is visible.
+
+      :Game Scenes: Flight, Tracking Station
+
+
+      .. note::
+
+         The path follows the orbit as it changes, and ends where the orbit leaves the
+         sphere of influence of its body.
+
+   .. function:: Point add_point(std::tuple<double, double, double> position, SpaceCenter::ReferenceFrame reference_frame, bool visible = true)
+
+      Draw a point in the scene, as a dot that keeps its size on screen.
+
+      :Parameters:
+
+       * **position** -- Position of the point.
+       * **reference_frame** -- Reference frame that the position is in.
+       * **visible** -- Whether the point is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: Box add_box(std::tuple<double, double, double> center, std::tuple<double, double, double> size, SpaceCenter::ReferenceFrame reference_frame, std::tuple<double, double, double, double> rotation = std::tuple<double, double, double, double>{0.0, 0.0, 0.0, 1.0}, bool visible = true)
+
+      Draw the edges of a box in the scene.
+
+      :Parameters:
+
+       * **center** -- Position of the center of the box.
+       * **size** -- Lengths of the sides of the box along its x, y and z axes, in meters.
+       * **reference_frame** -- Reference frame that the position and rotation are in.
+       * **rotation** -- Rotation of the box, as a quaternion.
+       * **visible** -- Whether the box is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: Sphere add_sphere(std::tuple<double, double, double> center, double radius, SpaceCenter::ReferenceFrame reference_frame, bool visible = true)
+
+      Draw a solid sphere in the scene.
+
+      :Parameters:
+
+       * **center** -- Position of the center of the sphere.
+       * **radius** -- Radius of the sphere, in meters.
+       * **reference_frame** -- Reference frame that the position is in.
+       * **visible** -- Whether the sphere is visible.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
@@ -97,6 +219,36 @@ Drawing
        * **visible** -- Whether the marker is visible.
 
       :Game Scenes: Flight
+
+   .. function:: MapMarker add_map_marker(std::tuple<double, double, double> position, SpaceCenter::ReferenceFrame reference_frame, MapMarkerIcon icon = MapMarkerIcon::generic, std::string caption = "", bool visible = true)
+
+      Draw a marker in the map view, with one of the game's own map icons.
+
+      :Parameters:
+
+       * **position** -- Position of the marker.
+       * **reference_frame** -- Reference frame that the position is in.
+       * **icon** -- The icon that the marker is drawn with.
+       * **caption** -- The caption shown when the mouse is over the marker.
+       * **visible** -- Whether the marker is visible.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. function:: Image add_image(std::string data)
+
+      Load an image that markers can be drawn with, from the contents of a PNG or JPEG
+      file. The transparency of a PNG image is kept.
+
+      :Parameters:
+
+       * **data** -- The contents of the image file.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the data is not a PNG or JPEG image.
 
    .. function:: void clear(bool client_only = false)
 

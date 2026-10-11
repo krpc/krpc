@@ -1,0 +1,63 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+Sphere
+======
+
+
+.. class:: Sphere
+
+   A solid sphere. Created using :meth:`Drawing.add_sphere`.
+
+   .. note::
+
+      The sphere is drawn with an additive material, so a darker color draws it more
+      transparent.
+
+   .. attribute:: center: Tuple
+
+      Position of the center of the sphere.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: radius: number
+
+      Radius of the sphere, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+   .. attribute:: visible: boolean
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: color: Tuple
+
+      The color of the object.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: material: string
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. method:: remove()
+
+      Remove the object.

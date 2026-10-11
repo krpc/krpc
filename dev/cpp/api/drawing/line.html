@@ -57,8 +57,8 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/cpp/api/drawing/line.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="NavballMarker" href="navball-marker.html" />
-    <link rel="prev" title="Drawing" href="drawing.html" />
+    <link rel="next" title="MapMarker" href="map-marker.html" />
+    <link rel="prev" title="Image" href="image.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -571,9 +571,18 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 </ul>
 </details></li>
@@ -770,7 +779,127 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line9set_colorENSt5tupleIdddEE">
 <span id="_CPPv3N4krpc8services7Drawing4Line9set_colorENSt5tupleIdddEE"></span><span id="_CPPv2N4krpc8services7Drawing4Line9set_colorENSt5tupleIdddEE"></span><span id="krpc::services::Drawing::Line::set_color__std::tuple:double.double.double:"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_color</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line9set_colorENSt5tupleIdddEE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Set the color</p>
+<dd><p>The color of the path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a path drawn with more than one color, this is the color at its start.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line6colorsEv">
+<span id="_CPPv3N4krpc8services7Drawing4Line6colorsEv"></span><span id="_CPPv2N4krpc8services7Drawing4Line6colorsEv"></span><span id="krpc::services::Drawing::Line::colors"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">colors</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line6colorsEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line10set_colorsENSt6vectorINSt5tupleIdddEEEE">
+<span id="_CPPv3N4krpc8services7Drawing4Line10set_colorsENSt6vectorINSt5tupleIdddEEEE"></span><span id="_CPPv2N4krpc8services7Drawing4Line10set_colorsENSt6vectorINSt5tupleIdddEEEE"></span><span id="krpc::services::Drawing::Line::set_colors__std::vector:std::tuple:double.double.double::"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_colors</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line10set_colorsENSt6vectorINSt5tupleIdddEEEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The colors of the path, blended evenly from its start to its end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the list is empty or holds more than 8 colors.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line9thicknessEv">
+<span id="_CPPv3N4krpc8services7Drawing4Line9thicknessEv"></span><span id="_CPPv2N4krpc8services7Drawing4Line9thicknessEv"></span><span id="krpc::services::Drawing::Line::thickness"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thickness</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line9thicknessEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line13set_thicknessEf">
+<span id="_CPPv3N4krpc8services7Drawing4Line13set_thicknessEf"></span><span id="_CPPv2N4krpc8services7Drawing4Line13set_thicknessEf"></span><span id="krpc::services::Drawing::Line::set_thickness__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_thickness</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line13set_thicknessEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The thickness of the path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line11start_arrowEv">
+<span id="_CPPv3N4krpc8services7Drawing4Line11start_arrowEv"></span><span id="_CPPv2N4krpc8services7Drawing4Line11start_arrowEv"></span><span id="krpc::services::Drawing::Line::start_arrow"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start_arrow</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line11start_arrowEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line15set_start_arrowEb">
+<span id="_CPPv3N4krpc8services7Drawing4Line15set_start_arrowEb"></span><span id="_CPPv2N4krpc8services7Drawing4Line15set_start_arrowEb"></span><span id="krpc::services::Drawing::Line::set_start_arrow__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_start_arrow</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line15set_start_arrowEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether an arrow head is drawn at the start.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line9end_arrowEv">
+<span id="_CPPv3N4krpc8services7Drawing4Line9end_arrowEv"></span><span id="_CPPv2N4krpc8services7Drawing4Line9end_arrowEv"></span><span id="krpc::services::Drawing::Line::end_arrow"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end_arrow</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line9end_arrowEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line13set_end_arrowEb">
+<span id="_CPPv3N4krpc8services7Drawing4Line13set_end_arrowEb"></span><span id="_CPPv2N4krpc8services7Drawing4Line13set_end_arrowEb"></span><span id="krpc::services::Drawing::Line::set_end_arrow__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_end_arrow</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line13set_end_arrowEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether an arrow head is drawn at the end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line10arrow_sizeEv">
+<span id="_CPPv3N4krpc8services7Drawing4Line10arrow_sizeEv"></span><span id="_CPPv2N4krpc8services7Drawing4Line10arrow_sizeEv"></span><span id="krpc::services::Drawing::Line::arrow_size"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrow_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line10arrow_sizeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line14set_arrow_sizeEf">
+<span id="_CPPv3N4krpc8services7Drawing4Line14set_arrow_sizeEf"></span><span id="_CPPv2N4krpc8services7Drawing4Line14set_arrow_sizeEf"></span><span id="krpc::services::Drawing::Line::set_arrow_size__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_arrow_size</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line14set_arrow_sizeEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The size of the arrow heads, relative to the thickness.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line6dashedEv">
+<span id="_CPPv3N4krpc8services7Drawing4Line6dashedEv"></span><span id="_CPPv2N4krpc8services7Drawing4Line6dashedEv"></span><span id="krpc::services::Drawing::Line::dashed"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dashed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line6dashedEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line10set_dashedEb">
+<span id="_CPPv3N4krpc8services7Drawing4Line10set_dashedEb"></span><span id="_CPPv2N4krpc8services7Drawing4Line10set_dashedEb"></span><span id="krpc::services::Drawing::Line::set_dashed__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_dashed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line10set_dashedEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the path is drawn as a dashed line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line5labelEv">
+<span id="_CPPv3N4krpc8services7Drawing4Line5labelEv"></span><span id="_CPPv2N4krpc8services7Drawing4Line5labelEv"></span><span id="krpc::services::Drawing::Line::label"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">label</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line5labelEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line9set_labelENSt6stringE">
+<span id="_CPPv3N4krpc8services7Drawing4Line9set_labelENSt6stringE"></span><span id="_CPPv2N4krpc8services7Drawing4Line9set_labelENSt6stringE"></span><span id="krpc::services::Drawing::Line::set_label__ss"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_label</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line9set_labelENSt6stringE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Text drawn halfway along the path, facing the camera. Empty for no label.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
@@ -788,22 +917,6 @@
 <span id="_CPPv3N4krpc8services7Drawing4Line12set_materialENSt6stringE"></span><span id="_CPPv2N4krpc8services7Drawing4Line12set_materialENSt6stringE"></span><span id="krpc::services::Drawing::Line::set_material__ss"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_material</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line12set_materialENSt6stringE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Material used to render the object.
 Creates the material from a shader with the given name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line9thicknessEv">
-<span id="_CPPv3N4krpc8services7Drawing4Line9thicknessEv"></span><span id="_CPPv2N4krpc8services7Drawing4Line9thicknessEv"></span><span id="krpc::services::Drawing::Line::thickness"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thickness</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line9thicknessEv" title="Link to this definition">#</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing4Line13set_thicknessEf">
-<span id="_CPPv3N4krpc8services7Drawing4Line13set_thicknessEf"></span><span id="_CPPv2N4krpc8services7Drawing4Line13set_thicknessEf"></span><span id="krpc::services::Drawing::Line::set_thickness__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_thickness</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing4Line13set_thicknessEf" title="Link to this definition">#</a><br /></dt>
-<dd><p>Set the thickness</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
@@ -837,20 +950,20 @@ Creates the material from a shader with the given name.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="drawing.html"
+       href="image.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Drawing</p>
+        <p class="prev-next-title">Image</p>
       </div>
     </a>
     <a class="right-next"
-       href="navball-marker.html"
+       href="map-marker.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">NavballMarker</p>
+        <p class="prev-next-title">MapMarker</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

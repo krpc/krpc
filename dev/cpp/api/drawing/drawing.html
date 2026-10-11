@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/cpp/api/drawing/drawing.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Line" href="line.html" />
+    <link rel="next" title="Arc" href="arc.html" />
     <link rel="prev" title="Drawing API" href="../drawing.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -571,9 +571,18 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 </ul>
 </details></li>
@@ -768,6 +777,27 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing8add_axesEN11SpaceCenter14ReferenceFrameEfb">
+<span id="_CPPv3N4krpc8services7Drawing8add_axesEN11SpaceCenter14ReferenceFrameEfb"></span><span id="_CPPv2N4krpc8services7Drawing8add_axesEN11SpaceCenter14ReferenceFrameEfb"></span><span id="krpc::services::Drawing::add_axes__SpaceCenter::ReferenceFrame.float.b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="line.html#_CPPv4N4krpc8services7Drawing4LineE" title="krpc::services::Drawing::Line"><span class="n"><span class="pre">Line</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_axes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">length</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e+01f</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing8add_axesEN11SpaceCenter14ReferenceFrameEfb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw the axes of a reference frame in the scene, as arrows from its origin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame.</p></li>
+<li><p><strong>length</strong> – The length of each axis.</p></li>
+<li><p><strong>visible</strong> – Whether the axes are visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lines for the x, y and z axes, colored red, green and blue.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing11add_polygonENSt6vectorINSt5tupleIdddEEEEN11SpaceCenter14ReferenceFrameEb">
 <span id="_CPPv3N4krpc8services7Drawing11add_polygonENSt6vectorINSt5tupleIdddEEEEN11SpaceCenter14ReferenceFrameEb"></span><span id="_CPPv2N4krpc8services7Drawing11add_polygonENSt6vectorINSt5tupleIdddEEEEN11SpaceCenter14ReferenceFrameEb"></span><span id="krpc::services::Drawing::add_polygon__std::vector:std::tuple:double.double.double::.SpaceCenter::ReferenceFrame.b"></span><a class="reference internal" href="polygon.html#_CPPv4N4krpc8services7Drawing7PolygonE" title="krpc::services::Drawing::Polygon"><span class="n"><span class="pre">Polygon</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_polygon</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vertices</span></span>, <a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing11add_polygonENSt6vectorINSt5tupleIdddEEEEN11SpaceCenter14ReferenceFrameEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a polygon in the scene, defined by a list of vertices.</p>
@@ -777,6 +807,154 @@ Objects drawn by a client are removed when that client disconnects.</p>
 <li><p><strong>vertices</strong> – Vertices of the polygon.</p></li>
 <li><p><strong>reference_frame</strong> – Reference frame that the vertices are in.</p></li>
 <li><p><strong>visible</strong> – Whether the polygon is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing12add_polylineENSt6vectorINSt5tupleIdddEEEEN11SpaceCenter14ReferenceFrameEb">
+<span id="_CPPv3N4krpc8services7Drawing12add_polylineENSt6vectorINSt5tupleIdddEEEEN11SpaceCenter14ReferenceFrameEb"></span><span id="_CPPv2N4krpc8services7Drawing12add_polylineENSt6vectorINSt5tupleIdddEEEEN11SpaceCenter14ReferenceFrameEb"></span><span id="krpc::services::Drawing::add_polyline__std::vector:std::tuple:double.double.double::.SpaceCenter::ReferenceFrame.b"></span><a class="reference internal" href="polyline.html#_CPPv4N4krpc8services7Drawing8PolylineE" title="krpc::services::Drawing::Polyline"><span class="n"><span class="pre">Polyline</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_polyline</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vertices</span></span>, <a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing12add_polylineENSt6vectorINSt5tupleIdddEEEEN11SpaceCenter14ReferenceFrameEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw an open line through a list of vertices in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> – Vertices of the line.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the vertices are in.</p></li>
+<li><p><strong>visible</strong> – Whether the line is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing10add_circleENSt5tupleIdddEENSt5tupleIdddEEdN11SpaceCenter14ReferenceFrameEb">
+<span id="_CPPv3N4krpc8services7Drawing10add_circleENSt5tupleIdddEENSt5tupleIdddEEdN11SpaceCenter14ReferenceFrameEb"></span><span id="_CPPv2N4krpc8services7Drawing10add_circleENSt5tupleIdddEENSt5tupleIdddEEdN11SpaceCenter14ReferenceFrameEb"></span><span id="krpc::services::Drawing::add_circle__std::tuple:double.double.double:.std::tuple:double.double.double:.double.SpaceCenter::ReferenceFrame.b"></span><a class="reference internal" href="circle.html#_CPPv4N4krpc8services7Drawing6CircleE" title="krpc::services::Drawing::Circle"><span class="n"><span class="pre">Circle</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_circle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">center</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">normal</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span>, <a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing10add_circleENSt5tupleIdddEENSt5tupleIdddEEdN11SpaceCenter14ReferenceFrameEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw a circle in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – Position of the center of the circle.</p></li>
+<li><p><strong>normal</strong> – Normal of the plane of the circle.</p></li>
+<li><p><strong>radius</strong> – Radius of the circle, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position and normal are in.</p></li>
+<li><p><strong>visible</strong> – Whether the circle is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the normal is zero.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing7add_arcENSt5tupleIdddEENSt5tupleIdddEENSt5tupleIdddEEddN11SpaceCenter14ReferenceFrameEb">
+<span id="_CPPv3N4krpc8services7Drawing7add_arcENSt5tupleIdddEENSt5tupleIdddEENSt5tupleIdddEEddN11SpaceCenter14ReferenceFrameEb"></span><span id="_CPPv2N4krpc8services7Drawing7add_arcENSt5tupleIdddEENSt5tupleIdddEENSt5tupleIdddEEddN11SpaceCenter14ReferenceFrameEb"></span><span id="krpc::services::Drawing::add_arc__std::tuple:double.double.double:.std::tuple:double.double.double:.std::tuple:double.double.double:.double.double.SpaceCenter::ReferenceFrame.b"></span><a class="reference internal" href="arc.html#_CPPv4N4krpc8services7Drawing3ArcE" title="krpc::services::Drawing::Arc"><span class="n"><span class="pre">Arc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_arc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">center</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">normal</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">start_direction</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">angle</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span>, <a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing7add_arcENSt5tupleIdddEENSt5tupleIdddEENSt5tupleIdddEEddN11SpaceCenter14ReferenceFrameEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw an arc of a circle in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – Position of the center of the arc.</p></li>
+<li><p><strong>normal</strong> – Normal of the plane of the arc.</p></li>
+<li><p><strong>start_direction</strong> – Direction from the center to the start of the arc.</p></li>
+<li><p><strong>angle</strong> – Angle of the arc, in radians.</p></li>
+<li><p><strong>radius</strong> – Radius of the arc, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position and directions are in.</p></li>
+<li><p><strong>visible</strong> – Whether the arc is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arc turns counterclockwise about the normal, seen from the side it points to.
+Throws an exception if the normal is zero, or the start direction is parallel to it.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing9add_orbitEN11SpaceCenter5OrbitEb">
+<span id="_CPPv3N4krpc8services7Drawing9add_orbitEN11SpaceCenter5OrbitEb"></span><span id="_CPPv2N4krpc8services7Drawing9add_orbitEN11SpaceCenter5OrbitEb"></span><span id="krpc::services::Drawing::add_orbit__SpaceCenter::Orbit.b"></span><a class="reference internal" href="orbit-path.html#_CPPv4N4krpc8services7Drawing9OrbitPathE" title="krpc::services::Drawing::OrbitPath"><span class="n"><span class="pre">OrbitPath</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_orbit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/orbit.html#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">orbit</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing9add_orbitEN11SpaceCenter5OrbitEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw the path of an orbit in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orbit</strong> – The orbit.</p></li>
+<li><p><strong>visible</strong> – Whether the path is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The path follows the orbit as it changes, and ends where the orbit leaves the
+sphere of influence of its body.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing9add_pointENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameEb">
+<span id="_CPPv3N4krpc8services7Drawing9add_pointENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameEb"></span><span id="_CPPv2N4krpc8services7Drawing9add_pointENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameEb"></span><span id="krpc::services::Drawing::add_point__std::tuple:double.double.double:.SpaceCenter::ReferenceFrame.b"></span><a class="reference internal" href="point.html#_CPPv4N4krpc8services7Drawing5PointE" title="krpc::services::Drawing::Point"><span class="n"><span class="pre">Point</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_point</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">position</span></span>, <a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing9add_pointENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw a point in the scene, as a dot that keeps its size on screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> – Position of the point.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> – Whether the point is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing7add_boxENSt5tupleIdddEENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameENSt5tupleIddddEEb">
+<span id="_CPPv3N4krpc8services7Drawing7add_boxENSt5tupleIdddEENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameENSt5tupleIddddEEb"></span><span id="_CPPv2N4krpc8services7Drawing7add_boxENSt5tupleIdddEENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameENSt5tupleIddddEEb"></span><span id="krpc::services::Drawing::add_box__std::tuple:double.double.double:.std::tuple:double.double.double:.SpaceCenter::ReferenceFrame.std::tuple:double.double.double.double:.b"></span><a class="reference internal" href="box.html#_CPPv4N4krpc8services7Drawing3BoxE" title="krpc::services::Drawing::Box"><span class="n"><span class="pre">Box</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_box</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">center</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rotation</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">{</span></span><span class="m"><span class="pre">0.0</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">1.0</span></span><span class="p"><span class="pre">}</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing7add_boxENSt5tupleIdddEENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameENSt5tupleIddddEEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw the edges of a box in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – Position of the center of the box.</p></li>
+<li><p><strong>size</strong> – Lengths of the sides of the box along its x, y and z axes, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position and rotation are in.</p></li>
+<li><p><strong>rotation</strong> – Rotation of the box, as a quaternion.</p></li>
+<li><p><strong>visible</strong> – Whether the box is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing10add_sphereENSt5tupleIdddEEdN11SpaceCenter14ReferenceFrameEb">
+<span id="_CPPv3N4krpc8services7Drawing10add_sphereENSt5tupleIdddEEdN11SpaceCenter14ReferenceFrameEb"></span><span id="_CPPv2N4krpc8services7Drawing10add_sphereENSt5tupleIdddEEdN11SpaceCenter14ReferenceFrameEb"></span><span id="krpc::services::Drawing::add_sphere__std::tuple:double.double.double:.double.SpaceCenter::ReferenceFrame.b"></span><a class="reference internal" href="sphere.html#_CPPv4N4krpc8services7Drawing6SphereE" title="krpc::services::Drawing::Sphere"><span class="n"><span class="pre">Sphere</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_sphere</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">center</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span>, <a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing10add_sphereENSt5tupleIdddEEdN11SpaceCenter14ReferenceFrameEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw a solid sphere in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – Position of the center of the sphere.</p></li>
+<li><p><strong>radius</strong> – Radius of the sphere, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> – Whether the sphere is visible.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -824,6 +1002,47 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing14add_map_markerENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameE13MapMarkerIconNSt6stringEb">
+<span id="_CPPv3N4krpc8services7Drawing14add_map_markerENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameE13MapMarkerIconNSt6stringEb"></span><span id="_CPPv2N4krpc8services7Drawing14add_map_markerENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameE13MapMarkerIconNSt6stringEb"></span><span id="krpc::services::Drawing::add_map_marker__std::tuple:double.double.double:.SpaceCenter::ReferenceFrame.MapMarkerIcon.ss.b"></span><a class="reference internal" href="map-marker.html#_CPPv4N4krpc8services7Drawing9MapMarkerE" title="krpc::services::Drawing::MapMarker"><span class="n"><span class="pre">MapMarker</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_map_marker</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">position</span></span>, <a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span>, <a class="reference internal" href="map-marker.html#_CPPv4N4krpc8services7Drawing13MapMarkerIconE" title="krpc::services::Drawing::MapMarkerIcon"><span class="n"><span class="pre">MapMarkerIcon</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">icon</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="map-marker.html#_CPPv4N4krpc8services7Drawing13MapMarkerIconE" title="krpc::services::Drawing::MapMarkerIcon"><span class="n"><span class="pre">MapMarkerIcon</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="map-marker.html#_CPPv4N4krpc8services7Drawing13MapMarkerIcon7genericE" title="krpc::services::Drawing::MapMarkerIcon::generic"><span class="n"><span class="pre">generic</span></span></a>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">caption</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;&quot;</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">visible</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing14add_map_markerENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameE13MapMarkerIconNSt6stringEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Draw a marker in the map view, with one of the game’s own map icons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> – Position of the marker.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame that the position is in.</p></li>
+<li><p><strong>icon</strong> – The icon that the marker is drawn with.</p></li>
+<li><p><strong>caption</strong> – The caption shown when the mouse is over the marker.</p></li>
+<li><p><strong>visible</strong> – Whether the marker is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing9add_imageENSt6stringE">
+<span id="_CPPv3N4krpc8services7Drawing9add_imageENSt6stringE"></span><span id="_CPPv2N4krpc8services7Drawing9add_imageENSt6stringE"></span><span id="krpc::services::Drawing::add_image__ss"></span><a class="reference internal" href="image.html#_CPPv4N4krpc8services7Drawing5ImageE" title="krpc::services::Drawing::Image"><span class="n"><span class="pre">Image</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_image</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing9add_imageENSt6stringE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Load an image that markers can be drawn with, from the contents of a PNG or JPEG
+file. The transparency of a PNG image is kept.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The contents of the image file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight, Tracking Station, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the data is not a PNG or JPEG image.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services7Drawing5clearEb">
 <span id="_CPPv3N4krpc8services7Drawing5clearEb"></span><span id="_CPPv2N4krpc8services7Drawing5clearEb"></span><span id="krpc::services::Drawing::clear__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clear</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">client_only</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services7Drawing5clearEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Remove all objects being drawn.</p>
@@ -863,11 +1082,11 @@ Objects drawn by a client are removed when that client disconnects.</p>
       </div>
     </a>
     <a class="right-next"
-       href="line.html"
+       href="arc.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Line</p>
+        <p class="prev-next-title">Arc</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

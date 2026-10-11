@@ -1,0 +1,60 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+Sphere
+======
+
+
+.. class:: Sphere
+
+   A solid sphere. Created using :meth:`Drawing.AddSphere <Drawing.Drawing.AddSphere>`.
+
+   .. note::
+
+      The sphere is drawn with an additive material, so a darker color draws it more
+      transparent.
+
+   .. property:: System.Tuple<double,double,double> Center { get; set; }
+
+      Position of the center of the sphere.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: double Radius { get; set; }
+
+      Radius of the sphere, in meters.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double> Color { get; set; }
+
+      The color of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. property:: string Material { get; set; }
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
