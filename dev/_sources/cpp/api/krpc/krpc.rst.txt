@@ -249,6 +249,14 @@ KRPC
 
 
 .. namespace:: krpc::services::KRPC
+.. class:: ObjectNotLoadedException
+
+   The game object that a service object refers to exists, but is not loaded.
+   For example, the game is loading, or the vessel carrying the part is unloaded.
+
+
+
+.. namespace:: krpc::services::KRPC
 .. class:: UnsupportedSceneException
 
    The procedure is not available in the current game scene.

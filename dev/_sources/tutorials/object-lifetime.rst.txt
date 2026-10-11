@@ -85,14 +85,17 @@ A vessel far enough from the active vessel is *unloaded*. The game keeps it as o
 and a description of its parts, and instantiates those parts again when it comes back into
 range.
 
-The vessel itself reads normally. Its parts are not instantiated, and using one raises an
-error saying that the part is not loaded. ``Vessel.Loaded`` reports whether a vessel's parts
-are available.
+The vessel itself reads normally. Its parts are not instantiated, and using one raises
+``KRPC.ObjectNotLoadedException``. ``Vessel.Loaded`` reports whether a vessel's parts are
+available.
 
 The object stays valid throughout, and the part works again once the game loads the vessel.
-Two other cases raise the same error. A maneuver node raises it while the game computes no
-flight plan for its vessel, and a vessel raises it while the game is between states, part way
-through a load.
+Other objects raise the same error while the game has not loaded them:
+
+* a vessel, crew member, contract, alarm or waypoint, while the game is part way through a load
+* a maneuver node, while the game computes no flight plan for its vessel
+* a comm link, while it is not part of its vessel's control path
+* the editor vessel, while the editor is starting up
 
 Objects in the Editor
 ---------------------

@@ -15,6 +15,7 @@ v0.7.0 - unreleased
 Core
 ^^^^
 
+* Add ``KRPC.ObjectNotLoadedException``, for an object that exists but is not loaded, such as a part of an unloaded vessel (:issue:`1120`)
 * :breaking:`Breaking` Throw ``KRPC.UnsupportedSceneException`` for a procedure called outside its game scenes (:issue:`1119`)
 * Encode and decode values without reflection, cutting the server cost of a call that passes or returns an object by about three quarters (:issue:`1091`)
 * :breaking:`Breaking` Nullability is carried by ``Type.nullable`` at every position a value sits in, replacing ``Parameter.nullable`` and ``Procedure.return_is_nullable`` (:issue:`1091`)
@@ -195,7 +196,7 @@ SpaceCenter service
   * Using a part that has been destroyed raises ``KRPC.ObjectDestroyedException`` instead of failing with a null reference (:issue:`885`)
   * Using a part module, or an object built on one such as ``Engine`` or ``Parachute``, after its part has been destroyed raises ``KRPC.ObjectDestroyedException`` (:issue:`885`)
   * Part modules, and the objects built on them, read the modules of the loaded game, so they keep working across a quickload (:issue:`764`)
-  * Using a part of a vessel that the game has unloaded raises an error saying that the part is not loaded (:issue:`1051`)
+  * Using a part of a vessel that the game has unloaded raises ``KRPC.ObjectNotLoadedException`` (:issue:`1051`)
   * The fields, events and actions of a part module read the loaded game's module (:issue:`764`)
   * A ``ScienceSubject`` belongs to the game state it was read from, and using one after that state has been replaced raises ``KRPC.ObjectDestroyedException`` (:issue:`771`)
   * Fix ``Experiment.ScienceSubject`` adding a new object for every read (:issue:`771`)
