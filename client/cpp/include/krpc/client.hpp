@@ -60,8 +60,6 @@ class Client {
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
   std::shared_ptr<StreamImpl> get_stream(uint64_t id);
   void remove_stream(uint64_t id);
-  void freeze_streams();
-  void thaw_streams();
 
   /**
    * Condition variable that is notified when a stream update

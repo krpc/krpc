@@ -24,10 +24,7 @@ StreamManager::StreamManager(Client* client, const std::shared_ptr<Connection>& 
       connection(connection),
       update_lock(new std::recursive_mutex),
       stop(new std::atomic_bool(false)),
-      should_freeze(new std::atomic_bool(false)),
-      frozen(new std::atomic_bool(false)),
-      update_thread(
-          new std::thread(update_thread_main, this, connection, stop, should_freeze, frozen)),
+      update_thread(new std::thread(update_thread_main, this, connection, stop)),
       condition_lock(condition_mutex, std::defer_lock),
       next_callback_tag(0) {}
 
@@ -109,18 +106,6 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   }
 }
 
-void StreamManager::freeze() {
-  should_freeze->store(true);
-  while (!frozen->load()) {
-  }
-}
-
-void StreamManager::thaw() {
-  should_freeze->store(false);
-  while (frozen->load()) {
-  }
-}
-
 std::condition_variable& StreamManager::get_update_condition() { return condition; }
 
 std::unique_lock<std::mutex>& StreamManager::get_update_condition_lock() { return condition_lock; }
@@ -140,9 +125,7 @@ void StreamManager::remove_update_callback(int tag) {
 
 void StreamManager::update_thread_main(StreamManager* stream_manager,
                                        const std::shared_ptr<Connection>& connection,
-                                       const std::shared_ptr<std::atomic_bool>& stop,
-                                       const std::shared_ptr<std::atomic_bool>& should_freeze,
-                                       const std::shared_ptr<std::atomic_bool>& frozen) {
+                                       const std::shared_ptr<std::atomic_bool>& stop) {
   Client* client = stream_manager->client;
 
   auto apply_update = [stream_manager, client](const std::string& data) {
@@ -177,44 +160,11 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
         break;
       } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
       }
-      // Handle a freeze request even when no update message is arriving, so that
-      // freezing does not block until the next message when no stream is producing
-      // updates. Only applies between messages: partial data means a message is
-      // mid-transfer, and it is read to completion first.
-      if (data.empty() && should_freeze->load()) break;
     }
     if (stop->load()) break;
 
     // Decode and apply the update
     if (size > 0) apply_update(connection->receive(size));
-
-    // Check if updates should freeze
-    if (should_freeze->load()) {
-      frozen->store(true);
-
-      // While frozen, read and skip update messages
-      std::string last_update;
-      while (should_freeze->load()) {
-        size_t size = 0;
-        std::string data;
-        while (data.size() > 0 || should_freeze->load()) {
-          try {
-            data += connection->partial_receive(1);
-            size = decoder::decode_size(data);
-            break;
-          } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
-          }
-          // Stop if requested
-          if (stop->load()) return;
-        }
-        if (size > 0) last_update = connection->receive(size);
-      }
-
-      // Apply the last received update when thawing
-      if (!last_update.empty()) apply_update(last_update);
-
-      frozen->store(false);
-    }
   }
 }
 
