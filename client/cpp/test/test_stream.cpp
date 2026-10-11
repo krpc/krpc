@@ -556,51 +556,6 @@ TEST_F(test_stream, test_rate) {
   ASSERT_EQ(test_rate_value, 5);
 }
 
-TEST_F(test_stream, test_stream_freeze) {
-  auto s0 = test_service.counter_stream("test_stream.test_stream_freeze.0");
-  auto s1 = test_service.counter_stream("test_stream.test_stream_freeze.1");
-  auto x0 = s0();
-  auto x1 = s1();
-  wait();
-  ASSERT_NE(x0, s0());
-  ASSERT_NE(x1, s1());
-  conn.freeze_streams();
-  x0 = s0();
-  x1 = s1();
-  wait();
-  ASSERT_EQ(x0, s0());
-  ASSERT_EQ(x1, s1());
-  conn.thaw_streams();
-  wait();
-  ASSERT_NE(x0, s0());
-  ASSERT_NE(x1, s1());
-}
-
-TEST_F(test_stream, test_stream_freeze_many) {
-  std::vector<krpc::Stream<int>> streams;
-  for (size_t i = 0; i < 100; i++)
-    streams.push_back(
-        test_service.counter_stream("test_stream.test_stream_freeze_many." + std::to_string(i)));
-  std::vector<int> values;
-  for (auto stream : streams) values.push_back(stream());
-  wait();
-  for (size_t i = 0; i < streams.size(); i++) ASSERT_NE(values[i], streams[i]());
-  conn.freeze_streams();
-  for (size_t i = 0; i < streams.size(); i++) values[i] = streams[i]();
-  wait();
-  for (size_t i = 0; i < streams.size(); i++) ASSERT_EQ(values[i], streams[i]());
-  conn.thaw_streams();
-  wait();
-  for (size_t i = 0; i < streams.size(); i++) ASSERT_NE(values[i], streams[i]());
-}
-
-// Freezes with a stream that is not producing updates (it is never started), then
-// tears the connection down while still frozen.
-TEST_F(test_stream, test_stream_stop_while_frozen) {
-  auto s = test_service.counter_stream("test_stream.test_stream_stop_while_frozen");
-  conn.freeze_streams();
-}
-
 TEST_F(test_stream, test_default_constructable) {
   krpc::Stream<int> s;
   ASSERT_FALSE(s);

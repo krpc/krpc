@@ -27,8 +27,6 @@ class StreamManager {
   std::shared_ptr<StreamImpl> get_stream(uint64_t id);
   void remove_stream(uint64_t id);
   void update(uint64_t id, const schema::ProcedureResult& result);
-  void freeze();
-  void thaw();
   std::condition_variable& get_update_condition();
   std::unique_lock<std::mutex>& get_update_condition_lock();
   typedef std::function<void()> Callback;
@@ -39,16 +37,12 @@ class StreamManager {
  private:
   static void update_thread_main(StreamManager* stream_manager,
                                  const std::shared_ptr<Connection>& connection,
-                                 const std::shared_ptr<std::atomic_bool>& stop,
-                                 const std::shared_ptr<std::atomic_bool>& should_freeze,
-                                 const std::shared_ptr<std::atomic_bool>& frozen);
+                                 const std::shared_ptr<std::atomic_bool>& stop);
   Client* client;
   std::shared_ptr<Connection> connection;
   std::map<uint64_t, std::weak_ptr<StreamImpl>> streams;
   std::shared_ptr<std::recursive_mutex> update_lock;
   std::shared_ptr<std::atomic_bool> stop;
-  std::shared_ptr<std::atomic_bool> should_freeze;
-  std::shared_ptr<std::atomic_bool> frozen;
   std::shared_ptr<std::thread> update_thread;
   std::condition_variable condition;
   std::mutex condition_mutex;

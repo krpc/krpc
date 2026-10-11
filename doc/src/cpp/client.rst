@@ -155,11 +155,9 @@ stream can be obtained by calling :func:`krpc::Stream::operator()()`. A stream c
 removed from the server by calling :func:`krpc::Stream::remove()` on the stream object. All of a
 clients streams are automatically stopped when it disconnects.
 
-Updates to streams can be paused by calling :func:`krpc::Client::freeze_streams()`. After this call,
-all streams will have their values frozen to values from the same physics tick. Updates can be
-resumed by calling :func:`krpc::Client::thaw_streams()`. This is useful if you need to perform some
-computation using stream values and require all of the stream values to be from the same physics
-tick.
+Each stream updates on its own, so two streams read one after the other can give values from
+different physics ticks. To read several values from one physics tick, make the calls while
+holding the tick, as described in :ref:`holding-a-tick`.
 
 Synchronizing with Stream Updates
 ---------------------------------
@@ -290,16 +288,6 @@ Client API Reference
    .. function:: ~Client()
 
       Destructs the client object and closes the connection to the server.
-
-   .. function:: void freeze_streams()
-
-      Pause stream updates, after the next stream update message is received. This function blocks
-      until the streams have been frozen.
-
-   .. function:: void thaw_streams()
-
-      Resume stream updates. Before this function returns, the last received update message is
-      applied to the streams.
 
    .. function:: std::condition_variable& get_stream_update_condition() const
 

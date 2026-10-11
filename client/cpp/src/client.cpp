@@ -172,10 +172,6 @@ std::shared_ptr<StreamImpl> Client::get_stream(uint64_t id) { return streams().g
 
 void Client::remove_stream(uint64_t id) { streams().remove_stream(id); }
 
-void Client::freeze_streams() { streams().freeze(); }
-
-void Client::thaw_streams() { streams().thaw(); }
-
 std::condition_variable& Client::get_stream_update_condition() const {
   return streams().get_update_condition();
 }
