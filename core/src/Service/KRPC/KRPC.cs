@@ -227,6 +227,17 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// The number of game states that have finished loading.
+        /// </summary>
+        /// <remarks>
+        /// Increases once a game load, quickload, revert or scene change has finished.
+        /// </remarks>
+        [KRPCProperty]
+        public static uint GameStateLoads {
+            get { return GameState.Loads; }
+        }
+
+        /// <summary>
         /// Add a streaming request and return its identifier.
         /// </summary>
         [KRPCProcedure]

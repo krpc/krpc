@@ -776,6 +776,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "current_game_scene",
                     "GameScene",
                     "paused",
+                    "game_state_loads",
                     "clients",
                     "Expression",
                     "Type",
