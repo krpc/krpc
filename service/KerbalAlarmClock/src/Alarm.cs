@@ -4,6 +4,7 @@ using KRPC.KerbalAlarmClock.ExtensionMethods;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.KerbalAlarmClock
 {
@@ -47,14 +48,16 @@ namespace KRPC.KerbalAlarmClock
 
         /// <summary>
         /// The state of the alarm. It is live while Kerbal Alarm Clock lists an alarm with
-        /// the identifier, and destroyed once a running mod lists none. A mod that has yet
-        /// to start leaves the alarm dormant.
+        /// the identifier, and destroyed once a running mod in a settled game lists none. A
+        /// mod that has yet to start, or a game between states, leaves the alarm dormant.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
                 if (!KACWrapper.APIReady)
                     return GameObjectState.Dormant;
-                return Find () != null ? GameObjectState.Live : GameObjectState.Destroyed;
+                if (Find () != null)
+                    return GameObjectState.Live;
+                return KRPC.Service.GameState.Settled ? GameObjectState.Destroyed : GameObjectState.Dormant;
             }
         }
 
@@ -97,7 +100,7 @@ namespace KRPC.KerbalAlarmClock
                 return new ObjectDestroyedException (
                     "The alarm no longer exists, as Kerbal Alarm Clock no longer has an " +
                     "alarm with its id.");
-            return new InvalidOperationException (
+            return new ObjectNotLoadedException (
                 "The alarm is not available, as Kerbal Alarm Clock is not ready. " +
                 "It can be used again once it is.");
         }

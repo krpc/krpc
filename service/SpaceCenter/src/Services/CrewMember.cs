@@ -5,6 +5,8 @@ using KRPC.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -69,8 +71,25 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                return HighLogic.CurrentGame?.CrewRoster?[m_protoCrewMemberName];
+                var crewMember = HighLogic.CurrentGame?.CrewRoster?[m_protoCrewMemberName];
+                if (crewMember == null)
+                    throw NotResolvable ();
+                return crewMember;
             }
+        }
+
+        /// <summary>
+        /// The error to raise when the roster has no kerbal with the name, which
+        /// <see cref="GameObjectState" /> decides between.
+        /// </summary>
+        Exception NotResolvable ()
+        {
+            if (GameObjectState == GameObjectState.Destroyed)
+                return new ObjectDestroyedException (
+                    "The crew member no longer exists, as the game has no kerbal with their name.");
+            return new ObjectNotLoadedException (
+                "The crew member is not loaded, as no game is loaded. " +
+                "They can be used again once a game is.");
         }
         readonly string m_protoCrewMemberName;
 

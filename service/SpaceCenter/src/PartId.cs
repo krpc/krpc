@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.SpaceCenter
 {
@@ -128,7 +129,7 @@ namespace KRPC.SpaceCenter
         internal Exception NotResolvable ()
         {
             if (GameObjectState != GameObjectState.Destroyed)
-                return new InvalidOperationException (
+                return new ObjectNotLoadedException (
                     inEditor
                     ? "The vessel in the editor is not ready to be read. " +
                       "The part can be used again once the editor has it open."

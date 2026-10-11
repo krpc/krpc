@@ -1,5 +1,6 @@
 using System;
 using KRPC.Utils;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.SpaceCenter
 {
@@ -22,8 +23,13 @@ namespace KRPC.SpaceCenter
         public static ShipConstruct GetShip ()
         {
             var ship = Ship;
-            if (ReferenceEquals (ship, null))
+            if (ReferenceEquals (ship, null)) {
+                if (ShipState == GameObjectState.Dormant)
+                    throw new ObjectNotLoadedException (
+                        "The editor vessel is not loaded, as the editor is starting up. " +
+                        "It can be used once the editor has opened it.");
                 throw new InvalidOperationException ("The editor does not contain a vessel.");
+            }
             return ship;
         }
 

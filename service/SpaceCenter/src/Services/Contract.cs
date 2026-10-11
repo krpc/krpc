@@ -5,6 +5,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -45,16 +46,23 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The state of the contract. It is live while the contract system lists it,
-        /// running or finished, and destroyed once a running system stops listing it. A
-        /// game with no contract system leaves the contract dormant.
+        /// running or finished, and destroyed once a loaded system in a settled game stops
+        /// listing it. A game with no contract system, or one still loading its contracts,
+        /// leaves the contract dormant.
         /// </summary>
+        /// <remarks>
+        /// The contract system parses its contracts a frame after the scene loads it.
+        /// </remarks>
         public GameObjectState GameObjectState
         {
             get
             {
                 if (Contracts.ContractSystem.Instance == null)
                     return GameObjectState.Dormant;
-                return Find() != null ? GameObjectState.Live : GameObjectState.Destroyed;
+                if (Find() != null)
+                    return GameObjectState.Live;
+                return Contracts.ContractSystem.loaded && KRPC.Service.GameState.Settled ?
+                    GameObjectState.Destroyed : GameObjectState.Dormant;
             }
         }
 
@@ -93,7 +101,7 @@ namespace KRPC.SpaceCenter.Services
             if (GameObjectState == GameObjectState.Destroyed)
                 return new ObjectDestroyedException(
                     "The contract no longer exists, as the game no longer has a contract with its id.");
-            return new InvalidOperationException(
+            return new ObjectNotLoadedException(
                 "The contract is not loaded, as the game has no contract system running. " +
                 "It can be used again once the game does.");
         }

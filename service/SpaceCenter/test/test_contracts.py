@@ -1,3 +1,4 @@
+import time
 import unittest
 
 import krpctest
@@ -234,6 +235,22 @@ class TestContractsVesselSwitch(krpctest.TestCase):
 
     def test_switch_vessel_from_tracking_station(self):
         self.switch_vessel_from(self.conn.krpc.GameScene.tracking_station)
+
+    def test_contract_survives_a_load(self):
+        contract = self.space_center.contract_manager.active_contracts[0]
+        title = contract.title
+        self.space_center.save("contract_load")
+        self.space_center.load("contract_load")
+        # While the game loads, and parses the contracts a frame after the scene, the
+        # contract is not loaded. It is never destroyed
+        deadline = time.time() + 10
+        while time.time() < deadline:
+            try:
+                contract.title
+            except self.conn.krpc.ObjectNotLoadedException:
+                pass
+            time.sleep(0.05)
+        self.assertEqual(title, contract.title)
 
 
 if __name__ == "__main__":

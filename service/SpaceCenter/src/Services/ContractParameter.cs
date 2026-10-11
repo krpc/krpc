@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -136,7 +137,7 @@ namespace KRPC.SpaceCenter.Services
                 return new ObjectDestroyedException(
                     "The contract parameter no longer exists, as the contract it belongs to " +
                     "no longer has it.");
-            return new InvalidOperationException(
+            return new ObjectNotLoadedException(
                 "The contract parameter is not loaded, as the game has no contract system " +
                 "running. It can be used again once the game does.");
         }

@@ -784,6 +784,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "ArgumentNullException",
                     "ArgumentOutOfRangeException",
                     "ObjectDestroyedException",
+                    "ObjectNotLoadedException",
                     "UnsupportedSceneException",
                 ]
             ),

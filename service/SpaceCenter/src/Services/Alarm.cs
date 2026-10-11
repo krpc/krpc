@@ -3,6 +3,7 @@ using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
+using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -42,8 +43,9 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The state of the alarm. It is live while an alarm with the id is in the game's
-        /// alarm clock, and destroyed once a running alarm clock has none. A game with no
-        /// alarm clock running leaves the alarm dormant.
+        /// alarm clock, and destroyed once a running alarm clock in a settled game has none.
+        /// A game with no alarm clock running, or one between states, leaves the alarm
+        /// dormant.
         /// </summary>
         public GameObjectState GameObjectState
         {
@@ -51,7 +53,9 @@ namespace KRPC.SpaceCenter.Services
             {
                 if (AlarmClockScenario.Instance == null)
                     return GameObjectState.Dormant;
-                return Find() != null ? GameObjectState.Live : GameObjectState.Destroyed;
+                if (Find() != null)
+                    return GameObjectState.Live;
+                return KRPC.Service.GameState.Settled ? GameObjectState.Destroyed : GameObjectState.Dormant;
             }
         }
 
@@ -76,7 +80,7 @@ namespace KRPC.SpaceCenter.Services
             if (GameObjectState == GameObjectState.Destroyed)
                 return new ObjectDestroyedException(
                     "The alarm no longer exists, as the game no longer has an alarm with its id.");
-            return new InvalidOperationException(
+            return new ObjectNotLoadedException(
                 "The alarm is not loaded, as the game has no alarm clock running. " +
                 "It can be used again once the game does.");
         }
