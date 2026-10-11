@@ -348,6 +348,7 @@ C# client
 C++ client
 ^^^^^^^^^^
 
+* :breaking:`Breaking` Remove ``Client::freeze_streams`` and ``Client::thaw_streams``. Calls made while holding the tick with ``KRPC::hold_tick`` give values from one physics tick (:issue:`1118`)
 * Fix a data race reading a stream's value while an update for it arrives (:issue:`1108`)
 * Fix a stream of a value whose type a service defines, such as an enumeration or a structure, failing to compile (:issue:`1094`)
 * Support a nullable structure field, list element, tuple item and dictionary value (:issue:`1091`)

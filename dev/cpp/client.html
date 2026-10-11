@@ -885,11 +885,9 @@ end of the functions name. This returns a stream object of type <a class="refere
 stream can be obtained by calling <a class="reference internal" href="#_CPPv4N4krpc6StreamclEv" title="krpc::Stream::operator()"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::Stream::operator()()</span></code></a>. A stream can be stopped and
 removed from the server by calling <a class="reference internal" href="#_CPPv4N4krpc6Stream6removeEv" title="krpc::Stream::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::Stream::remove()</span></code></a> on the stream object. All of a
 clients streams are automatically stopped when it disconnects.</p>
-<p>Updates to streams can be paused by calling <a class="reference internal" href="#_CPPv4N4krpc6Client14freeze_streamsEv" title="krpc::Client::freeze_streams"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::Client::freeze_streams()</span></code></a>. After this call,
-all streams will have their values frozen to values from the same physics tick. Updates can be
-resumed by calling <a class="reference internal" href="#_CPPv4N4krpc6Client12thaw_streamsEv" title="krpc::Client::thaw_streams"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::Client::thaw_streams()</span></code></a>. This is useful if you need to perform some
-computation using stream values and require all of the stream values to be from the same physics
-tick.</p>
+<p>Each stream updates on its own, so two streams read one after the other can give values from
+different physics ticks. To read several values from one physics tick, make the calls while
+holding the tick, as described in <a class="reference internal" href="../tutorials/control-loops.html#holding-a-tick"><span class="std std-ref">Holding a Tick</span></a>.</p>
 </section>
 <section id="synchronizing-with-stream-updates">
 <h2>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h2>
@@ -1083,20 +1081,6 @@ instances to invoke remote procedure calls. Instances of this class can be obtai
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6ClientD0Ev">
 <span id="_CPPv3N4krpc6ClientD0Ev"></span><span id="_CPPv2N4krpc6ClientD0Ev"></span><span id="krpc::Client::~Client"></span><span class="sig-name descname"><span class="n"><span class="pre">~Client</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6ClientD0Ev" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destructs the client object and closes the connection to the server.</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client14freeze_streamsEv">
-<span id="_CPPv3N4krpc6Client14freeze_streamsEv"></span><span id="_CPPv2N4krpc6Client14freeze_streamsEv"></span><span id="krpc::Client::freeze_streams"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">freeze_streams</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client14freeze_streamsEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Pause stream updates, after the next stream update message is received. This function blocks
-until the streams have been frozen.</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client12thaw_streamsEv">
-<span id="_CPPv3N4krpc6Client12thaw_streamsEv"></span><span id="_CPPv2N4krpc6Client12thaw_streamsEv"></span><span id="krpc::Client::thaw_streams"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thaw_streams</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client12thaw_streamsEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Resume stream updates. Before this function returns, the last received update message is
-applied to the streams.</p>
 </dd></dl>
 
 <dl class="cpp function">

@@ -950,6 +950,7 @@
 <section id="id1">
 <h3>C++ client<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p><span class="changelog-marker breaking">Breaking</span> Remove <code class="docutils literal notranslate"><span class="pre">Client::freeze_streams</span></code> and <code class="docutils literal notranslate"><span class="pre">Client::thaw_streams</span></code>. Calls made while holding the tick with <code class="docutils literal notranslate"><span class="pre">KRPC::hold_tick</span></code> give values from one physics tick (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1118">#1118</a>)</p></li>
 <li><p>Fix a data race reading a stream’s value while an update for it arrives (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1108">#1108</a>)</p></li>
 <li><p>Fix a stream of a value whose type a service defines, such as an enumeration or a structure, failing to compile (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>
 <li><p>Support a nullable structure field, list element, tuple item and dictionary value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1091">#1091</a>)</p></li>
