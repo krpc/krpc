@@ -21,8 +21,9 @@ namespace KRPC.SpaceCenter
         /// </remarks>
         public static bool VesselsKnown {
             get {
+                // A scene with no planetarium, such as an editor, lists no vessels
                 return HighLogic.CurrentGame != null && GameState.Settled &&
-                FlightGlobals.Vessels != null && FlightGlobals.Vessels.Count > 0;
+                HighLogic.LoadedSceneHasPlanetarium && FlightGlobals.Vessels != null;
             }
         }
 

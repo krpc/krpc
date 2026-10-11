@@ -91,6 +91,7 @@ namespace KRPC
 
             // The scene being left takes its game objects with it, so the service objects
             // standing for them are due to be swept once the new scene is built.
+            sceneLoadRequested = false;
             GameStateChanged ();
 
             // Auto-start the server, if required
@@ -208,6 +209,7 @@ namespace KRPC
             // KSP events
             IsPaused = false;
             GameEvents.onGameStatePostLoad.Add(OnGameStatePostLoad);
+            GameEvents.onGameSceneLoadRequested.Add(OnGameSceneLoadRequested);
             GameEvents.onPartDie.Add(OnPartDie);
             GameEvents.onEditorShipModified.Add(OnEditorShipModified);
             GameEvents.onVesselDestroy.Add(OnVesselDestroy);
@@ -272,6 +274,18 @@ namespace KRPC
             Service.GameState.Changed ();
             lastCount = -1;
         }
+
+        void OnGameSceneLoadRequested(GameScenes scene)
+        {
+            // The game fills in the next scene's game objects while it loads it, so the game
+            // is between states from the request. The scene being left can run further
+            // physics ticks before it unloads, so nothing settles until the next scene starts
+            sceneLoadRequested = true;
+            GameStateChanged();
+        }
+
+        // Whether a scene load has been requested and the next scene has not started yet
+        static bool sceneLoadRequested;
 
         void OnPartDie(Part part)
         {
@@ -378,6 +392,7 @@ namespace KRPC
         public void OnDestroy ()
         {
             GameEvents.onGameStatePostLoad.Remove(OnGameStatePostLoad);
+            GameEvents.onGameSceneLoadRequested.Remove(OnGameSceneLoadRequested);
             GameEvents.onPartDie.Remove(OnPartDie);
             GameEvents.onEditorShipModified.Remove(OnEditorShipModified);
             GameEvents.onVesselDestroy.Remove(OnVesselDestroy);
@@ -432,6 +447,16 @@ namespace KRPC
         // nothing counted yet
         static int lastCount = -1;
 
+        // The time, and the number of updates, the count has held its value for
+        static readonly System.Diagnostics.Stopwatch countHeld = new System.Diagnostics.Stopwatch ();
+        static int countHeldUpdates;
+
+        // How long a count of zero holds before it settles, in time and in updates. A load
+        // has not been seen to list zero vessels before its first one, so this is a margin.
+        // The update count keeps a single long frame from settling it
+        const long ZeroCountSettleMilliseconds = 1000;
+        const int ZeroCountSettleUpdates = 10;
+
         /// <summary>
         /// Sweep the object store, once the game has finished building the state it loaded.
         /// </summary>
@@ -440,8 +465,8 @@ namespace KRPC
         /// vessels over the following frames, and a sweep run before it has finished sees
         /// objects that are about to exist as gone. There is no event for having finished,
         /// so wait for the count to stop changing, which also covers a game that adds
-        /// vessels more slowly than usual. A game with nothing in it at all says nothing
-        /// about what exists, so nothing is swept then.
+        /// vessels more slowly than usual. A count of zero has to hold for longer, as a
+        /// save can have no vessels.
         ///
         /// In an editor the objects stand for the vessel it has open rather than for
         /// anything in the vessel list, which is empty on a save with nothing in flight,
@@ -456,7 +481,7 @@ namespace KRPC
         /// </remarks>
         static void SweepObjectStore ()
         {
-            if (HighLogic.CurrentGame == null) {
+            if (HighLogic.CurrentGame == null || sceneLoadRequested) {
                 lastCount = -1;
                 return;
             }
@@ -465,7 +490,16 @@ namespace KRPC
                 lastCount = -1;
                 return;
             }
-            var settled = count > 0 && count == lastCount;
+            if (count != lastCount) {
+                countHeld.Reset ();
+                countHeldUpdates = 0;
+            }
+            countHeld.Start ();
+            countHeldUpdates++;
+            var settled = count == lastCount &&
+                (count > 0 ||
+                 (countHeld.ElapsedMilliseconds >= ZeroCountSettleMilliseconds &&
+                  countHeldUpdates >= ZeroCountSettleUpdates));
             lastCount = count;
             if (settled) {
                 Service.GameState.Sweep ();
@@ -481,12 +515,12 @@ namespace KRPC
             get { return FlightGlobals.Vessels == null ? -1 : FlightGlobals.Vessels.Count; }
         }
 
-        // The number of parts in the vessel the editor has open, or -1 if it has none.
+        // The number of parts in the vessel the editor has open, which is zero if it has none.
         static int EditorPartCount {
             get {
                 var editor = EditorLogic.fetch;
                 var ship = editor == null ? null : editor.ship;
-                return ReferenceEquals (ship, null) || ship.parts == null ? -1 : ship.parts.Count;
+                return ReferenceEquals (ship, null) || ship.parts == null ? 0 : ship.parts.Count;
             }
         }
 
