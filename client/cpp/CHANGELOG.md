@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Remove `Client::freeze_streams` and `Client::thaw_streams`. Calls made while
+  holding the tick with `KRPC::hold_tick` give values from one physics tick (#1118)
 - Fix a data race reading a stream's value while an update for it arrives (#1108)
 - Fix a stream of a value whose type a service defines, such as an enumeration or a structure,
   failing to compile (#1094)
