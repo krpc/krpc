@@ -784,6 +784,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "ArgumentNullException",
                     "ArgumentOutOfRangeException",
                     "ObjectDestroyedException",
+                    "UnsupportedSceneException",
                 ]
             ),
             set(x for x in dir(self.conn.krpc) if not x.startswith("_")),

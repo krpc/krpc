@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Throw `KRPC.UnsupportedSceneException` for a procedure called outside its game
+  scenes (#1119)
 - Encode and decode values without reflection, cutting the server cost of a call that passes
   or returns an object by about three quarters (#1091)
 - **Breaking:** Nullability is carried by `Type.nullable` at every position a value sits in,

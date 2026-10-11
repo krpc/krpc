@@ -134,7 +134,7 @@ namespace KRPC.Service
         {
             try {
                 if ((CallContext.GameScene & procedure.GameScene) == 0)
-                    throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
+                    throw new KRPC.UnsupportedSceneException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
                 object returnValue = procedure.Handler.Invoke (instance, arguments);
                 var result = new ProcedureResult ();
                 if (procedure.HasReturnType) {
@@ -192,7 +192,7 @@ namespace KRPC.Service
             object returnValue;
             try {
                 if ((CallContext.GameScene & procedure.GameScene) == 0)
-                    throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
+                    throw new KRPC.UnsupportedSceneException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
                 returnValue = procedure.Handler.Invoke (instance, arguments);
             } catch (YieldException) {
                 throw;
