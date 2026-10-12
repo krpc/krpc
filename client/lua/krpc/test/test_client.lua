@@ -498,6 +498,8 @@ function TestClient:test_krpc_service_members()
   luaunit.assertEquals(
     members,
     {'GameScene',
+     'Type',
+     'TypeCode',
      'add_stream',
      'get_client_id',
      'get_client_name',

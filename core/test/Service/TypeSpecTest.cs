@@ -159,5 +159,75 @@ namespace KRPC.Test.Service
         {
             Assert.IsTrue (TypeSpec.Create (type, true, null, "test").Nullable);
         }
+
+        [Test]
+        public void CreateFromContainedTypes ()
+        {
+            var element = TypeSpec.Create (typeof(string)).WithNullable (true);
+            var spec = TypeSpec.Create (typeof(IList<string>), false, new [] { element });
+            Assert.IsFalse (spec.Nullable);
+            Assert.IsTrue (spec.Types [0].Nullable);
+            Assert.AreEqual (
+                TypeSpec.Create (typeof(IList<string>), false,
+                    new [] { new List<Position> { Position.Element } }, "test"),
+                spec);
+            Assert.Throws<ArgumentException> (
+                () => TypeSpec.Create (typeof(IList<string>), false, new [] { TypeSpec.Create (typeof(int)) }));
+            Assert.Throws<ArgumentException> (
+                () => TypeSpec.Create (typeof(int), true, new TypeSpec [0]));
+        }
+
+        [Test]
+        public void WithNullable ()
+        {
+            var value = TypeSpec.Create (typeof(bool)).WithNullable (true);
+            Assert.AreEqual (typeof(bool?), value.DeclaredType);
+            Assert.AreEqual (typeof(bool), value.Type);
+            Assert.IsTrue (value.Nullable);
+            Assert.AreEqual (TypeSpec.Create (typeof(bool)), value.WithNullable (false));
+            var reference = TypeSpec.Create (typeof(string)).WithNullable (true);
+            Assert.AreEqual (typeof(string), reference.DeclaredType);
+            Assert.IsTrue (reference.Nullable);
+            Assert.AreNotEqual (TypeSpec.Create (typeof(string)), reference);
+        }
+
+        [Test]
+        public void CreateLike ()
+        {
+            var like = TypeSpec.Create (typeof(Tuple<int, string>), false,
+                new [] { new List<Position> { Position.Item2 } }, "test");
+            var spec = TypeSpec.Create (typeof(Tuple<long, string>), like);
+            Assert.AreEqual (typeof(Tuple<long, string>), spec.DeclaredType);
+            Assert.IsFalse (spec.Types [0].Nullable);
+            Assert.IsTrue (spec.Types [1].Nullable);
+            Assert.IsTrue (TypeSpec.Create (typeof(long?), TypeSpec.Create (typeof(int?))).Nullable);
+            Assert.IsFalse (TypeSpec.Create (typeof(long), TypeSpec.Create (typeof(int?))).Nullable);
+        }
+
+        [Test]
+        public void Join ()
+        {
+            var plain = TypeSpec.Create (typeof(IList<string>));
+            var nullable = TypeSpec.Create (typeof(IList<string>), false,
+                new [] { new List<Position> { Position.Element } }, "test");
+            Assert.AreEqual (nullable, TypeSpec.Join (plain, nullable));
+            Assert.AreEqual (nullable, TypeSpec.Join (nullable, plain));
+            Assert.AreEqual (typeof(int?),
+                TypeSpec.Join (TypeSpec.Create (typeof(int)), TypeSpec.Create (typeof(int?))).DeclaredType);
+            Assert.Throws<ArgumentException> (
+                () => TypeSpec.Join (TypeSpec.Create (typeof(int)), TypeSpec.Create (typeof(long))));
+            Assert.IsTrue (plain.IsNoMoreNullableThan (nullable));
+            Assert.IsFalse (nullable.IsNoMoreNullableThan (plain));
+        }
+
+        [Test]
+        public void LazySequenceHasAnElement ()
+        {
+            var spec = TypeSpec.Create (typeof(IEnumerable<int?>));
+            Assert.AreEqual (1, spec.Types.Count);
+            Assert.IsTrue (spec.Types [0].Nullable);
+            Assert.AreEqual (0, TypeSpec.Create (typeof(string)).Types.Count);
+            Assert.AreEqual (0, TypeSpec.Create (typeof(byte[])).Types.Count);
+        }
     }
 }

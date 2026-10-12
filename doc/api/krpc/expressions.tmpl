@@ -1,0 +1,12 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('KRPC') }}
+{% import domain.macros as macros with context %}
+
+Expressions
+===========
+
+The types a server side function works with.
+
+{{ macros.class(services['KRPC'].classes['Type']) }}
+{{ macros.enumeration(services['KRPC'].enumerations['TypeCode']) }}

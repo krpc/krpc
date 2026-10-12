@@ -776,6 +776,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "paused",
                     "game_state_loads",
                     "clients",
+                    "Type",
+                    "TypeCode",
                     "InvalidOperationException",
                     "ArgumentException",
                     "ArgumentNullException",

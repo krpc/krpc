@@ -157,6 +157,10 @@ namespace KRPC.Service
             return IsATupleCollectionType (type) || IsAListCollectionType (type) || IsASetCollectionType (type) || IsADictionaryCollectionType (type);
         }
 
+        // The CLR tuple types are flat up to seven elements, and nest a tuple in the
+        // eighth position beyond that, which is not a shape kRPC can carry
+        public const int MaxTupleElements = 7;
+
         /// <summary>
         /// Returns true if the given type can be used as a kRPC tuple collection type.
         /// </summary>
