@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.google.protobuf.ByteString;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +16,8 @@ import java.util.List;
 import krpc.client.services.TestService;
 import krpc.client.services.TestService.CustomException;
 import krpc.client.services.TestService.TestClass;
+import krpc.schema.KRPC.ProcedureResult;
+import krpc.schema.KRPC.Type;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -334,7 +337,7 @@ public class StreamTest {
       List<Integer> values = Collections.synchronizedList(new ArrayList<Integer>());
       stream.addCallback((Integer value) -> values.add(value));
       synchronized (stream.getCondition()) {
-        stream.waitForUpdate();
+        assertThrows(UnsupportedOperationException.class, () -> stream.waitForUpdate());
       }
       assertThrows(UnsupportedOperationException.class, () -> stream.get());
       // The callbacks run on the update thread after it notifies the condition
@@ -478,7 +481,7 @@ public class StreamTest {
         TestService.class, "counter", "StreamTest.testWaitTimeoutShort", 10);
     synchronized (stream.getCondition()) {
       int count = stream.get();
-      stream.waitForUpdateWithTimeout(0);
+      assertFalse(stream.waitForUpdateWithTimeout(0));
       assertEquals(count, (int) stream.get());
     }
   }
@@ -492,7 +495,7 @@ public class StreamTest {
       int count = stream.get();
       assertTrue(count < 10);
       while (count < 10) {
-        stream.waitForUpdateWithTimeout(10);
+        assertTrue(stream.waitForUpdateWithTimeout(10));
         count++;
         assertEquals(count, (int) stream.get());
       }
@@ -664,5 +667,192 @@ public class StreamTest {
     assertFalse(stream0.equals(null));
     assertTrue(stream0.hashCode() == stream1.hashCode());
     assertFalse(stream0.hashCode() == stream2.hashCode());
+  }
+
+  /**
+   * Waits for a list to reach a size, and checks it stays there. End callbacks run on the update
+   * thread after it wakes the waiters.
+   */
+  private static void awaitSize(List<?> list, int size) throws InterruptedException {
+    long deadline = System.currentTimeMillis() + 10000;
+    while (list.size() < size && System.currentTimeMillis() < deadline) {
+      Thread.sleep(10);
+    }
+    Thread.sleep(100);
+    assertEquals(size, list.size());
+  }
+
+  @Test(timeout = 30000)
+  public void testErrorEndsTheStream()
+      throws RPCException, StreamException, InterruptedException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "throwInvalidOperationException");
+    List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
+    stream.addEndCallback(ended::add);
+    synchronized (stream.getCondition()) {
+      assertThrows(UnsupportedOperationException.class, () -> stream.waitForUpdate());
+      assertThrows(
+          UnsupportedOperationException.class, () -> stream.waitForUpdateWithTimeout(1));
+    }
+    assertThrows(UnsupportedOperationException.class, () -> stream.get());
+    awaitSize(ended, 1);
+    assertTrue(ended.get(0) instanceof UnsupportedOperationException);
+    // Added after the end, so called straight away
+    stream.addEndCallback(ended::add);
+    assertEquals(2, ended.size());
+    // Already removed by the server, so this does nothing
+    stream.remove();
+    assertThrows(UnsupportedOperationException.class, () -> stream.get());
+  }
+
+  @Test(timeout = 30000)
+  public void testEndCallbackOnRemove()
+      throws RPCException, StreamException {
+    Stream<String> stream = connection.addStream(TestService.class, "int32ToString", 48);
+    assertEquals("48", stream.get());
+    List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
+    stream.addEndCallback(ended::add);
+    stream.remove();
+    assertEquals(1, ended.size());
+    assertTrue(ended.get(0) instanceof StreamException);
+  }
+
+  @Test(timeout = 30000)
+  public void testEndCallbackAddedAfterTheEnd()
+      throws RPCException, StreamException {
+    Stream<String> stream = connection.addStream(TestService.class, "int32ToString", 55);
+    stream.remove();
+    List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
+    stream.addEndCallback(ended::add);
+    assertEquals(1, ended.size());
+    assertTrue(ended.get(0) instanceof StreamException);
+  }
+
+  @Test(timeout = 30000)
+  public void testRemoveEndCallback()
+      throws RPCException, StreamException {
+    Stream<String> stream = connection.addStream(TestService.class, "int32ToString", 56);
+    List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
+    int tag = stream.addEndCallback(ended::add);
+    stream.removeEndCallback(tag);
+    stream.remove();
+    assertEquals(Collections.emptyList(), ended);
+  }
+
+  @Test(timeout = 30000)
+  public void testValueThatFailsToDecodeEndsOnlyItsStream()
+      throws RPCException, StreamException {
+    Type type = Type.newBuilder().setCode(Type.TypeCode.UINT32).build();
+    // Ids the server has not issued, so no update arrives for them
+    StreamImpl failing = connection.streamManager.getStream(type, 1000000);
+    List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
+    failing.addEndCallback(ended::add);
+    final StreamImpl working = connection.streamManager.getStream(type, 1000001);
+    // A varint that never ends
+    ByteString bad = ByteString.copyFrom(new byte[] {-1});
+    connection.streamManager.update(1000000, ProcedureResult.newBuilder().setValue(bad).build());
+    ByteString good = ByteString.copyFrom(new byte[] {42});
+    connection.streamManager.update(1000001, ProcedureResult.newBuilder().setValue(good).build());
+    assertEquals(1, ended.size());
+    assertThrows(EncodingException.class, () -> failing.getValue());
+    assertEquals(42, (int) working.getValue());
+  }
+
+  @Test(timeout = 30000)
+  public void testCloseWakesWaits()
+      throws IOException, RPCException, StreamException, InterruptedException {
+    Connection conn = TestUtils.connect();
+    Stream<String> stream = conn.addStream(TestService.class, "int32ToString", 49);
+    assertEquals("49", stream.get());
+    Event event = TestService.newInstance(conn).onTimer(60000, 1);
+    List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
+    stream.addEndCallback(ended::add);
+    event.addEndCallback(ended::add);
+    List<Throwable> errors = Collections.synchronizedList(new ArrayList<Throwable>());
+    Thread streamWaiter = new Thread(() -> {
+      synchronized (stream.getCondition()) {
+        try {
+          stream.waitForUpdate();
+        } catch (RPCException | StreamException exn) {
+          errors.add(exn);
+        }
+      }
+    });
+    Thread eventWaiter = new Thread(() -> {
+      synchronized (event.getCondition()) {
+        try {
+          event.waitFor();
+        } catch (RPCException | StreamException exn) {
+          errors.add(exn);
+        }
+      }
+    });
+    streamWaiter.start();
+    eventWaiter.start();
+    while (streamWaiter.getState() != Thread.State.WAITING
+        || eventWaiter.getState() != Thread.State.WAITING) {
+      Thread.sleep(10);
+    }
+    conn.close();
+    streamWaiter.join();
+    eventWaiter.join();
+    assertEquals(2, errors.size());
+    for (Throwable exn : errors) {
+      assertTrue(exn.getCause() instanceof ConnectionException);
+    }
+    awaitSize(ended, 2);
+    StreamException exn = assertThrows(StreamException.class, () -> stream.get());
+    assertTrue(exn.getCause() instanceof ConnectionException);
+  }
+
+  @Test(timeout = 30000)
+  public void testConnectionFailureWakesWaitingThread()
+      throws IOException, RPCException, StreamException, InterruptedException {
+    Connection conn = TestUtils.connect();
+    try {
+      Stream<String> stream = conn.addStream(TestService.class, "int32ToString", 50);
+      assertEquals("50", stream.get());
+      List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
+      stream.addEndCallback(ended::add);
+      List<Throwable> errors = Collections.synchronizedList(new ArrayList<Throwable>());
+      Thread waiter = new Thread(() -> {
+        synchronized (stream.getCondition()) {
+          try {
+            stream.waitForUpdate();
+          } catch (RPCException | StreamException exn) {
+            errors.add(exn);
+          }
+        }
+      });
+      waiter.start();
+      while (waiter.getState() != Thread.State.WAITING) {
+        Thread.sleep(10);
+      }
+      // Stands in for the server closing the connection
+      conn.streamManager.channel.close();
+      waiter.join();
+      assertEquals(1, errors.size());
+      assertTrue(errors.get(0).getCause() instanceof ConnectionException);
+      awaitSize(ended, 1);
+      assertThrows(StreamException.class, () -> stream.get());
+    } finally {
+      conn.close();
+    }
+  }
+
+  @Test(timeout = 30000)
+  public void testCloseWhileHoldingCondition()
+      throws IOException, RPCException, StreamException, InterruptedException {
+    Connection conn = TestUtils.connect();
+    // A new value on every update, which the update thread blocks on the condition to store
+    Stream<Integer> stream = conn.addStream(
+        TestService.class, "counter", "StreamTest.testCloseWhileHoldingCondition", 1);
+    synchronized (stream.getCondition()) {
+      stream.waitForUpdate();
+      Thread.sleep(100);
+      conn.close();
+      StreamException exn = assertThrows(StreamException.class, () -> stream.waitForUpdate());
+      assertTrue(exn.getCause() instanceof ConnectionException);
+    }
   }
 }

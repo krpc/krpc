@@ -441,6 +441,18 @@ public class Connection implements AutoCloseable {
   }
 
   void throwException(KRPC.Error error) throws RPCException {
+    Exception exn = buildException(error);
+    if (exn instanceof RuntimeException) {
+      throw (RuntimeException) exn;
+    }
+    throw (RPCException) exn;
+  }
+
+  /**
+   * Builds the exception for an error from the server. Returns an RPCException or a
+   * RuntimeException.
+   */
+  Exception buildException(KRPC.Error error) {
     String message = error.getDescription();
     if (!error.getStackTrace().isEmpty()) {
       message += "\nServer stack trace:\n" + error.getStackTrace();
@@ -448,16 +460,16 @@ public class Connection implements AutoCloseable {
     if (!error.getService().isEmpty() && !error.getName().isEmpty()) {
       String key = error.getService() + "." + error.getName();
       if (key.equals("KRPC.InvalidOperationException")) {
-        throw new UnsupportedOperationException(message);
+        return new UnsupportedOperationException(message);
       }
       if (key.equals("KRPC.ArgumentException")) {
-        throw new IllegalArgumentException(message);
+        return new IllegalArgumentException(message);
       }
       if (key.equals("KRPC.ArgumentNullException")) {
-        throw new IllegalArgumentException(message);
+        return new IllegalArgumentException(message);
       }
       if (key.equals("KRPC.ArgumentOutOfRangeException")) {
-        throw new IndexOutOfBoundsException(message);
+        return new IndexOutOfBoundsException(message);
       }
       Class<?> exnType = exceptionTypes.get(key);
       Constructor<?> ctor = null;
@@ -474,21 +486,20 @@ public class Connection implements AutoCloseable {
         // and has no usable constructor if it was not generated as an exception type. Report
         // the error itself, named by its type on the server, so that the failure to build an
         // exception for it does not hide it.
-        throw new RPCException(key + ": " + message);
+        return new RPCException(key + ": " + message);
       }
       try {
         ctor.setAccessible(true);
-        RPCException exn = (RPCException) ctor.newInstance(message);
-        throw exn;
+        return (RPCException) ctor.newInstance(message);
       } catch (IllegalAccessException exn) {
-        throw new RPCException("Failed to throw server exception");
+        return new RPCException("Failed to throw server exception");
       } catch (InstantiationException exn) {
-        throw new RPCException("Failed to throw server exception");
+        return new RPCException("Failed to throw server exception");
       } catch (InvocationTargetException exn) {
-        throw new RPCException("Failed to throw server exception");
+        return new RPCException("Failed to throw server exception");
       }
     }
-    throw new RPCException(message);
+    return new RPCException(message);
   }
 
   /**
