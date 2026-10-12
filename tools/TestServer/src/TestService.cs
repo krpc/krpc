@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -722,16 +723,24 @@ namespace TestServer
 
         [KRPCProcedure]
         public static KRPC.Service.Messages.Event OnTimer (uint milliseconds, uint repeats = 1) {
-            var evnt = new KRPC.Service.Event ();
+            // The timer thread counts the intervals, and the event fires for them on the
+            // update thread
+            int elapsed = 0;
+            uint fired = 0;
             var timer = new System.Timers.Timer (milliseconds);
             timer.Elapsed += (s, e) => {
-                evnt.Trigger ();
-                repeats--;
-                if (repeats == 0) {
-                    evnt.Remove ();
+                if (Interlocked.Increment (ref elapsed) == repeats)
                     timer.Enabled = false;
-                }
             };
+            var evnt = new KRPC.Service.Event (
+                (KRPC.Service.Event e) => {
+                    if (fired == Volatile.Read (ref elapsed))
+                        return false;
+                    fired++;
+                    if (fired == repeats)
+                        e.Remove ();
+                    return true;
+                });
             timer.Start();
             return evnt.Message;
         }

@@ -54,7 +54,7 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Trigger the event.
+        /// Trigger the event. Call from the thread that updates the server.
         /// </summary>
         public void Trigger ()
         {
@@ -62,7 +62,7 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Remove the event.
+        /// Remove the event. Call from the thread that updates the server.
         /// </summary>
         public void Remove ()
         {
