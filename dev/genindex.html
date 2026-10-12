@@ -704,6 +704,12 @@
         <li><a href="lua/api/ui/panel.html#UI.Panel.add_dropdown">(Panel method)</a>, <a href="python/api/ui/panel.html#UI.Panel.add_dropdown">[1]</a>
 </li>
       </ul></li>
+      <li><a href="python/client.html#krpc.event.Event.add_end_callback">add_end_callback() (krpc.event.Event method)</a>
+
+      <ul>
+        <li><a href="python/client.html#krpc.stream.Stream.add_end_callback">(krpc.stream.Stream method)</a>
+</li>
+      </ul></li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.add_force">add_force() (Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.add_force">[1]</a>
 </li>
       <li><a href="lua/api/ui/panel.html#UI.Panel.add_grid_layout">add_grid_layout() (Panel method)</a>, <a href="python/api/ui/panel.html#UI.Panel.add_grid_layout">[1]</a>
@@ -831,6 +837,8 @@
       <li><a href="java/api/drawing/drawing.html#krpc.client.services.Drawing.Drawing.addDirectionFromCom(org.javatuples.Triplet, SpaceCenter.ReferenceFrame, float, boolean)">addDirectionFromCom(org.javatuples.Triplet, SpaceCenter.ReferenceFrame, float, boolean) (Java method)</a>
 </li>
       <li><a href="java/api/ui/canvas.html#krpc.client.services.UI.Canvas.addDropdown(boolean)">addDropdown(boolean) (Java method)</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.addDropdown(boolean)">[1]</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Event.addEndCallback(java.util.function.Consumer)">addEndCallback(java.util.function.Consumer) (Java method)</a>, <a href="java/client.html#krpc.client.Stream.addEndCallback(java.util.function.Consumer)">[1]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.addForce(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)">addForce(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame) (Java method)</a>
 </li>
@@ -1016,10 +1024,10 @@
       </ul></li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.ascending_node">AlarmType.ascending_node (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.ascending_node">[1]</a>
 </li>
-      <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">AlarmType.closest (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">[1]</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">AlarmType.closest (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">[1]</a>
+</li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract">AlarmType.contract (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract">[1]</a>
 </li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract_auto">AlarmType.contract_auto (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract_auto">[1]</a>
@@ -6125,6 +6133,18 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6ClientD0Ev">krpc::Client::~Client (C++ function)</a>
 </li>
+      <li><a href="cpp/client.html#_CPPv4N4krpc9ConditionE">krpc::Condition (C++ class)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4N4krpc9Condition10notify_allEv">krpc::Condition::notify_all (C++ function)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4N4krpc9Condition10notify_oneEv">krpc::Condition::notify_one (C++ function)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4N4krpc9Condition4waitEv">krpc::Condition::wait (C++ function)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4I00EN4krpc9Condition8wait_forENSt9cv_statusERKNSt6chrono8durationI3Rep6PeriodEE">krpc::Condition::wait_for (C++ function)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4I00EN4krpc9Condition10wait_untilENSt9cv_statusERKNSt6chrono10time_pointI5Clock8DurationEE">krpc::Condition::wait_until (C++ function)</a>
+</li>
       <li><a href="cpp/client.html#_CPPv4N4krpc7connectERKNSt6stringERKNSt6stringEjjNSt6chrono12millisecondsE">krpc::connect (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc13connect_localERKNSt6stringERKNSt6stringERKNSt6stringE">krpc::connect_local (C++ function)</a>
@@ -6134,6 +6154,8 @@
       <li><a href="cpp/client.html#_CPPv4N4krpc5Event7acquireEv">krpc::Event::acquire (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc5Event12add_callbackERKNSt8functionIFvvEEE">krpc::Event::add_callback (C++ function)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4N4krpc5Event16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE">krpc::Event::add_end_callback (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4NK4krpc5Event13get_conditionEv">krpc::Event::get_condition (C++ function)</a>
 </li>
@@ -6151,7 +6173,7 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc5Event15remove_callbackEi">krpc::Event::remove_callback (C++ function)</a>
 </li>
-      <li><a href="cpp/client.html#_CPPv4N4krpc5Event5startEv">krpc::Event::start (C++ function)</a>
+      <li><a href="cpp/client.html#_CPPv4N4krpc5Event19remove_end_callbackEi">krpc::Event::remove_end_callback (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc5Event6streamEv">krpc::Event::stream (C++ function)</a>
 </li>
@@ -6160,6 +6182,10 @@
       <li><a href="cpp/client.html#_CPPv4N4krpc4hashE">krpc::hash (C++ class)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4I0EN4krpc10hash_valueENSt6size_tERK1T">krpc::hash_value (C++ function)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4N4krpc14RecursiveMutexE">krpc::RecursiveMutex (C++ class)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4NK4krpc14RecursiveMutex19held_by_this_threadEv">krpc::RecursiveMutex::held_by_this_thread (C++ function)</a>
 </li>
       <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5DebugE">krpc::services::Debug (C++ class)</a>
 </li>
@@ -7444,6 +7470,8 @@
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14set_game_sceneE9GameScene">krpc::services::KRPC::set_game_scene (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC10set_pausedEb">krpc::services::KRPC::set_paused (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC22StreamRemovedExceptionE">krpc::services::KRPC::StreamRemovedException (C++ class)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4TypeE">krpc::services::KRPC::Type (C++ class)</a>
 </li>
@@ -11623,6 +11651,8 @@
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text11set_contentENSt6stringE">krpc::services::UI::Text::set_content (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text8set_fontENSt6stringE">krpc::services::UI::Text::set_font (C++ function)</a>
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text16set_line_spacingEf">krpc::services::UI::Text::set_line_spacing (C++ function)</a>
@@ -11631,8 +11661,6 @@
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text9set_styleE9FontStyle">krpc::services::UI::Text::set_style (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text11set_visibleEb">krpc::services::UI::Text::set_visible (C++ function)</a>
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text13set_word_wrapEb">krpc::services::UI::Text::set_word_wrap (C++ function)</a>
@@ -11737,6 +11765,8 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6Stream12add_callbackERKNSt8functionIFv1TEEE">krpc::Stream::add_callback (C++ function)</a>
 </li>
+      <li><a href="cpp/client.html#_CPPv4N4krpc6Stream16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE">krpc::Stream::add_end_callback (C++ function)</a>
+</li>
       <li><a href="cpp/client.html#_CPPv4NK4krpc6Stream13get_conditionEv">krpc::Stream::get_condition (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4NK4krpc6Stream18get_condition_lockEv">krpc::Stream::get_condition_lock (C++ function)</a>
@@ -11757,9 +11787,9 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6Stream15remove_callbackEi">krpc::Stream::remove_callback (C++ function)</a>
 </li>
-      <li><a href="cpp/client.html#_CPPv4N4krpc6Stream8set_rateEf">krpc::Stream::set_rate (C++ function)</a>
+      <li><a href="cpp/client.html#_CPPv4N4krpc6Stream19remove_end_callbackEi">krpc::Stream::remove_end_callback (C++ function)</a>
 </li>
-      <li><a href="cpp/client.html#_CPPv4N4krpc6Stream5startEb">krpc::Stream::start (C++ function)</a>
+      <li><a href="cpp/client.html#_CPPv4N4krpc6Stream8set_rateEf">krpc::Stream::set_rate (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6Stream4waitEd">krpc::Stream::wait (C++ function)</a>
 </li>
@@ -19254,6 +19284,12 @@
         <li><a href="python/client.html#krpc.stream.Stream.remove_callback">(krpc.stream.Stream method)</a>
 </li>
       </ul></li>
+      <li><a href="python/client.html#krpc.event.Event.remove_end_callback">remove_end_callback() (krpc.event.Event method)</a>
+
+      <ul>
+        <li><a href="python/client.html#krpc.stream.Stream.remove_end_callback">(krpc.stream.Stream method)</a>
+</li>
+      </ul></li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.Control.remove_nodes">remove_nodes() (Control method)</a>, <a href="python/api/space-center/control.html#SpaceCenter.Control.remove_nodes">[1]</a>
 </li>
       <li><a href="lua/api/infernal-robotics/servo.html#InfernalRobotics.Servo.remove_preset_at">remove_preset_at() (Servo method)</a>, <a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.remove_preset_at">[1]</a>
@@ -19261,6 +19297,8 @@
       <li><a href="python/client.html#krpc.client.Client.remove_stream_update_callback">remove_stream_update_callback() (krpc.client.Client method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Event.removeCallback(int)">removeCallback(int) (Java method)</a>, <a href="java/client.html#krpc.client.Stream.removeCallback(int)">[1]</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Event.removeEndCallback(int)">removeEndCallback(int) (Java method)</a>, <a href="java/client.html#krpc.client.Stream.removeEndCallback(int)">[1]</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.removeNodes()">removeNodes() (Java method)</a>
 </li>
@@ -21325,10 +21363,10 @@
 </li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.Editor.delta_v_body">SpaceCenter.SpaceCenter.Editor.delta_v_body (attribute)</a>
 </li>
-      <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.Editor.delta_v_situation">SpaceCenter.SpaceCenter.Editor.delta_v_situation (attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.Editor.delta_v_situation">SpaceCenter.SpaceCenter.Editor.delta_v_situation (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.Editor.facility">SpaceCenter.SpaceCenter.Editor.facility (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.Editor.vessel">SpaceCenter.SpaceCenter.Editor.vessel (attribute)</a>
@@ -22795,13 +22833,9 @@
         <li><a href="python/api/drawing/line.html#Drawing.Line.start">(Line attribute)</a>
 </li>
       </ul></li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceDrain.start()">start() (Java method)</a>, <a href="java/client.html#krpc.client.Event.start()">[1]</a>, <a href="java/client.html#krpc.client.Stream.start()">[2]</a>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceDrain.start()">start() (Java method)</a>
 
       <ul>
-        <li><a href="python/client.html#krpc.event.Event.start">(krpc.event.Event method)</a>
-</li>
-        <li><a href="python/client.html#krpc.stream.Stream.start">(krpc.stream.Stream method)</a>
-</li>
         <li><a href="lua/api/space-center/parts.html#SpaceCenter.ResourceConverter.start">(ResourceConverter method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ResourceConverter.start">[1]</a>
 </li>
         <li><a href="lua/api/space-center/parts.html#SpaceCenter.ResourceDrain.start">(ResourceDrain method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ResourceDrain.start">[1]</a>
@@ -22832,8 +22866,6 @@
       <li><a href="python/api/space-center/stage.html#SpaceCenter.Stage.start_mass">start_mass (Stage attribute)</a>
 </li>
       <li><a href="python/api/drawing/orbit-path.html#Drawing.OrbitPath.start_true_anomaly">start_true_anomaly (OrbitPath attribute)</a>
-</li>
-      <li><a href="java/client.html#krpc.client.Stream.startAndWait()">startAndWait() (Java method)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Antenna.state">state (Antenna attribute)</a>
 
@@ -22929,6 +22961,12 @@
 </li>
       <li><a href="python/client.html#krpc.client.Client.stream_update_condition">stream_update_condition (krpc.client.Client attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.StreamRemovedException">StreamRemovedException (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.StreamRemovedException">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.StreamRemovedException">(Java class)</a>
+</li>
+      </ul></li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Wheel.stress">stress (Wheel attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Wheel.stress_percentage">stress_percentage (Wheel attribute)</a>

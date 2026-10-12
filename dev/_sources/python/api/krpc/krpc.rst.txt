@@ -15,8 +15,6 @@ KRPC
 
 
 
-
-
 .. module:: KRPC
 
 Main kRPC service, used by clients to interact with basic server functionality.
@@ -298,3 +296,9 @@ Main kRPC service, used by clients to interact with basic server functionality.
 .. class:: UnsupportedSceneException
 
    The procedure is not available in the current game scene.
+
+
+
+.. class:: StreamRemovedException
+
+   A stream was removed by the server, e.g. an event that has finished.

@@ -22,7 +22,6 @@ public class Callbacks {
         (Boolean x) -> {
           System.out.println("Abort 2 called with a value of " + x);
         });
-      abort.start();
 
       // Keep the program running...
       while (true) {

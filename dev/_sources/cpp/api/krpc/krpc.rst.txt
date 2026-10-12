@@ -15,8 +15,6 @@ KRPC
 
 
 
-
-
 .. namespace:: krpc::services
 .. class:: KRPC : public krpc::Service
 
@@ -270,3 +268,10 @@ KRPC
 .. class:: UnsupportedSceneException
 
    The procedure is not available in the current game scene.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: StreamRemovedException
+
+   A stream was removed by the server, e.g. an event that has finished.

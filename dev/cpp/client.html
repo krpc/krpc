@@ -888,6 +888,11 @@ clients streams are automatically stopped when it disconnects.</p>
 <p>Each stream updates on its own, so two streams read one after the other can give values from
 different physics ticks. To read several values from one physics tick, make the calls while
 holding the tick, as described in <a class="reference internal" href="../tutorials/control-loops.html#holding-a-tick"><span class="std std-ref">Holding a Tick</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A stream runs on the server until you remove it or the connection closes, even once every copy
+of the stream object is destroyed. Each call to a <code class="docutils literal notranslate"><span class="pre">_stream</span></code> function adds another stream.</p>
+</div>
 </section>
 <section id="synchronizing-with-stream-updates">
 <h2>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h2>
@@ -897,8 +902,10 @@ and <em>callbacks</em>.</p>
 <section id="condition-variables">
 <h3>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h3>
 <p>Each stream has a condition variable associated with it, that is notified whenever the value of the
-stream changes. The condition variables are instances of <code class="docutils literal notranslate"><span class="pre">std::condition_variable</span></code>. These can be
-used to block the current thread of execution until the value of the stream changes.</p>
+stream changes. The condition variables are instances of <code class="docutils literal notranslate"><span class="pre">krpc::Condition</span></code>, used like
+<code class="docutils literal notranslate"><span class="pre">std::condition_variable</span></code> over the re-entrant mutex <code class="docutils literal notranslate"><span class="pre">krpc::RecursiveMutex</span></code>. A wait releases
+every level of the thread’s lock. These can be used to block the current thread of execution until
+the value of the stream changes.</p>
 <p>The following example waits until the abort button is pressed in game, by waiting for the value of
 <a class="reference internal" href="api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control5abortEv" title="krpc::services::SpaceCenter::Control::abort"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::services::SpaceCenter::Control::abort()</span></code></a> to change to true:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
@@ -923,12 +930,6 @@ to true.</p>
 <p>The body of the loop calls <code class="docutils literal notranslate"><span class="pre">wait</span></code> on the stream, which causes the program to block until the value
 changes. This prevents the loop from ‘spinning’ and so it does not consume processing resources
 whilst waiting.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The stream does not start receiving updates until the first call to <code class="docutils literal notranslate"><span class="pre">wait</span></code>. This means that the
-example code will not miss any updates to the streams value, as it will have already locked the
-condition variable before the first stream update is received.</p>
-</div>
 </section>
 <section id="callbacks">
 <h3>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h3>
@@ -957,7 +958,6 @@ should return nothing.</p>
 
 <span class="w">  </span><span class="n">abort</span><span class="p">.</span><span class="n">add_callback</span><span class="p">(</span><span class="n">check_abort1</span><span class="p">);</span>
 <span class="w">  </span><span class="n">abort</span><span class="p">.</span><span class="n">add_callback</span><span class="p">(</span><span class="n">check_abort2</span><span class="p">);</span>
-<span class="w">  </span><span class="n">abort</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
 
 <span class="w">  </span><span class="c1">// Keep the program running...</span>
 <span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -965,21 +965,56 @@ should return nothing.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>A callback added to a stream that already has a value is called with that value straight away.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When a stream is created it does not start receiving updates until <code class="docutils literal notranslate"><span class="pre">start</span></code> is called. This is
-implicitly called when accessing the value of a stream, but as this example does not do this an
-explicit call to <code class="docutils literal notranslate"><span class="pre">start</span></code> is required.</p>
+<p>The callback function may be called from a different thread than the one that created the
+stream. Any changes to shared state must therefore be protected with appropriate
+synchronization.</p>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The callbacks are registered before the call to <code class="docutils literal notranslate"><span class="pre">start</span></code> so that stream updates are not missed.</p>
+</section>
+<section id="stream-endings">
+<h3>Stream Endings<a class="headerlink" href="#stream-endings" title="Link to this heading">#</a></h3>
+<p>The following example streams the temperature of a part until the part is destroyed:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="w"> </span><span class="n">krpc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">temperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">parts</span><span class="p">().</span><span class="n">root</span><span class="p">().</span><span class="n">temperature_stream</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">temperature</span><span class="p">.</span><span class="n">acquire</span><span class="p">();</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">temperature</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Temperature &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">temperature</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="o">::</span><span class="n">ObjectDestroyedException</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;The part was destroyed&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">temperature</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The callback function may be called from a different thread to that which created the stream. Any
-changes to shared state must therefore be protected with appropriate synchronization.</p>
+<p>Once a stream ends, reading the stream or waiting on it throws the exception that ended it. A stream
+ends when its procedure throws an exception, when the server removes it, when you remove it, or when
+the connection closes.</p>
+<p>A stream that the server removes, such as an event that has finished, ends with
+<code class="docutils literal notranslate"><span class="pre">krpc::services::KRPC::StreamRemovedException</span></code>. A stream you remove ends with
+<code class="docutils literal notranslate"><span class="pre">krpc::StreamError</span></code>, and a closed connection with <code class="docutils literal notranslate"><span class="pre">krpc::ConnectionError</span></code>.</p>
+<p>An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a></p>
 </div>
+<p>To handle an ending in a callback, add an end callback with
+<a class="reference internal" href="#_CPPv4N4krpc6Stream16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE" title="krpc::Stream::add_end_callback"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::Stream::add_end_callback()</span></code></a>. It is called once, with the exception.</p>
 </section>
 </section>
 <section id="custom-events">
@@ -1020,6 +1055,9 @@ expression returns true:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>A call to <code class="docutils literal notranslate"><span class="pre">wait</span></code> returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+<code class="docutils literal notranslate"><span class="pre">wait</span></code> return once.</p>
 </section>
 <section id="client-api-reference">
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
@@ -1085,26 +1123,27 @@ instances to invoke remote procedure calls. Instances of this class can be obtai
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4krpc6Client27get_stream_update_conditionEv">
-<span id="_CPPv3NK4krpc6Client27get_stream_update_conditionEv"></span><span id="_CPPv2NK4krpc6Client27get_stream_update_conditionEv"></span><span id="krpc::Client::get_stream_update_conditionC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">condition_variable</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_stream_update_condition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc6Client27get_stream_update_conditionEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3NK4krpc6Client27get_stream_update_conditionEv"></span><span id="_CPPv2NK4krpc6Client27get_stream_update_conditionEv"></span><span id="krpc::Client::get_stream_update_conditionC"></span><a class="reference internal" href="#_CPPv4N4krpc9ConditionE" title="krpc::Condition"><span class="n"><span class="pre">Condition</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_stream_update_condition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc6Client27get_stream_update_conditionEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>A condition variable that is notified whenever a stream update message finishes processing.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4krpc6Client32get_stream_update_condition_lockEv">
-<span id="_CPPv3NK4krpc6Client32get_stream_update_condition_lockEv"></span><span id="_CPPv2NK4krpc6Client32get_stream_update_condition_lockEv"></span><span id="krpc::Client::get_stream_update_condition_lockC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_lock</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mutex</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_stream_update_condition_lock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc6Client32get_stream_update_condition_lockEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The lock for the stream update condition variable.</p>
+<span id="_CPPv3NK4krpc6Client32get_stream_update_condition_lockEv"></span><span id="_CPPv2NK4krpc6Client32get_stream_update_condition_lockEv"></span><span id="krpc::Client::get_stream_update_condition_lockC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_lock</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc14RecursiveMutexE" title="krpc::RecursiveMutex"><span class="n"><span class="pre">RecursiveMutex</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_stream_update_condition_lock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc6Client32get_stream_update_condition_lockEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>A lock on the re-entrant mutex for the stream update condition variable. Every copy of the
+client shares the lock, so one thread at a time uses it.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client21acquire_stream_updateEv">
 <span id="_CPPv3N4krpc6Client21acquire_stream_updateEv"></span><span id="_CPPv2N4krpc6Client21acquire_stream_updateEv"></span><span id="krpc::Client::acquire_stream_update"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">acquire_stream_update</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client21acquire_stream_updateEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Acquires a lock on the mutex for the stream update condition variable.</p>
+<dd><p>Locks the mutex for the stream update condition variable.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client21release_stream_updateEv">
 <span id="_CPPv3N4krpc6Client21release_stream_updateEv"></span><span id="_CPPv2N4krpc6Client21release_stream_updateEv"></span><span id="krpc::Client::release_stream_update"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">release_stream_update</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client21release_stream_updateEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Releases the lock on the mutex for the stream update condition variable.</p>
+<dd><p>Unlocks the mutex for the stream update condition variable.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1124,8 +1163,8 @@ the operation.</p>
 processing. Returns a unique identifier for the callback which can be used to remove it.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The callback function may be called from a different thread to that which created the
-stream. Any changes to shared state must therefore be protected with appropriate
+<p>The callback function may be called from a different thread than the one that created
+the stream. Any changes to shared state must therefore be protected with appropriate
 synchronization.</p>
 </div>
 </dd></dl>
@@ -1143,20 +1182,9 @@ callback was added.</p>
 <dt class="sig sig-object cpp" id="_CPPv4I0EN4krpc6StreamE">
 <span id="_CPPv3I0EN4krpc6StreamE"></span><span id="_CPPv2I0EN4krpc6StreamE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Stream</span></span></span><a class="headerlink" href="#_CPPv4I0EN4krpc6StreamE" title="Link to this definition">#</a><br /></dt>
 <dd><p>This class represents a stream. See <a class="reference internal" href="#cpp-client-streams"><span class="std std-ref">Streaming Data</span></a>.</p>
-<p>Streams are created by calling a remove procedure with <code class="docutils literal notranslate"><span class="pre">_stream</span></code> appended to its name.</p>
-<p>Stream objects are copy constructible and assignable. A stream is removed from the server when
-all stream objects that refer to it are destroyed.</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Stream5startEb">
-<span id="_CPPv3N4krpc6Stream5startEb"></span><span id="_CPPv2N4krpc6Stream5startEb"></span><span id="krpc::Stream::start__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">wait</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream5startEb" title="Link to this definition">#</a><br /></dt>
-<dd><p>Starts the stream. When a stream is created it does not start sending updates to the client
-until this method is called.</p>
-<p>If wait is true, this method will block until at least one update has been received from the
-server.</p>
-<p>If wait is false, the method starts the stream and returns immediately. Subsequent calls to
-<code class="docutils literal notranslate"><span class="pre">operator()</span></code> may throw a <code class="docutils literal notranslate"><span class="pre">krpc::StreamError</span></code> exception.</p>
-</dd></dl>
-
+<p>Streams are created by calling a remote procedure with <code class="docutils literal notranslate"><span class="pre">_stream</span></code> appended to its name.</p>
+<p>Stream objects are copy constructible and assignable, and every copy refers to the same stream.
+Call <a class="reference internal" href="#_CPPv4N4krpc6Stream6removeEv" title="krpc::Stream::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">remove()</span></code></a> to remove the stream from the server.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4krpc6Stream4rateEv">
 <span id="_CPPv3NK4krpc6Stream4rateEv"></span><span id="_CPPv2NK4krpc6Stream4rateEv"></span><span id="krpc::Stream::rateC"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc6Stream4rateEv" title="Link to this definition">#</a><br /></dt>
@@ -1171,43 +1199,50 @@ server.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6StreamclEv">
 <span id="_CPPv3N4krpc6StreamclEv"></span><span id="_CPPv2N4krpc6StreamclEv"></span><span id="krpc::Stream::call-operator"></span><a class="reference internal" href="#_CPPv4I0EN4krpc6StreamE" title="krpc::Stream::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6StreamclEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Get the most recently received value from the stream.</p>
+<dd><p>Get the most recently received value from the stream, waiting for the first value if none has
+arrived yet. Throws the exception that ended the stream, if it has ended, such as an exception
+thrown by the remote procedure.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4krpc6Stream13get_conditionEv">
-<span id="_CPPv3NK4krpc6Stream13get_conditionEv"></span><span id="_CPPv2NK4krpc6Stream13get_conditionEv"></span><span id="krpc::Stream::get_conditionC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">condition_variable</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_condition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc6Stream13get_conditionEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>A condition variable that is notified whenever the value of the stream changes.</p>
+<span id="_CPPv3NK4krpc6Stream13get_conditionEv"></span><span id="_CPPv2NK4krpc6Stream13get_conditionEv"></span><span id="krpc::Stream::get_conditionC"></span><a class="reference internal" href="#_CPPv4N4krpc9ConditionE" title="krpc::Condition"><span class="n"><span class="pre">Condition</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_condition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc6Stream13get_conditionEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>A condition variable that is notified whenever the value of the stream changes. Every copy
+of the stream object shares it.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4krpc6Stream18get_condition_lockEv">
-<span id="_CPPv3NK4krpc6Stream18get_condition_lockEv"></span><span id="_CPPv2NK4krpc6Stream18get_condition_lockEv"></span><span id="krpc::Stream::get_condition_lockC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_lock</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mutex</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_condition_lock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc6Stream18get_condition_lockEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The lock for the condition variable.</p>
+<span id="_CPPv3NK4krpc6Stream18get_condition_lockEv"></span><span id="_CPPv2NK4krpc6Stream18get_condition_lockEv"></span><span id="krpc::Stream::get_condition_lockC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_lock</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc14RecursiveMutexE" title="krpc::RecursiveMutex"><span class="n"><span class="pre">RecursiveMutex</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_condition_lock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc6Stream18get_condition_lockEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>A lock on the re-entrant mutex for the condition variable. Each stream object has its own
+lock, used by one thread, so a thread waiting on a stream uses its own copy of the stream
+object.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6Stream7acquireEv">
 <span id="_CPPv3N4krpc6Stream7acquireEv"></span><span id="_CPPv2N4krpc6Stream7acquireEv"></span><span id="krpc::Stream::acquire"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">acquire</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream7acquireEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Acquires a lock on the mutex for the condition variable.</p>
+<dd><p>Locks the mutex for the condition variable. Every copy of the stream object shares the
+mutex, so a lock taken through one copy can be released through another.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6Stream7releaseEv">
 <span id="_CPPv3N4krpc6Stream7releaseEv"></span><span id="_CPPv2N4krpc6Stream7releaseEv"></span><span id="krpc::Stream::release"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">release</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream7releaseEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Releases the lock on the mutex for the condition variable.</p>
+<dd><p>Unlocks the mutex for the condition variable.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6Stream4waitEd">
-<span id="_CPPv3N4krpc6Stream4waitEd"></span><span id="_CPPv2N4krpc6Stream4waitEd"></span><span id="krpc::Stream::wait__double"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream4waitEd" title="Link to this definition">#</a><br /></dt>
-<dd><p>This method blocks until the value of the stream changes or the operation times out.</p>
-<p>The streams condition variable must be locked (by calling <code class="docutils literal notranslate"><span class="pre">acquire</span></code>) before calling this
-method.</p>
+<span id="_CPPv3N4krpc6Stream4waitEd"></span><span id="_CPPv2N4krpc6Stream4waitEd"></span><span id="krpc::Stream::wait__double"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream4waitEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>This method blocks until the value of the stream changes or the operation times out. Returns
+true if the value changed, and false on a timeout.</p>
+<p>The method locks the condition variable itself, unless the thread holds it. To wait for a
+change from a value you have read, call <code class="docutils literal notranslate"><span class="pre">acquire</span></code> before reading it, so that no update
+lands between the read and the wait.</p>
 <p>If <em>timeout</em> is specified and is greater than or equal to 0, it is the timeout in seconds for
-the operation.</p>
-<p>If the stream has not been started this method calls <code class="docutils literal notranslate"><span class="pre">start(false)</span></code> to start the stream
-(without waiting for at least one update to be received).</p>
+the operation. Throws the exception that ended the stream, if it ends before or during the
+wait.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1215,11 +1250,13 @@ the operation.</p>
 <span id="_CPPv3N4krpc6Stream12add_callbackERKNSt8functionIFv1TEEE"></span><span id="_CPPv2N4krpc6Stream12add_callbackERKNSt8functionIFv1TEEE"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_callback</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv4I0EN4krpc6StreamE" title="krpc::Stream::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream12add_callbackERKNSt8functionIFv1TEEE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Adds a callback function that is invoked whenever the value of the stream changes. The
 callback function should take one argument, which is passed the new value of the
-stream. Returns a unique identifier for the callback which can be used to remove it.</p>
+stream. If the stream already has a value, the callback is invoked with it straight away.
+An error from the stream does not invoke the callback. Calling the stream throws it.
+Returns a unique identifier for the callback which can be used to remove it.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The callback function may be called from a different thread to that which created the
-stream. Any changes to shared state must therefore be protected with appropriate
+<p>The callback function may be called from a different thread than the one that created
+the stream. Any changes to shared state must therefore be protected with appropriate
 synchronization.</p>
 </div>
 </dd></dl>
@@ -1232,15 +1269,33 @@ added.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Stream16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE">
+<span id="_CPPv3N4krpc6Stream16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE"></span><span id="_CPPv2N4krpc6Stream16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_end_callback</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">exception_ptr</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Adds a callback function that is invoked once when the stream ends. The callback function
+is passed the exception that ended the stream. It is invoked straight away if the stream has
+already ended. Returns a unique identifier for the callback which can be used to remove it.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Stream19remove_end_callbackEi">
+<span id="_CPPv3N4krpc6Stream19remove_end_callbackEi"></span><span id="_CPPv2N4krpc6Stream19remove_end_callbackEi"></span><span id="krpc::Stream::remove_end_callback__i"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove_end_callback</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream19remove_end_callbackEi" title="Link to this definition">#</a><br /></dt>
+<dd><p>Removes an end callback from the stream. The tag is the identifier returned when the
+callback was added.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6Stream6removeEv">
 <span id="_CPPv3N4krpc6Stream6removeEv"></span><span id="_CPPv2N4krpc6Stream6removeEv"></span><span id="krpc::Stream::remove"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream6removeEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Removes the stream from the server.</p>
+<dd><p>Removes the stream from the server. Every copy of the stream object refers to the same
+stream. Another stream added for the same call stays live.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc6StreameqERK6StreamI1TE">
 <span id="_CPPv3N4krpc6StreameqERK6StreamI1TE"></span><span id="_CPPv2N4krpc6StreameqERK6StreamI1TE"></span><span id="krpc::Stream::eq-operator__Stream:T:CR"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN4krpc6StreamE" title="krpc::Stream"><span class="n"><span class="pre">Stream</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN4krpc6StreamE" title="krpc::Stream::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6StreameqERK6StreamI1TE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Returns true if the two stream objects are bound to the same stream.</p>
+<dd><p>Returns true if the two stream objects are bound to the same stream. Each call to a
+<code class="docutils literal notranslate"><span class="pre">_stream</span></code> function adds a new stream, so two streams added for the same call are not
+equal.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1262,56 +1317,58 @@ added.</p>
 <span id="_CPPv3N4krpc5EventE"></span><span id="_CPPv2N4krpc5EventE"></span><span id="krpc::Event"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Event</span></span></span><a class="headerlink" href="#_CPPv4N4krpc5EventE" title="Link to this definition">#</a><br /></dt>
 <dd><p>This class represents an event. See <a class="reference internal" href="#cpp-client-events"><span class="std std-ref">Custom Events</span></a>. It is wrapper around a
 <code class="docutils literal notranslate"><span class="pre">Stream&lt;bool&gt;</span></code> that indicates when the event occurs.</p>
-<p>Event objects are copy constructible and assignable. An event is removed from the server when all
-event objects that refer to it are destroyed.</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc5Event5startEv">
-<span id="_CPPv3N4krpc5Event5startEv"></span><span id="_CPPv2N4krpc5Event5startEv"></span><span id="krpc::Event::start"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5Event5startEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Starts the event. When an event is created, it will not receive updates from the server until
-this method is called.</p>
-</dd></dl>
-
+<p>Event objects are copy constructible and assignable, and every copy refers to the same event.
+Call <a class="reference internal" href="#_CPPv4N4krpc5Event6removeEv" title="krpc::Event::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">remove()</span></code></a> to remove the event from the server.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4krpc5Event13get_conditionEv">
-<span id="_CPPv3NK4krpc5Event13get_conditionEv"></span><span id="_CPPv2NK4krpc5Event13get_conditionEv"></span><span id="krpc::Event::get_conditionC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">condition_variable</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_condition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc5Event13get_conditionEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The condition variable that is notified whenever the event occurs.</p>
+<span id="_CPPv3NK4krpc5Event13get_conditionEv"></span><span id="_CPPv2NK4krpc5Event13get_conditionEv"></span><span id="krpc::Event::get_conditionC"></span><a class="reference internal" href="#_CPPv4N4krpc9ConditionE" title="krpc::Condition"><span class="n"><span class="pre">Condition</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_condition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc5Event13get_conditionEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>A condition variable that is notified whenever the event occurs. Every copy of the event
+object shares it.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK4krpc5Event18get_condition_lockEv">
-<span id="_CPPv3NK4krpc5Event18get_condition_lockEv"></span><span id="_CPPv2NK4krpc5Event18get_condition_lockEv"></span><span id="krpc::Event::get_condition_lockC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_lock</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mutex</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_condition_lock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc5Event18get_condition_lockEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The lock for the condition variable.</p>
+<span id="_CPPv3NK4krpc5Event18get_condition_lockEv"></span><span id="_CPPv2NK4krpc5Event18get_condition_lockEv"></span><span id="krpc::Event::get_condition_lockC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_lock</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc14RecursiveMutexE" title="krpc::RecursiveMutex"><span class="n"><span class="pre">RecursiveMutex</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_condition_lock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc5Event18get_condition_lockEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>A lock on the re-entrant mutex for the condition variable. Each event object has its own
+lock, used by one thread, so a thread waiting on an event uses its own copy of the event
+object.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc5Event7acquireEv">
 <span id="_CPPv3N4krpc5Event7acquireEv"></span><span id="_CPPv2N4krpc5Event7acquireEv"></span><span id="krpc::Event::acquire"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">acquire</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5Event7acquireEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Acquires a lock on the mutex for the condition variable.</p>
+<dd><p>Locks the mutex for the condition variable. Every copy of the event object, and its
+underlying stream, shares the mutex.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc5Event7releaseEv">
 <span id="_CPPv3N4krpc5Event7releaseEv"></span><span id="_CPPv2N4krpc5Event7releaseEv"></span><span id="krpc::Event::release"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">release</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5Event7releaseEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Releases the lock on the mutex for the condition variable.</p>
+<dd><p>Unlocks the mutex for the condition variable.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc5Event4waitEd">
-<span id="_CPPv3N4krpc5Event4waitEd"></span><span id="_CPPv2N4krpc5Event4waitEd"></span><span id="krpc::Event::wait__double"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5Event4waitEd" title="Link to this definition">#</a><br /></dt>
-<dd><p>This method blocks until the event occurs or the operation times out.</p>
-<p>The events condition variable must be locked before calling this method.</p>
+<span id="_CPPv3N4krpc5Event4waitEd"></span><span id="_CPPv2N4krpc5Event4waitEd"></span><span id="krpc::Event::wait__double"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5Event4waitEd" title="Link to this definition">#</a><br /></dt>
+<dd><p>This method blocks until the event occurs or the operation times out. It returns straight
+away if the event has occurred since the previous call on this event object. Returns true if
+the event occurred, and false on a timeout.</p>
+<p>The method locks the condition variable itself, unless the thread holds it.</p>
 <p>If <em>timeout</em> is specified and is greater than or equal to 0, it is the timeout in seconds for
-the operation.</p>
-<p>If the event has not been started this method calls <code class="docutils literal notranslate"><span class="pre">start()</span></code> to start the underlying
-stream.</p>
+the operation. Throws the exception that ended the event, if it ends before or during the
+wait.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc5Event12add_callbackERKNSt8functionIFvvEEE">
 <span id="_CPPv3N4krpc5Event12add_callbackERKNSt8functionIFvvEEE"></span><span id="_CPPv2N4krpc5Event12add_callbackERKNSt8functionIFvvEEE"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_callback</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5Event12add_callbackERKNSt8functionIFvvEEE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Adds a callback function that is invoked whenever the event occurs. The callback function
-should be a function that takes zero arguments. Returns a unique identifier for the callback
-which can be used to remove the callback.</p>
+should be a function that takes zero arguments. If the event has occurred since the previous
+call to <code class="docutils literal notranslate"><span class="pre">wait</span></code> on this event object, and no callback was invoked for it, the callback is
+invoked once straight away. A callback added after the event has ended is not invoked for
+an earlier firing. An error from the event does not invoke the callback. Waiting on the
+event throws it. Returns a unique identifier for the callback which can be used to remove
+the callback.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1319,6 +1376,21 @@ which can be used to remove the callback.</p>
 <span id="_CPPv3N4krpc5Event15remove_callbackEi"></span><span id="_CPPv2N4krpc5Event15remove_callbackEi"></span><span id="krpc::Event::remove_callback__i"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove_callback</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5Event15remove_callbackEi" title="Link to this definition">#</a><br /></dt>
 <dd><p>Removes a callback from the event. The tag is the identifier returned when the callback was
 added.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc5Event16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE">
+<span id="_CPPv3N4krpc5Event16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE"></span><span id="_CPPv2N4krpc5Event16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_end_callback</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">exception_ptr</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5Event16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Adds a callback function that is invoked once when the event ends, with the exception that
+ended it. It is invoked straight away if the event has already ended. Returns a unique
+identifier for the callback which can be used to remove it.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc5Event19remove_end_callbackEi">
+<span id="_CPPv3N4krpc5Event19remove_end_callbackEi"></span><span id="_CPPv2N4krpc5Event19remove_end_callbackEi"></span><span id="krpc::Event::remove_end_callback__i"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove_end_callback</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5Event19remove_end_callbackEi" title="Link to this definition">#</a><br /></dt>
+<dd><p>Removes an end callback from the event. The tag is the identifier returned when the callback
+was added.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1350,6 +1422,57 @@ added.</p>
 <span id="_CPPv3N4krpc5EventcvbEv"></span><span id="_CPPv2N4krpc5EventcvbEv"></span><span id="krpc::Event::castto-b-operator"></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc5EventcvbEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns whether the event object is bound to a stream.</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc14RecursiveMutexE">
+<span id="_CPPv3N4krpc14RecursiveMutexE"></span><span id="_CPPv2N4krpc14RecursiveMutexE"></span><span id="krpc::RecursiveMutex"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RecursiveMutex</span></span></span><a class="headerlink" href="#_CPPv4N4krpc14RecursiveMutexE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The mutex of a stream’s, an event’s or the stream update’s condition variable. The thread
+holding it can lock it again, and each lock is matched by an unlock. It provides <code class="docutils literal notranslate"><span class="pre">lock</span></code>, <code class="docutils literal notranslate"><span class="pre">try_lock</span></code>, <code class="docutils literal notranslate"><span class="pre">try_lock_for</span></code>,
+<code class="docutils literal notranslate"><span class="pre">try_lock_until</span></code> and <code class="docutils literal notranslate"><span class="pre">unlock</span></code>, so it can be held with <code class="docutils literal notranslate"><span class="pre">std::unique_lock</span></code> and
+<code class="docutils literal notranslate"><span class="pre">std::lock_guard</span></code>.</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK4krpc14RecursiveMutex19held_by_this_threadEv">
+<span id="_CPPv3NK4krpc14RecursiveMutex19held_by_this_threadEv"></span><span id="_CPPv2NK4krpc14RecursiveMutex19held_by_this_threadEv"></span><span id="krpc::RecursiveMutex::held_by_this_threadC"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">held_by_this_thread</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4krpc14RecursiveMutex19held_by_this_threadEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the calling thread holds the mutex.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc9ConditionE">
+<span id="_CPPv3N4krpc9ConditionE"></span><span id="_CPPv2N4krpc9ConditionE"></span><span id="krpc::Condition"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Condition</span></span></span><a class="headerlink" href="#_CPPv4N4krpc9ConditionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The condition variable of a stream, an event or the stream update. Its <code class="docutils literal notranslate"><span class="pre">wait</span></code>, <code class="docutils literal notranslate"><span class="pre">wait_for</span></code>
+and <code class="docutils literal notranslate"><span class="pre">wait_until</span></code> take a <code class="docutils literal notranslate"><span class="pre">std::unique_lock&lt;RecursiveMutex&gt;</span></code>, with or without a predicate,
+as <code class="docutils literal notranslate"><span class="pre">std::condition_variable</span></code> does. A wait releases every lock the calling thread holds on
+the mutex, and takes them again before it returns.</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc9Condition4waitEv">
+<span id="_CPPv3N4krpc9Condition4waitEv"></span><span id="_CPPv2N4krpc9Condition4waitEv"></span><span id="krpc::Condition::wait"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc9Condition4waitEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN4krpc9Condition8wait_forENSt9cv_statusERKNSt6chrono8durationI3Rep6PeriodEE">
+<span id="_CPPv3I00EN4krpc9Condition8wait_forERKNSt6chrono8durationI3Rep6PeriodEE"></span><span id="_CPPv2I00EN4krpc9Condition8wait_forERKNSt6chrono8durationI3Rep6PeriodEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rep</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Period</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">cv_status</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_for</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">chrono</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN4krpc9Condition8wait_forENSt9cv_statusERKNSt6chrono8durationI3Rep6PeriodEE" title="krpc::Condition::wait_for::Rep"><span class="n"><span class="pre">Rep</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4krpc9Condition8wait_forENSt9cv_statusERKNSt6chrono8durationI3Rep6PeriodEE" title="krpc::Condition::wait_for::Period"><span class="n"><span class="pre">Period</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">duration</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN4krpc9Condition8wait_forENSt9cv_statusERKNSt6chrono8durationI3Rep6PeriodEE" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN4krpc9Condition10wait_untilENSt9cv_statusERKNSt6chrono10time_pointI5Clock8DurationEE">
+<span id="_CPPv3I00EN4krpc9Condition10wait_untilERKNSt6chrono10time_pointI5Clock8DurationEE"></span><span id="_CPPv2I00EN4krpc9Condition10wait_untilERKNSt6chrono10time_pointI5Clock8DurationEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Clock</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Duration</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">cv_status</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_until</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">chrono</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">time_point</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN4krpc9Condition10wait_untilENSt9cv_statusERKNSt6chrono10time_pointI5Clock8DurationEE" title="krpc::Condition::wait_until::Clock"><span class="n"><span class="pre">Clock</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN4krpc9Condition10wait_untilENSt9cv_statusERKNSt6chrono10time_pointI5Clock8DurationEE" title="krpc::Condition::wait_until::Duration"><span class="n"><span class="pre">Duration</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">deadline</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN4krpc9Condition10wait_untilENSt9cv_statusERKNSt6chrono10time_pointI5Clock8DurationEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Waits as the overloads taking a lock do, for a thread that holds the mutex through
+<code class="docutils literal notranslate"><span class="pre">acquire</span></code> or a lock of its own.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc9Condition10notify_oneEv">
+<span id="_CPPv3N4krpc9Condition10notify_oneEv"></span><span id="_CPPv2N4krpc9Condition10notify_oneEv"></span><span id="krpc::Condition::notify_one"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">notify_one</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc9Condition10notify_oneEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc9Condition10notify_allEv">
+<span id="_CPPv3N4krpc9Condition10notify_allEv"></span><span id="_CPPv2N4krpc9Condition10notify_allEv"></span><span id="krpc::Condition::notify_all"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">notify_all</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc9Condition10notify_allEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -1437,6 +1560,7 @@ any of the collection types, so a container keyed by one needs this:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-events">Custom Events</a></li>

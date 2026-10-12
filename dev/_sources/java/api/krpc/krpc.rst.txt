@@ -15,8 +15,6 @@ KRPC
 
 
 
-
-
 .. type:: public class KRPC
 
    Main kRPC service, used by clients to interact with basic server functionality.
@@ -255,3 +253,9 @@ KRPC
 .. type:: public class UnsupportedSceneException
 
    The procedure is not available in the current game scene.
+
+
+
+.. type:: public class StreamRemovedException
+
+   A stream was removed by the server, e.g. an event that has finished.

@@ -15,8 +15,6 @@ KRPC
 
 
 
-
-
 Main kRPC service, used by clients to interact with basic server functionality.
 
 
@@ -291,3 +289,9 @@ For example, the game is loading, or the vessel carrying the part is unloaded.
 Exception class UnsupportedSceneException
 
 The procedure is not available in the current game scene.
+
+
+
+Exception class StreamRemovedException
+
+A stream was removed by the server, e.g. an event that has finished.

@@ -780,11 +780,14 @@ valid encoding and is distinct from null.</p>
 <p>Streams allow the client to repeatedly execute an RPC on the server and receive its results, without
 needing to repeatedly call the RPC directly, avoiding the communication overhead that this would
 involve.</p>
-<p>A client can create a stream on the server by calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>. This
-procedure takes an optional boolean argument that controls whether the stream starts sending data to
-the client or not. If not, <a class="reference internal" href="#communication-protocol-start-stream"><span class="std std-ref">StartStream</span></a> can be called later on to
-start the stream. Once the client is finished with the stream, it can remove it from the server by
-calling <a class="reference internal" href="#communication-protocol-remove-stream"><span class="std std-ref">RemoveStream</span></a>. Streams are automatically removed when the
+<p>A client can create a stream on the server by calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>. Each
+call creates a new stream with a new identifier, including a call for the same RPC as an existing
+stream. The stream sends its first result in the update after it is added.</p>
+<p>A stream over a game object that is not loaded sends no result until the object loads. A stream over
+a procedure that is not available in the current game scene sends no result until the game returns
+to a scene where it is. An event still sends its first result, which says whether it has fired.</p>
+<p>Once the client is finished with the stream, it can remove it from the server by calling
+<a class="reference internal" href="#communication-protocol-remove-stream"><span class="std std-ref">RemoveStream</span></a>. Streams are automatically removed when the
 client that created it disconnects from the server. Streams are local to each client and there is no
 way to share a stream between clients.</p>
 <p>The RPC for each stream is invoked every <a class="reference external" href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html">fixed update</a> and the return values
@@ -794,6 +797,12 @@ since the last update that was sent, its value is omitted from the update messag
 minimize network traffic. A client can also control the rate of the stream, by specifying a target
 number of Hertz. The server computes a time delay from the target rate, and only updates the stream
 if at least that time has passed since the last time the stream was updated.</p>
+<p>The first result travels on the stream connection and the <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> response on the RPC
+connection, so the result can arrive first. The same holds for every response carrying an <code class="docutils literal notranslate"><span class="pre">Event</span></code>
+message. A client keeps the results for an identifier higher than any it has been given, and applies
+them once the response carrying that identifier arrives. The server issues identifiers in increasing
+order, so a client notes each identifier in the order the responses arrive. A result for a lower
+identifier with no stream on the client is for a stream that has ended, and is dropped.</p>
 <section id="anatomy-of-a-stream-update">
 <h3>Anatomy of a Stream Update<a class="headerlink" href="#anatomy-of-a-stream-update" title="Link to this heading">#</a></h3>
 <p>Stream updates are sent to the client using a <code class="docutils literal notranslate"><span class="pre">StreamUpdate</span></code> Protocol Buffer message with the
@@ -821,13 +830,19 @@ identical to the <code class="docutils literal notranslate"><span class="pre">Pr
 <a class="reference internal" href="#communication-protocol-anatomy-of-a-response"><span class="std std-ref">Anatomy of a Response</span></a> for details on the format and contents of this
 message.</p></li>
 </ul>
+<p>A result with its <code class="docutils literal notranslate"><span class="pre">error</span></code> field set is the last result for that stream. The server removes the
+stream after sending it, and sends nothing more for its identifier. When the server removes a stream
+itself, for example an event that has finished, the error is a <code class="docutils literal notranslate"><span class="pre">StreamRemovedException</span></code> from the
+<code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service. A stream removed by the client with <a class="reference internal" href="#communication-protocol-remove-stream"><span class="std std-ref">RemoveStream</span></a>
+gets no final result.</p>
 </section>
 </section>
 <section id="events">
 <h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
 <p>Events are a wrapper over a stream that returns a boolean value. The event is triggered when the
 stream returns true. Remote procedures that return an event return an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message that
-contains a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message describing the underlying stream for the event.</p>
+contains a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message describing the underlying stream for the event. The stream starts when
+the event is created, and its first result says whether it has fired.</p>
 <p>The format for an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message is simply the following:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Event</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">Stream</span><span class="w"> </span><span class="na">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -883,18 +898,10 @@ service provided by the server. The content of these <code class="docutils liter
 </section>
 <section id="addstream">
 <span id="communication-protocol-add-stream"></span><h3>AddStream<a class="headerlink" href="#addstream" title="Link to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> procedure adds a new stream to the server. Its first argument is the RPC to
-invoke, encoded as a <code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code> message. The second argument is a boolean value indicating
-whether the stream should start sending data to the client immediately. The procedure returns a
+<p>The <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> procedure adds a new stream to the server. Its argument is the RPC to invoke,
+encoded as a <code class="docutils literal notranslate"><span class="pre">ProcedureCall</span></code> message. The procedure returns a
 <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message describing the stream that was added. See
 <a class="reference internal" href="#communication-protocol-anatomy-of-a-request"><span class="std std-ref">Anatomy of a Request</span></a> for the format and contents of this message. See
-<a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more information on working with streams.</p>
-</section>
-<section id="startstream">
-<span id="communication-protocol-start-stream"></span><h3>StartStream<a class="headerlink" href="#startstream" title="Link to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">StartStream</span></code> procedure starts a stream sending data to a client, if it has not yet been
-started. It takes a single argument – the identifier of the stream to start. This is the identifier
-returned when the stream was added by calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>. See
 <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more information on working with streams.</p>
 </section>
 <section id="removestream">
@@ -903,6 +910,8 @@ returned when the stream was added by calling <a class="reference internal" href
 identifier of the stream to be removed. This is the identifier returned when the stream was added by
 calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>. See <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more
 information on working with streams.</p>
+<p>Removing a stream that has already ended does nothing. An identifier the server never issued raises
+<code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>. <code class="docutils literal notranslate"><span class="pre">SetStreamRate</span></code> follows the same rules.</p>
 </section>
 </section>
 <section id="service-description-message">
@@ -1364,7 +1373,6 @@ represent null on the wire.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getstatus">GetStatus</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getservices">GetServices</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addstream">AddStream</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#startstream">StartStream</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#removestream">RemoveStream</a></li>
 </ul>
 </li>
