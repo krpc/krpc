@@ -747,18 +747,19 @@ namespace TestServer
 
         [KRPCProcedure]
         public static KRPC.Service.Messages.Event OnTimerUsingLambda (uint milliseconds) {
-            bool triggered = false;
+            int triggered = 0;
             var timer = new System.Timers.Timer (milliseconds);
             timer.Elapsed += (s, e) => {
-                triggered = true;
+                Volatile.Write (ref triggered, 1);
                 timer.Enabled = false;
             };
             timer.Start();
             var evnt = new KRPC.Service.Event (
                 (KRPC.Service.Event e) => {
-                    if (triggered)
+                    var fire = Volatile.Read (ref triggered) == 1;
+                    if (fire)
                         e.Remove();
-                    return triggered;
+                    return fire;
                 });
             return evnt.Message;
         }
