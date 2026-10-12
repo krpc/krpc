@@ -765,7 +765,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "get_services",
                     "get_status",
                     "add_stream",
-                    "start_stream",
                     "set_stream_rate",
                     "remove_stream",
                     "add_event",

@@ -244,19 +244,10 @@ namespace KRPC.Service.KRPC
         /// The stream starts sending results from the next update.
         /// </remarks>
         [KRPCProcedure]
-        public static Messages.Stream AddStream (ProcedureCall call, bool start = true)
+        public static Messages.Stream AddStream (ProcedureCall call)
         {
             var callStream = new ProcedureCallStream (call);
             return new Messages.Stream (Core.Instance.AddStream (CallContext.Client, callStream, false));
-        }
-
-        /// <summary>
-        /// Start a previously added streaming request. Does nothing, as a stream starts when it
-        /// is added.
-        /// </summary>
-        [KRPCProcedure]
-        public static void StartStream (ulong id)
-        {
         }
 
         /// <summary>

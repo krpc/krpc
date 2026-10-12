@@ -1483,8 +1483,7 @@ public class StreamTest {
       throws RPCException {
     StreamManager manager = connection.streamManager;
     KRPC krpc = KRPC.newInstance(connection);
-    long id = krpc.addStream(
-        connection.getCall(TestService.class, "int32ToString", 54), true).getId();
+    long id = krpc.addStream(connection.getCall(TestService.class, "int32ToString", 54)).getId();
     manager.update(id, uint32Result(42));
     assertTrue(manager.unregistered.contains(id));
     assertTrue(manager.kept.containsKey(id));

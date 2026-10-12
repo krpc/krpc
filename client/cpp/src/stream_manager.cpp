@@ -48,7 +48,7 @@ StreamManager::~StreamManager() {
 }
 
 std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCall& call) {
-  schema::Stream stream = services::KRPC(client).add_stream(call, true);
+  schema::Stream stream = services::KRPC(client).add_stream(call);
   return get_stream(stream.id());
 }
 

@@ -517,8 +517,7 @@ function TestClient:test_krpc_service_members()
      'remove_stream',
      'set_game_scene',
      'set_paused',
-     'set_stream_rate',
-     'start_stream'})
+     'set_stream_rate'})
 end
 
 function TestClient:test_test_service_service_members()

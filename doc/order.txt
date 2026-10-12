@@ -6,7 +6,6 @@ KRPC.GetStatus
 KRPC.GetServices
 KRPC.AddStream
 KRPC.RemoveStream
-KRPC.StartStream
 KRPC.SetStreamRate
 KRPC.AddEvent
 KRPC.HoldTick
