@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service;
+using KRPC.Service.Messages;
 using NUnit.Framework;
 
 namespace KRPC.Test.Service
@@ -64,6 +65,14 @@ namespace KRPC.Test.Service
             Assert.IsTrue (stream.Changed);
             Assert.IsFalse (stream.Result.HasError);
             Assert.AreEqual (true, stream.Result.Value);
+        }
+
+        [Test]
+        public void AddEventCannotBeStreamed ()
+        {
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => new ProcedureCallStream (new ProcedureCall ("KRPC", "AddEvent")));
+            StringAssert.Contains ("KRPC.AddEvent cannot be streamed", exn.Message);
         }
     }
 }

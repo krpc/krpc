@@ -17,6 +17,10 @@ namespace KRPC.Service
             procedure = services.GetProcedureSignature (call);
             if (!procedure.HasReturnType)
                 throw new InvalidOperationException ("Cannot create a stream for a procedure that does not return a value.");
+            // Evaluating this each update would repeat its effects
+            var name = procedure.FullyQualifiedName;
+            if (name == "KRPC.AddEvent")
+                throw new KRPC.InvalidOperationException (name + " cannot be streamed.");
             arguments = services.GetArguments (procedure, call.Arguments);
             continuation = new StreamContinuation (call);
         }
