@@ -170,23 +170,22 @@ called once, with the exception.
 
 .. _csharp-client-events:
 
-Custom Events
--------------
+Events
+------
 
 Some procedures return event objects of type :type:`Event`. These allow you to wait until an event
 occurs, by calling :meth:`Event.Wait`. Under the hood, these are implemented using streams and
 condition variables.
 
-Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression ``MeanAltitude > 1000`` and then creates an event that will be triggered when the
-expression returns true:
-
-.. literalinclude:: /scripts/client/csharp/Event.cs
-
 A call to ``Wait`` returns straight away if the event has fired since the previous call on the same
 event object, so no firing is missed between two calls. Several firings between two calls make
 ``Wait`` return once.
+
+You can also create a custom event from a server side function, which is code that runs inside
+the game. The following builds the function ``MeanAltitude > 1000``, and creates an event that
+triggers when the function returns true:
+
+.. literalinclude:: /scripts/client/csharp/Event.cs
 
 Client API Reference
 --------------------
@@ -240,9 +239,8 @@ Client API Reference
 
    .. method:: KRPC.Schema.KRPC.ProcedureCall GetCall(LambdaExpression expression)
 
-      Returns a procedure call message for the given lambda expression. This allows descriptions of
-      procedure calls to be passed to the server, for example when constructing custom events. See
-      :ref:`csharp-client-events`.
+      Returns the procedure call message for a lambda expression that makes a single call. The
+      expression API's ``Expression.Call`` takes it, as in :ref:`csharp-client-events`.
 
    .. method:: void Dispose()
 

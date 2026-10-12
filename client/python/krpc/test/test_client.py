@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 import math
 import os
 import unittest
@@ -722,6 +723,25 @@ class TestClient(ServerTestCase, unittest.TestCase):
             self.conn.test_service.throw_custom_exception()
         self.assertTrue(str(cm.exception).startswith("A custom kRPC exception"))
 
+    def test_mapped_exceptions(self) -> None:
+        expression = self.conn.krpc.Expression
+        for name, error in (
+            ("NullReferenceException", TypeError),
+            ("KeyNotFoundException", KeyError),
+            ("IndexOutOfRangeException", IndexError),
+            ("DivideByZeroException", ZeroDivisionError),
+            ("NotSupportedException", NotImplementedError),
+            ("TimeoutException", TimeoutError),
+            ("OverflowException", OverflowError),
+        ):
+            function = expression.throw(
+                "KRPC", name, expression.constant_string("boom")
+            )
+            with self.assertRaises(error, msg=name) as cm:
+                self.conn.krpc.run_function(function)
+            # str of a KeyError quotes its message, so read the message itself
+            self.assertEqual("boom", cm.exception.args[0].splitlines()[0])
+
     def test_client_members(self) -> None:
         self.assertSetEqual(
             set(
@@ -765,6 +785,9 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "get_services",
                     "get_status",
                     "add_stream",
+                    "add_function_stream",
+                    "compile_function",
+                    "run_function",
                     "set_stream_rate",
                     "remove_stream",
                     "add_event",
@@ -779,14 +802,23 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "clients",
                     "Expression",
                     "Type",
+                    "TypeCode",
                     "InvalidOperationException",
                     "ArgumentException",
                     "ArgumentNullException",
                     "ArgumentOutOfRangeException",
+                    "NullReferenceException",
+                    "KeyNotFoundException",
+                    "IndexOutOfRangeException",
+                    "DivideByZeroException",
+                    "NotSupportedException",
+                    "TimeoutException",
+                    "OverflowException",
                     "ObjectDestroyedException",
                     "ObjectNotLoadedException",
                     "UnsupportedSceneException",
                     "StreamRemovedException",
+                    "Error",
                 ]
             ),
             set(x for x in dir(self.conn.krpc) if not x.startswith("_")),

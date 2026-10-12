@@ -21,7 +21,7 @@ public class CustomEvent {
       // so it can be passed to the server
       ProcedureCall meanAltitude = connection.getCall(flight, "getMeanAltitude");
 
-      // Create an expression on the server
+      // Build the function on the server
       Expression expr = Expression.greaterThan(
         connection,
         Expression.call(connection, meanAltitude),

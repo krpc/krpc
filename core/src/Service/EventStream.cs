@@ -12,6 +12,9 @@ namespace KRPC.Service
         static readonly TypeSpec BoolSpec = TypeSpec.Create (typeof(bool));
 
         Func<bool> continuation;
+        // Whether an object that is not loaded, or a procedure not available in the scene, holds
+        // the event in place of ending it
+        readonly bool canBeHeld = true;
         bool shouldRemove;
         System.Exception pendingError;
 
@@ -24,6 +27,11 @@ namespace KRPC.Service
         public EventStream (Func<bool> eventContinuation) : this ()
         {
             continuation = eventContinuation;
+        }
+
+        public EventStream (Func<bool> eventContinuation, bool canBeHeld) : this (eventContinuation)
+        {
+            this.canBeHeld = canBeHeld;
         }
 
         public override void UpdateInternal() {
@@ -41,7 +49,7 @@ namespace KRPC.Service
                 } catch (System.Exception e) {
                     // An object that is not loaded, or a procedure not available in the scene,
                     // holds the event
-                    if (Services.IsHeld (e))
+                    if (canBeHeld && Services.IsHeld (e))
                         return;
                     if (HasUnsentFiring)
                         pendingError = e;

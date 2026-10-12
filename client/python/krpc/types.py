@@ -57,6 +57,13 @@ EXCEPTION_TYPES = {
     "ArgumentException": ValueError,
     "ArgumentNullException": ValueError,
     "ArgumentOutOfRangeException": ValueError,
+    "NullReferenceException": TypeError,
+    "KeyNotFoundException": KeyError,
+    "IndexOutOfRangeException": IndexError,
+    "DivideByZeroException": ZeroDivisionError,
+    "NotSupportedException": NotImplementedError,
+    "TimeoutException": TimeoutError,
+    "OverflowException": OverflowError,
 }
 
 

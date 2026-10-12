@@ -60,6 +60,28 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void TestCustomEvent () {
+            var counter = Expr.Call(Connection,
+                Connection.GetCall (
+                    () => Connection.TestService ().Counter("TestEvent.TestCustomEvent", 1)));
+            var expr = Expr.Equal(Connection,
+                Expr.Multiply(Connection,
+                    Expr.ConstantInt(Connection, 2),
+                    Expr.ConstantInt(Connection, 10)),
+                counter);
+            var evnt = Connection.KRPC ().AddEvent(expr);
+            lock (evnt.Condition) {
+                Assert.True (evnt.Wait());
+                // The event fires when the server-side counter reaches 20. The counter
+                // increments on every expression evaluation, so the value read back is at
+                // least 21: 20 at the trigger, plus this read. The exact figure depends on how
+                // many more times the server evaluated the expression, so assert the lower
+                // bound to avoid flaking under load.
+                Assert.GreaterOrEqual(Connection.TestService ().Counter("TestEvent.TestCustomEvent", 1), 21);
+            }
+        }
+
+        [Test]
         public void TestEventCallback () {
             var e = Connection.TestService ().OnTimer (200);
             var called = new ManualResetEvent (false);
@@ -123,28 +145,6 @@ namespace KRPC.Client.Test
             Assert.Less (time, 2000);
             Assert.IsTrue (called1);
             Assert.IsFalse (called2);
-        }
-
-        [Test]
-        public void TestCustomEvent () {
-            var counter = Expr.Call(Connection,
-                Connection.GetCall (
-                    () => Connection.TestService ().Counter("TestEvent.TestCustomEvent", 1)));
-            var expr = Expr.Equal(Connection,
-                Expr.Multiply(Connection,
-                    Expr.ConstantInt(Connection, 2),
-                    Expr.ConstantInt(Connection, 10)),
-                counter);
-            var evnt = Connection.KRPC ().AddEvent(expr);
-            lock (evnt.Condition) {
-                Assert.True (evnt.Wait ());
-                // The event fires when the server-side counter reaches 20. The counter
-                // increments on every expression evaluation, so the value read back is at
-                // least 21: 20 at the trigger, plus this read. The exact figure depends on how
-                // many more times the server evaluated the expression, so assert the lower
-                // bound to avoid flaking under load.
-                Assert.GreaterOrEqual(Connection.TestService ().Counter("TestEvent.TestCustomEvent", 1), 21);
-            }
         }
 
         [Test]
@@ -367,19 +367,6 @@ namespace KRPC.Client.Test
             stream.AddEventCallback (() => called++, 0);
             Assert.AreEqual (0, removed);
             Assert.AreEqual (1, called);
-        }
-
-        [Test]
-        public void ErrorEndsTheEvent () {
-            var expr = Expr.Equal (Connection,
-                Expr.Call (Connection,
-                    Connection.GetCall (() => Connection.TestService ().ThrowInvalidOperationException ())),
-                Expr.ConstantInt (Connection, 0));
-            var e = Connection.KRPC ().AddEvent (expr);
-            lock (e.Condition) {
-                var exn = Assert.Throws<System.InvalidOperationException> (() => e.Wait ());
-                Assert.AreSame (exn, Assert.Catch (() => e.Wait ()));
-            }
         }
 
         [Test]

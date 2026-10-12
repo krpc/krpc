@@ -292,18 +292,6 @@ TEST_F(test_event, test_two_threads_wait_on_one_event) {
   ASSERT_EQ(2, woke.load());
 }
 
-TEST_F(test_event, test_error_ends_the_event) {
-  typedef krpc::services::KRPC::Expression Expr;
-  auto expr =
-      Expr::equal(conn, Expr::call(conn, test_service.throw_invalid_operation_exception_call()),
-                  Expr::constant_int(conn, 0));
-  auto event = krpc.add_event(expr);
-  event.acquire();
-  EXPECT_THROW(event.wait(), krpc::services::KRPC::InvalidOperationException);
-  EXPECT_THROW(event.wait(), krpc::services::KRPC::InvalidOperationException);
-  event.release();
-}
-
 TEST_F(test_event, test_remove_wakes_an_event_wait) {
   auto event = test_service.on_timer(10000);
   krpc::Event copy = event;

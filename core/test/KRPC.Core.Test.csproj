@@ -41,6 +41,18 @@
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="CoreTest.cs" />
     <Compile Include="ScriptedClient.cs" />
+    <Compile Include="Service\FunctionStreamTest.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.Collections.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.Exceptions.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.Mutation.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.Nulls.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.RunFunction.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.State.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.Statements.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.Strings.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.Values.cs" />
+    <Compile Include="Service\KRPC\TypeTest.cs" />
     <Compile Include="StreamUpdateTest.cs" />
     <Compile Include="TickHoldTest.cs" />
     <Compile Include="UpdateEventsTest.cs" />
@@ -85,7 +97,6 @@
     <Compile Include="Service\GameStateTest.cs" />
     <Compile Include="Service\ITestService.cs" />
     <Compile Include="Service\InvalidExtensions.cs" />
-    <Compile Include="Service\KRPC\ExpressionTest.cs" />
     <Compile Include="Service\KRPC\KRPCTest.cs" />
     <Compile Include="Service\MessageAssert.cs" />
     <Compile Include="Service\MortalObject.cs" />

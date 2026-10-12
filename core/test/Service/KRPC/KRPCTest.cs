@@ -30,9 +30,9 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (5, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (72, service.Procedures.Count);
+            Assert.AreEqual (171, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
-            Assert.AreEqual (1, service.Enumerations.Count);
+            Assert.AreEqual (2, service.Enumerations.Count);
 
             int foundProcedures = 0;
             foreach (var proc in service.Procedures) {
@@ -154,6 +154,30 @@ namespace KRPC.Test.Service.KRPC
                 } else if (exception.Name == "ArgumentOutOfRangeException") {
                     MessageAssert.HasDocumentation (exception,
                         "<doc>\n<summary>\nThe value of an argument is outside the allowable range of values as defined by the invoked method.\n</summary>\n</doc>");
+                } else if (exception.Name == "NullReferenceException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA value was null where its type does not allow one.\n</summary>\n</doc>");
+                } else if (exception.Name == "KeyNotFoundException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA key was not found in a dictionary.\n</summary>\n</doc>");
+                } else if (exception.Name == "IndexOutOfRangeException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nAn index was outside the bounds of a collection, string or array.\n</summary>\n</doc>");
+                } else if (exception.Name == "DivideByZeroException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nAn integer was divided by zero.\n</summary>\n</doc>");
+                } else if (exception.Name == "NotSupportedException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA method was invoked that is not supported.\n</summary>\n</doc>");
+                } else if (exception.Name == "TimeoutException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nAn operation did not complete in the time allotted to it.\n</summary>\n</doc>");
+                } else if (exception.Name == "OverflowException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nAn arithmetic or conversion operation overflowed.\n</summary>\n</doc>");
+                } else if (exception.Name == "Error") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA general error, described by its message.\n</summary>\n</doc>");
                 } else if (exception.Name == "ObjectDestroyedException") {
                     MessageAssert.HasDocumentation (exception,
                         "<doc>\n<summary>\nThe game object that a service object refers to no longer exists,\nso the object cannot be used. For example, the part it represents\nwas destroyed, or the vessel it belongs to was recovered.\n</summary>\n</doc>");
@@ -169,7 +193,7 @@ namespace KRPC.Test.Service.KRPC
                 }
                 foundExceptions++;
             }
-            Assert.AreEqual (8, foundExceptions);
+            Assert.AreEqual (16, foundExceptions);
         }
 
         [Test]

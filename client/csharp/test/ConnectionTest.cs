@@ -574,6 +574,27 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void MappedExceptions ()
+        {
+            var cases = new Dictionary<string, System.Type> {
+                { "NullReferenceException", typeof (System.NullReferenceException) },
+                { "KeyNotFoundException", typeof (System.Collections.Generic.KeyNotFoundException) },
+                { "IndexOutOfRangeException", typeof (System.IndexOutOfRangeException) },
+                { "DivideByZeroException", typeof (System.DivideByZeroException) },
+                { "NotSupportedException", typeof (System.NotSupportedException) },
+                { "TimeoutException", typeof (System.TimeoutException) },
+                { "OverflowException", typeof (System.OverflowException) }
+            };
+            foreach (var entry in cases) {
+                var function = Expression.Throw (
+                    Connection, "KRPC", entry.Key,
+                    Expression.ConstantString (Connection, "boom"));
+                var exn = Assert.Throws (entry.Value, () => Connection.KRPC ().RunFunction (function), entry.Key);
+                Assert.That (exn.Message, Does.StartWith ("boom"));
+            }
+        }
+
+        [Test]
         public void InvalidOperationException ()
         {
             var exn = Assert.Throws<System.InvalidOperationException> (() => Connection.TestService ().ThrowInvalidOperationException ());

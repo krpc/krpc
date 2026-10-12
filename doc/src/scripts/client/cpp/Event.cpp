@@ -13,7 +13,7 @@ int main() {
   // so it can be passed to the server
   auto mean_altitude = flight.mean_altitude_call();
 
-  // Create an expression on the server
+  // Build the function on the server
   typedef krpc::services::KRPC::Expression Expr;
   auto expr = Expr::greater_than(conn,
     Expr::call(conn, mean_altitude),

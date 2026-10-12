@@ -124,9 +124,21 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
+        public static double? EchoNullableDouble (double? x)
+        {
+            return Service.EchoNullableDouble (x);
+        }
+
+        [KRPCProcedure]
         public static TestEnum? EchoNullableEnum (TestEnum? x)
         {
             return Service.EchoNullableEnum (x);
+        }
+
+        [KRPCProcedure]
+        public static global::KRPC.Service.Messages.Event CreateEvent ()
+        {
+            return Service.CreateEvent ();
         }
 
         [KRPCProcedure (Nullable = true)]

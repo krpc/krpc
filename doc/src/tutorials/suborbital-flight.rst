@@ -245,9 +245,9 @@ jettison the boosters:
          :lines: 16-24
 
 In this bit of code, ``vessel.resources`` returns a :class:`Resources` object that is used to get
-information about the resources in the rocket. The code creates the expression
-``vessel.resources.amount('SolidFuel') < 0.1`` on the server, using the expression API. This
-expression is then used to drive an event, which is triggered when the expression returns true.
+information about the resources in the rocket. The code builds the server side function
+``vessel.resources.amount('SolidFuel') < 0.1``, and creates an event from it. The event triggers
+when the function returns true.
 
 Part Three: Reaching Apoapsis
 -----------------------------

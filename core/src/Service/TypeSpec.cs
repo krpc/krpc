@@ -75,6 +75,128 @@ namespace KRPC.Service
             return Build (type, nullable, pathList, location);
         }
 
+        /// <summary>
+        /// A spec for the given type, built from the specs of the values it contains, in the
+        /// order <see cref="Types"/> gives them. The declared type of each must be the type
+        /// its position holds.
+        /// </summary>
+        public static TypeSpec Create (Type type, bool nullable, IList<TypeSpec> containedTypes)
+        {
+            var declaredType = type;
+            var underlyingType = System.Nullable.GetUnderlyingType (type);
+            if (underlyingType != null) {
+                type = underlyingType;
+                nullable = true;
+            }
+            if (nullable && !TypeUtils.CanBeNull (declaredType))
+                throw new ArgumentException (declaredType + " cannot be null");
+            var positions = PositionsOf (type);
+            if (positions.Count != containedTypes.Count)
+                throw new ArgumentException (
+                    type + " contains " + positions.Count + " values, not " + containedTypes.Count);
+            for (int i = 0; i < positions.Count; i++) {
+                if (positions [i].Value != containedTypes [i].DeclaredType)
+                    throw new ArgumentException (
+                        type + " holds a " + positions [i].Value + " where " +
+                        containedTypes [i].DeclaredType + " was given");
+            }
+            return new TypeSpec (type, declaredType, nullable, containedTypes.ToArray ());
+        }
+
+        /// <summary>
+        /// A spec for the given type, nullable at each position where the given spec is and
+        /// the type can hold a null. The two need not be the same type, so a value converted
+        /// to another type keeps the nullability of the positions the conversion leaves alone.
+        /// </summary>
+        public static TypeSpec Create (Type type, TypeSpec like)
+        {
+            var positions = PositionsOf (System.Nullable.GetUnderlyingType (type) ?? type);
+            var containedTypes = new TypeSpec [positions.Count];
+            for (int i = 0; i < positions.Count; i++) {
+                var position = positions [i].Value;
+                containedTypes [i] = like.types.Length == positions.Count
+                    ? Create (position, like.types [i])
+                    : Create (position);
+            }
+            var nullable = like.Nullable && TypeUtils.CanBeNull (type);
+            return Create (type, nullable, containedTypes);
+        }
+
+        /// <summary>
+        /// The same type, nullable or not at the outermost position. A value type moves
+        /// between T and Nullable&lt;T&gt;.
+        /// </summary>
+        public TypeSpec WithNullable (bool nullable)
+        {
+            if (nullable == Nullable)
+                return this;
+            var declaredType = Type;
+            if (nullable && Type.IsValueType)
+                declaredType = typeof(Nullable<>).MakeGenericType (Type);
+            return new TypeSpec (Type, declaredType, nullable, types);
+        }
+
+        /// <summary>
+        /// A spec nullable at each position where either of the given ones is. Both must
+        /// describe the same type, apart from a value type nullable in only one of them.
+        /// </summary>
+        public static TypeSpec Join (TypeSpec a, TypeSpec b)
+        {
+            if (a.Type != b.Type || a.types.Length != b.types.Length)
+                throw new ArgumentException ("Cannot join " + a.DeclaredType + " and " + b.DeclaredType);
+            if (a.Equals (b))
+                return a;
+            var containedTypes = new TypeSpec [a.types.Length];
+            for (int i = 0; i < containedTypes.Length; i++)
+                containedTypes [i] = Join (a.types [i], b.types [i]);
+            var nullable = a.Nullable || b.Nullable;
+            var declaredType = nullable ? (a.Nullable ? a.DeclaredType : b.DeclaredType) : a.DeclaredType;
+            return Create (declaredType, nullable, containedTypes);
+        }
+
+        /// <summary>
+        /// Whether no position is nullable in this spec that is not nullable in the given one.
+        /// </summary>
+        public bool IsNoMoreNullableThan (TypeSpec other)
+        {
+            if (Nullable && !other.Nullable)
+                return false;
+            if (types.Length != other.types.Length)
+                return true;
+            for (int i = 0; i < types.Length; i++) {
+                if (!types [i].IsNoMoreNullableThan (other.types [i]))
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Whether the given object is a spec for the same type, nullable at the same positions.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            var other = obj as TypeSpec;
+            if (ReferenceEquals (other, null) || DeclaredType != other.DeclaredType ||
+                Nullable != other.Nullable || types.Length != other.types.Length)
+                return false;
+            for (int i = 0; i < types.Length; i++) {
+                if (!types [i].Equals (other.types [i]))
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// A hash of the type and the positions that are nullable.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            var hash = DeclaredType.GetHashCode () * 31 + (Nullable ? 1 : 0);
+            foreach (var type in types)
+                hash = hash * 31 + type.GetHashCode ();
+            return hash;
+        }
+
         static TypeSpec Build (
             Type type, bool nullable, IList<IList<Position>> paths, string location)
         {
@@ -174,8 +296,27 @@ namespace KRPC.Service
                     var position = i < 7 ? (Position?)(Position.Item1 + i) : null;
                     result.Add (At (position, arguments [i]));
                 }
+            } else {
+                // A lazily evaluated sequence, which a function holds until a collection is
+                // built from it, has the positions of a list
+                var element = SequenceElementType (type);
+                if (element != null)
+                    result.Add (At (Position.Element, element));
             }
             return result;
+        }
+
+        internal static Type SequenceElementType (Type type)
+        {
+            if (type.IsArray || type == typeof(string))
+                return null;
+            if (type.IsGenericType && type.GetGenericTypeDefinition () == typeof(IEnumerable<>))
+                return type.GetGenericArguments () [0];
+            foreach (var iface in type.GetInterfaces ()) {
+                if (iface.IsGenericType && iface.GetGenericTypeDefinition () == typeof(IEnumerable<>))
+                    return iface.GetGenericArguments () [0];
+            }
+            return null;
         }
 
         static KeyValuePair<Position?, Type> At (Position? position, Type type)

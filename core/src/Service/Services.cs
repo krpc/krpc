@@ -100,6 +100,27 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// The CLR exception types a client sees as the named kRPC exception: its own type,
+        /// and every type mapped onto it.
+        /// </summary>
+        public IList<Type> GetExceptionTypes (string service, string name)
+        {
+            ServiceSignature signature;
+            if (!Signatures.TryGetValue (service, out signature))
+                throw new KRPC.ArgumentException ("Service \"" + service + "\" not found");
+            ExceptionSignature exception;
+            if (!signature.Exceptions.TryGetValue (name, out exception))
+                throw new KRPC.ArgumentException (
+                    "Exception \"" + name + "\" not found in service \"" + service + "\"");
+            var type = exception.UnderlyingType;
+            var types = new List<Type> { type };
+            types.AddRange (MappedExceptionTypes
+                .Where (x => x.Value == type && x.Key != type)
+                .Select (x => x.Key));
+            return types;
+        }
+
+        /// <summary>
         /// Executes a procedure call and returns the result.
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.
@@ -162,6 +183,75 @@ namespace KRPC.Service
             if (procedure.HasReturnType)
                 CheckReturnValue (procedure, returnValue);
             return returnValue;
+        }
+
+        /// <summary>
+        /// Checks that a procedure is available in the current game scene, throwing
+        /// RPCException if not. Called from a compiled server side function before each
+        /// call to the procedure's method.
+        /// </summary>
+        public static void CheckExpressionGameScene (ProcedureSignature procedure)
+        {
+            if (procedure == null)
+                throw new ArgumentNullException (nameof (procedure));
+            if ((CallContext.GameScene & procedure.GameScene) == 0)
+                throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
+        }
+
+        /// <summary>
+        /// Whether a client sees a caught exception as the given kRPC exception type.
+        /// Called from the catch blocks of a compiled server side function.
+        /// </summary>
+        public static bool ExpressionExceptionIsNamed (System.Exception exn, Type name)
+        {
+            return Instance.GetMappedExceptionType (exn.GetType ()) == name;
+        }
+
+        /// <summary>
+        /// Checks an argument computed by a compiled server side function, throwing a
+        /// NullReferenceException if it is null. Only applied to a parameter that is not
+        /// nullable.
+        /// </summary>
+        public static T CheckExpressionArgument<T> (ProcedureSignature procedure, int position, T value)
+            where T : class
+        {
+            if (ReferenceEquals (value, null))
+                throw NullArgumentException (procedure, position);
+            return value;
+        }
+
+        /// <summary>
+        /// Checks a nullable value computed by a compiled server side function for a
+        /// parameter that is not nullable, throwing a NullReferenceException if it is null.
+        /// </summary>
+        public static T CheckExpressionValueArgument<T> (ProcedureSignature procedure, int position, T? value)
+            where T : struct
+        {
+            if (!value.HasValue)
+                throw NullArgumentException (procedure, position);
+            return value.Value;
+        }
+
+        static System.Exception NullArgumentException (ProcedureSignature procedure, int position)
+        {
+            if (procedure == null)
+                throw new ArgumentNullException (nameof (procedure));
+            var parameter = procedure.Parameters [position];
+            return new KRPC.NullReferenceException (
+                "Incorrect argument type for parameter " + parameter.Name + " in " +
+                procedure.FullyQualifiedName + ". " +
+                "Expected an argument of type " + parameter.Spec.Type + ", got null");
+        }
+
+        /// <summary>
+        /// Checks a return value produced by a procedure invoked from a compiled
+        /// server side function, throwing RPCException if it is null and the
+        /// procedure is not permitted to return null.
+        /// </summary>
+        public static void CheckExpressionReturnValue (ProcedureSignature procedure, object returnValue)
+        {
+            if (ReferenceEquals (returnValue, null))
+                CheckReturnValue (procedure, null);
         }
 
         /// <summary>

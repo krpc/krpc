@@ -14,7 +14,7 @@ class Program {
         // so it can be passed to the server
         var meanAltitude = Connection.GetCall(() => flight.MeanAltitude);
 
-        // Create an expression on the server
+        // Build the function on the server
         var expr = Expression.GreaterThan(connection,
             Expression.Call(connection, meanAltitude),
             Expression.ConstantDouble(connection, 1000));

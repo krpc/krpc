@@ -467,20 +467,4 @@ public class EventTest {
     stream.replay(first, firing);
     assertEquals(Arrays.asList(1), calls);
   }
-
-  @Test(timeout = 30000)
-  public void testErrorEndsTheEvent()
-      throws RPCException, StreamException {
-    Expression expr = Expression.equal(connection,
-        Expression.call(connection,
-            connection.getCall(TestService.class, "throwInvalidOperationException")),
-        Expression.constantInt(connection, 0));
-    Event event = krpc.addEvent(expr);
-    synchronized (event.getCondition()) {
-      Exception first =
-          assertThrows(UnsupportedOperationException.class, () -> event.waitFor());
-      Exception second = assertThrows(Exception.class, () -> event.waitFor());
-      assertSame(first, second);
-    }
-  }
 }

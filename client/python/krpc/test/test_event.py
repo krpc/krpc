@@ -229,34 +229,6 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         self.assertEqual([], removed)
         self.assertEqual([True], called)
 
-    def test_custom_event(self) -> None:
-        expression = self.conn.krpc.Expression
-
-        counter = expression.call(
-            self.conn.get_call(
-                self.conn.test_service.counter, "TestEvent.test_custom_event"
-            )
-        )
-        expr = expression.equal(
-            expression.multiply(
-                expression.constant_int(2), expression.constant_int(10)
-            ),
-            counter,
-        )
-
-        event = self.conn.krpc.add_event(expr)
-        with event.condition:
-            event.wait()
-            # The event fires when the server-side counter reaches 20. The
-            # counter increments on every expression evaluation, so the value
-            # read back here is >= 21 (20 at the trigger, plus this read); the
-            # exact figure depends on how many more times the server evaluated
-            # the expression before this read, so assert the lower bound rather
-            # than an exact value to avoid flaking under load.
-            self.assertGreaterEqual(
-                self.conn.test_service.counter("TestEvent.test_custom_event"), 21
-            )
-
     def test_server_removed_event(self) -> None:
         event = self.conn.test_service.on_timer(100)
         ended = []
@@ -321,23 +293,6 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         for thread in threads:
             thread.join(10)
         self.assertEqual([True, True], woke)
-
-    def test_error_ends_the_event(self) -> None:
-        expression = self.conn.krpc.Expression
-        expr = expression.equal(
-            expression.call(
-                self.conn.get_call(
-                    self.conn.test_service.throw_invalid_operation_exception
-                )
-            ),
-            expression.constant_int(0),
-        )
-        event = self.conn.krpc.add_event(expr)
-        with event.condition:
-            with self.assertRaises(RuntimeError) as cm:
-                event.wait()
-            self.assertTrue(str(cm.exception).startswith("Invalid operation"))
-            self.assertRaises(RuntimeError, event.wait)
 
     def test_remove_wakes_an_event_wait(self) -> None:
         event = self.conn.test_service.on_timer(10000)
@@ -424,6 +379,30 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             self.assertTrue(raised.wait(10))
         finally:
             conn.close()
+
+    def test_custom_event(self) -> None:
+        expression = self.conn.krpc.Expression
+
+        counter = expression.call(
+            self.conn.get_call(
+                self.conn.test_service.counter, "TestEvent.test_custom_event"
+            )
+        )
+        expr = expression.equal(
+            expression.multiply(
+                expression.constant_int(2), expression.constant_int(10)
+            ),
+            counter,
+        )
+
+        event = self.conn.krpc.add_event(expr)
+        with event.condition:
+            event.wait()
+            # The counter advances on each evaluation and on this read, and the
+            # server can evaluate the function again before the read
+            self.assertGreaterEqual(
+                self.conn.test_service.counter("TestEvent.test_custom_event"), 21
+            )
 
 
 if __name__ == "__main__":

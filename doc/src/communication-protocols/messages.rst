@@ -191,9 +191,11 @@ Streams allow the client to repeatedly execute an RPC on the server and receive 
 needing to repeatedly call the RPC directly, avoiding the communication overhead that this would
 involve.
 
-A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`. Each
-call creates a new stream with a new identifier, including a call for the same RPC as an existing
-stream. The stream sends its first result in the update after it is added.
+A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`, or
+stream the value of a server side function by calling
+:ref:`communication-protocol-add-function-stream`. Each call creates a new stream with a new
+identifier, including a call for the same RPC or function as an existing stream. The stream sends
+its first result in the update after it is added.
 
 A stream over a game object that is not loaded sends no result until the object loads. A stream over
 a procedure that is not available in the current game scene sends no result until the game returns
@@ -246,7 +248,8 @@ format:
 The fields are:
 
 * ``id`` - The identifier of the stream. This is the value returned by
-  :ref:`communication-protocol-add-stream` when the stream is created.
+  :ref:`communication-protocol-add-stream` or :ref:`communication-protocol-add-function-stream`
+  when the stream is created.
 
 * ``result`` - A ``ProcedureResult`` message containing the result of the streams RPC. This is
   identical to the ``ProcedureResult`` message returned when calling the RPC directly. See
@@ -345,6 +348,49 @@ encoded as a ``ProcedureCall`` message. The procedure returns a
 :ref:`communication-protocol-anatomy-of-a-request` for the format and contents of this message. See
 :ref:`communication-protocol-streams` for more information on working with streams.
 
+.. _communication-protocol-add-function-stream:
+
+AddFunctionStream
+^^^^^^^^^^^^^^^^^
+
+The ``AddFunctionStream`` procedure adds a stream that evaluates a server side function on
+each update. Its argument is the function, built using the ``KRPC.Expression`` class.
+
+The procedure returns a ``Stream`` message describing the stream that was added. The stream's
+values have the type given by the function's ``ReturnType`` property. The function must take no
+parameters. Any exception from the function ends the stream with that error, including one for a
+game object that is not loaded.
+
+.. _communication-protocol-run-function:
+
+RunFunction
+^^^^^^^^^^^
+
+The ``RunFunction`` procedure evaluates a server side function once, within a single physics
+tick, and returns the value it produces. Its first argument is the function, built using the
+``KRPC.Expression`` class. The value is returned as a ``bytes`` result holding the value's
+ordinary encoding, at the function's return type.
+
+The second argument is a list of the function's arguments, one per parameter of a function built
+with ``Expression.Lambda``. Each holds the value's ordinary encoding at the type given by the
+function's ``ParameterTypes`` property, and is null for a null value. A function that is not a
+lambda takes no arguments, and the list defaults to empty.
+
+A client decodes the result at the type given by the function's ``ReturnType`` property. A
+function that produces no value returns an empty result, and a function whose value is null sets
+``is_null`` on the result, the same flag any nullable return value uses. The function's
+``HasReturnType`` property distinguishes no value from an empty collection, as both give an
+empty result.
+
+.. _communication-protocol-compile-function:
+
+CompileFunction
+^^^^^^^^^^^^^^^
+
+The ``CompileFunction`` procedure compiles a server side function, and returns nothing. The
+server otherwise compiles a function when it is first run, streamed or added as an event, on the
+game's main thread. Compiling a large function in advance keeps that time out of its first run.
+
 .. _communication-protocol-remove-stream:
 
 RemoveStream
@@ -352,8 +398,8 @@ RemoveStream
 
 The ``RemoveStream`` procedure removes a stream from the server. It takes a single argument -- the
 identifier of the stream to be removed. This is the identifier returned when the stream was added by
-calling :ref:`communication-protocol-add-stream`. See :ref:`communication-protocol-streams` for more
-information on working with streams.
+calling :ref:`communication-protocol-add-stream` or :ref:`communication-protocol-add-function-stream`.
+See :ref:`communication-protocol-streams` for more information on working with streams.
 
 Removing a stream that has already ended does nothing. An identifier the server never issued raises
 ``KRPC.ArgumentException``. ``SetStreamRate`` follows the same rules.

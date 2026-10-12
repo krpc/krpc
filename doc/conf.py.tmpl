@@ -166,6 +166,7 @@ nitpick_ignore = [
     ('c:identifier', 'krpc_schema_ProcedureCall'),
     ('c:identifier', 'krpc_schema_Status'),
     ('c:identifier', 'krpc_schema_Services'),
+    ('c:identifier', 'krpc_schema_Stream'),
     ('c:identifier', 'krpc_tuple_double_double_t'),
     ('c:identifier', 'krpc_tuple_double_double_double_t'),
     ('c:identifier', 'krpc_tuple_double_double_double_double_t'),
@@ -188,6 +189,8 @@ nitpick_ignore = [
     ('c:identifier', 'krpc_dictionary_string_float_t'),
     ('c:identifier', 'krpc_dictionary_string_int32_t'),
     ('c:identifier', 'krpc_dictionary_string_object_t'),
+    ('c:identifier', 'krpc_dictionary_int32_object_t'),
+    ('c:identifier', 'krpc_list_nullable_bytes_t'),
 
     ('csharp:type', 'void'),
     ('csharp:type', 'object'),
@@ -202,6 +205,7 @@ nitpick_ignore = [
     ('csharp:type', 'KRPC.Schema.KRPC.Stream'),
 
     ('cpp:identifier', 'int32_t'),
+    ('cpp:identifier', 'int64_t'),
     ('cpp:identifier', 'uint32_t'),
     ('cpp:identifier', 'uint64_t'),
     ('cpp:identifier', 'std'),
@@ -235,6 +239,7 @@ nitpick_ignore = [
     ('java:type', 'Double,Double,Double'),
     ('java:type', 'Double,Double,Double,Double'),
     ('java:type', 'String,Expression'),
+    ('java:type', 'Integer,Expression'),
     ('java:type', 'T'),
     ('java:type', 'org'),
     ('java:type', 'java'),

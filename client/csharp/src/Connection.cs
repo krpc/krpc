@@ -724,6 +724,20 @@ namespace KRPC.Client
                     return new ArgumentNullException (string.Empty, message);
                 if (key == "KRPC.ArgumentOutOfRangeException")
                     return new ArgumentOutOfRangeException (string.Empty, message);
+                if (key == "KRPC.NullReferenceException")
+                    return new NullReferenceException (message);
+                if (key == "KRPC.KeyNotFoundException")
+                    return new KeyNotFoundException (message);
+                if (key == "KRPC.IndexOutOfRangeException")
+                    return new IndexOutOfRangeException (message);
+                if (key == "KRPC.DivideByZeroException")
+                    return new DivideByZeroException (message);
+                if (key == "KRPC.NotSupportedException")
+                    return new NotSupportedException (message);
+                if (key == "KRPC.TimeoutException")
+                    return new TimeoutException (message);
+                if (key == "KRPC.OverflowException")
+                    return new OverflowException (message);
                 System.Type exnType;
                 if (!exceptionTypes.TryGetValue (key, out exnType)) {
                     // The type is unknown here if the service it belongs to was never
