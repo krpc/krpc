@@ -60,26 +60,29 @@ public class Event implements Comparable<Event> {
   }
 
   /**
-   * Wait until the event occurs.
+   * Wait until the event occurs. Throws a StreamException if the event has been removed.
    */
   public void waitFor() throws RPCException, StreamException {
+    stream.checkNotRemoved();
     if (!stream.stream.getStarted()) {
       start();
     }
-    stream.stream.setValue(false);
+    stream.stream.setValueIfNotRemoved(false);
     while (!stream.get()) {
       stream.waitForUpdate();
     }
   }
 
   /**
-   * Wait until the event occurs, with a timeout in seconds.
+   * Wait until the event occurs, with a timeout in seconds. Throws a StreamException if the event
+   * has been removed.
    */
   public void waitForWithTimeout(double timeout) throws RPCException, StreamException {
+    stream.checkNotRemoved();
     if (!stream.stream.getStarted()) {
       start();
     }
-    stream.stream.setValue(false);
+    stream.stream.setValueIfNotRemoved(false);
     while (!stream.get()) {
       boolean origValue = stream.get();
       stream.waitForUpdateWithTimeout(timeout);

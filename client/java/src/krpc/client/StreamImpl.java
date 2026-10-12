@@ -18,6 +18,7 @@ class StreamImpl {
   private int nextCallbackTag = 0;
   private boolean started = false;
   private boolean updated = false;
+  private volatile boolean removed = false;
   private float rate = 0;
 
   StreamImpl(Connection connection, long id, Type returnType, Object updateLock) {
@@ -46,6 +47,10 @@ class StreamImpl {
     return started;
   }
 
+  public boolean getRemoved() {
+    return removed;
+  }
+
   public float getRate() {
     return rate;
   }
@@ -66,6 +71,18 @@ class StreamImpl {
     synchronized (updateLock) {
       this.value = value;
       updated = true;
+    }
+  }
+
+  /**
+   * Sets the value, unless the stream has been removed. The error remove() stores is kept.
+   */
+  public void setValueIfNotRemoved(Object value) {
+    synchronized (updateLock) {
+      if (!removed) {
+        this.value = value;
+        updated = true;
+      }
     }
   }
 
@@ -97,7 +114,18 @@ class StreamImpl {
   }
 
   public void remove() throws RPCException {
-    connection.streamManager.removeStream(id);
+    synchronized (updateLock) {
+      // A handle sharing this stream can remove it again after a new stream reuses its id
+      if (removed) {
+        return;
+      }
+      connection.streamManager.removeStream(id);
+      removed = true;
+    }
     setValue(new StreamException("Stream does not exist"));
+    // No update arrives for a removed stream, so a waiting thread is woken here
+    synchronized (condition) {
+      condition.notifyAll();
+    }
   }
 }

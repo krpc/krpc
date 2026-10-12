@@ -268,6 +268,8 @@ Client API Reference
       The ``start`` method starts the stream and returns immediately. Subsequent calls to ``get()``
       may throw a ``StreamException``.
 
+      ``startAndWait`` throws a ``StreamException`` if the stream has been removed.
+
    .. method:: float getRate()
    .. method:: void setRate(float rate)
 
@@ -280,7 +282,8 @@ Client API Reference
       ``StreamException`` if no update has been received from the server.
 
       If the stream has not been started this method calls ``startAndWait()`` to start the stream
-      and wait until at least one update has been received.
+      and wait until at least one update has been received. Throws a ``StreamException`` if the
+      stream has been removed.
 
    .. method:: Object getCondition()
 
@@ -297,13 +300,16 @@ Client API Reference
       If *timeout* is specified it is the timeout in seconds for the operation.
 
       If the stream has not been started this method calls ``start`` to start the stream (without
-      waiting for at least one update to be received).
+      waiting for at least one update to be received). Throws a ``StreamException`` if the stream
+      has been removed.
 
    .. method:: int addCallback(java.util.function.Consumer<T> callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
       stream. Returns a unique identifier for the callback which can be used to remove it.
+
+      An update that carries an error skips the callbacks. Calling ``get()`` throws the error.
 
       .. note::
 
@@ -347,7 +353,7 @@ Client API Reference
       If *timeout* is specified it is the timeout in seconds for the operation.
 
       If the event has not been started this method calls ``start()`` to start the underlying
-      stream.
+      stream. Throws a ``StreamException`` if the event has been removed.
 
    .. method:: int addCallback(java.lang.Runnable callback)
 

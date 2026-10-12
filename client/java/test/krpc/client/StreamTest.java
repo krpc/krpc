@@ -3,11 +3,14 @@ package krpc.client;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import krpc.client.services.TestService;
 import krpc.client.services.TestService.CustomException;
@@ -304,6 +307,84 @@ public class StreamTest {
     assertEquals("42", stream0.get());
     assertEquals("42", stream1.get());
     assertEquals("43", stream2.get());
+  }
+
+  @Test(timeout = 30000)
+  public void testRemovingStreamAgainThroughAnotherHandle()
+      throws RPCException, StreamException {
+    Stream<String> first = connection.addStream(TestService.class, "int32ToString", 46);
+    Stream<String> second = connection.addStream(TestService.class, "int32ToString", 46);
+    first.remove();
+    // The server can give the new stream the removed one's id
+    Stream<String> third = connection.addStream(TestService.class, "int32ToString", 46);
+    second.remove();
+    assertEquals("46", third.get());
+    third.remove();
+  }
+
+  @Test(timeout = 30000)
+  public void testCallbacksSkipAnError()
+      throws RPCException, StreamException, InterruptedException {
+    List<Throwable> uncaught = Collections.synchronizedList(new ArrayList<Throwable>());
+    Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
+    Thread.setDefaultUncaughtExceptionHandler((thread, exn) -> uncaught.add(exn));
+    try {
+      Stream<Integer> stream = connection.addStream(
+          TestService.class, "throwInvalidOperationException");
+      List<Integer> values = Collections.synchronizedList(new ArrayList<Integer>());
+      stream.addCallback((Integer value) -> values.add(value));
+      synchronized (stream.getCondition()) {
+        stream.waitForUpdate();
+      }
+      assertThrows(UnsupportedOperationException.class, () -> stream.get());
+      // The callbacks run on the update thread after it notifies the condition
+      Thread.sleep(200);
+      assertEquals(Collections.emptyList(), values);
+      assertEquals(Collections.emptyList(), uncaught);
+      stream.remove();
+    } finally {
+      Thread.setDefaultUncaughtExceptionHandler(handler);
+    }
+  }
+
+  @Test(timeout = 30000)
+  public void testRemovalWakesBlockedWait()
+      throws RPCException, StreamException, InterruptedException {
+    Event event = testService.onTimer(60000, 1);
+    Stream<String> stream = connection.addStream(TestService.class, "int32ToString", 47);
+    List<Throwable> errors = Collections.synchronizedList(new ArrayList<Throwable>());
+    Thread eventWaiter = new Thread(() -> {
+      synchronized (event.getCondition()) {
+        try {
+          event.waitFor();
+        } catch (RPCException | StreamException exn) {
+          errors.add(exn);
+        }
+      }
+    });
+    Thread streamWaiter = new Thread(() -> {
+      synchronized (stream.getCondition()) {
+        try {
+          stream.get();
+          stream.waitForUpdate();
+        } catch (RPCException | StreamException exn) {
+          errors.add(exn);
+        }
+      }
+    });
+    eventWaiter.start();
+    streamWaiter.start();
+    while (eventWaiter.getState() != Thread.State.WAITING
+        || streamWaiter.getState() != Thread.State.WAITING) {
+      Thread.sleep(10);
+    }
+    event.remove();
+    eventWaiter.join();
+    stream.remove();
+    streamWaiter.join();
+    assertEquals(2, errors.size());
+    assertTrue(errors.get(0) instanceof StreamException);
+    assertTrue(errors.get(1) instanceof StreamException);
   }
 
   @Test

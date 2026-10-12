@@ -58,14 +58,18 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Start the stream and wait for the first update.
+   * Start the stream and wait for the first update. Throws a StreamException if the stream has
+   * been removed.
    */
   public void startAndWait() throws RPCException, StreamException {
+    checkNotRemoved();
     if (stream.getStarted()) {
       return;
     }
     Object condition = stream.getCondition();
     synchronized (condition) {
+      // A removal after this check notifies under the condition, which ends the wait
+      checkNotRemoved();
       stream.start();
       try {
         condition.wait();
@@ -73,6 +77,7 @@ public class Stream<T> implements Comparable<Stream<T>> {
         throw new StreamException("wait was interrupted", exn);
       }
     }
+    checkNotRemoved();
   }
 
   /**
@@ -90,10 +95,12 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Get the most recent value for the stream.
+   * Get the most recent value for the stream. Throws a StreamException if the stream has been
+   * removed.
    */
   @SuppressWarnings("unchecked")
   public T get() throws RPCException, StreamException {
+    checkNotRemoved();
     if (!stream.getStarted()) {
       startAndWait();
     }
@@ -116,9 +123,10 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Wait until the next stream update.
+   * Wait until the next stream update. Throws a StreamException if the stream has been removed.
    */
   public void waitForUpdate() throws RPCException, StreamException {
+    checkNotRemoved();
     if (!stream.getStarted()) {
       stream.start();
     }
@@ -127,12 +135,15 @@ public class Stream<T> implements Comparable<Stream<T>> {
     } catch (InterruptedException exn) {
       throw new StreamException("wait was interrupted", exn);
     }
+    checkNotRemoved();
   }
 
   /**
-   * Wait until the next stream update, with a timeout in seconds.
+   * Wait until the next stream update, with a timeout in seconds. Throws a StreamException if
+   * the stream has been removed.
    */
   public void waitForUpdateWithTimeout(double timeout) throws RPCException, StreamException {
+    checkNotRemoved();
     if (!stream.getStarted()) {
       stream.start();
     }
@@ -144,16 +155,32 @@ public class Stream<T> implements Comparable<Stream<T>> {
     } catch (InterruptedException exn) {
       throw new StreamException("wait was interrupted", exn);
     }
+    checkNotRemoved();
   }
 
   /**
-   * Add a callback that is invoked whenever the stream is updated.
+   * Throws a StreamException if the stream has been removed.
+   */
+  void checkNotRemoved() throws StreamException {
+    if (stream.getRemoved()) {
+      throw new StreamException("Stream does not exist");
+    }
+  }
+
+  /**
+   * Add a callback that is invoked whenever the stream is updated with a value. An update that
+   * carries an error skips the callbacks, and get() throws the error.
    * Returns an integer tag for the callback which uniquely identifies it,
    * and allows it to be removed using remove_callback()
    */
   @SuppressWarnings("unchecked")
   public int addCallback(Consumer<T> callback) {
-    return stream.addCallback((Object value) -> callback.accept((T) value));
+    return stream.addCallback(
+        (Object value) -> {
+          if (!(value instanceof Error)) {
+            callback.accept((T) value);
+          }
+        });
   }
 
   /**
@@ -164,7 +191,8 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Remove the stream from the server.
+   * Remove the stream from the server. Streams for the same call share one stream on the server,
+   * so removing one removes them all.
    */
   public void remove() throws RPCException {
     stream.remove();
