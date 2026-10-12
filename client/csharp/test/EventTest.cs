@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using KRPC.Client.Services.TestService;
@@ -17,14 +19,13 @@ namespace KRPC.Client.Test
             lock (e.Condition) {
                 var timer = new Stopwatch ();
                 timer.Start ();
-                e.Wait ();
+                Assert.True (e.Wait ());
                 var time = timer.ElapsedMilliseconds;
                 // Lower bound is a correctness check: the event must not fire before its
                 // timer. The upper bound is a generous hang detector, kept loose so the test
                 // does not flake under parallel load.
                 Assert.Greater (time, 150);
                 Assert.Less (time, 2000);
-                Assert.True (e.Stream.Get ());
             }
         }
 
@@ -34,13 +35,12 @@ namespace KRPC.Client.Test
             lock (e.Condition) {
                 var timer = new Stopwatch ();
                 timer.Start ();
-                e.Wait (0.1);
+                Assert.False (e.Wait (0.1));
                 var time = timer.ElapsedMilliseconds;
                 // Wait must return on its timeout, before the 200ms event fires.
                 Assert.Greater (time, 50);
                 Assert.Less (time, 200);
-                e.Wait ();
-                Assert.True (e.Stream.Get ());
+                Assert.True (e.Wait ());
             }
         }
 
@@ -50,11 +50,10 @@ namespace KRPC.Client.Test
             lock (e.Condition) {
                 var timer = new Stopwatch ();
                 timer.Start ();
-                e.Wait (1);
+                Assert.True (e.Wait (1));
                 var time = timer.ElapsedMilliseconds;
                 Assert.Greater (time, 150);
                 Assert.Less (time, 2000);
-                Assert.True (e.Stream.Get ());
             }
         }
 
@@ -140,7 +139,7 @@ namespace KRPC.Client.Test
                 counter);
             var evnt = Connection.KRPC ().AddEvent(expr);
             lock (evnt.Condition) {
-                evnt.Wait();
+                Assert.True (evnt.Wait ());
                 // The event fires when the server-side counter reaches 20. The counter
                 // increments on every expression evaluation, so the value read back is at
                 // least 21: 20 at the trigger, plus this read. The exact figure depends on how
@@ -174,6 +173,130 @@ namespace KRPC.Client.Test
 
             Assert.AreEqual (e0.GetHashCode (), e1.GetHashCode ());
             Assert.AreNotEqual (e0.GetHashCode (), e2.GetHashCode ());
+        }
+
+        [Test]
+        public void ServerRemovedEvent () {
+            var e = Connection.TestService ().OnTimer (100);
+            var ended = new List<Exception> ();
+            var called = new ManualResetEvent (false);
+            e.AddEndCallback (exn => {
+                lock (ended)
+                    ended.Add (exn);
+                called.Set ();
+            });
+            lock (e.Condition) {
+                Assert.True (e.Wait ());
+                Assert.Throws<StreamRemovedException> (() => e.Wait ());
+                Assert.Throws<StreamRemovedException> (() => e.Wait (0.1));
+            }
+            // The end callbacks run after the waiters wake
+            Assert.True (called.WaitOne (10000));
+            lock (ended) {
+                Assert.AreEqual (1, ended.Count);
+                Assert.IsInstanceOf<StreamRemovedException> (ended [0]);
+            }
+        }
+
+        [Test]
+        public void FiringBeforeWait () {
+            var e = Connection.TestService ().OnTimer (100);
+            e.Start ();
+            Thread.Sleep (500);
+            lock (e.Condition) {
+                var timer = Stopwatch.StartNew ();
+                Assert.True (e.Wait (1));
+                Assert.Less (timer.ElapsedMilliseconds, 100);
+            }
+        }
+
+        [Test]
+        public void FiringsCoalesce () {
+            var e = Connection.TestService ().OnTimer (50, 3);
+            e.Start ();
+            Thread.Sleep (500);
+            lock (e.Condition) {
+                Assert.True (e.Wait ());
+                Assert.Throws<StreamRemovedException> (() => e.Wait ());
+            }
+        }
+
+        [Test]
+        public void TwoThreadsWaitOnOneEvent () {
+            var e = Connection.TestService ().OnTimer (1000);
+            e.Start ();
+            var woke = 0;
+            var threads = new List<Thread> ();
+            for (var i = 0; i < 2; i++) {
+                var thread = new Thread (() => {
+                    lock (e.Condition) {
+                        if (e.Wait (5))
+                            Interlocked.Increment (ref woke);
+                    }
+                });
+                thread.IsBackground = true;
+                thread.Start ();
+                threads.Add (thread);
+            }
+            foreach (var thread in threads)
+                Assert.True (thread.Join (10000));
+            Assert.AreEqual (2, woke);
+        }
+
+        [Test]
+        public void ErrorEndsTheEvent () {
+            var expr = Expr.Equal (Connection,
+                Expr.Call (Connection,
+                    Connection.GetCall (() => Connection.TestService ().ThrowInvalidOperationException ())),
+                Expr.ConstantInt (Connection, 0));
+            var e = Connection.KRPC ().AddEvent (expr);
+            lock (e.Condition) {
+                var exn = Assert.Throws<System.InvalidOperationException> (() => e.Wait ());
+                Assert.AreSame (exn, Assert.Catch (() => e.Wait ()));
+            }
+        }
+
+        [Test]
+        public void RemoveWakesAnEventWait () {
+            var e = Connection.TestService ().OnTimer (10000);
+            e.Start ();
+            var raised = new ManualResetEvent (false);
+            var thread = new Thread (() => {
+                lock (e.Condition) {
+                    try {
+                        e.Wait ();
+                    } catch (System.InvalidOperationException) {
+                        raised.Set ();
+                    }
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start ();
+            Thread.Sleep (200);
+            e.Remove ();
+            Assert.True (raised.WaitOne (10000));
+        }
+
+        [Test]
+        public void CloseWakesAnEventWait () {
+            var connection = Connect ("CSharpClientTest");
+            var e = connection.TestService ().OnTimer (10000);
+            e.Start ();
+            var raised = new ManualResetEvent (false);
+            var thread = new Thread (() => {
+                lock (e.Condition) {
+                    try {
+                        e.Wait ();
+                    } catch (ConnectionException) {
+                        raised.Set ();
+                    }
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start ();
+            Thread.Sleep (200);
+            connection.Dispose ();
+            Assert.True (raised.WaitOne (10000));
         }
     }
 }

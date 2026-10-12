@@ -97,10 +97,10 @@ namespace KRPC.Client
         /// Start the stream.
         /// </summary>
         /// <remarks>
-        /// Throws an exception if the stream has been removed.
+        /// Throws the exception that ended the stream, if it ends before or during the wait.
         /// </remarks>
         public void Start(bool wait = true) {
-            CheckNotRemoved ();
+            stream.ThrowIfEnded ();
             if (stream.Started)
                 return;
             if (!wait) {
@@ -109,9 +109,10 @@ namespace KRPC.Client
                 var condition = stream.Condition;
                 lock (condition) {
                     stream.Start();
-                    Monitor.Wait (condition);
+                    while (!stream.Updated && !stream.Ended)
+                        Monitor.Wait (condition);
+                    stream.ThrowIfEnded ();
                 }
-                CheckNotRemoved ();
             }
         }
 
@@ -127,17 +128,13 @@ namespace KRPC.Client
         /// The most recent value of the stream.
         /// </summary>
         /// <remarks>
-        /// Throws an exception if the stream has been removed.
+        /// Throws the exception that ended the stream, if it has ended.
         /// </remarks>
         public TReturnType Get () {
-            CheckNotRemoved ();
+            stream.ThrowIfEnded ();
             if (!stream.Started)
                 Start();
-            var value = stream.Value;
-            var exn = value as System.Exception;
-            if (exn != null)
-                throw exn;
-            return Convert (value);
+            return Convert (stream.Value);
         }
 
         TReturnType Convert (object value)
@@ -155,39 +152,25 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Wait until the next stream update.
+        /// Wait until the next stream update or a timeout in seconds. Returns true if the stream
+        /// updated, and false on a timeout.
         /// </summary>
         /// <remarks>
-        /// Throws an exception if the stream has been removed.
+        /// Throws the exception that ended the stream, if it ends before or during the wait.
         /// </remarks>
-        public void Wait (double timeout = -1) {
-            CheckNotRemoved ();
+        public bool Wait (double timeout = -1) {
+            stream.ThrowIfEnded ();
             if (!stream.Started)
                 stream.Start();
-            if (timeout >= 0)
-                Monitor.Wait (stream.Condition, (int)(timeout*1000.0));
-            else
-                Monitor.Wait (stream.Condition);
-            CheckNotRemoved ();
-        }
-
-        internal void CheckNotRemoved ()
-        {
-            if (stream.Removed)
-                throw new System.InvalidOperationException ("Stream does not exist");
+            var version = stream.Version;
+            return stream.Wait (() => stream.Version != version, timeout);
         }
 
         /// <summary>
         /// Add a callback that is invoked whenever the stream is updated.
         /// </summary>
-        /// <remarks>
-        /// An update that is an error is not passed to the callback. <see cref="Get"/> throws it.
-        /// </remarks>
         public int AddCallback (Action<TReturnType> callback) {
-            return stream.AddCallback ((object x) => {
-                if (!(x is System.Exception))
-                    callback (Convert (x));
-            });
+            return stream.AddCallback ((object x) => callback (Convert (x)));
         }
 
         /// <summary>
@@ -195,6 +178,24 @@ namespace KRPC.Client
         /// </summary>
         public void RemoveCallback (int tag) {
           stream.RemoveCallback (tag);
+        }
+
+        /// <summary>
+        /// Add a callback that is invoked once when the stream ends, with the exception that
+        /// ended it.
+        /// </summary>
+        /// <remarks>
+        /// The callback is invoked straight away if the stream has already ended.
+        /// </remarks>
+        public int AddEndCallback (Action<System.Exception> callback) {
+            return stream.AddEndCallback (callback);
+        }
+
+        /// <summary>
+        /// Remove an end callback, based on its tag.
+        /// </summary>
+        public void RemoveEndCallback (int tag) {
+            stream.RemoveEndCallback (tag);
         }
 
         /// <summary>

@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
 using KRPC.Client.Services.TestService;
+using Google.Protobuf;
 using NUnit.Framework;
 
 namespace KRPC.Client.Test
@@ -357,12 +360,8 @@ namespace KRPC.Client.Test
                 lock (received)
                     received.Add (value);
             });
-            // The untyped callback runs after the typed one, and is passed the error too
             var done = new ManualResetEvent (false);
-            s.stream.AddCallback (value => {
-                if (value is Exception)
-                    done.Set ();
-            });
+            s.AddEndCallback (exn => done.Set ());
             s.Start (false);
             Assert.IsTrue (done.WaitOne (30000));
             Assert.Throws<InvalidOperationException> (() => s.Get ());
@@ -479,7 +478,7 @@ namespace KRPC.Client.Test
                 () => Connection.TestService ().Counter ("StreamTest.TestWaitTimeoutShort", 10));
             lock (x.Condition) {
                 var count = x.Get ();
-                x.Wait (0);
+                Assert.False (x.Wait (0));
                 Assert.AreEqual(count, x.Get ());
             }
         }
@@ -492,7 +491,7 @@ namespace KRPC.Client.Test
                 var count = x.Get ();
                 Assert.Less(count, 10);
                 while (count < 10) {
-                    x.Wait (10);
+                    Assert.True (x.Wait (10));
                     count++;
                     Assert.AreEqual(count, x.Get ());
                 }
@@ -657,6 +656,166 @@ namespace KRPC.Client.Test
 
             Assert.AreEqual (s0.GetHashCode (), s1.GetHashCode ());
             Assert.AreNotEqual (s0.GetHashCode (), s2.GetHashCode ());
+        }
+
+        [Test]
+        public void ErrorEndsTheStream ()
+        {
+            var s = Connection.AddStream (
+                () => Connection.TestService ().ThrowInvalidOperationException ());
+            var ended = new List<Exception> ();
+            var called = new ManualResetEvent (false);
+            s.AddEndCallback (exn => {
+                lock (ended)
+                    ended.Add (exn);
+                called.Set ();
+            });
+            lock (s.Condition) {
+                Assert.Throws<InvalidOperationException> (() => s.Wait ());
+                Assert.Throws<InvalidOperationException> (() => s.Wait (1));
+            }
+            Assert.Throws<InvalidOperationException> (() => s.Get ());
+            // The end callbacks run after the waiters wake
+            Assert.IsTrue (called.WaitOne (10000));
+            lock (ended) {
+                Assert.AreEqual (1, ended.Count);
+                Assert.IsInstanceOf<InvalidOperationException> (ended [0]);
+            }
+            // Added after the end, so called straight away
+            s.AddEndCallback (exn => {
+                lock (ended)
+                    ended.Add (exn);
+            });
+            lock (ended)
+                Assert.AreEqual (2, ended.Count);
+            // Already removed by the server, so this does nothing
+            s.Remove ();
+            Assert.Throws<InvalidOperationException> (() => s.Get ());
+        }
+
+        [Test]
+        public void EndCallbackOnRemove ()
+        {
+            var s = Connection.AddStream (() => Connection.TestService ().Int32ToString (46));
+            Assert.AreEqual ("46", s.Get ());
+            var ended = new List<Exception> ();
+            s.AddEndCallback (exn => ended.Add (exn));
+            s.Remove ();
+            Assert.AreEqual (1, ended.Count);
+            Assert.IsInstanceOf<InvalidOperationException> (ended [0]);
+        }
+
+        [Test]
+        public void EndCallbackAddedAfterTheEnd ()
+        {
+            var s = Connection.AddStream (() => Connection.TestService ().Int32ToString (55));
+            s.Remove ();
+            var ended = new List<Exception> ();
+            s.AddEndCallback (exn => ended.Add (exn));
+            Assert.AreEqual (1, ended.Count);
+            Assert.IsInstanceOf<InvalidOperationException> (ended [0]);
+        }
+
+        [Test]
+        public void AValueThatFailsToDecodeEndsOnlyItsStream ()
+        {
+            var manager = Connection.StreamManager;
+            var type = TypeSpec.For (typeof (uint));
+            // Ids the server never sends a result for
+            var failing = manager.GetStream (type, 1000001);
+            var working = manager.GetStream (type, 1000002);
+            var ended = new List<Exception> ();
+            failing.AddEndCallback (exn => ended.Add (exn));
+            // A varint that never ends
+            manager.Update (1000001, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0xff) });
+            manager.Update (1000002, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x2a) });
+            Assert.AreEqual (1, ended.Count);
+            Assert.Throws<ArgumentException> (() => { var unused = failing.Value; });
+            Assert.AreEqual (42u, working.Value);
+        }
+
+        [Test]
+        public void RemoveWakesAStreamWait ()
+        {
+            var x = Connection.AddStream (() => Connection.TestService ().Int32ToString (48));
+            Assert.AreEqual ("48", x.Get ());
+            var raised = new ManualResetEvent (false);
+            var thread = new Thread (() => {
+                lock (x.Condition) {
+                    try {
+                        x.Wait ();
+                    } catch (InvalidOperationException) {
+                        raised.Set ();
+                    }
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start ();
+            Thread.Sleep (200);
+            x.Remove ();
+            Assert.IsTrue (raised.WaitOne (10000));
+        }
+
+        [Test]
+        public void CloseWakesAStreamWait ()
+        {
+            var connection = Connect ("CSharpClientTest");
+            var x = connection.AddStream (() => connection.TestService ().Int32ToString (47));
+            Assert.AreEqual ("47", x.Get ());
+            var raised = new ManualResetEvent (false);
+            var thread = new Thread (() => {
+                lock (x.Condition) {
+                    try {
+                        x.Wait ();
+                    } catch (ConnectionException) {
+                        raised.Set ();
+                    }
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start ();
+            Thread.Sleep (200);
+            connection.Dispose ();
+            Assert.IsTrue (raised.WaitOne (10000));
+            Assert.Throws<ConnectionException> (() => x.Get ());
+            // Ended by the close, so this does nothing
+            x.Remove ();
+        }
+
+        [Test]
+        public void ConnectionFailureWakesAWaitingThread ()
+        {
+            using (var connection = Connect ("CSharpClientTest")) {
+                var x = connection.AddStream (() => connection.TestService ().Int32ToString (47));
+                Assert.AreEqual ("47", x.Get ());
+                var ended = 0;
+                var called = new ManualResetEvent (false);
+                x.AddEndCallback (exn => {
+                    Interlocked.Increment (ref ended);
+                    called.Set ();
+                });
+                var raised = new ManualResetEvent (false);
+                var thread = new Thread (() => {
+                    lock (x.Condition) {
+                        try {
+                            x.Wait ();
+                        } catch (ConnectionException) {
+                            raised.Set ();
+                        }
+                    }
+                });
+                thread.IsBackground = true;
+                thread.Start ();
+                Thread.Sleep (200);
+                // Stands in for the server closing the connection
+                var field = typeof (Connection).GetField (
+                    "streamSocket", BindingFlags.NonPublic | BindingFlags.Instance);
+                ((Socket)field.GetValue (connection)).Shutdown (SocketShutdown.Both);
+                Assert.IsTrue (raised.WaitOne (10000));
+                Assert.IsTrue (called.WaitOne (10000));
+                Assert.AreEqual (1, ended);
+                Assert.Throws<ConnectionException> (() => x.Get ());
+            }
         }
     }
 }

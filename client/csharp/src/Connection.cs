@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net;
@@ -163,7 +164,7 @@ namespace KRPC.Client
                     streamReader.Buffer, streamReader.Offset, streamReader.Size);
                 if (response.Status != ConnectionResponse.Types.Status.Ok)
                     throw new ConnectionException (response.Message);
-                StreamManager = new StreamManager (this, streamReader);
+                StreamManager = new StreamManager (this, streamReader, streamSocket.Close);
             }
 
             Services.KRPC.Service.AddExceptionTypes (this);
@@ -476,7 +477,9 @@ namespace KRPC.Client
             return instanceExpr.Compile () ();
         }
 
-        readonly IDictionary<string, System.Type> exceptionTypes = new Dictionary<string, System.Type>();
+        // Read by the stream update thread while a service registers its exception types
+        readonly ConcurrentDictionary<string, System.Type> exceptionTypes =
+            new ConcurrentDictionary<string, System.Type> ();
 
         /// <summary>
         /// Add an exception type to the client.

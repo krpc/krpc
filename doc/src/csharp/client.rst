@@ -153,6 +153,23 @@ For example the following program registers two callbacks that are invoked when 
    The callback function may be called from a different thread to that which created the stream. Any
    changes to shared state must therefore be protected with appropriate synchronization.
 
+Stream Endings
+^^^^^^^^^^^^^^
+
+A stream ends when its procedure throws an exception, when the server removes it, when you remove
+it, or when the connection closes. From then on, calling ``Get`` or ``Wait`` on the stream throws the
+exception that ended it. The following example streams the temperature of a part until the part is
+destroyed:
+
+.. literalinclude:: /scripts/client/csharp/StreamEnd.cs
+
+A stream that the server removes, such as an event that has finished, ends with
+``KRPC.Client.Services.KRPC.StreamRemovedException``. A stream you remove ends with an
+``InvalidOperationException``, and a closed connection with a ``ConnectionException``.
+
+To handle an ending in a callback, add an end callback with :meth:`Stream.AddEndCallback`. It is
+called once, with the exception.
+
 .. _csharp-client-events:
 
 Custom Events
@@ -168,6 +185,10 @@ expression ``MeanAltitude > 1000`` and then creates an event that will be trigge
 expression returns true:
 
 .. literalinclude:: /scripts/client/csharp/Event.cs
+
+A call to ``Wait`` returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+``Wait`` return once.
 
 Client API Reference
 --------------------
@@ -248,7 +269,7 @@ Client API Reference
       :meth:`Get` may raise an ``InvalidOperationException`` if the stream does not yet contain a
       value.
 
-      Throws an ``InvalidOperationException`` if the stream has been removed.
+      Throws the exception that ended the stream, if it ends before or during the wait.
 
    .. property:: float Rate { get; set; }
 
@@ -256,10 +277,9 @@ Client API Reference
 
    .. method:: ReturnType Get()
 
-      Returns the most recent value for the stream. If executing the remote procedure for the stream
-      throws an exception, calling this method will rethrow the exception. Raises an
-      ``InvalidOperationException`` if no update has been received from the server, or if the
-      stream has been removed.
+      Returns the most recent value for the stream. Throws the exception that ended the stream, if
+      it has ended, such as an exception thrown by the remote procedure. Throws an
+      ``InvalidOperationException`` if no update has been received from the server.
 
       If the stream has not been started this method calls ``Start(true)`` to start the stream and
       wait until at least one update has been received.
@@ -269,14 +289,16 @@ Client API Reference
       A condition variable that is notified (using ``Monitor.PulseAll``) whenever the value of the
       stream changes.
 
-   .. method:: void Wait(double timeout = -1)
+   .. method:: bool Wait(double timeout = -1)
 
-      This method blocks until the value of the stream changes or the operation times out.
+      This method blocks until the value of the stream changes or the operation times out. Returns
+      ``true`` if the value changed, and ``false`` on a timeout.
 
       The streams condition variable must be locked before calling this method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation. Throws an ``InvalidOperationException`` if the stream has been removed.
+      the operation. Throws the exception that ended the stream, if it ends before or during the
+      wait.
 
       If the stream has not been started this method calls ``Start(false)`` to start the stream
       (without waiting for at least one update to be received).
@@ -285,8 +307,7 @@ Client API Reference
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
-      stream. Returns a unique identifier for the callback which can be used to remove it. An
-      update that is an error is not passed to the callback, and :meth:`Get` throws it.
+      stream. Returns a unique identifier for the callback which can be used to remove it.
 
       .. note::
 
@@ -298,6 +319,18 @@ Client API Reference
 
       Removes a callback from the stream. The tag is the identifier returned when the callback was
       added.
+
+   .. method:: int AddEndCallback(Action<System.Exception> callback)
+
+      Adds a callback function that is invoked once when the stream ends. The callback function
+      should take one argument, which is passed the exception that ended the stream. It is invoked
+      straight away if the stream has already ended. Returns a unique identifier for the callback
+      which can be used to remove it.
+
+   .. method:: void RemoveEndCallback(int tag)
+
+      Removes an end callback from the stream. The tag is the identifier returned when the callback
+      was added.
 
    .. method:: void Remove()
 
@@ -314,21 +347,24 @@ Client API Reference
    .. method:: void Start()
 
       Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called. Throws an ``InvalidOperationException`` if the event has been removed.
+      this method is called. Throws the exception that ended the event, if it has ended.
 
    .. property:: object Condition { get; }
 
       The condition variable that is notified (using ``Monitor.PulseAll``) whenever the event
       occurs.
 
-   .. method:: void Wait(double timeout = -1)
+   .. method:: bool Wait(double timeout = -1)
 
-      This method blocks until the event occurs or the operation times out.
+      This method blocks until the event occurs or the operation times out. It returns straight
+      away if the event has occurred since the previous call on this event object. Returns ``true``
+      if the event occurred, and ``false`` on a timeout.
 
       The events condition variable must be locked before calling this method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation. Throws an ``InvalidOperationException`` if the event has been removed.
+      the operation. Throws the exception that ended the event, if it ends before or during the
+      wait.
 
       If the event has not been started this method calls ``Start()`` to start the underlying
       stream.
@@ -343,6 +379,17 @@ Client API Reference
 
       Removes a callback from the event. The tag is the identifier returned when the callback was
       added.
+
+   .. method:: int AddEndCallback(Action<System.Exception> callback)
+
+      Adds a callback function that is invoked once when the event ends, with the exception that
+      ended it. It is invoked straight away if the event has already ended. Returns a unique
+      identifier for the callback which can be used to remove it.
+
+   .. method:: void RemoveEndCallback(int tag)
+
+      Removes an end callback from the event. The tag is the identifier returned when the callback
+      was added.
 
    .. method:: void Remove()
 
