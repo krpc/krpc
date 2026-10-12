@@ -248,6 +248,8 @@ Client API Reference
       :meth:`Get` may raise an ``InvalidOperationException`` if the stream does not yet contain a
       value.
 
+      Throws an ``InvalidOperationException`` if the stream has been removed.
+
    .. property:: float Rate { get; set; }
 
       The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
@@ -256,7 +258,8 @@ Client API Reference
 
       Returns the most recent value for the stream. If executing the remote procedure for the stream
       throws an exception, calling this method will rethrow the exception. Raises an
-      ``InvalidOperationException`` if no update has been received from the server.
+      ``InvalidOperationException`` if no update has been received from the server, or if the
+      stream has been removed.
 
       If the stream has not been started this method calls ``Start(true)`` to start the stream and
       wait until at least one update has been received.
@@ -273,7 +276,7 @@ Client API Reference
       The streams condition variable must be locked before calling this method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation.
+      the operation. Throws an ``InvalidOperationException`` if the stream has been removed.
 
       If the stream has not been started this method calls ``Start(false)`` to start the stream
       (without waiting for at least one update to be received).
@@ -282,7 +285,8 @@ Client API Reference
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
-      stream. Returns a unique identifier for the callback which can be used to remove it.
+      stream. Returns a unique identifier for the callback which can be used to remove it. An
+      update that is an error is not passed to the callback, and :meth:`Get` throws it.
 
       .. note::
 
@@ -310,7 +314,7 @@ Client API Reference
    .. method:: void Start()
 
       Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called.
+      this method is called. Throws an ``InvalidOperationException`` if the event has been removed.
 
    .. property:: object Condition { get; }
 
@@ -324,7 +328,7 @@ Client API Reference
       The events condition variable must be locked before calling this method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation.
+      the operation. Throws an ``InvalidOperationException`` if the event has been removed.
 
       If the event has not been started this method calls ``Start()`` to start the underlying
       stream.

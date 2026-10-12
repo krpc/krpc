@@ -74,13 +74,17 @@ namespace KRPC.Client
             }
         }
 
-        public void RemoveStream (ulong id)
+        /// <summary>
+        /// Remove a stream from the server, unless a stream added since has taken its id.
+        /// </summary>
+        public void RemoveStream (StreamImpl stream)
         {
             CheckDisposed ();
             lock (updateLock) {
-                if (streams.ContainsKey (id)) {
-                    connection.KRPC ().RemoveStream (id);
-                    streams.Remove (id);
+                StreamImpl registered;
+                if (streams.TryGetValue (stream.Id, out registered) && registered == stream) {
+                    connection.KRPC ().RemoveStream (stream.Id);
+                    streams.Remove (stream.Id);
                 }
             }
         }

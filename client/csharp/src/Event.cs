@@ -71,8 +71,11 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Start the event
+        /// Start the event.
         /// </summary>
+        /// <remarks>
+        /// Throws an exception if the event has been removed.
+        /// </remarks>
         public void Start() {
             stream.Start(false);
         }
@@ -87,7 +90,11 @@ namespace KRPC.Client
         /// <summary>
         /// Wait until the event occurs.
         /// </summary>
+        /// <remarks>
+        /// Throws an exception if the event has been removed.
+        /// </remarks>
         public void Wait (double timeout = -1) {
+            stream.CheckNotRemoved ();
             if (!stream.stream.Started)
                 Start();
             stream.stream.Value = false;

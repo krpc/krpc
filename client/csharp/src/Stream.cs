@@ -96,7 +96,11 @@ namespace KRPC.Client
         /// <summary>
         /// Start the stream.
         /// </summary>
+        /// <remarks>
+        /// Throws an exception if the stream has been removed.
+        /// </remarks>
         public void Start(bool wait = true) {
+            CheckNotRemoved ();
             if (stream.Started)
                 return;
             if (!wait) {
@@ -107,6 +111,7 @@ namespace KRPC.Client
                     stream.Start();
                     Monitor.Wait (condition);
                 }
+                CheckNotRemoved ();
             }
         }
 
@@ -121,15 +126,24 @@ namespace KRPC.Client
         /// <summary>
         /// The most recent value of the stream.
         /// </summary>
+        /// <remarks>
+        /// Throws an exception if the stream has been removed.
+        /// </remarks>
         public TReturnType Get () {
+            CheckNotRemoved ();
             if (!stream.Started)
                 Start();
             var value = stream.Value;
             var exn = value as System.Exception;
             if (exn != null)
                 throw exn;
+            return Convert (value);
+        }
+
+        TReturnType Convert (object value)
+        {
             if (convert != null)
-                return convert(value);
+                return convert (value);
             return (TReturnType) value;
         }
 
@@ -143,22 +157,37 @@ namespace KRPC.Client
         /// <summary>
         /// Wait until the next stream update.
         /// </summary>
+        /// <remarks>
+        /// Throws an exception if the stream has been removed.
+        /// </remarks>
         public void Wait (double timeout = -1) {
+            CheckNotRemoved ();
             if (!stream.Started)
                 stream.Start();
             if (timeout >= 0)
                 Monitor.Wait (stream.Condition, (int)(timeout*1000.0));
             else
                 Monitor.Wait (stream.Condition);
+            CheckNotRemoved ();
+        }
+
+        internal void CheckNotRemoved ()
+        {
+            if (stream.Removed)
+                throw new System.InvalidOperationException ("Stream does not exist");
         }
 
         /// <summary>
         /// Add a callback that is invoked whenever the stream is updated.
         /// </summary>
+        /// <remarks>
+        /// An update that is an error is not passed to the callback. <see cref="Get"/> throws it.
+        /// </remarks>
         public int AddCallback (Action<TReturnType> callback) {
-            if (convert != null)
-                return stream.AddCallback ((object x) => callback(convert(x)));
-            return stream.AddCallback ((object x) => callback((TReturnType)x));
+            return stream.AddCallback ((object x) => {
+                if (!(x is System.Exception))
+                    callback (Convert (x));
+            });
         }
 
         /// <summary>
@@ -171,6 +200,9 @@ namespace KRPC.Client
         /// <summary>
         /// Remove the stream from the server.
         /// </summary>
+        /// <remarks>
+        /// Streams of the same procedure call are one stream, so removing one removes them all.
+        /// </remarks>
         public void Remove ()
         {
             stream.Remove ();

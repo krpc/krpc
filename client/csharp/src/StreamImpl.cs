@@ -50,6 +50,8 @@ namespace KRPC.Client
 
         public bool Started { get; private set; }
 
+        public bool Removed { get; private set; }
+
         public object Value {
             get {
                 if (!Updated)
@@ -90,10 +92,15 @@ namespace KRPC.Client
         }
 
         public void Remove () {
-            connection.StreamManager.RemoveStream (Id);
+            connection.StreamManager.RemoveStream (this);
             lock (updateLock) {
+                Removed = true;
                 _value = new System.InvalidOperationException ("Stream does not exist");
+                Updated = true;
             }
+            // No update arrives for a removed stream, so a waiting thread is woken here
+            lock (condition)
+                Monitor.PulseAll (condition);
         }
     }
 }

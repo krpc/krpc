@@ -299,6 +299,78 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void RemoveThroughAStaleHandle ()
+        {
+            var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (44));
+            Assert.AreEqual ("44", s0.Get ());
+            s0.Remove ();
+            // The server can give the same id to the stream added again, while it removes the first
+            var s1 = Connection.AddStream (() => Connection.TestService ().Int32ToString (44));
+            s0.Remove ();
+            // Run on a thread so a regression fails here instead of hanging the suite
+            string value = null;
+            var thread = new Thread (() => value = s1.Get ());
+            thread.IsBackground = true;
+            thread.Start ();
+            Assert.IsTrue (thread.Join (30000));
+            Assert.AreEqual ("44", value);
+            Assert.Throws<InvalidOperationException> (() => s0.Get ());
+            s1.Remove ();
+        }
+
+        [Test]
+        public void StartStreamRemovedByAnotherHandle ()
+        {
+            var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (43));
+            var s1 = Connection.AddStream (() => Connection.TestService ().Int32ToString (43));
+            s0.Remove ();
+            // Run on a thread so a regression fails here instead of hanging the suite
+            Exception get = null;
+            Exception start = null;
+            var thread = new Thread (() => {
+                try {
+                    s1.Get ();
+                } catch (Exception exn) {
+                    get = exn;
+                }
+                try {
+                    s1.Start ();
+                } catch (Exception exn) {
+                    start = exn;
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start ();
+            Assert.IsTrue (thread.Join (30000));
+            Assert.IsInstanceOf<InvalidOperationException> (get);
+            Assert.IsInstanceOf<InvalidOperationException> (start);
+        }
+
+        [Test]
+        public void CallbackIsNotPassedAnError ()
+        {
+            Connection.TestService ().ResetInvalidOperationExceptionLater ();
+            var s = Connection.AddStream (
+                () => Connection.TestService ().ThrowInvalidOperationExceptionLater ());
+            var received = new List<int> ();
+            s.AddCallback (value => {
+                lock (received)
+                    received.Add (value);
+            });
+            // The untyped callback runs after the typed one, and is passed the error too
+            var done = new ManualResetEvent (false);
+            s.stream.AddCallback (value => {
+                if (value is Exception)
+                    done.Set ();
+            });
+            s.Start (false);
+            Assert.IsTrue (done.WaitOne (30000));
+            Assert.Throws<InvalidOperationException> (() => s.Get ());
+            lock (received)
+                CollectionAssert.AreEqual (new [] { 0 }, received);
+        }
+
+        [Test]
         public void AddStreamTwice ()
         {
             var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (42));
