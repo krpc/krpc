@@ -112,6 +112,11 @@ namespace KRPC.Service.KRPC
             if (!procedure.HasReturnType)
                 throw new InvalidOperationException(
                     "Cannot use a procedure that does not return a value.");
+            // Each evaluation would create a stream
+            var created = ProcedureCallStream.CreatedStreamKind(procedure);
+            if (created != null)
+                throw new InvalidOperationException(
+                    procedure.FullyQualifiedName + " returns " + created + ", and cannot be used in an expression.");
             var allArguments = services.GetArguments(procedure, call.Arguments);
             object instance = null;
             object[] arguments;

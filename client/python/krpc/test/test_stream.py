@@ -56,6 +56,11 @@ class TestStream(ServerTestCase, unittest.TestCase):
                 self.assertEqual(42, x())
                 self.wait()
 
+    def test_procedure_returning_an_event(self) -> None:
+        with self.assertRaises(RuntimeError) as cm:
+            self.conn.add_stream(self.conn.test_service.on_timer, 1000)
+        self.assertIn("returns an event, and cannot be streamed", str(cm.exception))
+
     def test_null_initial_value(self) -> None:
         """Test that the server sends a first stream update
         even if the value is null. See github issue #515"""

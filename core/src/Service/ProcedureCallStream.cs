@@ -18,12 +18,26 @@ namespace KRPC.Service
             if (!procedure.HasReturnType)
                 throw new KRPC.InvalidOperationException (
                     "Cannot create a stream for a procedure that does not return a value.");
-            // Evaluating this each update would repeat its effects
-            var name = procedure.FullyQualifiedName;
-            if (name == "KRPC.AddEvent")
-                throw new KRPC.InvalidOperationException (name + " cannot be streamed.");
+            // Each evaluation would create a stream
+            var created = CreatedStreamKind (procedure);
+            if (created != null)
+                throw new KRPC.InvalidOperationException (
+                    procedure.FullyQualifiedName + " returns " + created + ", and cannot be streamed.");
             arguments = services.GetArguments (procedure, call.Arguments);
             continuation = new StreamContinuation (call);
+        }
+
+        /// <summary>
+        /// "a stream" or "an event" if the procedure returns one, or null.
+        /// </summary>
+        internal static string CreatedStreamKind (ProcedureSignature procedure)
+        {
+            var type = procedure.ReturnSpec.Type;
+            if (type == typeof (Messages.Stream))
+                return "a stream";
+            if (type == typeof (Messages.Event))
+                return "an event";
+            return null;
         }
 
         public override bool Equals (Stream other)
