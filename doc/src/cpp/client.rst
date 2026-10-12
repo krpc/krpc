@@ -365,7 +365,8 @@ Client API Reference
    .. function:: std::unique_lock<std::mutex>& get_condition_lock() const
 
       The lock for the condition variable. Each stream object has its own lock, so a thread
-      waiting on a stream uses its own copy of the stream object.
+      waiting on a stream uses its own copy of the stream object. Locking it counts as a call to
+      ``acquire`` from the next call on the stream object.
 
    .. function:: void acquire()
 
@@ -380,8 +381,9 @@ Client API Reference
       This method blocks until the value of the stream changes or the operation times out. Returns
       true if the value changed, and false on a timeout.
 
-      The streams condition variable must be locked (by calling ``acquire``) before calling this
-      method.
+      The method locks the condition variable itself, unless the thread holds it. To wait for a
+      change from a value you have read, call ``acquire`` before reading it, so that no update
+      lands between the read and the wait.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
       the operation. Throws the exception that ended the stream, if it ends before or during the
@@ -465,7 +467,7 @@ Client API Reference
       away if the event has occurred since the previous call on this event object. Returns true if
       the event occurred, and false on a timeout.
 
-      The events condition variable must be locked before calling this method.
+      The method locks the condition variable itself, unless the thread holds it.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
       the operation. Throws the exception that ended the event, if it ends before or during the
@@ -474,9 +476,11 @@ Client API Reference
    .. function:: int add_callback(const std::function<void()>& callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments. An error from the event does not invoke the
-      callback. Waiting on the event throws it. Returns a unique identifier for the callback which
-      can be used to remove the callback.
+      should be a function that takes zero arguments. If the event has occurred since the previous
+      call to ``wait`` on this event object, and no callback was invoked for it, the callback is
+      invoked once straight away. An error from the event does not invoke the callback. Waiting on
+      the event throws it. Returns a unique identifier for the callback which can be used to
+      remove the callback.
 
    .. function:: void remove_callback(int tag)
 

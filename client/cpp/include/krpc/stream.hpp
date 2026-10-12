@@ -24,7 +24,7 @@ class Stream {
   Stream(Client* client, const schema::ProcedureCall& call);
   Stream(Client* client, uint64_t id);
   Stream(const Stream<T>& other);
-  Stream(Stream<T>&& other) noexcept = default;
+  Stream(Stream<T>&& other) noexcept;
   Stream<T>& operator=(const Stream<T>& other);
   Stream<T>& operator=(Stream<T>&& other) noexcept;
   ~Stream();
@@ -37,7 +37,8 @@ class Stream {
   T operator()();
   /** Condition variable that is notified when the stream updates */
   std::condition_variable& get_condition() const;
-  /** Lock used with the condition variable. Each stream object has its own. */
+  /** Lock used with the condition variable. Each stream object has its own. Locking it counts
+      as acquire() from the next call on this stream object. */
   std::unique_lock<std::mutex>& get_condition_lock() const;
   /** Acquire a lock on the condition variable */
   void acquire();
@@ -77,10 +78,14 @@ class Stream {
   friend class Event;
   std::shared_ptr<StreamImpl> impl;
   mutable std::unique_lock<std::mutex> lock;
+  // Whether this handle has a hold counted on the stream
+  bool holding = false;
   std::unique_lock<std::mutex> make_lock() const;
+  void sync_hold();
   void drop_hold();
+  void end_hold() noexcept;
   void check_exists() const;
-  T decode_value(const std::string& data, bool is_null) const;
+  static T decode_value(const std::string& data, bool is_null, Client* client);
 };
 
 template <typename T>
@@ -98,10 +103,16 @@ template <typename T>
 inline Stream<T>::Stream(const Stream<T>& other) : impl(other.impl), lock(make_lock()) {}
 
 template <typename T>
+inline Stream<T>::Stream(Stream<T>&& other) noexcept
+    : impl(std::move(other.impl)),
+      lock(std::move(other.lock)),
+      holding(std::exchange(other.holding, false)) {}
+
+template <typename T>
 inline Stream<T>& Stream<T>::operator=(const Stream<T>& other) {
   if (this == &other) return *this;
   // Released before the stream it locks can be destroyed
-  if (lock.owns_lock()) release();
+  end_hold();
   lock = std::unique_lock<std::mutex>();
   impl = other.impl;
   lock = make_lock();
@@ -112,15 +123,16 @@ template <typename T>
 inline Stream<T>& Stream<T>::operator=(Stream<T>&& other) noexcept {
   if (this == &other) return *this;
   // Released before the stream it locks can be destroyed
-  if (lock.owns_lock()) drop_hold();
+  end_hold();
   lock = std::move(other.lock);
+  holding = std::exchange(other.holding, false);
   impl = std::move(other.impl);
   return *this;
 }
 
 template <typename T>
 inline Stream<T>::~Stream() {
-  if (lock.owns_lock()) drop_hold();
+  end_hold();
 }
 
 template <typename T>
@@ -129,16 +141,41 @@ inline std::unique_lock<std::mutex> Stream<T>::make_lock() const {
   return std::unique_lock<std::mutex>(impl->get_condition_mutex(), std::defer_lock);
 }
 
+// Counts a lock taken through get_condition_lock() as a hold, and stops counting one
+// unlocked through it
+template <typename T>
+inline void Stream<T>::sync_hold() {
+  if (!impl || lock.owns_lock() == holding) return;
+  if (holding)
+    impl->remove_hold();
+  else
+    impl->add_hold();
+  holding = !holding;
+}
+
 // Ends this handle's hold on the condition. The thread's last hold unlocks it, and an
 // earlier one leaves it locked for the thread's other handles.
 template <typename T>
 inline void Stream<T>::drop_hold() {
+  holding = false;
   if (impl->remove_hold()) {
     lock.unlock();
     return;
   }
   lock.release();
   lock = make_lock();
+}
+
+// Ends this handle's hold on the condition, for a handle being destroyed or assigned to. Counting
+// a hold allocates and takes a lock, which throw only on a system failure. The counts are then
+// left as they are, and assigning to or destroying the lock still unlocks it.
+template <typename T>
+inline void Stream<T>::end_hold() noexcept {
+  try {
+    sync_hold();
+    if (holding) drop_hold();
+  } catch (...) {  // NOLINT(bugprone-empty-catch)
+  }
 }
 
 template <typename T>
@@ -156,6 +193,7 @@ inline void Stream<T>::set_rate(float value) {
 template <typename T>
 inline T Stream<T>::operator()() {
   check_exists();
+  sync_hold();
   if (!impl->has_updated()) {
     impl->with_condition([this](std::unique_lock<std::mutex>& held) {
       impl->wait(&held, -1, [this] { return impl->has_updated(); });
@@ -163,18 +201,18 @@ inline T Stream<T>::operator()() {
   }
   bool is_null = false;
   auto data = impl->get_data(&is_null);
-  return decode_value(data, is_null);
+  return decode_value(data, is_null, impl->get_client());
 }
 
 template <typename T>
-inline T Stream<T>::decode_value(const std::string& data, bool is_null) const {
+inline T Stream<T>::decode_value(const std::string& data, bool is_null, Client* client) {
   // A null value is signaled out-of-band by is_null, and leaves the value default
   // constructed, which for a nullable stream is an empty optional.
   T value{};
   // Unqualified, so that argument dependent lookup finds the overload for a type a
   // service defines at the point this template is used
   using decoder::decode;
-  if (!is_null) decode(value, data, impl->get_client());
+  if (!is_null) decode(value, data, client);
   return value;
 }
 
@@ -193,6 +231,7 @@ inline std::unique_lock<std::mutex>& Stream<T>::get_condition_lock() const {
 template <typename T>
 inline void Stream<T>::acquire() {
   check_exists();
+  sync_hold();
   if (!lock.owns_lock() && impl->is_held()) {
     // Another handle holds the condition in this thread, and this one shares its hold
     lock = std::unique_lock<std::mutex>(impl->get_condition_mutex(), std::adopt_lock);
@@ -200,19 +239,22 @@ inline void Stream<T>::acquire() {
     lock.lock();
   }
   impl->add_hold();
+  holding = true;
 }
 
 template <typename T>
 inline void Stream<T>::release() {
   check_exists();
+  sync_hold();
   // Unlocking a lock this handle does not own throws
-  if (!lock.owns_lock()) lock.unlock();
+  if (!holding) lock.unlock();
   drop_hold();
 }
 
 template <typename T>
 inline bool Stream<T>::wait(double timeout) {
   check_exists();
+  sync_hold();
   bool updated = false;
   impl->with_condition([this, timeout, &updated](std::unique_lock<std::mutex>& held) {
     impl->throw_if_ended();
@@ -226,8 +268,16 @@ inline bool Stream<T>::wait(double timeout) {
 template <typename T>
 inline int Stream<T>::add_callback(const Callback& callback) {
   check_exists();
-  auto callback_wrapper = [this, callback](const std::string& data, bool is_null) {
-    callback(this->decode_value(data, is_null));
+  // Captures no handle, as the handle can be moved or destroyed while the callback is added
+  auto callback_wrapper = [client = impl->get_client(), callback](const std::string& data,
+                                                                  bool is_null) {
+    T value{};
+    try {
+      value = decode_value(data, is_null, client);
+    } catch (const std::exception& exn) {
+      throw CallbackDecodeError(exn.what());
+    }
+    callback(std::move(value));
   };
   return impl->add_callback(callback_wrapper);
 }

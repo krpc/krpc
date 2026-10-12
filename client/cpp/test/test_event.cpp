@@ -3,21 +3,45 @@
 
 #include <atomic>
 #include <chrono>  // NOLINT(build/c++11)
+#include <cstdint>
 #include <exception>
 #include <functional>
 #include <memory>
+#include <mutex>  // NOLINT(build/c++11)
+#include <string>
 #include <thread>  // NOLINT(build/c++11)
 // IWYU pragma: no_include <ext/alloc_traits.h>
 
 #include "gtest/gtest.h"
+#include "krpc/client.hpp"
+#include "krpc/decoder.hpp"
+#include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
 #include "krpc/event.hpp"
+#include "krpc/krpc.pb.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream.hpp"
+#include "krpc/stream_impl.hpp"
 #include "server_test.hpp"
 #include "services/test_service.hpp"
 
 class test_event : public server_test {};
+
+// An event from TestService.OnTimer, and the state of its stream, which counts its firings
+struct timer_event {
+  krpc::Event event;
+  std::shared_ptr<krpc::StreamImpl> stream;
+};
+
+static timer_event on_timer(krpc::Client* client, uint32_t milliseconds, uint32_t repeats) {
+  auto result = client->invoke_add_stream(
+      "TestService", "OnTimer",
+      {krpc::encoder::encode_arg(milliseconds), krpc::encoder::encode_arg(repeats)}, true);
+  krpc::schema::Event message;
+  krpc::decoder::decode(message, result.value(), client);
+  timer_event timer{krpc::Event(client, message), client->get_stream(message.stream().id())};
+  return timer;
+}
 
 TEST_F(test_event, test_event) {
   auto event = test_service.on_timer(200);
@@ -121,6 +145,19 @@ TEST_F(test_event, test_event_callback_loop) {
   ASSERT_GT(duration.count(), 0.9);
   ASSERT_LT(duration.count(), 3);
   ASSERT_EQ(count, 5);
+}
+
+// A callback outlives the event object it was added through
+TEST_F(test_event, test_callback_after_the_event_is_moved_and_destroyed) {
+  std::atomic<int> calls(0);
+  krpc::Event kept;
+  {
+    auto event = test_service.on_timer(200);
+    event.add_callback([&calls] { calls++; });
+    kept = event;
+    auto moved = std::move(event);
+  }
+  ASSERT_TRUE(eventually([&calls] { return calls.load() > 0; }));
 }
 
 TEST_F(test_event, test_event_remove_callback) {
@@ -330,4 +367,84 @@ TEST_F(test_event, test_close_wakes_an_event_wait) {
   ASSERT_TRUE(eventually([&waiting] { return waiting.load(); }));
   client.reset();
   waiter.join();
+}
+
+// The timers fire a second time, so the event has not ended when the callback is added
+TEST_F(test_event, test_callback_added_after_a_wait_is_not_called) {
+  auto event = test_service.on_timer(500, 2);
+  ASSERT_TRUE(event.wait());
+  std::atomic<int> calls(0);
+  event.add_callback([&calls] { calls++; });
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
+  ASSERT_EQ(0, calls.load());
+}
+
+TEST_F(test_event, test_callback_added_after_an_unseen_firing_is_called) {
+  auto timer = on_timer(&conn, 500, 2);
+  ASSERT_TRUE(eventually([&timer] { return timer.stream->get_fired() == 1; }));
+  std::atomic<int> calls(0);
+  timer.event.add_callback([&calls] { calls++; });
+  ASSERT_EQ(1, calls.load());
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
+  ASSERT_EQ(1, calls.load());
+}
+
+// A callback on the event's stream is passed every value, and gives no firing to the event
+TEST_F(test_event, test_callback_added_after_a_firing_given_to_a_stream_callback_is_called) {
+  auto timer = on_timer(&conn, 500, 2);
+  auto stream = timer.event.stream();
+  stream.add_callback([](bool) {});
+  ASSERT_TRUE(eventually([&timer] { return timer.stream->get_fired() == 1; }));
+  std::atomic<int> calls(0);
+  timer.event.add_callback([&calls] { calls++; });
+  ASSERT_EQ(1, calls.load());
+}
+
+// The firing is still given to a wait
+TEST_F(test_event, test_callback_added_after_the_event_ends_is_not_called) {
+  auto timer = on_timer(&conn, 100, 1);
+  ASSERT_TRUE(eventually([&timer] { return timer.stream->has_ended(); }));
+  ASSERT_EQ(1, timer.stream->get_fired());
+  std::atomic<int> calls(0);
+  timer.event.add_callback([&calls] { calls++; });
+  ASSERT_EQ(0, calls.load());
+  ASSERT_TRUE(timer.event.wait());
+  EXPECT_THROW(timer.event.wait(), krpc::services::KRPC::StreamRemovedException);
+}
+
+// A firing given to an event callback after a later value is still given, as an event callback
+// is gated on the number of firings
+TEST_F(test_event, test_callback_gets_a_firing_passed_after_a_later_value) {
+  krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
+  std::atomic<int> calls(0);
+  stream.add_event_callback(
+      [&calls](const std::string& data, bool is_null) {
+        if (!is_null && data == "\x01") calls++;
+      },
+      0);
+  krpc::StreamImpl::Callbacks firing;
+  krpc::StreamImpl::Callbacks later;
+  uint64_t firing_version = 0;
+  uint64_t firing_fired = 0;
+  uint64_t later_version = 0;
+  uint64_t later_fired = 0;
+  {
+    std::lock_guard<std::mutex> held(stream.get_condition_mutex());
+    ASSERT_TRUE(stream.update_and_notify("\x01", false, &firing, &firing_version, &firing_fired));
+    ASSERT_TRUE(stream.update_and_notify("\x00", false, &later, &later_version, &later_fired));
+  }
+  stream.call_callbacks(later, "\x00", false, later_version, later_fired);
+  stream.call_callbacks(firing, "\x01", false, firing_version, firing_fired);
+  ASSERT_EQ(1, calls.load());
+}
+
+TEST_F(test_event, test_callback_added_after_a_firing_given_to_another_is_not_called) {
+  auto event = test_service.on_timer(500, 2);
+  std::atomic<int> first(0);
+  event.add_callback([&first] { first++; });
+  ASSERT_TRUE(eventually([&first] { return first.load() == 1; }));
+  std::atomic<int> second(0);
+  event.add_callback([&second] { second++; });
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
+  ASSERT_EQ(0, second.load());
 }

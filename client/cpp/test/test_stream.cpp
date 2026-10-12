@@ -363,19 +363,20 @@ TEST_F(test_stream, test_callback_skips_an_older_value) {
   krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
   krpc::StreamImpl::Callbacks callbacks;
   uint64_t version = 0;
+  uint64_t fired = 0;
   {
     std::lock_guard<std::mutex> held(stream.get_condition_mutex());
-    ASSERT_TRUE(stream.update_and_notify("a", false, &callbacks, &version));
+    ASSERT_TRUE(stream.update_and_notify("a", false, &callbacks, &version, &fired));
   }
   std::vector<std::string> values;
   stream.add_callback([&values](const std::string& value, bool) { values.push_back(value); });
   {
     std::lock_guard<std::mutex> held(stream.get_condition_mutex());
-    ASSERT_TRUE(stream.update_and_notify("b", false, &callbacks, &version));
+    ASSERT_TRUE(stream.update_and_notify("b", false, &callbacks, &version, &fired));
   }
-  stream.call_callbacks(callbacks, "b", false, version);
+  stream.call_callbacks(callbacks, "b", false, version, fired);
   // A first call with the earlier value, made after the update
-  stream.call_callbacks(callbacks, "a", false, 1);
+  stream.call_callbacks(callbacks, "a", false, 1, fired);
   ASSERT_EQ((std::vector<std::string>{"a", "b"}), values);
 }
 
@@ -573,6 +574,24 @@ TEST_F(test_stream, test_callback) {
 
 // A callback that throws must not escape the update thread: an exception leaving it calls
 // std::terminate and ends the process, not merely the stream updates.
+// A callback outlives the stream object it was added through
+TEST_F(test_stream, test_callback_after_the_handle_is_moved_and_destroyed) {
+  std::atomic<int> moved_calls(0);
+  std::atomic<int> destroyed_calls(0);
+  auto x = test_service.counter_stream("test_stream.test_callback_after_the_handle_is_moved");
+  {
+    auto y = x;
+    y.add_callback([&moved_calls](int) { moved_calls++; });
+    auto z = std::move(y);
+    auto w = x;
+    w.add_callback([&destroyed_calls](int) { destroyed_calls++; });
+  }
+  moved_calls.store(0);
+  destroyed_calls.store(0);
+  ASSERT_TRUE(eventually([&] { return moved_calls.load() > 0 && destroyed_calls.load() > 0; }));
+  x.remove();
+}
+
 TEST_F(test_stream, test_callback_that_throws) {
   std::atomic_flag called;
   called.test_and_set();
@@ -893,4 +912,61 @@ TEST_F(test_stream, test_remove_after_waiting_on_the_condition) {
   x.remove();
   EXPECT_THROW(x.wait(), krpc::StreamError);
   x.release();
+}
+
+// A lock taken through the condition lock counts as a hold of the stream object
+TEST_F(test_stream, test_wait_after_locking_the_condition_lock) {
+  auto x = test_service.counter_stream("test_stream.test_wait_after_locking_the_condition_lock");
+  ASSERT_GT(x(), 0);
+  x.get_condition_lock().lock();
+  ASSERT_TRUE(x.wait(5));
+  x.release();
+  {
+    auto y = x;
+    y.get_condition_lock().lock();
+    ASSERT_TRUE(y.wait(5));
+  }
+  // Both locks are released, so another thread can take the condition
+  std::thread other([x]() mutable {
+    x.acquire();
+    x.release();
+  });
+  other.join();
+  x.remove();
+}
+
+// A callback is not called once its stream has ended
+TEST_F(test_stream, test_callback_after_the_stream_ends) {
+  krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
+  std::vector<std::string> values;
+  stream.add_callback([&values](const std::string& value, bool) { values.push_back(value); });
+  krpc::StreamImpl::Callbacks callbacks;
+  uint64_t version = 0;
+  uint64_t fired = 0;
+  {
+    std::lock_guard<std::mutex> held(stream.get_condition_mutex());
+    ASSERT_TRUE(stream.update_and_notify("a", false, &callbacks, &version, &fired));
+  }
+  stream.end(std::make_exception_ptr(krpc::StreamError("ended")));
+  stream.call_callbacks(callbacks, "a", false, version, fired);
+  ASSERT_TRUE(values.empty());
+}
+
+// A value that fails to decode is thrown to the reader, and the stream stays live
+TEST_F(test_stream, test_value_that_fails_to_decode) {
+  // An int32 is too short to decode as a double
+  krpc::Stream<double> x(&conn,
+                         test_service.counter_call("test_stream.test_value_that_fails_to_decode"));
+  std::atomic<int> calls(0);
+  std::atomic<int> ended(0);
+  x.add_callback([&calls](double) { calls++; });
+  x.add_end_callback([&ended](const std::exception_ptr&) { ended++; });
+  ASSERT_THROW(x(), krpc::EncodingError);
+  x.acquire();
+  for (int i = 0; i < 3; i++) ASSERT_TRUE(x.wait(5));
+  x.release();
+  ASSERT_THROW(x(), krpc::EncodingError);
+  ASSERT_EQ(0, calls.load());
+  ASSERT_EQ(0, ended.load());
+  x.remove();
 }

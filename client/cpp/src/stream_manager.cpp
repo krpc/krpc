@@ -252,12 +252,14 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
 
   StreamImpl::Callbacks callbacks;
   uint64_t version = 0;
+  uint64_t fired = 0;
   {
     auto held = lock_unless_stopped(stream->get_condition_mutex(), *stop);
     if (!held.owns_lock()) return;
-    if (!stream->update_and_notify(result.value(), result.is_null(), &callbacks, &version)) return;
+    if (!stream->update_and_notify(result.value(), result.is_null(), &callbacks, &version, &fired))
+      return;
   }
-  stream->call_callbacks(callbacks, result.value(), result.is_null(), version);
+  stream->call_callbacks(callbacks, result.value(), result.is_null(), version, fired);
 }
 
 std::condition_variable& StreamManager::get_update_condition() { return condition; }

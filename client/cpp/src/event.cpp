@@ -27,6 +27,7 @@ void Event::release() { _stream.release(); }
 
 bool Event::wait(double timeout) {
   _stream.check_exists();
+  _stream.sync_hold();
   auto& impl = _stream.impl;
   bool fired = false;
   impl->with_condition([this, &impl, timeout, &fired](std::unique_lock<std::mutex>& held) {
@@ -40,9 +41,13 @@ bool Event::wait(double timeout) {
 }
 
 int Event::add_callback(const Callback& callback) {
-  return _stream.add_callback([callback](bool fired) {
-    if (fired) callback();
-  });
+  _stream.check_exists();
+  return _stream.impl->add_event_callback(
+      [callback](const std::string& data, bool is_null) {
+        // An encoded bool true
+        if (!is_null && data == "\x01") callback();
+      },
+      seen);
 }
 
 void Event::remove_callback(int tag) { return _stream.remove_callback(tag); }

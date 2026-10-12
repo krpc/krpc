@@ -34,8 +34,10 @@ class Event {
   bool wait(double timeout = -1);
   typedef std::function<void()> Callback;
   /**
-   * Add a callback that is invoked whenever the event occurs. An error from the event does not
-   * invoke the callback. Waiting on the event throws it.
+   * Add a callback that is invoked whenever the event occurs. It is invoked straight away if
+   * the event has occurred since the last wait on this event object, and no other callback
+   * has been invoked for it. An error from the event does not invoke the callback. Waiting on
+   * the event throws it.
    * Returns an integer tag for the callback which uniquely identifies it,
    * and allows it to be removed using remove_callback()
    */
