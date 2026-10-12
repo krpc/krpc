@@ -61,6 +61,23 @@ KRPC
 
    
 
+   .. function:: krpc::schema::Stream add_function_stream(Expression function)
+
+      Add a stream of the value a server side function computes on each update.
+
+      :Parameters:
+
+
+
+   
+
+      .. note::
+
+         Each call adds a new stream, with values of the type given by
+         :func:`Expression::return_type`. Any exception from the function ends the
+         stream, including one for an object that is not loaded. A procedure that pauses
+         execution to resume on a later tick produces an error on the stream.
+
    .. function:: void hold_tick()
 
       Hold the game on its current physics tick until :func:`release_tick` is called
@@ -113,6 +130,41 @@ KRPC
 
          Every limit of :func:`hold_tick` applies, the timeout included. A hold lost to
          the timeout is not reported, and the next call takes whatever tick it lands on.
+
+   .. function:: void compile_function(Expression function)
+
+      Compile a server side function, so that running, streaming or adding it as an
+      event does not compile it.
+
+      :Parameters:
+
+
+
+   
+
+      .. note::
+
+         Compiling a large function takes time on the game's main thread. Compiling it
+         in advance keeps that time out of its first run.
+
+   .. function:: std::optional<std::string> run_function(Expression function, std::vector<std::optional<std::string>> arguments = std::vector<std::optional<std::string>>{})
+
+      Run a server side function once, within a single physics tick, and return
+      the value it produces.
+
+      :Parameters:
+
+       * **function** -- The function to run.
+       * **arguments** -- The encoded arguments, one per parameter.
+
+      :returns: The encoded value of the function, or no bytes for a function with no value.
+   
+
+      .. note::
+
+         The arguments are encoded at the types given by :func:`Expression::parameter_types`.
+         Throws an exception if a procedure the function calls pauses execution, and the
+         effects up to the pause remain.
 
    .. function:: GameScene game_scene()
    .. function:: void set_game_scene(GameScene value)
@@ -248,6 +300,55 @@ KRPC
 
 
 .. namespace:: krpc::services::KRPC
+.. class:: NullReferenceException
+
+   A value was null where its type does not allow one.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: KeyNotFoundException
+
+   A key was not found in a dictionary.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: IndexOutOfRangeException
+
+   An index was outside the bounds of a collection, string or array.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: DivideByZeroException
+
+   An integer was divided by zero.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: NotSupportedException
+
+   A method was invoked that is not supported.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: TimeoutException
+
+   An operation did not complete in the time allotted to it.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: OverflowException
+
+   An arithmetic or conversion operation overflowed.
+
+
+
+.. namespace:: krpc::services::KRPC
 .. class:: ObjectDestroyedException
 
    The game object that a service object refers to no longer exists,
@@ -275,3 +376,10 @@ KRPC
 .. class:: StreamRemovedException
 
    A stream was removed by the server, e.g. an event that has finished.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: Error
+
+   A general error, described by its message.

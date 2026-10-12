@@ -5,10 +5,50 @@
 Expressions
 ===========
 
+The nodes a server side function is built from, and the types they work with.
+
 
 .. class:: Expression
 
    A server side expression.
+
+   .. note::
+
+      Numeric operands of differing types are converted to a common type.
+
+   .. function:: Type return_type()
+
+      The type of the value the expression evaluates to. Throws an exception if the
+      value cannot be sent to a client.
+
+   
+
+      .. note::
+
+         A function created with :func:`Expression::lambda` evaluates to the value it returns. A
+         lazily evaluated collection, such as from :func:`Expression::select`, is sent once
+         converted by :func:`Expression::to_list` or :func:`Expression::to_set`.
+
+   .. function:: bool has_return_type()
+
+      Whether the expression evaluates to a value.
+
+   
+
+      .. note::
+
+         An expression with no value has no :func:`Expression::return_type`. An empty
+         collection and no value both encode to an empty sequence of bytes.
+
+   .. function:: std::vector<Type> parameter_types()
+
+      The types of the function's parameters.
+
+   
+
+      .. note::
+
+         Empty for a function that is not created with :func:`Expression::lambda`.
 
    .. function:: static Expression constant_double(Client& connection, double value)
 
@@ -16,7 +56,7 @@ Expressions
 
       :Parameters:
 
-
+       * **value** -- The value.
 
    
 
@@ -26,7 +66,7 @@ Expressions
 
       :Parameters:
 
-
+       * **value** -- The value.
 
    
 
@@ -36,7 +76,37 @@ Expressions
 
       :Parameters:
 
+       * **value** -- The value.
 
+   
+
+   .. function:: static Expression constant_long(Client& connection, int64_t value)
+
+      A constant value of long integer type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_u_int(Client& connection, uint32_t value)
+
+      A constant value of unsigned integer type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_u_long(Client& connection, uint64_t value)
+
+      A constant value of unsigned long integer type.
+
+      :Parameters:
+
+       * **value** -- The value.
 
    
 
@@ -46,7 +116,7 @@ Expressions
 
       :Parameters:
 
-
+       * **value** -- The value.
 
    
 
@@ -56,9 +126,59 @@ Expressions
 
       :Parameters:
 
-
+       * **value** -- The value.
 
    
+
+   .. function:: static Expression constant_bytes(Client& connection, std::string value)
+
+      A constant value of bytes type.
+
+      :Parameters:
+
+       * **value** -- The value.
+
+   
+
+   .. function:: static Expression constant_enum(Client& connection, std::string service, std::string name, int32_t value)
+
+      A constant value of an enumeration a service defines.
+
+      :Parameters:
+
+       * **service** -- The name of the service the enumeration is defined in.
+       * **name** -- The name of the enumeration.
+       * **value** -- The value of the member of the enumeration.
+
+   
+
+   .. function:: static Expression constant_null(Client& connection, Type type)
+
+      A null constant of the given type.
+
+      :Parameters:
+
+       * **type** -- The type of the value.
+
+   
+
+      .. note::
+
+         The type is made nullable, as by :func:`Type::nullable_type`.
+
+   .. function:: static Expression constant_object(Client& connection, uint64_t value)
+
+      A constant object, an instance of a class a service defines.
+
+      :Parameters:
+
+       * **value** -- The object identifier of the object.
+
+   
+
+      .. note::
+
+         The object is given by its object identifier.
 
    .. function:: static Expression call(Client& connection, krpc::schema::ProcedureCall call)
 
@@ -66,9 +186,33 @@ Expressions
 
       :Parameters:
 
-
+       * **call** -- The procedure call.
 
    
+
+      .. note::
+
+         The instance the call is made on, and the values of its arguments, are fixed
+         when the expression is created. A call to a procedure with no return value is
+         evaluated for its effects, as a statement in a :func:`Expression::block`. A collection the
+         procedure returns is copied, as a client would receive it.
+
+   .. function:: static Expression call_with_arguments(Client& connection, krpc::schema::ProcedureCall call, std::map<int32_t, Expression> args)
+
+      An RPC call, where some or all of the arguments are computed by expressions.
+
+      :Parameters:
+
+       * **call** -- The RPC to call.
+       * **args** -- Expressions computing the call's arguments, by position.
+
+   
+
+      .. note::
+
+         Position 0 is the instance of a class method or property. A position with no
+         expression takes the argument encoded in the call, or the parameter's default. A
+         collection the procedure returns is copied, as a client would receive it.
 
    .. function:: static Expression equal(Client& connection, Expression arg0, Expression arg1)
 
@@ -76,10 +220,15 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
+
+      .. note::
+
+         Collections, tuples, bytes and structures compare by their contents. Throws an
+         exception if the operands are of unrelated types.
 
    .. function:: static Expression not_equal(Client& connection, Expression arg0, Expression arg1)
 
@@ -87,10 +236,15 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
+
+      .. note::
+
+         Collections, tuples, bytes and structures compare by their contents. Throws an
+         exception if the operands are of unrelated types.
 
    .. function:: static Expression greater_than(Client& connection, Expression arg0, Expression arg1)
 
@@ -98,8 +252,8 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
@@ -109,8 +263,8 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
@@ -120,8 +274,8 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
@@ -131,53 +285,111 @@ Expressions
 
       :Parameters:
 
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
+   
 
+   .. function:: static Expression is_null(Client& connection, Expression value)
+
+      Whether a value is null. Throws an exception if the type of the value cannot be null.
+
+      :Parameters:
+
+       * **value** -- The value.
 
    
 
    .. function:: static Expression and_(Client& connection, Expression arg0, Expression arg1)
 
-      Boolean and operator.
+      Logical or bitwise and, which evaluates both operands.
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
    .. function:: static Expression or_(Client& connection, Expression arg0, Expression arg1)
 
-      Boolean or operator.
+      Logical or bitwise or, which evaluates both operands.
 
       :Parameters:
 
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
+   
 
+   .. function:: static Expression conditional_and(Client& connection, Expression arg0, Expression arg1)
+
+      Logical and, which evaluates the second operand only when the first is true.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
+
+   
+
+   .. function:: static Expression conditional_or(Client& connection, Expression arg0, Expression arg1)
+
+      Logical or, which evaluates the second operand only when the first is false.
+
+      :Parameters:
+
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
    .. function:: static Expression exclusive_or(Client& connection, Expression arg0, Expression arg1)
 
-      Boolean exclusive-or operator.
+      Logical or bitwise exclusive or.
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
    .. function:: static Expression not_(Client& connection, Expression arg)
 
-      Boolean negation operator.
+      Logical or bitwise negation.
 
       :Parameters:
 
-
+       * **arg** -- The operand.
 
    
+
+   .. function:: static Expression negate(Client& connection, Expression arg)
+
+      Numerical negation, which negates a uint as a long.
+
+      :Parameters:
+
+       * **arg** -- The operand.
+
+   
+
+   .. function:: static Expression conditional(Client& connection, Expression condition, Expression if_true, Expression if_false)
+
+      The second argument if the condition is true, and the third argument otherwise.
+
+      :Parameters:
+
+       * **condition** -- The boolean condition.
+       * **if_true** -- The value when the condition is true.
+       * **if_false** -- The value when the condition is false.
+
+   
+
+      .. note::
+
+         Throws an exception if the two values have no common type.
 
    .. function:: static Expression add(Client& connection, Expression arg0, Expression arg1)
 
@@ -185,8 +397,8 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
@@ -196,8 +408,8 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
@@ -207,8 +419,8 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
@@ -218,8 +430,8 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
@@ -229,8 +441,8 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
       :returns: The remainder of arg0 divided by arg1
    
@@ -241,10 +453,10 @@ Expressions
 
       :Parameters:
 
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
-
-
-      :returns: arg0 raised to the power of arg1, with type of arg0
+      :returns: arg0 raised to the power of arg1, at the common type of the operands
    
 
    .. function:: static Expression left_shift(Client& connection, Expression arg0, Expression arg1)
@@ -253,10 +465,15 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
+
+      .. note::
+
+         Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+         for a 64-bit value.
 
    .. function:: static Expression right_shift(Client& connection, Expression arg0, Expression arg1)
 
@@ -264,25 +481,34 @@ Expressions
 
       :Parameters:
 
-
-
+       * **arg0** -- The first operand.
+       * **arg1** -- The second operand.
 
    
 
+      .. note::
+
+         Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+         for a 64-bit value.
+
    .. function:: static Expression cast(Client& connection, Expression arg, Type type)
 
-      Perform a cast to the given type.
+      A value cast to the given type.
 
       :Parameters:
 
-
+       * **arg** -- The value to cast.
        * **type** -- Type to cast the argument to.
 
    
 
+      .. note::
+
+         A tuple or collection is cast element by element.
+
    .. function:: static Expression parameter(Client& connection, std::string name, Type type)
 
-      A named parameter of type double.
+      A named parameter of a function.
 
       :Parameters:
 
@@ -292,9 +518,14 @@ Expressions
       :returns: A named parameter.
    
 
-   .. function:: static Expression function(Client& connection, std::vector<Expression> parameters, Expression body)
+      .. note::
 
-      A function.
+         A value is bound to it by name with :func:`Expression::invoke`, or by its position in
+         the parameters of a :func:`Expression::lambda`.
+
+   .. function:: static Expression lambda(Client& connection, std::vector<Expression> parameters, Expression body)
+
+      A function with the given parameters and body.
 
       :Parameters:
 
@@ -303,6 +534,12 @@ Expressions
 
       :returns: A function.
    
+
+      .. note::
+
+         The body is an expression or a block of statements, and a body with no value is
+         evaluated for its effects. A :func:`Expression::return_` or :func:`Expression::return_nothing`
+         statement ends the evaluation.
 
    .. function:: static Expression invoke(Client& connection, Expression function, std::map<std::string, Expression> args)
 
@@ -316,9 +553,241 @@ Expressions
       :returns: A function call.
    
 
+   .. function:: static Expression block(Client& connection, std::vector<Expression> statements)
+
+      A block of statements, whose value is that of its last statement.
+
+      :Parameters:
+
+       * **statements** -- The statements.
+
+   
+
+   .. function:: static Expression block_with_variables(Client& connection, std::vector<Expression> variables, std::vector<Expression> statements)
+
+      A block of statements with local variables.
+
+      :Parameters:
+
+       * **variables** -- The local variables of the block.
+       * **statements** -- The statements.
+
+   
+
+      .. note::
+
+         The value of the block is that of its last statement. The variables are in scope
+         for the statements of the block, including within nested functions.
+
+   .. function:: static Expression variable(Client& connection, std::string name, Type type)
+
+      A local variable, declared by :func:`Expression::block_with_variables`.
+
+      :Parameters:
+
+       * **name** -- The name of the variable.
+       * **type** -- The type of the variable.
+
+      :returns: A local variable.
+   
+
+   .. function:: static Expression state_variable(Client& connection, std::string name, Expression initial_value)
+
+      A variable that keeps its value between evaluations of a function.
+
+      :Parameters:
+
+       * **name** -- The name of the variable.
+       * **initial_value** -- The initial value of the variable.
+
+      :returns: A state variable.
+   
+
+      .. note::
+
+         The initial value is evaluated once, when the variable is created, and gives the
+         variable its type. The value belongs to the variable, so every function that
+         contains it shares it.
+
+   .. function:: static Expression assign(Client& connection, Expression variable, Expression value)
+
+      An assignment to a local variable, state variable or function parameter.
+
+      :Parameters:
+
+       * **variable** -- The variable to assign to.
+       * **value** -- The value to assign.
+
+   
+
+      .. note::
+
+         The value's type must be assignable to the variable's type. A numeric value of a
+         different type is widened, and narrowing it requires a cast.
+
+   .. function:: static Expression if_then(Client& connection, Expression condition, Expression body)
+
+      An if statement, with no value.
+
+      :Parameters:
+
+       * **condition** -- The boolean condition.
+       * **body** -- The statement evaluated when the condition is true.
+
+   
+
+      .. note::
+
+         Use :func:`Expression::conditional` for an if-then-else that produces a value.
+
+   .. function:: static Expression if_then_else(Client& connection, Expression condition, Expression body, Expression else_body)
+
+      An if-else statement, with no value.
+
+      :Parameters:
+
+       * **condition** -- The boolean condition.
+       * **body** -- The statement evaluated when the condition is true.
+       * **else_body** -- The statement evaluated when the condition is false.
+
+   
+
+      .. note::
+
+         Use :func:`Expression::conditional` for an if-then-else that produces a value.
+
+   .. function:: static Expression while_(Client& connection, Expression condition, Expression body)
+
+      A while loop, which evaluates the body while the condition is true.
+
+      :Parameters:
+
+       * **condition** -- The boolean condition.
+       * **body** -- The statement evaluated on each iteration.
+
+   
+
+      .. note::
+
+         A :func:`Expression::break_` or :func:`Expression::continue_` in the body applies to this loop.
+
+   .. function:: static Expression for_each(Client& connection, Expression variable, Expression collection, Expression body)
+
+      A loop that evaluates the body once for each value of a collection.
+
+      :Parameters:
+
+       * **variable** -- The loop variable.
+       * **collection** -- The collection to iterate over.
+       * **body** -- The statement evaluated on each iteration.
+
+   
+
+      .. note::
+
+         The loop variable is a local variable declared by an enclosing
+         :func:`Expression::block_with_variables`, or a parameter of an enclosing :func:`Expression::lambda`.
+         A :func:`Expression::break_` or :func:`Expression::continue_` in the body applies to this loop.
+
+   .. function:: static Expression break_(Client& connection)
+
+      A break statement, which ends the enclosing loop.
+
+
+   
+
+   .. function:: static Expression continue_(Client& connection)
+
+      A continue statement, which skips to the next iteration of the enclosing loop.
+
+
+   
+
+   .. function:: static Expression return_(Client& connection, Expression value)
+
+      A return statement, which ends the enclosing function with a value.
+
+      :Parameters:
+
+       * **value** -- The value to return.
+
+   
+
+   .. function:: static Expression return_nothing(Client& connection)
+
+      A return statement, which ends the enclosing function with no value.
+
+
+   
+
+   .. function:: static Expression throw_(Client& connection, std::string service, std::string name, Expression message)
+
+      A throw statement, which raises the named exception.
+
+      :Parameters:
+
+       * **service** -- The name of the service the exception is defined in.
+       * **name** -- The name of the exception.
+       * **message** -- The message of the exception.
+
+   
+
+      .. note::
+
+         The client receives the exception as an error from the function, or from the stream
+         or event evaluating it. Throws an exception if the service does not declare it.
+
+   .. function:: static Expression try_catch(Client& connection, Expression body, std::string service, std::string name, std::optional<Expression> message, Expression handler)
+
+      A try-catch statement that handles the named exception.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **service** -- The name of the service the exception is defined in.
+       * **name** -- The name of the exception.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when the exception is caught.
+
+   
+
+      .. note::
+
+         Only an exception a service declares can be named, and :func:`Expression::try_catch_all`
+         handles any exception. Throws an exception if the service does not declare it.
+
+   .. function:: static Expression try_catch_all(Client& connection, Expression body, std::optional<Expression> message, Expression handler)
+
+      A try-catch statement that handles any exception.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **message** -- A string variable assigned the exception's message, or null.
+       * **handler** -- The statement evaluated when an exception is caught.
+
+   
+
+   .. function:: static Expression try_finally(Client& connection, Expression body, Expression finalizer)
+
+      A try-finally statement.
+
+      :Parameters:
+
+       * **body** -- The statement to evaluate.
+       * **finalizer** -- The statement evaluated after the body.
+
+   
+
+      .. note::
+
+         The finalizer is evaluated after the body, whether or not the body raises an
+         exception. A break, continue or return cannot leave the finalizer.
+
    .. function:: static Expression create_tuple(Client& connection, std::vector<Expression> elements)
 
-      Construct a tuple.
+      A tuple of the given elements. Throws an exception if there are no elements or more
+      than seven.
 
       :Parameters:
 
@@ -327,43 +796,204 @@ Expressions
       :returns: The tuple.
    
 
-   .. function:: static Expression create_list(Client& connection, std::vector<Expression> values)
+   .. function:: static Expression create_struct(Client& connection, Type type, std::vector<Expression> field_values)
 
-      Construct a list.
+      A structure with the given field values. Throws an exception if the field values do
+      not match its fields.
 
       :Parameters:
 
-       * **values** -- The value. Should all be of the same type.
+       * **type** -- The type of the structure.
+       * **field_values** -- The values of the structure's fields, in the order the structure declares them.
+
+      :returns: The structure.
+   
+
+   .. function:: static Expression create_list(Client& connection, std::vector<Expression> values)
+
+      A list of the given values, with numbers widened to their common type. Throws an
+      exception if there are no values.
+
+      :Parameters:
+
+       * **values** -- The values.
 
       :returns: The list.
    
 
    .. function:: static Expression create_set(Client& connection, std::set<Expression> values)
 
-      Construct a set.
+      A set of the given values, with numbers widened to their common type. Throws an
+      exception if there are no values, or a value is null.
 
       :Parameters:
 
-       * **values** -- The values. Should all be of the same type.
+       * **values** -- The values.
 
       :returns: The set.
    
 
+      .. note::
+
+         The values are evaluated in an unspecified order.
+
    .. function:: static Expression create_dictionary(Client& connection, std::vector<Expression> keys, std::vector<Expression> values)
 
-      Construct a dictionary, from a list of corresponding keys and values.
+      A dictionary of the given keys and corresponding values, with numbers widened to
+      their common type. Throws an exception if there are no keys, the counts differ, the
+      keys are not of a valid key type, or a key is null.
 
       :Parameters:
 
-       * **keys** -- The keys. Should all be of the same type.
-       * **values** -- The values. Should all be of the same type.
+       * **keys** -- The keys.
+       * **values** -- The values.
 
       :returns: The dictionary.
    
 
+      .. note::
+
+         A repeated key takes the last of its values.
+
+   .. function:: static Expression create_empty_list(Client& connection, Type value_type)
+
+      An empty list of the given value type.
+
+      :Parameters:
+
+       * **value_type** -- The type of the values the list holds.
+
+      :returns: The empty list.
+   
+
+   .. function:: static Expression create_empty_set(Client& connection, Type value_type)
+
+      An empty set of the given value type. Throws an exception if the value type is
+      nullable.
+
+      :Parameters:
+
+       * **value_type** -- The type of the values the set holds.
+
+      :returns: The empty set.
+   
+
+   .. function:: static Expression create_empty_dictionary(Client& connection, Type key_type, Type value_type)
+
+      An empty dictionary of the given key and value types. Throws an exception if the
+      key type is nullable or not a valid key type.
+
+      :Parameters:
+
+       * **key_type** -- The type of the dictionary's keys.
+       * **value_type** -- The type of the dictionary's values.
+
+      :returns: The empty dictionary.
+   
+
+   .. function:: static Expression append(Client& connection, Expression collection, Expression value)
+
+      A statement adding a value to a list or a set.
+
+      :Parameters:
+
+       * **collection** -- The list or set to add to.
+       * **value** -- The value to add.
+
+   
+
+      .. note::
+
+         The value goes on the end of a list. A set holding the value is left unchanged.
+
+   .. function:: static Expression set(Client& connection, Expression collection, Expression index, Expression value)
+
+      A statement setting an element of a list, or an entry of a dictionary.
+
+      :Parameters:
+
+       * **collection** -- The list or dictionary.
+       * **index** -- The index of the element, counting from zero, or the key of the entry.
+       * **value** -- The value to set.
+
+   
+
+      .. note::
+
+         A key the dictionary does not hold is added. Throws an exception if the index
+         is out of range for the list.
+
+   .. function:: static Expression remove(Client& connection, Expression collection, Expression value)
+
+      A removal of a value from a list or a set, or of an entry from a dictionary.
+
+      :Parameters:
+
+       * **collection** -- The list, set or dictionary.
+       * **value** -- The value to remove, or the key of the entry to remove.
+
+      :returns: Whether the collection held the value.
+   
+
+      .. note::
+
+         The first occurrence is removed from a list.
+
+   .. function:: static Expression remove_at(Client& connection, Expression list, Expression index)
+
+      A statement removing the element at an index of a list.
+
+      :Parameters:
+
+       * **list** -- The list.
+       * **index** -- The index of the element, counting from zero.
+
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. function:: static Expression clear(Client& connection, Expression collection)
+
+      A statement removing every value from a list or a set, or every entry from a dictionary.
+
+      :Parameters:
+
+       * **collection** -- The list, set or dictionary.
+
+   
+
+   .. function:: static Expression dictionary_keys(Client& connection, Expression dictionary)
+
+      The keys of a dictionary, as a list.
+
+      :Parameters:
+
+       * **dictionary** -- The dictionary.
+
+      :returns: The keys of the dictionary.
+   
+
+      .. note::
+
+         The collection operations take the keys of a dictionary from here, and its values
+         from :func:`Expression::dictionary_values`.
+
+   .. function:: static Expression dictionary_values(Client& connection, Expression dictionary)
+
+      The values of a dictionary, as a list.
+
+      :Parameters:
+
+       * **dictionary** -- The dictionary.
+
+      :returns: The values of the dictionary.
+   
+
    .. function:: static Expression to_list(Client& connection, Expression arg)
 
-      Convert a collection to a list.
+      A collection as a list.
 
       :Parameters:
 
@@ -374,7 +1004,7 @@ Expressions
 
    .. function:: static Expression to_set(Client& connection, Expression arg)
 
-      Convert a collection to a set.
+      A collection as a set.
 
       :Parameters:
 
@@ -383,21 +1013,282 @@ Expressions
       :returns: The collection as a set.
    
 
+      .. note::
+
+         Throws an exception if a value is null.
+
+   .. function:: static Expression build_dictionary(Client& connection, Expression arg, Expression key_func, Expression value_func)
+
+      A dictionary built from a collection, with a key and a value computed from each
+      element.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **key_func** -- The function computing an element's key.
+       * **value_func** -- The function computing an element's value.
+
+      :returns: The dictionary.
+   
+
+      .. note::
+
+         A repeated key takes the last of its values.
+
    .. function:: static Expression get(Client& connection, Expression arg, Expression index)
 
-      Access an element in a tuple, list or dictionary.
+      An element of a tuple, list or dictionary.
 
       :Parameters:
 
        * **arg** -- The tuple, list or dictionary.
-       * **index** -- The index of the element to access. A zero indexed integer for a tuple or list, or a key for a dictionary.
+       * **index** -- The index or key of the element.
 
       :returns: The element.
    
 
+      .. note::
+
+         A tuple takes a constant integer index, a list a zero indexed integer and a
+         dictionary a key. Throws an exception if the index is out of range or the key is
+         missing, and for a tuple when the expression is created.
+
+   .. function:: static Expression get_field(Client& connection, Expression arg, std::string name)
+
+      The value of a field of a structure. Throws an exception if the value is not a
+      structure, or has no field of the given name.
+
+      :Parameters:
+
+       * **arg** -- The structure.
+       * **name** -- The name of the field to access.
+
+      :returns: The value of the field.
+   
+
+   .. function:: static Expression convert_to_string(Client& connection, Expression arg)
+
+      The string representation of a value.
+
+      :Parameters:
+
+       * **arg** -- The value to convert.
+
+      :returns: The string representation of the value.
+   
+
+      .. note::
+
+         A value other than a number, boolean, string or enumeration converts as .NET
+         formats it, which for a collection is the name of its type. Throws an exception if
+         the value is null.
+
+   .. function:: static Expression string_concat(Client& connection, std::vector<Expression> args)
+
+      The concatenation of strings.
+
+      :Parameters:
+
+       * **args** -- The strings to concatenate, in order.
+
+      :returns: The concatenated string.
+   
+
+      .. note::
+
+         Use :func:`Expression::convert_to_string` to convert other values to strings.
+
+   .. function:: static Expression string_length(Client& connection, Expression arg)
+
+      The number of characters in a string.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The length of the string.
+   
+
+   .. function:: static Expression string_get(Client& connection, Expression arg, Expression index)
+
+      The character at the given position in a string, as a string of length one.
+
+      :Parameters:
+
+       * **arg** -- The string.
+       * **index** -- The position of the character, counting from zero.
+
+      :returns: The character at the given position.
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. function:: static Expression string_substring(Client& connection, Expression arg, Expression start, Expression length)
+
+      Part of a string.
+
+      :Parameters:
+
+       * **arg** -- The string.
+       * **start** -- The position to start at, counting from zero.
+       * **length** -- The number of characters to take.
+
+      :returns: The substring.
+   
+
+      .. note::
+
+         Throws an exception if the start or the length is out of range.
+
+   .. function:: static Expression string_index_of(Client& connection, Expression arg, Expression value)
+
+      The position of the first occurrence of one string within another.
+
+      :Parameters:
+
+       * **arg** -- The string to search.
+       * **value** -- The string to search for.
+
+      :returns: The position of the value, counting from zero, or -1 if it does not occur.
+   
+
+   .. function:: static Expression string_contains(Client& connection, Expression arg, Expression value)
+
+      Whether one string occurs within another.
+
+      :Parameters:
+
+       * **arg** -- The string to search.
+       * **value** -- The string to search for.
+
+      :returns: Whether the value occurs in the string.
+   
+
+   .. function:: static Expression string_starts_with(Client& connection, Expression arg, Expression value)
+
+      Whether a string starts with another.
+
+      :Parameters:
+
+       * **arg** -- The string to test.
+       * **value** -- The string to test for.
+
+      :returns: Whether the string starts with the value.
+   
+
+   .. function:: static Expression string_ends_with(Client& connection, Expression arg, Expression value)
+
+      Whether a string ends with another.
+
+      :Parameters:
+
+       * **arg** -- The string to test.
+       * **value** -- The string to test for.
+
+      :returns: Whether the string ends with the value.
+   
+
+   .. function:: static Expression string_to_upper(Client& connection, Expression arg)
+
+      A string in upper case, independently of the game's language.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The string in upper case.
+   
+
+   .. function:: static Expression string_to_lower(Client& connection, Expression arg)
+
+      A string in lower case, independently of the game's language.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The string in lower case.
+   
+
+   .. function:: static Expression string_trim(Client& connection, Expression arg)
+
+      A string with white space removed from both ends.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The trimmed string.
+   
+
+   .. function:: static Expression string_trim_start(Client& connection, Expression arg)
+
+      A string with white space removed from its start.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The trimmed string.
+   
+
+   .. function:: static Expression string_trim_end(Client& connection, Expression arg)
+
+      A string with white space removed from its end.
+
+      :Parameters:
+
+       * **arg** -- The string.
+
+      :returns: The trimmed string.
+   
+
+   .. function:: static Expression string_replace(Client& connection, Expression arg, Expression old_value, Expression new_value)
+
+      A string with every occurrence of one string replaced by another.
+
+      :Parameters:
+
+       * **arg** -- The string to search.
+       * **old_value** -- The string to replace.
+       * **new_value** -- The string to replace it with.
+
+      :returns: The string with the replacements made.
+   
+
+      .. note::
+
+         Throws an exception if the string to replace is empty.
+
+   .. function:: static Expression string_split(Client& connection, Expression arg, Expression separator)
+
+      The parts of a string separated by another string.
+
+      :Parameters:
+
+       * **arg** -- The string to split.
+       * **separator** -- The string that separates the parts.
+
+      :returns: The parts of the string.
+   
+
+   .. function:: static Expression string_join(Client& connection, Expression separator, Expression values)
+
+      Strings joined together, separated by another string.
+
+      :Parameters:
+
+       * **separator** -- The string to put between the values.
+       * **values** -- The strings to join.
+
+      :returns: The joined string.
+   
+
    .. function:: static Expression count(Client& connection, Expression arg)
 
-      Number of elements in a collection.
+      The number of values in a collection.
 
       :Parameters:
 
@@ -408,7 +1299,7 @@ Expressions
 
    .. function:: static Expression sum(Client& connection, Expression arg)
 
-      Sum all elements of a collection.
+      The sum of the values of a collection.
 
       :Parameters:
 
@@ -419,76 +1310,125 @@ Expressions
 
    .. function:: static Expression max(Client& connection, Expression arg)
 
-      Maximum of all elements in a collection.
+      The largest value of a collection.
 
       :Parameters:
 
        * **arg** -- The list or set.
 
-      :returns: The maximum elements in the collection.
+      :returns: The largest value in the collection.
    
+
+      .. note::
+
+         Throws an exception if the collection is empty and its values are not nullable.
 
    .. function:: static Expression min(Client& connection, Expression arg)
 
-      Minimum of all elements in a collection.
+      The smallest value of a collection.
 
       :Parameters:
 
        * **arg** -- The list or set.
 
-      :returns: The minimum elements in the collection.
+      :returns: The smallest value in the collection.
    
+
+      .. note::
+
+         Throws an exception if the collection is empty and its values are not nullable.
 
    .. function:: static Expression average(Client& connection, Expression arg)
 
-      Minimum of all elements in a collection.
+      The average of the values of a collection.
 
       :Parameters:
 
        * **arg** -- The list or set.
 
-      :returns: The minimum elements in the collection.
+      :returns: The average of the elements in the collection.
    
+
+      .. note::
+
+         Throws an exception if the collection is empty and its values are not nullable.
 
    .. function:: static Expression select(Client& connection, Expression arg, Expression func)
 
-      Run a function on every element in the collection.
+      The result of a function for each value of a collection.
 
       :Parameters:
 
        * **arg** -- The list or set.
-       * **func** -- The function.
+       * **func** -- The function, taking an element of the collection.
 
-      :returns: The modified collection.
+      :returns: The collection of function results.
    
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
    .. function:: static Expression where(Client& connection, Expression arg, Expression func)
 
-      Run a function on every element in the collection.
+      The values of a collection for which a predicate function returns true.
 
       :Parameters:
 
        * **arg** -- The list or set.
-       * **func** -- The function.
+       * **func** -- The predicate function, taking an element of the collection.
 
-      :returns: The modified collection.
+      :returns: The filtered collection.
    
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression select_many(Client& connection, Expression arg, Expression func)
+
+      The values of the collections a function returns for each value of a collection,
+      flattened into one.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The function, taking an element of the collection and returning a collection.
+
+      :returns: The flattened collection of function results.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
    .. function:: static Expression contains(Client& connection, Expression arg, Expression value)
 
-      Determine if a collection contains a value.
+      Whether a collection contains a value.
 
       :Parameters:
 
        * **arg** -- The collection.
        * **value** -- The value to look for.
 
-      :returns: Whether the collection contains a value.
+      :returns: Whether the collection contains the value.
+   
+
+   .. function:: static Expression contains_key(Client& connection, Expression dictionary, Expression key)
+
+      Whether a dictionary contains a key.
+
+      :Parameters:
+
+       * **dictionary** -- The dictionary.
+       * **key** -- The key to look for.
+
+      :returns: Whether the dictionary contains the key.
    
 
    .. function:: static Expression aggregate(Client& connection, Expression arg, Expression func)
 
-      Applies an accumulator function over a sequence.
+      The result of applying an accumulator function over a collection.
 
       :Parameters:
 
@@ -498,9 +1438,13 @@ Expressions
       :returns: The accumulated value.
    
 
+      .. note::
+
+         Throws an exception if the collection is empty.
+
    .. function:: static Expression aggregate_with_seed(Client& connection, Expression arg, Expression seed, Expression func)
 
-      Applies an accumulator function over a sequence, with a given seed.
+      The result of applying an accumulator function over a collection, starting from a seed.
 
       :Parameters:
 
@@ -511,33 +1455,77 @@ Expressions
       :returns: The accumulated value.
    
 
+      .. note::
+
+         The seed widens to the type of the accumulated value, the function's result.
+
    .. function:: static Expression concat(Client& connection, Expression arg1, Expression arg2)
 
-      Concatenate two sequences.
+      The values of one collection followed by those of another.
 
       :Parameters:
 
-       * **arg1** -- The first sequence.
-       * **arg2** -- The second sequence.
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
 
-      :returns: The first sequence followed by the second sequence.
+      :returns: The first collection followed by the second.
    
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression skip(Client& connection, Expression arg, Expression count)
+
+      A collection without its first count values.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **count** -- The number of values to skip.
+
+      :returns: The collection without its first count values.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression take(Client& connection, Expression arg, Expression count)
+
+      The first count values of a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **count** -- The number of values to take.
+
+      :returns: The first count values of the collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
 
    .. function:: static Expression order_by(Client& connection, Expression arg, Expression key)
 
-      Order a collection using a key function.
+      The values of a collection ordered by the key a function produces for each of them.
 
       :Parameters:
 
        * **arg** -- The collection to order.
-       * **key** -- A function that takes a value from the collection and generates a key to sort on.
+       * **key** -- A function producing the key to order values by.
 
       :returns: The ordered collection.
    
 
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
    .. function:: static Expression all(Client& connection, Expression arg, Expression predicate)
 
-      Determine whether all items in a collection satisfy a boolean predicate.
+      Whether a predicate function returns true for every value of a collection.
 
       :Parameters:
 
@@ -549,7 +1537,7 @@ Expressions
 
    .. function:: static Expression any(Client& connection, Expression arg, Expression predicate)
 
-      Determine whether any item in a collection satisfies a boolean predicate.
+      Whether a predicate function returns true for any value of a collection.
 
       :Parameters:
 
@@ -559,40 +1547,471 @@ Expressions
       :returns: Whether any item satisfies the predicate.
    
 
+   .. function:: static Expression first(Client& connection, Expression arg)
+
+      The first value of a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The first value.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. function:: static Expression last(Client& connection, Expression arg)
+
+      The last value of a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The last value.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. function:: static Expression element_at(Client& connection, Expression arg, Expression index)
+
+      The value at the given position in a collection.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **index** -- The position of the value, counting from zero.
+
+      :returns: The value at the given position.
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. function:: static Expression min_by(Client& connection, Expression arg, Expression key)
+
+      The value of a collection with the smallest key.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **key** -- A function producing the key to compare values by.
+
+      :returns: The value with the smallest key.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. function:: static Expression max_by(Client& connection, Expression arg, Expression key)
+
+      The value of a collection with the largest key.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **key** -- A function producing the key to compare values by.
+
+      :returns: The value with the largest key.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. function:: static Expression distinct(Client& connection, Expression arg)
+
+      The values of a collection with duplicates removed, keeping the first
+      occurrence of each.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The distinct values of the collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression reverse(Client& connection, Expression arg)
+
+      The values of a collection in the opposite order.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The reversed collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression union_(Client& connection, Expression arg1, Expression arg2)
+
+      The values in either of two collections, with duplicates removed.
+
+      :Parameters:
+
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
+
+      :returns: The union of the two collections.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression intersect(Client& connection, Expression arg1, Expression arg2)
+
+      The values in both of two collections, with duplicates removed.
+
+      :Parameters:
+
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
+
+      :returns: The intersection of the two collections.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression except(Client& connection, Expression arg1, Expression arg2)
+
+      The values of the first collection that are not in the second, with
+      duplicates removed.
+
+      :Parameters:
+
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
+
+      :returns: The difference between the two collections.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression zip(Client& connection, Expression arg1, Expression arg2, Expression func)
+
+      The results of a function applied to the values of two collections in pairs.
+
+      :Parameters:
+
+       * **arg1** -- The first collection.
+       * **arg2** -- The second collection.
+       * **func** -- A function combining a value from each collection.
+
+      :returns: The combined collection.
+   
+
+      .. note::
+
+         The result is as long as the shorter of the two collections. It is lazily
+         evaluated, and :func:`Expression::to_list` makes it concrete.
+
+   .. function:: static Expression group_by(Client& connection, Expression arg, Expression key)
+
+      The values of a collection grouped by the key a function produces for each of them.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **key** -- A function producing the key to group values by.
+
+      :returns: A dictionary of each key to the values that produced it.
+   
+
 
 
 .. class:: Type
 
-   A server side expression.
+   The type of a value a procedure takes or returns.
 
    .. function:: static Type double_(Client& connection)
 
-      Double type.
+      A double precision floating point number type.
 
 
    
 
    .. function:: static Type float_(Client& connection)
 
-      Float type.
+      A single precision floating point number type.
 
 
    
 
    .. function:: static Type int_(Client& connection)
 
-      Int type.
+      A signed 32-bit integer type.
+
+
+   
+
+   .. function:: static Type long_(Client& connection)
+
+      A signed 64-bit integer type.
+
+
+   
+
+   .. function:: static Type u_int(Client& connection)
+
+      An unsigned 32-bit integer type.
+
+
+   
+
+   .. function:: static Type u_long(Client& connection)
+
+      An unsigned 64-bit integer type.
 
 
    
 
    .. function:: static Type bool_(Client& connection)
 
-      Bool type.
+      A boolean type.
 
 
    
 
    .. function:: static Type string(Client& connection)
 
-      String type.
+      A string type.
+
+
+   
+
+   .. function:: static Type bytes(Client& connection)
+
+      A byte sequence type.
+
+
+   
+
+   .. function:: static Type class_type(Client& connection, std::string service, std::string name)
+
+      The type of a class defined by a service.
+
+      :Parameters:
+
+       * **service** -- The name of the service the class is defined in.
+       * **name** -- The name of the class.
+
+   
+
+   .. function:: static Type enumeration_type(Client& connection, std::string service, std::string name)
+
+      The type of an enumeration defined by a service.
+
+      :Parameters:
+
+       * **service** -- The name of the service the enumeration is defined in.
+       * **name** -- The name of the enumeration.
+
+   
+
+   .. function:: static Type struct_type(Client& connection, std::string service, std::string name)
+
+      The type of a structure defined by a service.
+
+      :Parameters:
+
+       * **service** -- The name of the service the structure is defined in.
+       * **name** -- The name of the structure.
+
+   
+
+   .. function:: static Type tuple_type(Client& connection, std::vector<Type> value_types)
+
+      A tuple type. Throws an exception if there are no element types or more than seven.
+
+      :Parameters:
+
+       * **value_types** -- The types of the elements of the tuple.
+
+   
+
+   .. function:: static Type list_type(Client& connection, Type value_type)
+
+      A list type.
+
+      :Parameters:
+
+       * **value_type** -- The type of the elements of the list.
+
+   
+
+   .. function:: static Type set_type(Client& connection, Type value_type)
+
+      A set type. Throws an exception if the element type is nullable.
+
+      :Parameters:
+
+       * **value_type** -- The type of the elements of the set.
+
+   
+
+   .. function:: static Type dictionary_type(Client& connection, Type key_type, Type value_type)
+
+      A dictionary type. Throws an exception if the key type is nullable or not a valid
+      key type.
+
+      :Parameters:
+
+       * **key_type** -- The type of the keys of the dictionary.
+       * **value_type** -- The type of the values of the dictionary.
+
+   
+
+   .. function:: static Type nullable_type(Client& connection, Type value_type)
+
+      A nullable type, holding a value of the given type or null.
+
+      :Parameters:
+
+       * **value_type** -- The type of the value.
+
+   
+
+   .. function:: TypeCode code()
+
+      The kind of the type.
+
+   
+
+   .. function:: std::string service()
+
+      The service a class, enumeration or structure type is defined in, or an empty string.
+
+   
+
+   .. function:: std::string name()
+
+      The name of a class, enumeration or structure type, or an empty string.
+
+   
+
+   .. function:: std::vector<Type> types()
+
+      The types of the elements of a tuple, list, set or dictionary type.
+
+   
+
+      .. note::
+
+         The value types of a tuple, the value type of a list or set, or the key and value
+         types of a dictionary. An empty list for any other type.
+
+   .. function:: bool nullable()
+
+      Whether a value of the type may be null.
+
+   
+
+      .. note::
+
+         Any type can be nullable. A string or class value of a type that is not nullable
+         is never null.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. enum-struct:: TypeCode
+
+   The kind of a type, with the values of the communication protocol's type codes.
+
+
+   .. enumerator:: double_
+
+      A double precision floating point number.
+
+
+   .. enumerator:: float_
+
+      A single precision floating point number.
+
+
+   .. enumerator:: s_int32
+
+      A signed 32-bit integer.
+
+
+   .. enumerator:: s_int64
+
+      A signed 64-bit integer.
+
+
+   .. enumerator:: u_int32
+
+      An unsigned 32-bit integer.
+
+
+   .. enumerator:: u_int64
+
+      An unsigned 64-bit integer.
+
+
+   .. enumerator:: bool_
+
+      A boolean.
+
+
+   .. enumerator:: string
+
+      A string.
+
+
+   .. enumerator:: bytes
+
+      A sequence of bytes.
+
+
+   .. enumerator:: class_
+
+      A class defined by a service.
+
+
+   .. enumerator:: enumeration
+
+      An enumeration defined by a service.
+
+
+   .. enumerator:: struct_
+
+      A structure defined by a service.
+
+
+   .. enumerator:: tuple
+
+      A tuple, with the types of its values in :func:`Type::types`.
+
+
+   .. enumerator:: list
+
+      A list, with the type of its values in :func:`Type::types`.
+
+
+   .. enumerator:: set
+
+      A set, with the type of its values in :func:`Type::types`.
+
+
+   .. enumerator:: dictionary
+
+      A dictionary, with the types of its keys and values in :func:`Type::types`.

@@ -725,7 +725,7 @@ It requires Java 17 or later.</p>
 </div>
 <p>To compile this program using javac on the command line, save the source as <code class="docutils literal notranslate"><span class="pre">Example.java</span></code> and run
 the following:</p>
-<pre class="literal-block">javac -cp krpc-java-0.7.0-677-eb41a6b.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java</pre>
+<pre class="literal-block">javac -cp krpc-java-0.7.0-689-04e985e.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java</pre>
 <p>Note that you may need to change the paths to the JAR files.</p>
 <section id="connecting-to-the-server">
 <h3>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h3>
@@ -1006,15 +1006,17 @@ holds the stream instead. It resumes once the object or scene is available.</p>
 called once, with the exception.</p>
 </section>
 </section>
-<section id="custom-events">
-<span id="java-client-events"></span><h2>Custom Events<a class="headerlink" href="#custom-events" title="Link to this heading">#</a></h2>
+<section id="events">
+<span id="java-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
 <p>Some procedures return event objects of type <a class="reference internal" href="#krpc.client.Event" title="krpc.client.Event"><code class="xref java java-type docutils literal notranslate"><span class="pre">Event</span></code></a>. These allow you to wait
 until an event occurs, by calling <a class="reference internal" href="#krpc.client.Event.waitFor()" title="krpc.client.Event.waitFor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Event.waitFor</span></code></a>. Under the hood, these are
 implemented using streams and condition variables.</p>
-<p>Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code> and then creates an event that will be triggered when the
-expression returns true:</p>
+<p>A call to <code class="docutils literal notranslate"><span class="pre">waitFor</span></code> returns straight away if the event has fired since the previous call on the
+same event object, so no firing is missed between two calls. Several firings between two calls make
+<code class="docutils literal notranslate"><span class="pre">waitFor</span></code> return once.</p>
+<p>You can also create a custom event from a server side function, which is code that runs inside
+the game. The following builds the function <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that
+triggers when the function returns true:</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Event</span><span class="p">;</span>
@@ -1038,7 +1040,7 @@ expression returns true:</p>
 <span class="w">      </span><span class="c1">// so it can be passed to the server</span>
 <span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getMeanAltitude&quot;</span><span class="p">);</span>
 
-<span class="w">      </span><span class="c1">// Create an expression on the server</span>
+<span class="w">      </span><span class="c1">// Build the function on the server</span>
 <span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">greaterThan</span><span class="p">(</span>
 <span class="w">        </span><span class="n">connection</span><span class="p">,</span>
 <span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
@@ -1054,9 +1056,6 @@ expression returns true:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>A call to <code class="docutils literal notranslate"><span class="pre">waitFor</span></code> returns straight away if the event has fired since the previous call on the
-same event object, so no firing is missed between two calls. Several firings between two calls make
-<code class="docutils literal notranslate"><span class="pre">waitFor</span></code> return once.</p>
 </section>
 <section id="client-api-reference">
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
@@ -1174,7 +1173,7 @@ window.</p></li>
  <span class="pre">krpc</span><span class="pre">.</span><span class="pre">schema</span><span class="pre">.</span><span class="pre">KRPC</span><span class="pre">.</span><span class="pre">ProcedureCall</span> <span class="sig-name descname"><span class="pre">getCall</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="java.lang.Class"><span class="pre">Class</span></a><span class="pre">&lt;</span><span class="pre">?</span><span class="pre">&gt;</span><em> <span class="pre">clazz</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">method</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a><span class="pre">...</span><em> <span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.getCall(Class, String, Object)" title="Link to this definition">#</a></dt>
 <dd><p>Returns a procedure call message for the given static method call. This allows descriptions of
 procedure calls to be passed to the server, for example when constructing custom events. See
-<a class="reference internal" href="#java-client-events"><span class="std std-ref">Custom Events</span></a>.</p>
+<a class="reference internal" href="#java-client-events"><span class="std std-ref">Events</span></a>.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -1182,7 +1181,7 @@ procedure calls to be passed to the server, for example when constructing custom
  <span class="pre">krpc</span><span class="pre">.</span><span class="pre">schema</span><span class="pre">.</span><span class="pre">KRPC</span><span class="pre">.</span><span class="pre">ProcedureCall</span> <span class="sig-name descname"><span class="pre">getCall</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.RemoteObject" title="krpc.client.RemoteObject"><span class="pre">RemoteObject</span></a><em> <span class="pre">instance</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">method</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a><span class="pre">...</span><em> <span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.getCall(RemoteObject, String, Object)" title="Link to this definition">#</a></dt>
 <dd><p>Returns a procedure call message for the given method call. This allows descriptions of
 procedure calls to be passed to the server, for example when constructing custom events. See
-<a class="reference internal" href="#java-client-events"><span class="std std-ref">Custom Events</span></a>.</p>
+<a class="reference internal" href="#java-client-events"><span class="std std-ref">Events</span></a>.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -1292,7 +1291,7 @@ the callback was added.</p>
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.Event">
  <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Event</span></span><a class="headerlink" href="#krpc.client.Event" title="Link to this definition">#</a></dt>
-<dd><p>This class represents an event. See <a class="reference internal" href="#java-client-events"><span class="std std-ref">Custom Events</span></a>. It is wrapper around a
+<dd><p>This class represents an event. See <a class="reference internal" href="#java-client-events"><span class="std std-ref">Events</span></a>. It is wrapper around a
 <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html" title="java.lang.Boolean"><code class="xref java java-type docutils literal notranslate"><span class="pre">Stream</span></code></a> that indicates when the event occurs.</p>
 <p>Event objects implement <code class="docutils literal notranslate"><span class="pre">hashCode</span></code> and <code class="docutils literal notranslate"><span class="pre">equals</span></code> such that two event objects are equal if they
 are bound to the same underlying stream on the server.</p>
@@ -1433,7 +1432,7 @@ the callback was added.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-events">Custom Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
 </ul>
   </nav></div>

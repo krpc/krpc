@@ -738,6 +738,23 @@ Can be used by client libraries to automatically create functionality such as st
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_AddFunctionStream">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_AddFunctionStream</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_schema_Stream</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="expressions.html#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_AddFunctionStream" title="Link to this definition">#</a><br /></dt>
+<dd><p>Add a stream of the value a server side function computes on each update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call adds a new stream, with values of the type given by
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ReturnType()</span></code>. Any exception from the function ends the
+stream, including one for an object that is not loaded. A procedure that pauses
+execution to resume on a later tick produces an error on the stream.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KRPC_HoldTick">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_HoldTick</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_HoldTick" title="Link to this definition">#</a><br /></dt>
 <dd><p>Hold the game on its current physics tick until <a class="reference internal" href="#c.krpc_KRPC_ReleaseTick" title="krpc_KRPC_ReleaseTick"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_ReleaseTick()</span></code></a> is called
@@ -780,6 +797,46 @@ act on every tick, work, and come back to it.</p>
 as the loop runs. End the loop with <a class="reference internal" href="#c.krpc_KRPC_ReleaseTick" title="krpc_KRPC_ReleaseTick"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_ReleaseTick()</span></code></a>.</p>
 <p>Every limit of <a class="reference internal" href="#c.krpc_KRPC_HoldTick" title="krpc_KRPC_HoldTick"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_HoldTick()</span></code></a> applies, the timeout included. A hold lost to
 the timeout is not reported, and the next call takes whatever tick it lands on.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_CompileFunction">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_CompileFunction</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="expressions.html#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_CompileFunction" title="Link to this definition">#</a><br /></dt>
+<dd><p>Compile a server side function, so that running, streaming or adding it as an
+event does not compile it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compiling a large function takes time on the game’s main thread. Compiling it
+in advance keeps that time out of its first run.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KRPC_RunFunction">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_RunFunction</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_bytes_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="expressions.html#c.krpc_KRPC_Expression_t" title="krpc_KRPC_Expression_t"><span class="n"><span class="pre">krpc_KRPC_Expression_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_list_nullable_bytes_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">arguments</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_RunFunction" title="Link to this definition">#</a><br /></dt>
+<dd><p>Run a server side function once, within a single physics tick, and return
+the value it produces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> – The function to run.</p></li>
+<li><p><strong>arguments</strong> – The encoded arguments, one per parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The encoded value of the function, or no bytes for a function with no value.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arguments are encoded at the types given by <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ParameterTypes()</span></code>.
+Throws an exception if a procedure the function calls pauses execution, and the
+effects up to the pause remain.</p>
 </div>
 </dd></dl>
 
@@ -913,6 +970,20 @@ meet the parameter specification of the method.</p>
 <p>A null reference was passed to a method that does not accept it as a valid argument.</p>
 <p>Exception class ArgumentOutOfRangeException</p>
 <p>The value of an argument is outside the allowable range of values as defined by the invoked method.</p>
+<p>Exception class NullReferenceException</p>
+<p>A value was null where its type does not allow one.</p>
+<p>Exception class KeyNotFoundException</p>
+<p>A key was not found in a dictionary.</p>
+<p>Exception class IndexOutOfRangeException</p>
+<p>An index was outside the bounds of a collection, string or array.</p>
+<p>Exception class DivideByZeroException</p>
+<p>An integer was divided by zero.</p>
+<p>Exception class NotSupportedException</p>
+<p>A method was invoked that is not supported.</p>
+<p>Exception class TimeoutException</p>
+<p>An operation did not complete in the time allotted to it.</p>
+<p>Exception class OverflowException</p>
+<p>An arithmetic or conversion operation overflowed.</p>
 <p>Exception class ObjectDestroyedException</p>
 <p>The game object that a service object refers to no longer exists,
 so the object cannot be used. For example, the part it represents
@@ -924,6 +995,8 @@ For example, the game is loading, or the vessel carrying the part is unloaded.</
 <p>The procedure is not available in the current game scene.</p>
 <p>Exception class StreamRemovedException</p>
 <p>A stream was removed by the server, e.g. an event that has finished.</p>
+<p>Exception class Error</p>
+<p>A general error, described by its message.</p>
 </section>
 
 

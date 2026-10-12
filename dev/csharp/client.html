@@ -960,15 +960,17 @@ holds the stream instead. It resumes once the object or scene is available.</p>
 called once, with the exception.</p>
 </section>
 </section>
-<section id="custom-events">
-<span id="csharp-client-events"></span><h2>Custom Events<a class="headerlink" href="#custom-events" title="Link to this heading">#</a></h2>
+<section id="events">
+<span id="csharp-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
 <p>Some procedures return event objects of type <a class="reference internal" href="#class-Event" title="Event class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Event</span></code></a>. These allow you to wait until an event
 occurs, by calling <a class="reference internal" href="#method-Event.Wait" title="Event.Wait method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Event.Wait</span></code></a>. Under the hood, these are implemented using streams and
 condition variables.</p>
-<p>Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code> and then creates an event that will be triggered when the
-expression returns true:</p>
+<p>A call to <code class="docutils literal notranslate"><span class="pre">Wait</span></code> returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+<code class="docutils literal notranslate"><span class="pre">Wait</span></code> return once.</p>
+<p>You can also create a custom event from a server side function, which is code that runs inside
+the game. The following builds the function <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that
+triggers when the function returns true:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.KRPC</span><span class="p">;</span>
@@ -985,7 +987,7 @@ expression returns true:</p>
 <span class="w">        </span><span class="c1">// so it can be passed to the server</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="p">);</span>
 
-<span class="w">        </span><span class="c1">// Create an expression on the server</span>
+<span class="w">        </span><span class="c1">// Build the function on the server</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">GreaterThan</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
 <span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
 <span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
@@ -999,9 +1001,6 @@ expression returns true:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>A call to <code class="docutils literal notranslate"><span class="pre">Wait</span></code> returns straight away if the event has fired since the previous call on the same
-event object, so no firing is missed between two calls. Several firings between two calls make
-<code class="docutils literal notranslate"><span class="pre">Wait</span></code> return once.</p>
 </section>
 <section id="client-api-reference">
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
@@ -1069,9 +1068,8 @@ does. Pass <code class="docutils literal notranslate"><span class="pre">null</sp
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-Connection.GetCall">
 <span class="pre">KRPC.Schema.KRPC.ProcedureCall</span> <span class="sig-name descname"><span class="pre">GetCall</span></span> <span class="sig-paren">(</span><span class="pre">LambdaExpression</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.GetCall" title="Link to this definition">#</a></dt>
-<dd><p>Returns a procedure call message for the given lambda expression. This allows descriptions of
-procedure calls to be passed to the server, for example when constructing custom events. See
-<a class="reference internal" href="#csharp-client-events"><span class="std std-ref">Custom Events</span></a>.</p>
+<dd><p>Returns the procedure call message for a lambda expression that makes a single call. The
+expression API’s <code class="docutils literal notranslate"><span class="pre">Expression.Call</span></code> takes it, as in <a class="reference internal" href="#csharp-client-events"><span class="std std-ref">Events</span></a>.</p>
 </dd></dl>
 
 <dl class="csharp method">
@@ -1172,7 +1170,7 @@ was added.</p>
 <dl class="csharp class">
 <dt class="sig sig-object csharp" id="class-Event">
 <span class="sig-name descname"><span class="pre">class</span> <span class="pre">Event</span></span><a class="headerlink" href="#class-Event" title="Link to this definition">#</a></dt>
-<dd><p>This class represents an event. See <a class="reference internal" href="#csharp-client-events"><span class="std std-ref">Custom Events</span></a>. It is wrapper around a
+<dd><p>This class represents an event. See <a class="reference internal" href="#csharp-client-events"><span class="std std-ref">Events</span></a>. It is wrapper around a
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> that indicates when the event occurs.</p>
 <p>Event objects implement <code class="docutils literal notranslate"><span class="pre">GetHashCode</span></code>, <code class="docutils literal notranslate"><span class="pre">Equals</span></code>, <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">!=</span></code> such
 that two event objects are equal if they are bound to the same underlying stream on the server.</p>
@@ -1302,7 +1300,7 @@ was added.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-events">Custom Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
 </ul>
   </nav></div>

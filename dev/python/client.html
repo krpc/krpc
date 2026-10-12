@@ -956,15 +956,17 @@ holds the stream instead. It resumes once the object or scene is available.</p>
 <a class="reference internal" href="#krpc.stream.Stream.add_end_callback" title="krpc.stream.Stream.add_end_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.stream.Stream.add_end_callback()</span></code></a>. It is called once, with the exception.</p>
 </section>
 </section>
-<section id="custom-events">
-<span id="python-client-events"></span><h2>Custom Events<a class="headerlink" href="#custom-events" title="Link to this heading">#</a></h2>
+<section id="events">
+<span id="python-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
 <p>Some procedures return event objects of type <a class="reference internal" href="#krpc.event.Event" title="krpc.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.event.Event</span></code></a>. These allow you to wait
 until an event occurs, by calling <a class="reference internal" href="#krpc.event.Event.wait" title="krpc.event.Event.wait"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.event.Event.wait</span></code></a>. Under the hood, these are
 implemented using streams and condition variables.</p>
-<p>Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression <code class="docutils literal notranslate"><span class="pre">mean_altitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code> and then creates an event that will be triggered when the
-expression returns true:</p>
+<p>A call to <code class="docutils literal notranslate"><span class="pre">wait</span></code> returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+<code class="docutils literal notranslate"><span class="pre">wait</span></code> return once.</p>
+<p>You can also create a custom event from a server side function, which is code that runs inside
+the game. The following builds the function <code class="docutils literal notranslate"><span class="pre">mean_altitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that
+triggers when the function returns true:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
@@ -975,12 +977,12 @@ expression returns true:</p>
 <span class="c1"># so it can be passed to the server</span>
 <span class="n">mean_altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">flight</span><span class="p">,</span> <span class="s2">&quot;mean_altitude&quot;</span><span class="p">)</span>
 
-<span class="c1"># Create an expression on the server</span>
+<span class="c1"># Build the function on the server</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">greater_than</span><span class="p">(</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">mean_altitude</span><span class="p">),</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="c1"># Create an event from the expression</span>
+<span class="c1"># Create an event from the function</span>
 <span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
 
 <span class="c1"># Wait on the event</span>
@@ -989,9 +991,6 @@ expression returns true:</p>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Altitude reached 1000m&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>A call to <code class="docutils literal notranslate"><span class="pre">wait</span></code> returns straight away if the event has fired since the previous call on the same
-event object, so no firing is missed between two calls. Several firings between two calls make
-<code class="docutils literal notranslate"><span class="pre">wait</span></code> return once.</p>
 </section>
 <section id="client-api-reference">
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
@@ -1114,7 +1113,7 @@ synchronization.</p>
 <span class="sig-name descname"><span class="pre">get_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.get_call" title="Link to this definition">#</a></dt>
 <dd><p>Converts a call to function <em>func</em> with arguments <em>args</em> and <em>kwargs</em> into a message
 object. This allows descriptions of procedure calls to be passed to the server, for example
-when constructing custom events. See <a class="reference internal" href="#python-client-events"><span class="std std-ref">Custom Events</span></a>.</p>
+when constructing custom events. See <a class="reference internal" href="#python-client-events"><span class="std std-ref">Events</span></a>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1228,7 +1227,7 @@ invoked straight away if the stream has already ended.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="krpc.event.Event">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.event.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><a class="headerlink" href="#krpc.event.Event" title="Link to this definition">#</a></dt>
-<dd><p>This class represents an event. See <a class="reference internal" href="#python-client-events"><span class="std std-ref">Custom Events</span></a>. It is wrapper around a stream of
+<dd><p>This class represents an event. See <a class="reference internal" href="#python-client-events"><span class="std std-ref">Events</span></a>. It is wrapper around a stream of
 type <code class="docutils literal notranslate"><span class="pre">bool</span></code> that indicates when the event occurs.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="krpc.event.Event.condition">
@@ -1406,7 +1405,7 @@ the generated stub then names the constant from this module.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-events">Custom Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numeric-limits">Numeric Limits</a></li>
 </ul>

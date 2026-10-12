@@ -747,6 +747,23 @@ Can be used by client libraries to automatically create functionality such as st
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC19add_function_streamE10Expression">
+<span id="_CPPv3N4krpc8services4KRPC19add_function_streamE10Expression"></span><span id="_CPPv2N4krpc8services4KRPC19add_function_streamE10Expression"></span><span id="krpc::services::KRPC::add_function_stream__Expression"></span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Stream</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_function_stream</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="expressions.html#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC19add_function_streamE10Expression" title="Link to this definition">#</a><br /></dt>
+<dd><p>Add a stream of the value a server side function computes on each update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call adds a new stream, with values of the type given by
+<a class="reference internal" href="expressions.html#_CPPv4N4krpc8services4KRPC10Expression11return_typeEv" title="krpc::services::KRPC::Expression::return_type"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Expression::return_type()</span></code></a>. Any exception from the function ends the
+stream, including one for an object that is not loaded. A procedure that pauses
+execution to resume on a later tick produces an error on the stream.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC9hold_tickEv">
 <span id="_CPPv3N4krpc8services4KRPC9hold_tickEv"></span><span id="_CPPv2N4krpc8services4KRPC9hold_tickEv"></span><span id="krpc::services::KRPC::hold_tick"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hold_tick</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC9hold_tickEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Hold the game on its current physics tick until <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC12release_tickEv" title="krpc::services::KRPC::release_tick"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">release_tick()</span></code></a> is called
@@ -789,6 +806,46 @@ act on every tick, work, and come back to it.</p>
 as the loop runs. End the loop with <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC12release_tickEv" title="krpc::services::KRPC::release_tick"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">release_tick()</span></code></a>.</p>
 <p>Every limit of <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC9hold_tickEv" title="krpc::services::KRPC::hold_tick"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">hold_tick()</span></code></a> applies, the timeout included. A hold lost to
 the timeout is not reported, and the next call takes whatever tick it lands on.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16compile_functionE10Expression">
+<span id="_CPPv3N4krpc8services4KRPC16compile_functionE10Expression"></span><span id="_CPPv2N4krpc8services4KRPC16compile_functionE10Expression"></span><span id="krpc::services::KRPC::compile_function__Expression"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compile_function</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="expressions.html#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16compile_functionE10Expression" title="Link to this definition">#</a><br /></dt>
+<dd><p>Compile a server side function, so that running, streaming or adding it as an
+event does not compile it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compiling a large function takes time on the game’s main thread. Compiling it
+in advance keeps that time out of its first run.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC12run_functionE10ExpressionNSt6vectorINSt8optionalINSt6stringEEEEE">
+<span id="_CPPv3N4krpc8services4KRPC12run_functionE10ExpressionNSt6vectorINSt8optionalINSt6stringEEEEE"></span><span id="_CPPv2N4krpc8services4KRPC12run_functionE10ExpressionNSt6vectorINSt8optionalINSt6stringEEEEE"></span><span id="krpc::services::KRPC::run_function__Expression.std::vector:std::optional:ss::"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run_function</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="expressions.html#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">function</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">arguments</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC12run_functionE10ExpressionNSt6vectorINSt8optionalINSt6stringEEEEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Run a server side function once, within a single physics tick, and return
+the value it produces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> – The function to run.</p></li>
+<li><p><strong>arguments</strong> – The encoded arguments, one per parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The encoded value of the function, or no bytes for a function with no value.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arguments are encoded at the types given by <a class="reference internal" href="expressions.html#_CPPv4N4krpc8services4KRPC10Expression15parameter_typesEv" title="krpc::services::KRPC::Expression::parameter_types"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Expression::parameter_types()</span></code></a>.
+Throws an exception if a procedure the function calls pauses execution, and the
+effects up to the pause remain.</p>
 </div>
 </dd></dl>
 
@@ -941,6 +998,48 @@ meet the parameter specification of the method.</p>
 </dd></dl>
 
 <dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC22NullReferenceExceptionE">
+<span id="_CPPv3N4krpc8services4KRPC22NullReferenceExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC22NullReferenceExceptionE"></span><span id="krpc::services::KRPC::NullReferenceException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NullReferenceException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC22NullReferenceExceptionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A value was null where its type does not allow one.</p>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC20KeyNotFoundExceptionE">
+<span id="_CPPv3N4krpc8services4KRPC20KeyNotFoundExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC20KeyNotFoundExceptionE"></span><span id="krpc::services::KRPC::KeyNotFoundException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KeyNotFoundException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC20KeyNotFoundExceptionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A key was not found in a dictionary.</p>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC24IndexOutOfRangeExceptionE">
+<span id="_CPPv3N4krpc8services4KRPC24IndexOutOfRangeExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC24IndexOutOfRangeExceptionE"></span><span id="krpc::services::KRPC::IndexOutOfRangeException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IndexOutOfRangeException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC24IndexOutOfRangeExceptionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>An index was outside the bounds of a collection, string or array.</p>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC21DivideByZeroExceptionE">
+<span id="_CPPv3N4krpc8services4KRPC21DivideByZeroExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC21DivideByZeroExceptionE"></span><span id="krpc::services::KRPC::DivideByZeroException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DivideByZeroException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC21DivideByZeroExceptionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>An integer was divided by zero.</p>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC21NotSupportedExceptionE">
+<span id="_CPPv3N4krpc8services4KRPC21NotSupportedExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC21NotSupportedExceptionE"></span><span id="krpc::services::KRPC::NotSupportedException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NotSupportedException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC21NotSupportedExceptionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A method was invoked that is not supported.</p>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16TimeoutExceptionE">
+<span id="_CPPv3N4krpc8services4KRPC16TimeoutExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC16TimeoutExceptionE"></span><span id="krpc::services::KRPC::TimeoutException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TimeoutException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16TimeoutExceptionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>An operation did not complete in the time allotted to it.</p>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC17OverflowExceptionE">
+<span id="_CPPv3N4krpc8services4KRPC17OverflowExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC17OverflowExceptionE"></span><span id="krpc::services::KRPC::OverflowException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OverflowException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC17OverflowExceptionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>An arithmetic or conversion operation overflowed.</p>
+</dd></dl>
+
+<dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC24ObjectDestroyedExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC24ObjectDestroyedExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC24ObjectDestroyedExceptionE"></span><span id="krpc::services::KRPC::ObjectDestroyedException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ObjectDestroyedException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC24ObjectDestroyedExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The game object that a service object refers to no longer exists,
@@ -965,6 +1064,12 @@ For example, the game is loading, or the vessel carrying the part is unloaded.</
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC22StreamRemovedExceptionE">
 <span id="_CPPv3N4krpc8services4KRPC22StreamRemovedExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC22StreamRemovedExceptionE"></span><span id="krpc::services::KRPC::StreamRemovedException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">StreamRemovedException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC22StreamRemovedExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>A stream was removed by the server, e.g. an event that has finished.</p>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC5ErrorE">
+<span id="_CPPv3N4krpc8services4KRPC5ErrorE"></span><span id="_CPPv2N4krpc8services4KRPC5ErrorE"></span><span id="krpc::services::KRPC::Error"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Error</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC5ErrorE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A general error, described by its message.</p>
 </dd></dl>
 
 </section>

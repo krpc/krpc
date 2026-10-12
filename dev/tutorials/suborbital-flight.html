@@ -845,9 +845,9 @@ jettison the boosters:</p>
 </div>
 </div></div>
 <p>In this bit of code, <code class="docutils literal notranslate"><span class="pre">vessel.resources</span></code> returns a <a class="reference internal" href="../python/api/space-center/resources.html#SpaceCenter.Resources" title="SpaceCenter.Resources"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resources</span></code></a> object that is used to get
-information about the resources in the rocket. The code creates the expression
-<code class="docutils literal notranslate"><span class="pre">vessel.resources.amount('SolidFuel')</span> <span class="pre">&lt;</span> <span class="pre">0.1</span></code> on the server, using the expression API. This
-expression is then used to drive an event, which is triggered when the expression returns true.</p>
+information about the resources in the rocket. The code builds the server side function
+<code class="docutils literal notranslate"><span class="pre">vessel.resources.amount('SolidFuel')</span> <span class="pre">&lt;</span> <span class="pre">0.1</span></code>, and creates an event from it. The event triggers
+when the function returns true.</p>
 </section>
 <section id="part-three-reaching-apoapsis">
 <h2>Part Three: Reaching Apoapsis<a class="headerlink" href="#part-three-reaching-apoapsis" title="Link to this heading">#</a></h2>

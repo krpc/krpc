@@ -780,9 +780,11 @@ valid encoding and is distinct from null.</p>
 <p>Streams allow the client to repeatedly execute an RPC on the server and receive its results, without
 needing to repeatedly call the RPC directly, avoiding the communication overhead that this would
 involve.</p>
-<p>A client can create a stream on the server by calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>. Each
-call creates a new stream with a new identifier, including a call for the same RPC as an existing
-stream. The stream sends its first result in the update after it is added.</p>
+<p>A client can create a stream on the server by calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>, or
+stream the value of a server side function by calling
+<a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a>. Each call creates a new stream with a new
+identifier, including a call for the same RPC or function as an existing stream. The stream sends
+its first result in the update after it is added.</p>
 <p>A stream over a game object that is not loaded sends no result until the object loads. A stream over
 a procedure that is not available in the current game scene sends no result until the game returns
 to a scene where it is. An event still sends its first result, which says whether it has fired.</p>
@@ -824,7 +826,8 @@ format:</p>
 <p>The fields are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the stream. This is the value returned by
-<a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a> when the stream is created.</p></li>
+<a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a> or <a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a>
+when the stream is created.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">result</span></code> - A <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message containing the result of the streams RPC. This is
 identical to the <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message returned when calling the RPC directly. See
 <a class="reference internal" href="#communication-protocol-anatomy-of-a-response"><span class="std std-ref">Anatomy of a Response</span></a> for details on the format and contents of this
@@ -904,12 +907,43 @@ encoded as a <code class="docutils literal notranslate"><span class="pre">Proced
 <a class="reference internal" href="#communication-protocol-anatomy-of-a-request"><span class="std std-ref">Anatomy of a Request</span></a> for the format and contents of this message. See
 <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more information on working with streams.</p>
 </section>
+<section id="addfunctionstream">
+<span id="communication-protocol-add-function-stream"></span><h3>AddFunctionStream<a class="headerlink" href="#addfunctionstream" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">AddFunctionStream</span></code> procedure adds a stream that evaluates a server side function on
+each update. Its argument is the function, built using the <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> class.</p>
+<p>The procedure returns a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message describing the stream that was added. The stream’s
+values have the type given by the function’s <code class="docutils literal notranslate"><span class="pre">ReturnType</span></code> property. The function must take no
+parameters. Any exception from the function ends the stream with that error, including one for a
+game object that is not loaded.</p>
+</section>
+<section id="runfunction">
+<span id="communication-protocol-run-function"></span><h3>RunFunction<a class="headerlink" href="#runfunction" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">RunFunction</span></code> procedure evaluates a server side function once, within a single physics
+tick, and returns the value it produces. Its first argument is the function, built using the
+<code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> class. The value is returned as a <code class="docutils literal notranslate"><span class="pre">bytes</span></code> result holding the value’s
+ordinary encoding, at the function’s return type.</p>
+<p>The second argument is a list of the function’s arguments, one per parameter of a function built
+with <code class="docutils literal notranslate"><span class="pre">Expression.Lambda</span></code>. Each holds the value’s ordinary encoding at the type given by the
+function’s <code class="docutils literal notranslate"><span class="pre">ParameterTypes</span></code> property, and is null for a null value. A function that is not a
+lambda takes no arguments, and the list defaults to empty.</p>
+<p>A client decodes the result at the type given by the function’s <code class="docutils literal notranslate"><span class="pre">ReturnType</span></code> property. A
+function that produces no value returns an empty result, and a function whose value is null sets
+<code class="docutils literal notranslate"><span class="pre">is_null</span></code> on the result, the same flag any nullable return value uses. The function’s
+<code class="docutils literal notranslate"><span class="pre">HasReturnType</span></code> property distinguishes no value from an empty collection, as both give an
+empty result.</p>
+</section>
+<section id="compilefunction">
+<span id="communication-protocol-compile-function"></span><h3>CompileFunction<a class="headerlink" href="#compilefunction" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">CompileFunction</span></code> procedure compiles a server side function, and returns nothing. The
+server otherwise compiles a function when it is first run, streamed or added as an event, on the
+game’s main thread. Compiling a large function in advance keeps that time out of its first run.</p>
+</section>
 <section id="removestream">
 <span id="communication-protocol-remove-stream"></span><h3>RemoveStream<a class="headerlink" href="#removestream" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">RemoveStream</span></code> procedure removes a stream from the server. It takes a single argument – the
 identifier of the stream to be removed. This is the identifier returned when the stream was added by
-calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>. See <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more
-information on working with streams.</p>
+calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a> or <a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a>.
+See <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more information on working with streams.</p>
 <p>Removing a stream that has already ended does nothing. An identifier the server never issued raises
 <code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>. <code class="docutils literal notranslate"><span class="pre">SetStreamRate</span></code> follows the same rules.</p>
 </section>
@@ -1373,6 +1407,9 @@ represent null on the wire.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getstatus">GetStatus</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getservices">GetServices</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addstream">AddStream</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addfunctionstream">AddFunctionStream</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runfunction">RunFunction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compilefunction">CompileFunction</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#removestream">RemoveStream</a></li>
 </ul>
 </li>

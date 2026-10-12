@@ -579,6 +579,7 @@
  | <a href="#W"><strong>W</strong></a>
  | <a href="#X"><strong>X</strong></a>
  | <a href="#Y"><strong>Y</strong></a>
+ | <a href="#Z"><strong>Z</strong></a>
  
 </div>
 <h2 id="_">_</h2>
@@ -712,6 +713,8 @@
       </ul></li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.add_force">add_force() (Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.add_force">[1]</a>
 </li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.add_function_stream">add_function_stream() (in module KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.add_function_stream">[1]</a>
+</li>
       <li><a href="lua/api/ui/panel.html#UI.Panel.add_grid_layout">add_grid_layout() (Panel method)</a>, <a href="python/api/ui/panel.html#UI.Panel.add_grid_layout">[1]</a>
 </li>
       <li><a href="lua/api/ui/panel.html#UI.Panel.add_horizontal_layout">add_horizontal_layout() (Panel method)</a>, <a href="python/api/ui/panel.html#UI.Panel.add_horizontal_layout">[1]</a>
@@ -841,6 +844,8 @@
       <li><a href="java/client.html#krpc.client.Event.addEndCallback(java.util.function.Consumer)">addEndCallback(java.util.function.Consumer) (Java method)</a>, <a href="java/client.html#krpc.client.Stream.addEndCallback(java.util.function.Consumer)">[1]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.addForce(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)">addForce(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.addFunctionStream(Expression)">addFunctionStream(Expression) (Java method)</a>
 </li>
       <li><a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.addGridLayout()">addGridLayout() (Java method)</a>
 </li>
@@ -1024,10 +1029,10 @@
       </ul></li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.ascending_node">AlarmType.ascending_node (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.ascending_node">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">AlarmType.closest (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract">AlarmType.contract (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract">[1]</a>
 </li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract_auto">AlarmType.contract_auto (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract_auto">[1]</a>
@@ -1222,6 +1227,10 @@
 </li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.apoapsis_altitude">apoapsis_altitude (Orbit attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.append">append() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.append">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.append(Connection, Expression, Expression)">append(Connection, Expression, Expression) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMemberType.APPLICANT">APPLICANT (Java field)</a>
 </li>
       <li><a href="lua/api/debug/debug.html#Debug.apply_rotation">apply_rotation() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.apply_rotation">[1]</a>
@@ -1283,6 +1292,10 @@
       <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarkerIcon.ASCENDING_NODE">ASCENDING_NODE (Java field)</a>, <a href="java/api/kerbal-alarm-clock/alarm-type.html#krpc.client.services.KerbalAlarmClock.AlarmType.ASCENDING_NODE">[1]</a>
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.AltimeterMode.ASL">ASL (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.assign">assign() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.assign">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.assign(Connection, Expression, Expression)">assign(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.RosterStatus.ASSIGNED">ASSIGNED (Java field)</a>
 </li>
@@ -1512,6 +1525,14 @@
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Light.blink_rate">blink_rate (Light attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.block">block() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.block">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.block(Connection, java.util.List)">block(Connection, java.util.List) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.block_with_variables">block_with_variables() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.block_with_variables">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.blockWithVariables(Connection, java.util.List, java.util.List)">blockWithVariables(Connection, java.util.List, java.util.List) (Java method)</a>
+</li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.Control.board">board() (Control method)</a>, <a href="python/api/space-center/control.html#SpaceCenter.Control.board">[1]</a>
 
       <ul>
@@ -1536,6 +1557,8 @@
 </li>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.FontStyle.BOLD_AND_ITALIC">BOLD_AND_ITALIC (Java field)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.BOOL">BOOL (Java field)</a>
+</li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Type.bool">bool() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.bool">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.bool(Connection)">bool(Connection) (Java method)</a>
@@ -1552,10 +1575,10 @@
         <li><a href="lua/api/space-center/vessel.html#SpaceCenter.Vessel.bounding_box">(Vessel method)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.bounding_box">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.boundingBox(ReferenceFrame)">boundingBox(ReferenceFrame) (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.boundingBox(ReferenceFrame)">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/drawing/box.html#Drawing.Box">Box (class in Drawing)</a>, <a href="python/api/drawing/box.html#Drawing.Box">[1]</a>
 
       <ul>
@@ -1572,6 +1595,12 @@
         <li><a href="python/api/space-center/parts.html#SpaceCenter.Wheel.brakes">(Wheel attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.break">break() (Expression static method)</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Expression.break_">break_() (Expression static method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.break_(Connection)">break_(Connection) (Java method)</a>
+</li>
       <li><a href="lua/api/ui/panel.html#UI.Panel.bring_to_front">bring_to_front() (Panel method)</a>, <a href="python/api/ui/panel.html#UI.Panel.bring_to_front">[1]</a>
 </li>
       <li><a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.bringToFront()">bringToFront() (Java method)</a>
@@ -1585,6 +1614,10 @@
 </li>
       </ul></li>
       <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.build_aid">build_aid (ServoGroup attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.build_dictionary">build_dictionary() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.build_dictionary">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.buildDictionary(Connection, Expression, Expression, Expression)">buildDictionary(Connection, Expression, Expression, Expression) (Java method)</a>
 </li>
       <li>
     built-in function
@@ -1647,6 +1680,12 @@
         <li><a href="java/api/ui/button.html#krpc.client.services.UI.Button">(Java class)</a>
 </li>
       </ul></li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.BYTES">BYTES (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.bytes">bytes() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.bytes">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.bytes(Connection)">bytes(Connection) (Java method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1656,6 +1695,10 @@
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.call">call() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.call">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.call(Connection, krpc.schema.KRPC.ProcedureCall)">call(Connection, krpc.schema.KRPC.ProcedureCall) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.call_with_arguments">call_with_arguments() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.call_with_arguments">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.callWithArguments(Connection, krpc.schema.KRPC.ProcedureCall, java.util.Map)">callWithArguments(Connection, krpc.schema.KRPC.ProcedureCall, java.util.Map) (Java method)</a>
 </li>
       <li><a href="lua/api/docking-camera/camera.html#DockingCamera.Camera">Camera (class in DockingCamera)</a>, <a href="python/api/docking-camera/camera.html#DockingCamera.Camera">[1]</a>
 
@@ -1853,13 +1896,23 @@
         <li><a href="java/api/drawing/circle.html#krpc.client.services.Drawing.Circle">(Java class)</a>
 </li>
       </ul></li>
-      <li><a href="lua/api/drawing/drawing.html#Drawing.clear">clear() (in module Drawing)</a>, <a href="python/api/drawing/drawing.html#Drawing.clear">[1]</a>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.CLASS">CLASS (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.class_type">class_type() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.class_type">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.classType(Connection, String, String)">classType(Connection, String, String) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.clear">clear() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.clear">[1]</a>
 
       <ul>
+        <li><a href="lua/api/drawing/drawing.html#Drawing.clear">(in module Drawing)</a>, <a href="python/api/drawing/drawing.html#Drawing.clear">[1]</a>
+</li>
         <li><a href="lua/api/ui/ui.html#UI.clear">(in module UI)</a>, <a href="python/api/ui/ui.html#UI.clear">[1]</a>
 </li>
       </ul></li>
       <li><a href="java/api/drawing/drawing.html#krpc.client.services.Drawing.Drawing.clear(boolean)">clear(boolean) (Java method)</a>, <a href="java/api/ui/ui.html#krpc.client.services.UI.UI.clear(boolean)">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.clear(Connection, Expression)">clear(Connection, Expression) (Java method)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.RoboticController.clear_axis">clear_axis() (RoboticController method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.RoboticController.clear_axis">[1]</a>
 </li>
@@ -1900,6 +1953,8 @@
       <li><a href="python/api/lidar/laser.html#LiDAR.Laser.cloud">cloud (Laser attribute)</a>
 </li>
       <li><a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.clustered">clustered (Waypoint attribute)</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Type.code">code (Type attribute)</a>
 </li>
       <li><a href="python/api/drawing/arc.html#Drawing.Arc.color">color (Arc attribute)</a>
 
@@ -2005,14 +2060,16 @@
 </li>
       <li><a href="java/api/remote-tech/remote-tech.html#krpc.client.services.RemoteTech.RemoteTech.comms(SpaceCenter.Vessel)">comms(SpaceCenter.Vessel) (Java method)</a>
 </li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.compile_function">compile_function() (in module KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.compile_function">[1]</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.compileFunction(Expression)">compileFunction(Expression) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/resources.html#SpaceCenter.ResourceTransfer.complete">complete (ResourceTransfer attribute)</a>
 </li>
       <li><a href="python/api/space-center/contracts.html#SpaceCenter.ContractParameter.completed">completed (ContractParameter attribute)</a>
 </li>
       <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.ContractState.COMPLETED">COMPLETED (Java field)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/contracts.html#SpaceCenter.ContractManager.completed_contracts">completed_contracts (ContractManager attribute)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.concat">concat() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.concat">[1]</a>
@@ -2025,12 +2082,26 @@
         <li><a href="python/client.html#krpc.stream.Stream.condition">(krpc.stream.Stream attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.conditional">conditional() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.conditional">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.conditional(Connection, Expression, Expression, Expression)">conditional(Connection, Expression, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.conditional_and">conditional_and() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.conditional_and">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.conditional_or">conditional_or() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.conditional_or">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.conditionalAnd(Connection, Expression, Expression)">conditionalAnd(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.conditionalOr(Connection, Expression, Expression)">conditionalOr(Connection, Expression, Expression) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Module.config">config (Module attribute)</a>
 
       <ul>
         <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.config">(Part attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.config_speed">config_speed (Servo attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.ConfigNode">ConfigNode (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ConfigNode">[1]</a>
@@ -2045,23 +2116,51 @@
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_bool">constant_bool() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_bool">[1]</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_bytes">constant_bytes() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_bytes">[1]</a>
+</li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_double">constant_double() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_double">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_enum">constant_enum() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_enum">[1]</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_float">constant_float() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_float">[1]</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_int">constant_int() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_int">[1]</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_long">constant_long() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_long">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_null">constant_null() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_null">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_object">constant_object() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_object">[1]</a>
+</li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_string">constant_string() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_string">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_u_int">constant_u_int() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_u_int">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_u_long">constant_u_long() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_u_long">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantBool(Connection, boolean)">constantBool(Connection, boolean) (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantBytes(Connection, byte[])">constantBytes(Connection, byte[]) (Java method)</a>
+</li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantDouble(Connection, double)">constantDouble(Connection, double) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantEnum(Connection, String, String, int)">constantEnum(Connection, String, String, int) (Java method)</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantFloat(Connection, float)">constantFloat(Connection, float) (Java method)</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantInt(Connection, int)">constantInt(Connection, int) (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantLong(Connection, long)">constantLong(Connection, long) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantNull(Connection, Type)">constantNull(Connection, Type) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantObject(Connection, long)">constantObject(Connection, long) (Java method)</a>
+</li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantString(Connection, String)">constantString(Connection, String) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantUInt(Connection, int)">constantUInt(Connection, int) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantULong(Connection, long)">constantULong(Connection, long) (Java method)</a>
 </li>
       <li><a href="python/api/ui/layout.html#UI.Layout.constraint">constraint (Layout attribute)</a>
 </li>
@@ -2070,6 +2169,10 @@
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.contains">contains() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.contains">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.contains(Connection, Expression, Expression)">contains(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.contains_key">contains_key() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.contains_key">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.containsKey(Connection, Expression, Expression)">containsKey(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="python/api/ui/image.html#UI.Image.content">content (Image attribute)</a>
 
@@ -2092,6 +2195,12 @@
       <li><a href="lua/api/ui/size-fitter.html#UI.ContentSizeFit.preferred_size">ContentSizeFit.preferred_size (in module UI)</a>, <a href="python/api/ui/size-fitter.html#UI.ContentSizeFit.preferred_size">[1]</a>
 </li>
       <li><a href="lua/api/ui/size-fitter.html#UI.ContentSizeFit.unconstrained">ContentSizeFit.unconstrained (in module UI)</a>, <a href="python/api/ui/size-fitter.html#UI.ContentSizeFit.unconstrained">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.continue">continue() (Expression static method)</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Expression.continue_">continue_() (Expression static method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.continue_(Connection)">continue_(Connection) (Java method)</a>
 </li>
       <li><a href="lua/api/space-center/contracts.html#SpaceCenter.Contract">Contract (class in SpaceCenter)</a>, <a href="python/api/space-center/contracts.html#SpaceCenter.Contract">[1]</a>
 
@@ -2203,7 +2312,11 @@
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface">(Java class)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.convert_to_string">convert_to_string() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.convert_to_string">[1]</a>
+</li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction.CONVERTED">CONVERTED (Java field)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.convertToString(Connection, Expression)">convertToString(Connection, Expression) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ResourceConverter.core_temperature">core_temperature (ResourceConverter attribute)</a>
 
@@ -2229,6 +2342,12 @@
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.create_dictionary">create_dictionary() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.create_dictionary">[1]</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.create_empty_dictionary">create_empty_dictionary() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.create_empty_dictionary">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.create_empty_list">create_empty_list() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.create_empty_list">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.create_empty_set">create_empty_set() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.create_empty_set">[1]</a>
+</li>
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.Orbit.create_from_orbital_elements">create_from_orbital_elements() (Orbit static method)</a>, <a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.create_from_orbital_elements">[1]</a>
 </li>
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.Orbit.create_from_position_and_velocity">create_from_position_and_velocity() (Orbit static method)</a>, <a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.create_from_position_and_velocity">[1]</a>
@@ -2243,11 +2362,19 @@
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.create_set">create_set() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.create_set">[1]</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.create_struct">create_struct() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.create_struct">[1]</a>
+</li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.create_tuple">create_tuple() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.create_tuple">[1]</a>
 </li>
       <li><a href="java/api/kerbal-alarm-clock/kerbal-alarm-clock.html#krpc.client.services.KerbalAlarmClock.KerbalAlarmClock.createAlarm(AlarmType, String, double)">createAlarm(AlarmType, String, double) (Java method)</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.createDictionary(Connection, java.util.List, java.util.List)">createDictionary(Connection, java.util.List, java.util.List) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.createEmptyDictionary(Connection, Type, Type)">createEmptyDictionary(Connection, Type, Type) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.createEmptyList(Connection, Type)">createEmptyList(Connection, Type) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.createEmptySet(Connection, Type)">createEmptySet(Connection, Type) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.createFromOrbitalElements(Connection, CelestialBody, double, double, double, double, double, double, double)">createFromOrbitalElements(Connection, CelestialBody, double, double, double, double, double, double, double) (Java method)</a>
 </li>
@@ -2262,6 +2389,8 @@
       <li><a href="java/api/space-center/reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame.createRelative(Connection, ReferenceFrame, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet, org.javatuples.Triplet)">createRelative(Connection, ReferenceFrame, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet, org.javatuples.Triplet) (Java method)</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.createSet(Connection, java.util.Set)">createSet(Connection, java.util.Set) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.createStruct(Connection, Type, java.util.List)">createStruct(Connection, Type, java.util.List) (Java method)</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.createTuple(Connection, java.util.List)">createTuple(Connection, java.util.List) (Java method)</a>
 </li>
@@ -2670,6 +2799,20 @@
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.diagnostic_logging">diagnostic_logging (AutoPilot attribute)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.DICTIONARY">DICTIONARY (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.dictionary_keys">dictionary_keys() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.dictionary_keys">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.dictionary_type">dictionary_type() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.dictionary_type">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.dictionary_values">dictionary_values() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.dictionary_values">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.dictionaryKeys(Connection, Expression)">dictionaryKeys(Connection, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.dictionaryType(Connection, Type, Type)">dictionaryType(Connection, Type, Type) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.dictionaryValues(Connection, Expression)">dictionaryValues(Connection, Expression) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.direction">direction (Flight attribute)</a>
 
       <ul>
@@ -2718,10 +2861,20 @@
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.distanceAtClosestApproach(Orbit)">distanceAtClosestApproach(Orbit) (Java method)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.distinct">distinct() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.distinct">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.distinct(Connection, Expression)">distinct(Connection, Expression) (Java method)</a>
+</li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.divide">divide() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.divide">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.divide(Connection, Expression, Expression)">divide(Connection, Expression, Expression) (Java method)</a>
 </li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.DivideByZeroException">DivideByZeroException (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.DivideByZeroException">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.DivideByZeroException">(Java class)</a>
+</li>
+      </ul></li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction.DO_NOTHING">DO_NOTHING (Java field)</a>
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction.DO_NOTHING_DELETE_WHEN_PASSED">DO_NOTHING_DELETE_WHEN_PASSED (Java field)</a>
@@ -2761,6 +2914,8 @@
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort">(Java class)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.DockingPortState">DockingPortState (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.DockingPortState">[1]</a>
 
       <ul>
@@ -2773,15 +2928,13 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.DockingPortState.moving">DockingPortState.moving (in module SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.DockingPortState.moving">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.DockingPortState.ready">DockingPortState.ready (in module SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.DockingPortState.ready">[1]</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.DockingPortState.shielded">DockingPortState.shielded (in module SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.DockingPortState.shielded">[1]</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.DockingPortState.undocking">DockingPortState.undocking (in module SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.DockingPortState.undocking">[1]</a>
 </li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.FieldType.DOUBLE">DOUBLE (Java field)</a>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.DOUBLE">DOUBLE (Java field)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.FieldType.DOUBLE">[1]</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Type.double">double() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.double">[1]</a>
 </li>
@@ -3176,6 +3329,10 @@
         <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.electric_charge_required">(ServoGroup attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.element_at">element_at() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.element_at">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.elementAt(Connection, Expression, Expression)">elementAt(Connection, Expression, Expression) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.elevation">elevation (Flight attribute)</a>
 </li>
       <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.enabled">enabled (Alarm attribute)</a>
@@ -3216,8 +3373,6 @@
 </li>
       <li><a href="python/api/drawing/orbit-path.html#Drawing.OrbitPath.end_true_anomaly">end_true_anomaly (OrbitPath attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.SolarPanel.energy_flow">energy_flow (SolarPanel attribute)</a>
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.engaged">engaged (AutoPilot attribute)</a>
@@ -3228,11 +3383,19 @@
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine">(Java class)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.engine">engine (Part attribute)</a>
 </li>
       <li><a href="python/api/space-center/control.html#SpaceCenter.Control.engine_gimbals">engine_gimbals (Control attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Parts.engines">engines (Parts attribute)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.ENUMERATION">ENUMERATION (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.enumeration_type">enumeration_type() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.enumeration_type">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.enumerationType(Connection, String, String)">enumerationType(Connection, String, String) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.epoch">epoch (Orbit attribute)</a>
 </li>
@@ -3246,6 +3409,12 @@
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.error">error (AutoPilot attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.Error">Error (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.Error">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.Error">(Java class)</a>
+</li>
+      </ul></li>
       <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarkerIcon.ESCAPE">ESCAPE (Java field)</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselSituation.ESCAPING">ESCAPING (Java field)</a>
@@ -3267,6 +3436,12 @@
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Module.events">events (Module attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Module.events_by_id">events_by_id (Module attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.except">except() (Expression static method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.except(Connection, Expression, Expression)">except(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Expression.except_">except_() (Expression static method)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.exclusive_or">exclusive_or() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.exclusive_or">[1]</a>
 </li>
@@ -3370,6 +3545,10 @@
 </li>
       <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.fillResources(String, SpaceCenter.Vessel)">fillResources(String, SpaceCenter.Vessel) (Java method)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.first">first() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.first">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.first(Connection, Expression)">first(Connection, Expression) (Java method)</a>
+</li>
       <li><a href="java/api/ui/layout.html#krpc.client.services.UI.GridConstraint.FIXED_COLUMN_COUNT">FIXED_COLUMN_COUNT (Java field)</a>
 </li>
       <li><a href="java/api/ui/layout.html#krpc.client.services.UI.GridConstraint.FIXED_ROW_COUNT">FIXED_ROW_COUNT (Java field)</a>
@@ -3398,16 +3577,16 @@
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.flight(ReferenceFrame)">flight(ReferenceFrame) (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.FieldType.FLOAT">FLOAT (Java field)</a>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.FLOAT">FLOAT (Java field)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.FieldType.FLOAT">[1]</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Type.float">float() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.float">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.float_(Connection)">float_(Connection) (Java method)</a>
 </li>
-      <li><a href="python/api/space-center/parts.html#SpaceCenter.PartField.float_value">float_value (PartField attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/api/space-center/parts.html#SpaceCenter.PartField.float_value">float_value (PartField attribute)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Intake.flow">flow (Intake attribute)</a>
 </li>
       <li><a href="python/api/space-center/resources.html#SpaceCenter.Resource.flow_mode">flow_mode (Resource attribute)</a>
@@ -3446,6 +3625,8 @@
 </li>
       <li><a href="lua/api/ui/text.html#UI.FontStyle.normal">FontStyle.normal (in module UI)</a>, <a href="python/api/ui/text.html#UI.FontStyle.normal">[1]</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.for_each">for_each() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.for_each">[1]</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Force">Force (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Force">[1]</a>
 
       <ul>
@@ -3466,6 +3647,8 @@
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.MitigationMode.FORCED">FORCED (Java field)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.forEach(Connection, Expression, Expression, Expression)">forEach(Connection, Expression, Expression, Expression) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/control.html#SpaceCenter.Control.forward">forward (Control attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.RCS.forward_enabled">forward_enabled (RCS attribute)</a>
@@ -3483,10 +3666,6 @@
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlState.FULL">FULL (Java field)</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.fully_submerged_center_of_buoyancy">fully_submerged_center_of_buoyancy (Flight attribute)</a>
-</li>
-      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.function">function() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.function">[1]</a>
-</li>
-      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.function(Connection, java.util.List, Expression)">function(Connection, java.util.List, Expression) (Java method)</a>
 </li>
       <li><a href="python/api/debug/debug.html#Debug.funds">funds (in module Debug)</a>
 
@@ -3600,8 +3779,12 @@
 </li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.get_client_name">get_client_name() (in module KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.get_client_name">[1]</a>
 </li>
-      <li><a href="lua/api/space-center/parts.html#SpaceCenter.Module.get_field">get_field() (Module method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Module.get_field">[1]</a>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.get_field">get_field() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.get_field">[1]</a>
+
+      <ul>
+        <li><a href="lua/api/space-center/parts.html#SpaceCenter.Module.get_field">(Module method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Module.get_field">[1]</a>
 </li>
+      </ul></li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Module.get_field_by_id">get_field_by_id() (Module method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Module.get_field_by_id">[1]</a>
 </li>
       <li><a href="lua/api/space-center/space-center.html#SpaceCenter.get_kerbal">get_kerbal() (in module SpaceCenter)</a>, <a href="python/api/space-center/space-center.html#SpaceCenter.get_kerbal">[1]</a>
@@ -3894,6 +4077,8 @@
 </li>
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getClustered()">getClustered() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.getCode()">getCode() (Java method)</a>
+</li>
       <li><a href="java/api/drawing/arc.html#krpc.client.services.Drawing.Arc.getColor()">getColor() (Java method)</a>, <a href="java/api/drawing/box.html#krpc.client.services.Drawing.Box.getColor()">[1]</a>, <a href="java/api/drawing/circle.html#krpc.client.services.Drawing.Circle.getColor()">[2]</a>, <a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.getColor()">[3]</a>, <a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarker.getColor()">[4]</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.getColor()">[5]</a>, <a href="java/api/drawing/orbit-path.html#krpc.client.services.Drawing.OrbitPath.getColor()">[6]</a>, <a href="java/api/drawing/point.html#krpc.client.services.Drawing.Point.getColor()">[7]</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.getColor()">[8]</a>, <a href="java/api/drawing/polyline.html#krpc.client.services.Drawing.Polyline.getColor()">[9]</a>, <a href="java/api/drawing/sphere.html#krpc.client.services.Drawing.Sphere.getColor()">[10]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getColor()">[11]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.getColor()">[12]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getColor()">[13]</a>, <a href="java/api/ui/button.html#krpc.client.services.UI.Button.getColor()">[14]</a>, <a href="java/api/ui/dropdown.html#krpc.client.services.UI.Dropdown.getColor()">[15]</a>, <a href="java/api/ui/image.html#krpc.client.services.UI.Image.getColor()">[16]</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.getColor()">[17]</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.getColor()">[18]</a>, <a href="java/api/ui/slider.html#krpc.client.services.UI.Slider.getColor()">[19]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getColor()">[20]</a>, <a href="java/api/ui/toggle.html#krpc.client.services.UI.Toggle.getColor()">[21]</a>
 </li>
       <li><a href="java/api/drawing/arc.html#krpc.client.services.Drawing.Arc.getColors()">getColors() (Java method)</a>, <a href="java/api/drawing/circle.html#krpc.client.services.Drawing.Circle.getColors()">[1]</a>, <a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.getColors()">[2]</a>, <a href="java/api/drawing/orbit-path.html#krpc.client.services.Drawing.OrbitPath.getColors()">[3]</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.getColors()">[4]</a>, <a href="java/api/drawing/polyline.html#krpc.client.services.Drawing.Polyline.getColors()">[5]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.WaypointManager.getColors()">[6]</a>
@@ -4182,6 +4367,8 @@
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getFARAvailable()">getFARAvailable() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.getField(Connection, Expression, String)">getField(Connection, Expression, String) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Module.getField(String)">getField(String) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Module.getFieldById(String)">getFieldById(String) (Java method)</a>
@@ -4315,6 +4502,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getHasRealFuels()">getHasRealFuels() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getHasRealFuelsTank()">getHasRealFuelsTank() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.getHasReturnType()">getHasReturnType() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.getHasShield()">getHasShield() (Java method)</a>
 </li>
@@ -4476,10 +4665,10 @@
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getLiftAcceleration()">getLiftAcceleration() (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getLiftCoefficient()">getLiftCoefficient() (Java method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getLight()">getLight() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getLights()">getLights() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parts.getLights()">[1]</a>
@@ -4620,7 +4809,7 @@
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getMovingDirection()">getMovingDirection() (Java method)</a>
 </li>
-      <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getName()">getName() (Java method)</a>, <a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getName()">[1]</a>, <a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.getName()">[2]</a>, <a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getName()">[3]</a>, <a href="java/api/space-center/comms.html#krpc.client.services.SpaceCenter.CommNode.getName()">[4]</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ActionGroupAction.getName()">[5]</a>, <a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.EditorVessel.getName()">[6]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ConfigNode.getName()">[7]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Experiment.getName()">[8]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Module.getName()">[9]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getName()">[10]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartAction.getName()">[11]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartEvent.getName()">[12]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartField.getName()">[13]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Propellant.getName()">[14]</a>, <a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.Resource.getName()">[15]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.LaunchSite.getName()">[16]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getName()">[17]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getName()">[18]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getName()">[19]</a>
+      <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getName()">getName() (Java method)</a>, <a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getName()">[1]</a>, <a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.getName()">[2]</a>, <a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.getName()">[3]</a>, <a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getName()">[4]</a>, <a href="java/api/space-center/comms.html#krpc.client.services.SpaceCenter.CommNode.getName()">[5]</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ActionGroupAction.getName()">[6]</a>, <a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.EditorVessel.getName()">[7]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ConfigNode.getName()">[8]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Experiment.getName()">[9]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Module.getName()">[10]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getName()">[11]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartAction.getName()">[12]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartEvent.getName()">[13]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartField.getName()">[14]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Propellant.getName()">[15]</a>, <a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.Resource.getName()">[16]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.LaunchSite.getName()">[17]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getName()">[18]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getName()">[19]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getName()">[20]</a>
 </li>
       <li><a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.Resources.getNames()">getNames() (Java method)</a>
 </li>
@@ -4647,6 +4836,8 @@
       <li><a href="java/api/drawing/arc.html#krpc.client.services.Drawing.Arc.getNormal()">getNormal() (Java method)</a>, <a href="java/api/drawing/circle.html#krpc.client.services.Drawing.Circle.getNormal()">[1]</a>, <a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getNormal()">[2]</a>, <a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.getNormal()">[3]</a>
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.getNotes()">getNotes() (Java method)</a>, <a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getNotes()">[1]</a>, <a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.ContractParameter.getNotes()">[2]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.getNullable()">getNullable() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/stage.html#krpc.client.services.SpaceCenter.Stage.getNumber()">getNumber() (Java method)</a>
 </li>
@@ -4705,6 +4896,8 @@
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getParachutes()">getParachutes() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parts.getParachutes()">[1]</a>
 </li>
       <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getParameters()">getParameters() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.getParameterTypes()">getParameterTypes() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getParent()">getParent() (Java method)</a>
 </li>
@@ -4864,6 +5057,8 @@
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getRetrograde()">getRetrograde() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.getReturnType()">getReturnType() (Java method)</a>
+</li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getReverseKey()">getReverseKey() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getReynoldsNumber()">getReynoldsNumber() (Java method)</a>
@@ -4983,6 +5178,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getSensor()">getSensor() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parts.getSensors()">getSensors() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.getService()">getService() (Java method)</a>
 </li>
       <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.getServices()">getServices() (Java method)</a>
 </li>
@@ -5272,7 +5469,7 @@
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.getType()">getType() (Java method)</a>, <a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.getType()">[1]</a>, <a href="java/api/space-center/comms.html#krpc.client.services.SpaceCenter.CommLink.getType()">[2]</a>, <a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getType()">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartField.getType()">[4]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getType()">[5]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getType()">[6]</a>
 </li>
-      <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.ContractManager.getTypes()">getTypes() (Java method)</a>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.getTypes()">getTypes() (Java method)</a>, <a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.ContractManager.getTypes()">[1]</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getUID()">getUID() (Java method)</a>
 </li>
@@ -5432,6 +5629,10 @@
       </ul></li>
       <li><a href="python/api/ui/toggle.html#UI.Toggle.group">group (Toggle attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.group_by">group_by() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.group_by">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.groupBy(Connection, Expression, Expression)">groupBy(Connection, Expression, Expression) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.PartAction.gui_name">gui_name (PartAction attribute)</a>
 
       <ul>
@@ -5501,6 +5702,8 @@
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.has_real_fuels_tank">has_real_fuels_tank (Part attribute)</a>
 </li>
       <li><a href="lua/api/space-center/resources.html#SpaceCenter.Resources.has_resource">has_resource() (Resources method)</a>, <a href="python/api/space-center/resources.html#SpaceCenter.Resources.has_resource">[1]</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Expression.has_return_type">has_return_type (Expression attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.DockingPort.has_shield">has_shield (DockingPort attribute)</a>
 </li>
@@ -5592,6 +5795,14 @@
       </ul></li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.MotorState.IDLE">IDLE (Java field)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverterState.IDLE">[1]</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.if_then">if_then() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.if_then">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.if_then_else">if_then_else() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.if_then_else">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.ifThen(Connection, Expression, Expression)">ifThen(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.ifThenElse(Connection, Expression, Expression, Expression)">ifThenElse(Connection, Expression, Expression, Expression) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Engine.ignition_resources">ignition_resources (Engine attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Engine.ignitions">ignitions (Engine attribute)</a>
@@ -5646,6 +5857,12 @@
 </li>
       <li><a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.index">index (Waypoint attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.IndexOutOfRangeException">IndexOutOfRangeException (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.IndexOutOfRangeException">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.IndexOutOfRangeException">(Java class)</a>
+</li>
+      </ul></li>
       <li><a href="python/api/space-center/editor.html#SpaceCenter.EditorVessel.inertia_tensor">inertia_tensor (EditorVessel attribute)</a>
 
       <ul>
@@ -5747,10 +5964,10 @@
 </li>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.advanced_mode">InfernalRobotics.InfernalRobotics.ServoGroup.advanced_mode (attribute)</a>
 </li>
-      <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.build_aid">InfernalRobotics.InfernalRobotics.ServoGroup.build_aid (attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.build_aid">InfernalRobotics.InfernalRobotics.ServoGroup.build_aid (attribute)</a>
+</li>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.electric_charge_required">InfernalRobotics.InfernalRobotics.ServoGroup.electric_charge_required (attribute)</a>
 </li>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.expanded">InfernalRobotics.InfernalRobotics.ServoGroup.expanded (attribute)</a>
@@ -5863,6 +6080,10 @@
       </ul></li>
       <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarkerIcon.INTERSECT">INTERSECT (Java field)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.intersect">intersect() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.intersect">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.intersect(Connection, Expression, Expression)">intersect(Connection, Expression, Expression) (Java method)</a>
+</li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.InvalidOperationException">InvalidOperationException (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.InvalidOperationException">[1]</a>
 
       <ul>
@@ -5911,6 +6132,8 @@
         <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.is_moving">(Servo attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.is_null">is_null() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.is_null">[1]</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Decoupler.is_omni_decoupler">is_omni_decoupler (Decoupler attribute)</a>
 </li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.is_rotational">is_rotational (Servo attribute)</a>
@@ -5922,6 +6145,8 @@
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.is_star">is_star (CelestialBody attribute)</a>
 </li>
       <li><a href="python/api/space-center/comms.html#SpaceCenter.CommNode.is_vessel">is_vessel (CommNode attribute)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.isNull(Connection, Expression)">isNull(Connection, Expression) (Java method)</a>
 </li>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.FontStyle.ITALIC">ITALIC (Java field)</a>
 </li>
@@ -6012,6 +6237,12 @@
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.kerbin_sea_level_specific_impulse">(Vessel attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KeyNotFoundException">KeyNotFoundException (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.KeyNotFoundException">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KeyNotFoundException">(Java class)</a>
+</li>
+      </ul></li>
       <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.keywords">keywords (Contract attribute)</a>
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction.KILL_WARP">KILL_WARP (Java field)</a>
@@ -6087,11 +6318,27 @@
 </li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.current_game_scene">KRPC.KRPC.current_game_scene (attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Expression.has_return_type">KRPC.KRPC.Expression.has_return_type (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Expression.parameter_types">KRPC.KRPC.Expression.parameter_types (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Expression.return_type">KRPC.KRPC.Expression.return_type (attribute)</a>
+</li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.game_scene">KRPC.KRPC.game_scene (attribute)</a>
 </li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.game_state_loads">KRPC.KRPC.game_state_loads (attribute)</a>
 </li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.paused">KRPC.KRPC.paused (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Type.code">KRPC.KRPC.Type.code (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Type.name">KRPC.KRPC.Type.name (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Type.nullable">KRPC.KRPC.Type.nullable (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Type.service">KRPC.KRPC.Type.service (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Type.types">KRPC.KRPC.Type.types (attribute)</a>
 </li>
       <li><a href="python/client.html#krpc.limits.DOUBLE_LOWEST">krpc.limits.DOUBLE_LOWEST (built-in variable)</a>
 </li>
@@ -7307,6 +7554,8 @@
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPCE">krpc::services::KRPC (C++ class)</a>
 </li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC19add_function_streamE10Expression">krpc::services::KRPC::add_function_stream (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC17ArgumentExceptionE">krpc::services::KRPC::ArgumentException (C++ class)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC21ArgumentNullExceptionE">krpc::services::KRPC::ArgumentNullException (C++ class)</a>
@@ -7315,7 +7564,13 @@
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC7clientsEv">krpc::services::KRPC::clients (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16compile_functionE10Expression">krpc::services::KRPC::compile_function (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC18current_game_sceneEv">krpc::services::KRPC::current_game_scene (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC21DivideByZeroExceptionE">krpc::services::KRPC::DivideByZeroException (C++ class)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC5ErrorE">krpc::services::KRPC::Error (C++ class)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10ExpressionE">krpc::services::KRPC::Expression (C++ class)</a>
 </li>
@@ -7331,51 +7586,131 @@
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3anyER6Client10Expression10Expression">krpc::services::KRPC::Expression::any (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6appendER6Client10Expression10Expression">krpc::services::KRPC::Expression::append (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6assignER6Client10Expression10Expression">krpc::services::KRPC::Expression::assign (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7averageER6Client10Expression">krpc::services::KRPC::Expression::average (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5blockER6ClientNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::block (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression20block_with_variablesER6ClientNSt6vectorI10ExpressionEENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::block_with_variables (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6break_ER6Client">krpc::services::KRPC::Expression::break_ (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16build_dictionaryER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::build_dictionary (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4callER6ClientN4krpc6schema13ProcedureCallE">krpc::services::KRPC::Expression::call (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression19call_with_argumentsER6ClientN4krpc6schema13ProcedureCallENSt3mapI7int32_t10ExpressionEE">krpc::services::KRPC::Expression::call_with_arguments (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4castER6Client10Expression4Type">krpc::services::KRPC::Expression::cast (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5clearER6Client10Expression">krpc::services::KRPC::Expression::clear (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6concatER6Client10Expression10Expression">krpc::services::KRPC::Expression::concat (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11conditionalER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::conditional (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15conditional_andER6Client10Expression10Expression">krpc::services::KRPC::Expression::conditional_and (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14conditional_orER6Client10Expression10Expression">krpc::services::KRPC::Expression::conditional_or (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_boolER6Clientb">krpc::services::KRPC::Expression::constant_bool (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14constant_bytesER6ClientNSt6stringE">krpc::services::KRPC::Expression::constant_bytes (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_doubleER6Clientd">krpc::services::KRPC::Expression::constant_double (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_enumER6ClientNSt6stringENSt6stringE7int32_t">krpc::services::KRPC::Expression::constant_enum (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14constant_floatER6Clientf">krpc::services::KRPC::Expression::constant_float (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12constant_intER6Client7int32_t">krpc::services::KRPC::Expression::constant_int (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_longER6Client7int64_t">krpc::services::KRPC::Expression::constant_long (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13constant_nullER6Client4Type">krpc::services::KRPC::Expression::constant_null (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_objectER6Client8uint64_t">krpc::services::KRPC::Expression::constant_object (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_stringER6ClientNSt6stringE">krpc::services::KRPC::Expression::constant_string (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14constant_u_intER6Client8uint32_t">krpc::services::KRPC::Expression::constant_u_int (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15constant_u_longER6Client8uint64_t">krpc::services::KRPC::Expression::constant_u_long (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8containsER6Client10Expression10Expression">krpc::services::KRPC::Expression::contains (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12contains_keyER6Client10Expression10Expression">krpc::services::KRPC::Expression::contains_key (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9continue_ER6Client">krpc::services::KRPC::Expression::continue_ (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17convert_to_stringER6Client10Expression">krpc::services::KRPC::Expression::convert_to_string (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5countER6Client10Expression">krpc::services::KRPC::Expression::count (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17create_dictionaryER6ClientNSt6vectorI10ExpressionEENSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_dictionary (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression23create_empty_dictionaryER6Client4Type4Type">krpc::services::KRPC::Expression::create_empty_dictionary (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17create_empty_listER6Client4Type">krpc::services::KRPC::Expression::create_empty_list (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16create_empty_setER6Client4Type">krpc::services::KRPC::Expression::create_empty_set (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11create_listER6ClientNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_list (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10create_setER6ClientNSt3setI10ExpressionEE">krpc::services::KRPC::Expression::create_set (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13create_structER6Client4TypeNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_struct (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12create_tupleER6ClientNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::create_tuple (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15dictionary_keysER6Client10Expression">krpc::services::KRPC::Expression::dictionary_keys (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17dictionary_valuesER6Client10Expression">krpc::services::KRPC::Expression::dictionary_values (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8distinctER6Client10Expression">krpc::services::KRPC::Expression::distinct (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6divideER6Client10Expression10Expression">krpc::services::KRPC::Expression::divide (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10element_atER6Client10Expression10Expression">krpc::services::KRPC::Expression::element_at (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5equalER6Client10Expression10Expression">krpc::services::KRPC::Expression::equal (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6exceptER6Client10Expression10Expression">krpc::services::KRPC::Expression::except (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12exclusive_orER6Client10Expression10Expression">krpc::services::KRPC::Expression::exclusive_or (C++ function)</a>
 </li>
-      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8functionER6ClientNSt6vectorI10ExpressionEE10Expression">krpc::services::KRPC::Expression::function (C++ function)</a>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5firstER6Client10Expression">krpc::services::KRPC::Expression::first (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8for_eachER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::for_each (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3getER6Client10Expression10Expression">krpc::services::KRPC::Expression::get (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9get_fieldER6Client10ExpressionNSt6stringE">krpc::services::KRPC::Expression::get_field (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12greater_thanER6Client10Expression10Expression">krpc::services::KRPC::Expression::greater_than (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression21greater_than_or_equalER6Client10Expression10Expression">krpc::services::KRPC::Expression::greater_than_or_equal (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8group_byER6Client10Expression10Expression">krpc::services::KRPC::Expression::group_by (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15has_return_typeEv">krpc::services::KRPC::Expression::has_return_type (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7if_thenER6Client10Expression10Expression">krpc::services::KRPC::Expression::if_then (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12if_then_elseER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::if_then_else (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9intersectER6Client10Expression10Expression">krpc::services::KRPC::Expression::intersect (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6invokeER6Client10ExpressionNSt3mapINSt6stringE10ExpressionEE">krpc::services::KRPC::Expression::invoke (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7is_nullER6Client10Expression">krpc::services::KRPC::Expression::is_null (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6lambdaER6ClientNSt6vectorI10ExpressionEE10Expression">krpc::services::KRPC::Expression::lambda (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4lastER6Client10Expression">krpc::services::KRPC::Expression::last (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10left_shiftER6Client10Expression10Expression">krpc::services::KRPC::Expression::left_shift (C++ function)</a>
 </li>
@@ -7385,11 +7720,17 @@
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3maxER6Client10Expression">krpc::services::KRPC::Expression::max (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6max_byER6Client10Expression10Expression">krpc::services::KRPC::Expression::max_by (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3minER6Client10Expression">krpc::services::KRPC::Expression::min (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6min_byER6Client10Expression10Expression">krpc::services::KRPC::Expression::min_by (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6moduloER6Client10Expression10Expression">krpc::services::KRPC::Expression::modulo (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8multiplyER6Client10Expression10Expression">krpc::services::KRPC::Expression::multiply (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6negateER6Client10Expression">krpc::services::KRPC::Expression::negate (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4not_ER6Client10Expression">krpc::services::KRPC::Expression::not_ (C++ function)</a>
 </li>
@@ -7401,21 +7742,93 @@
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9parameterER6ClientNSt6stringE4Type">krpc::services::KRPC::Expression::parameter (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15parameter_typesEv">krpc::services::KRPC::Expression::parameter_types (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5powerER6Client10Expression10Expression">krpc::services::KRPC::Expression::power (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6removeER6Client10Expression10Expression">krpc::services::KRPC::Expression::remove (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9remove_atER6Client10Expression10Expression">krpc::services::KRPC::Expression::remove_at (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7return_ER6Client10Expression">krpc::services::KRPC::Expression::return_ (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14return_nothingER6Client">krpc::services::KRPC::Expression::return_nothing (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11return_typeEv">krpc::services::KRPC::Expression::return_type (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7reverseER6Client10Expression">krpc::services::KRPC::Expression::reverse (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11right_shiftER6Client10Expression10Expression">krpc::services::KRPC::Expression::right_shift (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6selectER6Client10Expression10Expression">krpc::services::KRPC::Expression::select (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11select_manyER6Client10Expression10Expression">krpc::services::KRPC::Expression::select_many (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3setER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::set (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4skipER6Client10Expression10Expression">krpc::services::KRPC::Expression::skip (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14state_variableER6ClientNSt6stringE10Expression">krpc::services::KRPC::Expression::state_variable (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13string_concatER6ClientNSt6vectorI10ExpressionEE">krpc::services::KRPC::Expression::string_concat (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_containsER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_contains (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16string_ends_withER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_ends_with (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression10string_getER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_get (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_index_ofER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_index_of (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11string_joinER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_join (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13string_lengthER6Client10Expression">krpc::services::KRPC::Expression::string_length (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression14string_replaceER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::string_replace (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression12string_splitER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_split (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression18string_starts_withER6Client10Expression10Expression">krpc::services::KRPC::Expression::string_starts_with (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression16string_substringER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::string_substring (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_to_lowerER6Client10Expression">krpc::services::KRPC::Expression::string_to_lower (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_to_upperER6Client10Expression">krpc::services::KRPC::Expression::string_to_upper (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11string_trimER6Client10Expression">krpc::services::KRPC::Expression::string_trim (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression15string_trim_endER6Client10Expression">krpc::services::KRPC::Expression::string_trim_end (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression17string_trim_startER6Client10Expression">krpc::services::KRPC::Expression::string_trim_start (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8subtractER6Client10Expression10Expression">krpc::services::KRPC::Expression::subtract (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3sumER6Client10Expression">krpc::services::KRPC::Expression::sum (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression4takeER6Client10Expression10Expression">krpc::services::KRPC::Expression::take (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6throw_ER6ClientNSt6stringENSt6stringE10Expression">krpc::services::KRPC::Expression::throw_ (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression7to_listER6Client10Expression">krpc::services::KRPC::Expression::to_list (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6to_setER6Client10Expression">krpc::services::KRPC::Expression::to_set (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression9try_catchER6Client10ExpressionNSt6stringENSt6stringENSt8optionalI10ExpressionEE10Expression">krpc::services::KRPC::Expression::try_catch (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression13try_catch_allER6Client10ExpressionNSt8optionalI10ExpressionEE10Expression">krpc::services::KRPC::Expression::try_catch_all (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression11try_finallyER6Client10Expression10Expression">krpc::services::KRPC::Expression::try_finally (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6union_ER6Client10Expression10Expression">krpc::services::KRPC::Expression::union_ (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression8variableER6ClientNSt6stringE4Type">krpc::services::KRPC::Expression::variable (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression5whereER6Client10Expression10Expression">krpc::services::KRPC::Expression::where (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression6while_ER6Client10Expression10Expression">krpc::services::KRPC::Expression::while_ (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10Expression3zipER6Client10Expression10Expression10Expression">krpc::services::KRPC::Expression::zip (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC10game_sceneEv">krpc::services::KRPC::game_scene (C++ function)</a>
 </li>
@@ -7453,19 +7866,31 @@
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC9hold_tickEv">krpc::services::KRPC::hold_tick (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC24IndexOutOfRangeExceptionE">krpc::services::KRPC::IndexOutOfRangeException (C++ class)</a>
+</li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC25InvalidOperationExceptionE">krpc::services::KRPC::InvalidOperationException (C++ class)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC20KeyNotFoundExceptionE">krpc::services::KRPC::KeyNotFoundException (C++ class)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC4KRPCEPN4krpc6ClientE">krpc::services::KRPC::KRPC (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC9next_tickEv">krpc::services::KRPC::next_tick (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC21NotSupportedExceptionE">krpc::services::KRPC::NotSupportedException (C++ class)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC22NullReferenceExceptionE">krpc::services::KRPC::NullReferenceException (C++ class)</a>
+</li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC24ObjectDestroyedExceptionE">krpc::services::KRPC::ObjectDestroyedException (C++ class)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC24ObjectNotLoadedExceptionE">krpc::services::KRPC::ObjectNotLoadedException (C++ class)</a>
 </li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC17OverflowExceptionE">krpc::services::KRPC::OverflowException (C++ class)</a>
+</li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC6pausedEv">krpc::services::KRPC::paused (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC12release_tickEv">krpc::services::KRPC::release_tick (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC12run_functionE10ExpressionNSt6vectorINSt8optionalINSt6stringEEEEE">krpc::services::KRPC::run_function (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14set_game_sceneE9GameScene">krpc::services::KRPC::set_game_scene (C++ function)</a>
 </li>
@@ -7473,17 +7898,87 @@
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC22StreamRemovedExceptionE">krpc::services::KRPC::StreamRemovedException (C++ class)</a>
 </li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16TimeoutExceptionE">krpc::services::KRPC::TimeoutException (C++ class)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4TypeE">krpc::services::KRPC::Type (C++ class)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5bool_ER6Client">krpc::services::KRPC::Type::bool_ (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5bytesER6Client">krpc::services::KRPC::Type::bytes (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type10class_typeER6ClientNSt6stringENSt6stringE">krpc::services::KRPC::Type::class_type (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type4codeEv">krpc::services::KRPC::Type::code (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type15dictionary_typeER6Client4Type4Type">krpc::services::KRPC::Type::dictionary_type (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type7double_ER6Client">krpc::services::KRPC::Type::double_ (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type16enumeration_typeER6ClientNSt6stringENSt6stringE">krpc::services::KRPC::Type::enumeration_type (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type6float_ER6Client">krpc::services::KRPC::Type::float_ (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type4int_ER6Client">krpc::services::KRPC::Type::int_ (C++ function)</a>
 </li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type9list_typeER6Client4Type">krpc::services::KRPC::Type::list_type (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5long_ER6Client">krpc::services::KRPC::Type::long_ (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type4nameEv">krpc::services::KRPC::Type::name (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type8nullableEv">krpc::services::KRPC::Type::nullable (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type13nullable_typeER6Client4Type">krpc::services::KRPC::Type::nullable_type (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type7serviceEv">krpc::services::KRPC::Type::service (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type8set_typeER6Client4Type">krpc::services::KRPC::Type::set_type (C++ function)</a>
+</li>
       <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type6stringER6Client">krpc::services::KRPC::Type::string (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type11struct_typeER6ClientNSt6stringENSt6stringE">krpc::services::KRPC::Type::struct_type (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type10tuple_typeER6ClientNSt6vectorI4TypeEE">krpc::services::KRPC::Type::tuple_type (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5typesEv">krpc::services::KRPC::Type::types (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type5u_intER6Client">krpc::services::KRPC::Type::u_int (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC4Type6u_longER6Client">krpc::services::KRPC::Type::u_long (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCodeE">krpc::services::KRPC::TypeCode (C++ enum)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode5bool_E">krpc::services::KRPC::TypeCode::bool_ (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode5bytesE">krpc::services::KRPC::TypeCode::bytes (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode6class_E">krpc::services::KRPC::TypeCode::class_ (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode10dictionaryE">krpc::services::KRPC::TypeCode::dictionary (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode7double_E">krpc::services::KRPC::TypeCode::double_ (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode11enumerationE">krpc::services::KRPC::TypeCode::enumeration (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode6float_E">krpc::services::KRPC::TypeCode::float_ (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode4listE">krpc::services::KRPC::TypeCode::list (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode7s_int32E">krpc::services::KRPC::TypeCode::s_int32 (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode7s_int64E">krpc::services::KRPC::TypeCode::s_int64 (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode3setE">krpc::services::KRPC::TypeCode::set (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode6stringE">krpc::services::KRPC::TypeCode::string (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode7struct_E">krpc::services::KRPC::TypeCode::struct_ (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode5tupleE">krpc::services::KRPC::TypeCode::tuple (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode7u_int32E">krpc::services::KRPC::TypeCode::u_int32 (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC8TypeCode7u_int64E">krpc::services::KRPC::TypeCode::u_int64 (C++ enumerator)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC25UnsupportedSceneExceptionE">krpc::services::KRPC::UnsupportedSceneException (C++ class)</a>
 </li>
@@ -11633,6 +12128,8 @@
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text5colorEv">krpc::services::UI::Text::color (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text7contentEv">krpc::services::UI::Text::content (C++ function)</a>
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text4fontEv">krpc::services::UI::Text::font (C++ function)</a>
@@ -11651,8 +12148,6 @@
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text11set_contentENSt6stringE">krpc::services::UI::Text::set_content (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text8set_fontENSt6stringE">krpc::services::UI::Text::set_font (C++ function)</a>
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text16set_line_spacingEf">krpc::services::UI::Text::set_line_spacing (C++ function)</a>
@@ -12917,7 +13412,11 @@
 </li>
       <li><a href="cnano/api/kerbal-alarm-clock/kerbal-alarm-clock.html#c.krpc_KerbalAlarmClock_CreateAlarm">krpc_KerbalAlarmClock_CreateAlarm (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_AddFunctionStream">krpc_KRPC_AddFunctionStream (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_Clients">krpc_KRPC_Clients (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_CompileFunction">krpc_KRPC_CompileFunction (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_CurrentGameScene">krpc_KRPC_CurrentGameScene (C function)</a>
 </li>
@@ -12935,51 +13434,131 @@
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Any">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Any (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Append">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Append (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Assign">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Assign (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Average">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Average (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Block">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Block (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_BlockWithVariables">krpc_KRPC_Expression_t.krpc_KRPC_Expression_BlockWithVariables (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Break">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Break (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_BuildDictionary">krpc_KRPC_Expression_t.krpc_KRPC_Expression_BuildDictionary (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Call">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Call (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_CallWithArguments">krpc_KRPC_Expression_t.krpc_KRPC_Expression_CallWithArguments (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Cast">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Cast (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Clear">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Clear (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Concat">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Concat (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Conditional">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Conditional (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConditionalAnd">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConditionalAnd (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConditionalOr">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConditionalOr (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantBool">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantBool (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantBytes">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantBytes (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantDouble">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantDouble (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantEnum">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantEnum (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantFloat">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantFloat (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantInt">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantInt (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantLong">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantLong (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantNull">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantNull (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantObject">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantObject (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantString">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantString (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantUInt">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantUInt (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantULong">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConstantULong (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Contains">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Contains (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ContainsKey">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ContainsKey (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Continue">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Continue (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConvertToString">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ConvertToString (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Count">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Count (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateDictionary">krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateDictionary (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateEmptyDictionary">krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateEmptyDictionary (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateEmptyList">krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateEmptyList (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateEmptySet">krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateEmptySet (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateList">krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateList (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateSet">krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateSet (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateStruct">krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateStruct (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateTuple">krpc_KRPC_Expression_t.krpc_KRPC_Expression_CreateTuple (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_DictionaryKeys">krpc_KRPC_Expression_t.krpc_KRPC_Expression_DictionaryKeys (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_DictionaryValues">krpc_KRPC_Expression_t.krpc_KRPC_Expression_DictionaryValues (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Distinct">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Distinct (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Divide">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Divide (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ElementAt">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ElementAt (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Equal">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Equal (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Except">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Except (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ExclusiveOr">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ExclusiveOr (C function)</a>
 </li>
-      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Function">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Function (C function)</a>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_First">krpc_KRPC_Expression_t.krpc_KRPC_Expression_First (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ForEach">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ForEach (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Get">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Get (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_GetField">krpc_KRPC_Expression_t.krpc_KRPC_Expression_GetField (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_GreaterThan">krpc_KRPC_Expression_t.krpc_KRPC_Expression_GreaterThan (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_GreaterThanOrEqual">krpc_KRPC_Expression_t.krpc_KRPC_Expression_GreaterThanOrEqual (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_GroupBy">krpc_KRPC_Expression_t.krpc_KRPC_Expression_GroupBy (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_HasReturnType">krpc_KRPC_Expression_t.krpc_KRPC_Expression_HasReturnType (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_IfThen">krpc_KRPC_Expression_t.krpc_KRPC_Expression_IfThen (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_IfThenElse">krpc_KRPC_Expression_t.krpc_KRPC_Expression_IfThenElse (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Intersect">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Intersect (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Invoke">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Invoke (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_IsNull">krpc_KRPC_Expression_t.krpc_KRPC_Expression_IsNull (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Lambda">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Lambda (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Last">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Last (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_LeftShift">krpc_KRPC_Expression_t.krpc_KRPC_Expression_LeftShift (C function)</a>
 </li>
@@ -12989,11 +13568,17 @@
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Max">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Max (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_MaxBy">krpc_KRPC_Expression_t.krpc_KRPC_Expression_MaxBy (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Min">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Min (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_MinBy">krpc_KRPC_Expression_t.krpc_KRPC_Expression_MinBy (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Modulo">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Modulo (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Multiply">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Multiply (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Negate">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Negate (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Not">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Not (C function)</a>
 </li>
@@ -13005,21 +13590,93 @@
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Parameter">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Parameter (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ParameterTypes">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ParameterTypes (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Power">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Power (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Remove">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Remove (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_RemoveAt">krpc_KRPC_Expression_t.krpc_KRPC_Expression_RemoveAt (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Return">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Return (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ReturnNothing">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ReturnNothing (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ReturnType">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ReturnType (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Reverse">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Reverse (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_RightShift">krpc_KRPC_Expression_t.krpc_KRPC_Expression_RightShift (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Select">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Select (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_SelectMany">krpc_KRPC_Expression_t.krpc_KRPC_Expression_SelectMany (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Set">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Set (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Skip">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Skip (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StateVariable">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StateVariable (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringConcat">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringConcat (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringContains">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringContains (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringEndsWith">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringEndsWith (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringGet">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringGet (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringIndexOf">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringIndexOf (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringJoin">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringJoin (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringLength">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringLength (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringReplace">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringReplace (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringSplit">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringSplit (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringStartsWith">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringStartsWith (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringSubstring">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringSubstring (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringToLower">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringToLower (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringToUpper">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringToUpper (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringTrim">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringTrim (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringTrimEnd">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringTrimEnd (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringTrimStart">krpc_KRPC_Expression_t.krpc_KRPC_Expression_StringTrimStart (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Subtract">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Subtract (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Sum">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Sum (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Take">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Take (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Throw">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Throw (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ToList">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ToList (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_ToSet">krpc_KRPC_Expression_t.krpc_KRPC_Expression_ToSet (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatch">krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatch (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatchAll">krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryCatchAll (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryFinally">krpc_KRPC_Expression_t.krpc_KRPC_Expression_TryFinally (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Union">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Union (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Variable">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Variable (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Where">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Where (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_While">krpc_KRPC_Expression_t.krpc_KRPC_Expression_While (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Expression_t.krpc_KRPC_Expression_Zip">krpc_KRPC_Expression_t.krpc_KRPC_Expression_Zip (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_GameScene">krpc_KRPC_GameScene (C function)</a>
 </li>
@@ -13063,6 +13720,8 @@
 </li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ReleaseTick">krpc_KRPC_ReleaseTick (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_RunFunction">krpc_KRPC_RunFunction (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_set_GameScene">krpc_KRPC_set_GameScene (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_set_Paused">krpc_KRPC_set_Paused (C function)</a>
@@ -13071,13 +13730,81 @@
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Bool">krpc_KRPC_Type_t.krpc_KRPC_Type_Bool (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Bytes">krpc_KRPC_Type_t.krpc_KRPC_Type_Bytes (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_ClassType">krpc_KRPC_Type_t.krpc_KRPC_Type_ClassType (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Code">krpc_KRPC_Type_t.krpc_KRPC_Type_Code (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_DictionaryType">krpc_KRPC_Type_t.krpc_KRPC_Type_DictionaryType (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Double">krpc_KRPC_Type_t.krpc_KRPC_Type_Double (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_EnumerationType">krpc_KRPC_Type_t.krpc_KRPC_Type_EnumerationType (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Float">krpc_KRPC_Type_t.krpc_KRPC_Type_Float (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Int">krpc_KRPC_Type_t.krpc_KRPC_Type_Int (C function)</a>
 </li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_ListType">krpc_KRPC_Type_t.krpc_KRPC_Type_ListType (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Long">krpc_KRPC_Type_t.krpc_KRPC_Type_Long (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Name">krpc_KRPC_Type_t.krpc_KRPC_Type_Name (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Nullable">krpc_KRPC_Type_t.krpc_KRPC_Type_Nullable (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_NullableType">krpc_KRPC_Type_t.krpc_KRPC_Type_NullableType (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Service">krpc_KRPC_Type_t.krpc_KRPC_Type_Service (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_SetType">krpc_KRPC_Type_t.krpc_KRPC_Type_SetType (C function)</a>
+</li>
       <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_String">krpc_KRPC_Type_t.krpc_KRPC_Type_String (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_StructType">krpc_KRPC_Type_t.krpc_KRPC_Type_StructType (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_TupleType">krpc_KRPC_Type_t.krpc_KRPC_Type_TupleType (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_Types">krpc_KRPC_Type_t.krpc_KRPC_Type_Types (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_UInt">krpc_KRPC_Type_t.krpc_KRPC_Type_UInt (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_Type_t.krpc_KRPC_Type_ULong">krpc_KRPC_Type_t.krpc_KRPC_Type_ULong (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t">krpc_KRPC_TypeCode_t (C type)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_BOOL">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_BOOL (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_BYTES">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_BYTES (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_CLASS">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_CLASS (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_DICTIONARY">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_DICTIONARY (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_DOUBLE">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_DOUBLE (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_ENUMERATION">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_ENUMERATION (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_FLOAT">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_FLOAT (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_LIST">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_LIST (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_SET">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_SET (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_SINT32">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_SINT32 (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_SINT64">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_SINT64 (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_STRING">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_STRING (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_STRUCT">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_STRUCT (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_TUPLE">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_TUPLE (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_UINT32">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_UINT32 (C macro)</a>
+</li>
+      <li><a href="cnano/api/krpc/expressions.html#c.krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_UINT64">krpc_KRPC_TypeCode_t.KRPC_KRPC_TYPECODE_UINT64 (C macro)</a>
 </li>
       <li><a href="cnano/api/lidar/lidar.html#c.krpc_LiDAR_Available">krpc_LiDAR_Available (C function)</a>
 </li>
@@ -17359,6 +18086,12 @@
       </ul></li>
       <li><a href="python/api/space-center/control.html#SpaceCenter.Control.ladder">ladder (Control attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.lambda">lambda() (Expression static method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.lambda(Connection, java.util.List, Expression)">lambda(Connection, java.util.List, Expression) (Java method)</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Expression.lambda_">lambda_() (Expression static method)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselSituation.LANDED">LANDED (Java field)</a>
 </li>
       <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarkerIcon.LANDER">LANDER (Java field)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselType.LANDER">[1]</a>
@@ -17374,6 +18107,10 @@
       <li><a href="lua/api/lidar/lidar.html#LiDAR.laser">laser() (in module LiDAR)</a>, <a href="python/api/lidar/lidar.html#LiDAR.laser">[1]</a>
 </li>
       <li><a href="java/api/lidar/lidar.html#krpc.client.services.LiDAR.LiDAR.laser(SpaceCenter.Part)">laser(SpaceCenter.Part) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.last">last() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.last">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.last(Connection, Expression)">last(Connection, Expression) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.latitude">latitude (Flight attribute)</a>
 
@@ -17570,9 +18307,15 @@
       </ul></li>
       <li><a href="python/api/drawing/text.html#Drawing.Text.line_spacing">line_spacing (Text attribute)</a>, <a href="python/api/ui/text.html#UI.Text.line_spacing">[1]</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.LIST">LIST (Java field)</a>
+</li>
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.Orbit.list_closest_approaches">list_closest_approaches() (Orbit method)</a>, <a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.list_closest_approaches">[1]</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.list_type">list_type() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.list_type">[1]</a>
+</li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.listClosestApproaches(Orbit, int)">listClosestApproaches(Orbit, int) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.listType(Connection, Type)">listType(Connection, Type) (Java method)</a>
 </li>
       <li><a href="lua/api/space-center/space-center.html#SpaceCenter.load">load() (in module SpaceCenter)</a>, <a href="python/api/space-center/space-center.html#SpaceCenter.load">[1]</a>
 </li>
@@ -17602,6 +18345,10 @@
         <li><a href="python/api/space-center/parts.html#SpaceCenter.RoboticRotor.locked">(RoboticRotor attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.long">long() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.long">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.long_(Connection)">long_(Connection) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.longitude">longitude (Flight attribute)</a>
 
       <ul>
@@ -17824,6 +18571,8 @@
       </ul></li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.max_angular_velocity">max_angular_velocity (AutoPilot attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.max_by">max_by() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.max_by">[1]</a>
+</li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.max_config_position">max_config_position (Servo attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ControlSurface.max_deploy_angle">max_deploy_angle (ControlSurface attribute)</a>
@@ -17885,6 +18634,8 @@
 </li>
       </ul></li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.maxAccelerationAt(double)">maxAccelerationAt(double) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.maxBy(Connection, Expression, Expression)">maxBy(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/space-center.html#SpaceCenter.maximum_rails_warp_factor">maximum_rails_warp_factor (in module SpaceCenter)</a>
 </li>
@@ -17958,6 +18709,8 @@
         <li><a href="python/api/space-center/parts.html#SpaceCenter.RoboticRotation.min_angle">(RoboticRotation attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.min_by">min_by() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.min_by">[1]</a>
+</li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.min_config_position">min_config_position (Servo attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ControlSurface.min_deploy_angle">min_deploy_angle (ControlSurface attribute)</a>
@@ -17979,6 +18732,8 @@
       <li><a href="java/api/ui/size-fitter.html#krpc.client.services.UI.ContentSizeFit.MIN_SIZE">MIN_SIZE (Java field)</a>
 </li>
       <li><a href="python/api/ui/layout-element.html#UI.LayoutElement.min_size">min_size (LayoutElement attribute)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.minBy(Connection, Expression, Expression)">minBy(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.DockingPort.minimum_rotation">minimum_rotation (DockingPort attribute)</a>
 </li>
@@ -18212,6 +18967,8 @@
 </li>
         <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.name">(ServoGroup attribute)</a>
 </li>
+        <li><a href="python/api/krpc/expressions.html#KRPC.Type.name">(Type attribute)</a>
+</li>
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.name">(Vessel attribute)</a>
 </li>
         <li><a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.name">(Waypoint attribute)</a>
@@ -18233,6 +18990,10 @@
       </ul></li>
       <li><a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.near_surface">near_surface (Waypoint attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.negate">negate() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.negate">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.negate(Connection, Expression)">negate(Connection, Expression) (Java method)</a>
+</li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance()">newInstance() (Java method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance(String)">newInstance(String) (Java method)</a>
@@ -18251,12 +19012,12 @@
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newLocalInstance()">newLocalInstance() (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String)">newLocalInstance(String) (Java method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String, String, String)">newLocalInstance(String, String, String) (Java method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/camera.html#SpaceCenter.Camera.next_camera">next_camera() (Camera method)</a>, <a href="python/api/space-center/camera.html#SpaceCenter.Camera.next_camera">[1]</a>
 </li>
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.Orbit.next_closest_approach">next_closest_approach() (Orbit method)</a>, <a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.next_closest_approach">[1]</a>
@@ -18329,6 +19090,24 @@
         <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.notes">(Contract attribute)</a>
 </li>
         <li><a href="python/api/space-center/contracts.html#SpaceCenter.ContractParameter.notes">(ContractParameter attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.NotSupportedException">NotSupportedException (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.NotSupportedException">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.NotSupportedException">(Java class)</a>
+</li>
+      </ul></li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Type.nullable">nullable (Type attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.nullable_type">nullable_type() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.nullable_type">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.nullableType(Connection, Type)">nullableType(Connection, Type) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.NullReferenceException">NullReferenceException (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.NullReferenceException">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.NullReferenceException">(Java class)</a>
 </li>
       </ul></li>
       <li><a href="python/api/space-center/stage.html#SpaceCenter.Stage.number">number (Stage attribute)</a>
@@ -18407,10 +19186,10 @@
 </li>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.CameraMode.ORBITAL">ORBITAL (Java field)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.orbital_energy">orbital_energy (Orbit attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.orbital_reference_frame">orbital_reference_frame (CelestialBody attribute)</a>
 
       <ul>
@@ -18457,6 +19236,12 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverter.outputs(int)">outputs(int) (Java method)</a>
 </li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.OverflowException">OverflowException (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.OverflowException">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.OverflowException">(Java class)</a>
+</li>
+      </ul></li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlInputMode.OVERRIDE">OVERRIDE (Java field)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.RCS.override_force">override_force() (RCS method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.RCS.override_force">[1]</a>
@@ -18550,6 +19335,8 @@
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.parameter">parameter() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.parameter">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.parameter(Connection, String, Type)">parameter(Connection, String, Type) (Java method)</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Expression.parameter_types">parameter_types (Expression attribute)</a>
 </li>
       <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.parameters">parameters (Contract attribute)</a>
 </li>
@@ -19225,6 +20012,8 @@
 </li>
         <li><a href="lua/api/ui/dropdown.html#UI.Dropdown.remove">(Dropdown method)</a>, <a href="python/api/ui/dropdown.html#UI.Dropdown.remove">[1]</a>
 </li>
+        <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.remove">(Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.remove">[1]</a>
+</li>
         <li><a href="lua/api/space-center/parts.html#SpaceCenter.Force.remove">(Force method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Force.remove">[1]</a>
 </li>
         <li><a href="lua/api/drawing/image.html#Drawing.Image.remove">(Image method)</a>, <a href="lua/api/ui/image.html#UI.Image.remove">[1]</a>, <a href="python/api/drawing/image.html#Drawing.Image.remove">[2]</a>, <a href="python/api/ui/image.html#UI.Image.remove">[3]</a>
@@ -19278,6 +20067,10 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.remove(Connection, Expression, Expression)">remove(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.remove_at">remove_at() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.remove_at">[1]</a>
+</li>
       <li><a href="python/client.html#krpc.event.Event.remove_callback">remove_callback() (krpc.event.Event method)</a>
 
       <ul>
@@ -19295,6 +20088,8 @@
       <li><a href="lua/api/infernal-robotics/servo.html#InfernalRobotics.Servo.remove_preset_at">remove_preset_at() (Servo method)</a>, <a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.remove_preset_at">[1]</a>
 </li>
       <li><a href="python/client.html#krpc.client.Client.remove_stream_update_callback">remove_stream_update_callback() (krpc.client.Client method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.removeAt(Connection, Expression, Expression)">removeAt(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Event.removeCallback(int)">removeCallback(int) (Java method)</a>, <a href="java/client.html#krpc.client.Stream.removeCallback(int)">[1]</a>
 </li>
@@ -19457,6 +20252,22 @@
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.retrograde">retrograde (Flight attribute)</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.SASMode.RETROGRADE">RETROGRADE (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.return">return() (Expression static method)</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Expression.return_">return_() (Expression static method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.return_(Connection, Expression)">return_(Connection, Expression) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.return_nothing">return_nothing() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.return_nothing">[1]</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Expression.return_type">return_type (Expression attribute)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.returnNothing(Connection)">returnNothing(Connection) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.reverse">reverse() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.reverse">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.reverse(Connection, Expression)">reverse(Connection, Expression) (Java method)</a>
 </li>
       <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.reverse_key">reverse_key (ServoGroup attribute)</a>
 </li>
@@ -19632,6 +20443,10 @@
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Experiment.run()">(Java method)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.run_function">run_function() (in module KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.run_function">[1]</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.runFunction(Expression, java.util.List)">runFunction(Expression, java.util.List) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.MotorState.RUNNING">RUNNING (Java field)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverterState.RUNNING">[1]</a>
 </li>
       <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarkerIcon.RUNWAY">RUNWAY (Java field)</a>
@@ -19642,6 +20457,10 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.S_INT32">S_INT32 (Java field)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.S_INT64">S_INT64 (Java field)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ParachuteSafeState.SAFE">SAFE (Java field)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Parachute.safe_state">safe_state (Parachute attribute)</a>
@@ -19770,9 +20589,13 @@
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.select(Connection, Expression, Expression)">select(Connection, Expression, Expression) (Java method)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.select_many">select_many() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.select_many">[1]</a>
+</li>
       <li><a href="python/api/ui/toggle-group.html#UI.ToggleGroup.selected">selected (ToggleGroup attribute)</a>
 </li>
       <li><a href="python/api/ui/dropdown.html#UI.Dropdown.selected_index">selected_index (Dropdown attribute)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.selectMany(Connection, Expression, Expression)">selectMany(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ParachuteState.SEMI_DEPLOYED">SEMI_DEPLOYED (Java field)</a>
 </li>
@@ -19791,6 +20614,8 @@
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.sensor">sensor (Part attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Parts.sensors">sensors (Parts attribute)</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Type.service">service (Type attribute)</a>
 </li>
       <li><a href="lua/api/infernal-robotics/servo.html#InfernalRobotics.Servo">Servo (class in InfernalRobotics)</a>, <a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo">[1]</a>
 
@@ -19836,6 +20661,12 @@
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.servoWithName(String)">servoWithName(String) (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.SET">SET (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.set">set() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.set">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.set(Connection, Expression, Expression, Expression)">set(Connection, Expression, Expression, Expression) (Java method)</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Module.set_action">set_action() (Module method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Module.set_action">[1]</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Module.set_action_by_id">set_action_by_id() (Module method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Module.set_action_by_id">[1]</a>
@@ -19879,6 +20710,8 @@
       <li><a href="lua/api/debug/debug.html#Debug.set_position">set_position() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_position">[1]</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.ResourceDrain.set_resource">set_resource() (ResourceDrain method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ResourceDrain.set_resource">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.set_type">set_type() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.set_type">[1]</a>
 </li>
       <li><a href="lua/api/debug/debug.html#Debug.set_velocity">set_velocity() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_velocity">[1]</a>
 </li>
@@ -20552,6 +21385,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.setTranslationOverride(org.javatuples.Triplet)">setTranslationOverride(org.javatuples.Triplet) (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.setType(Connection, Type)">setType(Connection, Type) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.setType(VesselType)">setType(VesselType) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.setUIVisible(boolean)">setUIVisible(boolean) (Java method)</a>
@@ -20681,6 +21516,10 @@
 </li>
       </ul></li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.skin_temperature">skin_temperature (Part attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.skip">skip() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.skip">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.skip(Connection, Expression, Expression)">skip(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="lua/api/ui/slider.html#UI.Slider">Slider (class in UI)</a>, <a href="python/api/ui/slider.html#UI.Slider">[1]</a>
 
@@ -21363,8 +22202,6 @@
 </li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.Editor.delta_v_body">SpaceCenter.SpaceCenter.Editor.delta_v_body (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.Editor.delta_v_situation">SpaceCenter.SpaceCenter.Editor.delta_v_situation (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.Editor.facility">SpaceCenter.SpaceCenter.Editor.facility (attribute)</a>
@@ -21391,6 +22228,8 @@
 </li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.EditorVessel.facility">SpaceCenter.SpaceCenter.EditorVessel.facility (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.EditorVessel.inertia_tensor">SpaceCenter.SpaceCenter.EditorVessel.inertia_tensor (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.EditorVessel.mass">SpaceCenter.SpaceCenter.EditorVessel.mass (attribute)</a>
@@ -22895,6 +23734,10 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverter.state(int)">state(int) (Java method)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.state_variable">state_variable() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.state_variable">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stateVariable(Connection, String, Expression)">stateVariable(Connection, String, Expression) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.static_air_temperature">static_air_temperature (Flight attribute)</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.static_pressure">static_pressure (Flight attribute)</a>
@@ -22973,11 +23816,81 @@
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Wheel.stress_tolerance">stress_tolerance (Wheel attribute)</a>
 </li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.FieldType.STRING">STRING (Java field)</a>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.STRING">STRING (Java field)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.FieldType.STRING">[1]</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Type.string">string() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.string">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.string(Connection)">string(Connection) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_concat">string_concat() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_concat">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_contains">string_contains() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_contains">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_ends_with">string_ends_with() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_ends_with">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_get">string_get() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_get">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_index_of">string_index_of() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_index_of">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_join">string_join() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_join">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_length">string_length() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_length">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_replace">string_replace() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_replace">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_split">string_split() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_split">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_starts_with">string_starts_with() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_starts_with">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_substring">string_substring() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_substring">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_to_lower">string_to_lower() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_to_lower">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_to_upper">string_to_upper() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_to_upper">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_trim">string_trim() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_trim">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_trim_end">string_trim_end() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_trim_end">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.string_trim_start">string_trim_start() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.string_trim_start">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringConcat(Connection, java.util.List)">stringConcat(Connection, java.util.List) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringContains(Connection, Expression, Expression)">stringContains(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringEndsWith(Connection, Expression, Expression)">stringEndsWith(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringGet(Connection, Expression, Expression)">stringGet(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringIndexOf(Connection, Expression, Expression)">stringIndexOf(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringJoin(Connection, Expression, Expression)">stringJoin(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringLength(Connection, Expression)">stringLength(Connection, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringReplace(Connection, Expression, Expression, Expression)">stringReplace(Connection, Expression, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringSplit(Connection, Expression, Expression)">stringSplit(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringStartsWith(Connection, Expression, Expression)">stringStartsWith(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringSubstring(Connection, Expression, Expression, Expression)">stringSubstring(Connection, Expression, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringToLower(Connection, Expression)">stringToLower(Connection, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringToUpper(Connection, Expression)">stringToUpper(Connection, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringTrim(Connection, Expression)">stringTrim(Connection, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringTrimEnd(Connection, Expression)">stringTrimEnd(Connection, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.stringTrimStart(Connection, Expression)">stringTrimStart(Connection, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.STRUCT">STRUCT (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.struct_type">struct_type() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.struct_type">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.structType(Connection, String, String)">structType(Connection, String, String) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.CrewMember.stupidity">stupidity (CrewMember attribute)</a>
 </li>
@@ -23090,6 +24003,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.tag">tag (Part attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.take">take() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.take">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.take(Connection, Expression, Expression)">take(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="python/api/remote-tech/antenna.html#RemoteTech.Antenna.target">target (Antenna attribute)</a>
 </li>
@@ -23281,6 +24198,10 @@
       </ul></li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Engine.throttle_locked">throttle_locked (Engine attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.throw">throw() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.throw">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.throw_(Connection, String, String, Expression)">throw_(Connection, String, String, Expression) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Engine.thrust">thrust (Engine attribute)</a>
 
       <ul>
@@ -23311,8 +24232,6 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.thrustDirection(ReferenceFrame)">thrustDirection(ReferenceFrame) (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Thruster">Thruster (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Thruster">[1]</a>
 
       <ul>
@@ -23345,10 +24264,18 @@
 </li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.time_to_soi_change">time_to_soi_change (Orbit attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/alarms.html#SpaceCenter.Alarm.time_until">time_until (Alarm attribute)</a>
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.timeOfClosestApproach(Orbit)">timeOfClosestApproach(Orbit) (Java method)</a>
 </li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.TimeoutException">TimeoutException (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.TimeoutException">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.TimeoutException">(Java class)</a>
+</li>
+      </ul></li>
       <li><a href="python/api/space-center/alarms.html#SpaceCenter.Alarm.title">title (Alarm attribute)</a>
 
       <ul>
@@ -23507,6 +24434,24 @@
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.trueAnomalyAtUT(double)">trueAnomalyAtUT(double) (Java method)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.try_catch">try_catch() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.try_catch">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.try_catch_all">try_catch_all() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.try_catch_all">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.try_finally">try_finally() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.try_finally">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.tryCatch(Connection, Expression, String, String, Expression, Expression)">tryCatch(Connection, Expression, String, String, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.tryCatchAll(Connection, Expression, Expression, Expression)">tryCatchAll(Connection, Expression, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.tryFinally(Connection, Expression, Expression)">tryFinally(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.TUPLE">TUPLE (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.tuple_type">tuple_type() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.tuple_type">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.tupleType(Connection, java.util.List)">tupleType(Connection, java.util.List) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/stage.html#SpaceCenter.Stage.twr">twr (Stage attribute)</a>
 </li>
       <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.type">type (Alarm attribute)</a>, <a href="python/api/space-center/alarms.html#SpaceCenter.Alarm.type">[1]</a>
@@ -23529,14 +24474,64 @@
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.type">(Vessel attribute)</a>
 </li>
       </ul></li>
-      <li><a href="python/api/space-center/contracts.html#SpaceCenter.ContractManager.types">types (ContractManager attribute)</a>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode">TypeCode (class in KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode">(Java enum)</a>
 </li>
+      </ul></li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.bool">TypeCode.bool (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.bool">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.bytes">TypeCode.bytes (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.bytes">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.class">TypeCode.class (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.class">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.dictionary">TypeCode.dictionary (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.dictionary">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.double">TypeCode.double (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.double">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.enumeration">TypeCode.enumeration (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.enumeration">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.float">TypeCode.float (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.float">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.list">TypeCode.list (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.list">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.s_int32">TypeCode.s_int32 (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.s_int32">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.s_int64">TypeCode.s_int64 (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.s_int64">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.set">TypeCode.set (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.set">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.string">TypeCode.string (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.string">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.struct">TypeCode.struct (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.struct">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.tuple">TypeCode.tuple (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.tuple">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.u_int32">TypeCode.u_int32 (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.u_int32">[1]</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.TypeCode.u_int64">TypeCode.u_int64 (in module KRPC)</a>, <a href="python/api/krpc/expressions.html#KRPC.TypeCode.u_int64">[1]</a>
+</li>
+      <li><a href="python/api/space-center/contracts.html#SpaceCenter.ContractManager.types">types (ContractManager attribute)</a>
+
+      <ul>
+        <li><a href="python/api/krpc/expressions.html#KRPC.Type.types">(Type attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.u_int">u_int() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.u_int">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.U_INT32">U_INT32 (Java field)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.TypeCode.U_INT64">U_INT64 (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Type.u_long">u_long() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.u_long">[1]</a>
+</li>
       <li>
     UI
 
@@ -23784,6 +24779,10 @@
 </li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.uid">uid (Servo attribute)</a>
 </li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.uInt(Connection)">uInt(Connection) (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.uLong(Connection)">uLong(Connection) (Java method)</a>
+</li>
       <li><a href="python/api/debug/debug.html#Debug.unbreakable_joints">unbreakable_joints (in module Debug)</a>
 </li>
       <li><a href="java/api/ui/size-fitter.html#krpc.client.services.UI.ContentSizeFit.UNCONSTRAINED">UNCONSTRAINED (Java field)</a>
@@ -23795,6 +24794,10 @@
 </li>
       </ul></li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPortState.UNDOCKING">UNDOCKING (Java field)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.union">union() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.union">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.union(Connection, Expression, Expression)">union(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.AlarmType.UNKNOWN">UNKNOWN (Java field)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.FieldType.UNKNOWN">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverterState.UNKNOWN">[2]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.UNKNOWN">[3]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselType.UNKNOWN">[4]</a>
 </li>
@@ -23898,6 +24901,10 @@
       </ul></li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ConfigNode.values">values (ConfigNode attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.variable">variable() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.variable">[1]</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.variable(Connection, String, Type)">variable(Connection, String, Type) (Java method)</a>
+</li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.velocity">velocity (Flight attribute)</a>
 </li>
       <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.velocity">velocity() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.velocity">[1]</a>
@@ -23972,10 +24979,10 @@
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.VesselSituation.flying">VesselSituation.flying (in module SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.VesselSituation.flying">[1]</a>
 </li>
-      <li><a href="lua/api/space-center/vessel.html#SpaceCenter.VesselSituation.landed">VesselSituation.landed (in module SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.VesselSituation.landed">[1]</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/space-center/vessel.html#SpaceCenter.VesselSituation.landed">VesselSituation.landed (in module SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.VesselSituation.landed">[1]</a>
+</li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.VesselSituation.orbiting">VesselSituation.orbiting (in module SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.VesselSituation.orbiting">[1]</a>
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.VesselSituation.pre_launch">VesselSituation.pre_launch (in module SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.VesselSituation.pre_launch">[1]</a>
@@ -24144,10 +25151,10 @@
         <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.WaypointManager">(Java class)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/waypoints.html#SpaceCenter.WaypointManager.waypoints">waypoints (WaypointManager attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Wheel">Wheel (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Wheel">[1]</a>
 
       <ul>
@@ -24169,6 +25176,12 @@
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.where">where() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.where">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.where(Connection, Expression, Expression)">where(Connection, Expression, Expression) (Java method)</a>
+</li>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.while">while() (Expression static method)</a>
+</li>
+      <li><a href="python/api/krpc/expressions.html#KRPC.Expression.while_">while_() (Expression static method)</a>
+</li>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.while_(Connection, Expression, Expression)">while_(Connection, Expression, Expression) (Java method)</a>
 </li>
       <li><a href="python/api/drawing/orbit-path.html#Drawing.OrbitPath.whole_orbit">whole_orbit (OrbitPath attribute)</a>
 </li>
@@ -24231,6 +25244,18 @@
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.yaw_pid_gains">yaw_pid_gains (AutoPilot attribute)</a>
 </li>
       <li><a href="python/api/space-center/control.html#SpaceCenter.Control.yaw_trim">yaw_trim (Control attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.zip">zip() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.zip">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.zip(Connection, Expression, Expression, Expression)">zip(Connection, Expression, Expression, Expression) (Java method)</a>
 </li>
   </ul></td>
 </tr></table>

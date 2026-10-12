@@ -1017,15 +1017,17 @@ holds the stream instead. It resumes once the object or scene is available.</p>
 <a class="reference internal" href="#_CPPv4N4krpc6Stream16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE" title="krpc::Stream::add_end_callback"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::Stream::add_end_callback()</span></code></a>. It is called once, with the exception.</p>
 </section>
 </section>
-<section id="custom-events">
-<span id="cpp-client-events"></span><h2>Custom Events<a class="headerlink" href="#custom-events" title="Link to this heading">#</a></h2>
+<section id="events">
+<span id="cpp-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
 <p>Some procedures return event objects of type <a class="reference internal" href="#_CPPv4N4krpc5EventE" title="krpc::Event"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">krpc::Event</span></code></a>. These allow you to wait until an
 event occurs, by calling <a class="reference internal" href="#_CPPv4N4krpc5Event4waitEd" title="krpc::Event::wait"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::Event::wait()</span></code></a>. Under the hood, these are implemented using
 streams and condition variables.</p>
-<p>Custom events can also be created. An expression API allows you to create code that runs on the
-server and these can be used to build a custom event. For example, the following creates the
-expression <code class="docutils literal notranslate"><span class="pre">mean_altitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code> and then creates an event that will be triggered when the
-expression returns true:</p>
+<p>A call to <code class="docutils literal notranslate"><span class="pre">wait</span></code> returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+<code class="docutils literal notranslate"><span class="pre">wait</span></code> return once.</p>
+<p>You can also create a custom event from a server side function, which is code that runs inside
+the game. The following builds the function <code class="docutils literal notranslate"><span class="pre">mean_altitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that
+triggers when the function returns true:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/krpc.hpp&gt;</span>
@@ -1041,7 +1043,7 @@ expression returns true:</p>
 <span class="w">  </span><span class="c1">// so it can be passed to the server</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">mean_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">mean_altitude_call</span><span class="p">();</span>
 
-<span class="w">  </span><span class="c1">// Create an expression on the server</span>
+<span class="w">  </span><span class="c1">// Build the function on the server</span>
 <span class="w">  </span><span class="k">typedef</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="o">::</span><span class="n">Expression</span><span class="w"> </span><span class="n">Expr</span><span class="p">;</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">greater_than</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">mean_altitude</span><span class="p">),</span>
@@ -1055,9 +1057,6 @@ expression returns true:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>A call to <code class="docutils literal notranslate"><span class="pre">wait</span></code> returns straight away if the event has fired since the previous call on the same
-event object, so no firing is missed between two calls. Several firings between two calls make
-<code class="docutils literal notranslate"><span class="pre">wait</span></code> return once.</p>
 </section>
 <section id="client-api-reference">
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
@@ -1315,7 +1314,7 @@ equal.</p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc5EventE">
 <span id="_CPPv3N4krpc5EventE"></span><span id="_CPPv2N4krpc5EventE"></span><span id="krpc::Event"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Event</span></span></span><a class="headerlink" href="#_CPPv4N4krpc5EventE" title="Link to this definition">#</a><br /></dt>
-<dd><p>This class represents an event. See <a class="reference internal" href="#cpp-client-events"><span class="std std-ref">Custom Events</span></a>. It is wrapper around a
+<dd><p>This class represents an event. See <a class="reference internal" href="#cpp-client-events"><span class="std std-ref">Events</span></a>. It is wrapper around a
 <code class="docutils literal notranslate"><span class="pre">Stream&lt;bool&gt;</span></code> that indicates when the event occurs.</p>
 <p>Event objects are copy constructible and assignable, and every copy refers to the same event.
 Call <a class="reference internal" href="#_CPPv4N4krpc5Event6removeEv" title="krpc::Event::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">remove()</span></code></a> to remove the event from the server.</p>
@@ -1563,7 +1562,7 @@ any of the collection types, so a container keyed by one needs this:</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-events">Custom Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
 </ul>
   </nav></div>

@@ -766,6 +766,27 @@ Can be used by client libraries to automatically create functionality such as st
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="KRPC.add_function_stream">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_function_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.add_function_stream" title="Link to this definition">#</a></dt>
+<dd><p>Add a stream of the value a server side function computes on each update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>function</strong> (<a class="reference internal" href="expressions.html#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.schema.KRPC.Stream</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call adds a new stream, with values of the type given by
+<a class="reference internal" href="expressions.html#KRPC.Expression.return_type" title="KRPC.Expression.return_type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Expression.return_type</span></code></a>. Any exception from the function ends the
+stream, including one for an object that is not loaded. A procedure that pauses
+execution to resume on a later tick produces an error on the stream.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="KRPC.hold_tick">
 <span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">hold_tick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.hold_tick" title="Link to this definition">#</a></dt>
 <dd><p>Hold the game on its current physics tick until <a class="reference internal" href="#KRPC.release_tick" title="KRPC.release_tick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release_tick()</span></code></a> is called
@@ -808,6 +829,50 @@ act on every tick, work, and come back to it.</p>
 as the loop runs. End the loop with <a class="reference internal" href="#KRPC.release_tick" title="KRPC.release_tick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">release_tick()</span></code></a>.</p>
 <p>Every limit of <a class="reference internal" href="#KRPC.hold_tick" title="KRPC.hold_tick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hold_tick()</span></code></a> applies, the timeout included. A hold lost to
 the timeout is not reported, and the next call takes whatever tick it lands on.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KRPC.compile_function">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">compile_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.compile_function" title="Link to this definition">#</a></dt>
+<dd><p>Compile a server side function, so that running, streaming or adding it as an
+event does not compile it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>function</strong> (<a class="reference internal" href="expressions.html#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compiling a large function takes time on the game’s main thread. Compiling it
+in advance keeps that time out of its first run.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KRPC.run_function">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">run_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KRPC.run_function" title="Link to this definition">#</a></dt>
+<dd><p>Run a server side function once, within a single physics tick, and return
+the value it produces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> (<a class="reference internal" href="expressions.html#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – The function to run.</p></li>
+<li><p><strong>arguments</strong> (<em>list</em>) – The encoded arguments, one per parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The encoded value of the function, or no bytes for a function with no value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes or None</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arguments are encoded at the types given by <a class="reference internal" href="expressions.html#KRPC.Expression.parameter_types" title="KRPC.Expression.parameter_types"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Expression.parameter_types</span></code></a>.
+Throws an exception if a procedure the function calls pauses execution, and the
+effects up to the pause remain.</p>
 </div>
 </dd></dl>
 
@@ -980,6 +1045,48 @@ meet the parameter specification of the method.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="KRPC.NullReferenceException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NullReferenceException</span></span><a class="headerlink" href="#KRPC.NullReferenceException" title="Link to this definition">#</a></dt>
+<dd><p>A value was null where its type does not allow one.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KRPC.KeyNotFoundException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">KeyNotFoundException</span></span><a class="headerlink" href="#KRPC.KeyNotFoundException" title="Link to this definition">#</a></dt>
+<dd><p>A key was not found in a dictionary.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KRPC.IndexOutOfRangeException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">IndexOutOfRangeException</span></span><a class="headerlink" href="#KRPC.IndexOutOfRangeException" title="Link to this definition">#</a></dt>
+<dd><p>An index was outside the bounds of a collection, string or array.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KRPC.DivideByZeroException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DivideByZeroException</span></span><a class="headerlink" href="#KRPC.DivideByZeroException" title="Link to this definition">#</a></dt>
+<dd><p>An integer was divided by zero.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KRPC.NotSupportedException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NotSupportedException</span></span><a class="headerlink" href="#KRPC.NotSupportedException" title="Link to this definition">#</a></dt>
+<dd><p>A method was invoked that is not supported.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KRPC.TimeoutException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">TimeoutException</span></span><a class="headerlink" href="#KRPC.TimeoutException" title="Link to this definition">#</a></dt>
+<dd><p>An operation did not complete in the time allotted to it.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KRPC.OverflowException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">OverflowException</span></span><a class="headerlink" href="#KRPC.OverflowException" title="Link to this definition">#</a></dt>
+<dd><p>An arithmetic or conversion operation overflowed.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="KRPC.ObjectDestroyedException">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ObjectDestroyedException</span></span><a class="headerlink" href="#KRPC.ObjectDestroyedException" title="Link to this definition">#</a></dt>
 <dd><p>The game object that a service object refers to no longer exists,
@@ -1004,6 +1111,12 @@ For example, the game is loading, or the vessel carrying the part is unloaded.</
 <dt class="sig sig-object py" id="KRPC.StreamRemovedException">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">StreamRemovedException</span></span><a class="headerlink" href="#KRPC.StreamRemovedException" title="Link to this definition">#</a></dt>
 <dd><p>A stream was removed by the server, e.g. an event that has finished.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KRPC.Error">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="headerlink" href="#KRPC.Error" title="Link to this definition">#</a></dt>
+<dd><p>A general error, described by its message.</p>
 </dd></dl>
 
 </section>

@@ -56,6 +56,24 @@ KRPC
 
       :Game Scenes: All
 
+   .. method:: KRPC.Schema.KRPC.Stream AddFunctionStream(Expression function)
+
+      Add a stream of the value a server side function computes on each update.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Each call adds a new stream, with values of the type given by
+         :prop:`Expression.ReturnType`. Any exception from the function ends the
+         stream, including one for an object that is not loaded. A procedure that pauses
+         execution to resume on a later tick produces an error on the stream.
+
    .. method:: void HoldTick()
 
       Hold the game on its current physics tick until :meth:`KRPC.ReleaseTick <KRPC.KRPC.ReleaseTick>` is called
@@ -110,6 +128,43 @@ KRPC
 
          Every limit of :meth:`KRPC.HoldTick <KRPC.KRPC.HoldTick>` applies, the timeout included. A hold lost to
          the timeout is not reported, and the next call takes whatever tick it lands on.
+
+   .. method:: void CompileFunction(Expression function)
+
+      Compile a server side function, so that running, streaming or adding it as an
+      event does not compile it.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Compiling a large function takes time on the game's main thread. Compiling it
+         in advance keeps that time out of its first run.
+
+   .. method:: byte[] RunFunction(Expression function, System.Collections.Generic.IList<byte[]> arguments = {  })
+
+      Run a server side function once, within a single physics tick, and return
+      the value it produces.
+
+      :parameters:
+
+       * **function** -- The function to run.
+       * **arguments** -- The encoded arguments, one per parameter.
+
+      :returns: The encoded value of the function, or no bytes for a function with no value.
+      :Game Scenes: All
+
+
+      .. note::
+
+         The arguments are encoded at the types given by :prop:`Expression.ParameterTypes`.
+         Throws an exception if a procedure the function calls pauses execution, and the
+         effects up to the pause remain.
 
    .. property:: GameScene GameScene { get; set; }
 
@@ -238,6 +293,48 @@ KRPC
 
 
 
+.. class:: NullReferenceException
+
+   A value was null where its type does not allow one.
+
+
+
+.. class:: KeyNotFoundException
+
+   A key was not found in a dictionary.
+
+
+
+.. class:: IndexOutOfRangeException
+
+   An index was outside the bounds of a collection, string or array.
+
+
+
+.. class:: DivideByZeroException
+
+   An integer was divided by zero.
+
+
+
+.. class:: NotSupportedException
+
+   A method was invoked that is not supported.
+
+
+
+.. class:: TimeoutException
+
+   An operation did not complete in the time allotted to it.
+
+
+
+.. class:: OverflowException
+
+   An arithmetic or conversion operation overflowed.
+
+
+
 .. class:: ObjectDestroyedException
 
    The game object that a service object refers to no longer exists,
@@ -262,3 +359,9 @@ KRPC
 .. class:: StreamRemovedException
 
    A stream was removed by the server, e.g. an event that has finished.
+
+
+
+.. class:: Error
+
+   A general error, described by its message.

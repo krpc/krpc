@@ -766,6 +766,26 @@ Can be used by client libraries to automatically create functionality such as st
 </dd></dl>
 
 <dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.KRPC.AddFunctionStream">
+<span class="pre">KRPC.Schema.KRPC.Stream</span> <span class="sig-name descname"><span class="pre">AddFunctionStream</span></span> <span class="sig-paren">(</span><a class="reference internal" href="expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.KRPC.AddFunctionStream" title="Link to this definition">#</a></dt>
+<dd><p>Add a stream of the value a server side function computes on each update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call adds a new stream, with values of the type given by
+<a class="reference internal" href="expressions.html#property-KRPC.Client.Services.KRPC.Expression.ReturnType" title="KRPC.Client.Services.KRPC.Expression.ReturnType property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Expression.ReturnType</span></code></a>. Any exception from the function ends the
+stream, including one for an object that is not loaded. A procedure that pauses
+execution to resume on a later tick produces an error on the stream.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.KRPC.HoldTick">
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">HoldTick</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.KRPC.HoldTick" title="Link to this definition">#</a></dt>
 <dd><p>Hold the game on its current physics tick until <a class="reference internal" href="#method-KRPC.Client.Services.KRPC.KRPC.ReleaseTick" title="KRPC.Client.Services.KRPC.KRPC.ReleaseTick method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">KRPC.ReleaseTick</span></code></a> is called
@@ -823,6 +843,52 @@ act on every tick, work, and come back to it.</p>
 as the loop runs. End the loop with <a class="reference internal" href="#method-KRPC.Client.Services.KRPC.KRPC.ReleaseTick" title="KRPC.Client.Services.KRPC.KRPC.ReleaseTick method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">KRPC.ReleaseTick</span></code></a>.</p>
 <p>Every limit of <a class="reference internal" href="#method-KRPC.Client.Services.KRPC.KRPC.HoldTick" title="KRPC.Client.Services.KRPC.KRPC.HoldTick method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code></a> applies, the timeout included. A hold lost to
 the timeout is not reported, and the next call takes whatever tick it lands on.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.KRPC.CompileFunction">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">CompileFunction</span></span> <span class="sig-paren">(</span><a class="reference internal" href="expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.KRPC.CompileFunction" title="Link to this definition">#</a></dt>
+<dd><p>Compile a server side function, so that running, streaming or adding it as an
+event does not compile it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compiling a large function takes time on the game’s main thread. Compiling it
+in advance keeps that time out of its first run.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.KRPC.RunFunction">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.byte" title="System.Byte"><span class="pre">Byte</span></a><span class="pre">[]</span> <span class="sig-name descname"><span class="pre">RunFunction</span></span> <span class="sig-paren">(</span><a class="reference internal" href="expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">function</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.byte" title="System.Byte"><span class="pre">Byte</span></a><span class="pre">[]</span><span class="pre">&gt;</span> <em><span class="pre">arguments</span></em><em> <span class="pre">=</span> <span class="pre">{</span>&#160; <span class="pre">}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.KRPC.RunFunction" title="Link to this definition">#</a></dt>
+<dd><p>Run a server side function once, within a single physics tick, and return
+the value it produces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> – The function to run.</p></li>
+<li><p><strong>arguments</strong> – The encoded arguments, one per parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The encoded value of the function, or no bytes for a function with no value.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arguments are encoded at the types given by <a class="reference internal" href="expressions.html#property-KRPC.Client.Services.KRPC.Expression.ParameterTypes" title="KRPC.Client.Services.KRPC.Expression.ParameterTypes property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Expression.ParameterTypes</span></code></a>.
+Throws an exception if a procedure the function calls pauses execution, and the
+effects up to the pause remain.</p>
 </div>
 </dd></dl>
 
@@ -985,6 +1051,48 @@ meet the parameter specification of the method.</p>
 </dd></dl>
 
 <dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.NullReferenceException">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">NullReferenceException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.NullReferenceException" title="Link to this definition">#</a></dt>
+<dd><p>A value was null where its type does not allow one.</p>
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.KeyNotFoundException">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">KeyNotFoundException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.KeyNotFoundException" title="Link to this definition">#</a></dt>
+<dd><p>A key was not found in a dictionary.</p>
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.IndexOutOfRangeException">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">IndexOutOfRangeException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.IndexOutOfRangeException" title="Link to this definition">#</a></dt>
+<dd><p>An index was outside the bounds of a collection, string or array.</p>
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.DivideByZeroException">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">DivideByZeroException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.DivideByZeroException" title="Link to this definition">#</a></dt>
+<dd><p>An integer was divided by zero.</p>
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.NotSupportedException">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">NotSupportedException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.NotSupportedException" title="Link to this definition">#</a></dt>
+<dd><p>A method was invoked that is not supported.</p>
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.TimeoutException">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">TimeoutException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.TimeoutException" title="Link to this definition">#</a></dt>
+<dd><p>An operation did not complete in the time allotted to it.</p>
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.OverflowException">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">OverflowException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.OverflowException" title="Link to this definition">#</a></dt>
+<dd><p>An arithmetic or conversion operation overflowed.</p>
+</dd></dl>
+
+<dl class="csharp class">
 <dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.ObjectDestroyedException">
 <span class="sig-name descname"><span class="pre">class</span> <span class="pre">ObjectDestroyedException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.ObjectDestroyedException" title="Link to this definition">#</a></dt>
 <dd><p>The game object that a service object refers to no longer exists,
@@ -1009,6 +1117,12 @@ For example, the game is loading, or the vessel carrying the part is unloaded.</
 <dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.StreamRemovedException">
 <span class="sig-name descname"><span class="pre">class</span> <span class="pre">StreamRemovedException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.StreamRemovedException" title="Link to this definition">#</a></dt>
 <dd><p>A stream was removed by the server, e.g. an event that has finished.</p>
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.Error">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Error</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.Error" title="Link to this definition">#</a></dt>
+<dd><p>A general error, described by its message.</p>
 </dd></dl>
 
 </section>

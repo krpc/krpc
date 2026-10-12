@@ -741,6 +741,26 @@ Can be used by client libraries to automatically create functionality such as st
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.KRPC.addFunctionStream(Expression)">
+ <span class="pre">krpc</span><span class="pre">.</span><span class="pre">schema</span><span class="pre">.</span><span class="pre">KRPC</span><span class="pre">.</span><span class="pre">Stream</span> <span class="sig-name descname"><span class="pre">addFunctionStream</span></span><span class="sig-paren">(</span><a class="reference internal" href="expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.KRPC.addFunctionStream(Expression)" title="Link to this definition">#</a></dt>
+<dd><p>Add a stream of the value a server side function computes on each update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> (<span><a class="reference internal" href="expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a></span>)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call adds a new stream, with values of the type given by
+<a class="reference internal" href="expressions.html#krpc.client.services.KRPC.Expression.getReturnType()" title="krpc.client.services.KRPC.Expression.getReturnType()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Expression.getReturnType()</span></code></a>. Any exception from the function ends the
+stream, including one for an object that is not loaded. A procedure that pauses
+execution to resume on a later tick produces an error on the stream.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KRPC.KRPC.holdTick()">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">holdTick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.KRPC.holdTick()" title="Link to this definition">#</a></dt>
 <dd><p>Hold the game on its current physics tick until <a class="reference internal" href="#krpc.client.services.KRPC.KRPC.releaseTick()" title="krpc.client.services.KRPC.KRPC.releaseTick()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">releaseTick()</span></code></a> is called
@@ -783,6 +803,49 @@ act on every tick, work, and come back to it.</p>
 as the loop runs. End the loop with <a class="reference internal" href="#krpc.client.services.KRPC.KRPC.releaseTick()" title="krpc.client.services.KRPC.KRPC.releaseTick()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">releaseTick()</span></code></a>.</p>
 <p>Every limit of <a class="reference internal" href="#krpc.client.services.KRPC.KRPC.holdTick()" title="krpc.client.services.KRPC.KRPC.holdTick()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">holdTick()</span></code></a> applies, the timeout included. A hold lost to
 the timeout is not reported, and the next call takes whatever tick it lands on.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.KRPC.compileFunction(Expression)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">compileFunction</span></span><span class="sig-paren">(</span><a class="reference internal" href="expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.KRPC.compileFunction(Expression)" title="Link to this definition">#</a></dt>
+<dd><p>Compile a server side function, so that running, streaming or adding it as an
+event does not compile it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> (<span><a class="reference internal" href="expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a></span>)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compiling a large function takes time on the game’s main thread. Compiling it
+in advance keeps that time out of its first run.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.KRPC.runFunction(Expression, java.util.List)">
+ <span class="pre">byte[]</span> <span class="sig-name descname"><span class="pre">runFunction</span></span><span class="sig-paren">(</span><a class="reference internal" href="expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><span class="pre">byte[]</span><span class="pre">&gt;</span><em> <span class="pre">arguments</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KRPC.KRPC.runFunction(Expression, java.util.List)" title="Link to this definition">#</a></dt>
+<dd><p>Run a server side function once, within a single physics tick, and return
+the value it produces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> (<span><a class="reference internal" href="expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><code class="xref java java-type docutils literal notranslate"><span class="pre">Expression</span></code></a></span>) – The function to run.</p></li>
+<li><p><strong>arguments</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">java.util.List</span></code></span>) – The encoded arguments, one per parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The encoded value of the function, or no bytes for a function with no value.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arguments are encoded at the types given by <a class="reference internal" href="expressions.html#krpc.client.services.KRPC.Expression.getParameterTypes()" title="krpc.client.services.KRPC.Expression.getParameterTypes()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Expression.getParameterTypes()</span></code></a>.
+Throws an exception if a procedure the function calls pauses execution, and the
+effects up to the pause remain.</p>
 </div>
 </dd></dl>
 
@@ -935,6 +998,48 @@ meet the parameter specification of the method.</p>
 </dd></dl>
 
 <dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.NullReferenceException">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">NullReferenceException</span></span><a class="headerlink" href="#krpc.client.services.KRPC.NullReferenceException" title="Link to this definition">#</a></dt>
+<dd><p>A value was null where its type does not allow one.</p>
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.KeyNotFoundException">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">KeyNotFoundException</span></span><a class="headerlink" href="#krpc.client.services.KRPC.KeyNotFoundException" title="Link to this definition">#</a></dt>
+<dd><p>A key was not found in a dictionary.</p>
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.IndexOutOfRangeException">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">IndexOutOfRangeException</span></span><a class="headerlink" href="#krpc.client.services.KRPC.IndexOutOfRangeException" title="Link to this definition">#</a></dt>
+<dd><p>An index was outside the bounds of a collection, string or array.</p>
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.DivideByZeroException">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">DivideByZeroException</span></span><a class="headerlink" href="#krpc.client.services.KRPC.DivideByZeroException" title="Link to this definition">#</a></dt>
+<dd><p>An integer was divided by zero.</p>
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.NotSupportedException">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">NotSupportedException</span></span><a class="headerlink" href="#krpc.client.services.KRPC.NotSupportedException" title="Link to this definition">#</a></dt>
+<dd><p>A method was invoked that is not supported.</p>
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.TimeoutException">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">TimeoutException</span></span><a class="headerlink" href="#krpc.client.services.KRPC.TimeoutException" title="Link to this definition">#</a></dt>
+<dd><p>An operation did not complete in the time allotted to it.</p>
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.OverflowException">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">OverflowException</span></span><a class="headerlink" href="#krpc.client.services.KRPC.OverflowException" title="Link to this definition">#</a></dt>
+<dd><p>An arithmetic or conversion operation overflowed.</p>
+</dd></dl>
+
+<dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.KRPC.ObjectDestroyedException">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">ObjectDestroyedException</span></span><a class="headerlink" href="#krpc.client.services.KRPC.ObjectDestroyedException" title="Link to this definition">#</a></dt>
 <dd><p>The game object that a service object refers to no longer exists,
@@ -959,6 +1064,12 @@ For example, the game is loading, or the vessel carrying the part is unloaded.</
 <dt class="sig sig-object java" id="krpc.client.services.KRPC.StreamRemovedException">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">StreamRemovedException</span></span><a class="headerlink" href="#krpc.client.services.KRPC.StreamRemovedException" title="Link to this definition">#</a></dt>
 <dd><p>A stream was removed by the server, e.g. an event that has finished.</p>
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KRPC.Error">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Error</span></span><a class="headerlink" href="#krpc.client.services.KRPC.Error" title="Link to this definition">#</a></dt>
+<dd><p>A general error, described by its message.</p>
 </dd></dl>
 
 </section>
