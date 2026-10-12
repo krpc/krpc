@@ -24,6 +24,23 @@
 - **Breaking:** Raise `ZeroDivisionError`, `NotImplementedError`, `TimeoutError` and
   `OverflowError` for the matching errors reported by any service, such as `AutoPilot.wait`, in
   place of `RPCError` (#1124)
+- Add `Client.compile`, which compiles a Python function or lambda into a server side
+  function (#1127)
+- Compile operators, comparisons, conditionals, comprehensions, f-strings, slices, string and
+  collection operations, and calls to a subset of the builtins and the `math` module (#1127)
+- Compile `print` to `StdLib.print`, which writes a line to the game's log (#1127)
+- Compile statements in a function with a body: `if`, `while`, `for`, `break`, `continue`,
+  `del`, `raise`, `try`/`except`/`finally`, local variables and functions, assignment to remote
+  properties and early `return` (#1127)
+- Compile a captured variable declared `nonlocal` to a state variable, which keeps its value
+  between runs of a compiled function (#1127)
+- Raise `FunctionCompilationError` naming an unsupported construct (#1127)
+- Add `Client.run`, which runs a server side function or a Python function, with arguments,
+  within a single physics tick and returns the value it produces (#1127)
+- Stream the value of a server side function or a Python function with `Client.add_stream`
+  and `Client.stream` (#1127)
+- Add `Client.add_event`, which creates an event from a server side function or a Python
+  function (#1127)
 - A dynamically created service escapes an enumeration member whose name is a python keyword,
   such as `Class` to `class_`, matching the pre-generated stubs (#1094)
 - Support a nullable structure field, list element, tuple item and dictionary value, which is
