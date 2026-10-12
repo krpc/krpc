@@ -775,6 +775,33 @@ vessel and then prints out its altitude:</p>
 a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
 behaves when a game is loaded or what it identifies is destroyed.</p>
 </section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p>A server side function is code that runs inside the game, on the server. Pass a lambda expression to
+<a class="reference internal" href="#method-Connection.Run" title="Connection.Run method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Run</span></code></a> to compile it into a server side function, run it once and return its value.
+Every value it reads comes from the same physics tick. For example, the following reads the vessel’s
+altitude and speed together:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Run the lambda on the server, so both values come from the same physics tick</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Tuple</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">Speed</span><span class="p">));</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Altitude: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">Item1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; m, speed: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">Item2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; m/s&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">Run</span></code> for a function with effects, such as a call of <code class="docutils literal notranslate"><span class="pre">ActivateNextStage</span></code>. An event or a
+function stream evaluates its function on every update, repeating the effects.</p>
+<p><a class="reference internal" href="#csharp-client-compiling-lambdas"><span class="std std-ref">Compiling Server Side Functions</span></a> describes what a function can contain.</p>
+</section>
 <section id="streaming-data">
 <span id="csharp-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
 <p>A common use case for kRPC is to continuously extract data from the game. The naive approach to do
@@ -824,26 +851,29 @@ closed.</p>
 <p>It calls <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> once at the start of the program to create the stream, and
 then repeatedly prints the position returned by the stream. The stream is automatically closed when
 the client disconnects.</p>
-<p>A stream can be created for any method call by calling <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> and passing it
-a lambda expression that invokes the desired method. This lambda expression must take zero arguments
-and be a method call or property access, which may be multiplied by a constant. It returns a stream
-object of type <a class="reference internal" href="#class-Stream" title="Stream class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent value of the stream can be obtained by calling
-<a class="reference internal" href="#method-Stream.Get" title="Stream.Get method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Get</span></code></a>. A stream can be stopped and removed from the server by calling
-<a class="reference internal" href="#method-Stream.Remove" title="Stream.Remove method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Remove</span></code></a> on the stream object. All of a clients streams are automatically stopped when
-it disconnects.</p>
+<p>To stream a method call, pass <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> a lambda expression with no parameters
+that makes the call. A single call with fixed arguments is streamed as that call. The instance it
+is made on is evaluated once, when the stream is created. For example,
+<code class="docutils literal notranslate"><span class="pre">vessel.Flight(frame).MeanAltitude</span></code> streams the <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span></code> call.</p>
+<p>Any other lambda is compiled into a server side function, as
+<a class="reference internal" href="#csharp-client-compiling-lambdas"><span class="std std-ref">Compiling Server Side Functions</span></a> describes. A call with a remote procedure call in an
+argument is one of these, and the argument’s call is made on each update.</p>
+<p><a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> returns a stream object of type <a class="reference internal" href="#class-Stream" title="Stream class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent
+value of the stream can be obtained by calling <a class="reference internal" href="#method-Stream.Get" title="Stream.Get method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Get</span></code></a>. A stream can be stopped and
+removed from the server by calling <a class="reference internal" href="#method-Stream.Remove" title="Stream.Remove method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Remove</span></code></a> on the stream object. All of a client’s
+streams are automatically stopped when it disconnects.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A stream runs on the server until you remove it or the connection closes, even once the stream
 object is garbage collected. Each call to <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> adds another stream.</p>
 </div>
-</section>
 <section id="synchronizing-with-stream-updates">
-<h2>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h2>
+<h3>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h3>
 <p>A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
 then take some action. kRPC provides two mechanisms to do this efficiently: <em>condition variables</em>
 and <em>callbacks</em>.</p>
 <section id="condition-variables">
-<h3>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h3>
+<h4>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h4>
 <p>Each stream has a condition variable associated with it, that is notified whenever the value of the
 stream changes. These can be used to block the current thread of execution until the value of the
 stream changes.</p>
@@ -875,7 +905,7 @@ changes. This prevents the loop from ‘spinning’ and so it does not consume p
 whilst waiting.</p>
 </section>
 <section id="callbacks">
-<h3>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h3>
+<h4>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h4>
 <p>Streams allow you to register callback functions that are called whenever the value of the stream
 changes. Callback functions should take a single argument, which is the new value of the stream, and
 should return nothing.</p>
@@ -915,6 +945,7 @@ should return nothing.</p>
 stream. Any changes to shared state must therefore be protected with appropriate
 synchronization.</p>
 </div>
+</section>
 </section>
 <section id="stream-endings">
 <h3>Stream Endings<a class="headerlink" href="#stream-endings" title="Link to this heading">#</a></h3>
@@ -960,6 +991,55 @@ holds the stream instead. It resumes once the object or scene is available.</p>
 <p>To handle an ending in a callback, add an end callback with <a class="reference internal" href="#method-Stream.AddEndCallback" title="Stream.AddEndCallback method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.AddEndCallback</span></code></a>. It is
 called once, with the exception.</p>
 </section>
+<section id="streaming-server-side-functions">
+<h3>Streaming Server Side Functions<a class="headerlink" href="#streaming-server-side-functions" title="Link to this heading">#</a></h3>
+<p>Pass a lambda expression to <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> to stream its value, computed on the
+server. The server evaluates the function on each stream update, within one physics tick. The value
+can be any type the server can send, including collections and objects. For example, the following
+streams the vessel’s altitude in kilometers:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Threading</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Stream the vessel&#39;s altitude in kilometers, computed on the server</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Altitude: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="n">Get</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; km&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Given a function built with the expression API, <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> takes the type of
+its value as a type parameter. The type must be able to hold the value, or <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> throws an
+<code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>.</p>
+<p>A function stream or event ends at the first exception its function throws. This includes the
+<code class="docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code> of a call on a part of an unloaded vessel, or on a vessel during
+a game load. To keep the function running, catch the exception with <code class="docutils literal notranslate"><span class="pre">Expression.TryCatch</span></code>. The
+following event does not fire while the part is not loaded:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">hot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;hot&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p">.</span><span class="n">Bool</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">BlockWithVariables</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Expression</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">hot</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Expression</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="n">TryCatch</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">Assign</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">hot</span><span class="p">,</span>
+<span class="w">                </span><span class="n">connection</span><span class="p">.</span><span class="n">Compile</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">part</span><span class="p">.</span><span class="n">Temperature</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1000</span><span class="p">)),</span>
+<span class="w">            </span><span class="s">&quot;KRPC&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ObjectNotLoadedException&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">Assign</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">hot</span><span class="p">,</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantBool</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="k">false</span><span class="p">))),</span>
+<span class="w">        </span><span class="n">hot</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">function</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="events">
 <span id="csharp-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
@@ -969,9 +1049,33 @@ condition variables.</p>
 <p>A call to <code class="docutils literal notranslate"><span class="pre">Wait</span></code> returns straight away if the event has fired since the previous call on the same
 event object, so no firing is missed between two calls. Several firings between two calls make
 <code class="docutils literal notranslate"><span class="pre">Wait</span></code> return once.</p>
-<p>You can also create a custom event from a server side function, which is code that runs inside
-the game. The following builds the function <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that
-triggers when the function returns true:</p>
+<p>You can also create a custom event from a lambda expression. The following creates an event that
+triggers when <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Create an event that triggers when the lambda returns true</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddEvent</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Wait on the event</span>
+<span class="w">        </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="p">();</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can also build the event’s function with the expression API, and pass it to
+<a class="reference internal" href="#method-Connection.AddEvent" title="Connection.AddEvent method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddEvent</span></code></a>. <a class="reference internal" href="#method-Connection.GetCall" title="Connection.GetCall method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.GetCall</span></code></a> gives the call of a procedure, for
+<code class="docutils literal notranslate"><span class="pre">Expression.Call</span></code>. The following builds the same event:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.KRPC</span><span class="p">;</span>
@@ -980,7 +1084,6 @@ triggers when the function returns true:</p>
 <span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">KRPC</span><span class="p">();</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">();</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">();</span>
 
@@ -993,7 +1096,7 @@ triggers when the function returns true:</p>
 <span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
 <span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
 
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 <span class="w">        </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="p">();</span>
 <span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
@@ -1002,6 +1105,136 @@ triggers when the function returns true:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
+</section>
+<section id="compiling-server-side-functions">
+<span id="csharp-client-compiling-lambdas"></span><h2>Compiling Server Side Functions<a class="headerlink" href="#compiling-server-side-functions" title="Link to this heading">#</a></h2>
+<p>Pass a lambda expression to <a class="reference internal" href="#method-Connection.Compile" title="Connection.Compile method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> to compile it into a server side function.
+<a class="reference internal" href="#method-Connection.AddEvent" title="Connection.AddEvent method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddEvent</span></code></a>, <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> and <a class="reference internal" href="#method-Connection.Run" title="Connection.Run method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Run</span></code></a> take the
+result, and run it without compiling it again. The following compiles a function once, and runs it
+every second:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Threading</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">resources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Compile the lambda once. Its remote procedure calls</span>
+<span class="w">        </span><span class="c1">// are made again each time the function runs</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">fuelFraction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">Compile</span><span class="p">(</span>
+<span class="w">            </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">resources</span><span class="p">.</span><span class="n">Amount</span><span class="p">(</span><span class="s">&quot;LiquidFuel&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">resources</span><span class="p">.</span><span class="n">Max</span><span class="p">(</span><span class="s">&quot;LiquidFuel&quot;</span><span class="p">));</span>
+
+<span class="w">        </span><span class="c1">// Run the compiled function as often as needed</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Fuel: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fuelFraction</span><span class="p">));</span>
+<span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Given a lambda, <code class="docutils literal notranslate"><span class="pre">AddEvent</span></code> and <code class="docutils literal notranslate"><span class="pre">Run</span></code> translate it on every call, and so does <code class="docutils literal notranslate"><span class="pre">AddStream</span></code>
+unless it streams a single call. The lambda’s captured variables take their current values. A
+compiled function keeps the values from when it was compiled.</p>
+<p>Compiling makes a remote procedure call per node. To use a lambda repeatedly, compile it once with
+<code class="docutils literal notranslate"><span class="pre">Compile</span></code> and pass the result. <code class="docutils literal notranslate"><span class="pre">Compile</span></code> also compiles the function on the server, so its first
+run is as fast as later ones.</p>
+<p>A lambda can take up to four parameters. <code class="docutils literal notranslate"><span class="pre">Run</span></code> passes its arguments to them:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">();</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">altitudeAbove</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">Compile</span><span class="p">((</span><span class="kt">double</span><span class="w"> </span><span class="n">height</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">height</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">altitudeAbove</span><span class="p">,</span><span class="w"> </span><span class="mi">70000</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>An argument is encoded at its parameter’s type, and a number widens as C# widens it. A signed
+integer that is not negative converts to an unsigned parameter at least as wide, so a <code class="docutils literal notranslate"><span class="pre">long</span></code>
+converts to a <code class="docutils literal notranslate"><span class="pre">ulong</span></code> but not a <code class="docutils literal notranslate"><span class="pre">uint</span></code>.</p>
+<p>An array other than an <code class="docutils literal notranslate"><span class="pre">object[]</span></code>, passed as the only argument, is the argument of a function
+with one parameter. An event or a function stream takes a function with no parameters.</p>
+<p>The lambda is a C# expression tree, so C#’s expression tree rules apply. It holds a single
+expression, and a call in it gives every argument, including the optional ones. Build a function
+with statements, or one that raises or handles exceptions, with the expression API.</p>
+<p>The compiler translates the lambda’s expression tree into a server side function that computes
+the same result on the server:</p>
+<ul class="simple">
+<li><p>Property accesses and method calls on remote objects and services become calls in the
+function, made again on each evaluation. This includes calls on the elements of a collection
+in a LINQ operator. The procedures of the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service cannot be called.</p></li>
+<li><p>Captured variables, literals and any sub-expression that makes no remote call are evaluated
+once, when the function is compiled, and embedded as constants. A captured value in a string
+concatenation is formatted on the client, as C# formats it.</p></li>
+<li><p>A delegate call is an error. So is a call to a method, a constructor, a computed property or an
+operator defined outside the .NET base library and the kRPC client. Call it outside the lambda
+and use its result. An auto-property is read once, when compiling, as a captured variable is.</p></li>
+<li><p>Passing a delegate, or a value whose type overrides a method such as <code class="docutils literal notranslate"><span class="pre">ToString</span></code>, to the base
+library is an error, as in <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span> <span class="pre">+</span> <span class="pre">obj</span></code>, <code class="docutils literal notranslate"><span class="pre">list.Select(MyMethod)</span></code> and your own
+<code class="docutils literal notranslate"><span class="pre">IEnumerable&lt;T&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">IComparer&lt;T&gt;</span></code> given to LINQ. So is reading <code class="docutils literal notranslate"><span class="pre">Lazy&lt;T&gt;.Value</span></code>.</p></li>
+<li><p>Operators, conditional expressions, casts and indexing compile to the matching expression
+operators. So do <code class="docutils literal notranslate"><span class="pre">List</span></code>, <code class="docutils literal notranslate"><span class="pre">HashSet</span></code> and <code class="docutils literal notranslate"><span class="pre">Dictionary</span></code> initializers, <code class="docutils literal notranslate"><span class="pre">Tuple.Create</span></code>, and
+a tuple’s <code class="docutils literal notranslate"><span class="pre">Item1</span></code> to <code class="docutils literal notranslate"><span class="pre">Item7</span></code>. A dictionary’s <code class="docutils literal notranslate"><span class="pre">Keys</span></code> and <code class="docutils literal notranslate"><span class="pre">Values</span></code> are lists of its keys
+and values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> and <code class="docutils literal notranslate"><span class="pre">||</span></code> short-circuit on the server. <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> and <code class="docutils literal notranslate"><span class="pre">|</span></code> evaluate both operands.</p></li>
+<li><p>Comparing a value with <code class="docutils literal notranslate"><span class="pre">null</span></code> tests whether it is null. <code class="docutils literal notranslate"><span class="pre">??</span></code>, <code class="docutils literal notranslate"><span class="pre">HasValue</span></code>, <code class="docutils literal notranslate"><span class="pre">Value</span></code> and
+<code class="docutils literal notranslate"><span class="pre">GetValueOrDefault</span></code> behave as in C#.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">!=</span></code> compare tuples and collections by their contents. C# compares them by
+reference.</p></li>
+<li><p>An ordering comparison with a nullable number is false when the number is null. Arithmetic
+and logic on a null throw.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">System.Math</span></code> methods <code class="docutils literal notranslate"><span class="pre">Abs</span></code>, <code class="docutils literal notranslate"><span class="pre">Sign</span></code>, <code class="docutils literal notranslate"><span class="pre">Min</span></code>, <code class="docutils literal notranslate"><span class="pre">Max</span></code>, <code class="docutils literal notranslate"><span class="pre">Clamp</span></code>, <code class="docutils literal notranslate"><span class="pre">Floor</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Ceiling</span></code>, <code class="docutils literal notranslate"><span class="pre">Round</span></code>, <code class="docutils literal notranslate"><span class="pre">Pow</span></code>, <code class="docutils literal notranslate"><span class="pre">Sqrt</span></code>, <code class="docutils literal notranslate"><span class="pre">Exp</span></code>, <code class="docutils literal notranslate"><span class="pre">Log</span></code>, <code class="docutils literal notranslate"><span class="pre">Log10</span></code>, <code class="docutils literal notranslate"><span class="pre">Sin</span></code>, <code class="docutils literal notranslate"><span class="pre">Cos</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Tan</span></code>, <code class="docutils literal notranslate"><span class="pre">Asin</span></code>, <code class="docutils literal notranslate"><span class="pre">Acos</span></code>, <code class="docutils literal notranslate"><span class="pre">Atan</span></code> and <code class="docutils literal notranslate"><span class="pre">Atan2</span></code> take server side arguments. Integer
+<code class="docutils literal notranslate"><span class="pre">Abs</span></code>, <code class="docutils literal notranslate"><span class="pre">Min</span></code>, <code class="docutils literal notranslate"><span class="pre">Max</span></code> and <code class="docutils literal notranslate"><span class="pre">Clamp</span></code> are exact at their own type. <code class="docutils literal notranslate"><span class="pre">Math.Round</span></code> takes the
+<code class="docutils literal notranslate"><span class="pre">MidpointRounding.ToEven</span></code> and <code class="docutils literal notranslate"><span class="pre">AwayFromZero</span></code> modes, given as a client side value. Unlike
+C#, it takes any number of decimal places, and a negative number rounds to tens, hundreds and
+beyond.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Console.WriteLine</span></code> writes a line to the game’s log with <code class="docutils literal notranslate"><span class="pre">StdLib.Print</span></code>. It formats its
+arguments as <code class="docutils literal notranslate"><span class="pre">string.Format</span></code> does. Convert a number computed on the server with
+<code class="docutils literal notranslate"><span class="pre">ToString(CultureInfo.InvariantCulture)</span></code> before passing it.</p></li>
+<li><p>The string members <code class="docutils literal notranslate"><span class="pre">Length</span></code>, <code class="docutils literal notranslate"><span class="pre">Substring</span></code>, <code class="docutils literal notranslate"><span class="pre">IndexOf</span></code>, <code class="docutils literal notranslate"><span class="pre">Contains</span></code>, <code class="docutils literal notranslate"><span class="pre">StartsWith</span></code>,
+<code class="docutils literal notranslate"><span class="pre">EndsWith</span></code>, <code class="docutils literal notranslate"><span class="pre">Replace</span></code>, <code class="docutils literal notranslate"><span class="pre">ToUpperInvariant</span></code>, <code class="docutils literal notranslate"><span class="pre">ToLowerInvariant</span></code>, <code class="docutils literal notranslate"><span class="pre">Trim</span></code>,
+<code class="docutils literal notranslate"><span class="pre">TrimStart</span></code> and <code class="docutils literal notranslate"><span class="pre">TrimEnd</span></code> compile to the server’s string operations. So does
+<code class="docutils literal notranslate"><span class="pre">string.Join</span></code>.</p></li>
+<li><p>An interpolated string, <code class="docutils literal notranslate"><span class="pre">string.Concat</span></code>, and <code class="docutils literal notranslate"><span class="pre">string.Format</span></code> with plain <code class="docutils literal notranslate"><span class="pre">{0}</span></code>
+placeholders compile to a concatenation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ToString</span></code> of an object computed on the server gives the server’s name for its class, which
+differs from the client’s.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">double</span></code> converted to a string on the server is formatted by the server’s runtime. It can
+print fewer digits than the client, as in <code class="docutils literal notranslate"><span class="pre">0.3</span></code> for <code class="docutils literal notranslate"><span class="pre">0.30000000000000004</span></code>.</p></li>
+<li><p>An index out of range in <code class="docutils literal notranslate"><span class="pre">list[i]</span></code>, <code class="docutils literal notranslate"><span class="pre">ElementAt</span></code> or <code class="docutils literal notranslate"><span class="pre">Substring</span></code> throws
+<code class="docutils literal notranslate"><span class="pre">IndexOutOfRangeException</span></code>, where C# throws <code class="docutils literal notranslate"><span class="pre">ArgumentOutOfRangeException</span></code>.</p></li>
+<li><p>The LINQ operators <code class="docutils literal notranslate"><span class="pre">Select</span></code>, <code class="docutils literal notranslate"><span class="pre">Where</span></code>, <code class="docutils literal notranslate"><span class="pre">SelectMany</span></code>, <code class="docutils literal notranslate"><span class="pre">Any</span></code> and <code class="docutils literal notranslate"><span class="pre">All</span></code> with a
+predicate, <code class="docutils literal notranslate"><span class="pre">Count</span></code>, <code class="docutils literal notranslate"><span class="pre">Sum</span></code>, <code class="docutils literal notranslate"><span class="pre">Min</span></code>, <code class="docutils literal notranslate"><span class="pre">Max</span></code> and <code class="docutils literal notranslate"><span class="pre">Average</span></code> without one, <code class="docutils literal notranslate"><span class="pre">Contains</span></code>,
+<code class="docutils literal notranslate"><span class="pre">OrderBy</span></code>, <code class="docutils literal notranslate"><span class="pre">Concat</span></code>, <code class="docutils literal notranslate"><span class="pre">Skip</span></code>, <code class="docutils literal notranslate"><span class="pre">Take</span></code>, <code class="docutils literal notranslate"><span class="pre">First</span></code>, <code class="docutils literal notranslate"><span class="pre">Last</span></code>, <code class="docutils literal notranslate"><span class="pre">ElementAt</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Distinct</span></code>, <code class="docutils literal notranslate"><span class="pre">Reverse</span></code>, <code class="docutils literal notranslate"><span class="pre">Union</span></code>, <code class="docutils literal notranslate"><span class="pre">Intersect</span></code>, <code class="docutils literal notranslate"><span class="pre">Except</span></code>, <code class="docutils literal notranslate"><span class="pre">Zip</span></code>, <code class="docutils literal notranslate"><span class="pre">ToDictionary</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ToList</span></code> and <code class="docutils literal notranslate"><span class="pre">ToHashSet</span></code> compile to the server’s collection operations. A key repeated
+in <code class="docutils literal notranslate"><span class="pre">ToDictionary</span></code> takes the last of its values, where C# throws.</p></li>
+<li><p>A lambda that evaluates to an <code class="docutils literal notranslate"><span class="pre">IEnumerable&lt;T&gt;</span></code> evaluates to a list. One that evaluates to
+the <code class="docutils literal notranslate"><span class="pre">IOrderedEnumerable&lt;T&gt;</span></code> of <code class="docutils literal notranslate"><span class="pre">OrderBy</span></code> is an error. Call <code class="docutils literal notranslate"><span class="pre">ToList</span></code> on it.</p></li>
+<li><p>Reading a field of a structure a service defines reads that field of it on the server.
+Constructing one with <code class="docutils literal notranslate"><span class="pre">new</span></code> builds it there. Comparing two with <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&gt;=</span></code> is an error.</p></li>
+<li><p>Reading a stream with <code class="docutils literal notranslate"><span class="pre">Stream.Get</span></code> is an error. Make the stream’s remote procedure call in
+the lambda instead.</p></li>
+</ul>
+<p>The server formats and compares strings with the invariant culture. A call that depends on the
+current culture is an error:</p>
+<ul class="simple">
+<li><p>A number converts to a string with <code class="docutils literal notranslate"><span class="pre">ToString(CultureInfo.InvariantCulture)</span></code>. Format an
+interpolated string with <code class="docutils literal notranslate"><span class="pre">FormattableString.Invariant</span></code>, or call <code class="docutils literal notranslate"><span class="pre">string.Format</span></code> with
+<code class="docutils literal notranslate"><span class="pre">CultureInfo.InvariantCulture</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IndexOf</span></code>, <code class="docutils literal notranslate"><span class="pre">StartsWith</span></code> and <code class="docutils literal notranslate"><span class="pre">EndsWith</span></code> with a string argument take
+<code class="docutils literal notranslate"><span class="pre">StringComparison.Ordinal</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ToUpper</span></code> and <code class="docutils literal notranslate"><span class="pre">ToLower</span></code> take <code class="docutils literal notranslate"><span class="pre">CultureInfo.InvariantCulture</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OrderBy</span></code> with a string key takes <code class="docutils literal notranslate"><span class="pre">StringComparer.Ordinal</span></code>.</p></li>
+</ul>
+<p>Integer arithmetic wraps around on overflow, so <code class="docutils literal notranslate"><span class="pre">checked</span></code> arithmetic is an error.</p>
+<p>A construct with no server side equivalent throws <a class="reference internal" href="#class-FunctionCompilationException" title="FunctionCompilationException class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> naming it.
+Examples are <code class="docutils literal notranslate"><span class="pre">GroupBy</span></code>, <code class="docutils literal notranslate"><span class="pre">Aggregate</span></code>, <code class="docutils literal notranslate"><span class="pre">MinBy</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxBy</span></code> and a format specifier.</p>
+<p>A lambda that makes no remote procedure call is an error in an event or a stream, as its value is
+the same on every update. An <code class="docutils literal notranslate"><span class="pre">Action</span></code> lambda that makes no remote procedure call is an error in
+<code class="docutils literal notranslate"><span class="pre">Compile</span></code> and <code class="docutils literal notranslate"><span class="pre">Run</span></code>, as it has no effect on the server.</p>
 </section>
 <section id="client-api-reference">
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
@@ -1063,7 +1296,86 @@ does. Pass <code class="docutils literal notranslate"><span class="pre">null</sp
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-Connection.AddStream">
 <a class="reference internal" href="#class-Stream" title="Stream class"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AddStream</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><span class="pre">LambdaExpression</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.AddStream" title="Link to this definition">#</a></dt>
-<dd><p>Create a new stream from the given lambda expression.</p>
+<dd><p>Create a stream from a lambda expression. A single remote procedure call with fixed
+arguments is streamed as that call. A cast of a call to a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service procedure is
+too, with the cast made on the client. Any other lambda is translated as
+<a class="reference internal" href="#method-Connection.Compile" title="Connection.Compile method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> translates it, on every call. Throws an <code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code> if
+<code class="docutils literal notranslate"><span class="pre">ReturnType</span></code> cannot hold the lambda’s value, and <a class="reference internal" href="#class-FunctionCompilationException" title="FunctionCompilationException class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if
+the lambda cannot be compiled.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp">
+<a class="reference internal" href="#class-Stream" title="Stream class"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AddStream</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Create a stream of the value of a server side function. Throws an
+<code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code> if the function has no value or the type parameter cannot
+hold its value.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Connection.Compile">
+<a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <span class="sig-name descname"><span class="pre">Compile</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Func</span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Compile" title="Link to this definition">#</a></dt>
+<dd><p>Compile a lambda expression into a server side function. Throws
+<a class="reference internal" href="#class-FunctionCompilationException" title="FunctionCompilationException class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot run on the server. Compiling
+makes a remote procedure call per node, so compile a function once and reuse it. The
+server compiles the function too, so its first run is as fast as later ones.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp">
+<a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <span class="sig-name descname"><span class="pre">Compile</span></span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Action</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Compile a lambda expression with no value into a server side function.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp">
+<a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <span class="sig-name descname"><span class="pre">Compile</span></span><span class="pre">&lt;T1,ReturnType&gt;</span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Func</span><span class="pre">&lt;</span><span class="pre">T1</span><span class="pre">,</span> <span class="pre">ReturnType</span><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Compile a lambda expression with a parameter into a server side function. Overloads take
+up to four parameters, and a lambda with no value.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Connection.AddEvent">
+<a class="reference internal" href="#class-Event" title="Event class"><span class="pre">Event</span></a> <span class="sig-name descname"><span class="pre">AddEvent</span></span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Func</span><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.AddEvent" title="Link to this definition">#</a></dt>
+<dd><p>Create an event from a lambda expression that evaluates to a boolean value. The lambda is
+translated as <a class="reference internal" href="#method-Connection.Compile" title="Connection.Compile method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> translates it, on every call.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp">
+<a class="reference internal" href="#class-Event" title="Event class"><span class="pre">Event</span></a> <span class="sig-name descname"><span class="pre">AddEvent</span></span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Create an event from a server side function that evaluates to a boolean value.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Connection.Run">
+<span class="pre">ReturnType</span> <span class="sig-name descname"><span class="pre">Run</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em>, <em><span class="pre">params</span></em> <span class="pre">object</span><span class="pre">[]</span> <em><span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Run" title="Link to this definition">#</a></dt>
+<dd><p>Run a server side function within a single physics tick, and return its value. The
+arguments are passed to the function’s parameters. Throws an
+<code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code> if the function has no value or the type parameter cannot hold
+its value, and an <code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code> if the number of arguments is wrong or a parameter
+cannot take its argument. A null result needs a reference type or a nullable value type as
+the type parameter.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp">
+<span class="pre">ReturnType</span> <span class="sig-name descname"><span class="pre">Run</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Func</span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Run a lambda expression on the server within a single physics tick, and return its value.
+The lambda is translated as <a class="reference internal" href="#method-Connection.Compile" title="Connection.Compile method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> translates it, on every call.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Run</span></span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em>, <em><span class="pre">params</span></em> <span class="pre">object</span><span class="pre">[]</span> <em><span class="pre">args</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Run a server side function with no value within a single physics tick. The arguments are
+passed to the function’s parameters.</p>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Run</span></span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Action</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
+<dd><p>Run a lambda expression with no value on the server within a single physics tick.</p>
 </dd></dl>
 
 <dl class="csharp method">
@@ -1079,6 +1391,12 @@ expression API’s <code class="docutils literal notranslate"><span class="pre">
 <dd><p>Closes the connection and frees the resources associated with it.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-FunctionCompilationException">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">FunctionCompilationException</span></span><a class="headerlink" href="#class-FunctionCompilationException" title="Link to this definition">#</a></dt>
+<dd><p>Thrown when a lambda expression cannot be compiled into a server side function.</p>
 </dd></dl>
 
 <dl class="csharp class">
@@ -1101,6 +1419,8 @@ equal.</p>
 <dd><p>Returns the most recent value for the stream, waiting for the first value if none has arrived
 yet. Throws the exception that ended the stream, if it has ended, such as an exception thrown
 by the remote procedure.</p>
+<p>Throws an <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code> if the value is a null that <code class="docutils literal notranslate"><span class="pre">ReturnType</span></code>
+cannot hold.</p>
 </dd></dl>
 
 <dl class="csharp property">
@@ -1294,14 +1614,19 @@ was added.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing">Installing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-server-side-functions">Streaming Server Side Functions</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling-server-side-functions">Compiling Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
 </ul>
   </nav></div>
