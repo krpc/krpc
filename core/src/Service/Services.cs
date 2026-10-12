@@ -133,12 +133,9 @@ namespace KRPC.Service
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, object instance, object[] arguments)
         {
             try {
-                if ((CallContext.GameScene & procedure.GameScene) == 0)
-                    throw new KRPC.UnsupportedSceneException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
-                object returnValue = procedure.Handler.Invoke (instance, arguments);
+                object returnValue = Invoke (procedure, instance, arguments);
                 var result = new ProcedureResult ();
                 if (procedure.HasReturnType) {
-                    CheckReturnValue (procedure, returnValue);
                     result.Spec = procedure.ReturnSpec;
                     result.Value = returnValue;
                 }
@@ -150,6 +147,21 @@ namespace KRPC.Service
             } catch (System.Exception e) {
                 return new ProcedureResult { Error = HandleException (e) };
             }
+        }
+
+        /// <summary>
+        /// Executes a procedure call and returns its return value.
+        /// Throws YieldException, containing a continuation, if the call yields.
+        /// Throws the exception the procedure throws if the call fails.
+        /// </summary>
+        internal object Invoke (ProcedureSignature procedure, object instance, object[] arguments)
+        {
+            if ((CallContext.GameScene & procedure.GameScene) == 0)
+                throw new KRPC.UnsupportedSceneException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
+            object returnValue = procedure.Handler.Invoke (instance, arguments);
+            if (procedure.HasReturnType)
+                CheckReturnValue (procedure, returnValue);
+            return returnValue;
         }
 
         /// <summary>

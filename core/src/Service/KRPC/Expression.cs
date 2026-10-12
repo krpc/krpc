@@ -128,20 +128,21 @@ namespace KRPC.Service.KRPC
             }
 
             var servicesExpr = LinqExpression.Constant(services);
-            var executeCallMethod = typeof(Services).GetMethod(
-                "ExecuteCall", new[] { typeof(Scanner.ProcedureSignature), typeof(object), typeof(object[]) });
+            // Throws the procedure's exception, which ends a stream or event over the expression
+            var invokeMethod = typeof(Services).GetMethod(
+                "Invoke", BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new[] { typeof(Scanner.ProcedureSignature), typeof(object), typeof(object[]) }, null);
             var procedureExpr = LinqExpression.Constant(procedure);
             var instanceExpr = LinqExpression.Constant(instance, typeof(object));
             var argumentsExpr = LinqExpression.Constant(arguments);
 
             var result = LinqExpression.Call(
-                servicesExpr, executeCallMethod,
+                servicesExpr, invokeMethod,
                 new[] { procedureExpr, instanceExpr, argumentsExpr });
             // The declared type of a nullable value-type return is Nullable<T>, which keeps a
             // null representable
             var returnType = procedure.ReturnSpec.DeclaredType;
-            var value = LinqExpression.Convert(
-                LinqExpression.Property(result, "Value"), returnType);
+            var value = LinqExpression.Convert(result, returnType);
             return new Expression(value);
         }
 
