@@ -20,6 +20,12 @@ namespace KRPC.Test.Service
             var triggered = false;
             var stream = new EventStream (() => triggered);
 
+            // The first update sends that the event has not fired
+            stream.UpdateInternal ();
+            Assert.IsTrue (stream.Changed);
+            Assert.AreEqual (false, stream.Result.Value);
+            stream.Sent ();
+
             stream.UpdateInternal ();
             Assert.IsFalse (stream.Changed);
 

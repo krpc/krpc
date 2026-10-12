@@ -20,11 +20,7 @@ namespace KRPC.Service
         float rate;
         float delay;
         Stopwatch timer;
-
-        /// <summary>
-        /// Whether the stream has been started.
-        /// </summary>
-        public bool Started { get; private set; }
+        bool updated;
 
         /// <summary>
         /// The value of the stream.
@@ -54,20 +50,17 @@ namespace KRPC.Service
         protected Stream ()
         {
             StreamResult = new StreamResult ();
-            Started = false;
             rate = 0;
             delay = 0;
-            timer = new Stopwatch();
+            timer = Stopwatch.StartNew ();
         }
 
         /// <summary>
-        /// Start the stream.
+        /// Send the current value in the next update.
         /// </summary>
-        public void Start()
+        internal void Resend ()
         {
-            Started = true;
             Changed |= StreamResult.Result.HasValue || StreamResult.Result.HasError;
-            timer.Start();
         }
 
         /// <summary>
@@ -86,9 +79,11 @@ namespace KRPC.Service
         /// Rate limiting is applied by this method.
         /// </summary>
         public void Update() {
-            if (rate != 0 && timer.ElapsedMilliseconds < delay) {
+            // The first update is never rate limited, so a new stream sends its value at once
+            if (updated && rate != 0 && timer.ElapsedMilliseconds < delay) {
                 return;
             }
+            updated = true;
             UpdateInternal();
             if (rate != 0) {
                 timer.Reset();

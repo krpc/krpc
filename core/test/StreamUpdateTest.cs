@@ -166,9 +166,7 @@ namespace KRPC.Test
 
         ulong Add (global::KRPC.Service.Stream stream)
         {
-            var id = core.AddStream (rpcClient, stream);
-            core.StartStream (rpcClient, id);
-            return id;
+            return core.AddStream (rpcClient, stream);
         }
 
         List<SentResult> Update ()
@@ -221,6 +219,16 @@ namespace KRPC.Test
         }
 
         [Test]
+        public void ARateSetBeforeTheFirstUpdateDoesNotDelayIt ()
+        {
+            var id = Add (new ConstantStream (42));
+            core.SetStreamRate (rpcClient, id, 0.1f);
+            var update = Update ();
+            Assert.AreEqual (1, update.Count);
+            Assert.AreEqual (42, ResultFor (update, id).Value);
+        }
+
+        [Test]
         public void ManagementCallsOnAnEndedStreamDoNothing ()
         {
             var id = Add (new ConstantStream (42));
@@ -229,7 +237,6 @@ namespace KRPC.Test
             Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
             core.RemoveStream (rpcClient, id);
             core.SetStreamRate (rpcClient, id, 1);
-            core.StartStream (rpcClient, id);
             Assert.AreEqual (0, Update ().Count);
         }
 
@@ -239,7 +246,6 @@ namespace KRPC.Test
             var id = Add (new ConstantStream (42));
             Assert.Throws<ArgumentException> (() => core.RemoveStream (rpcClient, id + 1));
             Assert.Throws<ArgumentException> (() => core.SetStreamRate (rpcClient, id + 1, 1));
-            Assert.Throws<ArgumentException> (() => core.StartStream (rpcClient, id + 1));
         }
 
         [Test]
@@ -281,6 +287,14 @@ namespace KRPC.Test
             Assert.AreEqual (true, ResultFor (Update (), id).Value);
             Assert.AreEqual ("StreamRemovedException", ResultFor (Update (), id).ErrorName);
             Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
+        }
+
+        [Test]
+        public void AnEventSendsThatItHasNotFiredOnItsFirstUpdate ()
+        {
+            var id = Add (new EventStream ());
+            Assert.AreEqual (false, ResultFor (Update (), id).Value);
+            Assert.AreEqual (0, Update ().Count);
         }
     }
 }

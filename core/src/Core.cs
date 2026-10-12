@@ -616,16 +616,14 @@ namespace KRPC
                     // Update streams
                     bool changed = false;
                     foreach (var stream in clientStreams) {
-                        if (stream.Started) {
-                            // An exception fails only this stream
-                            try {
-                                stream.Update ();
-                            } catch (System.Exception exn) {
-                                stream.SetError (exn);
-                            }
-                            rpcsExecuted++;
-                            changed |= stream.Changed;
+                        // An exception fails only this stream
+                        try {
+                            stream.Update ();
+                        } catch (System.Exception exn) {
+                            stream.SetError (exn);
                         }
+                        rpcsExecuted++;
+                        changed |= stream.Changed;
                     }
                     // If anything changed, produce an update
                     if (changed) {
@@ -797,6 +795,8 @@ namespace KRPC
                     removeStreams.Remove(entry.Key);
                     if (requireNew)
                         throw new ArgumentException ("Stream already exists", nameof (stream));
+                    // The client has no value for an id it removed
+                    entry.Value.Resend ();
                     return entry.Key;
                 }
             }
@@ -809,18 +809,6 @@ namespace KRPC
             Logger.WriteLine ("Added stream " + streamId + " for client " + streamClient.Address, Logger.Severity.Debug);
             StreamRPCs++;
             return streamId;
-        }
-
-        /// <summary>
-        /// Start a stream.
-        /// </summary>
-        internal void StartStream(IClient rpcClient, ulong streamId)
-        {
-            var stream = GetStream (rpcClient, streamId);
-            if (stream == null)
-                return;
-            stream.Start ();
-            Logger.WriteLine("Started stream " + streamId, Logger.Severity.Debug);
         }
 
         /// <summary>

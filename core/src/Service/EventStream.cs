@@ -16,12 +16,12 @@ namespace KRPC.Service
 
         public EventStream ()
         {
-            Changed = false;
+            // The first update sends whether the event has fired
+            SetValue (false);
         }
 
-        public EventStream (Func<bool> eventContinuation)
+        public EventStream (Func<bool> eventContinuation) : this ()
         {
-            Changed = false;
             continuation = eventContinuation;
         }
 
