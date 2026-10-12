@@ -79,6 +79,7 @@
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
     <Compile Include="Service\ClassStaticMethodHandlerTest.cs" />
     <Compile Include="Service\DocumentationUtilsTest.cs" />
+    <Compile Include="Service\EventStreamTest.cs" />
     <Compile Include="Service\GameSceneTest.cs" />
     <Compile Include="Service\GameStateTest.cs" />
     <Compile Include="Service\ITestService.cs" />
