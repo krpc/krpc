@@ -1216,7 +1216,7 @@ inline std::string TestService::add_multiple_values(float x, int32_t y, int64_t 
   _args.push_back(encoder::encode_arg(x));
   _args.push_back(encoder::encode_arg(y));
   _args.push_back(encoder::encode_arg(z));
-  auto _data = this->_client->invoke("TestService", "AddMultipleValues", _args);
+  auto _data = this->_client->invoke("TestService", "AddMultipleValues", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1228,7 +1228,7 @@ inline std::vector<TestService::TestClass> TestService::add_to_object_list(std::
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(l));
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "AddToObjectList", _args);
+  auto _data = this->_client->invoke("TestService", "AddToObjectList", _args, ::krpc::Client::Returns::value);
   std::vector<TestService::TestClass> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1240,7 +1240,7 @@ inline int32_t TestService::blocking_procedure(int32_t n, int32_t sum = 0) {
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(n));
   _args.push_back(encoder::encode_arg(sum));
-  auto _data = this->_client->invoke("TestService", "BlockingProcedure", _args);
+  auto _data = this->_client->invoke("TestService", "BlockingProcedure", _args, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1251,7 +1251,7 @@ inline std::string TestService::bool_to_string(bool value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "BoolToString", _args);
+  auto _data = this->_client->invoke("TestService", "BoolToString", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1262,7 +1262,7 @@ inline std::string TestService::bytes_to_hex_string(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "BytesToHexString", _args);
+  auto _data = this->_client->invoke("TestService", "BytesToHexString", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1274,7 +1274,7 @@ inline int32_t TestService::counter(std::string id = "", int32_t divisor = 1) {
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(id));
   _args.push_back(encoder::encode_arg(divisor));
-  auto _data = this->_client->invoke("TestService", "Counter", _args);
+  auto _data = this->_client->invoke("TestService", "Counter", _args, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1285,7 +1285,7 @@ inline TestService::TestStruct TestService::counter_struct(std::string id = "") 
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(id));
-  auto _data = this->_client->invoke("TestService", "CounterStruct", _args);
+  auto _data = this->_client->invoke("TestService", "CounterStruct", _args, ::krpc::Client::Returns::value);
   TestService::TestStruct _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1296,7 +1296,7 @@ inline TestService::TestClass TestService::create_test_object(std::string value)
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "CreateTestObject", _args);
+  auto _data = this->_client->invoke("TestService", "CreateTestObject", _args, ::krpc::Client::Returns::value);
   TestService::TestClass _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1307,7 +1307,7 @@ inline std::string TestService::deprecated_procedure(float value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "DeprecatedProcedure", _args);
+  auto _data = this->_client->invoke("TestService", "DeprecatedProcedure", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1318,7 +1318,7 @@ inline std::string TestService::deprecated_procedure_no_message(float value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "DeprecatedProcedureNoMessage", _args);
+  auto _data = this->_client->invoke("TestService", "DeprecatedProcedureNoMessage", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1329,7 +1329,7 @@ inline std::map<int32_t, bool> TestService::dictionary_default(std::map<int32_t,
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "DictionaryDefault", _args);
+  auto _data = this->_client->invoke("TestService", "DictionaryDefault", _args, ::krpc::Client::Returns::value);
   std::map<int32_t, bool> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1344,7 +1344,7 @@ inline std::vector<double> TestService::double_special_defaults(double nan = std
   _args.push_back(encoder::encode_arg(negative_infinity));
   _args.push_back(encoder::encode_arg(maximum));
   _args.push_back(encoder::encode_arg(lowest));
-  auto _data = this->_client->invoke("TestService", "DoubleSpecialDefaults", _args);
+  auto _data = this->_client->invoke("TestService", "DoubleSpecialDefaults", _args, ::krpc::Client::Returns::value);
   std::vector<double> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1355,7 +1355,7 @@ inline std::string TestService::double_to_string(double value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "DoubleToString", _args);
+  auto _data = this->_client->invoke("TestService", "DoubleToString", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1366,7 +1366,7 @@ inline std::map<std::string, std::optional<TestService::TestClass> > TestService
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(d));
-  auto _data = this->_client->invoke("TestService", "EchoDictionaryOfNullableObjects", _args);
+  auto _data = this->_client->invoke("TestService", "EchoDictionaryOfNullableObjects", _args, ::krpc::Client::Returns::value);
   std::map<std::string, std::optional<TestService::TestClass> > _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1377,7 +1377,7 @@ inline std::vector<std::optional<int32_t> > TestService::echo_list_of_nullable_i
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(l));
-  auto _data = this->_client->invoke("TestService", "EchoListOfNullableInts", _args);
+  auto _data = this->_client->invoke("TestService", "EchoListOfNullableInts", _args, ::krpc::Client::Returns::value);
   std::vector<std::optional<int32_t> > _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1388,7 +1388,7 @@ inline std::vector<std::optional<TestService::TestClass> > TestService::echo_lis
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(l));
-  auto _data = this->_client->invoke("TestService", "EchoListOfNullableObjects", _args);
+  auto _data = this->_client->invoke("TestService", "EchoListOfNullableObjects", _args, ::krpc::Client::Returns::value);
   std::vector<std::optional<TestService::TestClass> > _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1399,7 +1399,7 @@ inline std::vector<std::vector<std::optional<TestService::TestClass>> > TestServ
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(l));
-  auto _data = this->_client->invoke("TestService", "EchoNestedListOfNullableObjects", _args);
+  auto _data = this->_client->invoke("TestService", "EchoNestedListOfNullableObjects", _args, ::krpc::Client::Returns::value);
   std::vector<std::vector<std::optional<TestService::TestClass>> > _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1410,7 +1410,7 @@ inline TestService::TestNestedNullableStruct TestService::echo_nested_nullable_s
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "EchoNestedNullableStruct", _args);
+  auto _data = this->_client->invoke("TestService", "EchoNestedNullableStruct", _args, ::krpc::Client::Returns::value);
   TestService::TestNestedNullableStruct _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1421,7 +1421,7 @@ inline std::optional<int32_t> TestService::echo_nullable_int(std::optional<int32
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "EchoNullableInt", _args);
+  auto _data = this->_client->invoke("TestService", "EchoNullableInt", _args, ::krpc::Client::Returns::value);
   std::optional<int32_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1432,7 +1432,7 @@ inline std::optional<std::vector<int32_t> > TestService::echo_nullable_list(std:
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(l));
-  auto _data = this->_client->invoke("TestService", "EchoNullableList", _args);
+  auto _data = this->_client->invoke("TestService", "EchoNullableList", _args, ::krpc::Client::Returns::value);
   std::optional<std::vector<int32_t> > _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1443,7 +1443,7 @@ inline std::optional<std::string> TestService::echo_nullable_string(std::optiona
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "EchoNullableString", _args);
+  auto _data = this->_client->invoke("TestService", "EchoNullableString", _args, ::krpc::Client::Returns::value);
   std::optional<std::string> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1454,7 +1454,7 @@ inline std::optional<TestService::TestClass> TestService::echo_test_object(std::
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "EchoTestObject", _args);
+  auto _data = this->_client->invoke("TestService", "EchoTestObject", _args, ::krpc::Client::Returns::value);
   std::optional<TestService::TestClass> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1465,7 +1465,7 @@ inline std::tuple<int32_t, std::optional<TestService::TestClass> > TestService::
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(t));
-  auto _data = this->_client->invoke("TestService", "EchoTupleWithANullableObject", _args);
+  auto _data = this->_client->invoke("TestService", "EchoTupleWithANullableObject", _args, ::krpc::Client::Returns::value);
   std::tuple<int32_t, std::optional<TestService::TestClass> > _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1476,7 +1476,7 @@ inline std::vector<std::string> TestService::empty_list_default(std::vector<std:
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "EmptyListDefault", _args);
+  auto _data = this->_client->invoke("TestService", "EmptyListDefault", _args, ::krpc::Client::Returns::value);
   std::vector<std::string> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1487,7 +1487,7 @@ inline TestService::TestEnum TestService::enum_default_arg(TestService::TestEnum
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "EnumDefaultArg", _args);
+  auto _data = this->_client->invoke("TestService", "EnumDefaultArg", _args, ::krpc::Client::Returns::value);
   TestService::TestEnum _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1498,7 +1498,7 @@ inline TestService::TestEnum TestService::enum_echo(TestService::TestEnum x) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "EnumEcho", _args);
+  auto _data = this->_client->invoke("TestService", "EnumEcho", _args, ::krpc::Client::Returns::value);
   TestService::TestEnum _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1509,7 +1509,7 @@ inline std::vector<TestService::TestEnum> TestService::enum_list_default(std::ve
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "EnumListDefault", _args);
+  auto _data = this->_client->invoke("TestService", "EnumListDefault", _args, ::krpc::Client::Returns::value);
   std::vector<TestService::TestEnum> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1517,7 +1517,7 @@ inline std::vector<TestService::TestEnum> TestService::enum_list_default(std::ve
 }
 
 inline TestService::TestEnum TestService::enum_return() {
-  auto _data = this->_client->invoke("TestService", "EnumReturn");
+  auto _data = this->_client->invoke("TestService", "EnumReturn", {}, ::krpc::Client::Returns::value);
   TestService::TestEnum _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1533,7 +1533,7 @@ inline std::vector<float> TestService::float_special_defaults(float nan = std::n
   _args.push_back(encoder::encode_arg(maximum));
   _args.push_back(encoder::encode_arg(lowest));
   _args.push_back(encoder::encode_arg(fraction));
-  auto _data = this->_client->invoke("TestService", "FloatSpecialDefaults", _args);
+  auto _data = this->_client->invoke("TestService", "FloatSpecialDefaults", _args, ::krpc::Client::Returns::value);
   std::vector<float> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1544,7 +1544,7 @@ inline std::string TestService::float_to_string(float value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "FloatToString", _args);
+  auto _data = this->_client->invoke("TestService", "FloatToString", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1555,7 +1555,7 @@ inline std::map<std::string, int32_t> TestService::increment_dictionary(std::map
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(d));
-  auto _data = this->_client->invoke("TestService", "IncrementDictionary", _args);
+  auto _data = this->_client->invoke("TestService", "IncrementDictionary", _args, ::krpc::Client::Returns::value);
   std::map<std::string, int32_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1566,7 +1566,7 @@ inline std::vector<int32_t> TestService::increment_list(std::vector<int32_t> l) 
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(l));
-  auto _data = this->_client->invoke("TestService", "IncrementList", _args);
+  auto _data = this->_client->invoke("TestService", "IncrementList", _args, ::krpc::Client::Returns::value);
   std::vector<int32_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1577,7 +1577,7 @@ inline std::vector<TestService::TestStruct> TestService::increment_list_of_struc
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(l));
-  auto _data = this->_client->invoke("TestService", "IncrementListOfStructs", _args);
+  auto _data = this->_client->invoke("TestService", "IncrementListOfStructs", _args, ::krpc::Client::Returns::value);
   std::vector<TestService::TestStruct> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1588,7 +1588,7 @@ inline std::map<std::string, std::vector<int32_t> > TestService::increment_neste
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(d));
-  auto _data = this->_client->invoke("TestService", "IncrementNestedCollection", _args);
+  auto _data = this->_client->invoke("TestService", "IncrementNestedCollection", _args, ::krpc::Client::Returns::value);
   std::map<std::string, std::vector<int32_t> > _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1599,7 +1599,7 @@ inline std::set<int32_t> TestService::increment_set(std::set<int32_t> h) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(h));
-  auto _data = this->_client->invoke("TestService", "IncrementSet", _args);
+  auto _data = this->_client->invoke("TestService", "IncrementSet", _args, ::krpc::Client::Returns::value);
   std::set<int32_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1610,7 +1610,7 @@ inline std::tuple<int32_t, int64_t> TestService::increment_tuple(std::tuple<int3
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(t));
-  auto _data = this->_client->invoke("TestService", "IncrementTuple", _args);
+  auto _data = this->_client->invoke("TestService", "IncrementTuple", _args, ::krpc::Client::Returns::value);
   std::tuple<int32_t, int64_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1622,7 +1622,7 @@ inline std::vector<int32_t> TestService::int32_special_defaults(int32_t maximum 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(maximum));
   _args.push_back(encoder::encode_arg(minimum));
-  auto _data = this->_client->invoke("TestService", "Int32SpecialDefaults", _args);
+  auto _data = this->_client->invoke("TestService", "Int32SpecialDefaults", _args, ::krpc::Client::Returns::value);
   std::vector<int32_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1633,7 +1633,7 @@ inline std::string TestService::int32_to_string(int32_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "Int32ToString", _args);
+  auto _data = this->_client->invoke("TestService", "Int32ToString", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1645,7 +1645,7 @@ inline std::vector<int64_t> TestService::int64_special_defaults(int64_t maximum 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(maximum));
   _args.push_back(encoder::encode_arg(minimum));
-  auto _data = this->_client->invoke("TestService", "Int64SpecialDefaults", _args);
+  auto _data = this->_client->invoke("TestService", "Int64SpecialDefaults", _args, ::krpc::Client::Returns::value);
   std::vector<int64_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1656,7 +1656,7 @@ inline std::string TestService::int64_to_string(int64_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "Int64ToString", _args);
+  auto _data = this->_client->invoke("TestService", "Int64ToString", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1667,7 +1667,7 @@ inline std::vector<int32_t> TestService::list_default(std::vector<int32_t> x = s
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "ListDefault", _args);
+  auto _data = this->_client->invoke("TestService", "ListDefault", _args, ::krpc::Client::Returns::value);
   std::vector<int32_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1678,7 +1678,7 @@ inline TestService::TestNestedStruct TestService::nested_struct_echo(TestService
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "NestedStructEcho", _args);
+  auto _data = this->_client->invoke("TestService", "NestedStructEcho", _args, ::krpc::Client::Returns::value);
   TestService::TestNestedStruct _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1689,7 +1689,7 @@ inline TestService::TestClass TestService::not_nullable_object(TestService::Test
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "NotNullableObject", _args);
+  auto _data = this->_client->invoke("TestService", "NotNullableObject", _args, ::krpc::Client::Returns::value);
   TestService::TestClass _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1700,7 +1700,7 @@ inline TestService::TestNullableStruct TestService::nullable_struct_echo(TestSer
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "NullableStructEcho", _args);
+  auto _data = this->_client->invoke("TestService", "NullableStructEcho", _args, ::krpc::Client::Returns::value);
   TestService::TestNullableStruct _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1712,7 +1712,7 @@ inline ::krpc::Event TestService::on_timer(uint32_t milliseconds, uint32_t repea
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(milliseconds));
   _args.push_back(encoder::encode_arg(repeats));
-  auto _data = this->_client->invoke_add_stream("TestService", "OnTimer", _args, true);
+  auto _data = this->_client->invoke("TestService", "OnTimer", _args, ::krpc::Client::Returns::event);
   ::krpc::Event _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1723,7 +1723,7 @@ inline ::krpc::Event TestService::on_timer_using_lambda(uint32_t milliseconds) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(milliseconds));
-  auto _data = this->_client->invoke_add_stream("TestService", "OnTimerUsingLambda", _args, true);
+  auto _data = this->_client->invoke("TestService", "OnTimerUsingLambda", _args, ::krpc::Client::Returns::event);
   ::krpc::Event _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1737,7 +1737,7 @@ inline std::string TestService::optional_arguments(std::string x, std::string y 
   _args.push_back(encoder::encode_arg(y));
   _args.push_back(encoder::encode_arg(z));
   _args.push_back(encoder::encode_arg(obj));
-  auto _data = this->_client->invoke("TestService", "OptionalArguments", _args);
+  auto _data = this->_client->invoke("TestService", "OptionalArguments", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1745,15 +1745,15 @@ inline std::string TestService::optional_arguments(std::string x, std::string y 
 }
 
 inline void TestService::reset_custom_exception_later() {
-  this->_client->invoke("TestService", "ResetCustomExceptionLater");
+  this->_client->invoke("TestService", "ResetCustomExceptionLater", {}, ::krpc::Client::Returns::value);
 }
 
 inline void TestService::reset_invalid_operation_exception_later() {
-  this->_client->invoke("TestService", "ResetInvalidOperationExceptionLater");
+  this->_client->invoke("TestService", "ResetInvalidOperationExceptionLater", {}, ::krpc::Client::Returns::value);
 }
 
 inline TestService::TestClass TestService::return_null_when_not_allowed() {
-  auto _data = this->_client->invoke("TestService", "ReturnNullWhenNotAllowed");
+  auto _data = this->_client->invoke("TestService", "ReturnNullWhenNotAllowed", {}, ::krpc::Client::Returns::value);
   TestService::TestClass _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1764,7 +1764,7 @@ inline std::set<int32_t> TestService::set_default(std::set<int32_t> x = std::set
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "SetDefault", _args);
+  auto _data = this->_client->invoke("TestService", "SetDefault", _args, ::krpc::Client::Returns::value);
   std::set<int32_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1775,7 +1775,7 @@ inline int32_t TestService::string_to_int32(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "StringToInt32", _args);
+  auto _data = this->_client->invoke("TestService", "StringToInt32", _args, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1786,7 +1786,7 @@ inline TestService::TestStruct TestService::struct_default(TestService::TestStru
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "StructDefault", _args);
+  auto _data = this->_client->invoke("TestService", "StructDefault", _args, ::krpc::Client::Returns::value);
   TestService::TestStruct _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1797,7 +1797,7 @@ inline TestService::TestStruct TestService::struct_echo(TestService::TestStruct 
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "StructEcho", _args);
+  auto _data = this->_client->invoke("TestService", "StructEcho", _args, ::krpc::Client::Returns::value);
   TestService::TestStruct _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1808,7 +1808,7 @@ inline std::optional<TestService::TestStruct> TestService::struct_echo_nullable(
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "StructEchoNullable", _args);
+  auto _data = this->_client->invoke("TestService", "StructEchoNullable", _args, ::krpc::Client::Returns::value);
   std::optional<TestService::TestStruct> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1816,7 +1816,7 @@ inline std::optional<TestService::TestStruct> TestService::struct_echo_nullable(
 }
 
 inline int32_t TestService::throw_argument_exception() {
-  auto _data = this->_client->invoke("TestService", "ThrowArgumentException");
+  auto _data = this->_client->invoke("TestService", "ThrowArgumentException", {}, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1827,7 +1827,7 @@ inline int32_t TestService::throw_argument_null_exception(std::string foo) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(foo));
-  auto _data = this->_client->invoke("TestService", "ThrowArgumentNullException", _args);
+  auto _data = this->_client->invoke("TestService", "ThrowArgumentNullException", _args, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1838,7 +1838,7 @@ inline int32_t TestService::throw_argument_out_of_range_exception(int32_t foo) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(foo));
-  auto _data = this->_client->invoke("TestService", "ThrowArgumentOutOfRangeException", _args);
+  auto _data = this->_client->invoke("TestService", "ThrowArgumentOutOfRangeException", _args, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1846,7 +1846,7 @@ inline int32_t TestService::throw_argument_out_of_range_exception(int32_t foo) {
 }
 
 inline int32_t TestService::throw_custom_exception() {
-  auto _data = this->_client->invoke("TestService", "ThrowCustomException");
+  auto _data = this->_client->invoke("TestService", "ThrowCustomException", {}, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1854,7 +1854,7 @@ inline int32_t TestService::throw_custom_exception() {
 }
 
 inline int32_t TestService::throw_custom_exception_later() {
-  auto _data = this->_client->invoke("TestService", "ThrowCustomExceptionLater");
+  auto _data = this->_client->invoke("TestService", "ThrowCustomExceptionLater", {}, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1862,7 +1862,7 @@ inline int32_t TestService::throw_custom_exception_later() {
 }
 
 inline int32_t TestService::throw_invalid_operation_exception() {
-  auto _data = this->_client->invoke("TestService", "ThrowInvalidOperationException");
+  auto _data = this->_client->invoke("TestService", "ThrowInvalidOperationException", {}, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1870,7 +1870,7 @@ inline int32_t TestService::throw_invalid_operation_exception() {
 }
 
 inline int32_t TestService::throw_invalid_operation_exception_later() {
-  auto _data = this->_client->invoke("TestService", "ThrowInvalidOperationExceptionLater");
+  auto _data = this->_client->invoke("TestService", "ThrowInvalidOperationExceptionLater", {}, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1881,7 +1881,7 @@ inline std::tuple<int32_t, bool> TestService::tuple_default(std::tuple<int32_t, 
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "TupleDefault", _args);
+  auto _data = this->_client->invoke("TestService", "TupleDefault", _args, ::krpc::Client::Returns::value);
   std::tuple<int32_t, bool> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1892,7 +1892,7 @@ inline std::vector<uint32_t> TestService::uint32_special_defaults(uint32_t maxim
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(maximum));
-  auto _data = this->_client->invoke("TestService", "Uint32SpecialDefaults", _args);
+  auto _data = this->_client->invoke("TestService", "Uint32SpecialDefaults", _args, ::krpc::Client::Returns::value);
   std::vector<uint32_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1903,7 +1903,7 @@ inline std::vector<uint64_t> TestService::uint64_special_defaults(uint64_t maxim
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(maximum));
-  auto _data = this->_client->invoke("TestService", "Uint64SpecialDefaults", _args);
+  auto _data = this->_client->invoke("TestService", "Uint64SpecialDefaults", _args, ::krpc::Client::Returns::value);
   std::vector<uint64_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1911,7 +1911,7 @@ inline std::vector<uint64_t> TestService::uint64_special_defaults(uint64_t maxim
 }
 
 inline std::string TestService::deprecated_property() {
-  auto _data = this->_client->invoke("TestService", "get_DeprecatedProperty");
+  auto _data = this->_client->invoke("TestService", "get_DeprecatedProperty", {}, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1922,11 +1922,11 @@ inline void TestService::set_deprecated_property(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("TestService", "set_DeprecatedProperty", _args);
+  this->_client->invoke("TestService", "set_DeprecatedProperty", _args, ::krpc::Client::Returns::value);
 }
 
 inline std::optional<TestService::TestClass> TestService::nullable_object() {
-  auto _data = this->_client->invoke("TestService", "get_NullableObject");
+  auto _data = this->_client->invoke("TestService", "get_NullableObject", {}, ::krpc::Client::Returns::value);
   std::optional<TestService::TestClass> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1937,11 +1937,11 @@ inline void TestService::set_nullable_object(std::optional<TestService::TestClas
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("TestService", "set_NullableObject", _args);
+  this->_client->invoke("TestService", "set_NullableObject", _args, ::krpc::Client::Returns::value);
 }
 
 inline std::optional<TestService::TestClass> TestService::object_property() {
-  auto _data = this->_client->invoke("TestService", "get_ObjectProperty");
+  auto _data = this->_client->invoke("TestService", "get_ObjectProperty", {}, ::krpc::Client::Returns::value);
   std::optional<TestService::TestClass> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1952,11 +1952,11 @@ inline void TestService::set_object_property(std::optional<TestService::TestClas
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("TestService", "set_ObjectProperty", _args);
+  this->_client->invoke("TestService", "set_ObjectProperty", _args, ::krpc::Client::Returns::value);
 }
 
 inline std::string TestService::string_property() {
-  auto _data = this->_client->invoke("TestService", "get_StringProperty");
+  auto _data = this->_client->invoke("TestService", "get_StringProperty", {}, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1967,18 +1967,18 @@ inline void TestService::set_string_property(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("TestService", "set_StringProperty", _args);
+  this->_client->invoke("TestService", "set_StringProperty", _args, ::krpc::Client::Returns::value);
 }
 
 inline void TestService::set_string_property_private_get(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("TestService", "set_StringPropertyPrivateGet", _args);
+  this->_client->invoke("TestService", "set_StringPropertyPrivateGet", _args, ::krpc::Client::Returns::value);
 }
 
 inline std::string TestService::string_property_private_set() {
-  auto _data = this->_client->invoke("TestService", "get_StringPropertyPrivateSet");
+  auto _data = this->_client->invoke("TestService", "get_StringPropertyPrivateSet", {}, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -2955,7 +2955,7 @@ inline std::string TestService::DeprecatedClass::deprecated_method() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("TestService", "DeprecatedClass_DeprecatedMethod", _args);
+  auto _data = this->_client->invoke("TestService", "DeprecatedClass_DeprecatedMethod", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -2984,7 +2984,7 @@ inline std::optional<TestService::TestClass> TestService::TestClass::echo_nullab
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(*this));
   _args.push_back(encoder::encode_arg(value));
-  auto _data = this->_client->invoke("TestService", "TestClass_EchoNullableObject", _args);
+  auto _data = this->_client->invoke("TestService", "TestClass_EchoNullableObject", _args, ::krpc::Client::Returns::value);
   std::optional<TestService::TestClass> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -2996,7 +2996,7 @@ inline std::string TestService::TestClass::float_to_string(float x) {
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(*this));
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "TestClass_FloatToString", _args);
+  auto _data = this->_client->invoke("TestService", "TestClass_FloatToString", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -3007,7 +3007,7 @@ inline std::string TestService::TestClass::get_value() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("TestService", "TestClass_GetValue", _args);
+  auto _data = this->_client->invoke("TestService", "TestClass_GetValue", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -3019,7 +3019,7 @@ inline std::string TestService::TestClass::object_to_string(std::optional<TestSe
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(*this));
   _args.push_back(encoder::encode_arg(other));
-  auto _data = this->_client->invoke("TestService", "TestClass_ObjectToString", _args);
+  auto _data = this->_client->invoke("TestService", "TestClass_ObjectToString", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -3034,7 +3034,7 @@ inline std::string TestService::TestClass::optional_arguments(std::string x, std
   _args.push_back(encoder::encode_arg(y));
   _args.push_back(encoder::encode_arg(z));
   _args.push_back(encoder::encode_arg(obj));
-  auto _data = this->_client->invoke("TestService", "TestClass_OptionalArguments", _args);
+  auto _data = this->_client->invoke("TestService", "TestClass_OptionalArguments", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -3045,7 +3045,7 @@ inline int32_t TestService::TestClass::int_property() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("TestService", "TestClass_get_IntProperty", _args);
+  auto _data = this->_client->invoke("TestService", "TestClass_get_IntProperty", _args, ::krpc::Client::Returns::value);
   int32_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -3057,14 +3057,14 @@ inline void TestService::TestClass::set_int_property(int32_t value) {
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(*this));
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("TestService", "TestClass_set_IntProperty", _args);
+  this->_client->invoke("TestService", "TestClass_set_IntProperty", _args, ::krpc::Client::Returns::value);
 }
 
 inline std::optional<TestService::TestClass> TestService::TestClass::object_property() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("TestService", "TestClass_get_ObjectProperty", _args);
+  auto _data = this->_client->invoke("TestService", "TestClass_get_ObjectProperty", _args, ::krpc::Client::Returns::value);
   std::optional<TestService::TestClass> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -3076,7 +3076,7 @@ inline void TestService::TestClass::set_object_property(std::optional<TestServic
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(*this));
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("TestService", "TestClass_set_ObjectProperty", _args);
+  this->_client->invoke("TestService", "TestClass_set_ObjectProperty", _args, ::krpc::Client::Returns::value);
 }
 
 inline void TestService::TestClass::set_string_property_private_get(std::string value) {
@@ -3084,14 +3084,14 @@ inline void TestService::TestClass::set_string_property_private_get(std::string 
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(*this));
   _args.push_back(encoder::encode_arg(value));
-  this->_client->invoke("TestService", "TestClass_set_StringPropertyPrivateGet", _args);
+  this->_client->invoke("TestService", "TestClass_set_StringPropertyPrivateGet", _args, ::krpc::Client::Returns::value);
 }
 
 inline std::string TestService::TestClass::string_property_private_set() {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(*this));
-  auto _data = this->_client->invoke("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
+  auto _data = this->_client->invoke("TestService", "TestClass_get_StringPropertyPrivateSet", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -3103,7 +3103,7 @@ inline std::string TestService::TestClass::static_method(Client& _client, std::s
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(a));
   _args.push_back(encoder::encode_arg(b));
-  auto _data = _client.invoke("TestService", "TestClass_static_StaticMethod", _args);
+  auto _data = _client.invoke("TestService", "TestClass_static_StaticMethod", _args, ::krpc::Client::Returns::value);
     std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), &_client);
@@ -3114,7 +3114,7 @@ inline std::optional<TestService::TestClass> TestService::TestClass::static_null
     std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
-  auto _data = _client.invoke("TestService", "TestClass_static_StaticNullableObject", _args);
+  auto _data = _client.invoke("TestService", "TestClass_static_StaticNullableObject", _args, ::krpc::Client::Returns::value);
     std::optional<TestService::TestClass> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), &_client);

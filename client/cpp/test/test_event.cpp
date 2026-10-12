@@ -34,9 +34,10 @@ struct timer_event {
 };
 
 static timer_event on_timer(krpc::Client* client, uint32_t milliseconds, uint32_t repeats) {
-  auto result = client->invoke_add_stream(
-      "TestService", "OnTimer",
-      {krpc::encoder::encode_arg(milliseconds), krpc::encoder::encode_arg(repeats)}, true);
+  auto result =
+      client->invoke("TestService", "OnTimer",
+                     {krpc::encoder::encode_arg(milliseconds), krpc::encoder::encode_arg(repeats)},
+                     krpc::Client::Returns::event);
   krpc::schema::Event message;
   krpc::decoder::decode(message, result.value(), client);
   timer_event timer{krpc::Event(client, message), client->get_stream(message.stream().id())};
@@ -436,6 +437,21 @@ TEST_F(test_event, test_callback_gets_a_firing_passed_after_a_later_value) {
   stream.call_callbacks(later, "\x00", false, later_version, later_fired);
   stream.call_callbacks(firing, "\x01", false, firing_version, firing_fired);
   ASSERT_EQ(1, calls.load());
+}
+
+// A raw call that returns an event has the event's id noted, so a firing and an ending sent
+// before the event is wrapped are kept, though a later id has been noted since
+TEST_F(test_event, test_raw_invoke_of_an_event_notes_its_id) {
+  auto result = conn.invoke("TestService", "OnTimer",
+                            {krpc::encoder::encode_arg(static_cast<uint32_t>(100)),
+                             krpc::encoder::encode_arg(static_cast<uint32_t>(1))});
+  krpc::schema::Event message;
+  krpc::decoder::decode(message, result.value(), &conn);
+  auto later = test_service.int32_to_string_stream(42);
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  krpc::Event event(&conn, message);
+  ASSERT_TRUE(event.wait(0));
+  EXPECT_THROW(event.wait(), krpc::services::KRPC::StreamRemovedException);
 }
 
 TEST_F(test_event, test_callback_added_after_a_firing_given_to_another_is_not_called) {

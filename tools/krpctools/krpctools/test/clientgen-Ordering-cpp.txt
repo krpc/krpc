@@ -52,14 +52,14 @@ inline void ServiceA::frob(ServiceB::Mode mode = ServiceB::Mode::fast) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(mode));
-  this->_client->invoke("ServiceA", "Frob", _args);
+  this->_client->invoke("ServiceA", "Frob", _args, ::krpc::Client::Returns::value);
 }
 
 inline void ServiceA::frob_all(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(modes));
-  this->_client->invoke("ServiceA", "FrobAll", _args);
+  this->_client->invoke("ServiceA", "FrobAll", _args, ::krpc::Client::Returns::value);
 }
 
 inline ::krpc::schema::ProcedureCall ServiceA::frob_call(ServiceB::Mode mode = ServiceB::Mode::fast) {

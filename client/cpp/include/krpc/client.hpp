@@ -32,18 +32,24 @@ class Client {
   Client(const std::string& name, std::shared_ptr<Connection> rpc_connection,
          const std::shared_ptr<Connection>& stream_connection);
 
+  /** Invoke the calls of a request, and return the result of the first. The first call
+      through a client with a stream connection fetches the server's list of services, to find
+      the procedures that return a new stream or event. */
   schema::ProcedureResult invoke(const schema::Request& request);
+  /** Invoke a call, as invoke(const schema::Request&) does. */
   schema::ProcedureResult invoke(const schema::ProcedureCall& call);
+  /** Invoke a procedure, as invoke(const schema::Request&) does. */
   schema::ProcedureResult invoke(
       std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
 
-  /** Invoke a procedure that returns a new stream, as a KRPC.Stream message, or a new event,
-      as a KRPC.Event message if is_event is true. */
-  schema::ProcedureResult invoke_add_stream(
-      std::string_view service, std::string_view procedure,
-      const std::vector<encoder::Value>& args = std::vector<encoder::Value>(),
-      bool is_event = false);
+  /** The kind of value a procedure returns: a new stream as a KRPC.Stream message, a new event
+      as a KRPC.Event message, or any other value. */
+  enum class Returns : uint8_t { value, stream, event };
+  /** Invoke a procedure that returns what returns says, as generated stubs do. The id of a
+      new stream or event is noted with the stream manager. */
+  schema::ProcedureResult invoke(std::string_view service, std::string_view procedure,
+                                 const std::vector<encoder::Value>& args, Returns returns);
 
   schema::Request build_request(
       std::string_view service, std::string_view procedure,
@@ -58,11 +64,14 @@ class Client {
   friend class StreamManager;
   friend class StreamImpl;
   void throw_exception(const schema::Error& error) const;
-  // The message a procedure returns a new stream as, if it returns one
-  enum class NewStream : uint8_t { none, stream, event };
+  /** Send a request, whose first call returns what returns says, or whose calls are looked up
+      in the server's list of services if returns is null. */
   schema::ProcedureResult send_request(const schema::Request& request,
-                                       NewStream new_stream = NewStream::none);
-  void note_stream_id(NewStream new_stream);
+                                       const Returns* returns = nullptr);
+  Returns lookup_returns(const std::string& service, const std::string& procedure);
+  void list_returns();
+  void note_stream_id(int index, Returns returns);
+  void note_removed_streams(const schema::Request& request);
   static void add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args);
   StreamManager& streams() const;
 
@@ -108,6 +117,14 @@ class Client {
   schema::Request request_buffer;
   std::string request_data;
   schema::Response response_buffer;
+  // The procedures that return a new stream or event, from the server's list of services,
+  // keyed by service and procedure name. Shared by every copy of the client and guarded by
+  // lock.
+  struct ListedReturns {
+    bool listed = false;
+    std::map<std::pair<std::string, std::string>, Returns> returns;
+  };
+  std::shared_ptr<ListedReturns> listed_returns;
   std::map<std::pair<std::string, std::string>, std::function<void(std::string)>>
       exception_throwers;
   // Guards exception_throwers. Services register their throwers as they are constructed,

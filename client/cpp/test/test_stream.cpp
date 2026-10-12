@@ -21,6 +21,7 @@
 
 #include "gtest/gtest.h"
 #include "krpc/client.hpp"
+#include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream.hpp"
@@ -969,4 +970,51 @@ TEST_F(test_stream, test_value_that_fails_to_decode) {
   ASSERT_EQ(0, calls.load());
   ASSERT_EQ(0, ended.load());
   x.remove();
+}
+
+// RemoveStream is sent for an id the client noted but never wrapped in a stream
+TEST_F(test_stream, test_remove_a_stream_never_wrapped) {
+  auto id =
+      krpc.add_stream(test_service.counter_call("test_stream.test_remove_a_stream_never_wrapped"))
+          .id();
+  wait();
+  conn.remove_stream(id);
+  // A result already sent arrives before this
+  wait();
+  krpc::Stream<int32_t> x(&conn, id);
+  x.acquire();
+  ASSERT_FALSE(x.wait(0.5));
+  x.release();
+}
+
+// Removing an id the client noted drops the result kept for it, however the removal is sent
+TEST_F(test_stream, test_remove_drops_a_kept_result) {
+  const std::string name = "test_stream.test_remove_drops_a_kept_result";
+  std::vector<std::function<void(uint64_t)>> removals = {
+      [this](uint64_t id) { krpc.remove_stream(id); },
+      [this](uint64_t id) { conn.invoke("KRPC", "RemoveStream", {krpc::encoder::encode_arg(id)}); },
+      [this](uint64_t id) {
+        conn.invoke(conn.build_request("KRPC", "RemoveStream", {krpc::encoder::encode_arg(id)}));
+      }};
+  for (const auto& remove : removals) {
+    auto id = krpc.add_stream(test_service.counter_call(name)).id();
+    // A result already sent arrives before this
+    wait();
+    remove(id);
+    wait();
+    ASSERT_FALSE(conn.get_stream(id)->has_updated());
+  }
+}
+
+// RemoveStream is sent for an id the manager has not noted, such as one another manager noted
+TEST_F(test_stream, test_remove_a_stream_not_noted) {
+  const std::string name = "test_stream.test_remove_a_stream_not_noted";
+  auto id = krpc.add_stream(test_service.counter_call(name)).id();
+  idle_stream_manager idle(&conn);
+  idle.manager->remove_stream(id);
+  wait();
+  // Only these calls count once the stream is removed
+  auto count = test_service.counter(name);
+  wait();
+  ASSERT_EQ(count + 1, test_service.counter(name));
 }

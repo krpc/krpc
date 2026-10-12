@@ -32,7 +32,11 @@ class StreamManager {
   /** Note a stream id the server has given this client. Called in the order the server's
       replies arrive. */
   void note_issued(uint64_t id);
+  /** Remove a stream from the server. A stream wrapped in a handle ends for every handle. */
   void remove_stream(uint64_t id);
+  /** Note a stream id the server has removed for this client, whose kept results and later
+      results are dropped. Called in the order the server's replies arrive. */
+  void note_removed(uint64_t id);
   /** Remove a stream from the server, and end it for every handle. Does nothing if the
       stream has already ended. */
   void remove_stream(StreamImpl* stream);
