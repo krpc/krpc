@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import krpc.client.services.KRPC;
+import krpc.client.services.KRPC.Expression;
 import krpc.client.services.TestService;
 import krpc.client.services.TestService.CustomException;
 import krpc.client.services.TestService.TestClass;
@@ -27,6 +28,7 @@ import org.junit.Test;
 public class EventTest {
 
   private Connection connection;
+  private KRPC krpc;
   private TestService testService;
 
   /** Set up test. */
@@ -34,6 +36,7 @@ public class EventTest {
   @SuppressWarnings("checkstyle:missingjavadocmethod")
   public void setup() throws IOException {
     connection = TestUtils.connect();
+    krpc = KRPC.newInstance(connection);
     testService = TestService.newInstance(connection);
   }
 
@@ -156,6 +159,29 @@ public class EventTest {
     long time = System.currentTimeMillis() - startTime;
     assertTrue(150 < time && time < 2000);
     assertFalse(testEventRemoveCallbackCalled2);
+  }
+
+  @Test
+  public void testCustomEvent()
+      throws RPCException, StreamException {
+    Expression counter = Expression.call(connection,
+                            connection.getCall(
+                              TestService.class, "counter", "TestEvent.TestCustomEvent", 1));
+    Expression expr = Expression.equal(connection,
+        Expression.multiply(connection,
+            Expression.constantInt(connection, 2),
+            Expression.constantInt(connection, 10)),
+        counter);
+    Event event = krpc.addEvent(expr);
+    synchronized (event.getCondition()) {
+      event.waitFor();
+      // The event fires when the server-side counter reaches 20. The counter increments
+      // on every expression evaluation, so the value read back is at least 21: 20 at the
+      // trigger, plus this read. The exact figure depends on how many more times the
+      // server evaluated the expression, so assert the lower bound to avoid flaking under
+      // load. See issue #540.
+      assertTrue(testService.counter("TestEvent.TestCustomEvent", 1) >= 21);
+    }
   }
 
   @Test

@@ -380,6 +380,30 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         finally:
             conn.close()
 
+    def test_custom_event(self) -> None:
+        expression = self.conn.krpc.Expression
+
+        counter = expression.call(
+            self.conn.get_call(
+                self.conn.test_service.counter, "TestEvent.test_custom_event"
+            )
+        )
+        expr = expression.equal(
+            expression.multiply(
+                expression.constant_int(2), expression.constant_int(10)
+            ),
+            counter,
+        )
+
+        event = self.conn.krpc.add_event(expr)
+        with event.condition:
+            event.wait()
+            # The counter advances on each evaluation and on this read, and the
+            # server can evaluate the function again before the read
+            self.assertGreaterEqual(
+                self.conn.test_service.counter("TestEvent.test_custom_event"), 21
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

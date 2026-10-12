@@ -205,6 +205,12 @@ A call to ``wait`` returns straight away if the event has fired since the previo
 event object, so no firing is missed between two calls. Several firings between two calls make
 ``wait`` return once.
 
+You can also create a custom event from a server side function, which is code that runs inside
+the game. The following builds the function ``mean_altitude > 1000``, and creates an event that
+triggers when the function returns true:
+
+.. literalinclude:: /scripts/client/python/Event.py
+
 Client API Reference
 --------------------
 
@@ -303,7 +309,8 @@ Client API Reference
    .. method:: get_call(func, *args, **kwargs)
 
       Converts a call to function *func* with arguments *args* and *kwargs* into a message
-      object. This allows descriptions of procedure calls to be passed to the server.
+      object. This allows descriptions of procedure calls to be passed to the server, for example
+      when constructing custom events. See :ref:`python-client-events`.
 
    .. method:: close()
 

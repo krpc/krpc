@@ -585,6 +585,9 @@ public class Connection implements AutoCloseable {
       if (key.equals("KRPC.ArgumentOutOfRangeException")) {
         return new IndexOutOfBoundsException(message);
       }
+      if (key.equals("KRPC.NullReferenceException")) {
+        return new NullPointerException(message);
+      }
       Class<?> exnType = exceptionTypes.get(key);
       Constructor<?> ctor = null;
       if (exnType != null) {

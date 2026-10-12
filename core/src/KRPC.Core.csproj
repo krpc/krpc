@@ -127,9 +127,11 @@
     <Compile Include="Service\KRPC\ArgumentException.cs" />
     <Compile Include="Service\KRPC\ArgumentNullException.cs" />
     <Compile Include="Service\KRPC\ArgumentOutOfRangeException.cs" />
+    <Compile Include="Service\KRPC\Expression.cs" />
     <Compile Include="Service\KRPC\GameScene.cs" />
     <Compile Include="Service\KRPC\InvalidOperationException.cs" />
     <Compile Include="Service\KRPC\KRPC.cs" />
+    <Compile Include="Service\KRPC\NullReferenceException.cs" />
     <Compile Include="Service\KRPC\ObjectDestroyedException.cs" />
     <Compile Include="Service\KRPC\ObjectNotLoadedException.cs" />
     <Compile Include="Service\KRPC\StreamRemovedException.cs" />

@@ -1,10 +1,14 @@
 import krpc.client.Connection;
+import krpc.client.Event;
 import krpc.client.RPCException;
 import krpc.client.StreamException;
+import krpc.client.services.KRPC;
+import krpc.client.services.KRPC.Expression;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Flight;
 import krpc.client.services.SpaceCenter.Node;
 import krpc.client.services.SpaceCenter.Resources;
+import krpc.schema.KRPC.ProcedureCall;
 
 import org.javatuples.Triplet;
 
@@ -14,6 +18,7 @@ public class SubOrbitalFlight {
   public static void main(String[] args)
     throws IOException, RPCException, StreamException, InterruptedException {
     Connection connection = Connection.newInstance("Sub-orbital flight");
+    KRPC krpc = KRPC.newInstance(connection);
     SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
 
     SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();
@@ -26,22 +31,47 @@ public class SubOrbitalFlight {
     System.out.println("Launch!");
     vessel.getControl().activateNextStage();
 
-    while (vessel.getResources().amount("SolidFuel") > 0.1) {
-      Thread.sleep(1000);
+    {
+      ProcedureCall solidFuel = connection.getCall(vessel.getResources(), "amount", "SolidFuel");
+      Expression expr = Expression.lessThan(
+        connection,
+        Expression.call(connection, solidFuel),
+        Expression.constantFloat(connection, 0.1f));
+      Event event = krpc.addEvent(expr);
+      synchronized (event.getCondition()) {
+        event.waitFor();
+      }
     }
 
     System.out.println("Booster separation");
     vessel.getControl().activateNextStage();
 
-    while (vessel.flight(null).getMeanAltitude() < 10000) {
-      Thread.sleep(1000);
+    {
+      ProcedureCall meanAltitude = connection.getCall(vessel.flight(null), "getMeanAltitude");
+      Expression expr = Expression.greaterThan(
+        connection,
+        Expression.call(connection, meanAltitude),
+        Expression.constantDouble(connection, 10000));
+      Event event = krpc.addEvent(expr);
+      synchronized (event.getCondition()) {
+        event.waitFor();
+      }
     }
 
     System.out.println("Gravity turn");
     vessel.getAutoPilot().targetPitchAndHeading(60, 90);
 
-    while (vessel.getOrbit().getApoapsisAltitude() < 100000) {
-      Thread.sleep(1000);
+    {
+      ProcedureCall apoapsisAltitude = connection.getCall(
+        vessel.getOrbit(), "getApoapsisAltitude");
+      Expression expr = Expression.greaterThan(
+        connection,
+        Expression.call(connection, apoapsisAltitude),
+        Expression.constantDouble(connection, 100000));
+      Event event = krpc.addEvent(expr);
+      synchronized (event.getCondition()) {
+        event.waitFor();
+      }
     }
 
     System.out.println("Launch stage separation");
@@ -50,8 +80,17 @@ public class SubOrbitalFlight {
     vessel.getControl().activateNextStage();
     vessel.getAutoPilot().setEngaged(false);
 
-    while (vessel.flight(null).getSurfaceAltitude() > 1000) {
-      Thread.sleep(1000);
+    {
+      ProcedureCall srfAltitude = connection.getCall(
+        vessel.flight(null), "getSurfaceAltitude");
+      Expression expr = Expression.lessThan(
+        connection,
+        Expression.call(connection, srfAltitude),
+        Expression.constantDouble(connection, 1000));
+      Event event = krpc.addEvent(expr);
+      synchronized (event.getCondition()) {
+        event.waitFor();
+      }
     }
 
     vessel.getControl().activateNextStage();

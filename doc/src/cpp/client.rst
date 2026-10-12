@@ -251,6 +251,12 @@ A call to ``wait`` returns straight away if the event has fired since the previo
 event object, so no firing is missed between two calls. Several firings between two calls make
 ``wait`` return once.
 
+You can also create a custom event from a server side function, which is code that runs inside
+the game. The following builds the function ``mean_altitude > 1000``, and creates an event that
+triggers when the function returns true:
+
+.. literalinclude:: /scripts/client/cpp/Event.cpp
+
 Client API Reference
 --------------------
 

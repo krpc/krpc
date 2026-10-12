@@ -8,6 +8,7 @@ using KRPC.Client.Services.TestService;
 using KRPC.Client.Services.KRPC;
 using NUnit.Framework;
 
+using Expr = KRPC.Client.Services.KRPC.Expression;
 
 namespace KRPC.Client.Test
 {
@@ -55,6 +56,28 @@ namespace KRPC.Client.Test
                 var time = timer.ElapsedMilliseconds;
                 Assert.Greater (time, 150);
                 Assert.Less (time, 2000);
+            }
+        }
+
+        [Test]
+        public void TestCustomEvent () {
+            var counter = Expr.Call(Connection,
+                Connection.GetCall (
+                    () => Connection.TestService ().Counter("TestEvent.TestCustomEvent", 1)));
+            var expr = Expr.Equal(Connection,
+                Expr.Multiply(Connection,
+                    Expr.ConstantInt(Connection, 2),
+                    Expr.ConstantInt(Connection, 10)),
+                counter);
+            var evnt = Connection.KRPC ().AddEvent(expr);
+            lock (evnt.Condition) {
+                Assert.True (evnt.Wait());
+                // The event fires when the server-side counter reaches 20. The counter
+                // increments on every expression evaluation, so the value read back is at
+                // least 21: 20 at the trigger, plus this read. The exact figure depends on how
+                // many more times the server evaluated the expression, so assert the lower
+                // bound to avoid flaking under load.
+                Assert.GreaterOrEqual(Connection.TestService ().Counter("TestEvent.TestCustomEvent", 1), 21);
             }
         }
 

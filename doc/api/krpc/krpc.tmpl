@@ -9,9 +9,11 @@ KRPC
 {{ mark_documented(services['KRPC'].members['AddStream']) }}
 {{ mark_documented(services['KRPC'].members['RemoveStream']) }}
 {{ mark_documented(services['KRPC'].members['SetStreamRate']) }}
+{{ mark_documented(services['KRPC'].members['AddEvent']) }}
 {{ services['KRPC'].remove('AddStream') or '' }}
 {{ services['KRPC'].remove('RemoveStream') or '' }}
 {{ services['KRPC'].remove('SetStreamRate') or '' }}
+{{ services['KRPC'].remove('AddEvent') or '' }}
 
 {{ macros.service(services['KRPC']) }}
 {{ macros.enumeration(services['KRPC'].enumerations['GameScene']) }}
@@ -19,6 +21,7 @@ KRPC
 {{ macros.exception(services['KRPC'].exceptions['ArgumentException']) }}
 {{ macros.exception(services['KRPC'].exceptions['ArgumentNullException']) }}
 {{ macros.exception(services['KRPC'].exceptions['ArgumentOutOfRangeException']) }}
+{{ macros.exception(services['KRPC'].exceptions['NullReferenceException']) }}
 {{ macros.exception(services['KRPC'].exceptions['ObjectDestroyedException']) }}
 {{ macros.exception(services['KRPC'].exceptions['ObjectNotLoadedException']) }}
 {{ macros.exception(services['KRPC'].exceptions['UnsupportedSceneException']) }}

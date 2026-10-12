@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
+using LinqExpression = System.Linq.Expressions.Expression;
 
 namespace KRPC.Service.KRPC
 {
@@ -273,6 +274,42 @@ namespace KRPC.Service.KRPC
         public static void RemoveStream (ulong id)
         {
             Core.Instance.RemoveStream (CallContext.Client, id);
+        }
+
+        /// <summary>
+        /// Create an event from a server side function that evaluates to a boolean value.
+        /// </summary>
+        /// <remarks>
+        /// The function is evaluated on each update, and each call adds a new event. Any
+        /// exception from the function ends the event, including one for an object that is not
+        /// loaded. A procedure that pauses execution to resume on a later tick produces an
+        /// error on the event's stream.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Messages.Event AddEvent(Expression function)
+        {
+            var stream = new EventStream (EventCondition (function), false);
+            return new Messages.Event (new Messages.Stream (Core.Instance.AddStream (CallContext.Client, stream)));
+        }
+
+        /// <summary>
+        /// The condition an event created by <see cref="AddEvent"/> checks on each update.
+        /// </summary>
+        internal static Func<bool> EventCondition (Expression function)
+        {
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            var type = ((LinqExpression)function).Type;
+            if (type != typeof (bool) && type != typeof (bool?))
+                throw new ArgumentException ("The function must evaluate to a boolean value");
+            function.Check ();
+            function.Compile ();
+            return () => {
+                var value = function.Evaluate ();
+                if (ReferenceEquals (value, null))
+                    throw new NullReferenceException (Expression.NullResultMessage);
+                return (bool)value;
+            };
         }
 
         /// <summary>

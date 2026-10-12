@@ -183,6 +183,12 @@ A call to ``waitFor`` returns straight away if the event has fired since the pre
 same event object, so no firing is missed between two calls. Several firings between two calls make
 ``waitFor`` return once.
 
+You can also create a custom event from a server side function, which is code that runs inside
+the game. The following builds the function ``MeanAltitude > 1000``, and creates an event that
+triggers when the function returns true:
+
+.. literalinclude:: /scripts/client/java/CustomEvent.java
+
 Client API Reference
 --------------------
 
@@ -247,12 +253,14 @@ Client API Reference
    .. method:: krpc.schema.KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
 
       Returns a procedure call message for the given static method call. This allows descriptions of
-      procedure calls to be passed to the server.
+      procedure calls to be passed to the server, for example when constructing custom events. See
+      :rst:ref:`java-client-events`.
 
    .. method:: krpc.schema.KRPC.ProcedureCall getCall(RemoteObject instance, String method, Object... args)
 
       Returns a procedure call message for the given method call. This allows descriptions of
-      procedure calls to be passed to the server.
+      procedure calls to be passed to the server, for example when constructing custom events. See
+      :rst:ref:`java-client-events`.
 
    .. method:: void close()
 

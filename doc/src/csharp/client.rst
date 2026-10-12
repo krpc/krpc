@@ -181,6 +181,12 @@ A call to ``Wait`` returns straight away if the event has fired since the previo
 event object, so no firing is missed between two calls. Several firings between two calls make
 ``Wait`` return once.
 
+You can also create a custom event from a server side function, which is code that runs inside
+the game. The following builds the function ``MeanAltitude > 1000``, and creates an event that
+triggers when the function returns true:
+
+.. literalinclude:: /scripts/client/csharp/Event.cs
+
 Client API Reference
 --------------------
 
@@ -233,8 +239,8 @@ Client API Reference
 
    .. method:: KRPC.Schema.KRPC.ProcedureCall GetCall(LambdaExpression expression)
 
-      Returns a procedure call message for the given lambda expression. This allows descriptions of
-      procedure calls to be passed to the server.
+      Returns the procedure call message for a lambda expression that makes a single call. The
+      expression API's ``Expression.Call`` takes it, as in :ref:`csharp-client-events`.
 
    .. method:: void Dispose()
 

@@ -57,6 +57,7 @@ EXCEPTION_TYPES = {
     "ArgumentException": ValueError,
     "ArgumentNullException": ValueError,
     "ArgumentOutOfRangeException": ValueError,
+    "NullReferenceException": TypeError,
 }
 
 
