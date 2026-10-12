@@ -1,6 +1,5 @@
 #pragma once
 
-#include <condition_variable>  // NOLINT(build/c++11)
 #include <exception>
 #include <functional>
 #include <map>
@@ -10,6 +9,7 @@
 #include <utility>
 
 #include "krpc/client.hpp"
+#include "krpc/condition.hpp"
 #include "krpc/decoder.hpp"
 #include "krpc/error.hpp"
 #include "krpc/krpc.pb.hpp"
@@ -35,14 +35,15 @@ class Stream {
   /** Get the most recent value for this stream. Blocks until the first value arrives. Throws
       the exception that ended the stream, if it has ended. */
   T operator()();
-  /** Condition variable that is notified when the stream updates */
-  std::condition_variable& get_condition() const;
-  /** Lock used with the condition variable. Each stream object has its own. Locking it counts
-      as acquire() from the next call on this stream object. */
-  std::unique_lock<std::mutex>& get_condition_lock() const;
-  /** Acquire a lock on the condition variable */
+  /** Condition variable that is notified when the stream updates. Every copy of the stream
+      object shares it. */
+  Condition& get_condition() const;
+  /** Lock on the condition's mutex. Each stream object has its own lock, used by one thread,
+      and the mutex is re-entrant. */
+  std::unique_lock<RecursiveMutex>& get_condition_lock() const;
+  /** Lock the condition's mutex, which every copy of the stream object shares */
   void acquire();
-  /** Release the lock on the condition variable */
+  /** Unlock the condition's mutex, which every copy of the stream object shares */
   void release();
   /** Wait until the next stream update. If timeout >= 0, the operation times out after that
       many seconds. Returns true if the stream updated, and false on a timeout. Throws the
@@ -77,13 +78,11 @@ class Stream {
  private:
   friend class Event;
   std::shared_ptr<StreamImpl> impl;
-  mutable std::unique_lock<std::mutex> lock;
-  // Whether this handle has a hold counted on the stream
-  bool holding = false;
-  std::unique_lock<std::mutex> make_lock() const;
-  void sync_hold();
-  void drop_hold();
-  void end_hold() noexcept;
+  // Declared after impl, so that it releases the mutex before the stream can be destroyed
+  mutable std::unique_lock<RecursiveMutex> lock;
+  /** Release the lock, unlocking the mutex only if this thread holds it. */
+  void drop_lock();
+  std::unique_lock<RecursiveMutex> make_lock() const;
   void check_exists() const;
   static T decode_value(const std::string& data, bool is_null, Client* client);
 };
@@ -104,16 +103,18 @@ inline Stream<T>::Stream(const Stream<T>& other) : impl(other.impl), lock(make_l
 
 template <typename T>
 inline Stream<T>::Stream(Stream<T>&& other) noexcept
-    : impl(std::move(other.impl)),
-      lock(std::move(other.lock)),
-      holding(std::exchange(other.holding, false)) {}
+    : impl(std::move(other.impl)), lock(std::move(other.lock)) {}
+
+template <typename T>
+inline Stream<T>::~Stream() {
+  drop_lock();
+}
 
 template <typename T>
 inline Stream<T>& Stream<T>::operator=(const Stream<T>& other) {
   if (this == &other) return *this;
   // Released before the stream it locks can be destroyed
-  end_hold();
-  lock = std::unique_lock<std::mutex>();
+  drop_lock();
   impl = other.impl;
   lock = make_lock();
   return *this;
@@ -123,59 +124,22 @@ template <typename T>
 inline Stream<T>& Stream<T>::operator=(Stream<T>&& other) noexcept {
   if (this == &other) return *this;
   // Released before the stream it locks can be destroyed
-  end_hold();
+  drop_lock();
   lock = std::move(other.lock);
-  holding = std::exchange(other.holding, false);
   impl = std::move(other.impl);
   return *this;
 }
 
 template <typename T>
-inline Stream<T>::~Stream() {
-  end_hold();
+inline void Stream<T>::drop_lock() {
+  detail::release_if_held_elsewhere(&lock);
+  lock = std::unique_lock<RecursiveMutex>();
 }
 
 template <typename T>
-inline std::unique_lock<std::mutex> Stream<T>::make_lock() const {
-  if (!impl) return std::unique_lock<std::mutex>();
-  return std::unique_lock<std::mutex>(impl->get_condition_mutex(), std::defer_lock);
-}
-
-// Counts a lock taken through get_condition_lock() as a hold, and stops counting one
-// unlocked through it
-template <typename T>
-inline void Stream<T>::sync_hold() {
-  if (!impl || lock.owns_lock() == holding) return;
-  if (holding)
-    impl->remove_hold();
-  else
-    impl->add_hold();
-  holding = !holding;
-}
-
-// Ends this handle's hold on the condition. The thread's last hold unlocks it, and an
-// earlier one leaves it locked for the thread's other handles.
-template <typename T>
-inline void Stream<T>::drop_hold() {
-  holding = false;
-  if (impl->remove_hold()) {
-    lock.unlock();
-    return;
-  }
-  lock.release();
-  lock = make_lock();
-}
-
-// Ends this handle's hold on the condition, for a handle being destroyed or assigned to. Counting
-// a hold allocates and takes a lock, which throw only on a system failure. The counts are then
-// left as they are, and assigning to or destroying the lock still unlocks it.
-template <typename T>
-inline void Stream<T>::end_hold() noexcept {
-  try {
-    sync_hold();
-    if (holding) drop_hold();
-  } catch (...) {  // NOLINT(bugprone-empty-catch)
-  }
+inline std::unique_lock<RecursiveMutex> Stream<T>::make_lock() const {
+  if (!impl) return std::unique_lock<RecursiveMutex>();
+  return std::unique_lock<RecursiveMutex>(impl->get_condition_mutex(), std::defer_lock);
 }
 
 template <typename T>
@@ -193,11 +157,9 @@ inline void Stream<T>::set_rate(float value) {
 template <typename T>
 inline T Stream<T>::operator()() {
   check_exists();
-  sync_hold();
   if (!impl->has_updated()) {
-    impl->with_condition([this](std::unique_lock<std::mutex>& held) {
-      impl->wait(&held, -1, [this] { return impl->has_updated(); });
-    });
+    std::lock_guard<RecursiveMutex> held(impl->get_condition_mutex());
+    while (!impl->has_updated() && !impl->has_ended()) impl->get_condition().wait();
   }
   bool is_null = false;
   auto data = impl->get_data(&is_null);
@@ -217,13 +179,13 @@ inline T Stream<T>::decode_value(const std::string& data, bool is_null, Client* 
 }
 
 template <typename T>
-inline std::condition_variable& Stream<T>::get_condition() const {
+inline Condition& Stream<T>::get_condition() const {
   check_exists();
   return impl->get_condition();
 }
 
 template <typename T>
-inline std::unique_lock<std::mutex>& Stream<T>::get_condition_lock() const {
+inline std::unique_lock<RecursiveMutex>& Stream<T>::get_condition_lock() const {
   check_exists();
   return lock;
 }
@@ -231,38 +193,22 @@ inline std::unique_lock<std::mutex>& Stream<T>::get_condition_lock() const {
 template <typename T>
 inline void Stream<T>::acquire() {
   check_exists();
-  sync_hold();
-  if (!lock.owns_lock() && impl->is_held()) {
-    // Another handle holds the condition in this thread, and this one shares its hold
-    lock = std::unique_lock<std::mutex>(impl->get_condition_mutex(), std::adopt_lock);
-  } else {
-    lock.lock();
-  }
-  impl->add_hold();
-  holding = true;
+  impl->get_condition_mutex().lock();
 }
 
 template <typename T>
 inline void Stream<T>::release() {
   check_exists();
-  sync_hold();
-  // Unlocking a lock this handle does not own throws
-  if (!holding) lock.unlock();
-  drop_hold();
+  impl->get_condition_mutex().unlock();
 }
 
 template <typename T>
 inline bool Stream<T>::wait(double timeout) {
   check_exists();
-  sync_hold();
-  bool updated = false;
-  impl->with_condition([this, timeout, &updated](std::unique_lock<std::mutex>& held) {
-    impl->throw_if_ended();
-    auto version = impl->get_version();
-    updated =
-        impl->wait(&held, timeout, [this, version] { return impl->get_version() != version; });
-  });
-  return updated;
+  std::lock_guard<RecursiveMutex> held(impl->get_condition_mutex());
+  impl->throw_if_ended();
+  auto version = impl->get_version();
+  return impl->wait(timeout, [this, version] { return impl->get_version() != version; });
 }
 
 template <typename T>
@@ -303,7 +249,6 @@ inline void Stream<T>::remove_end_callback(int tag) {
 template <typename T>
 inline void Stream<T>::remove() {
   if (!impl) return;
-  sync_hold();
   impl->remove();
 }
 

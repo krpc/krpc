@@ -181,12 +181,13 @@ test_suite(
 )
 
 # What the client does regardless of the transport it talks over: encoding and decoding
-# values and messages. It needs no server, so it runs on its own rather than under the
-# harness that starts one.
+# values and messages, and the locks streams use. It needs no server, so it runs on its own,
+# outside the harness that starts one.
 cc_test(
     name = "unit",
     size = "small",
     srcs = [
+        "test/test_condition.cpp",
         "test/test_decoder.cpp",
         "test/test_encode_decode.cpp",
         "test/test_encoder.cpp",

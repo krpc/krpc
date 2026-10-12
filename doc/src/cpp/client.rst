@@ -159,6 +159,11 @@ Each stream updates on its own, so two streams read one after the other can give
 different physics ticks. To read several values from one physics tick, make the calls while
 holding the tick, as described in :ref:`holding-a-tick`.
 
+.. note::
+
+   A stream runs on the server until you remove it or the connection closes, even once every copy
+   of the stream object is destroyed. Each call to a ``_stream`` function adds another stream.
+
 Synchronizing with Stream Updates
 ---------------------------------
 
@@ -170,8 +175,10 @@ Condition Variables
 ^^^^^^^^^^^^^^^^^^^
 
 Each stream has a condition variable associated with it, that is notified whenever the value of the
-stream changes. The condition variables are instances of ``std::condition_variable``. These can be
-used to block the current thread of execution until the value of the stream changes.
+stream changes. The condition variables are instances of ``krpc::Condition``, used like
+``std::condition_variable`` over the re-entrant mutex ``krpc::RecursiveMutex``. A wait releases
+every level of the thread's lock. These can be used to block the current thread of execution until
+the value of the stream changes.
 
 The following example waits until the abort button is pressed in game, by waiting for the value of
 :func:`krpc::services::SpaceCenter::Control::abort` to change to true:
@@ -202,8 +209,9 @@ A callback added to a stream that already has a value is called with that value 
 
 .. note::
 
-   The callback function may be called from a different thread to that which created the stream. Any
-   changes to shared state must therefore be protected with appropriate synchronization.
+   The callback function may be called from a different thread than the one that created the
+   stream. Any changes to shared state must therefore be protected with appropriate
+   synchronization.
 
 Stream Endings
 ^^^^^^^^^^^^^^
@@ -296,21 +304,22 @@ Client API Reference
 
       Destructs the client object and closes the connection to the server.
 
-   .. function:: std::condition_variable& get_stream_update_condition() const
+   .. function:: Condition& get_stream_update_condition() const
 
       A condition variable that is notified whenever a stream update message finishes processing.
 
-   .. function:: std::unique_lock<std::mutex>& get_stream_update_condition_lock() const
+   .. function:: std::unique_lock<RecursiveMutex>& get_stream_update_condition_lock() const
 
-      The lock for the stream update condition variable.
+      A lock on the re-entrant mutex for the stream update condition variable. Every copy of the
+      client shares the lock, so one thread at a time uses it.
 
    .. function:: void acquire_stream_update()
 
-      Acquires a lock on the mutex for the stream update condition variable.
+      Locks the mutex for the stream update condition variable.
 
    .. function:: void release_stream_update()
 
-      Releases the lock on the mutex for the stream update condition variable.
+      Unlocks the mutex for the stream update condition variable.
 
    .. function:: void wait_for_stream_update(double timeout = -1)
 
@@ -329,8 +338,8 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
-         stream. Any changes to shared state must therefore be protected with appropriate
+         The callback function may be called from a different thread than the one that created
+         the stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
    .. function:: void remove_stream_update_callback(int tag)
@@ -358,23 +367,25 @@ Client API Reference
       arrived yet. Throws the exception that ended the stream, if it has ended, such as an exception
       thrown by the remote procedure.
 
-   .. function:: std::condition_variable& get_condition() const
+   .. function:: Condition& get_condition() const
 
-      A condition variable that is notified whenever the value of the stream changes.
+      A condition variable that is notified whenever the value of the stream changes. Every copy
+      of the stream object shares it.
 
-   .. function:: std::unique_lock<std::mutex>& get_condition_lock() const
+   .. function:: std::unique_lock<RecursiveMutex>& get_condition_lock() const
 
-      The lock for the condition variable. Each stream object has its own lock, so a thread
-      waiting on a stream uses its own copy of the stream object. Locking it counts as a call to
-      ``acquire`` from the next call on the stream object.
+      A lock on the re-entrant mutex for the condition variable. Each stream object has its own
+      lock, used by one thread, so a thread waiting on a stream uses its own copy of the stream
+      object.
 
    .. function:: void acquire()
 
-      Acquires a lock on the mutex for the condition variable.
+      Locks the mutex for the condition variable. Every copy of the stream object shares the
+      mutex, so a lock taken through one copy can be released through another.
 
    .. function:: void release()
 
-      Releases the lock on the mutex for the condition variable.
+      Unlocks the mutex for the condition variable.
 
    .. function:: bool wait(double timeout = -1)
 
@@ -399,8 +410,8 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
-         stream. Any changes to shared state must therefore be protected with appropriate
+         The callback function may be called from a different thread than the one that created
+         the stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
    .. function:: void remove_callback(int tag)
@@ -446,22 +457,25 @@ Client API Reference
    Event objects are copy constructible and assignable, and every copy refers to the same event.
    Call :func:`remove` to remove the event from the server.
 
-   .. function:: std::condition_variable& get_condition() const
+   .. function:: Condition& get_condition() const
 
-      The condition variable that is notified whenever the event occurs.
+      A condition variable that is notified whenever the event occurs. Every copy of the event
+      object shares it.
 
-   .. function:: std::unique_lock<std::mutex>& get_condition_lock() const
+   .. function:: std::unique_lock<RecursiveMutex>& get_condition_lock() const
 
-      The lock for the condition variable. Each event object has its own lock, so a thread
-      waiting on an event uses its own copy of the event object.
+      A lock on the re-entrant mutex for the condition variable. Each event object has its own
+      lock, used by one thread, so a thread waiting on an event uses its own copy of the event
+      object.
 
    .. function:: void acquire()
 
-      Acquires a lock on the mutex for the condition variable.
+      Locks the mutex for the condition variable. Every copy of the event object, and its
+      underlying stream, shares the mutex.
 
    .. function:: void release()
 
-      Releases the lock on the mutex for the condition variable.
+      Unlocks the mutex for the condition variable.
 
    .. function:: bool wait(double timeout = -1)
 
@@ -480,9 +494,10 @@ Client API Reference
       Adds a callback function that is invoked whenever the event occurs. The callback function
       should be a function that takes zero arguments. If the event has occurred since the previous
       call to ``wait`` on this event object, and no callback was invoked for it, the callback is
-      invoked once straight away. An error from the event does not invoke the callback. Waiting on
-      the event throws it. Returns a unique identifier for the callback which can be used to
-      remove the callback.
+      invoked once straight away. A callback added after the event has ended is not invoked for
+      an earlier firing. An error from the event does not invoke the callback. Waiting on the
+      event throws it. Returns a unique identifier for the callback which can be used to remove
+      the callback.
 
    .. function:: void remove_callback(int tag)
 
@@ -519,6 +534,34 @@ Client API Reference
    .. function:: operator bool()
 
       Returns whether the event object is bound to a stream.
+
+.. class:: RecursiveMutex
+
+   The mutex of a stream's, an event's or the stream update's condition variable. The thread
+   holding it can lock it again, and each lock is matched by an unlock. It provides ``lock``, ``try_lock``, ``try_lock_for``,
+   ``try_lock_until`` and ``unlock``, so it can be held with ``std::unique_lock`` and
+   ``std::lock_guard``.
+
+   .. function:: bool held_by_this_thread() const
+
+      Whether the calling thread holds the mutex.
+
+.. class:: Condition
+
+   The condition variable of a stream, an event or the stream update. Its ``wait``, ``wait_for``
+   and ``wait_until`` take a ``std::unique_lock<RecursiveMutex>``, with or without a predicate,
+   as ``std::condition_variable`` does. A wait releases every lock the calling thread holds on
+   the mutex, and takes them again before it returns.
+
+   .. function:: void wait()
+   .. function:: template <typename Rep, typename Period> std::cv_status wait_for(const std::chrono::duration<Rep, Period>& duration)
+   .. function:: template <typename Clock, typename Duration> std::cv_status wait_until(const std::chrono::time_point<Clock, Duration>& deadline)
+
+      Waits as the overloads taking a lock do, for a thread that holds the mutex through
+      ``acquire`` or a lock of its own.
+
+   .. function:: void notify_one()
+   .. function:: void notify_all()
 
 .. function:: template <typename T> std::size_t hash_value(const T& value)
 

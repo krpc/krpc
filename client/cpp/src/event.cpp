@@ -1,8 +1,11 @@
 #include "krpc/event.hpp"
 
+#include <cstdint>
 #include <memory>
+#include <mutex>  // NOLINT(build/c++11)
 #include <string>
 
+#include "krpc/condition.hpp"
 #include "krpc/krpc.pb.hpp"
 #include "krpc/stream_impl.hpp"
 
@@ -15,9 +18,9 @@ Event::Event() {}
 Event::Event(Client* client, const krpc::schema::Event& message)
     : _stream(client, message.stream().id()) {}
 
-std::condition_variable& Event::get_condition() const { return _stream.get_condition(); }
+Condition& Event::get_condition() const { return _stream.get_condition(); }
 
-std::unique_lock<std::mutex>& Event::get_condition_lock() const {
+std::unique_lock<RecursiveMutex>& Event::get_condition_lock() const {
   return _stream.get_condition_lock();
 }
 
@@ -27,27 +30,30 @@ void Event::release() { _stream.release(); }
 
 bool Event::wait(double timeout) {
   _stream.check_exists();
-  _stream.sync_hold();
   auto& impl = _stream.impl;
-  bool fired = false;
-  impl->with_condition([this, &impl, timeout, &fired](std::unique_lock<std::mutex>& held) {
-    // A firing not yet seen returns before an ending is thrown
-    auto last_seen = seen;
-    fired =
-        impl->wait(&held, timeout, [&impl, last_seen] { return impl->get_fired() > last_seen; });
-    if (fired) seen = impl->get_fired();
-  });
-  return fired;
+  std::lock_guard<RecursiveMutex> held(impl->get_condition_mutex());
+  // A firing not yet seen returns before an ending is thrown
+  auto last_seen = seen;
+  if (!impl->wait(timeout, [&impl, last_seen] { return impl->get_fired() > last_seen; }))
+    return false;
+  seen = impl->get_fired();
+  return true;
 }
 
 int Event::add_callback(const Callback& callback) {
   _stream.check_exists();
-  return _stream.impl->add_event_callback(
+  auto& impl = _stream.impl;
+  uint64_t last_seen = 0;
+  {
+    std::lock_guard<RecursiveMutex> held(impl->get_condition_mutex());
+    last_seen = seen;
+  }
+  return impl->add_event_callback(
       [callback](const std::string& data, bool is_null) {
         // An encoded bool true
         if (!is_null && data == "\x01") callback();
       },
-      seen);
+      last_seen);
 }
 
 void Event::remove_callback(int tag) { return _stream.remove_callback(tag); }

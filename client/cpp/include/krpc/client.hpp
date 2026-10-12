@@ -1,7 +1,6 @@
 #pragma once
 
-#include <chrono>              // NOLINT(build/c++11)
-#include <condition_variable>  // NOLINT(build/c++11)
+#include <chrono>  // NOLINT(build/c++11)
 #include <cstdint>
 #include <functional>
 #include <map>
@@ -12,6 +11,7 @@
 #include <utility>
 #include <vector>
 
+#include "krpc/condition.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/krpc.pb.hpp"
 
@@ -34,7 +34,7 @@ class Client {
 
   /** Invoke the calls of a request, and return the result of the first. The first call
       through a client with a stream connection fetches the server's list of services, to find
-      the procedures that return a new stream or event. */
+      the procedures that return a new stream or event. A failed fetch is not retried. */
   schema::ProcedureResult invoke(const schema::Request& request);
   /** Invoke a call, as invoke(const schema::Request&) does. */
   schema::ProcedureResult invoke(const schema::ProcedureCall& call);
@@ -86,12 +86,13 @@ class Client {
    * Condition variable that is notified when a stream update
    * message has finished being processed.
    */
-  std::condition_variable& get_stream_update_condition() const;
-  /** Lock used with the condition variable */
-  std::unique_lock<std::mutex>& get_stream_update_condition_lock() const;
-  /** Acquire a lock on the condition variable */
+  Condition& get_stream_update_condition() const;
+  /** Lock on the condition's mutex, which is re-entrant. Every copy of the client shares the
+      lock, so it is used by one thread. */
+  std::unique_lock<RecursiveMutex>& get_stream_update_condition_lock() const;
+  /** Lock the condition's mutex */
   void acquire_stream_update();
-  /** Release the lock on the condition variable */
+  /** Unlock the condition's mutex */
   void release_stream_update();
   /** Wait until the next stream update message. If timeout >= 0, the
       operation times out after that many seconds. */

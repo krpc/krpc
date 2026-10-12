@@ -355,6 +355,32 @@ TEST_F(test_event, test_remove_through_another_handle_while_holding_condition) {
   event.release();
 }
 
+// A lock on the condition taken through one handle is released through another
+TEST_F(test_event, test_acquire_and_release_through_different_handles) {
+  auto event = test_service.on_timer(10000);
+  auto* mutex = event.get_condition_lock().mutex();
+  event.stream().acquire();
+  ASSERT_TRUE(mutex->held_by_this_thread());
+  event.release();
+  ASSERT_FALSE(mutex->held_by_this_thread());
+  event.acquire();
+  event.stream().release();
+  ASSERT_FALSE(mutex->held_by_this_thread());
+  std::promise<void> acquired;
+  auto done = acquired.get_future();
+  std::thread other([event, acquired = std::move(acquired)]() mutable {
+    event.acquire();
+    event.release();
+    acquired.set_value();
+  });
+  if (done.wait_for(std::chrono::seconds(10)) != std::future_status::ready) {
+    other.detach();
+    FAIL() << "the condition was not released";
+  }
+  other.join();
+  event.remove();
+}
+
 TEST_F(test_event, test_connection_failure_wakes_an_event_wait) {
   std::function<void()> shutdown;
   auto client = connect_client(&shutdown);
@@ -410,14 +436,50 @@ TEST_F(test_event, test_callback_added_after_an_unseen_firing_is_called) {
 }
 
 // A callback on the event's stream is passed every value, and gives no firing to the event
-TEST_F(test_event, test_callback_added_after_a_firing_given_to_a_stream_callback_is_called) {
-  auto timer = on_timer(&conn, 500, 2);
-  auto stream = timer.event.stream();
-  stream.add_callback([](bool) {});
-  ASSERT_TRUE(eventually([&timer] { return timer.stream->get_fired() == 1; }));
+TEST_F(test_event, test_a_firing_passed_to_a_value_callback_is_replayed) {
+  krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
+  std::atomic<int> values(0);
+  stream.add_callback([&values](const std::string&, bool) { values++; });
+  stream.set_value("\x01", false);
+  stream.call(stream.get_callbacks()[0], 1, "\x01", false);
+  ASSERT_EQ(1, values.load());
   std::atomic<int> calls(0);
-  timer.event.add_callback([&calls] { calls++; });
+  stream.add_event_callback([&calls](const std::string&, bool) { calls++; }, 0);
   ASSERT_EQ(1, calls.load());
+}
+
+// A replay reserved for a callback removed before the call leaves the firing for the next late
+// callback
+TEST_F(test_event, test_a_callback_removed_before_its_replay_takes_no_firing) {
+  krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
+  stream.set_value("\x01", false);
+  std::atomic<int> removed(0);
+  auto tag = stream.add_event_callback([&removed](const std::string&, bool) { removed++; }, 1);
+  auto callback = stream.get_callbacks()[0];
+  auto fired = stream.reserve_replay(0);
+  ASSERT_EQ(1, fired);
+  stream.remove_callback(tag);
+  stream.replay(callback, fired);
+  std::atomic<int> called(0);
+  stream.add_event_callback([&called](const std::string&, bool) { called++; }, 0);
+  ASSERT_EQ(0, removed.load());
+  ASSERT_EQ(1, called.load());
+}
+
+// The second late callback is added while the first one's replay is in flight
+TEST_F(test_event, test_two_late_callbacks_do_not_both_replay_a_firing) {
+  krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
+  stream.set_value("\x01", false);
+  std::atomic<int> first(0);
+  stream.add_event_callback([&first](const std::string&, bool) { first++; }, 1);
+  auto callback = stream.get_callbacks()[0];
+  auto fired = stream.reserve_replay(0);
+  ASSERT_EQ(1, fired);
+  std::atomic<int> second(0);
+  stream.add_event_callback([&second](const std::string&, bool) { second++; }, 0);
+  stream.replay(callback, fired);
+  ASSERT_EQ(1, first.load());
+  ASSERT_EQ(0, second.load());
 }
 
 // The firing is still given to a wait
@@ -432,9 +494,9 @@ TEST_F(test_event, test_callback_added_after_the_event_ends_is_not_called) {
   EXPECT_THROW(timer.event.wait(), krpc::services::KRPC::StreamRemovedException);
 }
 
-// A firing given to an event callback after a later value is still given, as an event callback
-// is gated on the number of firings
-TEST_F(test_event, test_callback_gets_a_firing_passed_after_a_later_value) {
+// The update thread can pass a later value that is not a firing before a replay passes the
+// firing. Both carry the same firing count, and the value is not passed to the event callback.
+TEST_F(test_event, test_a_value_that_is_not_a_firing_does_not_take_a_firing) {
   krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
   std::atomic<int> calls(0);
   stream.add_event_callback(
@@ -442,19 +504,10 @@ TEST_F(test_event, test_callback_gets_a_firing_passed_after_a_later_value) {
         if (!is_null && data == "\x01") calls++;
       },
       0);
-  krpc::StreamImpl::Callbacks firing;
-  krpc::StreamImpl::Callbacks later;
-  uint64_t firing_version = 0;
-  uint64_t firing_fired = 0;
-  uint64_t later_version = 0;
-  uint64_t later_fired = 0;
-  {
-    std::lock_guard<std::mutex> held(stream.get_condition_mutex());
-    ASSERT_TRUE(stream.update_and_notify("\x01", false, &firing, &firing_version, &firing_fired));
-    ASSERT_TRUE(stream.update_and_notify("\x00", false, &later, &later_version, &later_fired));
-  }
-  stream.call_callbacks(later, "\x00", false, later_version, later_fired);
-  stream.call_callbacks(firing, "\x01", false, firing_version, firing_fired);
+  auto callback = stream.get_callbacks()[0];
+  // The later value, which is not a firing, then the firing
+  stream.call(callback, 1, std::string("\x00", 1), false);
+  stream.call(callback, 1, "\x01", false);
   ASSERT_EQ(1, calls.load());
 }
 
@@ -482,4 +535,19 @@ TEST_F(test_event, test_callback_added_after_a_firing_given_to_another_is_not_ca
   event.add_callback([&second] { second++; });
   std::this_thread::sleep_for(std::chrono::milliseconds(200));
   ASSERT_EQ(0, second.load());
+}
+
+TEST_F(test_event, test_a_removed_callback_does_not_take_a_firing) {
+  krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
+  std::atomic<int> removed(0);
+  auto tag = stream.add_event_callback([&removed](const std::string&, bool) { removed++; }, 0);
+  auto callback = stream.get_callbacks()[0];
+  stream.remove_callback(tag);
+  stream.set_value("\x01", false);
+  // Stands in for an update thread that copied the callback before its removal
+  stream.call(callback, 1, "\x01", false);
+  std::atomic<int> called(0);
+  stream.add_event_callback([&called](const std::string&, bool) { called++; }, 0);
+  ASSERT_EQ(0, removed.load());
+  ASSERT_EQ(1, called.load());
 }

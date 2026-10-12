@@ -1,11 +1,11 @@
 #pragma once
 
-#include <condition_variable>  // NOLINT(build/c++11)
 #include <cstdint>
 #include <exception>
 #include <functional>
 #include <mutex>  // NOLINT(build/c++11)
 
+#include "krpc/condition.hpp"
 #include "krpc/stream.hpp"
 
 namespace krpc {
@@ -19,13 +19,15 @@ class Event {
  public:
   Event();
   Event(Client* client, const krpc::schema::Event& message);
-  /** Condition variable that is notified when the event occurs */
-  std::condition_variable& get_condition() const;
-  /** Lock used with the condition variable. Each event object has its own. */
-  std::unique_lock<std::mutex>& get_condition_lock() const;
-  /** Acquire a lock on the condition variable */
+  /** Condition variable that is notified when the event occurs. Every copy of the event object
+      shares it. */
+  Condition& get_condition() const;
+  /** Lock on the condition's mutex. Each event object has its own lock, used by one thread,
+      and the mutex is re-entrant. */
+  std::unique_lock<RecursiveMutex>& get_condition_lock() const;
+  /** Lock the condition's mutex, which every copy of the event object shares */
   void acquire();
-  /** Release the lock on the condition variable */
+  /** Unlock the condition's mutex, which every copy of the event object shares */
   void release();
   /** Wait until the event occurs. Returns straight away if the event has occurred since the
       last wait on this event object. If timeout >= 0, the operation times out after that many
@@ -35,9 +37,9 @@ class Event {
   typedef std::function<void()> Callback;
   /**
    * Add a callback that is invoked whenever the event occurs. It is invoked straight away if
-   * the event has occurred since the last wait on this event object, and no other callback
-   * has been invoked for it. An error from the event does not invoke the callback. Waiting on
-   * the event throws it.
+   * the event has not ended, has occurred since the last wait on this event object, and no
+   * other callback has been invoked for it. An error from the event does not invoke the
+   * callback. Waiting on the event throws it.
    * Returns an integer tag for the callback which uniquely identifies it,
    * and allows it to be removed using remove_callback()
    */

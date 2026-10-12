@@ -1,9 +1,6 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
-#include <asio/io_context.hpp>
-#include <asio/ip/address.hpp>
-#include <asio/ip/tcp.hpp>
 #include <atomic>
 #include <chrono>  // NOLINT(build/c++11)
 #include <cstddef>
@@ -285,22 +282,12 @@ TEST_F(test_stream, test_callback_added_after_the_first_value) {
   ASSERT_EQ(std::vector<std::string>{"49"}, values);
 }
 
-// A stream manager on a connection to a server that sends nothing, so the only results it
-// applies are those a test passes to update
+// A stream manager with no update thread, so the only results it applies are those a test
+// passes to update
 class idle_stream_manager {
  public:
   explicit idle_stream_manager(krpc::Client* client)
-      : acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::make_address("127.0.0.1"), 0)),
-        socket(io_context) {
-    auto connection =
-        std::make_shared<krpc::Connection>("127.0.0.1", acceptor.local_endpoint().port());
-    connection->connect();
-    acceptor.accept(socket);
-    manager = krpc::StreamManager::create(client, connection);
-  }
-  asio::io_context io_context;
-  asio::ip::tcp::acceptor acceptor;
-  asio::ip::tcp::socket socket;
+      : manager(krpc::StreamManager::create(client, nullptr)) {}
   std::shared_ptr<krpc::StreamManager> manager;
 };
 
@@ -310,13 +297,29 @@ static krpc::schema::ProcedureResult result_value(const std::string& value) {
   return result;
 }
 
+static krpc::schema::ProcedureResult result_error(const std::string& description) {
+  krpc::schema::ProcedureResult result;
+  result.mutable_error()->set_description(description);
+  return result;
+}
+
+// Apply a stream update message holding one result
+static void update(krpc::StreamManager* manager, uint64_t id,
+                   const krpc::schema::ProcedureResult& result) {
+  krpc::schema::StreamUpdate message;
+  auto* stream_result = message.add_results();
+  stream_result->set_id(id);
+  *stream_result->mutable_result() = result;
+  manager->update(message);
+}
+
 TEST_F(test_stream, test_result_before_the_add_reply_is_kept) {
   idle_stream_manager idle(&conn);
   auto& manager = *idle.manager;
   manager.note_issued(3);
   // One for an id noted but not registered, and one for an id not yet noted
-  manager.update(3, result_value("\x2a"));
-  manager.update(4, result_value("\x2b"));
+  update(&manager, 3, result_value("\x2a"));
+  update(&manager, 4, result_value("\x2b"));
   bool is_null = false;
   ASSERT_EQ("\x2a", manager.get_stream(3)->get_data(&is_null));
   ASSERT_EQ("\x2b", manager.get_stream(4)->get_data(&is_null));
@@ -327,8 +330,8 @@ TEST_F(test_stream, test_kept_value_is_the_latest) {
   idle_stream_manager idle(&conn);
   auto& manager = *idle.manager;
   manager.note_issued(3);
-  manager.update(3, result_value("\x2a"));
-  manager.update(3, result_value("\x2b"));
+  update(&manager, 3, result_value("\x2a"));
+  update(&manager, 3, result_value("\x2b"));
   auto stream = manager.get_stream(3);
   bool is_null = false;
   ASSERT_EQ("\x2b", stream->get_data(&is_null));
@@ -339,11 +342,9 @@ TEST_F(test_stream, test_result_after_a_kept_ending_is_dropped) {
   idle_stream_manager idle(&conn);
   auto& manager = *idle.manager;
   manager.note_issued(3);
-  manager.update(3, result_value("\x2a"));
-  krpc::schema::ProcedureResult error;
-  error.mutable_error()->set_description("ended");
-  manager.update(3, error);
-  manager.update(3, result_value("\x2b"));
+  update(&manager, 3, result_value("\x2a"));
+  update(&manager, 3, result_error("ended"));
+  update(&manager, 3, result_value("\x2b"));
   auto stream = manager.get_stream(3);
   ASSERT_TRUE(stream->has_ended());
   ASSERT_EQ(1, stream->get_version());
@@ -351,26 +352,14 @@ TEST_F(test_stream, test_result_after_a_kept_ending_is_dropped) {
   ASSERT_THROW(stream->get_data(&is_null), krpc::RPCError);
 }
 
-// The first call of a new callback is skipped if an update has already passed it a later value
-TEST_F(test_stream, test_callback_skips_an_older_value) {
+TEST_F(test_stream, test_a_callback_is_not_passed_an_older_value) {
   krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
-  krpc::StreamImpl::Callbacks callbacks;
-  uint64_t version = 0;
-  uint64_t fired = 0;
-  {
-    std::lock_guard<std::mutex> held(stream.get_condition_mutex());
-    ASSERT_TRUE(stream.update_and_notify("a", false, &callbacks, &version, &fired));
-  }
   std::vector<std::string> values;
   stream.add_callback([&values](const std::string& value, bool) { values.push_back(value); });
-  {
-    std::lock_guard<std::mutex> held(stream.get_condition_mutex());
-    ASSERT_TRUE(stream.update_and_notify("b", false, &callbacks, &version, &fired));
-  }
-  stream.call_callbacks(callbacks, "b", false, version, fired);
-  // A first call with the earlier value, made after the update
-  stream.call_callbacks(callbacks, "a", false, 1, fired);
-  ASSERT_EQ((std::vector<std::string>{"a", "b"}), values);
+  auto callback = stream.get_callbacks()[0];
+  stream.call(callback, 2, "newer", false);
+  stream.call(callback, 1, "older", false);
+  ASSERT_EQ(std::vector<std::string>{"newer"}, values);
 }
 
 TEST_F(test_stream, test_result_for_an_ended_stream_is_dropped) {
@@ -378,7 +367,7 @@ TEST_F(test_stream, test_result_for_an_ended_stream_is_dropped) {
   auto& manager = *idle.manager;
   manager.note_issued(5);
   manager.get_stream(5);
-  manager.update(2, result_value("\x2a"));
+  update(&manager, 2, result_value("\x2a"));
   ASSERT_FALSE(manager.get_stream(2)->has_updated());
 }
 
@@ -925,13 +914,14 @@ TEST_F(test_stream, test_remove_after_waiting_on_the_condition) {
   x.release();
 }
 
-// A lock taken through the condition lock counts as a hold of the stream object
+// A lock taken through the condition lock is released by unlocking it, or by destroying the
+// stream object
 TEST_F(test_stream, test_wait_after_locking_the_condition_lock) {
   auto x = test_service.counter_stream("test_stream.test_wait_after_locking_the_condition_lock");
   ASSERT_GT(x(), 0);
   x.get_condition_lock().lock();
   ASSERT_TRUE(x.wait(5));
-  x.release();
+  x.get_condition_lock().unlock();
   {
     auto y = x;
     y.get_condition_lock().lock();
@@ -946,20 +936,12 @@ TEST_F(test_stream, test_wait_after_locking_the_condition_lock) {
   x.remove();
 }
 
-// A callback is not called once its stream has ended
-TEST_F(test_stream, test_callback_after_the_stream_ends) {
+TEST_F(test_stream, test_a_callback_is_not_passed_a_value_once_ended) {
   krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
   std::vector<std::string> values;
   stream.add_callback([&values](const std::string& value, bool) { values.push_back(value); });
-  krpc::StreamImpl::Callbacks callbacks;
-  uint64_t version = 0;
-  uint64_t fired = 0;
-  {
-    std::lock_guard<std::mutex> held(stream.get_condition_mutex());
-    ASSERT_TRUE(stream.update_and_notify("a", false, &callbacks, &version, &fired));
-  }
   stream.end(std::make_exception_ptr(krpc::StreamError("ended")));
-  stream.call_callbacks(callbacks, "a", false, version, fired);
+  stream.call(stream.get_callbacks()[0], 1, "value", false);
   ASSERT_TRUE(values.empty());
 }
 
@@ -1094,7 +1076,6 @@ TEST_F(test_stream, test_connection_failure_while_a_thread_holds_one_stream_and_
   hold_one_wait_on_another(held, waited, shutdown);
 }
 
-// Closing from a callback on the update thread does not wait for that thread
 TEST_F(test_stream, test_remove_after_locking_the_condition_lock) {
   auto x = test_service.int32_to_string_stream(42);
   ASSERT_EQ("42", x());
@@ -1133,8 +1114,9 @@ TEST_F(test_stream, test_close_from_a_callback) {
   krpc::services::TestService service(client.get());
   auto x = service.counter_stream("test_stream.test_close_from_a_callback");
   std::atomic_bool closed(false);
-  x.add_callback([&client, &closed](int32_t) {
-    if (closed.load()) return;
+  // Closed on the update thread, and not by the first call on this one
+  x.add_callback([&client, &closed, adder = std::this_thread::get_id()](int32_t) {
+    if (closed.load() || std::this_thread::get_id() == adder) return;
     client.reset();
     closed.store(true);
   });
@@ -1183,4 +1165,265 @@ TEST_F(test_stream, test_close_while_holding_a_condition_a_callback_waits_for) {
     y.release();
   }));
   ASSERT_THROW(y(), krpc::ConnectionError);
+}
+
+TEST_F(test_stream, test_a_removed_callback_is_not_called) {
+  krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
+  std::vector<std::string> values;
+  auto tag =
+      stream.add_callback([&values](const std::string& value, bool) { values.push_back(value); });
+  auto callback = stream.get_callbacks()[0];
+  stream.remove_callback(tag);
+  stream.call(callback, 1, "value", false);
+  ASSERT_TRUE(values.empty());
+}
+
+TEST_F(test_stream, test_values_during_a_first_call_are_queued) {
+  idle_stream_manager idle(&conn);
+  idle.manager->note_issued(1);
+  auto stream = idle.manager->get_stream(1);
+  update(idle.manager.get(), 1, result_value("\x01"));
+  std::mutex calls_lock;
+  std::vector<std::pair<std::string, std::thread::id>> calls;
+  std::promise<void> entered;
+  std::promise<void> release;
+  auto released = release.get_future().share();
+  std::thread adder([&] {
+    stream->add_callback([&](const std::string& value, bool) {
+      {
+        std::lock_guard<std::mutex> guard(calls_lock);
+        calls.emplace_back(value, std::this_thread::get_id());
+      }
+      if (value == "\x01") {
+        entered.set_value();
+        released.wait_for(std::chrono::seconds(10));
+      }
+    });
+  });
+  auto adder_id = adder.get_id();
+  EXPECT_EQ(std::future_status::ready, entered.get_future().wait_for(std::chrono::seconds(10)));
+  // The update thread queues the value, with no wait for the first call
+  EXPECT_TRUE(
+      returns([manager = idle.manager] { update(manager.get(), 1, result_value("\x02")); }));
+  release.set_value();
+  adder.join();
+  ASSERT_EQ((std::vector<std::pair<std::string, std::thread::id>>{{"\x01", adder_id},
+                                                                  {"\x02", adder_id}}),
+            calls);
+}
+
+TEST_F(test_stream, test_the_first_call_of_a_callback_waits_for_updates) {
+  auto x = test_service.counter_stream(
+      "test_stream.test_the_first_call_of_a_callback_waits_for_updates");
+  x();
+  std::vector<bool> waited;
+  std::thread adder([x, &waited]() mutable {
+    x.add_callback([x, &waited, adder_id = std::this_thread::get_id()](int32_t) mutable {
+      // The values queued during the first call are passed on the same thread
+      if (std::this_thread::get_id() != adder_id || !waited.empty()) return;
+      x.acquire();
+      waited.push_back(x.wait(5));
+      waited.push_back(x.wait(5));
+      x.release();
+    });
+  });
+  adder.join();
+  ASSERT_EQ((std::vector<bool>{true, true}), waited);
+  x.remove();
+}
+
+TEST_F(test_stream, test_close_while_an_update_waits_for_a_first_call) {
+  idle_stream_manager idle(&conn);
+  idle.manager->note_issued(1);
+  auto stream = idle.manager->get_stream(1);
+  update(idle.manager.get(), 1, result_value("\x01"));
+  std::vector<std::string> record;
+  std::promise<void> entered;
+  std::promise<void> release;
+  auto released = release.get_future().share();
+  std::thread adder([&] {
+    stream->add_callback([&](const std::string& value, bool) {
+      record.push_back(value);
+      entered.set_value();
+      released.wait_for(std::chrono::seconds(10));
+    });
+  });
+  EXPECT_EQ(std::future_status::ready, entered.get_future().wait_for(std::chrono::seconds(10)));
+  auto callback = stream->get_callbacks()[0];
+  // Stands in for the window before the adding thread marks the first call
+  callback->adding = false;
+  std::promise<void> called;
+  auto updated = called.get_future();
+  std::thread([stream, callback, called = std::move(called)]() mutable {
+    stream->call(callback, 2, "\x02", false);
+    called.set_value();
+  }).detach();
+  EXPECT_EQ(std::future_status::timeout, updated.wait_for(std::chrono::milliseconds(100)));
+  idle.manager->request_close();
+  EXPECT_EQ(std::future_status::ready, updated.wait_for(std::chrono::seconds(10)));
+  release.set_value();
+  adder.join();
+  ASSERT_EQ(std::vector<std::string>{"\x01"}, record);
+}
+
+// The stream's value does not change, so only the adding thread calls the callback
+TEST_F(test_stream, test_close_from_the_first_call_of_a_callback) {
+  std::shared_ptr<krpc::Client> client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto x = service.int32_to_string_stream(56);
+  ASSERT_EQ("56", x());
+  auto closer = std::make_shared<std::thread::id>();
+  auto adder = std::make_shared<std::thread::id>();
+  ASSERT_TRUE(returns([x, closer, adder, client = std::move(client)]() mutable {
+    *adder = std::this_thread::get_id();
+    x.add_callback([&client, closer](const std::string&) {
+      *closer = std::this_thread::get_id();
+      client.reset();
+    });
+  }));
+  ASSERT_EQ(*adder, *closer);
+  ASSERT_THROW(x(), krpc::ConnectionError);
+}
+
+TEST_F(test_stream, test_update_callbacks_are_not_called_once_closed) {
+  idle_stream_manager idle(&conn);
+  std::atomic<int> calls(0);
+  idle.manager->add_update_callback([&calls] { calls++; });
+  idle.manager->notify_closed();
+  idle.manager->update(krpc::schema::StreamUpdate());
+  ASSERT_EQ(0, calls.load());
+}
+
+TEST_F(test_stream, test_a_server_ending_is_kept_for_the_closing_thread) {
+  idle_stream_manager idle(&conn);
+  idle.manager->note_issued(1);
+  auto stream = idle.manager->get_stream(1);
+  std::promise<void> held;
+  std::promise<void> release;
+  auto released = release.get_future().share();
+  std::thread holder([&] {
+    std::lock_guard<krpc::RecursiveMutex> guard(stream->get_condition_mutex());
+    held.set_value();
+    released.wait_for(std::chrono::seconds(10));
+  });
+  EXPECT_EQ(std::future_status::ready, held.get_future().wait_for(std::chrono::seconds(10)));
+  // The update thread gives up on the stream, as a thread is closing the client
+  idle.manager->request_close();
+  update(idle.manager.get(), 1, result_error("ended by the server"));
+  EXPECT_FALSE(stream->has_ended());
+  release.set_value();
+  holder.join();
+  idle.manager->notify_closed();
+  bool is_null = false;
+  ASSERT_THROW(stream->get_data(&is_null), krpc::RPCError);
+}
+
+TEST_F(test_stream, test_a_closer_holding_the_condition_keeps_a_server_ending) {
+  idle_stream_manager idle(&conn);
+  idle.manager->note_issued(1);
+  auto stream = idle.manager->get_stream(1);
+  std::lock_guard<krpc::RecursiveMutex> held(stream->get_condition_mutex());
+  idle.manager->request_close();
+  // Closed once the ending is decoded and the update thread has given up on the condition this
+  // thread holds
+  std::thread updater(
+      [manager = idle.manager] { update(manager.get(), 1, result_error("ended by the server")); });
+  updater.join();
+  idle.manager->notify_closed();
+  bool is_null = false;
+  ASSERT_THROW(stream->get_data(&is_null), krpc::RPCError);
+}
+
+// The closing thread holds a stream's condition through the condition lock alone
+TEST_F(test_stream, test_close_after_locking_the_condition_lock) {
+  std::shared_ptr<krpc::Client> client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto x = service.counter_stream("test_stream.test_close_after_locking_the_condition_lock");
+  ASSERT_GT(x(), 0);
+  ASSERT_TRUE(returns([x, client = std::move(client)]() mutable {
+    x.get_condition_lock().lock();
+    client.reset();
+    x.get_condition_lock().unlock();
+  }));
+  ASSERT_THROW(x(), krpc::ConnectionError);
+}
+
+// A thread holding the condition removes the stream once its final result is decoded, and the
+// update thread has stopped trying to take the condition
+TEST_F(test_stream, test_remove_keeps_a_server_ending) {
+  idle_stream_manager idle(&conn);
+  idle.manager->note_issued(1);
+  auto stream = idle.manager->get_stream(1);
+  std::lock_guard<krpc::RecursiveMutex> held(stream->get_condition_mutex());
+  idle.manager->request_close();
+  std::thread updater(
+      [manager = idle.manager] { update(manager.get(), 1, result_error("ended by the server")); });
+  updater.join();
+  ASSERT_FALSE(stream->has_ended());
+  stream->remove();
+  bool is_null = false;
+  ASSERT_THROW(stream->get_data(&is_null), krpc::RPCError);
+}
+
+TEST_F(test_stream, test_end_callback_added_after_the_end) {
+  krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
+  stream.end(std::make_exception_ptr(krpc::StreamError("ended")));
+  std::atomic<int> ended(0);
+  stream.add_end_callback([&ended](const std::exception_ptr& ending) {
+    ended++;
+    EXPECT_THROW(std::rethrow_exception(ending), krpc::StreamError);
+  });
+  ASSERT_EQ(1, ended.load());
+}
+
+// The closing thread holds the update condition, so the update thread destroys the manager
+// once it exits
+TEST_F(test_stream, test_close_while_holding_the_update_condition_lock) {
+  auto sentinel = std::make_shared<int>(0);
+  std::weak_ptr<int> manager_alive = sentinel;
+  std::shared_ptr<krpc::Client> client = connect_client();
+  // Kept by every copy of the client, including the stream manager's own
+  client->add_exception_thrower("TestService", "Sentinel", [sentinel](const std::string&) {});
+  sentinel.reset();
+  ASSERT_TRUE(returns([client = std::move(client)]() mutable {
+    client->get_stream_update_condition_lock().lock();
+    client.reset();
+  }));
+  ASSERT_TRUE(eventually([&manager_alive] { return manager_alive.expired(); }));
+}
+
+TEST_F(test_stream, test_destroy_a_stream_object_while_another_thread_holds_its_lock) {
+  auto x = test_service.int32_to_string_stream(57);
+  ASSERT_EQ("57", x());
+  auto copy = std::make_unique<krpc::Stream<std::string>>(x);
+  std::promise<void> locked;
+  std::promise<void> destroyed;
+  std::thread holder([&copy, &locked, released = destroyed.get_future()] {
+    auto& lock = copy->get_condition_lock();
+    lock.lock();
+    auto* mutex = lock.mutex();
+    locked.set_value();
+    released.wait();
+    mutex->unlock();
+  });
+  locked.get_future().wait();
+  copy.reset();
+  destroyed.set_value();
+  holder.join();
+  x.remove();
+  ASSERT_THROW(x(), krpc::StreamError);
+}
+
+TEST_F(test_stream, test_end_callback_on_close) {
+  auto client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto x = service.int32_to_string_stream(47);
+  ASSERT_EQ("47", x());
+  std::atomic<int> ended(0);
+  x.add_end_callback([&ended](const std::exception_ptr& ending) {
+    ended++;
+    EXPECT_THROW(std::rethrow_exception(ending), krpc::ConnectionError);
+  });
+  client.reset();
+  ASSERT_EQ(1, ended.load());
 }

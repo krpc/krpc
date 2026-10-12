@@ -1,8 +1,8 @@
 #pragma once
 
 #include <atomic>
-#include <condition_variable>  // NOLINT(build/c++11)
 #include <cstdint>
+#include <deque>
 #include <exception>
 #include <functional>
 #include <map>
@@ -10,27 +10,15 @@
 #include <mutex>  // NOLINT(build/c++11)
 #include <stdexcept>
 #include <string>
-#include <thread>  // NOLINT(build/c++11)
 #include <utility>
+#include <vector>
+
+#include "krpc/condition.hpp"
 
 namespace krpc {
 
 class Client;
 class StreamManager;
-
-/** The number of holds each thread has on a condition. */
-class Holds {
- public:
-  /** Whether the calling thread has a hold. */
-  bool held() const;
-  void add();
-  /** Remove a hold of the calling thread. Returns true if it was the thread's last. */
-  bool remove();
-
- private:
-  mutable std::mutex mutex;
-  std::map<std::thread::id, int> counts;
-};
 
 /** A value that failed to decode for a callback. */
 class CallbackDecodeError : public std::runtime_error {
@@ -38,10 +26,8 @@ class CallbackDecodeError : public std::runtime_error {
   using std::runtime_error::runtime_error;
 };
 
-/** The state shared by every handle of one stream. The value, its counts and the ending change
-    with the stream's condition and the update lock both held, so holding either one is enough
-    to read them. The callbacks and the firings given to them change under the update lock
-    alone. */
+/** The state shared by every handle of one stream. It is changed under the stream's condition,
+    and then the update lock. */
 class StreamImpl {
  public:
   StreamImpl(Client* client, uint64_t id, std::shared_ptr<std::recursive_mutex> update_lock,
@@ -54,32 +40,30 @@ class StreamImpl {
       exception that ended the stream, if it has ended. */
   std::string get_data(bool* is_null);
   typedef std::function<void(const std::string&, bool)> Callback;
-  /** A callback, and the version of the last value it was called with, or for an event
-      callback the number of firings when it was last called. Its mutex is held while it runs,
-      so that it runs on one thread at a time and in the order of the values. */
+  /** A value callback, or an event callback that is called only with firings. The version is
+      that of the last value passed to a value callback, or the firing count last passed to an
+      event callback. The lock is held while the callback runs, so it runs on one thread at a
+      time. While the adding thread makes the first call, the update thread queues its values
+      in missed for the adding thread to pass on. */
   struct CallbackEntry {
-    CallbackEntry(Callback callback, bool event) : callback(std::move(callback)), event(event) {}
+    CallbackEntry(int tag, Callback callback, bool event)
+        : tag(tag), callback(std::move(callback)), event(event) {}
+    struct Value {
+      uint64_t version = 0;
+      std::string data;
+      bool is_null = false;
+    };
+    int tag;
     Callback callback;
-    // Whether the callback is an event callback, which is called only with firings
     bool event;
-    uint64_t delivered = 0;
-    std::recursive_mutex mutex;
+    uint64_t version = 0;
+    RecursiveMutex lock;
+    bool adding = false;
+    std::deque<Value> missed;
   };
-  typedef std::map<int, std::shared_ptr<CallbackEntry>> Callbacks;
-  /** Store a value, with the update lock held. Returns false, storing nothing, if the stream
-      has ended. */
-  bool store(const std::string& data, bool is_null);
-  /** Store a value and wake the threads waiting for one, with the condition held. Returns
-      false, storing nothing, if the stream has ended. Otherwise sets callbacks to those to
-      call with the value, version to its version, and fired to the number of firings. */
-  bool update_and_notify(const std::string& data, bool is_null, Callbacks* callbacks,
-                         uint64_t* version, uint64_t* fired);
-  /** Call each callback with a value, with no stream lock held. A callback already called
-      with this version or a later one is skipped, and an event callback already called with
-      this number of firings or more, as is every callback once the stream has ended. A
-      callback that throws is reported, and the rest are still called. */
-  void call_callbacks(const Callbacks& callbacks, const std::string& data, bool is_null,
-                      uint64_t version, uint64_t fired);
+  typedef std::vector<std::shared_ptr<CallbackEntry>> Callbacks;
+  /** Store a value, with the condition held. */
+  void set_value(const std::string& data, bool is_null);
   bool has_updated() const;
   /** The number of values received. */
   uint64_t get_version() const;
@@ -93,31 +77,35 @@ class StreamImpl {
   /** End the stream and wake its waiters. Returns the end callbacks to call, with no lock
       held, or none if the stream had already ended. */
   EndCallbacks end(const std::exception_ptr& ending);
-  /** End the stream, with the condition held. */
-  EndCallbacks end_held(const std::exception_ptr& ending);
-  /** Call fn with a lock that holds the condition. A thread that has acquired the condition
-      through any handle keeps its hold, and any other thread takes the condition for the
-      call. */
-  void with_condition(const std::function<void(std::unique_lock<std::mutex>&)>& fn);
-  /** Wait on the condition, which lock holds, until done returns true or the timeout in
-      seconds passes. A negative timeout waits indefinitely. Returns false on a timeout, and
-      throws the ending if the stream ends first. */
-  bool wait(std::unique_lock<std::mutex>* lock, double timeout, const std::function<bool()>& done);
-  /** Whether the calling thread holds the condition through acquire(), on any handle. */
-  bool is_held() const;
-  /** Record a hold on the condition by the calling thread, through acquire(). */
-  void add_hold();
-  /** Remove a hold on the condition by the calling thread. Returns true if it was the
-      thread's last hold, which the caller then unlocks. */
-  bool remove_hold();
-  std::condition_variable& get_condition();
-  std::mutex& get_condition_mutex();
+  /** Wait on the condition, which the calling thread holds, until done returns true or the
+      timeout in seconds passes. A negative timeout waits indefinitely. Returns false on a
+      timeout, and throws the ending if the stream ends first. */
+  bool wait(double timeout, const std::function<bool()>& done);
+  Condition& get_condition();
+  RecursiveMutex& get_condition_mutex();
+  /** The callbacks, read under the update lock. */
+  Callbacks get_callbacks() const;
+  /** Call a callback with a value, unless it has been passed a newer one, has been removed, or
+      the stream has ended. The version is the firing count for an event callback, which is
+      passed only firings. Called with no lock held.
+
+      The first call, from the adding thread, skips the value if the update thread is calling
+      the callback, as that thread has a newer value. The update thread queues its values for
+      the adding thread while the first call runs. */
+  void call(const std::shared_ptr<CallbackEntry>& callback, uint64_t version,
+            const std::string& data, bool is_null, bool added = false);
   /** Add a callback. One added to a stream with a value is called with it here. */
   int add_callback(const Callback& callback);
-  /** Add an event callback. It is called here, once, if the event has not ended and has a
-      firing that neither the callbacks nor a wait that has seen the given number of firings
-      have been given. */
+  /** Add an event callback. It is called here for a firing passed neither to a wait that has
+      seen the given number of firings, nor to the event's callbacks. */
   int add_event_callback(const Callback& callback, uint64_t seen);
+  /** Reserve the latest firing for a late event callback, if it has been passed neither to a
+      wait that has seen the given number of firings, nor to the event's callbacks, nor to a
+      replay in flight. Returns the firing count reserved, or zero for none. */
+  uint64_t reserve_replay(uint64_t seen);
+  /** Pass a reserved firing to a late event callback, and release the reservation. Called
+      with no lock held. */
+  void replay(const std::shared_ptr<CallbackEntry>& callback, uint64_t fired);
   void remove_callback(int tag);
   /** Add an end callback. One added after the stream ended is called here. */
   int add_end_callback(const EndCallback& callback);
@@ -127,12 +115,20 @@ class StreamImpl {
   void remove();
 
  private:
-  /** Call a callback with a value, unless it has had this one or a later one, or the stream
-      has ended. The count is the value's version, or for an event callback the number of
-      firings. An event callback is called only with a firing. The first call, made by the
-      thread adding the callback, is skipped if the callback is running. */
-  void deliver(CallbackEntry* entry, const std::string& data, bool is_null, uint64_t count,
-               bool first = false);
+  /** Take a callback's lock on the update thread. Returns false, without the lock, once the
+      value is queued for the adding thread or the client is closing. */
+  bool enter_on_update_thread(CallbackEntry* callback, uint64_t version, const std::string& data,
+                              bool is_null);
+  /** Call a callback, on the adding thread, with the values the update thread queued during
+      its first call. A value queued before the stream ended is still passed on. Clears adding
+      in the same hold of the update lock that finds the queue empty, so the update thread
+      queues no value after the last check. Called with the callback's lock held. */
+  void call_missed(CallbackEntry* callback);
+  /** Note that a callback is passed a version. Returns false, noting nothing, if the callback
+      has been removed or passed that version or a newer one. Called with the update lock
+      held. */
+  bool note_passed(CallbackEntry* callback, uint64_t version);
+  void invoke(const CallbackEntry& callback, const std::string& data, bool is_null);
   Client* client;
   uint64_t id;
   std::shared_ptr<std::recursive_mutex> update_lock;
@@ -143,17 +139,17 @@ class StreamImpl {
   bool _is_null;
   uint64_t version;
   uint64_t fired;
-  // The number of firings when firings were last given to the event callbacks
+  // The highest firing count passed to an event callback
   uint64_t callbacks_fired;
+  // The firing count a replay in flight passes, so that a concurrent late event callback does
+  // not replay it too
+  uint64_t replaying;
   // Whether a value that failed to decode for a callback has been reported
   std::atomic<bool> decode_failure_reported;
   std::exception_ptr ending;
-  std::condition_variable condition;
-  std::mutex condition_mutex;
-  // The number of handles holding the condition through acquire(), per thread. A thread
-  // waiting on the condition keeps its holds while another thread takes the condition.
-  Holds holds;
-  Callbacks callbacks;
+  RecursiveMutex condition_mutex;
+  Condition condition;
+  std::map<int, std::shared_ptr<CallbackEntry>> callbacks;
   int next_callback_tag;
   EndCallbacks end_callbacks;
   int next_end_callback_tag;

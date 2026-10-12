@@ -274,11 +274,9 @@ std::shared_ptr<StreamImpl> Client::get_stream(uint64_t id) { return streams().g
 
 void Client::remove_stream(uint64_t id) { streams().remove_stream(id); }
 
-std::condition_variable& Client::get_stream_update_condition() const {
-  return streams().get_update_condition();
-}
+Condition& Client::get_stream_update_condition() const { return streams().get_update_condition(); }
 
-std::unique_lock<std::mutex>& Client::get_stream_update_condition_lock() const {
+std::unique_lock<RecursiveMutex>& Client::get_stream_update_condition_lock() const {
   return streams().get_update_condition_lock();
 }
 
@@ -288,10 +286,10 @@ void Client::release_stream_update() { streams().release_update(); }
 
 void Client::wait_for_stream_update(double timeout) {
   if (timeout < 0) {
-    streams().get_update_condition().wait(streams().get_update_condition_lock());
+    streams().get_update_condition().wait();
   } else {
     auto rel_time = std::chrono::milliseconds(static_cast<int>(timeout * 1000));
-    streams().get_update_condition().wait_for(streams().get_update_condition_lock(), rel_time);
+    streams().get_update_condition().wait_for(rel_time);
   }
 }
 
