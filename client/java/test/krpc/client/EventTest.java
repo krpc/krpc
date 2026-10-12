@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.google.protobuf.ByteString;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import krpc.client.services.KRPC.Expression;
 import krpc.client.services.TestService;
 import krpc.client.services.TestService.CustomException;
 import krpc.client.services.TestService.TestClass;
+import krpc.schema.KRPC.ProcedureResult;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -90,7 +92,6 @@ public class EventTest {
           testEventCallbackCalled = true;
         });
     long startTime = System.currentTimeMillis();
-    event.start();
     while (!testEventCallbackCalled) {
     }
     long time = System.currentTimeMillis() - startTime;
@@ -108,7 +109,6 @@ public class EventTest {
           testEventCallbackTimeoutCalled = true;
         });
     long startTime = System.currentTimeMillis();
-    event.start();
     while (!testEventCallbackTimeoutCalled) {
       if (System.currentTimeMillis() - startTime > 100) {
         break;
@@ -130,7 +130,6 @@ public class EventTest {
           testEventCallbackLoopCount++;
         });
     long startTime = System.currentTimeMillis();
-    event.start();
     while (testEventCallbackLoopCount < 5) {
     }
     long time = System.currentTimeMillis() - startTime;
@@ -155,7 +154,6 @@ public class EventTest {
         });
     event.removeCallback(called2Tag);
     long startTime = System.currentTimeMillis();
-    event.start();
     while (!testEventRemoveCallbackCalled1) {
     }
     long time = System.currentTimeMillis() - startTime;
@@ -272,7 +270,6 @@ public class EventTest {
   public void testFiringBeforeWait()
       throws RPCException, StreamException, InterruptedException {
     Event event = testService.onTimer(100, 1);
-    event.start();
     Thread.sleep(500);
     synchronized (event.getCondition()) {
       long startTime = System.currentTimeMillis();
@@ -285,7 +282,6 @@ public class EventTest {
   public void testFiringsCoalesce()
       throws RPCException, StreamException, InterruptedException {
     Event event = testService.onTimer(50, 3);
-    event.start();
     Thread.sleep(500);
     synchronized (event.getCondition()) {
       event.waitFor();
@@ -297,7 +293,6 @@ public class EventTest {
   public void testTwoThreadsWaitOnOneEvent()
       throws RPCException, StreamException, InterruptedException {
     Event event = testService.onTimer(1000, 1);
-    event.start();
     List<Boolean> woke = Collections.synchronizedList(new ArrayList<Boolean>());
     List<Thread> threads = new ArrayList<Thread>();
     for (int i = 0; i < 2; i++) {
@@ -318,6 +313,138 @@ public class EventTest {
       thread.join();
     }
     assertEquals(Arrays.asList(true, true), woke);
+  }
+
+  @Test(timeout = 30000)
+  public void testTimedWaitWokenWithNothingNewWaitsToTheDeadline()
+      throws RPCException, StreamException, InterruptedException {
+    Event event = testService.onTimer(60000, 1);
+    Thread notifier = new Thread(() -> {
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException exn) {
+        throw new RuntimeException(exn);
+      }
+      synchronized (event.getCondition()) {
+        event.getCondition().notifyAll();
+      }
+    });
+    synchronized (event.getCondition()) {
+      long startTime = System.currentTimeMillis();
+      notifier.start();
+      assertFalse(event.waitForWithTimeout(0.5));
+      assertTrue(System.currentTimeMillis() - startTime >= 450);
+    }
+    notifier.join();
+  }
+
+  @Test(timeout = 30000)
+  public void testFiringPassedToValueCallbackIsReplayed() {
+    Event event = unissuedEvent(4000003);
+    List<Object> values = Collections.synchronizedList(new ArrayList<Object>());
+    event.getStream().addCallback(values::add);
+    fire(4000003);
+    assertEquals(Arrays.asList(true), values);
+    List<Integer> calls = Collections.synchronizedList(new ArrayList<Integer>());
+    event.addCallback(() -> calls.add(1));
+    assertEquals(Arrays.asList(1), calls);
+  }
+
+  @Test(timeout = 30000)
+  public void testRemovedCallbackDoesNotTakeFiring() {
+    Event event = unissuedEvent(4000004);
+    StreamImpl stream = event.getStream().stream;
+    List<Integer> calls = Collections.synchronizedList(new ArrayList<Integer>());
+    int tag = event.addCallback(() -> calls.add(1));
+    StreamImpl.Callback callback = stream.getCallbacks().get(tag);
+    event.removeCallback(tag);
+    fire(4000004);
+    // Stands in for an update thread that copied the callback before its removal
+    stream.call(callback, 1, true);
+    event.addCallback(() -> calls.add(2));
+    assertEquals(Arrays.asList(2), calls);
+  }
+
+  /** An event over an id the server has not issued, so no update arrives for it. */
+  private Event unissuedEvent(long id) {
+    return new Event(connection, TestUtils.eventMessage(id));
+  }
+
+  private void fire(long id) {
+    connection.streamManager.update(id, ProcedureResult.newBuilder()
+        .setValue(ByteString.copyFrom(new byte[] {1}))
+        .build());
+  }
+
+  @Test(timeout = 30000)
+  public void testCallbackAddedAfterWaitIsNotCalled()
+      throws RPCException, StreamException {
+    Event event = unissuedEvent(4000000);
+    fire(4000000);
+    synchronized (event.getCondition()) {
+      assertTrue(event.waitForWithTimeout(1));
+    }
+    List<Integer> calls = Collections.synchronizedList(new ArrayList<Integer>());
+    event.addCallback(() -> calls.add(1));
+    assertEquals(0, calls.size());
+  }
+
+  @Test(timeout = 30000)
+  public void testCallbackAddedAfterAnUnseenFiringIsCalledOnce() {
+    Event event = unissuedEvent(4000001);
+    fire(4000001);
+    List<Integer> calls = Collections.synchronizedList(new ArrayList<Integer>());
+    event.addCallback(() -> calls.add(1));
+    assertEquals(Arrays.asList(1), calls);
+    // The firing has been passed to a callback
+    event.addCallback(() -> calls.add(2));
+    assertEquals(Arrays.asList(1), calls);
+  }
+
+  @Test(timeout = 30000)
+  public void testCallbackAddedAfterFiringPassedToAnotherIsNotCalled() {
+    Event event = unissuedEvent(4000002);
+    List<Integer> calls = Collections.synchronizedList(new ArrayList<Integer>());
+    event.addCallback(() -> calls.add(1));
+    fire(4000002);
+    assertEquals(Arrays.asList(1), calls);
+    event.addCallback(() -> calls.add(2));
+    assertEquals(Arrays.asList(1), calls);
+  }
+
+  @Test(timeout = 30000)
+  public void testCallbackRemovedBeforeItsReplayTakesNoFiring() {
+    Event event = unissuedEvent(4000005);
+    StreamImpl stream = event.getStream().stream;
+    List<Integer> calls = Collections.synchronizedList(new ArrayList<Integer>());
+    int tag = event.addCallback(() -> calls.add(1));
+    final StreamImpl.Callback callback = stream.getCallbacks().get(tag);
+    event.removeCallback(tag);
+    fire(4000005);
+    // Stands in for a late callback that reserves the firing and is removed before its call
+    long firing = stream.reserveReplay(0);
+    assertEquals(1, firing);
+    stream.replay(callback, firing);
+    event.addCallback(() -> calls.add(2));
+    assertEquals(Arrays.asList(2), calls);
+  }
+
+  @Test(timeout = 30000)
+  public void testTwoLateCallbacksDoNotBothReplayFiring() {
+    Event event = unissuedEvent(4000006);
+    StreamImpl stream = event.getStream().stream;
+    fire(4000006);
+    List<Integer> calls = Collections.synchronizedList(new ArrayList<Integer>());
+    // Stands in for a late callback that is added and reserves the firing
+    StreamImpl.Callback first = new StreamImpl.Callback((Object value) -> calls.add(1), true, -1);
+    synchronized (connection.streamManager.updateLock) {
+      stream.getCallbacks().put(first.tag, first);
+    }
+    long firing = stream.reserveReplay(0);
+    // Added between the reservation of the firing for the first callback and its replay
+    event.addCallback(() -> calls.add(2));
+    stream.replay(first, firing);
+    assertEquals(Arrays.asList(1), calls);
   }
 
   @Test(timeout = 30000)

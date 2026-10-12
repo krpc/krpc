@@ -122,12 +122,6 @@ The body of the loop calls ``waitForUpdate`` on the stream, which causes the pro
 the value changes. This prevents the loop from 'spinning' and so it does not consume processing
 resources whilst waiting.
 
-.. note::
-
-   The stream does not start receiving updates until the first call to ``waitForUpdate``. This means
-   that the example code will not miss any updates to the streams value, as it will have already
-   locked the condition variable before the first stream update is received.
-
 Callbacks
 ^^^^^^^^^
 
@@ -140,20 +134,13 @@ For example the following program registers two callbacks that are invoked when 
 
 .. literalinclude:: /scripts/client/java/Callbacks.java
 
-.. note::
-
-   When a stream is created it does not start receiving updates until ``start`` is called. This is
-   implicitly called when accessing the value of a stream, but as this example does not do this an
-   explicit call to ``start`` is required.
+A callback added to a stream that already has a value is called with that value straight away.
 
 .. note::
 
-   The callbacks are registered before the call to ``start`` so that stream updates are not missed.
-
-.. note::
-
-   The callback function may be called from a different thread to that which created the stream. Any
-   changes to shared state must therefore be protected with appropriate synchronization.
+   The callback function may be called from a different thread than the one that created the
+   stream. Any changes to shared state must therefore be protected with appropriate
+   synchronization.
 
 Stream Endings
 ^^^^^^^^^^^^^^
@@ -277,21 +264,6 @@ Client API Reference
    Stream objects implement ``hashCode`` and ``equals`` such that two stream objects are equal if
    they are bound to the same stream on the server.
 
-   .. method:: void start()
-   .. method:: void startAndWait()
-
-      Starts the stream. When a stream is created it does not start sending updates to the client
-      until this method is called.
-
-      The ``startAndWait`` method will block until at least one update has been received from the
-      server.
-
-      The ``start`` method starts the stream and returns immediately. Subsequent calls to ``get()``
-      may throw a ``StreamException``.
-
-      Both throw the exception that ended the stream, if it has ended. ``startAndWait`` also throws
-      it if the stream ends during the wait.
-
    .. method:: float getRate()
    .. method:: void setRate(float rate)
 
@@ -299,12 +271,9 @@ Client API Reference
 
    .. method:: T get()
 
-      Returns the most recent value for the stream. Throws the exception that ended the stream, if
-      it has ended, such as an exception thrown by the remote procedure. Throws a
-      ``StreamException`` if no update has been received from the server.
-
-      If the stream has not been started this method calls ``startAndWait()`` to start the stream
-      and wait until at least one update has been received.
+      Returns the most recent value for the stream, waiting for the first value if none has
+      arrived yet. Throws the exception that ended the stream, if it has ended, such as an
+      exception thrown by the remote procedure.
 
    .. method:: Object getCondition()
 
@@ -322,21 +291,19 @@ Client API Reference
 
       If *timeout* is specified it is the timeout in seconds for the operation.
 
-      If the stream has not been started this method calls ``start`` to start the stream (without
-      waiting for at least one update to be received). Throws the exception that ended the stream,
-      if it ends before or during the wait.
+      Throws the exception that ended the stream, if it ends before or during the wait.
 
    .. method:: int addCallback(java.util.function.Consumer<T> callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
-      stream. Returns a unique identifier for the callback which can be used to remove it.
-
-      An error ends the stream and skips the callbacks. Calling ``get()`` throws the error.
+      stream. If the stream already has a value, the callback is invoked with it straight away.
+      An error ends the stream and does not invoke the callback. Calling ``get()`` throws it.
+      Returns a unique identifier for the callback which can be used to remove it.
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
+         The callback function may be called from a different thread than the one that created the
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
@@ -369,11 +336,6 @@ Client API Reference
    Event objects implement ``hashCode`` and ``equals`` such that two event objects are equal if they
    are bound to the same underlying stream on the server.
 
-   .. method:: void start()
-
-      Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called. Throws the exception that ended the event, if it has ended.
-
    .. method:: Object getCondition()
 
       The condition variable that is notified (using ``notifyAll``) whenever the event occurs, and
@@ -390,14 +352,16 @@ Client API Reference
 
       If *timeout* is specified it is the timeout in seconds for the operation.
 
-      If the event has not been started this method calls ``start()`` to start the underlying
-      stream. Throws the exception that ended the event, if it ends before or during the wait.
+      Throws the exception that ended the event, if it ends before or during the wait.
 
    .. method:: int addCallback(java.lang.Runnable callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments. Returns an integer tag identifying the
-      callback which can be used to remove it later.
+      should be a function that takes zero arguments. If the event has occurred since the
+      last wait on this event object, and no callback has been invoked for it, the callback is
+      invoked straight away. A callback added after the event has ended is not invoked for an
+      earlier firing. An error ends the event and does not invoke the callback. Returns an integer
+      tag identifying the callback which can be used to remove it later.
 
    .. method:: void removeCallback(int tag)
 

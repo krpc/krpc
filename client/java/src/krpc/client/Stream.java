@@ -46,36 +46,6 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Start the stream. Throws the exception that ended the stream, if it has ended.
-   */
-  public void start() throws RPCException, StreamException {
-    stream.throwIfEnded();
-    if (stream.getStarted()) {
-      return;
-    }
-    stream.start();
-  }
-
-  /**
-   * Start the stream and wait for the first update. Throws the exception that ended the stream,
-   * if it ends before or during the wait.
-   */
-  public void startAndWait() throws RPCException, StreamException {
-    stream.throwIfEnded();
-    if (stream.getStarted()) {
-      return;
-    }
-    Object condition = stream.getCondition();
-    synchronized (condition) {
-      stream.start();
-      while (!stream.getUpdated() && stream.getEnding() == null) {
-        waitOn(condition, 0);
-      }
-      stream.throwIfEnded();
-    }
-  }
-
-  /**
    * The rate of the stream, in Hertz. Zero if the rate is unlimted.
    */
   public float getRate() throws RPCException {
@@ -90,20 +60,16 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Get the most recent value for the stream. Throws the exception that ended the stream, if it
-   * has ended.
+   * Get the most recent value for the stream, waiting for the first value if none has arrived
+   * yet. Throws the exception that ended the stream, if it has ended.
    */
   @SuppressWarnings("unchecked")
   public T get() throws RPCException, StreamException {
-    stream.throwIfEnded();
-    if (!stream.getStarted()) {
-      startAndWait();
-    }
-    return (T) stream.getValue();
+    return (T) stream.waitForValue();
   }
 
   /**
-   * Condition variable that is notified when the streams value changes.
+   * Condition variable that is notified when the stream's value changes, and when the stream ends.
    */
   public Object getCondition() {
     return stream.getCondition();
@@ -129,9 +95,6 @@ public class Stream<T> implements Comparable<Stream<T>> {
   /** A deadline of zero waits indefinitely. */
   private boolean waitForUpdateUntil(long deadline) throws RPCException, StreamException {
     stream.throwIfEnded();
-    if (!stream.getStarted()) {
-      stream.start();
-    }
     long version = stream.getVersion();
     while (stream.getVersion() == version) {
       stream.throwIfEnded();
@@ -177,8 +140,9 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Add a callback that is invoked whenever the stream is updated with a value. An error ends
-   * the stream and skips the callbacks.
+   * Add a callback that is invoked whenever the stream is updated with a value. It is invoked
+   * straight away with the value the stream already has, if any. An error ends the stream and
+   * does not invoke the callback.
    * Returns an integer tag for the callback which uniquely identifies it,
    * and allows it to be removed using removeCallback()
    */

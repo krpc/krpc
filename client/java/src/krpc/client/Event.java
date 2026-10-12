@@ -11,7 +11,7 @@ import krpc.schema.KRPC.Type.TypeCode;
 public class Event implements Comparable<Event> {
   private Stream<Boolean> stream;
   // The number of firings when a wait on this handle last returned
-  private long seen = 0;
+  private volatile long seen = 0;
 
   Event(Connection connection, KRPC.Event event) {
     Type returnType = Type.newBuilder().setCode(TypeCode.BOOL).build();
@@ -45,14 +45,7 @@ public class Event implements Comparable<Event> {
   }
 
   /**
-   * Start the event. Throws the exception that ended the event, if it has ended.
-   */
-  public void start() throws RPCException, StreamException {
-    stream.start();
-  }
-
-  /**
-   * Condition variable that is notified when the event occurs.
+   * Condition variable that is notified when the event occurs, and when the event ends.
    */
   public Object getCondition() {
     return stream.getCondition();
@@ -80,10 +73,6 @@ public class Event implements Comparable<Event> {
   /** A deadline of zero waits indefinitely. */
   private boolean waitForUntil(long deadline) throws RPCException, StreamException {
     StreamImpl impl = stream.stream;
-    if (!impl.getStarted()) {
-      impl.throwIfEnded();
-      impl.start();
-    }
     long seenOnEntry = seen;
     while (impl.getFired() <= seenOnEntry) {
       impl.throwIfEnded();
@@ -96,17 +85,19 @@ public class Event implements Comparable<Event> {
   }
 
   /**
-   * Add a callback that is invoked whenever the stream is updated.
+   * Add a callback that is invoked whenever the event occurs. It is invoked straight away if the
+   * event has occurred since the last wait on this event object, and no callback has been invoked
+   * for it. A callback added after the event has ended is not invoked for an earlier firing. An
+   * error ends the event and does not invoke the callback.
    * Returns an integer tag for the callback which uniquely identifies it,
    * and allows it to be removed using removeCallback()
    */
   public int addCallback(Runnable callback) {
-    return stream.addCallback(
-        (Boolean value) -> {
-          if (value) {
-            callback.run();
-          }
-        });
+    long seenNow;
+    synchronized (stream.getCondition()) {
+      seenNow = seen;
+    }
+    return stream.stream.addEventCallback(callback, seenNow);
   }
 
   /**

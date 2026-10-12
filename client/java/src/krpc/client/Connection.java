@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import krpc.schema.KRPC;
 
 /** A connection to a kRPC server. */
@@ -28,6 +29,14 @@ public class Connection implements AutoCloseable {
   private CodedOutputStream rpcOutputStream;
   private CodedInputStream rpcInputStream;
   StreamManager streamManager;
+  // The return type code of each procedure, by service and then procedure name. Accessed with
+  // the connection lock held.
+  private final Map<String, Map<String, KRPC.Type.TypeCode>> returnTypeCodes =
+      new HashMap<String, Map<String, KRPC.Type.TypeCode>>();
+  // Whether returnTypeCodes holds every procedure the server lists
+  private boolean listedReturnTypeCodes = false;
+  // The class loader the generated stubs are looked up in
+  ClassLoader stubsLoader = Connection.class.getClassLoader();
 
   private static final Map<Class<?>, Class<?>> WRAPPER_TYPES = new HashMap<Class<?>, Class<?>>();
 
@@ -375,17 +384,121 @@ public class Connection implements AutoCloseable {
 
   KRPC.Response invokeInternal(KRPC.ProcedureCall call) throws RPCException {
     try {
-      KRPC.Request request = KRPC.Request.newBuilder().addCalls(call).build();
-      byte[] data;
       synchronized (connectionLock) {
-        rpcOutputStream.writeMessageNoTag(request);
-        rpcOutputStream.flush();
-        int size = rpcInputStream.readRawVarint32();
-        data = rpcInputStream.readRawBytes(size);
+        KRPC.Response response = exchange(call);
+        noteStreamId(call, response);
+        return response;
       }
-      return KRPC.Response.parseFrom(data);
     } catch (IOException exn) {
       throw new RPCException("Failed to invoke call", exn);
+    }
+  }
+
+  /** Sends a call and reads its reply. Called with the connection lock held. */
+  private KRPC.Response exchange(KRPC.ProcedureCall call) throws IOException {
+    KRPC.Request request = KRPC.Request.newBuilder().addCalls(call).build();
+    rpcOutputStream.writeMessageNoTag(request);
+    rpcOutputStream.flush();
+    int size = rpcInputStream.readRawVarint32();
+    return KRPC.Response.parseFrom(rpcInputStream.readRawBytes(size));
+  }
+
+  /**
+   * Notes the id of a stream or event the server returned, or of a stream the call removed.
+   * Called with the connection lock held, in the order the replies arrive, so the stream manager
+   * keeps the latest value and any ending sent for the stream before it is registered. Best
+   * effort, as the call itself has succeeded.
+   */
+  private void noteStreamId(KRPC.ProcedureCall call, KRPC.Response response) {
+    try {
+      noteStreamIdOrThrow(call, response);
+    } catch (IOException exn) {
+      // An id not noted keeps its early results only while it is above every noted id
+    }
+  }
+
+  private void noteStreamIdOrThrow(KRPC.ProcedureCall call, KRPC.Response response)
+      throws IOException {
+    if (call.getService().equals("KRPC") && call.getProcedure().equals("RemoveStream")) {
+      if (response.hasError() || response.getResultsCount() == 0
+          || response.getResults(0).hasError()) {
+        return;
+      }
+      for (KRPC.Argument argument : call.getArgumentsList()) {
+        if (argument.getPosition() == 0) {
+          streamManager.noteRemoved(Encoder.decodeUint64(argument.getValue()));
+        }
+      }
+      return;
+    }
+    KRPC.Type.TypeCode code = getReturnTypeCode(call.getService(), call.getProcedure());
+    if (code != KRPC.Type.TypeCode.STREAM && code != KRPC.Type.TypeCode.EVENT) {
+      return;
+    }
+    if (response.hasError() || response.getResultsCount() == 0) {
+      return;
+    }
+    KRPC.ProcedureResult result = response.getResults(0);
+    if (result.hasError() || result.getIsNull()) {
+      return;
+    }
+    KRPC.Stream stream;
+    if (code == KRPC.Type.TypeCode.STREAM) {
+      stream = KRPC.Stream.parseFrom(result.getValue());
+    } else {
+      stream = KRPC.Event.parseFrom(result.getValue()).getStream();
+    }
+    streamManager.noteIssued(stream.getId());
+  }
+
+  /**
+   * The return type code of a procedure, looked up in its service's generated stubs, or in the
+   * server's list of services if the stubs are not loaded. NONE if the procedure returns nothing.
+   * Called with the connection lock held.
+   */
+  private KRPC.Type.TypeCode getReturnTypeCode(String service, String procedure)
+      throws IOException {
+    Map<String, KRPC.Type.TypeCode> codes =
+        returnTypeCodes.computeIfAbsent(service, key -> new HashMap<String, KRPC.Type.TypeCode>());
+    KRPC.Type.TypeCode code = codes.get(procedure);
+    if (code != null) {
+      return code;
+    }
+    try {
+      Class<?> types =
+          Class.forName("krpc.client.services." + service + "$_Types", true, stubsLoader);
+      Method getReturnType = types.getMethod("getReturnType", String.class);
+      KRPC.Type type = (KRPC.Type) getReturnType.invoke(null, procedure);
+      code = type == null ? KRPC.Type.TypeCode.NONE : type.getCode();
+      codes.put(procedure, code);
+      return code;
+    } catch (ReflectiveOperationException | LinkageError exn) {
+      // The stubs for the service or procedure are not loaded, or do not link
+    }
+    if (!listedReturnTypeCodes) {
+      // Listed once, even if the listing fails
+      listedReturnTypeCodes = true;
+      listReturnTypeCodes();
+    }
+    return codes.computeIfAbsent(procedure, key -> KRPC.Type.TypeCode.NONE);
+  }
+
+  /**
+   * Stores the return type code of every procedure the server lists. Called with the connection
+   * lock held.
+   */
+  private void listReturnTypeCodes() throws IOException {
+    KRPC.Response response = exchange(buildCall("KRPC", "GetServices"));
+    if (getErrorFromResponse(response) != null) {
+      return;
+    }
+    KRPC.Services services = KRPC.Services.parseFrom(getResultFromResponse(response).getValue());
+    for (KRPC.Service service : services.getServicesList()) {
+      Map<String, KRPC.Type.TypeCode> codes = returnTypeCodes.computeIfAbsent(
+          service.getName(), key -> new HashMap<String, KRPC.Type.TypeCode>());
+      for (KRPC.Procedure procedure : service.getProceduresList()) {
+        codes.putIfAbsent(procedure.getName(), procedure.getReturnType().getCode());
+      }
     }
   }
 
@@ -430,7 +543,8 @@ public class Connection implements AutoCloseable {
     return buildCall(service, procedure, args);
   }
 
-  private Map<String, Class<?>> exceptionTypes = new HashMap<String, Class<?>>();
+  // Read on the stream update thread too
+  private Map<String, Class<?>> exceptionTypes = new ConcurrentHashMap<String, Class<?>>();
 
   /**
    * Add an exception type.
