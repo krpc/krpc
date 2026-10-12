@@ -20,7 +20,8 @@ Client::Client()
     : lock(new std::mutex),
       listed_returns(std::make_shared<ListedReturns>()),
       exception_throwers(std::make_shared<decltype(exception_throwers)::element_type>()),
-      exception_throwers_lock(new std::mutex) {}
+      exception_throwers_lock(new std::mutex),
+      function_types_lock(new std::mutex) {}
 
 Client::Client(const std::string& name, const std::string& address, unsigned int rpc_port,
                unsigned int stream_port, std::chrono::milliseconds timeout)
@@ -234,6 +235,32 @@ void Client::add_exception_thrower(const std::string& service, const std::string
                                    const std::function<void(std::string)>& thrower) {
   std::lock_guard<std::mutex> guard(*exception_throwers_lock);
   (*exception_throwers)[std::make_pair(service, name)] = thrower;
+}
+
+bool Client::get_function_return_type(uint64_t id, schema::Type* type) const {
+  std::lock_guard<std::mutex> guard(*function_types_lock);
+  auto entry = function_return_types.find(id);
+  if (entry == function_return_types.end()) return false;
+  *type = entry->second;
+  return true;
+}
+
+void Client::set_function_return_type(uint64_t id, const schema::Type& type) {
+  std::lock_guard<std::mutex> guard(*function_types_lock);
+  function_return_types[id] = type;
+}
+
+bool Client::get_function_parameter_types(uint64_t id, std::vector<schema::Type>* types) const {
+  std::lock_guard<std::mutex> guard(*function_types_lock);
+  auto entry = function_parameter_types.find(id);
+  if (entry == function_parameter_types.end()) return false;
+  *types = entry->second;
+  return true;
+}
+
+void Client::set_function_parameter_types(uint64_t id, const std::vector<schema::Type>& types) {
+  std::lock_guard<std::mutex> guard(*function_types_lock);
+  function_parameter_types[id] = types;
 }
 
 void Client::throw_exception(const schema::Error& error) const {
