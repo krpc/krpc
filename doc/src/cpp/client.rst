@@ -392,6 +392,7 @@ Client API Reference
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
       stream. If the stream already has a value, the callback is invoked with it straight away.
+      An error from the stream does not invoke the callback. Calling the stream throws it.
       Returns a unique identifier for the callback which can be used to remove it.
 
       .. note::
@@ -473,8 +474,9 @@ Client API Reference
    .. function:: int add_callback(const std::function<void()>& callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments. Returns a unique identifier for the callback
-      which can be used to remove the callback.
+      should be a function that takes zero arguments. An error from the event does not invoke the
+      callback. Waiting on the event throws it. Returns a unique identifier for the callback which
+      can be used to remove the callback.
 
    .. function:: void remove_callback(int tag)
 

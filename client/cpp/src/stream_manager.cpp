@@ -59,50 +59,47 @@ void StreamManager::note_issued(uint64_t id) {
 }
 
 std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
-  std::shared_ptr<StreamImpl> stream_impl;
-  // The result that ends the stream, if one is pending
-  const schema::ProcedureResult* final_result = nullptr;
-  std::vector<schema::ProcedureResult> results;
-  bool was_closed = false;
+  auto stream_impl = std::make_shared<StreamImpl>(client, id, update_lock);
+  std::exception_ptr ending;
+  StreamImpl::EndCallbacks end_callbacks;
   {
+    // The kept results are applied under the locks an update takes, so that no update for the
+    // id lands between them. The stream is new, so it has no waiters or callbacks yet.
+    std::lock_guard<std::mutex> condition_guard(stream_impl->get_condition_mutex());
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
     auto it = streams.find(id);
     if (it != streams.end())
       if (auto stream = it->second.lock()) return stream;
-    stream_impl = std::make_shared<StreamImpl>(client, id, update_lock);
-    was_closed = closed;
     unregistered.erase(id);
+    Pending kept;
     auto pending_it = pending.find(id);
     if (pending_it != pending.end()) {
-      results.swap(pending_it->second);
+      kept = std::move(pending_it->second);
       pending.erase(pending_it);
     }
-    if (!was_closed) {
-      // The pending results are stored as an update would store them. The stream is new, so
-      // it has no waiters or callbacks yet.
-      for (const auto& result : results) {
-        if (result.has_error()) {
-          final_result = &result;
-          break;
-        }
-        stream_impl->store(result.value(), result.is_null());
-      }
+    if (closed) {
+      ending = closed_error();
+    } else {
+      if (kept.value) stream_impl->store(kept.value->value(), kept.value->is_null());
       // A final result ends the stream, and the server has already removed it
-      if (!final_result) streams[id] = stream_impl;
+      if (kept.ending)
+        ending = error_ptr(kept.ending->error());
+      else
+        streams[id] = stream_impl;
     }
+    if (ending) end_callbacks = stream_impl->end_held(ending);
   }
-  std::exception_ptr ending;
-  if (was_closed) {
-    ending = closed_error();
-  } else if (final_result) {
-    try {
-      client->throw_exception(final_result->error());
-    } catch (...) {
-      ending = std::current_exception();
-    }
-  }
-  if (ending) call_end_callbacks(stream_impl->end(ending), ending);
+  call_end_callbacks(end_callbacks, ending);
   return stream_impl;
+}
+
+std::exception_ptr StreamManager::error_ptr(const schema::Error& error) const {
+  try {
+    client->throw_exception(error);
+  } catch (...) {
+    return std::current_exception();
+  }
+  return nullptr;
 }
 
 void StreamManager::remove_stream(uint64_t id) {
@@ -159,8 +156,16 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
     if (it == streams.end()) {
       // A result for a stream not registered yet is kept. One for an id below those is for
       // a stream that has ended.
-      if (static_cast<int64_t>(id) > issued || unregistered.count(id) > 0)
-        pending[id].push_back(result);
+      if (static_cast<int64_t>(id) > issued || unregistered.count(id) > 0) {
+        auto& kept = pending[id];
+        if (!kept.ending) {
+          auto copy = std::make_shared<schema::ProcedureResult>(result);
+          if (result.has_error())
+            kept.ending = copy;
+          else
+            kept.value = copy;
+        }
+      }
       return;
     }
     stream = it->second.lock();
@@ -170,19 +175,15 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   }
 
   if (result.has_error()) {
-    std::exception_ptr ending;
-    try {
-      client->throw_exception(result.error());
-    } catch (...) {
-      ending = std::current_exception();
-    }
+    auto ending = error_ptr(result.error());
     call_end_callbacks(stream->end(ending), ending);
     return;
   }
 
   StreamImpl::Callbacks callbacks;
-  if (!stream->update_and_notify(result.value(), result.is_null(), &callbacks)) return;
-  call_callbacks(callbacks, result.value(), result.is_null());
+  uint64_t version = 0;
+  if (!stream->update_and_notify(result.value(), result.is_null(), &callbacks, &version)) return;
+  stream->call_callbacks(callbacks, result.value(), result.is_null(), version);
 }
 
 std::condition_variable& StreamManager::get_update_condition() { return condition; }

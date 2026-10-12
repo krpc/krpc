@@ -7,9 +7,11 @@
 #include <atomic>
 #include <chrono>  // NOLINT(build/c++11)
 #include <cstddef>
+#include <cstdint>
 #include <exception>
 #include <functional>
 #include <memory>
+#include <mutex>  // NOLINT(build/c++11)
 #include <optional>
 #include <string>
 #include <thread>  // NOLINT(build/c++11)
@@ -306,6 +308,50 @@ TEST_F(test_stream, test_result_before_the_add_reply_is_kept) {
   bool is_null = false;
   ASSERT_EQ("\x2a", manager.get_stream(3)->get_data(&is_null));
   ASSERT_EQ("\x2b", manager.get_stream(4)->get_data(&is_null));
+}
+
+// Only the latest value is kept, as a new stream has no callbacks to give the others to
+TEST_F(test_stream, test_kept_value_is_the_latest) {
+  idle_stream_manager idle(&conn);
+  auto& manager = *idle.manager;
+  manager.note_issued(3);
+  manager.update(3, result_value("\x2a"));
+  manager.update(3, result_value("\x2b"));
+  auto stream = manager.get_stream(3);
+  bool is_null = false;
+  ASSERT_EQ("\x2b", stream->get_data(&is_null));
+  ASSERT_EQ(1, stream->get_version());
+}
+
+TEST_F(test_stream, test_result_after_a_kept_ending_is_dropped) {
+  idle_stream_manager idle(&conn);
+  auto& manager = *idle.manager;
+  manager.note_issued(3);
+  manager.update(3, result_value("\x2a"));
+  krpc::schema::ProcedureResult error;
+  error.mutable_error()->set_description("ended");
+  manager.update(3, error);
+  manager.update(3, result_value("\x2b"));
+  auto stream = manager.get_stream(3);
+  ASSERT_TRUE(stream->has_ended());
+  ASSERT_EQ(1, stream->get_version());
+  bool is_null = false;
+  ASSERT_THROW(stream->get_data(&is_null), krpc::RPCError);
+}
+
+// The first call of a new callback is skipped if an update has already passed it a later value
+TEST_F(test_stream, test_callback_skips_an_older_value) {
+  krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
+  krpc::StreamImpl::Callbacks callbacks;
+  uint64_t version = 0;
+  ASSERT_TRUE(stream.update_and_notify("a", false, &callbacks, &version));
+  std::vector<std::string> values;
+  stream.add_callback([&values](const std::string& value, bool) { values.push_back(value); });
+  ASSERT_TRUE(stream.update_and_notify("b", false, &callbacks, &version));
+  stream.call_callbacks(callbacks, "b", false, version);
+  // A first call with the earlier value, made after the update
+  stream.call_callbacks(callbacks, "a", false, 1);
+  ASSERT_EQ((std::vector<std::string>{"a", "b"}), values);
 }
 
 TEST_F(test_stream, test_result_for_an_ended_stream_is_dropped) {

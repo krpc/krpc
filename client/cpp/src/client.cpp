@@ -112,8 +112,8 @@ schema::ProcedureResult Client::send_request(const schema::Request& request, New
 }
 
 // Note the id of a new stream with the stream manager. Called with lock held, so ids are noted
-// in the order the replies arrive, and the manager keeps every result sent for a stream before
-// it is registered.
+// in the order the replies arrive, and the manager keeps the latest value and an ending sent for
+// a stream before it is registered.
 void Client::note_stream_id(NewStream new_stream) {
   if (!stream_manager || response_buffer.has_error() || response_buffer.results_size() == 0) return;
   const auto& result = response_buffer.results(0);

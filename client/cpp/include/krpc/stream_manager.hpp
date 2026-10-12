@@ -3,6 +3,7 @@
 #include <atomic>
 #include <condition_variable>  // NOLINT(build/c++11)
 #include <cstdint>
+#include <exception>
 #include <functional>
 #include <map>
 #include <memory>
@@ -17,6 +18,7 @@ class Client;
 class Connection;
 class StreamImpl;
 namespace schema {
+class Error;
 class ProcedureCall;
 class ProcedureResult;
 }  // namespace schema
@@ -51,6 +53,8 @@ class StreamManager {
   static void read_updates(StreamManager* stream_manager,
                            const std::shared_ptr<Connection>& connection,
                            const std::shared_ptr<std::atomic_bool>& stop);
+  /** The exception an error is thrown as. */
+  std::exception_ptr error_ptr(const schema::Error& error) const;
   Client* client;
   std::shared_ptr<Connection> connection;
   std::map<uint64_t, std::weak_ptr<StreamImpl>> streams;
@@ -59,7 +63,13 @@ class StreamManager {
   // is registered, and is kept until it is.
   int64_t issued;
   std::set<uint64_t> unregistered;
-  std::map<uint64_t, std::vector<schema::ProcedureResult>> pending;
+  // The latest value and the ending kept for a stream not registered yet. A result after an
+  // ending is dropped.
+  struct Pending {
+    std::shared_ptr<schema::ProcedureResult> value;
+    std::shared_ptr<schema::ProcedureResult> ending;
+  };
+  std::map<uint64_t, Pending> pending;
   std::shared_ptr<std::recursive_mutex> update_lock;
   std::shared_ptr<std::atomic_bool> stop;
   // Whether the connection has closed, after which a stream is ended as it is added

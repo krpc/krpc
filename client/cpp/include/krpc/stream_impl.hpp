@@ -27,13 +27,25 @@ class StreamImpl {
       exception that ended the stream, if it has ended. */
   std::string get_data(bool* is_null);
   typedef std::function<void(const std::string&, bool)> Callback;
-  typedef std::map<int, Callback> Callbacks;
+  /** A callback, and the version of the last value it was called with. */
+  struct CallbackEntry {
+    Callback callback;
+    uint64_t delivered;
+  };
+  typedef std::map<int, std::shared_ptr<CallbackEntry>> Callbacks;
   /** Store a value, with the update lock held. Returns false, storing nothing, if the stream
       has ended. */
   bool store(const std::string& data, bool is_null);
   /** Store a value and wake the threads waiting for one. Returns false, storing nothing, if
-      the stream has ended. Otherwise sets callbacks to those to call with the value. */
-  bool update_and_notify(const std::string& data, bool is_null, Callbacks* callbacks);
+      the stream has ended. Otherwise sets callbacks to those to call with the value, and
+      version to its version. */
+  bool update_and_notify(const std::string& data, bool is_null, Callbacks* callbacks,
+                         uint64_t* version);
+  /** Call each callback with a value, with no lock held. A callback already called with this
+      version or a later one is skipped. A callback that throws is reported, and the rest are
+      still called. */
+  void call_callbacks(const Callbacks& callbacks, const std::string& data, bool is_null,
+                      uint64_t version);
   bool has_updated() const;
   /** The number of values received. */
   uint64_t get_version() const;
@@ -47,6 +59,8 @@ class StreamImpl {
   /** End the stream and wake its waiters. Returns the end callbacks to call, with no lock
       held, or none if the stream had already ended. */
   EndCallbacks end(const std::exception_ptr& ending);
+  /** End the stream, with the condition held. */
+  EndCallbacks end_held(const std::exception_ptr& ending);
   /** Call fn with a lock that holds the condition. A thread that has acquired the condition
       through any handle keeps its hold, and any other thread takes the condition for the
       call. */
@@ -96,10 +110,6 @@ class StreamImpl {
   int next_end_callback_tag;
   float _rate;
 };
-
-/** Call each callback with a value. A callback that throws is reported, and the rest are
-    still called. */
-void call_callbacks(const StreamImpl::Callbacks& callbacks, const std::string& data, bool is_null);
 
 /** Call each end callback with the ending. A callback that throws is reported, and the
     rest are still called. */

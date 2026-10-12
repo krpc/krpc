@@ -50,7 +50,8 @@ class Stream {
   typedef std::function<void(T)> Callback;
   /**
    * Add a callback that is invoked whenever the stream is updated. It is invoked straight
-   * away with the value the stream already has, if any. Returns an integer tag for the
+   * away with the value the stream already has, if any. An error from the stream does not
+   * invoke the callback. Calling the stream throws it. Returns an integer tag for the
    * callback which uniquely identifies it, and allows it to be removed using remove_callback()
    */
   int add_callback(const Callback& callback);
