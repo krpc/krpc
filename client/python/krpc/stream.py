@@ -1,7 +1,7 @@
 from __future__ import annotations
 import threading
+import time
 from typing import Any, Callable, Optional, TYPE_CHECKING
-from krpc.error import StreamError
 from krpc.types import TypeBase
 import krpc.schema.KRPC_pb2 as KRPC
 
@@ -36,19 +36,19 @@ class Stream:
     def start(self, wait: bool = True) -> None:
         """Start the stream. If wait is true,
         blocks until the stream has received its first update.
-        Raises a StreamError if the stream has been removed, before or during
-        the wait."""
-        self._check_not_removed()
-        if self._stream.started:
+        Raises the error that ended the stream, if it ends before or during the wait."""
+        stream = self._stream
+        stream.raise_if_ended()
+        if stream.started:
             return
         if not wait:
-            self._stream.start()
+            stream.start()
         else:
-            with self._stream.condition:
-                self._check_not_removed()
-                self._stream.start()
-                self._stream.condition.wait()
-                self._check_not_removed()
+            with stream.condition:
+                stream.start()
+                while not stream.updated and not stream.ended:
+                    stream.condition.wait()
+                stream.raise_if_ended()
 
     @property
     def rate(self) -> float:
@@ -63,39 +63,42 @@ class Stream:
         self._stream.rate = value
 
     def __call__(self):  # type: ignore[no-untyped-def]
-        """Get the most recent value for this stream."""
-        self._check_not_removed()
+        """Get the most recent value for this stream. Raises the error that ended the
+        stream, if it has ended."""
+        self._stream.raise_if_ended()
         if not self._stream.started:
             self.start()
-        value = self._stream.value
-        if isinstance(value, Exception):
-            raise value
-        return value
+        return self._stream.value
 
     @property
     def condition(self) -> threading.Condition:
         """Condition variable that is notified when the stream updates."""
         return self._stream.condition
 
-    def wait(self, timeout: Optional[float] = None) -> None:
+    def wait(self, timeout: Optional[float] = None) -> bool:
         """Wait until the next stream update or a timeout occurs.
         The condition variable must be locked before calling this method.
 
         When timeout is not None, it should be a floating point number
-        specifying the timeout in seconds for the operation. Raises a
-        StreamError if the stream has been removed, before or during the wait."""
-        self._check_not_removed()
-        if not self._stream.started:
-            self._stream.start()
-        self._stream.condition.wait(timeout=timeout)
-        self._check_not_removed()
-
-    def _check_not_removed(self) -> None:
-        """Raises a StreamError if the stream has been removed, through this
-        handle or another one for the same stream. No update arrives for a
-        removed stream, so a wait for one would never return."""
-        if self._stream.removed:
-            raise StreamError("Stream does not exist")
+        specifying the timeout in seconds for the operation. Returns true if the
+        stream updated, and false on a timeout. Raises the error that ended the
+        stream, if it ends before or during the wait."""
+        stream = self._stream
+        stream.raise_if_ended()
+        if not stream.started:
+            stream.start()
+        version = stream.version
+        deadline = None if timeout is None else time.monotonic() + timeout
+        while stream.version == version:
+            stream.raise_if_ended()
+            if deadline is None:
+                stream.condition.wait()
+            else:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    return False
+                stream.condition.wait(remaining)
+        return True
 
     def add_callback(self, callback: Callable[[Any], None]) -> None:
         """Add a callback that is invoked whenever the stream is updated. An
@@ -105,6 +108,15 @@ class Stream:
     def remove_callback(self, callback: Callable[[Any], None]) -> None:
         """Remove a callback."""
         self._stream.remove_callback(callback)
+
+    def add_end_callback(self, callback: Callable[[Exception], None]) -> None:
+        """Add a callback that is invoked once when the stream ends, with the error
+        that ended it. It is invoked straight away if the stream has already ended."""
+        self._stream.add_end_callback(callback)
+
+    def remove_end_callback(self, callback: Callable[[Exception], None]) -> None:
+        """Remove an end callback."""
+        self._stream.remove_end_callback(callback)
 
     def remove(self) -> None:
         """Remove the stream"""

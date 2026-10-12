@@ -177,6 +177,23 @@ For example the following program registers two callbacks that are invoked when 
    The callback function may be called from a different thread to that which created the stream. Any
    changes to shared state must therefore be protected with appropriate synchronization.
 
+Stream Endings
+^^^^^^^^^^^^^^
+
+A stream ends when its procedure raises an exception, when the server removes it, when you remove
+it, or when the connection closes. From then on, calling the stream or waiting on it raises the
+exception that ended it. The following example streams the temperature of a part until the part is
+destroyed:
+
+.. literalinclude:: /scripts/client/python/StreamEnd.py
+
+A stream that the server removes, such as an event that has finished, ends with
+``StreamRemovedException`` from the ``KRPC`` service. A stream you remove ends with ``StreamError``,
+and a closed connection with ``ConnectionError``.
+
+To handle an ending in a callback, add an end callback with
+:meth:`krpc.stream.Stream.add_end_callback`. It is called once, with the exception.
+
 .. _python-client-events:
 
 Custom Events
@@ -192,6 +209,10 @@ expression ``mean_altitude > 1000`` and then creates an event that will be trigg
 expression returns true:
 
 .. literalinclude:: /scripts/client/python/Event.py
+
+A call to ``wait`` returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+``wait`` return once.
 
 Client API Reference
 --------------------
@@ -330,7 +351,7 @@ Client API Reference
       :meth:`__call__` may raise a ``StreamError`` exception if the stream does not yet contain a
       value.
 
-      Raises ``StreamError`` if the stream has been removed, before or during the wait.
+      Raises the exception that ended the stream, if it ends before or during the wait.
 
    .. attribute:: rate
 
@@ -338,9 +359,9 @@ Client API Reference
 
    .. method:: __call__()
 
-      Returns the most recent value for the stream. If executing the remote procedure for the stream
-      throws an exception, calling this method will rethrow the exception. Raises a ``StreamError``
-      exception if no update has been received from the server, or if the stream has been removed.
+      Returns the most recent value for the stream. Raises the exception that ended the stream, if
+      it has ended, such as an exception thrown by the remote procedure. Raises a ``StreamError``
+      exception if no update has been received from the server.
 
       If the stream has not been started this method calls ``start(True)`` to start the stream and
       wait until at least one update has been received.
@@ -352,7 +373,8 @@ Client API Reference
 
    .. method:: wait(timeout=None)
 
-      This method blocks until the value of the stream changes or the operation times out.
+      This method blocks until the value of the stream changes or the operation times out. Returns
+      ``True`` if the value changed, and ``False`` on a timeout.
 
       The streams condition variable must be locked before calling this method.
 
@@ -360,8 +382,8 @@ Client API Reference
       the timeout in seconds for the operation.
 
       If the stream has not been started this method calls ``start(False)`` to start the stream
-      (without waiting for at least one update to be received). Raises ``StreamError`` if the
-      stream has been removed, before or during the wait.
+      (without waiting for at least one update to be received). Raises the exception that ended
+      the stream, if it ends before or during the wait.
 
    .. method:: add_callback(callback)
 
@@ -379,9 +401,20 @@ Client API Reference
 
       Removes a callback function from the stream.
 
+   .. method:: add_end_callback(callback)
+
+      Adds a callback function that is invoked once when the stream ends. The callback function
+      should take one argument, which is passed the exception that ended the stream. It is
+      invoked straight away if the stream has already ended.
+
+   .. method:: remove_end_callback(callback)
+
+      Removes an end callback function from the stream.
+
    .. method:: remove()
 
-      Removes the stream from the server.
+      Removes the stream from the server. Every copy of the stream object refers to the same
+      stream.
 
 .. class:: krpc.event.Event
 
@@ -391,7 +424,7 @@ Client API Reference
    .. method:: start()
 
       Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called. Raises ``StreamError`` if the event has been removed.
+      this method is called. Raises the exception that ended the event, if it has ended.
 
    .. attribute:: condition
 
@@ -400,7 +433,9 @@ Client API Reference
 
    .. method:: wait(timeout=None)
 
-      This method blocks until the event occurs or the operation times out.
+      This method blocks until the event occurs or the operation times out. It returns straight
+      away if the event has occurred since the previous call on this event object. Returns
+      ``True`` if the event occurred, and ``False`` on a timeout.
 
       The events condition variable must be locked before calling this method.
 
@@ -408,7 +443,7 @@ Client API Reference
       the timeout in seconds for the operation.
 
       If the event has not been started this method calls ``start()`` to start the underlying
-      stream. Raises ``StreamError`` if the event has been removed.
+      stream. Raises the exception that ended the event, if it ends before or during the wait.
 
    .. method:: add_callback(callback)
 
@@ -418,6 +453,15 @@ Client API Reference
    .. method:: remove_callback(callback)
 
       Removes a callback function from the event.
+
+   .. method:: add_end_callback(callback)
+
+      Adds a callback function that is invoked once when the event ends, with the exception that
+      ended it. It is invoked straight away if the event has already ended.
+
+   .. method:: remove_end_callback(callback)
+
+      Removes an end callback function from the event.
 
    .. method:: remove()
 
