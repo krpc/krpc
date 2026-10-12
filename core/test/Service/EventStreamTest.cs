@@ -68,6 +68,14 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void AProcedureWithNoReturnValueCannotBeStreamed ()
+        {
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => new ProcedureCallStream (new ProcedureCall ("TestService", "ProcedureNoArgsNoReturn")));
+            StringAssert.Contains ("does not return a value", exn.Message);
+        }
+
+        [Test]
         public void AddEventCannotBeStreamed ()
         {
             var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
