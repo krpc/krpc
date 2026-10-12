@@ -225,6 +225,24 @@ TEST_F(test_stream, test_remove_stream_twice) {
   ASSERT_THROW(s(), krpc::StreamError);
 }
 
+// The server stops sending updates for a stream removed by id after its handles are gone
+TEST_F(test_stream, test_remove_stream_with_no_handles) {
+  auto client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto stream =
+      client->add_stream(service.counter_call("test_stream.test_remove_stream_with_no_handles"));
+  auto id = stream->get_id();
+  stream.reset();
+  client->remove_stream(id);
+  std::atomic<int> updates(0);
+  client->add_stream_update_callback([&updates] { updates++; });
+  // An update sent before the removal can still arrive
+  wait();
+  updates.store(0);
+  wait();
+  ASSERT_EQ(0, updates.load());
+}
+
 TEST_F(test_stream, test_removing_a_stream_again_through_another_handle) {
   auto first = test_service.int32_to_string_stream(46);
   auto second = test_service.int32_to_string_stream(46);

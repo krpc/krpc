@@ -132,8 +132,13 @@ void StreamManager::remove_stream(uint64_t id) {
     auto it = streams.find(id);
     if (it == streams.end()) return;
     stream = it->second.lock();
+    // A stream whose handles are all gone is removed here
+    if (!stream) streams.erase(it);
   }
-  if (stream) remove_stream(stream.get());
+  if (stream)
+    remove_stream(stream.get());
+  else
+    services::KRPC(client).remove_stream(id);
 }
 
 void StreamManager::remove_stream(StreamImpl* stream) {
