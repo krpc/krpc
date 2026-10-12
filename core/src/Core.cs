@@ -617,7 +617,12 @@ namespace KRPC
                     bool changed = false;
                     foreach (var stream in clientStreams) {
                         if (stream.Started) {
-                            stream.Update();
+                            // An exception fails only this stream
+                            try {
+                                stream.Update ();
+                            } catch (System.Exception exn) {
+                                stream.SetError (exn);
+                            }
                             rpcsExecuted++;
                             changed |= stream.Changed;
                         }
@@ -867,6 +872,9 @@ namespace KRPC
         {
             if (streams.ContainsKey (client) && streams [client].ContainsKey (id)) {
                 streams [client].Remove (id);
+                var stream = client.Stream as Server.Message.StreamStream;
+                if (stream != null)
+                    stream.Removed (id);
                 Logger.WriteLine ("Removed stream " + id + " for client " + client.Address, Logger.Severity.Debug);
                 StreamRPCs--;
             }

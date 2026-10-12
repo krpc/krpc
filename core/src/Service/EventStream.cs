@@ -48,14 +48,6 @@ namespace KRPC.Service
                 Core.Instance.RemoveStream (Id);
         }
 
-        void SetError (System.Exception exn)
-        {
-            var result = Result;
-            result.Reset ();
-            result.Error = Services.Instance.HandleException (exn);
-            Changed = true;
-        }
-
         public void Trigger () {
             SetValue (true);
         }

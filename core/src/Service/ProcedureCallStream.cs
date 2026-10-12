@@ -51,9 +51,7 @@ namespace KRPC.Service
             } catch (YieldException) {
                 return;
             } catch (System.Exception e) {
-                result.Reset ();
-                result.Error = Service.Services.Instance.HandleException (e);
-                Changed = true;
+                SetError (e);
                 return;
             }
 
@@ -66,6 +64,16 @@ namespace KRPC.Service
                     Changed |= !ReferenceEquals (oldValue, null);
             } else {
                 Changed |= result.HasError;
+            }
+
+            // An encoding error, such as a null element in a list of objects, fails only this
+            // stream. The update sends this encoding.
+            if (Changed && result.HasValue && !ReferenceEquals (result.Value, null)) {
+                try {
+                    result.EncodedValue = Server.ProtocolBuffers.Encoder.Encode (result.Value, result.Spec);
+                } catch (ServiceException e) {
+                    SetError (e);
+                }
             }
         }
     }

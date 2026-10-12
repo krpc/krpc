@@ -36,6 +36,13 @@ namespace KRPC.Server.Message
         /// </summary>
         public abstract void Write (StreamUpdate value);
 
+        /// <summary>
+        /// Called when a stream has been removed, to free the state kept for it.
+        /// </summary>
+        public virtual void Removed (ulong id)
+        {
+        }
+
         public void Write (StreamUpdate[] buffer)
         {
             foreach (var value in buffer)

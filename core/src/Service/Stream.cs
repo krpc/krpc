@@ -103,6 +103,17 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Set the result to an error, which ends the stream once it is sent.
+        /// </summary>
+        internal void SetError (System.Exception exn)
+        {
+            var result = StreamResult.Result;
+            result.Reset ();
+            result.Error = Services.Instance.HandleException (exn);
+            Changed = true;
+        }
+
+        /// <summary>
         /// Called when the stream value has been sent to the client.
         /// </summary>
         public virtual void Sent() {

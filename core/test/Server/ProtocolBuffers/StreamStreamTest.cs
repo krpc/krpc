@@ -1,4 +1,6 @@
+using System.Collections;
 using System.IO;
+using System.Reflection;
 using Google.Protobuf;
 using KRPC.Server.ProtocolBuffers;
 using KRPC.Service.Messages;
@@ -53,6 +55,20 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (updateBytes.Length, streamStream.BytesWritten);
             Assert.AreEqual (0, streamStream.BytesRead);
             Assert.AreEqual (updateBytes.ToHexString (), stream.ToArray ().ToHexString ());
+        }
+
+        [Test]
+        public void RemovingAStreamFreesItsCachedResult ()
+        {
+            var streamStream = new StreamStream (new TestStream (null, new MemoryStream ()));
+            streamStream.Write (expectedUpdate);
+            var cache = (IDictionary)typeof (StreamStream)
+                .GetField ("protoResultCache", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue (streamStream);
+            Assert.AreEqual (2, cache.Count);
+            streamStream.Removed (1263);
+            Assert.AreEqual (1, cache.Count);
+            Assert.IsFalse (cache.Contains (1263ul));
         }
     }
 }
