@@ -24,7 +24,12 @@ KRPC
 {{ macros.exception(services['KRPC'].exceptions['NullReferenceException']) }}
 {{ macros.exception(services['KRPC'].exceptions['KeyNotFoundException']) }}
 {{ macros.exception(services['KRPC'].exceptions['IndexOutOfRangeException']) }}
+{{ macros.exception(services['KRPC'].exceptions['DivideByZeroException']) }}
+{{ macros.exception(services['KRPC'].exceptions['NotSupportedException']) }}
+{{ macros.exception(services['KRPC'].exceptions['TimeoutException']) }}
+{{ macros.exception(services['KRPC'].exceptions['OverflowException']) }}
 {{ macros.exception(services['KRPC'].exceptions['ObjectDestroyedException']) }}
 {{ macros.exception(services['KRPC'].exceptions['ObjectNotLoadedException']) }}
 {{ macros.exception(services['KRPC'].exceptions['UnsupportedSceneException']) }}
 {{ macros.exception(services['KRPC'].exceptions['StreamRemovedException']) }}
+{{ macros.exception(services['KRPC'].exceptions['Error']) }}

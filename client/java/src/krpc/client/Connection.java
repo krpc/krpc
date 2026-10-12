@@ -595,6 +595,15 @@ public class Connection implements AutoCloseable {
       if (key.equals("KRPC.KeyNotFoundException")) {
         return new NoSuchElementException(message);
       }
+      if (key.equals("KRPC.DivideByZeroException")) {
+        return new ArithmeticException(message);
+      }
+      if (key.equals("KRPC.OverflowException")) {
+        return new ArithmeticException(message);
+      }
+      if (key.equals("KRPC.NotSupportedException")) {
+        return new UnsupportedOperationException(message);
+      }
       Class<?> exnType = exceptionTypes.get(key);
       Constructor<?> ctor = null;
       if (exnType != null) {

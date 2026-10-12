@@ -100,6 +100,27 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// The CLR exception types a client sees as the named kRPC exception: its own type,
+        /// and every type mapped onto it.
+        /// </summary>
+        public IList<Type> GetExceptionTypes (string service, string name)
+        {
+            ServiceSignature signature;
+            if (!Signatures.TryGetValue (service, out signature))
+                throw new KRPC.ArgumentException ("Service \"" + service + "\" not found");
+            ExceptionSignature exception;
+            if (!signature.Exceptions.TryGetValue (name, out exception))
+                throw new KRPC.ArgumentException (
+                    "Exception \"" + name + "\" not found in service \"" + service + "\"");
+            var type = exception.UnderlyingType;
+            var types = new List<Type> { type };
+            types.AddRange (MappedExceptionTypes
+                .Where (x => x.Value == type && x.Key != type)
+                .Select (x => x.Key));
+            return types;
+        }
+
+        /// <summary>
         /// Executes a procedure call and returns the result.
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.
@@ -175,6 +196,15 @@ namespace KRPC.Service
                 throw new ArgumentNullException (nameof (procedure));
             if ((CallContext.GameScene & procedure.GameScene) == 0)
                 throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
+        }
+
+        /// <summary>
+        /// Whether a client sees a caught exception as the given kRPC exception type.
+        /// Called from the catch blocks of a compiled server side function.
+        /// </summary>
+        public static bool ExpressionExceptionIsNamed (System.Exception exn, Type name)
+        {
+            return Instance.GetMappedExceptionType (exn.GetType ()) == name;
         }
 
         /// <summary>

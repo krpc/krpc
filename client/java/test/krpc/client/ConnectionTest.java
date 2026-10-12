@@ -13,11 +13,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import krpc.client.TestUtils.Endpoint;
 import krpc.client.services.KRPC;
+import krpc.client.services.KRPC.Expression;
 import krpc.client.services.TestService;
 import krpc.schema.KRPC.Error;
 import krpc.schema.KRPC.Status;
@@ -494,6 +496,26 @@ public class ConnectionTest {
     assertTrue(e.getMessage().contains(
         "Specified argument was out of the range of valid values."));
     assertTrue(e.getMessage().contains("foo"));
+  }
+
+  @Test
+  public void testMappedExceptions() {
+    Map<String, Class<? extends Throwable>> cases =
+        new HashMap<String, Class<? extends Throwable>>();
+    cases.put("NullReferenceException", NullPointerException.class);
+    cases.put("KeyNotFoundException", NoSuchElementException.class);
+    cases.put("IndexOutOfRangeException", IndexOutOfBoundsException.class);
+    cases.put("DivideByZeroException", ArithmeticException.class);
+    cases.put("NotSupportedException", UnsupportedOperationException.class);
+    cases.put("TimeoutException", KRPC.TimeoutException.class);
+    cases.put("OverflowException", ArithmeticException.class);
+    for (Map.Entry<String, Class<? extends Throwable>> entry : cases.entrySet()) {
+      Throwable e = assertThrows(entry.getKey(), entry.getValue(), () -> krpc.runFunction(
+          Expression.throw_(connection, "KRPC", entry.getKey(),
+              Expression.constantString(connection, "boom")),
+          java.util.Collections.emptyList()));
+      assertTrue(entry.getKey(), e.getMessage().startsWith("boom"));
+    }
   }
 
   @Test

@@ -86,6 +86,10 @@ KRPC.Expression.Break
 KRPC.Expression.Continue
 KRPC.Expression.Return
 KRPC.Expression.ReturnNothing
+KRPC.Expression.Throw
+KRPC.Expression.TryCatch
+KRPC.Expression.TryCatchAll
+KRPC.Expression.TryFinally
 KRPC.Expression.CreateTuple
 KRPC.Expression.CreateStruct
 KRPC.Expression.CreateList
@@ -200,10 +204,15 @@ KRPC.ArgumentOutOfRangeException
 KRPC.NullReferenceException
 KRPC.KeyNotFoundException
 KRPC.IndexOutOfRangeException
+KRPC.DivideByZeroException
+KRPC.NotSupportedException
+KRPC.TimeoutException
+KRPC.OverflowException
 KRPC.ObjectDestroyedException
 KRPC.ObjectNotLoadedException
 KRPC.UnsupportedSceneException
 KRPC.StreamRemovedException
+KRPC.Error
 SpaceCenter
 SpaceCenter.GameMode
 SpaceCenter.Expansions

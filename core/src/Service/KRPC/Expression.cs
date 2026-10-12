@@ -478,7 +478,7 @@ namespace KRPC.Service.KRPC
         /// <summary>
         /// Throws if the expression has more than <see cref="MaxNodes"/> nodes, uses a
         /// parameter or variable outside the function or block that declares it, or has a
-        /// break, continue or return outside its loop or function.
+        /// break, continue or return outside its loop or function or leaving a finally block.
         /// </summary>
         internal void Check ()
         {
@@ -1822,6 +1822,9 @@ namespace KRPC.Service.KRPC
                 throw new ArgumentNullException (nameof (ifFalse));
             LinqExpression left = ifTrue;
             LinqExpression right = ifFalse;
+            // A branch that throws takes the type of the other branch
+            left = ThrowAs (left, right);
+            right = ThrowAs (right, left);
             PromoteNullableOperands (ref left, ref right);
             if (left.Type != right.Type) {
                 // Tuples and collections join position by position
@@ -1839,6 +1842,7 @@ namespace KRPC.Service.KRPC
             TypeSpec resultSpec = null;
             if (result.Type != typeof (void)) {
                 foreach (var branch in new [] { ifTrue, ifFalse }) {
+                    // A branch that throws has no spec to join
                     if (branch.Type == typeof (void))
                         continue;
                     var branchSpec = SpecAs (branch, result.Type);
@@ -1846,6 +1850,14 @@ namespace KRPC.Service.KRPC
                 }
             }
             return new Expression (result, resultSpec);
+        }
+
+        static LinqExpression ThrowAs (LinqExpression branch, LinqExpression other)
+        {
+            if (branch == null || other == null || branch.NodeType != ExpressionType.Throw ||
+                branch.Type != typeof (void) || other.Type == typeof (void))
+                return branch;
+            return LinqExpression.Throw (((UnaryExpression)branch).Operand, other.Type);
         }
 
         /// <summary>

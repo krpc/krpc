@@ -60,6 +60,10 @@ EXCEPTION_TYPES = {
     "NullReferenceException": TypeError,
     "KeyNotFoundException": KeyError,
     "IndexOutOfRangeException": IndexError,
+    "DivideByZeroException": ZeroDivisionError,
+    "NotSupportedException": NotImplementedError,
+    "TimeoutException": TimeoutError,
+    "OverflowException": OverflowError,
 }
 
 

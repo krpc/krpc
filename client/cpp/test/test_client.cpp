@@ -569,6 +569,31 @@ TEST_F(test_client, test_custom_exception) {
   }
 }
 
+// Throw the KRPC exception with the given name from a server side function
+template <typename Exception>
+static void check_mapped_exception(krpc::Client& conn, krpc::services::KRPC& krpc,
+                                   const std::string& name) {
+  typedef krpc::services::KRPC::Expression Expr;
+  auto expr = Expr::throw_(conn, "KRPC", name, Expr::constant_string(conn, "boom"));
+  try {
+    krpc.run_function(expr, {});
+    FAIL() << name << " not thrown";
+  } catch (const Exception& e) {
+    EXPECT_THAT(e.what(), testing::StartsWith("boom")) << name;
+  }
+}
+
+TEST_F(test_client, test_mapped_exceptions) {
+  using krpc::services::KRPC;
+  check_mapped_exception<KRPC::NullReferenceException>(conn, krpc, "NullReferenceException");
+  check_mapped_exception<KRPC::KeyNotFoundException>(conn, krpc, "KeyNotFoundException");
+  check_mapped_exception<KRPC::IndexOutOfRangeException>(conn, krpc, "IndexOutOfRangeException");
+  check_mapped_exception<KRPC::DivideByZeroException>(conn, krpc, "DivideByZeroException");
+  check_mapped_exception<KRPC::NotSupportedException>(conn, krpc, "NotSupportedException");
+  check_mapped_exception<KRPC::TimeoutException>(conn, krpc, "TimeoutException");
+  check_mapped_exception<KRPC::OverflowException>(conn, krpc, "OverflowException");
+}
+
 TEST_F(test_client, test_line_endings) {
   std::vector<std::string> strings;
   strings.push_back("foo\nbar");
