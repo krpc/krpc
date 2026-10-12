@@ -55,6 +55,29 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void AFiringIsSentBeforeAnErrorInTheSameUpdate ()
+        {
+            var fail = false;
+            var stream = new EventStream (() => {
+                if (fail)
+                    throw new InvalidOperationException ("it went wrong");
+                return false;
+            });
+            stream.UpdateInternal ();
+            stream.Sent ();
+            fail = true;
+            stream.Trigger ();
+            stream.UpdateInternal ();
+            Assert.IsTrue (stream.Changed);
+            Assert.AreEqual (true, stream.Result.Value);
+            stream.Sent ();
+            stream.UpdateInternal ();
+            Assert.IsTrue (stream.Changed);
+            Assert.IsTrue (stream.Result.HasError);
+            StringAssert.Contains ("it went wrong", stream.Result.Error.Description);
+        }
+
+        [Test]
         public void TriggerClearsAnError ()
         {
             var fail = true;

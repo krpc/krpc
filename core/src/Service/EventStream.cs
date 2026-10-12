@@ -13,6 +13,7 @@ namespace KRPC.Service
 
         Func<bool> continuation;
         bool shouldRemove;
+        System.Exception pendingError;
 
         public EventStream ()
         {
@@ -26,6 +27,12 @@ namespace KRPC.Service
         }
 
         public override void UpdateInternal() {
+            // An error is sent after the firing it came with
+            if (pendingError != null) {
+                if (!HasUnsentFiring)
+                    SetError (pendingError);
+                return;
+            }
             // An event that is ending does not fire again, so the end is sent
             if (continuation != null && !shouldRemove) {
                 try {
@@ -34,15 +41,23 @@ namespace KRPC.Service
                 } catch (System.Exception e) {
                     // An object that is not loaded, or a procedure not available in the scene,
                     // holds the event
-                    if (!Services.IsHeld (e))
+                    if (Services.IsHeld (e))
+                        return;
+                    if (HasUnsentFiring)
+                        pendingError = e;
+                    else
                         SetError (e);
                     return;
                 }
             }
             // A firing and an error both reset the result, so the end waits for an update
             // with no firing to send
-            if (shouldRemove && !(Changed && Result.HasValue && (bool)Result.Value))
+            if (shouldRemove && !HasUnsentFiring)
                 SetError (new KRPC.StreamRemovedException ("The event has finished"));
+        }
+
+        bool HasUnsentFiring {
+            get { return Changed && Result.HasValue && (bool)Result.Value; }
         }
 
         public void Trigger () {
