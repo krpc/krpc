@@ -172,6 +172,7 @@ stderr
 stepwise
 str
 streamPort
+substring
 sudo
 symlink
 targetting

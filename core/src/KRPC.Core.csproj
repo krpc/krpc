@@ -132,6 +132,7 @@
     <Compile Include="Service\KRPC\Expression.cs" />
     <Compile Include="Service\KRPC\Expression.Mutation.cs" />
     <Compile Include="Service\KRPC\Expression.Statements.cs" />
+    <Compile Include="Service\KRPC\Expression.Strings.cs" />
     <Compile Include="Service\KRPC\Expression.Values.cs" />
     <Compile Include="Service\KRPC\GameScene.cs" />
     <Compile Include="Service\KRPC\IndexOutOfRangeException.cs" />

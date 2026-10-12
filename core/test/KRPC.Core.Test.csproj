@@ -48,6 +48,7 @@
     <Compile Include="Service\KRPC\ExpressionTest.RunFunction.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.State.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.Statements.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.Strings.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.Values.cs" />
     <Compile Include="Service\KRPC\TypeTest.cs" />
     <Compile Include="StreamUpdateTest.cs" />
