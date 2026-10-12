@@ -111,6 +111,11 @@ stream can be obtained by calling :func:`krpc.stream.Stream.__call__`. A stream 
 removed from the server by calling :func:`krpc.stream.Stream.remove` on the stream object. All of a
 clients streams are automatically stopped when it disconnects.
 
+.. note::
+
+   A stream runs on the server until you remove it or the connection closes, even once the stream
+   object is garbage collected. Each call to ``add_stream`` adds another stream.
+
 Synchronizing with Stream Updates
 ---------------------------------
 
@@ -259,7 +264,7 @@ Client API Reference
    .. method:: add_stream(func, *args, **kwargs)
 
       Create a stream for the function *func* called with arguments *args* and *kwargs*. Returns a
-      :class:`krpc.stream.Stream` object.
+      :class:`krpc.stream.Stream` object. Each call creates a new stream.
 
    .. method:: stream(func, *args, **kwargs)
 
@@ -381,8 +386,7 @@ Client API Reference
 
    .. method:: remove()
 
-      Removes the stream from the server. Every copy of the stream object refers to the same
-      stream.
+      Removes the stream from the server. Other streams of the same call are not affected.
 
 .. class:: krpc.event.Event
 
