@@ -6,6 +6,7 @@ import time
 import unittest
 from unittest import mock
 
+from google.protobuf.message import DecodeError
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.error
 import krpc.stream
@@ -1126,6 +1127,55 @@ class TestStream(ServerTestCase, unittest.TestCase):
             self.assertRaises(krpc.error.ConnectionError, x)
         finally:
             conn.close()
+
+    def test_a_connection_failure_is_the_cause_of_the_ending(self) -> None:
+        conn = self.connect()
+        try:
+            x = conn.add_stream(conn.test_service.int32_to_string, 48)
+            self.assertEqual("48", x())
+            # Stands in for the server closing the connection
+            conn._stream_connection._socket.shutdown(socket.SHUT_RDWR)
+            conn._stream_thread.join(10)
+            with self.assertRaises(krpc.error.ConnectionError) as context:
+                x()
+            self.assertIsInstance(context.exception.__cause__, OSError)
+        finally:
+            conn.close()
+
+    def test_a_message_that_cannot_be_read_is_the_cause_of_the_ending(self) -> None:
+        class Unreadable:
+            """A stream connection that sends a message that is not a stream update."""
+
+            def partial_receive(self, _length: int) -> bytes:
+                return b"\x02"
+
+            def receive(self, _size: int) -> bytes:
+                return b"\xff\xff"
+
+            def close(self) -> None:
+                pass
+
+        manager = StreamManager(None)
+        stream = manager.get_stream(self.conn._types.string_type, 1)
+        thread = threading.Thread(
+            target=streammanager.update_thread,
+            args=(manager, Unreadable(), threading.Event()),
+            daemon=True,
+        )
+        thread.start()
+        thread.join(10)
+        with self.assertRaises(krpc.error.ConnectionError) as context:
+            stream.raise_if_ended()
+        self.assertIsInstance(context.exception.__cause__, DecodeError)
+
+    def test_a_stopped_update_thread_gives_no_cause(self) -> None:
+        conn = self.connect()
+        x = conn.add_stream(conn.test_service.int32_to_string, 49)
+        self.assertEqual("49", x())
+        conn.close()
+        with self.assertRaises(krpc.error.ConnectionError) as context:
+            x()
+        self.assertIsNone(context.exception.__cause__)
 
     def test_remove_while_holding_condition(self) -> None:
         # The update thread must not hold the update lock while waiting for a stream's

@@ -329,6 +329,8 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
         self._streams: dict[int, StreamImpl] = {}
         self._callbacks: list[Callable[[], None]] = []
         self._closed = False
+        # The error that closed the connection, if it failed
+        self._close_cause: Optional[Exception] = None
         # Whether a thread is closing the connection
         self._close_requested = False
         # Streams out of the registry and not yet ended, with the ending for each. The
@@ -389,7 +391,7 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
                 self._unregistered.discard(stream_id)
                 pending = self._pending.pop(stream_id, [])
                 if self._closed:
-                    stream.end(_closed_error())
+                    stream.end(_closed_error(self._close_cause))
                     return stream
                 self._streams[stream_id] = stream
                 self._registered.add(stream)
@@ -477,7 +479,9 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
             for x in streams
         )
 
-    def notify_closed(self, on_update_thread: bool = False) -> Optional[BaseException]:
+    def notify_closed(
+        self, on_update_thread: bool = False, cause: Optional[Exception] = None
+    ) -> Optional[BaseException]:
         """End every stream, once the connection is closing and no further update is
         applied. Called by the closing thread and by the update thread. Returns the first
         exception that propagates from an end callback, for the caller to raise once it
@@ -489,8 +493,10 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
         leaves the remaining streams to the closing thread."""
         deferred: Optional[BaseException] = None
         with self._update_lock:
+            if not self._closed:
+                self._close_cause = cause
             self._closed = True
-            ending = _closed_error()
+            ending = _closed_error(self._close_cause)
             for stream in self._streams.values():
                 self._to_end[stream] = ending
             self._streams.clear()
@@ -681,24 +687,31 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
             kept[:] = [result]
 
 
-def _closed_error() -> Exception:
-    return ConnectionError("Connection closed")
+def _closed_error(cause: Optional[Exception] = None) -> Exception:
+    """The error that ends a stream once the connection closes. Its cause is the error
+    that closed the connection, if it failed."""
+    error = ConnectionError("Connection closed")
+    error.__cause__ = cause
+    return error
 
 
 def update_thread(
     manager: StreamManager, connection: Connection, stop: threading.Event
 ) -> None:
     _thread_state.update_thread = True
+    cause: Optional[Exception] = None
     try:
-        _read_updates(manager, connection, stop)
+        cause = _read_updates(manager, connection, stop)
     finally:
         # The connection is closed or failed, so no further update arrives
-        manager.notify_closed(on_update_thread=True)
+        manager.notify_closed(on_update_thread=True, cause=cause)
 
 
 def _read_updates(
     manager: StreamManager, connection: Connection, stop: threading.Event
-) -> None:
+) -> Optional[Exception]:
+    """Read stream updates until the client stops the thread, or the connection fails.
+    Returns the error that ended the connection, if it failed."""
     while True:
 
         # Read the size and position of the update message
@@ -710,12 +723,12 @@ def _read_updates(
                 break
             except IndexError:
                 pass
-            except:  # noqa pylint: disable=bare-except
+            except Exception as exn:  # pylint: disable=broad-except
                 # The socket closing as the client shuts down, or failing
-                return
+                return exn
             if stop.is_set():
                 connection.close()
-                return
+                return None
 
         # Read and decode the update message
         try:
@@ -723,10 +736,10 @@ def _read_updates(
             update = cast(
                 KRPC.StreamUpdate, Decoder.decode_message(data, KRPC.StreamUpdate)
             )
-        except:  # noqa pylint: disable=bare-except
+        except Exception as exn:  # pylint: disable=broad-except
             # A message that cannot be read leaves the connection unusable
             connection.close()
-            return
+            return exn
 
         # Add the data to the cache
         manager.update(update.results)
