@@ -192,7 +192,8 @@ TEST_F(test_stream, test_remove_wakes_a_waiting_thread) {
   std::thread waiter([&y, &waiting] {
     y.acquire();
     waiting.store(true);
-    y.wait();
+    // The wait wakes, and throws as the stream was removed
+    EXPECT_THROW(y.wait(), krpc::StreamError);
     y.release();
   });
   // The waiter holds the condition until it enters its wait, so the removal below cannot
@@ -215,6 +216,17 @@ TEST_F(test_stream, test_remove_stream_twice) {
 
   s.remove();
   ASSERT_THROW(s(), krpc::StreamError);
+}
+
+TEST_F(test_stream, test_removing_a_stream_again_through_another_handle) {
+  auto first = test_service.int32_to_string_stream(46);
+  auto second = test_service.int32_to_string_stream(46);
+  first.remove();
+  // The server can give the new stream the removed one's id
+  auto third = test_service.int32_to_string_stream(46);
+  second.remove();
+  ASSERT_EQ("46", third());
+  third.remove();
 }
 
 TEST_F(test_stream, test_add_stream_twice) {

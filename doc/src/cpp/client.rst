@@ -351,6 +351,8 @@ Client API Reference
       If wait is false, the method starts the stream and returns immediately. Subsequent calls to
       ``operator()`` may throw a ``krpc::StreamError`` exception.
 
+      Throws ``StreamError`` if the stream has been removed.
+
    .. function:: float rate() const
    .. function:: void set_rate(float rate)
 
@@ -358,7 +360,8 @@ Client API Reference
 
    .. function:: T operator()()
 
-      Get the most recently received value from the stream.
+      Get the most recently received value from the stream. Throws ``StreamError`` if the stream
+      has been removed.
 
    .. function:: std::condition_variable& get_condition() const
 
@@ -384,7 +387,7 @@ Client API Reference
       method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation.
+      the operation. Throws ``StreamError`` if the stream has been removed.
 
       If the stream has not been started this method calls ``start(false)`` to start the stream
       (without waiting for at least one update to be received).
@@ -433,7 +436,7 @@ Client API Reference
    .. function:: void start()
 
       Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called.
+      this method is called. Throws ``StreamError`` if the event has been removed.
 
    .. function:: std::condition_variable& get_condition() const
 
@@ -458,7 +461,7 @@ Client API Reference
       The events condition variable must be locked before calling this method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation.
+      the operation. Throws ``StreamError`` if the event has been removed.
 
       If the event has not been started this method calls ``start()`` to start the underlying
       stream.

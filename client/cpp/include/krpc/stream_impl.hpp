@@ -24,6 +24,8 @@ class StreamImpl {
   /** A copy of the encoded value, and whether the value is null, read together. */
   std::string get_data(bool* is_null);
   void update(const std::string& data, bool is_null, const std::exception_ptr& exception);
+  /** Store a value, unless the stream has been removed. */
+  void update_unless_removed(const std::string& data, bool is_null);
   void update_and_notify(const std::string& data, bool is_null,
                          const std::exception_ptr& exception);
   bool has_updated() const;
@@ -35,6 +37,7 @@ class StreamImpl {
   int add_callback(const Callback& callback);
   void remove_callback(int tag);
   void remove();
+  bool is_removed() const;
 
  private:
   Client* client;

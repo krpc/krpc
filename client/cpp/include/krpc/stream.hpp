@@ -19,13 +19,14 @@ class Stream {
   Stream();
   Stream(Client* client, const schema::ProcedureCall& call);
   Stream(Client* client, uint64_t id);
-  /** Start the stream. */
+  /** Start the stream. Throws StreamError if the stream has been removed. */
   void start(bool wait = true);
   /** The rate of the stream, in Hertz. Zero if the rate is unlimited. */
   float rate();
   /** Set the rate of the stream, in Hertz. Zero if the rate is unlimited. */
   void set_rate(float value);
-  /** Get the most recent value for this stream. */
+  /** Get the most recent value for this stream. Throws StreamError if the stream has been
+      removed. */
   T operator()();
   /** Condition variable that is notified when the stream updates */
   std::condition_variable& get_condition() const;
@@ -36,7 +37,8 @@ class Stream {
   /** Release the lock on the condition variable */
   void release();
   /** Wait until the next stream update. If timeout >= 0, the
-      operation times out after that many seconds. */
+      operation times out after that many seconds. Throws StreamError
+      if the stream has been removed. */
   void wait(double timeout = -1);
   typedef std::function<void(T)> Callback;
   /**
@@ -47,6 +49,8 @@ class Stream {
   int add_callback(const Callback& callback);
   /** Remove a callback, based on its tag */
   void remove_callback(int tag);
+  /** Remove the stream from the server. Streams for the same call share one stream on the
+      server, so removing one removes them all. */
   void remove();
   bool operator==(const Stream<T>& rhs) const;
   bool operator!=(const Stream<T>& rhs) const;
@@ -57,6 +61,8 @@ class Stream {
   std::shared_ptr<StreamImpl> impl;
   bool acquired;
   void check_exists() const;
+  void check_not_removed() const;
+  T decode_value(const std::string& data, bool is_null) const;
 };
 
 template <typename T>
@@ -72,16 +78,21 @@ inline Stream<T>::Stream(Client* client, uint64_t id)
 
 template <typename T>
 inline void Stream<T>::start(bool wait) {
-  check_exists();
+  check_not_removed();
   if (impl->has_started()) return;
   if (!wait) {
     impl->start();
-  } else {
-    if (!acquired) impl->get_condition_lock().lock();
+    return;
+  }
+  if (!acquired) impl->get_condition_lock().lock();
+  // A removal after this check stores its error and notifies under the condition, which ends
+  // the wait
+  if (!impl->is_removed()) {
     impl->start();
     impl->get_condition().wait(impl->get_condition_lock(), [this] { return impl->has_updated(); });
-    if (!acquired) impl->get_condition_lock().unlock();
   }
+  if (!acquired) impl->get_condition_lock().unlock();
+  check_not_removed();
 }
 
 template <typename T>
@@ -98,10 +109,15 @@ inline void Stream<T>::set_rate(float value) {
 
 template <typename T>
 inline T Stream<T>::operator()() {
-  check_exists();
+  check_not_removed();
   if (!impl->has_started()) start();
   bool is_null = false;
-  std::string data = impl->get_data(&is_null);
+  auto data = impl->get_data(&is_null);
+  return decode_value(data, is_null);
+}
+
+template <typename T>
+inline T Stream<T>::decode_value(const std::string& data, bool is_null) const {
   // A null value is signaled out-of-band by is_null, and leaves the value default
   // constructed, which for a nullable stream is an empty optional.
   T value{};
@@ -140,7 +156,7 @@ inline void Stream<T>::release() {
 
 template <typename T>
 inline void Stream<T>::wait(double timeout) {
-  check_exists();
+  check_not_removed();
   if (!impl->has_started()) impl->start();
   if (timeout < 0) {
     impl->get_condition().wait(impl->get_condition_lock());
@@ -148,16 +164,14 @@ inline void Stream<T>::wait(double timeout) {
     auto rel_time = std::chrono::milliseconds(static_cast<int>(timeout * 1000));
     impl->get_condition().wait_for(impl->get_condition_lock(), rel_time);
   }
+  check_not_removed();
 }
 
 template <typename T>
 inline int Stream<T>::add_callback(const Callback& callback) {
   check_exists();
   auto callback_wrapper = [this, callback](const std::string& data, bool is_null) {
-    T value{};
-    using decoder::decode;
-    if (!is_null) decode(value, data, this->impl->get_client());
-    callback(value);
+    callback(this->decode_value(data, is_null));
   };
   return impl->add_callback(callback_wrapper);
 }
@@ -197,6 +211,13 @@ Stream<T>::operator bool() const {
 template <typename T>
 inline void Stream<T>::check_exists() const {
   if (!impl) throw StreamError("Stream does not exist or was removed");
+}
+
+template <typename T>
+inline void Stream<T>::check_not_removed() const {
+  check_exists();
+  // Another handle for the same stream shares the implementation, and can remove it
+  if (impl->is_removed()) throw StreamError("Stream does not exist or was removed");
 }
 
 }  // namespace krpc

@@ -28,8 +28,9 @@ void Event::acquire() { _stream.acquire(); }
 void Event::release() { _stream.release(); }
 
 void Event::wait(double timeout) {
+  _stream.check_not_removed();
   start();
-  _stream.impl->update(std::string("\x00", 1), false, nullptr);
+  _stream.impl->update_unless_removed(std::string("\x00", 1), false);
   while (!_stream()) {
     bool origValue = _stream();
     _stream.wait(timeout);

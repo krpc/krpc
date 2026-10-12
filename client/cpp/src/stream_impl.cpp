@@ -61,6 +61,11 @@ void StreamImpl::update(const std::string& data, bool is_null,
   updated = true;
 }
 
+void StreamImpl::update_unless_removed(const std::string& data, bool is_null) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  if (!removed) update(data, is_null, nullptr);
+}
+
 // Store an update and wake the threads waiting for one. We hold the condition across both,
 // so that a notification cannot fire between a waiter checking the value and entering its
 // wait.
@@ -79,6 +84,11 @@ void StreamImpl::update_and_notify(const std::string& data, bool is_null,
 }
 
 bool StreamImpl::has_updated() const { return updated; }
+
+bool StreamImpl::is_removed() const {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  return removed;
+}
 
 std::condition_variable& StreamImpl::get_condition() { return condition; }
 
@@ -100,11 +110,16 @@ void StreamImpl::remove_callback(int tag) {
 }
 
 void StreamImpl::remove() {
-  client->remove_stream(id);
+  {
+    std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
+    // A handle sharing this stream can remove it again after a new stream reuses its id
+    if (removed) return;
+    client->remove_stream(id);
+    removed = true;
+  }
   std::lock_guard<std::mutex> guard(condition_mutex);
   {
     std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
-    removed = true;
     update("", false, std::make_exception_ptr(StreamError("Stream does not exist")));
   }
   // No further update arrives for a removed stream, so a thread waiting on it has to be

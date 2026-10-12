@@ -17,7 +17,7 @@ class Event {
  public:
   Event();
   Event(Client* client, const krpc::schema::Event& message);
-  /** Start the event */
+  /** Start the event. Throws StreamError if the event has been removed. */
   void start();
   /** Condition variable that is notified when the event occurs */
   std::condition_variable& get_condition() const;
@@ -28,7 +28,8 @@ class Event {
   /** Release the lock on the condition variable */
   void release();
   /** Wait until the event occurs. If timeout >= 0, the
-      operation times out after that many seconds. */
+      operation times out after that many seconds. Throws StreamError
+      if the event has been removed. */
   void wait(double timeout = -1);
   typedef std::function<void()> Callback;
   /**
