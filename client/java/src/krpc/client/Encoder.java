@@ -136,6 +136,107 @@ public class Encoder {
   }
 
   /**
+   * Describes the first value within a value that encode rejects at the given type, naming its
+   * position within the value, or returns null if there is none. The position names the value
+   * itself, e.g. "argument 1".
+   */
+  static String describeMismatch(Object value, KRPC.Type type, String position) {
+    if (value == null) {
+      return type.getNullable() ? null
+          : position + " is null, where the function takes a " + type.getCode()
+              + " that is not nullable";
+    }
+    Class<?> expected = encodedClass(type.getCode());
+    if (expected != null && !expected.isInstance(value)) {
+      return position + " is a " + value.getClass().getName() + ", where the function takes a "
+          + type.getCode();
+    }
+    KRPC.Type.TypeCode code = type.getCode();
+    String mismatch = null;
+    if (code == KRPC.Type.TypeCode.STRUCT) {
+      List<KRPC.Type> fieldTypes = structInfo(type).fieldTypes;
+      Object[] values = ((RemoteStruct) value).fieldValues();
+      for (int i = 0; i < values.length && i < fieldTypes.size() && mismatch == null; i++) {
+        mismatch = describeMismatch(
+            values[i], fieldTypes.get(i), "field " + i + " of " + position);
+      }
+    } else if (code == KRPC.Type.TypeCode.TUPLE) {
+      Tuple tuple = (Tuple) value;
+      if (tuple.getSize() != type.getTypesCount()) {
+        return position + " has " + tuple.getSize()
+            + " items, where the function takes a TUPLE of " + type.getTypesCount();
+      }
+      for (int i = 0; i < tuple.getSize() && mismatch == null; i++) {
+        mismatch = describeMismatch(
+            tuple.getValue(i), type.getTypes(i), "the item at index " + i + " of " + position);
+      }
+    } else if (code == KRPC.Type.TypeCode.LIST) {
+      List<?> list = (List<?>) value;
+      for (int i = 0; i < list.size() && mismatch == null; i++) {
+        mismatch = describeMismatch(
+            list.get(i), type.getTypes(0), "the item at index " + i + " of " + position);
+      }
+    } else if (code == KRPC.Type.TypeCode.SET) {
+      for (Object item : (Set<?>) value) {
+        mismatch = describeMismatch(item, type.getTypes(0), "an item of " + position);
+        if (mismatch != null) {
+          break;
+        }
+      }
+    } else if (code == KRPC.Type.TypeCode.DICTIONARY) {
+      for (Map.Entry<?, ?> entry : ((Map<?, ?>) value).entrySet()) {
+        mismatch = describeMismatch(entry.getKey(), type.getTypes(0), "a key of " + position);
+        if (mismatch == null) {
+          mismatch = describeMismatch(entry.getValue(), type.getTypes(1),
+              "the value for key " + entry.getKey() + " of " + position);
+        }
+        if (mismatch != null) {
+          break;
+        }
+      }
+    }
+    return mismatch;
+  }
+
+  /** The class encodeValue casts a value of the given type to. */
+  private static Class<?> encodedClass(KRPC.Type.TypeCode code) {
+    switch (code) {
+      case DOUBLE:
+        return Double.class;
+      case FLOAT:
+        return Float.class;
+      case SINT32:
+      case UINT32:
+        return Integer.class;
+      case SINT64:
+      case UINT64:
+        return Long.class;
+      case BOOL:
+        return Boolean.class;
+      case STRING:
+        return String.class;
+      case BYTES:
+        return byte[].class;
+      case CLASS:
+        return RemoteObject.class;
+      case ENUMERATION:
+        return RemoteEnum.class;
+      case STRUCT:
+        return RemoteStruct.class;
+      case TUPLE:
+        return Tuple.class;
+      case LIST:
+        return List.class;
+      case SET:
+        return Set.class;
+      case DICTIONARY:
+        return Map.class;
+      default:
+        return null;
+    }
+  }
+
+  /**
    * Decode one of the values a collection or a structure holds, which encodeItem wrote.
    */
   static Object decodeItem(ByteString data, KRPC.Type type, Connection connection) {

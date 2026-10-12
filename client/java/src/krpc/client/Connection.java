@@ -15,8 +15,10 @@ import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -669,6 +671,218 @@ public class Connection implements AutoCloseable {
       throws StreamException, RPCException {
     Method methodInfo = getMethodByName(instance.getClass(), method, args);
     return new Stream<T>(this, getReturnType(methodInfo), getCall(methodInfo, instance, args));
+  }
+
+  /**
+   * Create a stream from a server side function, evaluated on each update. Each call creates a
+   * new stream. Values are decoded at the type the server reports for the function. A type
+   * parameter that cannot hold that type throws a ClassCastException where a
+   * value is assigned. Throws a StreamException if the function has no value, and an
+   * IllegalArgumentException if it has parameters.
+   *
+   * @param function
+   *            The function to evaluate on each stream update.
+   *
+   * @return A stream object.
+   */
+  public <T> Stream<T> addStream(krpc.client.services.KRPC.Expression function)
+      throws StreamException, RPCException {
+    krpc.client.services.KRPC krpcService = krpc.client.services.KRPC.newInstance(this);
+    KRPC.Type returnType = expressionReturnType(function);
+    if (returnType == null) {
+      throw new StreamException("The function does not evaluate to a value");
+    }
+    KRPC.Stream stream = krpcService.addFunctionStream(function);
+    return new Stream<T>(this, returnType, stream.getId());
+  }
+
+  /**
+   * Run a server side function within a single physics tick, and return its value.
+   * The value is decoded at the type the server reports for the function, and is
+   * null for a function with no value. The arguments are passed to the function's
+   * parameters, and are encoded at the types the server reports for them, with a number
+   * widened as Java widens it. An int or a long passes to an unsigned parameter of its width bit
+   * for bit, as the client holds unsigned values. A byte or a short that is not negative converts
+   * to an unsigned parameter, and an int that is not negative to an unsigned 64-bit parameter.
+   * Throws an IllegalArgumentException if the number of arguments
+   * differs from the number of parameters, or if a parameter cannot take its argument. The
+   * server checks a null for a parameter that is not nullable, and an object of another class,
+   * and these also throw an IllegalArgumentException.
+   *
+   * @param function
+   *            The function to evaluate.
+   * @param args
+   *            The arguments to pass to the function.
+   *
+   * @return The value of the function.
+   */
+  @SuppressWarnings("unchecked")
+  public <T> T run(krpc.client.services.KRPC.Expression function, Object... args)
+      throws RPCException {
+    krpc.client.services.KRPC krpcService = krpc.client.services.KRPC.newInstance(this);
+    byte[] data = krpcService.runFunction(function, encodeArguments(function, args));
+    // The stub returns null for a null value
+    if (data == null) {
+      return null;
+    }
+    KRPC.Type returnType = expressionReturnType(function);
+    if (returnType == null) {
+      return null;
+    }
+    return (T) Encoder.decode(ByteString.copyFrom(data), returnType, this);
+  }
+
+  /**
+   * Create an event from a server side function that evaluates to a boolean value. Each call
+   * creates a new event. Throws an IllegalArgumentException if the function does not evaluate to
+   * a boolean value, or has parameters.
+   *
+   * @param function
+   *            The condition the event waits for.
+   *
+   * @return An event object.
+   */
+  public Event addEvent(krpc.client.services.KRPC.Expression function) throws RPCException {
+    return krpc.client.services.KRPC.newInstance(this).addEvent(function);
+  }
+
+  /**
+   * The encoded arguments of a call to a server side function, one per parameter. A single
+   * null passed for the arguments is a null argument. Throws an IllegalArgumentException if the
+   * number of arguments differs from the number of parameters, or an argument fails to encode.
+   */
+  private List<byte[]> encodeArguments(
+      krpc.client.services.KRPC.Expression function, Object[] args) throws RPCException {
+    if (args == null) {
+      args = new Object[] {null};
+    }
+    List<byte[]> encoded = new ArrayList<byte[]>();
+    List<KRPC.Type> types = expressionParameterTypes(function);
+    if (args.length != types.size()) {
+      throw new IllegalArgumentException(
+          "The function takes " + types.size() + (types.size() == 1 ? " argument" : " arguments")
+              + ", got " + args.length);
+    }
+    for (int i = 0; i < args.length; i++) {
+      Object value = widen(args[i], types.get(i), i + 1);
+      ByteString data;
+      try {
+        data = Encoder.encode(value, types.get(i));
+      } catch (ClassCastException | EncodingException exn) {
+        String mismatch = Encoder.describeMismatch(value, types.get(i), "argument " + (i + 1));
+        if (mismatch == null) {
+          mismatch = "Argument " + (i + 1) + " cannot be encoded as the function's parameter of "
+              + "type " + types.get(i).getCode() + ": " + exn.getMessage();
+        } else {
+          mismatch = Character.toUpperCase(mismatch.charAt(0)) + mismatch.substring(1);
+        }
+        throw new IllegalArgumentException(mismatch, exn);
+      }
+      encoded.add(data == null ? null : data.toByteArray());
+    }
+    return encoded;
+  }
+
+  /**
+   * A number converted to a parameter's numeric type, as Java widens it. The client holds an
+   * unsigned value in an int or a long bit for bit, so an int takes an unsigned parameter and a
+   * long an unsigned 64-bit one. A byte or a short, and an int for an unsigned 64-bit parameter,
+   * must not be negative, and throws an IllegalArgumentException if it is.
+   */
+  private static Object widen(Object value, KRPC.Type type, int position) {
+    boolean small = value instanceof Byte || value instanceof Short;
+    boolean whole = small || value instanceof Integer;
+    boolean wholeOrLong = whole || value instanceof Long;
+    if (!wholeOrLong && !(value instanceof Float) && !(value instanceof Double)) {
+      return value;
+    }
+    Number number = (Number) value;
+    switch (type.getCode()) {
+      case DOUBLE:
+        return number.doubleValue();
+      case FLOAT:
+        return wholeOrLong || value instanceof Float ? number.floatValue() : value;
+      case SINT32:
+        return whole ? number.intValue() : value;
+      case SINT64:
+        return wholeOrLong ? number.longValue() : value;
+      case UINT32:
+        return small ? checkNotNegative(number, type, position).intValue() : value;
+      case UINT64:
+        return whole ? checkNotNegative(number, type, position).longValue() : value;
+      default:
+        return value;
+    }
+  }
+
+  private static Number checkNotNegative(Number number, KRPC.Type type, int position) {
+    if (number.longValue() < 0) {
+      throw new IllegalArgumentException(
+          "Argument " + position + " is negative, which the function's parameter of type "
+              + type.getCode() + " cannot take");
+    }
+    return number;
+  }
+
+  /** The parameter types of server side functions, by object identifier. */
+  private final Map<Long, List<KRPC.Type>> expressionParameterTypes =
+      new HashMap<Long, List<KRPC.Type>>();
+
+  private List<KRPC.Type> expressionParameterTypes(krpc.client.services.KRPC.Expression expression)
+      throws RPCException {
+    synchronized (expressionParameterTypes) {
+      if (expressionParameterTypes.containsKey(expression.id)) {
+        return expressionParameterTypes.get(expression.id);
+      }
+    }
+    // Introspect outside the lock, as it makes a round trip per property
+    List<KRPC.Type> types = new ArrayList<KRPC.Type>();
+    for (krpc.client.services.KRPC.Type type : expression.getParameterTypes()) {
+      types.add(buildType(type));
+    }
+    synchronized (expressionParameterTypes) {
+      expressionParameterTypes.put(expression.id, types);
+    }
+    return types;
+  }
+
+  /** The return types of server side functions, by object identifier, null for no value. */
+  private final Map<Long, KRPC.Type> expressionReturnTypes = new HashMap<Long, KRPC.Type>();
+
+  private KRPC.Type expressionReturnType(krpc.client.services.KRPC.Expression expression)
+      throws RPCException {
+    synchronized (expressionReturnTypes) {
+      if (expressionReturnTypes.containsKey(expression.id)) {
+        return expressionReturnTypes.get(expression.id);
+      }
+    }
+    // Introspect outside the lock, as it makes a round trip per property
+    KRPC.Type returnType =
+        expression.getHasReturnType() ? buildType(expression.getReturnType()) : null;
+    synchronized (expressionReturnTypes) {
+      expressionReturnTypes.put(expression.id, returnType);
+    }
+    return returnType;
+  }
+
+  /**
+   * Build the protocol buffer type message describing the type of the values
+   * a server side function evaluates to, by introspecting its return type
+   * on the server.
+   */
+  private KRPC.Type buildType(krpc.client.services.KRPC.Type remoteType) throws RPCException {
+    KRPC.Type.Builder builder = KRPC.Type.newBuilder();
+    builder.setCode(KRPC.Type.TypeCode.forNumber(remoteType.getCode().getValue()));
+    String service = remoteType.getService();
+    if (!service.isEmpty()) {
+      builder.setService(service);
+      builder.setName(remoteType.getName());
+    }
+    for (krpc.client.services.KRPC.Type subType : remoteType.getTypes()) {
+      builder.addTypes(buildType(subType));
+    }
+    builder.setNullable(remoteType.getNullable());
+    return builder.build();
   }
 
   /**
