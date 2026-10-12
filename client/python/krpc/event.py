@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Callable, Optional, TYPE_CHECKING
 import threading
+from krpc.error import StreamError
 from krpc.stream import Stream
 import krpc.schema.KRPC_pb2 as KRPC
 
@@ -19,7 +20,8 @@ class Event:
         self._callback_mapping: dict[Callable[[], None], Callable[[bool], None]] = {}
 
     def start(self) -> None:
-        """Start the underlying stream for the event"""
+        """Start the underlying stream for the event. Raises a StreamError if
+        the event has been removed."""
         self._stream.start(False)
 
     @property
@@ -32,7 +34,10 @@ class Event:
         The condition variable must be locked before calling this method.
 
         When timeout is not None, it should be a floating point number
-        specifying the timeout in seconds for the operation."""
+        specifying the timeout in seconds for the operation. Raises a
+        StreamError if the event has been removed."""
+        if self.stream._stream.removed:
+            raise StreamError("Stream does not exist")
         if not self.stream._stream.started:
             self.start()
         self.stream._stream.value = False

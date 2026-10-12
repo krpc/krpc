@@ -27,7 +27,7 @@ def _invoke_callback(fn: Callable[..., None], *args: object) -> None:
         )
 
 
-class StreamImpl:
+class StreamImpl:  # pylint: disable=too-many-instance-attributes
     def __init__(
         self,
         client: Client,
@@ -41,10 +41,15 @@ class StreamImpl:
         self._update_lock = update_lock
         self._started = False
         self._updated = False
+        self._removed = False
         self._value: Optional[object] = None
         self._condition = threading.Condition()
         self._callbacks: List[Callable[[object], None]] = []
         self._rate = 0.0
+
+    @property
+    def stream_id(self) -> int:
+        return self._stream_id
 
     @property
     def return_type(self) -> TypeBase:
@@ -67,6 +72,10 @@ class StreamImpl:
     @property
     def started(self) -> bool:
         return self._started
+
+    @property
+    def removed(self) -> bool:
+        return self._removed
 
     @property
     def value(self) -> object:
@@ -112,9 +121,14 @@ class StreamImpl:
             return self._callbacks
 
     def remove(self) -> None:
-        self._client._stream_manager.remove_stream(self._stream_id)
+        # The server can give the id of a removed stream to a stream added
+        # again, which a second removal through this one must leave alone
+        if self._removed:
+            return
+        self._client._stream_manager.remove_stream(self)
         with self._condition:
             with self._update_lock:
+                self._removed = True
                 self._value = StreamError("Stream does not exist")
             # No further update will ever arrive for this stream, so anything waiting on it
             # has to be woken here or it waits forever. It sees the error above on waking.
@@ -146,9 +160,10 @@ class StreamManager:
                 )
             return self._streams[stream_id]
 
-    def remove_stream(self, stream_id: int) -> None:
+    def remove_stream(self, stream: StreamImpl) -> None:
         with self._update_lock:
-            if stream_id in self._streams:
+            stream_id = stream.stream_id
+            if self._streams.get(stream_id) is stream:
                 self._client.krpc.remove_stream(stream_id)
                 del self._streams[stream_id]
 
@@ -229,6 +244,10 @@ class StreamManager:
                         continue
                     stream.value = value
                 stream.condition.notify_all()
+            # An error is raised by reading the stream, and is not a value to pass
+            # to a callback
+            if isinstance(value, Exception):
+                continue
             for fn in callbacks:
                 _invoke_callback(fn, value)
 

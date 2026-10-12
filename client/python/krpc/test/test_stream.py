@@ -1,8 +1,10 @@
 import threading
 import time
 import unittest
+from unittest import mock
 
 import krpc.schema.KRPC_pb2 as KRPC
+import krpc.stream
 from krpc.error import StreamError
 from krpc import streammanager
 from krpc.streammanager import StreamManager
@@ -187,6 +189,24 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertRaises(StreamError, stream)
         stream.remove()
         self.assertRaises(StreamError, stream)
+
+    def test_remove_through_a_stale_handle(self) -> None:
+        stream = self.conn.add_stream(self.conn.test_service.int32_to_string, 45)
+        self.assertEqual("45", stream())
+        stream.remove()
+        # The server can give a stream added again the id of the removed one
+        stream_id = stream._stream.stream_id
+        added_again = krpc.stream.Stream.from_stream_id(
+            self.conn, stream_id, self.conn._types.string_type
+        )
+        with mock.patch.object(self.conn.krpc, "remove_stream") as remove:
+            stream.remove()
+        remove.assert_not_called()
+        self.assertFalse(added_again._stream.removed)
+        self.assertIs(
+            added_again._stream, self.conn._stream_manager._streams[stream_id]
+        )
+        del self.conn._stream_manager._streams[stream_id]
 
     def test_add_stream_twice(self) -> None:
         s0 = self.conn.add_stream(self.conn.test_service.int32_to_string, 42)
@@ -375,6 +395,22 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertFalse(error.is_set())
         self.assertEqual(self.test_callback_value, 5)
 
+    def test_callback_is_not_passed_an_error(self) -> None:
+        self.conn.test_service.reset_invalid_operation_exception_later()
+        values = []
+        with self.conn.stream(
+            self.conn.test_service.throw_invalid_operation_exception_later
+        ) as stream:
+            stream.add_callback(values.append)
+            stream.start()
+            with self.assertRaises(RuntimeError):
+                for _ in range(1000):
+                    self.wait()
+                    stream()
+            # Callbacks run after the value is stored
+            time.sleep(0.1)
+        self.assertEqual([0], values)
+
     def test_remove_wakes_a_waiting_thread(self) -> None:
         # Nothing further will update a removed stream, so a thread waiting on it has to be
         # woken by the removal or it waits forever. The value streamed here never changes,
@@ -388,14 +424,39 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
             def wait_for_update() -> None:
                 with x.condition:
-                    x.wait()
-                woke.set()
+                    try:
+                        x.wait()
+                    except StreamError:
+                        woke.set()
 
             thread = threading.Thread(target=wait_for_update, daemon=True)
             thread.start()
             time.sleep(0.2)
             x.remove()
             self.assertTrue(woke.wait(10))
+        finally:
+            conn.close()
+
+    def test_remove_wakes_a_thread_waiting_to_start(self) -> None:
+        conn = self.connect()
+        try:
+            x = conn.add_stream(conn.test_service.int32_to_string, 44)
+            raised = threading.Event()
+
+            def start() -> None:
+                try:
+                    x.start()
+                except StreamError:
+                    raised.set()
+
+            # The stream is not started on the server, so no update arrives and
+            # only the removal ends the wait
+            with mock.patch.object(x._stream, "start"):
+                thread = threading.Thread(target=start, daemon=True)
+                thread.start()
+                time.sleep(0.2)
+                x.remove()
+                self.assertTrue(raised.wait(10))
         finally:
             conn.close()
 

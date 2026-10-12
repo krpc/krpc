@@ -1,6 +1,7 @@
 from __future__ import annotations
 import threading
 from typing import Any, Callable, Optional, TYPE_CHECKING
+from krpc.error import StreamError
 from krpc.types import TypeBase
 import krpc.schema.KRPC_pb2 as KRPC
 
@@ -34,15 +35,20 @@ class Stream:
 
     def start(self, wait: bool = True) -> None:
         """Start the stream. If wait is true,
-        blocks until the stream has received its first update."""
+        blocks until the stream has received its first update.
+        Raises a StreamError if the stream has been removed, before or during
+        the wait."""
+        self._check_not_removed()
         if self._stream.started:
             return
         if not wait:
             self._stream.start()
         else:
             with self._stream.condition:
+                self._check_not_removed()
                 self._stream.start()
                 self._stream.condition.wait()
+                self._check_not_removed()
 
     @property
     def rate(self) -> float:
@@ -58,6 +64,7 @@ class Stream:
 
     def __call__(self):  # type: ignore[no-untyped-def]
         """Get the most recent value for this stream."""
+        self._check_not_removed()
         if not self._stream.started:
             self.start()
         value = self._stream.value
@@ -75,13 +82,24 @@ class Stream:
         The condition variable must be locked before calling this method.
 
         When timeout is not None, it should be a floating point number
-        specifying the timeout in seconds for the operation."""
+        specifying the timeout in seconds for the operation. Raises a
+        StreamError if the stream has been removed, before or during the wait."""
+        self._check_not_removed()
         if not self._stream.started:
             self._stream.start()
         self._stream.condition.wait(timeout=timeout)
+        self._check_not_removed()
+
+    def _check_not_removed(self) -> None:
+        """Raises a StreamError if the stream has been removed, through this
+        handle or another one for the same stream. No update arrives for a
+        removed stream, so a wait for one would never return."""
+        if self._stream.removed:
+            raise StreamError("Stream does not exist")
 
     def add_callback(self, callback: Callable[[Any], None]) -> None:
-        """Add a callback that is invoked whenever the stream is updated."""
+        """Add a callback that is invoked whenever the stream is updated. An
+        error from the stream does not invoke the callback."""
         self._stream.add_callback(callback)
 
     def remove_callback(self, callback: Callable[[Any], None]) -> None:

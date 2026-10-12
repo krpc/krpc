@@ -330,6 +330,8 @@ Client API Reference
       :meth:`__call__` may raise a ``StreamError`` exception if the stream does not yet contain a
       value.
 
+      Raises ``StreamError`` if the stream has been removed, before or during the wait.
+
    .. attribute:: rate
 
       The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
@@ -338,7 +340,7 @@ Client API Reference
 
       Returns the most recent value for the stream. If executing the remote procedure for the stream
       throws an exception, calling this method will rethrow the exception. Raises a ``StreamError``
-      exception if no update has been received from the server.
+      exception if no update has been received from the server, or if the stream has been removed.
 
       If the stream has not been started this method calls ``start(True)`` to start the stream and
       wait until at least one update has been received.
@@ -358,12 +360,14 @@ Client API Reference
       the timeout in seconds for the operation.
 
       If the stream has not been started this method calls ``start(False)`` to start the stream
-      (without waiting for at least one update to be received).
+      (without waiting for at least one update to be received). Raises ``StreamError`` if the
+      stream has been removed, before or during the wait.
 
    .. method:: add_callback(callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the stream.
+      An error from the stream does not invoke the callback. Calling the stream raises it.
 
       .. note::
 
@@ -387,7 +391,7 @@ Client API Reference
    .. method:: start()
 
       Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called.
+      this method is called. Raises ``StreamError`` if the event has been removed.
 
    .. attribute:: condition
 
@@ -404,7 +408,7 @@ Client API Reference
       the timeout in seconds for the operation.
 
       If the event has not been started this method calls ``start()`` to start the underlying
-      stream.
+      stream. Raises ``StreamError`` if the event has been removed.
 
    .. method:: add_callback(callback)
 
