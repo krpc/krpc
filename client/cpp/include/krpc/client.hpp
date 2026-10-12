@@ -49,6 +49,7 @@ class Client {
 
  private:
   friend class StreamManager;
+  friend class StreamImpl;
   void throw_exception(const schema::Error& error) const;
   schema::ProcedureResult send_request(const schema::Request& request);
   static void add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args);
@@ -88,7 +89,6 @@ class Client {
 
  private:
   std::shared_ptr<Connection> rpc_connection;
-  std::shared_ptr<StreamManager> stream_manager;
   std::shared_ptr<std::mutex> lock;
   // The request a call is built into, the bytes it is written as, and the response it is
   // answered by. Kept from one call to the next and guarded by lock, so that a call reuses the
@@ -104,6 +104,9 @@ class Client {
   // on both the calling thread and the stream update thread. Held by shared pointer as the
   // client is copyable and a mutex is not.
   std::shared_ptr<std::mutex> exception_throwers_lock;
+  // Declared last, so that it is destroyed first. Ending the streams calls end callbacks,
+  // which can use the rest of the client.
+  std::shared_ptr<StreamManager> stream_manager;
 };
 
 }  // namespace krpc

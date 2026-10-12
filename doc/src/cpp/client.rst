@@ -219,6 +219,23 @@ For example the following program registers two callbacks that are invoked when 
    The callback function may be called from a different thread to that which created the stream. Any
    changes to shared state must therefore be protected with appropriate synchronization.
 
+Stream Endings
+^^^^^^^^^^^^^^
+
+A stream ends when its procedure throws an exception, when the server removes it, when you remove
+it, or when the connection closes. From then on, reading the stream or waiting on it throws the
+exception that ended it. The following example streams the temperature of a part until the part is
+destroyed:
+
+.. literalinclude:: /scripts/client/cpp/StreamEnd.cpp
+
+A stream that the server removes, such as an event that has finished, ends with
+``krpc::services::KRPC::StreamRemovedException``. A stream you remove ends with
+``krpc::StreamError``, and a closed connection with ``krpc::ConnectionError``.
+
+To handle an ending in a callback, add an end callback with
+:func:`krpc::Stream::add_end_callback`. It is called once, with the exception.
+
 .. _cpp-client-events:
 
 Custom Events
@@ -234,6 +251,10 @@ expression ``mean_altitude > 1000`` and then creates an event that will be trigg
 expression returns true:
 
 .. literalinclude:: /scripts/client/cpp/Event.cpp
+
+A call to ``wait`` returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+``wait`` return once.
 
 Client API Reference
 --------------------
@@ -351,7 +372,7 @@ Client API Reference
       If wait is false, the method starts the stream and returns immediately. Subsequent calls to
       ``operator()`` may throw a ``krpc::StreamError`` exception.
 
-      Throws ``StreamError`` if the stream has been removed.
+      Throws the exception that ended the stream, if it ends before or during the wait.
 
    .. function:: float rate() const
    .. function:: void set_rate(float rate)
@@ -360,8 +381,9 @@ Client API Reference
 
    .. function:: T operator()()
 
-      Get the most recently received value from the stream. Throws ``StreamError`` if the stream
-      has been removed.
+      Get the most recently received value from the stream. Throws the exception that ended the
+      stream, if it has ended, such as an exception thrown by the remote procedure. Throws a
+      ``StreamError`` if no update has been received from the server.
 
    .. function:: std::condition_variable& get_condition() const
 
@@ -369,7 +391,8 @@ Client API Reference
 
    .. function:: std::unique_lock<std::mutex>& get_condition_lock() const
 
-      The lock for the condition variable.
+      The lock for the condition variable. Each stream object has its own lock, so a thread
+      waiting on a stream uses its own copy of the stream object.
 
    .. function:: void acquire()
 
@@ -379,15 +402,17 @@ Client API Reference
 
       Releases the lock on the mutex for the condition variable.
 
-   .. function:: void wait(double timeout = -1)
+   .. function:: bool wait(double timeout = -1)
 
-      This method blocks until the value of the stream changes or the operation times out.
+      This method blocks until the value of the stream changes or the operation times out. Returns
+      true if the value changed, and false on a timeout.
 
       The streams condition variable must be locked (by calling ``acquire``) before calling this
       method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation. Throws ``StreamError`` if the stream has been removed.
+      the operation. Throws the exception that ended the stream, if it ends before or during the
+      wait.
 
       If the stream has not been started this method calls ``start(false)`` to start the stream
       (without waiting for at least one update to be received).
@@ -409,9 +434,21 @@ Client API Reference
       Removes a callback from the stream. The tag is the identifier returned when the callback was
       added.
 
+   .. function:: int add_end_callback(const std::function<void(std::exception_ptr)>& callback)
+
+      Adds a callback function that is invoked once when the stream ends. The callback function
+      is passed the exception that ended the stream. It is invoked straight away if the stream has
+      already ended. Returns a unique identifier for the callback which can be used to remove it.
+
+   .. function:: void remove_end_callback(int tag)
+
+      Removes an end callback from the stream. The tag is the identifier returned when the
+      callback was added.
+
    .. function:: void remove()
 
-      Removes the stream from the server.
+      Removes the stream from the server. Every copy of the stream object refers to the same
+      stream.
 
    .. function:: bool operator==(const Stream<T>& rhs)
 
@@ -436,7 +473,7 @@ Client API Reference
    .. function:: void start()
 
       Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called. Throws ``StreamError`` if the event has been removed.
+      this method is called. Throws the exception that ended the event, if it has ended.
 
    .. function:: std::condition_variable& get_condition() const
 
@@ -444,7 +481,8 @@ Client API Reference
 
    .. function:: std::unique_lock<std::mutex>& get_condition_lock() const
 
-      The lock for the condition variable.
+      The lock for the condition variable. Each event object has its own lock, so a thread
+      waiting on an event uses its own copy of the event object.
 
    .. function:: void acquire()
 
@@ -454,14 +492,17 @@ Client API Reference
 
       Releases the lock on the mutex for the condition variable.
 
-   .. function:: void wait(double timeout = -1)
+   .. function:: bool wait(double timeout = -1)
 
-      This method blocks until the event occurs or the operation times out.
+      This method blocks until the event occurs or the operation times out. It returns straight
+      away if the event has occurred since the previous call on this event object. Returns true if
+      the event occurred, and false on a timeout.
 
       The events condition variable must be locked before calling this method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation. Throws ``StreamError`` if the event has been removed.
+      the operation. Throws the exception that ended the event, if it ends before or during the
+      wait.
 
       If the event has not been started this method calls ``start()`` to start the underlying
       stream.
@@ -476,6 +517,17 @@ Client API Reference
 
       Removes a callback from the event. The tag is the identifier returned when the callback was
       added.
+
+   .. function:: int add_end_callback(const std::function<void(std::exception_ptr)>& callback)
+
+      Adds a callback function that is invoked once when the event ends, with the exception that
+      ended it. It is invoked straight away if the event has already ended. Returns a unique
+      identifier for the callback which can be used to remove it.
+
+   .. function:: void remove_end_callback(int tag)
+
+      Removes an end callback from the event. The tag is the identifier returned when the callback
+      was added.
 
    .. function:: void remove()
 

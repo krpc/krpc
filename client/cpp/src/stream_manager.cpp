@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "krpc/client.hpp"
 #include "krpc/connection.hpp"
@@ -19,30 +20,34 @@
 
 namespace krpc {
 
+namespace {
+
+std::exception_ptr closed_error() {
+  return std::make_exception_ptr(ConnectionError("Connection closed"));
+}
+
+}  // namespace
+
 StreamManager::StreamManager(Client* client, const std::shared_ptr<Connection>& connection)
     : client(client),
       connection(connection),
       update_lock(new std::recursive_mutex),
       stop(new std::atomic_bool(false)),
-      update_thread(new std::thread(update_thread_main, this, connection, stop)),
+      closed(false),
       condition_lock(condition_mutex, std::defer_lock),
-      next_callback_tag(0) {}
+      next_callback_tag(0) {
+  // Started once every member it uses is constructed
+  update_thread = std::make_shared<std::thread>(update_thread_main, this, connection, stop);
+}
 
 StreamManager::~StreamManager() {
   stop->store(true);
   update_thread->join();
-  update_lock.reset();
 }
 
 std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCall& call) {
   schema::Stream stream = services::KRPC(client).add_stream(call, false);
-  std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  auto it = streams.find(stream.id());
-  if (it != streams.end())
-    if (auto stream = it->second.lock()) return stream;
-  auto stream_impl = std::make_shared<StreamImpl>(client, stream.id(), update_lock.get());
-  streams[stream.id()] = stream_impl;
-  return stream_impl;
+  return get_stream(stream.id());
 }
 
 std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
@@ -50,58 +55,97 @@ std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
   auto it = streams.find(id);
   if (it != streams.end())
     if (auto stream = it->second.lock()) return stream;
-  auto stream_impl = std::make_shared<StreamImpl>(client, id, update_lock.get());
+  auto stream_impl = std::make_shared<StreamImpl>(client, id, update_lock);
+  if (closed) {
+    auto ending = closed_error();
+    call_end_callbacks(stream_impl->end(ending), ending);
+    return stream_impl;
+  }
   streams[id] = stream_impl;
   return stream_impl;
 }
 
 void StreamManager::remove_stream(uint64_t id) {
-  std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  if (streams.find(id) == streams.end()) return;
+  std::shared_ptr<StreamImpl> stream;
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    auto it = streams.find(id);
+    if (it == streams.end()) return;
+    stream = it->second.lock();
+  }
+  if (stream) remove_stream(stream.get());
+}
+
+void StreamManager::remove_stream(StreamImpl* stream) {
+  auto id = stream->get_id();
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    // The server can give a stream added since the id of this one, which stays live
+    auto it = streams.find(id);
+    if (it == streams.end() || it->second.lock().get() != stream) return;
+    streams.erase(it);
+  }
+  // The stream ends before the call, so a value decoded during the call is dropped and the
+  // ending holds whether or not the call succeeds
+  auto ending = std::make_exception_ptr(StreamError("Stream does not exist"));
+  call_end_callbacks(stream->end(ending), ending);
   services::KRPC(client).remove_stream(id);
-  streams.erase(id);
+}
+
+void StreamManager::notify_closed() {
+  std::vector<std::shared_ptr<StreamImpl>> ended;
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    closed = true;
+    for (const auto& entry : streams)
+      if (auto stream = entry.second.lock()) ended.push_back(stream);
+    streams.clear();
+  }
+  auto ending = closed_error();
+  for (const auto& stream : ended) call_end_callbacks(stream->end(ending), ending);
+  std::lock_guard<std::mutex> guard(condition_mutex);
+  condition.notify_all();
 }
 
 void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   std::shared_ptr<StreamImpl> stream;
   StreamImpl::Callbacks callbacks;
-  // The update lock is held only to find the stream and copy its callbacks, and is released
-  // before the stream's condition is taken. A thread waiting for an update holds the
-  // condition and then needs the update lock, as Event::wait resets the stream value while
-  // holding it. Taking the two in the opposite order here deadlocks. The callbacks are
-  // copied for the same reason: they run below without the lock held.
+  // Locks are taken in the order stream condition, then update lock. The update lock is
+  // held only to find the stream and copy its callbacks, and is released before the
+  // stream's condition is taken. The callbacks run below without it held.
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
     auto it = streams.find(id);
     if (it == streams.end()) return;
     stream = it->second.lock();
     if (!stream) return;
+    // An error is the final result, and the server has already removed the stream
+    if (result.has_error()) streams.erase(it);
     callbacks = stream->get_callbacks();
   }
 
-  if (!result.has_error()) {
-    stream->update_and_notify(result.value(), result.is_null(), nullptr);
-  } else {
+  if (result.has_error()) {
+    std::exception_ptr ending;
     try {
       client->throw_exception(result.error());
     } catch (...) {
-      stream->update_and_notify("", false, std::current_exception());
+      ending = std::current_exception();
     }
+    call_end_callbacks(stream->end(ending), ending);
+    return;
   }
 
-  // A stream in an error state has no value to give a callback: a callback takes the encoded
-  // value and there is nowhere to put an exception. Skip them for such an update. Anything a
-  // callback itself throws is contained here too, as an exception leaving the update thread
-  // calls std::terminate and ends the process.
-  if (!result.has_error()) {
-    for (const auto& callback : callbacks) {
-      try {
-        callback.second(result.value(), result.is_null());
-      } catch (const std::exception& exn) {
-        std::cerr << "kRPC: exception thrown by a stream callback: " << exn.what() << "\n";
-      } catch (...) {
-        std::cerr << "kRPC: unknown exception thrown by a stream callback\n";
-      }
+  if (!stream->update_and_notify(result.value(), result.is_null())) return;
+
+  // An exception leaving the update thread calls std::terminate and ends the process, so
+  // anything a callback throws is reported here, including a value that fails to decode
+  for (const auto& callback : callbacks) {
+    try {
+      callback.second(result.value(), result.is_null());
+    } catch (const std::exception& exn) {
+      std::cerr << "kRPC: exception thrown by a stream callback: " << exn.what() << "\n";
+    } catch (...) {
+      std::cerr << "kRPC: unknown exception thrown by a stream callback\n";
     }
   }
 }
@@ -126,6 +170,20 @@ void StreamManager::remove_update_callback(int tag) {
 void StreamManager::update_thread_main(StreamManager* stream_manager,
                                        const std::shared_ptr<Connection>& connection,
                                        const std::shared_ptr<std::atomic_bool>& stop) {
+  try {
+    read_updates(stream_manager, connection, stop);
+  } catch (...) {
+    // A connection that fails, or a message that cannot be read, leaves the connection
+    // unusable
+    connection->close();
+  }
+  // The connection is closed or failed, so no further update arrives
+  stream_manager->notify_closed();
+}
+
+void StreamManager::read_updates(StreamManager* stream_manager,
+                                 const std::shared_ptr<Connection>& connection,
+                                 const std::shared_ptr<std::atomic_bool>& stop) {
   Client* client = stream_manager->client;
 
   auto apply_update = [stream_manager, client](const std::string& data) {
@@ -146,7 +204,15 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
       std::lock_guard<std::recursive_mutex> guard(*stream_manager->update_lock);
       callbacks = stream_manager->callbacks;
     }
-    for (const auto& callback : callbacks) callback.second();
+    for (const auto& callback : callbacks) {
+      try {
+        callback.second();
+      } catch (const std::exception& exn) {
+        std::cerr << "kRPC: exception thrown by a stream update callback: " << exn.what() << "\n";
+      } catch (...) {
+        std::cerr << "kRPC: unknown exception thrown by a stream update callback\n";
+      }
+    }
   };
 
   while (!stop->load()) {
@@ -164,7 +230,7 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
     if (stop->load()) break;
 
     // Decode and apply the update
-    if (size > 0) apply_update(connection->receive(size));
+    apply_update(connection->receive(size));
   }
 }
 

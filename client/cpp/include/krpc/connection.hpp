@@ -40,7 +40,8 @@ class Connection {
   void receive_message(google::protobuf::MessageLite& message);
   /** Receive data from the connection. Blocks until length bytes have been received. */
   std::string receive(size_t length);
-  /** Receive up to length bytes of data from the connection. */
+  /** Receive up to length bytes of data from the connection, or none if the timeout passes
+      first. Throws if the connection has closed or failed. */
   std::string partial_receive(size_t length,
                               std::chrono::milliseconds timeout = std::chrono::milliseconds(10));
 

@@ -4,10 +4,26 @@
 #include <asio/ip/address.hpp>
 #include <asio/ip/tcp.hpp>
 #include <chrono>  // NOLINT(build/c++11)
+#include <functional>
 #include <krpc.hpp>
+#include <krpc/connection.hpp>
 #include <krpc/services/krpc.hpp>
+#include <memory>
+#include <string>
+#include <thread>  // NOLINT(build/c++11)
 
 #include "services/test_service.hpp"
+
+/** A connection a test can shut down, which stands in for the server closing it. */
+template <typename Base>
+class shutdown_connection : public Base {
+ public:
+  using Base::Base;
+  void shutdown() {
+    asio::error_code error;
+    this->socket.shutdown(asio::socket_base::shutdown_both, error);
+  }
+};
 
 class server_test : public ::testing::Test {
  public:
@@ -18,6 +34,11 @@ class server_test : public ::testing::Test {
       connect them the wrong way round. */
   krpc::Client connect(const std::string& name = "C++ClientTest", const std::string& rpc = "rpc",
                        const std::string& stream = "stream");
+  /** A client of the test's own, which the test closes by destroying it. Sets shutdown, if
+      given, to a function that shuts down the client's stream connection. */
+  std::unique_ptr<krpc::Client> connect_client(std::function<void()>* shutdown = nullptr);
+  /** Whether condition becomes true within ten seconds. */
+  static bool eventually(const std::function<bool()>& condition);
   int get_rpc_port() const;
   int get_stream_port() const;
   const char* get_rpc_path() const;
@@ -46,6 +67,37 @@ inline krpc::Client server_test::connect(const std::string& name, const std::str
                                stream == "rpc" ? get_rpc_path() : get_stream_path());
   return krpc::connect(name, "localhost", rpc == "rpc" ? get_rpc_port() : get_stream_port(),
                        stream == "rpc" ? get_rpc_port() : get_stream_port());
+}
+
+inline std::unique_ptr<krpc::Client> server_test::connect_client(std::function<void()>* shutdown) {
+  std::shared_ptr<krpc::Connection> rpc;
+  std::shared_ptr<krpc::Connection> stream;
+  std::function<void()> shutdown_stream;
+  if (get_rpc_path() != nullptr) {
+    rpc = std::make_shared<krpc::LocalConnection>(get_rpc_path());
+    auto connection =
+        std::make_shared<shutdown_connection<krpc::LocalConnection>>(get_stream_path());
+    shutdown_stream = [connection] { connection->shutdown(); };
+    stream = connection;
+  } else {
+    rpc = std::make_shared<krpc::Connection>("localhost", get_rpc_port());
+    auto connection =
+        std::make_shared<shutdown_connection<krpc::Connection>>("localhost", get_stream_port());
+    shutdown_stream = [connection] { connection->shutdown(); };
+    stream = connection;
+  }
+  if (shutdown != nullptr) *shutdown = shutdown_stream;
+  // Constructed in place, as the stream manager keeps the client's address
+  return std::make_unique<krpc::Client>("C++ClientTest", rpc, stream);
+}
+
+inline bool server_test::eventually(const std::function<bool()>& condition) {
+  auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(10);
+  while (!condition()) {
+    if (std::chrono::steady_clock::now() >= deadline) return false;
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  return true;
 }
 
 inline const char* server_test::get_rpc_path() const { return std::getenv("RPC_PATH"); }

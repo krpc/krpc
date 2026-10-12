@@ -27,17 +27,22 @@ void Event::acquire() { _stream.acquire(); }
 
 void Event::release() { _stream.release(); }
 
-void Event::wait(double timeout) {
-  _stream.check_not_removed();
-  start();
-  _stream.impl->update_unless_removed(std::string("\x00", 1), false);
-  while (!_stream()) {
-    bool origValue = _stream();
-    _stream.wait(timeout);
-    if (timeout >= 0 && _stream() == origValue)
-      // Value did not change, must have timed out
-      return;
-  }
+bool Event::wait(double timeout) {
+  _stream.check_exists();
+  auto& impl = _stream.impl;
+  bool fired = false;
+  impl->with_condition([this, &impl, timeout, &fired](std::unique_lock<std::mutex>& held) {
+    if (!impl->has_started()) {
+      impl->throw_if_ended();
+      impl->start();
+    }
+    // A firing not yet seen returns before an ending is thrown
+    auto last_seen = seen;
+    fired =
+        impl->wait(&held, timeout, [&impl, last_seen] { return impl->get_fired() > last_seen; });
+    if (fired) seen = impl->get_fired();
+  });
+  return fired;
 }
 
 int Event::add_callback(const Callback& callback) {
@@ -45,6 +50,12 @@ int Event::add_callback(const Callback& callback) {
 }
 
 void Event::remove_callback(int tag) { return _stream.remove_callback(tag); }
+
+int Event::add_end_callback(const EndCallback& callback) {
+  return _stream.add_end_callback(callback);
+}
+
+void Event::remove_end_callback(int tag) { _stream.remove_end_callback(tag); }
 
 void Event::remove() { _stream.remove(); }
 

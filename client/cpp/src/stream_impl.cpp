@@ -1,24 +1,34 @@
 #include "krpc/stream_impl.hpp"
 
+#include <algorithm>
+#include <atomic>
+#include <chrono>  // NOLINT(build/c++11)
 #include <exception>
+#include <iostream>
+#include <memory>
 #include <string>
+#include <thread>  // NOLINT(build/c++11)
+#include <utility>
 
 #include "krpc/client.hpp"
 #include "krpc/error.hpp"
 #include "krpc/services/krpc.hpp"
+#include "krpc/stream_manager.hpp"
 
 namespace krpc {
 
-StreamImpl::StreamImpl(Client* client, uint64_t id, std::recursive_mutex* update_lock)
+StreamImpl::StreamImpl(Client* client, uint64_t id,
+                       std::shared_ptr<std::recursive_mutex> update_lock)
     : client(client),
       id(id),
-      update_lock(update_lock),
+      update_lock(std::move(update_lock)),
       started(false),
       updated(false),
-      removed(false),
       _is_null(false),
-      condition_lock(condition_mutex, std::defer_lock),
+      version(0),
+      fired(0),
       next_callback_tag(0),
+      next_end_callback_tag(0),
       _rate(0) {}
 
 Client* StreamImpl::get_client() const { return client; }
@@ -36,6 +46,8 @@ float StreamImpl::rate() const { return _rate; }
 
 void StreamImpl::set_rate(float value) {
   _rate = value;
+  // The client of an ended stream can be gone
+  if (has_ended()) return;
   services::KRPC(client).set_stream_rate(id, value);
 }
 
@@ -43,56 +55,127 @@ bool StreamImpl::has_started() const { return started; }
 
 std::string StreamImpl::get_data(bool* is_null) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  if (ending) std::rethrow_exception(ending);
   if (!updated) throw StreamError("Stream has no value");
-  if (exception) std::rethrow_exception(exception);
   *is_null = _is_null;
   return data;
 }
 
-void StreamImpl::update(const std::string& data, bool is_null,
-                        const std::exception_ptr& exception) {
-  std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  // Store the value before the flag that says there is one. A reader checks the flag first
-  // and takes no lock, so the other order lets it see the flag set and read the value that
-  // has not been stored yet.
-  this->data = data;
-  this->_is_null = is_null;
-  this->exception = exception;
-  updated = true;
-}
-
-void StreamImpl::update_unless_removed(const std::string& data, bool is_null) {
-  std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  if (!removed) update(data, is_null, nullptr);
-}
-
-// Store an update and wake the threads waiting for one. We hold the condition across both,
-// so that a notification cannot fire between a waiter checking the value and entering its
-// wait.
-void StreamImpl::update_and_notify(const std::string& data, bool is_null,
-                                   const std::exception_ptr& exception) {
+// We hold the condition across the store and the notification, so that a notification
+// cannot fire between a waiter checking the value and entering its wait.
+bool StreamImpl::update_and_notify(const std::string& data, bool is_null) {
   std::lock_guard<std::mutex> guard(condition_mutex);
   {
     std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
-    // The stream can be removed while an update for it is in flight. Removal stores the
-    // error saying so, which this value must not overwrite: no further update arrives to
-    // replace it, and the stream would read as live forever.
-    if (removed) return;
-    update(data, is_null, exception);
+    // The stream can be removed while its value is in flight. The ending it stored is kept.
+    if (ending) return false;
+    // Store the value before the flag that says there is one. A reader checks the flag
+    // first and takes no lock, so the other order lets it see the flag set and read the
+    // value that has not been stored yet.
+    this->data = data;
+    this->_is_null = is_null;
+    updated = true;
+    version++;
+    // An encoded bool true
+    if (!is_null && data == "\x01") fired++;
   }
   condition.notify_all();
+  return true;
 }
 
 bool StreamImpl::has_updated() const { return updated; }
 
-bool StreamImpl::is_removed() const {
+uint64_t StreamImpl::get_version() const {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  return removed;
+  return version;
+}
+
+uint64_t StreamImpl::get_fired() const {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  return fired;
+}
+
+bool StreamImpl::has_ended() const {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  return ending != nullptr;
+}
+
+void StreamImpl::throw_if_ended() const {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  if (ending) std::rethrow_exception(ending);
+}
+
+StreamImpl::EndCallbacks StreamImpl::end(const std::exception_ptr& ending) {
+  std::unique_lock<std::mutex> guard(condition_mutex, std::defer_lock);
+  if (!is_held()) guard.lock();
+  EndCallbacks result;
+  {
+    std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
+    if (this->ending) return result;
+    this->ending = ending;
+    result.swap(end_callbacks);
+  }
+  condition.notify_all();
+  return result;
+}
+
+bool StreamImpl::wait(std::unique_lock<std::mutex>* lock, double timeout,
+                      const std::function<bool()>& done) {
+  // Clamped so that the deadline does not overflow the clock
+  auto duration = std::chrono::duration<double>(std::min(timeout, 1e9));
+  auto deadline = std::chrono::steady_clock::now() +
+                  std::chrono::duration_cast<std::chrono::steady_clock::duration>(duration);
+  while (!done()) {
+    throw_if_ended();
+    if (timeout < 0) {
+      condition.wait(*lock);
+      continue;
+    }
+    if (std::chrono::steady_clock::now() >= deadline) return false;
+    condition.wait_until(*lock, deadline);
+  }
+  return true;
+}
+
+void StreamImpl::with_condition(const std::function<void(std::unique_lock<std::mutex>&)>& fn) {
+  if (!is_held()) {
+    std::unique_lock<std::mutex> lock(condition_mutex);
+    fn(lock);
+    return;
+  }
+  // The thread's own hold, which a wait in fn releases and takes again
+  std::unique_lock<std::mutex> lock(condition_mutex, std::adopt_lock);
+  try {
+    fn(lock);
+  } catch (...) {
+    lock.release();
+    throw;
+  }
+  lock.release();
+}
+
+bool StreamImpl::is_held() const {
+  std::lock_guard<std::mutex> guard(holds_mutex);
+  return holds.count(std::this_thread::get_id()) > 0;
+}
+
+void StreamImpl::add_hold() {
+  std::lock_guard<std::mutex> guard(holds_mutex);
+  holds[std::this_thread::get_id()]++;
+}
+
+bool StreamImpl::remove_hold() {
+  std::lock_guard<std::mutex> guard(holds_mutex);
+  auto hold = holds.find(std::this_thread::get_id());
+  if (hold == holds.end()) return false;
+  if (--hold->second > 0) return false;
+  holds.erase(hold);
+  return true;
 }
 
 std::condition_variable& StreamImpl::get_condition() { return condition; }
 
-std::unique_lock<std::mutex>& StreamImpl::get_condition_lock() { return condition_lock; }
+std::mutex& StreamImpl::get_condition_mutex() { return condition_mutex; }
 
 const StreamImpl::Callbacks& StreamImpl::get_callbacks() const { return callbacks; }
 
@@ -109,22 +192,43 @@ void StreamImpl::remove_callback(int tag) {
   callbacks.erase(tag);
 }
 
+int StreamImpl::add_end_callback(const EndCallback& callback) {
+  std::exception_ptr ended;
+  int tag = 0;
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    tag = next_end_callback_tag;
+    next_end_callback_tag++;
+    ended = ending;
+    if (!ended) end_callbacks[tag] = callback;
+  }
+  // A stream that has already ended calls the callback here, as no ending is to come
+  if (ended) call_end_callbacks({{tag, callback}}, ended);
+  return tag;
+}
+
+void StreamImpl::remove_end_callback(int tag) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  end_callbacks.erase(tag);
+}
+
 void StreamImpl::remove() {
-  {
-    std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
-    // A handle sharing this stream can remove it again after a new stream reuses its id
-    if (removed) return;
-    client->remove_stream(id);
-    removed = true;
+  // The client of an ended stream can be gone
+  if (has_ended()) return;
+  client->streams().remove_stream(this);
+}
+
+void call_end_callbacks(const StreamImpl::EndCallbacks& callbacks,
+                        const std::exception_ptr& ending) {
+  for (const auto& callback : callbacks) {
+    try {
+      callback.second(ending);
+    } catch (const std::exception& exn) {
+      std::cerr << "kRPC: exception thrown by a stream end callback: " << exn.what() << "\n";
+    } catch (...) {
+      std::cerr << "kRPC: unknown exception thrown by a stream end callback\n";
+    }
   }
-  std::lock_guard<std::mutex> guard(condition_mutex);
-  {
-    std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
-    update("", false, std::make_exception_ptr(StreamError("Stream does not exist")));
-  }
-  // No further update arrives for a removed stream, so a thread waiting on it has to be
-  // woken here. It reads the error stored above on waking.
-  condition.notify_all();
 }
 
 }  // namespace krpc

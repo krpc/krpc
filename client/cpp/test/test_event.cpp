@@ -3,9 +3,14 @@
 
 #include <atomic>
 #include <chrono>  // NOLINT(build/c++11)
+#include <exception>
+#include <functional>
+#include <memory>
+#include <thread>  // NOLINT(build/c++11)
 // IWYU pragma: no_include <ext/alloc_traits.h>
 
 #include "gtest/gtest.h"
+#include "krpc/error.hpp"
 #include "krpc/event.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream.hpp"
@@ -18,7 +23,7 @@ TEST_F(test_event, test_event) {
   auto event = test_service.on_timer(200);
   event.acquire();
   auto start_time = std::chrono::high_resolution_clock::now();
-  event.wait();
+  ASSERT_TRUE(event.wait());
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
   // Lower bound is a correctness check (the event must not fire before its
@@ -26,7 +31,6 @@ TEST_F(test_event, test_event) {
   // test does not flake under parallel load.
   ASSERT_GT(duration.count(), 0.15);
   ASSERT_LT(duration.count(), 2);
-  ASSERT_TRUE(event.stream()());
   event.release();
 }
 
@@ -34,14 +38,12 @@ TEST_F(test_event, test_event_timeout_short) {
   auto event = test_service.on_timer(200);
   event.acquire();
   auto start_time = std::chrono::high_resolution_clock::now();
-  event.wait(0.1);
+  ASSERT_FALSE(event.wait(0.1));
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
   ASSERT_LT(duration.count(), 0.2);
   ASSERT_GT(duration.count(), 0.08);
-  ASSERT_FALSE(event.stream()());
-  event.wait();
-  ASSERT_TRUE(event.stream()());
+  ASSERT_TRUE(event.wait());
   event.release();
 }
 
@@ -49,12 +51,11 @@ TEST_F(test_event, test_event_timeout_long) {
   auto event = test_service.on_timer(200);
   event.acquire();
   auto start_time = std::chrono::high_resolution_clock::now();
-  event.wait(1);
+  ASSERT_TRUE(event.wait(1));
   auto end_time = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end_time - start_time;
   ASSERT_GT(duration.count(), 0.15);
   ASSERT_LT(duration.count(), 2);
-  ASSERT_TRUE(event.stream()());
   event.release();
 }
 
@@ -64,10 +65,9 @@ TEST_F(test_event, test_event_loop) {
   event.acquire();
   auto repeat = 0;
   while (true) {
-    event.wait();
+    ASSERT_TRUE(event.wait());
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end_time - start_time;
-    ASSERT_TRUE(event.stream()());
     repeat++;
     ASSERT_GT(duration.count(), 0.2 * repeat - 0.05);
     ASSERT_LT(duration.count(), 0.2 * repeat + 2);
@@ -175,7 +175,7 @@ TEST_F(test_event, test_assignable) {
   e = test_service.on_timer(100);
   ASSERT_TRUE(e);
   e.acquire();
-  e.wait();
+  ASSERT_TRUE(e.wait());
   e.release();
 }
 
@@ -196,4 +196,129 @@ TEST_F(test_event, test_equality) {
   ASSERT_FALSE(e1 != e2);
   ASSERT_TRUE(e2 == e1);
   ASSERT_FALSE(e2 != e1);
+}
+
+TEST_F(test_event, test_server_removed_event) {
+  auto event = test_service.on_timer(100);
+  std::atomic<int> ended(0);
+  std::atomic_bool removed(false);
+  event.add_end_callback([&ended, &removed](const std::exception_ptr& ending) {
+    try {
+      std::rethrow_exception(ending);
+    } catch (const krpc::services::KRPC::StreamRemovedException&) {
+      removed.store(true);
+    } catch (...) {  // NOLINT(bugprone-empty-catch): the flag stays false
+    }
+    ended++;
+  });
+  event.acquire();
+  ASSERT_TRUE(event.wait());
+  EXPECT_THROW(event.wait(), krpc::services::KRPC::StreamRemovedException);
+  EXPECT_THROW(event.wait(0.1), krpc::services::KRPC::StreamRemovedException);
+  event.release();
+  // The end callbacks run after the waiters wake
+  ASSERT_TRUE(eventually([&ended] { return ended.load() == 1; }));
+  ASSERT_TRUE(removed.load());
+}
+
+TEST_F(test_event, test_firing_before_wait) {
+  auto event = test_service.on_timer(100);
+  event.start();
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  event.acquire();
+  auto start_time = std::chrono::steady_clock::now();
+  ASSERT_TRUE(event.wait(1));
+  std::chrono::duration<double> duration = std::chrono::steady_clock::now() - start_time;
+  ASSERT_LT(duration.count(), 0.1);
+  event.release();
+}
+
+TEST_F(test_event, test_firings_coalesce) {
+  auto event = test_service.on_timer(50, 3);
+  event.start();
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  event.acquire();
+  ASSERT_TRUE(event.wait());
+  EXPECT_THROW(event.wait(), krpc::services::KRPC::StreamRemovedException);
+  event.release();
+}
+
+// Each thread waits on its own copy of the event object, as each has its own lock
+TEST_F(test_event, test_two_threads_wait_on_one_event) {
+  auto event = test_service.on_timer(1000);
+  event.start();
+  std::atomic<int> woke(0);
+  auto wait = [&woke](krpc::Event copy) {
+    copy.acquire();
+    if (copy.wait(5)) woke++;
+    copy.release();
+  };
+  std::thread first(wait, event);
+  std::thread second(wait, event);
+  first.join();
+  second.join();
+  ASSERT_EQ(2, woke.load());
+}
+
+TEST_F(test_event, test_error_ends_the_event) {
+  typedef krpc::services::KRPC::Expression Expr;
+  auto expr =
+      Expr::equal(conn, Expr::call(conn, test_service.throw_invalid_operation_exception_call()),
+                  Expr::constant_int(conn, 0));
+  auto event = krpc.add_event(expr);
+  event.acquire();
+  EXPECT_THROW(event.wait(), krpc::services::KRPC::InvalidOperationException);
+  EXPECT_THROW(event.wait(), krpc::services::KRPC::InvalidOperationException);
+  event.release();
+}
+
+TEST_F(test_event, test_remove_wakes_an_event_wait) {
+  auto event = test_service.on_timer(10000);
+  krpc::Event copy = event;
+  event.start();
+  std::atomic_bool waiting(false);
+  std::thread waiter([&copy, &waiting] {
+    copy.acquire();
+    waiting.store(true);
+    EXPECT_THROW(copy.wait(), krpc::StreamError);
+    copy.release();
+  });
+  // The waiter holds the condition until it enters its wait, so the removal below cannot
+  // notify before then
+  ASSERT_TRUE(eventually([&waiting] { return waiting.load(); }));
+  event.remove();
+  waiter.join();
+}
+
+TEST_F(test_event, test_remove_while_holding_condition) {
+  auto event = test_service.on_timer(10000);
+  event.acquire();
+  event.remove();
+  EXPECT_THROW(event.wait(), krpc::StreamError);
+  event.release();
+}
+
+TEST_F(test_event, test_remove_through_another_handle_while_holding_condition) {
+  auto event = test_service.on_timer(10000);
+  event.acquire();
+  event.stream().remove();
+  EXPECT_THROW(event.wait(), krpc::StreamError);
+  event.release();
+}
+
+TEST_F(test_event, test_close_wakes_an_event_wait) {
+  auto client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto event = service.on_timer(10000);
+  event.start();
+  std::atomic_bool waiting(false);
+  std::thread waiter([&event, &waiting] {
+    event.acquire();
+    waiting.store(true);
+    EXPECT_THROW(event.wait(), krpc::ConnectionError);
+    event.release();
+  });
+  ASSERT_TRUE(eventually([&waiting] { return waiting.load(); }));
+  client.reset();
+  waiter.join();
 }

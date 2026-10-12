@@ -1,6 +1,8 @@
 #pragma once
 
 #include <condition_variable>  // NOLINT(build/c++11)
+#include <cstdint>
+#include <exception>
 #include <functional>
 #include <mutex>  // NOLINT(build/c++11)
 
@@ -17,20 +19,21 @@ class Event {
  public:
   Event();
   Event(Client* client, const krpc::schema::Event& message);
-  /** Start the event. Throws StreamError if the event has been removed. */
+  /** Start the event. Throws the exception that ended the event, if it has ended. */
   void start();
   /** Condition variable that is notified when the event occurs */
   std::condition_variable& get_condition() const;
-  /** Lock used with the condition variable */
+  /** Lock used with the condition variable. Each event object has its own. */
   std::unique_lock<std::mutex>& get_condition_lock() const;
   /** Acquire a lock on the condition variable */
   void acquire();
   /** Release the lock on the condition variable */
   void release();
-  /** Wait until the event occurs. If timeout >= 0, the
-      operation times out after that many seconds. Throws StreamError
-      if the event has been removed. */
-  void wait(double timeout = -1);
+  /** Wait until the event occurs. Returns straight away if the event has occurred since the
+      last wait on this event object. If timeout >= 0, the operation times out after that many
+      seconds. Returns true if the event occurred, and false on a timeout. Throws the
+      exception that ended the event, if it ends before or during the wait. */
+  bool wait(double timeout = -1);
   typedef std::function<void()> Callback;
   /**
    * Add a callback that is invoked whenever the event occurs.
@@ -40,6 +43,15 @@ class Event {
   int add_callback(const Callback& callback);
   /** Remove a callback, based on its tag */
   void remove_callback(int tag);
+  typedef std::function<void(std::exception_ptr)> EndCallback;
+  /**
+   * Add a callback that is invoked once when the event ends, with the exception that ended
+   * it. It is invoked straight away if the event has already ended. Returns an integer tag
+   * for the callback, which allows it to be removed using remove_end_callback()
+   */
+  int add_end_callback(const EndCallback& callback);
+  /** Remove an end callback, based on its tag */
+  void remove_end_callback(int tag);
   /** Remove the event from the server */
   void remove();
   /** Returns the underlying stream for the event */
@@ -50,6 +62,8 @@ class Event {
 
  private:
   Stream<bool> _stream;
+  // The number of firings when a wait on this event object last returned
+  uint64_t seen = 0;
 };
 
 }  // namespace krpc

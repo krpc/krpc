@@ -209,11 +209,14 @@ std::string Connection::partial_receive(size_t length, std::chrono::milliseconds
   timer.async_wait([&timer_complete](const asio::error_code& error) { timer_complete = true; });
 
   bool read_complete = false;
-  asio::async_read(socket, asio::buffer(&data[0], length),
-                   [&read, &read_complete](const asio::error_code& error, size_t length) {
-                     read = length;
-                     read_complete = true;
-                   });
+  asio::error_code read_error;
+  asio::async_read(
+      socket, asio::buffer(&data[0], length),
+      [&read, &read_complete, &read_error](const asio::error_code& error, size_t length) {
+        read = length;
+        read_error = error;
+        read_complete = true;
+      });
 
   io_context.restart();
   while (io_context.run_one()) {
@@ -223,6 +226,9 @@ std::string Connection::partial_receive(size_t length, std::chrono::milliseconds
       socket.cancel();
   }
 
+  // The timeout cancels the read, which is the one failure that leaves the connection usable
+  if (read == 0 && read_error && read_error != asio::error::operation_aborted)
+    throw asio::system_error(read_error);
   if (read < length) data.resize(read);
   return data;
 }
