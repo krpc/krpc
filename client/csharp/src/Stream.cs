@@ -11,11 +11,15 @@ namespace KRPC.Client
     {
         internal readonly StreamImpl stream;
         readonly Func<object, TReturnType> convert;
-        readonly object convertKey;
 
         internal Stream (Connection connection, ulong id)
         {
             stream = connection.StreamManager.GetStream (TypeSpec.For (typeof(TReturnType)), id);
+        }
+
+        internal Stream (Connection connection, ulong id, TypeSpec returnType)
+        {
+            stream = connection.StreamManager.GetStream (returnType, id);
         }
 
         internal Stream (Connection connection, ProcedureCall call)
@@ -28,12 +32,15 @@ namespace KRPC.Client
             stream = connection.StreamManager.AddStream (returnType, call);
         }
 
-        internal Stream (Connection connection, ProcedureCall call, TypeSpec rpcReturnType,
-                         Func<object, TReturnType> convert, object convertKey)
+        /// <summary>
+        /// A stream of a call, whose values are converted on the client.
+        /// </summary>
+        internal Stream (
+            Connection connection, ProcedureCall call, TypeSpec returnType,
+            Func<object, TReturnType> convert)
         {
-            stream = connection.StreamManager.AddStream (rpcReturnType, call);
+            stream = connection.StreamManager.AddStream (returnType, call);
             this.convert = convert;
-            this.convertKey = convertKey;
         }
 
         /// <summary>
@@ -54,8 +61,7 @@ namespace KRPC.Client
         /// </summary>
         public bool Equals (Stream<TReturnType> other)
         {
-            return !ReferenceEquals (other, null) && stream.Id == other.stream.Id &&
-                Equals (convertKey, other.convertKey);
+            return !ReferenceEquals (other, null) && stream.Id == other.stream.Id;
         }
 
         /// <summary>
@@ -87,10 +93,7 @@ namespace KRPC.Client
         /// </summary>
         public override int GetHashCode ()
         {
-            var hash = stream.GetHashCode ();
-            if (convertKey != null)
-                hash ^= convertKey.GetHashCode ();
-            return hash;
+            return stream.GetHashCode ();
         }
 
         /// <summary>
@@ -123,6 +126,11 @@ namespace KRPC.Client
         {
             if (convert != null)
                 return convert (value);
+            if (value == null && typeof (TReturnType).IsValueType &&
+                System.Nullable.GetUnderlyingType (typeof (TReturnType)) == null)
+                throw new System.InvalidOperationException (
+                    "The stream's value is null, which " + typeof (TReturnType) +
+                    " cannot hold. Use a nullable type for the stream.");
             return (TReturnType) value;
         }
 

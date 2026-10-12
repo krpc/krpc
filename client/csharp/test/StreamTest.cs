@@ -101,6 +101,16 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void NarrowingConversionIsComputed ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            obj.IntProperty = 16777217;
+            var x = Connection.AddStream (() => (int)(float)obj.IntProperty);
+            Assert.AreEqual (16777216, x.Get ());
+            Assert.AreNotEqual (Connection.AddStream (() => obj.IntProperty), x);
+        }
+
+        [Test]
         public void MultiplyByConstant ()
         {
             var obj = Connection.TestService ().CreateTestObject ("jeb");
@@ -143,9 +153,11 @@ namespace KRPC.Client.Test
         {
             var obj = Connection.TestService ().CreateTestObject ("jeb");
             obj.IntProperty = 42;
-            var exn = Assert.Throws<ArgumentException> (
-                          () => Connection.AddStream (() => obj.IntProperty * obj.IntProperty));
-            Assert.That (exn.Message, Does.Contain ("Cannot multiply two remote calls"));
+            var x = Connection.AddStream (() => obj.IntProperty * obj.IntProperty);
+            for (int i = 0; i < 5; i++) {
+                Assert.AreEqual (42 * 42, x.Get ());
+                Wait ();
+            }
         }
 
         [Test]
@@ -153,13 +165,14 @@ namespace KRPC.Client.Test
         {
             var obj = Connection.TestService ().CreateTestObject ("jeb");
             obj.IntProperty = 42;
-            int n = 1;
-            var exn = Assert.Throws<ArgumentException> (
-                          () => Connection.AddStream (() => obj.IntProperty * n));
-            Assert.That (exn.Message, Does.Contain ("The factor must be a constant"));
-            n = 2;
-            Assert.Throws<ArgumentException> (
-                () => Connection.AddStream (() => obj.IntProperty * n));
+            int n = 2;
+            var x = Connection.AddStream (() => obj.IntProperty * n);
+            // The variable is captured when the stream is created
+            n = 3;
+            for (int i = 0; i < 5; i++) {
+                Assert.AreEqual (84, x.Get ());
+                Wait ();
+            }
         }
 
         [Test]

@@ -219,6 +219,29 @@ namespace KRPC.Client
         }
 
         /// <summary>
+        /// Build the functions that decode a value of a spec's type, and the values it holds.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if a type has no encoding.
+        /// </remarks>
+        internal static void BuildDecoders (TypeSpec spec)
+        {
+            BuildDecoders (spec, new System.Collections.Generic.HashSet<TypeSpec> ());
+        }
+
+        static void BuildDecoders (TypeSpec spec, System.Collections.Generic.ISet<TypeSpec> built)
+        {
+            if (!built.Add (spec))
+                return;
+            ItemDecoderFor (spec);
+            var types = TypeInfo.For (spec.Type).Types;
+            if (types == null)
+                return;
+            for (int i = 0; i < types.Length; i++)
+                BuildDecoders (spec.At (i), built);
+        }
+
+        /// <summary>
         /// A function that decodes one of the values a collection or a structure holds, which
         /// <see cref="ItemEncoderFor"/> wrote.
         /// </summary>

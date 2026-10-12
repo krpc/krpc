@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using Google.Protobuf;
 
 namespace KRPC.Client
@@ -66,6 +67,49 @@ namespace KRPC.Client
             if (specs.TryGetValue (type, out spec))
                 return spec;
             return specs.GetOrAdd (type, new TypeSpec (type));
+        }
+
+        /// <summary>
+        /// The spec a value the server describes is decoded at, as the given type. A reference
+        /// type inside a collection or a tuple is nullable where the description says so, and
+        /// a value type is nullable where the type says so.
+        /// </summary>
+        internal static TypeSpec FromDescribed (Type type, Schema.KRPC.Type described)
+        {
+            // A null at the top level is signaled out of band, so its spec is the type's own
+            return WithDescribed (For (type), described, true);
+        }
+
+        static TypeSpec WithDescribed (TypeSpec spec, Schema.KRPC.Type described, bool topLevel)
+        {
+            var nullable = topLevel || spec.Type.IsValueType ? spec.Nullable : described.Nullable;
+            var changed = nullable != spec.Nullable;
+            var contained = noTypes;
+            var info = TypeInfo.For (spec.Type);
+            // The server describes a structure by name, and its fields by their declarations
+            if (info.Kind != TypeKind.Struct && info.Types != null &&
+                info.Types.Length == described.Types_.Count) {
+                contained = new TypeSpec [info.Types.Length];
+                for (int i = 0; i < contained.Length; i++) {
+                    contained [i] = WithDescribed (spec.At (i), described.Types_ [i], false);
+                    changed |= !ReferenceEquals (contained [i], spec.At (i));
+                }
+            }
+            if (!changed)
+                return spec;
+            return new TypeSpec (spec.Type, contained) { Nullable = nullable };
+        }
+
+        /// <summary>
+        /// Whether a value of the given type holds a reference type inside a collection or a
+        /// tuple, where only the server knows whether the position can hold null.
+        /// </summary>
+        internal static bool HoldsAReference (Type type)
+        {
+            var info = TypeInfo.For (System.Nullable.GetUnderlyingType (type) ?? type);
+            if (info.Kind == TypeKind.Struct || info.Types == null)
+                return false;
+            return info.Types.Any (x => !x.Type.IsValueType || HoldsAReference (x.Type));
         }
 
         /// <summary>
