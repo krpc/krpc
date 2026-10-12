@@ -128,7 +128,8 @@ namespace KRPC.Service.KRPC
             }
 
             var servicesExpr = LinqExpression.Constant(services);
-            // Throws the procedure's exception, which ends a stream or event over the expression
+            // Throws the procedure's exception, which ends a stream or event over the expression,
+            // or holds it for an object that is not loaded
             var invokeMethod = typeof(Services).GetMethod(
                 "Invoke", BindingFlags.Instance | BindingFlags.NonPublic, null,
                 new[] { typeof(Scanner.ProcedureSignature), typeof(object), typeof(object[]) }, null);

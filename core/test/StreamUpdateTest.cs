@@ -4,6 +4,7 @@ using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Test.Service;
+using KRPC.Utils;
 using Moq;
 using NUnit.Framework;
 
@@ -299,6 +300,105 @@ namespace KRPC.Test
             update = Update ();
             Assert.AreEqual (1, update.Count);
             Assert.AreEqual ("bar", ResultFor (update, second).Value);
+        }
+
+        [Test]
+        public void AStreamOverAnObjectNotLoadedKeepsItsValue ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("foo");
+            TestService.Service = mock.Object;
+            var id = Add (new ProcedureCallStream (new ProcedureCall ("TestService", "ProcedureNoArgsReturns")));
+            Assert.AreEqual ("foo", ResultFor (Update (), id).Value);
+
+            mock.Setup (x => x.ProcedureNoArgsReturns ())
+                .Throws (new global::KRPC.Service.KRPC.ObjectNotLoadedException ("not loaded"));
+            Assert.AreEqual (0, Update ().Count);
+            Assert.AreEqual (0, Update ().Count);
+            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+
+            // The value it holds is the one sent, so an equal value is not sent again
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("foo");
+            Assert.AreEqual (0, Update ().Count);
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("bar");
+            Assert.AreEqual ("bar", ResultFor (Update (), id).Value);
+        }
+
+        [Test]
+        public void AStreamHeldInAContinuationRunsTheCallAgain ()
+        {
+            var loaded = false;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()))
+                .Returns ((int n, int sum) => {
+                    throw new YieldException<Func<int>> (() => {
+                        if (!loaded)
+                            throw new global::KRPC.Service.KRPC.ObjectNotLoadedException ("not loaded");
+                        return 42;
+                    });
+                });
+            TestService.Service = mock.Object;
+            var call = new ProcedureCall ("TestService", "BlockingProcedureReturns");
+            call.Arguments.Add (new Argument (0, 1));
+            var id = Add (new ProcedureCallStream (call));
+            for (var i = 0; i < 4; i++)
+                Assert.AreEqual (0, Update ().Count);
+            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+
+            loaded = true;
+            SentResult result = null;
+            for (var i = 0; i < 4 && result == null; i++) {
+                var update = Update ();
+                if (update.Count > 0)
+                    result = ResultFor (update, id);
+            }
+            Assert.IsNotNull (result);
+            Assert.AreEqual (42, result.Value);
+            // Each hold runs the call from the start
+            mock.Verify (x => x.BlockingProcedureReturns (It.IsAny<int> (), It.IsAny<int> ()), Times.AtLeast (3));
+        }
+
+        [Test]
+        public void AHeldStreamIsNotLogged ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsReturns ())
+                .Throws (new global::KRPC.Service.KRPC.ObjectNotLoadedException ("not loaded"));
+            TestService.Service = mock.Object;
+            var writer = Logger.Writer;
+            var level = Logger.Level;
+            var messages = new List<string> ();
+            try {
+                Logger.Level = Logger.Severity.Debug;
+                Logger.Writer = (message, severity) => messages.Add (message);
+                Add (new ProcedureCallStream (new ProcedureCall ("TestService", "ProcedureNoArgsReturns")));
+                messages.Clear ();
+                Update ();
+                Update ();
+            } finally {
+                Logger.Writer = writer;
+                Logger.Level = level;
+            }
+            Assert.IsEmpty (messages);
+        }
+
+        [Test]
+        public void AnEventOverAnObjectNotLoadedHolds ()
+        {
+            var loaded = false;
+            var fired = false;
+            var id = Add (new EventStream (() => {
+                if (!loaded)
+                    throw new global::KRPC.Service.KRPC.ObjectNotLoadedException ("not loaded");
+                return fired;
+            }));
+            // The first update sends that the event has not fired, and nothing follows
+            Assert.AreEqual (false, ResultFor (Update (), id).Value);
+            Assert.AreEqual (0, Update ().Count);
+            loaded = true;
+            fired = true;
+            Assert.AreEqual (true, ResultFor (Update (), id).Value);
+            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
         }
     }
 }

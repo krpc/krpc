@@ -32,7 +32,9 @@ namespace KRPC.Service
                     if (continuation ())
                         Trigger ();
                 } catch (System.Exception e) {
-                    SetError (e);
+                    // An object that is not loaded holds the event until it is
+                    if (!Services.IsNotLoaded (e))
+                        SetError (e);
                     return;
                 }
             }

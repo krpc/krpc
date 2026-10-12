@@ -97,6 +97,11 @@ Other objects raise the same error while the game has not loaded them:
 * a comm link, while it is not part of its vessel's control path
 * the editor vessel, while the editor is starting up
 
+A stream over an object that is not loaded keeps its last value, and carries on once the object
+loads. A stream over an object that is destroyed ends with ``KRPC.ObjectDestroyedException``.
+``KRPC.GameStateLoads`` counts the game states that have finished loading, so streaming it tells
+you when a load is complete.
+
 Objects in the Editor
 ---------------------
 

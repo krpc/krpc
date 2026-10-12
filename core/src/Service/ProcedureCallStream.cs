@@ -43,13 +43,23 @@ namespace KRPC.Service
             var result = StreamResult.Result;
             bool wasSet = result.HasValue;
             object oldValue = result.Value;
+            var oldSpec = result.Spec;
+            var oldEncodedValue = result.EncodedValue;
 
             try {
                 continuation.RunInto (result);
             } catch (YieldException) {
                 return;
             } catch (System.Exception e) {
-                SetError (e);
+                if (Services.IsNotLoaded (e))
+                    Restore (wasSet, oldValue, oldSpec, oldEncodedValue);
+                else
+                    SetError (e);
+                return;
+            }
+            // An object that is not loaded holds the stream at its last value until it is
+            if (result.HasError && Services.IsNotLoaded (result.Error)) {
+                Restore (wasSet, oldValue, oldSpec, oldEncodedValue);
                 return;
             }
 
@@ -73,6 +83,17 @@ namespace KRPC.Service
                     SetError (e);
                 }
             }
+        }
+
+        void Restore (bool wasSet, object value, TypeSpec spec, Google.Protobuf.ByteString encodedValue)
+        {
+            var result = StreamResult.Result;
+            result.Reset ();
+            if (!wasSet)
+                return;
+            result.Spec = spec;
+            result.Value = value;
+            result.EncodedValue = encodedValue;
         }
     }
 }

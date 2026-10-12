@@ -208,13 +208,11 @@ namespace KRPC.Service
                 returnValue = procedure.Handler.Invoke (instance, arguments);
             } catch (YieldException) {
                 throw;
-            } catch (RPCException e) {
-                result.Reset ();
-                result.Error = HandleException (e);
-                return;
             } catch (System.Exception e) {
+                // Not logged for an object that is not loaded, which a held stream reads on
+                // every update
                 result.Reset ();
-                result.Error = HandleException (e);
+                result.Error = HandleException (e, !IsNotLoaded (e));
                 return;
             }
             result.Reset ();
@@ -373,9 +371,28 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Convert an exception thrown by an RPC into an error message.
+        /// Whether an exception says that a game object is not loaded.
         /// </summary>
-        internal Error HandleException(System.Exception exn)
+        internal static bool IsNotLoaded (System.Exception exn)
+        {
+            if (exn is RPCException && exn.InnerException != null)
+                exn = exn.InnerException;
+            return exn is KRPC.ObjectNotLoadedException;
+        }
+
+        /// <summary>
+        /// Whether an error says that a game object is not loaded.
+        /// </summary>
+        internal static bool IsNotLoaded (Error error)
+        {
+            return error.Service == "KRPC" && error.Name == "ObjectNotLoadedException";
+        }
+
+        /// <summary>
+        /// Convert an exception thrown by an RPC into an error message, and log it at debug
+        /// level if log is set.
+        /// </summary>
+        internal Error HandleException(System.Exception exn, bool log = true)
         {
             if (exn is RPCException && exn.InnerException != null)
                 exn = exn.InnerException;
@@ -383,7 +400,7 @@ namespace KRPC.Service
             var verboseErrors = Configuration.Instance.VerboseErrors;
             // An exception that was never thrown has no stack trace
             var stackTrace = verboseErrors ? exn.StackTrace ?? string.Empty : string.Empty;
-            if (Logger.ShouldLog (Logger.Severity.Debug)) {
+            if (log && Logger.ShouldLog (Logger.Severity.Debug)) {
                 Logger.WriteLine (message, Logger.Severity.Debug);
                 if (verboseErrors)
                     Logger.WriteLine (stackTrace, Logger.Severity.Debug);

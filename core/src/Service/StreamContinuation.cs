@@ -42,8 +42,9 @@ namespace KRPC.Service
             } catch (YieldException<ProcedureCallContinuation> e) {
                 continuation = e.Value;
                 throw new YieldException<StreamContinuation> (this);
-            } catch (System.Exception) {
-                continuation = null;
+            } catch (System.Exception e) {
+                // A stream over an object that is not loaded is run again from the start
+                continuation = Services.IsNotLoaded (e) ? originalContinuation : null;
                 throw;
             }
         }
@@ -63,8 +64,9 @@ namespace KRPC.Service
             } catch (YieldException<ProcedureCallContinuation> e) {
                 continuation = e.Value;
                 throw new YieldException<StreamContinuation> (this);
-            } catch (System.Exception) {
-                continuation = null;
+            } catch (System.Exception e) {
+                // A stream over an object that is not loaded is run again from the start
+                continuation = Services.IsNotLoaded (e) ? originalContinuation : null;
                 throw;
             }
         }
