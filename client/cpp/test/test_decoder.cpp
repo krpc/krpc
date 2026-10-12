@@ -8,6 +8,7 @@
 #include "krpc/decoder.hpp"
 #include "krpc/krpc.pb.hpp"
 #include "krpc/platform.hpp"
+#include "krpc/services/krpc.hpp"
 #include "services/test_service.hpp"
 
 TEST(test_decoder, test_decode_message) {

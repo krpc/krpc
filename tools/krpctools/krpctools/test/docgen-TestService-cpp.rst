@@ -166,6 +166,16 @@
 
    
 
+   .. function:: std::string dump_expression_tree(KRPC::Expression expression)
+
+      The expression tree of a function, as text.
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::map<std::string, std::optional<TestClass>> echo_dictionary_of_nullable_objects(std::map<std::string, std::optional<TestClass>> d)
 
 

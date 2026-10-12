@@ -551,6 +551,7 @@ function TestClient:test_test_service_service_members()
      'dictionary_default',
      'double_special_defaults',
      'double_to_string',
+     'dump_expression_tree',
      'echo_dictionary_of_nullable_objects',
      'echo_list_of_nullable_ints',
      'echo_list_of_nullable_objects',

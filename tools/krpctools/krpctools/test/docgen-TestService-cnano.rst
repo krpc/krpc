@@ -202,6 +202,19 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_DumpExpressionTree(krpc_connection_t connection, char * * result, krpc_KRPC_Expression_t expression)
+
+   The expression tree of a function, as text.
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_EchoDictionaryOfNullableObjects(krpc_connection_t connection, krpc_dictionary_string_nullable_object_t * result, const krpc_dictionary_string_nullable_object_t * d)
 
 
