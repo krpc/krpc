@@ -123,6 +123,13 @@
       :param double value:
    
 
+   .. method:: String dumpExpressionTree(KRPC.Expression expression)
+
+      The expression tree of a function, as text.
+
+      :param KRPC.Expression expression:
+   
+
    .. method:: java.util.Map<String,TestClass> echoDictionaryOfNullableObjects(java.util.Map<String,TestClass> d)
 
 

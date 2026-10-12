@@ -165,6 +165,16 @@ Service documentation string.
 
 
 
+.. staticmethod:: dump_expression_tree(expression)
+
+   The expression tree of a function, as text.
+
+   :param KRPC.Expression expression:
+   :rtype: string
+
+
+
+
 .. staticmethod:: echo_dictionary_of_nullable_objects(d)
 
 

@@ -160,6 +160,16 @@
 
       :Game Scenes: All
 
+   .. method:: string DumpExpressionTree(KRPC.Expression expression)
+
+      The expression tree of a function, as text.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. method:: System.Collections.Generic.IDictionary<string,TestClass> EchoDictionaryOfNullableObjects(System.Collections.Generic.IDictionary<string,TestClass> d)
 
 

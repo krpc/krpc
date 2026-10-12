@@ -721,6 +721,17 @@ namespace TestServer
             return 0;
         }
 
+        /// <summary>
+        /// The expression tree of a function, as text.
+        /// </summary>
+        [KRPCProcedure]
+        public static string DumpExpressionTree (KRPC.Service.KRPC.Expression expression)
+        {
+            // A shared node prints once per use, so the node limit bounds the output
+            expression.Check ();
+            return KRPC.Service.KRPC.ExpressionTreePrinter.Print (expression);
+        }
+
         [KRPCProcedure]
         public static KRPC.Service.Messages.Event OnTimer (uint milliseconds, uint repeats = 1) {
             // The timer thread counts the intervals, and the event fires for them on the
