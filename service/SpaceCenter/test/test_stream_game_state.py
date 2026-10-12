@@ -63,6 +63,27 @@ class TestStreamsAcrossLoads(krpctest.TestCase):
             self._set_game_scene(self.conn.krpc.GameScene.flight)
             self.assertEqual("Basic", vessel.name)
             self.assertEqual([], ended)
+            # The stream carries on in flight
+            vessel.name = "Renamed"
+            self.wait_until(lambda: name() == "Renamed", message="the stream to update")
+
+    def test_stream_over_a_flight_property_outside_flight(self):
+        control = self.space_center.active_vessel.control
+        ended = []
+        with self.conn.stream(getattr, control, "throttle") as throttle:
+            throttle.add_end_callback(ended.append)
+            throttle()
+            self.enter_editor()
+            self.wait(3)
+            self.assertEqual([], ended)
+            self.leave_editor()
+            self._set_game_scene(self.conn.krpc.GameScene.flight)
+            # The stream carries on in flight
+            control.throttle = 0.75
+            self.wait_until(
+                lambda: abs(throttle() - 0.75) < 1e-3, message="the stream to update"
+            )
+            self.assertEqual([], ended)
 
     def test_stream_over_a_vessel_removed_by_a_load(self):
         self.space_center.quicksave()

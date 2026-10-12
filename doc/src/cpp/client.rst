@@ -216,16 +216,24 @@ A callback added to a stream that already has a value is called with that value 
 Stream Endings
 ^^^^^^^^^^^^^^
 
-A stream ends when its procedure throws an exception, when the server removes it, when you remove
-it, or when the connection closes. From then on, reading the stream or waiting on it throws the
-exception that ended it. The following example streams the temperature of a part until the part is
-destroyed:
+The following example streams the temperature of a part until the part is destroyed:
 
 .. literalinclude:: /scripts/client/cpp/StreamEnd.cpp
+
+Once a stream ends, reading the stream or waiting on it throws the exception that ended it. A stream
+ends when its procedure throws an exception, when the server removes it, when you remove it, or when
+the connection closes.
 
 A stream that the server removes, such as an event that has finished, ends with
 ``krpc::services::KRPC::StreamRemovedException``. A stream you remove ends with
 ``krpc::StreamError``, and a closed connection with ``krpc::ConnectionError``.
+
+An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.
+
+.. seealso::
+
+   :doc:`/tutorials/object-lifetime`
 
 To handle an ending in a callback, add an end callback with
 :func:`krpc::Stream::add_end_callback`. It is called once, with the exception.

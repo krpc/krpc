@@ -193,9 +193,13 @@ involve.
 
 A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`. Each
 call creates a new stream with a new identifier, including a call for the same RPC as an existing
-stream. The stream sends its first result in the update after it is added, even if the value is the
-default for its type. A stream over a game object that is not loaded sends nothing until the object
-loads. Once the client is finished with the stream, it can remove it from the server by calling
+stream. The stream sends its first result in the update after it is added.
+
+A stream over a game object that is not loaded sends no result until the object loads. A stream over
+a procedure that is not available in the current game scene sends no result until the game returns
+to a scene where it is. An event still sends its first result, which says whether it has fired.
+
+Once the client is finished with the stream, it can remove it from the server by calling
 :ref:`communication-protocol-remove-stream`. Streams are automatically removed when the
 client that created it disconnects from the server. Streams are local to each client and there is no
 way to share a stream between clients.

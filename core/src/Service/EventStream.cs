@@ -32,8 +32,9 @@ namespace KRPC.Service
                     if (continuation ())
                         Trigger ();
                 } catch (System.Exception e) {
-                    // An object that is not loaded holds the event until it is
-                    if (!Services.IsNotLoaded (e))
+                    // An object that is not loaded, or a procedure not available in the scene,
+                    // holds the event
+                    if (!Services.IsHeld (e))
                         SetError (e);
                     return;
                 }

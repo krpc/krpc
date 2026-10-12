@@ -141,22 +141,29 @@ A callback added to a stream that already has a value is called with that value 
 
 .. note::
 
-   The callback function may be called from a different thread to that which created the stream. Any
-   changes to shared state must therefore be protected with appropriate synchronization.
+   The callback function may be called from a different thread than the one that created the
+   stream. Any changes to shared state must therefore be protected with appropriate
+   synchronization.
 
 Stream Endings
 ^^^^^^^^^^^^^^
 
-A stream ends when its procedure throws an exception, when the server removes it, when you remove
-it, or when the connection closes. From then on, calling ``Get`` or ``Wait`` on the stream throws the
-exception that ended it. The following example streams the temperature of a part until the part is
-destroyed:
+The following example streams the temperature of a part until the part is destroyed:
 
 .. literalinclude:: /scripts/client/csharp/StreamEnd.cs
+
+Once a stream ends, calling ``Get`` or ``Wait`` on the stream throws the exception that ended it. A
+stream ends when its procedure throws an exception, when the server removes it, when you remove it,
+or when the connection closes.
 
 A stream that the server removes, such as an event that has finished, ends with
 ``KRPC.Client.Services.KRPC.StreamRemovedException``. A stream you remove ends with an
 ``InvalidOperationException``, and a closed connection with a ``ConnectionException``.
+
+An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.
+
+.. seealso:: :doc:`/tutorials/object-lifetime`
 
 To handle an ending in a callback, add an end callback with :meth:`Stream.AddEndCallback`. It is
 called once, with the exception.
@@ -286,7 +293,7 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
+         The callback function may be called from a different thread than the one that created the
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 

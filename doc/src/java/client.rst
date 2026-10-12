@@ -162,6 +162,11 @@ A stream that the server removes, such as an event that has finished, ends with
 ``KRPC.StreamRemovedException``. A stream you remove ends with a ``StreamException``. A closed
 connection ends it with a ``StreamException`` whose cause is a ``ConnectionException``.
 
+An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.
+
+.. seealso:: :doc:`/tutorials/object-lifetime`
+
 To handle an ending in a callback, add an end callback with :meth:`Stream.addEndCallback`. It is
 called once, with the exception.
 

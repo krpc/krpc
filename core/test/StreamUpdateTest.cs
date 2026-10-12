@@ -325,6 +325,23 @@ namespace KRPC.Test
         }
 
         [Test]
+        public void AStreamOverAProcedureNotAvailableInTheSceneIsHeld ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.PropertyAvailableInInheritedGameScene).Returns ("foo");
+            TestService.Service = mock.Object;
+            CallContext.GameScene = GameScene.SpaceCenter;
+            var id = Add (new ProcedureCallStream (
+                new ProcedureCall ("TestService", "get_PropertyAvailableInInheritedGameScene")));
+            Assert.AreEqual (0, Update ().Count);
+            Assert.AreEqual (0, Update ().Count);
+            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+
+            CallContext.GameScene = GameScene.Flight;
+            Assert.AreEqual ("foo", ResultFor (Update (), id).Value);
+        }
+
+        [Test]
         public void AStreamHeldInAContinuationRunsTheCallAgain ()
         {
             var loaded = false;
@@ -397,6 +414,22 @@ namespace KRPC.Test
             Assert.AreEqual (0, Update ().Count);
             loaded = true;
             fired = true;
+            Assert.AreEqual (true, ResultFor (Update (), id).Value);
+            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+        }
+
+        [Test]
+        public void AnEventOverAProcedureNotAvailableInTheSceneHolds ()
+        {
+            var available = false;
+            var id = Add (new EventStream (() => {
+                if (!available)
+                    throw new global::KRPC.Service.KRPC.UnsupportedSceneException ("not available");
+                return true;
+            }));
+            Assert.AreEqual (false, ResultFor (Update (), id).Value);
+            Assert.AreEqual (0, Update ().Count);
+            available = true;
             Assert.AreEqual (true, ResultFor (Update (), id).Value);
             Assert.IsEmpty (streamClient.Recorded.RemovedIds);
         }

@@ -51,14 +51,15 @@ namespace KRPC.Service
             } catch (YieldException) {
                 return;
             } catch (System.Exception e) {
-                if (Services.IsNotLoaded (e))
+                if (Services.IsHeld (e))
                     Restore (wasSet, oldValue, oldSpec, oldEncodedValue);
                 else
                     SetError (e);
                 return;
             }
-            // An object that is not loaded holds the stream at its last value until it is
-            if (result.HasError && Services.IsNotLoaded (result.Error)) {
+            // An object that is not loaded, or a procedure not available in the scene, holds
+            // the stream at its last value
+            if (result.HasError && Services.IsHeld (result.Error)) {
                 Restore (wasSet, oldValue, oldSpec, oldEncodedValue);
                 return;
             }

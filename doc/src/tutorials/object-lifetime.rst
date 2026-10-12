@@ -99,8 +99,13 @@ Other objects raise the same error while the game has not loaded them:
 
 A stream over an object that is not loaded keeps its last value, and carries on once the object
 loads. A stream over an object that is destroyed ends with ``KRPC.ObjectDestroyedException``.
-``KRPC.GameStateLoads`` counts the game states that have finished loading, so streaming it tells
-you when a load is complete.
+
+A procedure available only in some game scenes, such as a vessel's controls, raises
+``KRPC.UnsupportedSceneException`` in the others. A stream over it keeps its last value in those
+scenes, and carries on when the game returns to one where it is available.
+
+``KRPC.GameStateLoads`` counts the game states that have finished loading. A stream of it updates
+when a load is complete.
 
 Objects in the Editor
 ---------------------
