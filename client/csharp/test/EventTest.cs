@@ -197,6 +197,28 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void EventThatEndsWithoutFiring () {
+            var e = Connection.TestService ().RemoveEventAfter (100);
+            var called = 0;
+            e.AddCallback (() => Interlocked.Increment (ref called));
+            var ended = new List<Exception> ();
+            var endCalled = new ManualResetEvent (false);
+            e.AddEndCallback (exn => {
+                lock (ended)
+                    ended.Add (exn);
+                endCalled.Set ();
+            });
+            lock (e.Condition)
+                Assert.Throws<StreamRemovedException> (() => e.Wait ());
+            Assert.True (endCalled.WaitOne (10000));
+            lock (ended) {
+                Assert.AreEqual (1, ended.Count);
+                Assert.IsInstanceOf<StreamRemovedException> (ended [0]);
+            }
+            Assert.AreEqual (0, called);
+        }
+
+        [Test]
         public void FiringBeforeWait () {
             var e = Connection.TestService ().OnTimer (100);
             Thread.Sleep (500);
