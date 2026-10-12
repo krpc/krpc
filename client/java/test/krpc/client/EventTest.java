@@ -339,6 +339,27 @@ public class EventTest {
   }
 
   @Test(timeout = 30000)
+  public void testEventEndsWithoutFiring()
+      throws RPCException, StreamException, InterruptedException {
+    Event event = testService.removeEventAfter(100);
+    List<Integer> calls = Collections.synchronizedList(new ArrayList<Integer>());
+    event.addCallback(() -> calls.add(1));
+    List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
+    CountDownLatch endCalled = new CountDownLatch(1);
+    event.addEndCallback((Exception exn) -> {
+      ended.add(exn);
+      endCalled.countDown();
+    });
+    synchronized (event.getCondition()) {
+      assertThrows(KRPC.StreamRemovedException.class, () -> event.waitFor());
+    }
+    assertTrue(endCalled.await(10, TimeUnit.SECONDS));
+    assertEquals(1, ended.size());
+    assertTrue(ended.get(0) instanceof KRPC.StreamRemovedException);
+    assertEquals(0, calls.size());
+  }
+
+  @Test(timeout = 30000)
   public void testFiringPassedToValueCallbackIsReplayed() {
     Event event = unissuedEvent(4000003);
     List<Object> values = Collections.synchronizedList(new ArrayList<Object>());
