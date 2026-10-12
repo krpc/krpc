@@ -19,6 +19,7 @@ namespace KRPC.Test
             public bool HasValue;
             public object Value;
             public string Error;
+            public string ErrorName;
         }
 
         sealed class RecordingStream : global::KRPC.Server.Message.StreamStream
@@ -39,7 +40,8 @@ namespace KRPC.Test
                         Id = result.Id,
                         HasValue = result.Result.HasValue,
                         Value = result.Result.Value,
-                        Error = result.Result.HasError ? result.Result.Error.Description : null
+                        Error = result.Result.HasError ? result.Result.Error.Description : null,
+                        ErrorName = result.Result.HasError ? result.Result.Error.Name : null
                     });
                 Updates.Add (update);
             }
@@ -238,6 +240,47 @@ namespace KRPC.Test
             Assert.Throws<ArgumentException> (() => core.RemoveStream (rpcClient, id + 1));
             Assert.Throws<ArgumentException> (() => core.SetStreamRate (rpcClient, id + 1, 1));
             Assert.Throws<ArgumentException> (() => core.StartStream (rpcClient, id + 1));
+        }
+
+        [Test]
+        public void AnEventEndedWithoutAFiringSendsStreamRemoved ()
+        {
+            var evnt = new EventStream ();
+            var id = Add (evnt);
+            evnt.Remove ();
+            var update = Update ();
+            Assert.AreEqual (1, update.Count);
+            Assert.AreEqual ("StreamRemovedException", ResultFor (update, id).ErrorName);
+            Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
+        }
+
+        [Test]
+        public void AnEventThatFiresAndEndsSendsTheFiringFirst ()
+        {
+            var evnt = new EventStream ();
+            var id = Add (evnt);
+            evnt.Trigger ();
+            evnt.Remove ();
+            var update = Update ();
+            Assert.AreEqual (true, ResultFor (update, id).Value);
+            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+            update = Update ();
+            Assert.AreEqual ("StreamRemovedException", ResultFor (update, id).ErrorName);
+            Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
+        }
+
+        [Test]
+        public void AnEventThatFiresAndEndsInOneUpdateSendsTheFiringFirst ()
+        {
+            EventStream evnt = null;
+            evnt = new EventStream (() => {
+                evnt.Remove ();
+                return true;
+            });
+            var id = Add (evnt);
+            Assert.AreEqual (true, ResultFor (Update (), id).Value);
+            Assert.AreEqual ("StreamRemovedException", ResultFor (Update (), id).ErrorName);
+            Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
         }
     }
 }

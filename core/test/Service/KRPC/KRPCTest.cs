@@ -169,10 +169,13 @@ namespace KRPC.Test.Service.KRPC
                 } else if (exception.Name == "UnsupportedSceneException") {
                     MessageAssert.HasDocumentation (exception,
                         "<doc>\n<summary>\nThe procedure is not available in the current game scene.\n</summary>\n</doc>");
+                } else if (exception.Name == "StreamRemovedException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA stream was removed by the server, e.g. an event that has finished.\n</summary>\n</doc>");
                 }
                 foundExceptions++;
             }
-            Assert.AreEqual (7, foundExceptions);
+            Assert.AreEqual (8, foundExceptions);
         }
 
         [Test]

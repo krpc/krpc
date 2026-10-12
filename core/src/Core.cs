@@ -861,19 +861,6 @@ namespace KRPC
             return stream;
         }
 
-        /// <summary>
-        /// Remove a stream from the server, for all clients.
-        /// </summary>
-        internal void RemoveStream (ulong streamId)
-        {
-            foreach (var entry in streams) {
-                var streamClient = entry.Key;
-                var clientStreams = entry.Value;
-                if (clientStreams.ContainsKey (streamId))
-                    removeStreams[streamId] = streamClient;
-            }
-        }
-
         private void RemoveStreamInternal (IClient<NoMessage,StreamUpdate> client, ulong id)
         {
             if (streams.ContainsKey (client) && streams [client].ContainsKey (id)) {

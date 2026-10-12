@@ -787,6 +787,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "ObjectDestroyedException",
                     "ObjectNotLoadedException",
                     "UnsupportedSceneException",
+                    "StreamRemovedException",
                 ]
             ),
             set(x for x in dir(self.conn.krpc) if not x.startswith("_")),

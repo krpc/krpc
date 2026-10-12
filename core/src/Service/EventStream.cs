@@ -36,16 +36,20 @@ namespace KRPC.Service
         }
 
         public override void UpdateInternal() {
-            if (continuation != null) {
+            // An event that is ending does not fire again, so the end is sent
+            if (continuation != null && !shouldRemove) {
                 try {
                     if (continuation ())
                         Trigger ();
                 } catch (System.Exception e) {
                     SetError (e);
+                    return;
                 }
             }
-            if (shouldRemove)
-                Core.Instance.RemoveStream (Id);
+            // A firing and an error both reset the result, so the end waits for an update
+            // with no firing to send
+            if (shouldRemove && !(Changed && Result.HasValue && (bool)Result.Value))
+                SetError (new KRPC.StreamRemovedException ("The event has finished"));
         }
 
         public void Trigger () {

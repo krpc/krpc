@@ -89,6 +89,7 @@ KRPC.ArgumentOutOfRangeException
 KRPC.ObjectDestroyedException
 KRPC.ObjectNotLoadedException
 KRPC.UnsupportedSceneException
+KRPC.StreamRemovedException
 SpaceCenter
 SpaceCenter.GameMode
 SpaceCenter.Expansions

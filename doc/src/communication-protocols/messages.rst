@@ -241,6 +241,12 @@ The fields are:
   :ref:`communication-protocol-anatomy-of-a-response` for details on the format and contents of this
   message.
 
+A result with its ``error`` field set is the last result for that stream. The server removes the
+stream after sending it, and sends nothing more for its identifier. When the server removes a stream
+itself, for example an event that has finished, the error is a ``StreamRemovedException`` from the
+``KRPC`` service. A stream removed by the client with :ref:`communication-protocol-remove-stream`
+gets no final result.
+
 Events
 ------
 
@@ -346,6 +352,9 @@ The ``RemoveStream`` procedure removes a stream from the server. It takes a sing
 identifier of the stream to be removed. This is the identifier returned when the stream was added by
 calling :ref:`communication-protocol-add-stream`. See :ref:`communication-protocol-streams` for more
 information on working with streams.
+
+Removing a stream that has already ended does nothing. An identifier the server never issued raises
+``KRPC.ArgumentException``. ``SetStreamRate`` follows the same rules.
 
 .. _communication-protocol-service-description-message:
 

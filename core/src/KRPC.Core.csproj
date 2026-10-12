@@ -133,6 +133,7 @@
     <Compile Include="Service\KRPC\KRPC.cs" />
     <Compile Include="Service\KRPC\ObjectDestroyedException.cs" />
     <Compile Include="Service\KRPC\ObjectNotLoadedException.cs" />
+    <Compile Include="Service\KRPC\StreamRemovedException.cs" />
     <Compile Include="Service\KRPC\Type.cs" />
     <Compile Include="Service\KRPC\UnsupportedSceneException.cs" />
     <Compile Include="Service\Messages\Argument.cs" />
