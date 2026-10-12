@@ -273,6 +273,16 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void RunFunctionWithALambdaWithNoParameters ()
+        {
+            var function = Expression.Lambda (new List<Expression> (), Expression.Block (
+                new List<Expression> { Expression.Return (Expression.ConstantInt (42)) }));
+            Assert.IsTrue (function.HasReturnType);
+            Assert.AreEqual (Type.Int (), function.ReturnType);
+            Assert.AreEqual (42, Decode (global::KRPC.Service.KRPC.KRPC.RunFunction (function), typeof (int)));
+        }
+
+        [Test]
         public void ParameterTypes ()
         {
             var function = Multiplier ();

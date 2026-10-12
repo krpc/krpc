@@ -476,8 +476,9 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Throws if the expression has more than <see cref="MaxNodes"/> nodes, or uses a
-        /// parameter or variable outside the function or block that declares it.
+        /// Throws if the expression has more than <see cref="MaxNodes"/> nodes, uses a
+        /// parameter or variable outside the function or block that declares it, or has a
+        /// break, continue or return outside its loop or function.
         /// </summary>
         internal void Check ()
         {
@@ -939,8 +940,8 @@ namespace KRPC.Service.KRPC
         /// <remarks>
         /// The instance the call is made on, and the values of its arguments, are fixed
         /// when the expression is created. A call to a procedure with no return value is
-        /// evaluated for its effects. A collection the procedure returns is copied, as a client
-        /// would receive it.
+        /// evaluated for its effects, as a statement in a <see cref="Block"/>. A collection the
+        /// procedure returns is copied, as a client would receive it.
         /// </remarks>
         /// <param name="call">The procedure call.</param>
         [KRPCMethod]
@@ -2104,7 +2105,9 @@ namespace KRPC.Service.KRPC
         /// A function with the given parameters and body.
         /// </summary>
         /// <remarks>
-        /// A body with no value is evaluated for its effects.
+        /// The body is an expression or a block of statements, and a body with no value is
+        /// evaluated for its effects. A <see cref="Return"/> or <see cref="ReturnNothing"/>
+        /// statement ends the evaluation.
         /// </remarks>
         /// <returns>A function.</returns>
         /// <param name="parameters">The parameters of the function.</param>
@@ -2116,8 +2119,8 @@ namespace KRPC.Service.KRPC
                 throw new ArgumentNullException (nameof (parameters));
             if (ReferenceEquals (body, null))
                 throw new ArgumentNullException (nameof (body));
-            var bodySpec = body.Spec;
-            var boundBody = body.internalExpression;
+            TypeSpec bodySpec;
+            var boundBody = BindReturns (body, out bodySpec);
             var parameterNodes = new ParameterExpression [parameters.Count];
             for (int i = 0; i < parameters.Count; i++)
                 parameterNodes [i] = AsVariable (
@@ -2475,7 +2478,7 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// The variable an expression created with Parameter stands for.
+        /// The variable an expression created with Variable or Parameter stands for.
         /// </summary>
         static ParameterExpression AsVariable (Expression expression, string message)
         {

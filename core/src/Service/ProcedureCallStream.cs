@@ -23,6 +23,8 @@ namespace KRPC.Service
                     procedure.FullyQualifiedName + " returns " + created + ", and cannot be streamed.");
             // Evaluating these each update would repeat their effects
             var name = procedure.FullyQualifiedName;
+            if (name == "KRPC.Expression_static_StateVariable")
+                throw new KRPC.InvalidOperationException (name + " cannot be streamed.");
             if (name == "KRPC.RunFunction")
                 throw new KRPC.InvalidOperationException (
                     name + " cannot be streamed. Use KRPC.AddFunctionStream to stream a function.");

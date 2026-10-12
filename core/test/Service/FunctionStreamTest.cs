@@ -225,5 +225,36 @@ namespace KRPC.Test.Service
             Assert.IsTrue (stream.Result.HasValue);
             CollectionAssert.AreEqual (new [] { 2, 4 }, (List<int>)stream.Result.Value);
         }
+
+        [Test]
+        public void UnboundMarkerRejected ()
+        {
+            var expr = Expression.Block (new List<Expression> {
+                Expression.Break (),
+                Expression.ConstantInt (1)
+            });
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => new FunctionStream (expr));
+        }
+
+        [Test]
+        public void TwoStreamsOfOneFunctionAdvanceItsStateTwice ()
+        {
+            var count = Expression.StateVariable ("count", Expression.ConstantInt (0));
+            var increment = Expression.Block (new List<Expression> {
+                Expression.Assign (count, Expression.Add (count, Expression.ConstantInt (1))),
+                count
+            });
+            var first = new FunctionStream (increment);
+            var second = new FunctionStream (increment);
+            first.UpdateInternal ();
+            second.UpdateInternal ();
+            Assert.AreEqual (1, first.Result.Value);
+            Assert.AreEqual (2, second.Result.Value);
+            first.UpdateInternal ();
+            second.UpdateInternal ();
+            Assert.AreEqual (3, first.Result.Value);
+            Assert.AreEqual (4, second.Result.Value);
+        }
     }
 }
