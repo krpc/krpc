@@ -3,6 +3,8 @@
 #include <cmath>
 #include <thread>
 #include <krpc.hpp>
+#include <krpc/function_stream.hpp>
+#include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
 
 int main() {
@@ -73,14 +75,29 @@ int main() {
 
   // Disable engines when target apoapsis is reached
   vessel.control().set_throttle(0.25);
-  while (apoapsis() < target_altitude) {
+  typedef krpc::services::KRPC::Expression Expr;
+  {
+    auto expr = Expr::greater_than_or_equal(
+      conn, Expr::call(conn, vessel.orbit().apoapsis_altitude_call()),
+      Expr::constant_double(conn, target_altitude));
+    auto event = krpc::add_event(expr);
+    event.acquire();
+    event.wait();
+    event.release();
   }
   std::cout << "Target apoapsis reached" << std::endl;
   vessel.control().set_throttle(0);
 
   // Wait until out of atmosphere
   std::cout << "Coasting out of atmosphere" << std::endl;
-  while (altitude() < 70500) {
+  {
+    auto expr = Expr::greater_than_or_equal(
+      conn, Expr::call(conn, vessel.flight().mean_altitude_call()),
+      Expr::constant_double(conn, 70500));
+    auto event = krpc::add_event(expr);
+    event.acquire();
+    event.wait();
+    event.release();
   }
 
   // Plan circularization burn (using vis-viva equation)
@@ -117,8 +134,14 @@ int main() {
 
   // Execute burn
   std::cout << "Ready to execute burn" << std::endl;
-  auto time_to_apoapsis = vessel.orbit().time_to_apoapsis_stream();
-  while (time_to_apoapsis() - (burn_time / 2.0) > 0) {
+  {
+    auto expr = Expr::less_than_or_equal(
+      conn, Expr::call(conn, vessel.orbit().time_to_apoapsis_call()),
+      Expr::constant_double(conn, burn_time / 2.0));
+    auto event = krpc::add_event(expr);
+    event.acquire();
+    event.wait();
+    event.release();
   }
   std::cout << "Executing burn" << std::endl;
   vessel.control().set_throttle(1);
@@ -126,8 +149,16 @@ int main() {
     std::chrono::milliseconds(static_cast<int>((burn_time - 0.1) * 1000)));
   std::cout << "Fine tuning" << std::endl;
   vessel.control().set_throttle(0.05);
-  auto remaining_burn = node.remaining_burn_vector_stream(node.reference_frame());
-  while (std::get<1>(remaining_burn()) > 0) {
+  {
+    auto remaining_burn = Expr::call(
+      conn, node.remaining_burn_vector_call(node.reference_frame()));
+    auto expr = Expr::less_than_or_equal(
+      conn, Expr::get(conn, remaining_burn, Expr::constant_int(conn, 1)),
+      Expr::constant_double(conn, 0));
+    auto event = krpc::add_event(expr);
+    event.acquire();
+    event.wait();
+    event.release();
   }
   vessel.control().set_throttle(0);
   node.remove();

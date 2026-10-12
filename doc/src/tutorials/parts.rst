@@ -97,6 +97,18 @@ your Kerbals by deploying all the parachutes:
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.py
          :language: python
 
+The script deploys the parachutes one call at a time, and the game can advance between the
+calls. In Python, a :ref:`server side function <tutorial-server-side-functions>` deploys them all
+in the same physics tick, with a single call:
+
+.. code-block:: python
+
+   def deploy_parachutes():
+       for parachute in vessel.parts.parachutes:
+           parachute.deploy()
+
+   conn.run(deploy_parachutes)
+
 'Control From Here' for Docking Ports
 -------------------------------------
 
@@ -173,6 +185,36 @@ https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.py
          :language: python
+
+The script reads the thrust and specific impulse of each engine with separate calls, which can
+land in different physics ticks. A :ref:`server side function <tutorial-server-side-functions>`
+reads them all in the same tick, with a single call:
+
+.. tabs::
+
+   .. tab:: C#
+
+      .. code-block:: csharp
+
+         var isp = connection.Run (() =>
+             vessel.Parts.Engines.Where (e => e.Active && e.HasFuel)
+                 .Select (e => e.Thrust).Sum () /
+             vessel.Parts.Engines.Where (e => e.Active && e.HasFuel)
+                 .Select (e => e.Thrust / e.SpecificImpulse).Sum ());
+
+   .. tab:: Python
+
+      .. code-block:: python
+
+         def combined_isp():
+             engines = [e for e in vessel.parts.engines if e.active and e.has_fuel]
+             thrust = sum(engine.thrust for engine in engines)
+             fuel_consumption = sum(
+                 engine.thrust / engine.specific_impulse for engine in engines
+             )
+             return thrust / fuel_consumption
+
+         isp = conn.run(combined_isp)
 
 .. seealso:: The combined specific impulse of each stage is also available
    directly from the staging API, as :attr:`Stage.specific_impulse` on the

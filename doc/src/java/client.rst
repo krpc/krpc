@@ -72,6 +72,9 @@ example, the following reads the vessel's altitude and speed together:
 Use ``run`` for a function with effects, such as setting a property. An event or a function stream
 evaluates its function on every update, repeating the effects.
 
+The :rst:ref:`server side functions tutorial <tutorial-server-side-functions>` shows how to build
+larger functions.
+
 .. _java-client-streams:
 
 Streaming Data

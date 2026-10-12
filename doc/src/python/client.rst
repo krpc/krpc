@@ -80,7 +80,8 @@ reads the vessel's altitude and speed together:
 Use ``run`` for a function with effects, such as setting a property. An event or a function stream
 evaluates its function on every update, repeating the effects.
 
-:ref:`python-client-compiling-functions` describes what a function can contain.
+:ref:`python-client-compiling-functions` describes what a function can contain. The :ref:`server
+side functions tutorial <tutorial-server-side-functions>` shows how to build larger functions.
 
 .. _python-client-streams:
 

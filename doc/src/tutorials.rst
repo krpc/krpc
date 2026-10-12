@@ -19,3 +19,4 @@ of kRPC.
    tutorials/object-lifetime
    tutorials/control-loops
    tutorials/autopilot
+   tutorials/server-side-functions

@@ -80,14 +80,22 @@ class LaunchIntoOrbit
 
         // Disable engines when target apoapsis is reached
         vessel.Control.Throttle = 0.25f;
-        while (apoapsis.Get () < targetAltitude) {
+        {
+            var evnt = conn.AddEvent (() => vessel.Orbit.ApoapsisAltitude >= targetAltitude);
+            lock (evnt.Condition) {
+                evnt.Wait ();
+            }
         }
         Console.WriteLine ("Target apoapsis reached");
         vessel.Control.Throttle = 0;
 
         // Wait until out of atmosphere
         Console.WriteLine ("Coasting out of atmosphere");
-        while (altitude.Get () < 70500) {
+        {
+            var evnt = conn.AddEvent (() => flight.MeanAltitude >= 70500);
+            lock (evnt.Condition) {
+                evnt.Wait ();
+            }
         }
 
         // Plan circularization burn (using vis-viva equation)
@@ -124,17 +132,23 @@ class LaunchIntoOrbit
 
         // Execute burn
         Console.WriteLine ("Ready to execute burn");
-        var timeToApoapsis = conn.AddStream (() => vessel.Orbit.TimeToApoapsis);
-        while (timeToApoapsis.Get () - (burnTime / 2.0) > 0) {
+        {
+            var evnt = conn.AddEvent (() => vessel.Orbit.TimeToApoapsis <= burnTime / 2.0);
+            lock (evnt.Condition) {
+                evnt.Wait ();
+            }
         }
         Console.WriteLine ("Executing burn");
         vessel.Control.Throttle = 1;
         System.Threading.Thread.Sleep ((int)((burnTime - 0.1) * 1000));
         Console.WriteLine ("Fine tuning");
         vessel.Control.Throttle = 0.05f;
-        var remainingBurn = conn.AddStream (
-            () => node.RemainingBurnVector (node.ReferenceFrame));
-        while (remainingBurn.Get ().Item2 > 0) {
+        {
+            var evnt = conn.AddEvent (
+                () => node.RemainingBurnVector (node.ReferenceFrame).Item2 <= 0);
+            lock (evnt.Condition) {
+                evnt.Wait ();
+            }
         }
         vessel.Control.Throttle = 0;
         node.Remove ();
