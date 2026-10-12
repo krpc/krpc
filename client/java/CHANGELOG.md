@@ -1,4 +1,22 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Start a stream when it is added, removing `Stream.start`,
+  `Stream.startAndWait` and `Event.start` (#1122)
+- Wait for a stream's first value in `Stream.get` (#1122)
+- Call a callback added to a stream that has a value with that value straight away (#1122)
+- Call a callback added to an event straight away for a firing not yet passed to a wait or
+  another callback (#1122)
+- Throw `StreamException` when reading or waiting on a removed stream or event (#1122)
+- End a stream on an error from the server, which every later `get` and wait throws (#1122)
+- End every stream with a `StreamException` when the connection closes or fails (#1122)
+- **Breaking:** Return `true` from `Stream.waitForUpdateWithTimeout` and
+  `Event.waitForWithTimeout` on an update, and `false` on a timeout (#1122)
+- Fix `Event.waitFor` missing a firing that arrived before it (#1122)
+- Fix `Event.waitFor` waking only one of two threads waiting on one event (#1122)
+- Add `addEndCallback` to streams and events, called with the exception that ends the stream
+  (#1122)
+- Fix the stream update thread stopping on a value it cannot decode (#1122)
+- Fix a second removal of a stream removing a newer stream for the same call (#1122)
+- Fix an error ending a stream throwing a `ClassCastException` in its callbacks (#1122)
 - Support a nullable structure field, list element, tuple item and dictionary value, held as
   the boxed type (`Integer`, `Double`, …) where the value is a primitive (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as

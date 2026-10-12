@@ -1,4 +1,22 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Start a stream when it is added, removing `Stream.start` and `Event.start`
+  (#1122)
+- Call a callback added to a stream that has a value with that value straight away (#1122)
+- Call a callback added to an event straight away for a firing not yet passed to a wait or
+  another callback (#1122)
+- Raise `StreamError` when reading or waiting on a removed stream or event (#1122)
+- End a stream on an error from the server, which every later read and `wait` raises (#1122)
+- End every stream with `ConnectionError` when the connection closes or fails, with the
+  failure as its cause (#1122, #315)
+- Return `True` from `Stream.wait` and `Event.wait` on an update, and `False` on a timeout
+  (#1122)
+- Fix `Event.wait` missing a firing that arrived before it (#1122)
+- Fix `Event.wait` waking only one of two threads waiting on one event (#1122)
+- Add `add_end_callback` to streams and events, called with the exception that ends the stream
+  (#1122)
+- Fix the stream update thread stopping on a value it cannot decode (#1122, #198)
+- Fix a second removal of a stream removing a newer stream for the same call (#1122)
+- Fix an error ending an event calling the event's callbacks (#1122)
 - A dynamically created service escapes an enumeration member whose name is a python keyword,
   such as `Class` to `class_`, matching the pre-generated stubs (#1094)
 - Support a nullable structure field, list element, tuple item and dictionary value, which is

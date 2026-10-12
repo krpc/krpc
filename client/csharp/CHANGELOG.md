@@ -1,4 +1,27 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Start a stream when it is added, removing `Stream.Start` and `Event.Start`
+  (#1122)
+- Wait for a stream's first value in `Stream.Get` (#1122)
+- Call a callback added to a stream that has a value with that value straight away (#1122)
+- Call a callback added to an event straight away for a firing not yet passed to a wait or
+  another callback (#1122)
+- **Breaking:** Add an `IConnection.Invoke` overload taking the return type, which a class
+  implementing `IConnection` must provide (#1122)
+- Throw `InvalidOperationException` when reading or waiting on a removed stream or event (#1122)
+- End a stream on an error from the server, which every later `Get` and `Wait` throws (#1122)
+- End every stream with `ConnectionException` when the connection closes or fails (#1122)
+- **Breaking:** Return `true` from `Stream.Wait` and `Event.Wait` on an update, and `false` on
+  a timeout (#1122)
+- Fix `Event.Wait` missing a firing that arrived before it (#1122)
+- Fix `Event.Wait` waking only one of two threads waiting on one event (#1122)
+- Add `AddEndCallback` to streams and events, called with the exception that ends the stream
+  (#1122)
+- Fix the stream update thread ending the process on a value it cannot decode or a message it
+  cannot parse (#1122)
+- Fix a second removal of a stream removing a newer stream for the same call (#1122)
+- Fix stream callbacks throwing an `InvalidCastException` on an error from the server (#1122)
+- Throw `InvalidOperationException` from `AddStream` on a connection with no stream server
+  (#1122)
 - Support a nullable structure field, list element, tuple item and dictionary value; a
   value-typed one uses the nullable form (`int?`) (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as

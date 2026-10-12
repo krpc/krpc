@@ -1,6 +1,32 @@
 ## [v0.7.0] - unreleased
 - **Breaking:** Remove `Client::freeze_streams` and `Client::thaw_streams`. Calls made while
   holding the tick with `KRPC::hold_tick` give values from one physics tick (#1118)
+- **Breaking:** Start a stream when it is added, removing `Stream::start` and `Event::start`
+  (#1122)
+- **Breaking:** Return a `krpc::Condition` from the `get_condition` methods and
+  `Client::get_stream_update_condition`, with locks over the re-entrant `krpc::RecursiveMutex`
+  (#1122)
+- Wait for a stream's first value when reading it (#1122)
+- Call a callback added to a stream that has a value with that value straight away (#1122)
+- End a stream on an error from the server, which every later read and `wait` throws (#1122)
+- End every stream with `krpc::ConnectionError` when the connection closes or fails (#1122)
+- Return `true` from `Stream::wait` and `Event::wait` on an update, and `false` on a timeout
+  (#1122)
+- Throw `krpc::StreamError` when reading or waiting on a removed stream or event (#1122)
+- Call a callback added to an event straight away for a firing not yet passed to a wait or
+  another callback (#1122)
+- Fix `Event::wait` missing a firing that arrived before it (#1122)
+- Add `add_end_callback` to streams and events, called with the exception that ends the stream
+  (#1122)
+- Fix the stream update thread spinning after the server closes the connection (#1122)
+- Fix the stream update thread ending the process on a message it cannot read, or on a
+  stream update callback that throws (#1122)
+- Fix two copies of a stream or event sharing one condition lock (#1122)
+- Fix streams using freed memory once the copy of the client that added them is destroyed
+  (#1122)
+- Fix a callback using freed memory once the stream or event it was added through is moved or
+  destroyed (#1122)
+- Fix a second removal of a stream removing a newer stream for the same call (#1122)
 - Fix a data race reading a stream's value while an update for it arrives (#1108)
 - Fix a stream of a value whose type a service defines, such as an enumeration or a structure,
   failing to compile (#1094)
@@ -15,7 +41,6 @@
   sockets (#1065)
 - Add a `timeout` parameter to `krpc::connect`, bounding how long a connection is waited for
   (#1065)
-- Fix `Stream::start` hanging when a stream's only update notification is lost (#1090)
 - Fix a race between a stream update arriving and a stream update callback being added or
   removed (#1090)
 - Fix a stream on a client with no stream connection crashing instead of throwing

@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Generate C# and C++ stubs that mark the calls returning a stream or an event,
+  which need a v0.7.0 client (#1122)
 - Fix the python stubs for a service that names a type the KRPC service defines failing to
   import (#1094)
 - Fix a generated python exception type not naming the service and class it was built from

@@ -4,6 +4,23 @@
   part of an unloaded vessel (#1120)
 - **Breaking:** Throw `KRPC.UnsupportedSceneException` for a procedure called outside its game
   scenes (#1119)
+- Hold a stream or event over an object that is not loaded, or a procedure not available in
+  the game scene, until it is available (#1122, #877)
+- **Breaking:** Create a new stream for every `KRPC.AddStream`, so removing one leaves the
+  others for the same call (#1122, #902)
+- **Breaking:** Start a stream when it is added, removing `KRPC.StartStream` and the `start`
+  argument of `KRPC.AddStream` (#1122)
+- Fix a failing stream or event, including one whose value fails to encode, stopping the other
+  streams (#1122)
+- Throw an exception when streaming a procedure that returns a stream or an event, or calling
+  one in an expression (#1122)
+- Fix an expression calling a failing procedure throwing a `NullReferenceException` in place of
+  the procedure's exception (#1122)
+- Add `KRPC.StreamRemovedException`, sent as the final result of a stream the server ends, such
+  as an event that has finished (#1122)
+- Ignore a call to `KRPC.SetStreamRate` for a stream that has ended (#1122)
+- Throw an exception from `KRPC.RemoveStream` for a stream id that was never issued (#1122)
+- Fix the server keeping memory for every stream ever sent on a connection (#1122)
 - Encode and decode values without reflection, cutting the server cost of a call that passes
   or returns an object by about three quarters (#1091)
 - **Breaking:** Nullability is carried by `Type.nullable` at every position a value sits in,
