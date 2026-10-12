@@ -223,7 +223,7 @@ function TestClient:test_client_members()
   -- benchmark is the server-side benchmarks the test server exposes
   -- test_service2 owns the class that an extension member of test_service returns
   luaunit.assertEquals(
-    Set{'krpc', 'test_service', 'test_service2', 'benchmark'},
+    Set{'krpc', 'std_lib', 'test_service', 'test_service2', 'benchmark'},
     Set(filter_private(tablex.keys(self.conn)))
   )
 end
