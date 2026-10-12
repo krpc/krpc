@@ -17,6 +17,13 @@
 - Fix the stream update thread stopping on a value it cannot decode (#1122, #198)
 - Fix a second removal of a stream removing a newer stream for the same call (#1122)
 - Fix an error ending an event calling the event's callbacks (#1122)
+- **Breaking:** Raise `TypeError` for a null where a value is required, reported by any service,
+  in place of `RPCError` (#1124)
+- **Breaking:** Raise `KeyError` for a missing key, and `IndexError` for an index out of range,
+  reported by any service, in place of `RPCError` (#1124)
+- **Breaking:** Raise `ZeroDivisionError`, `NotImplementedError`, `TimeoutError` and
+  `OverflowError` for the matching errors reported by any service, such as `AutoPilot.wait`, in
+  place of `RPCError` (#1124)
 - A dynamically created service escapes an enumeration member whose name is a python keyword,
   such as `Class` to `class_`, matching the pre-generated stubs (#1094)
 - Support a nullable structure field, list element, tuple item and dictionary value, which is

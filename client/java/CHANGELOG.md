@@ -1,4 +1,11 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Throw `NullPointerException` for a null where a value is required, reported by
+  any service, in place of `RPCException` (#1124)
+- **Breaking:** Throw `NoSuchElementException` for a missing key, and `IndexOutOfBoundsException`
+  for an index out of range, reported by any service, in place of `RPCException` (#1124)
+- **Breaking:** Throw `ArithmeticException` for a division by zero or an overflow, and
+  `UnsupportedOperationException` for an unsupported operation, reported by any service, in place
+  of `RPCException` (#1124)
 - **Breaking:** Start a stream when it is added, removing `Stream.start`,
   `Stream.startAndWait` and `Event.start` (#1122)
 - Wait for a stream's first value in `Stream.get` (#1122)

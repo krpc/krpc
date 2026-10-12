@@ -1,5 +1,80 @@
 ## [v0.7.0] - unreleased
 - Add `KRPC.GameStateLoads`, the number of game states that have finished loading (#1121)
+- Extend `KRPC.Expression` to build server side functions, which the server evaluates
+  (#503, #517, #521, #1124)
+- Allow a function to call a procedure that returns no value (#1124)
+- Add `KRPC.Expression.CallWithArguments`, which computes the arguments of a call (#1124)
+- Allow a function to raise and handle exceptions (#1124)
+- Add `KRPC.DivideByZeroException`, `KRPC.NotSupportedException`, `KRPC.TimeoutException` and
+  `KRPC.OverflowException`, raised for the matching errors by any service (#1124)
+- Add `KRPC.Error`, a general error a function can raise (#1124)
+- Allow a function to declare local variables, loop, branch, assign and return early (#1124)
+- Allow a function to work on strings (#1124)
+- Allow a function to select, reshape and combine collections, including the keys and values of
+  a dictionary (#1124)
+- Allow a function to change a list, set or dictionary (#1124)
+- Add `KRPC.Expression.CreateStruct`, `GetField`, `CreateEmptyList`, `CreateEmptySet` and
+  `CreateEmptyDictionary`, which build and read structures and empty collections (#1124)
+- Add `KRPC.Expression.ConstantLong`, `ConstantUInt`, `ConstantULong`, `ConstantBytes`,
+  `ConstantEnum`, `ConstantObject` and `ConstantNull` (#1124)
+- Add `KRPC.Expression.IsNull`, `Negate`, `Conditional`, `ConditionalAnd` and `ConditionalOr`
+  (#1124)
+- Track which values of a function can be null, and raise an error when a null reaches a value
+  whose type does not allow one (#1124)
+- Add `KRPC.NullReferenceException`, raised for a null by any service, and by a function when a
+  null reaches a value whose type does not allow one (#1124)
+- Allow a function to use nullable booleans and structures (#1124)
+- Add `KRPC.KeyNotFoundException`, raised for a missing key by any service, and by a function
+  reading a missing dictionary key (#1124)
+- Add `KRPC.IndexOutOfRangeException`, raised for an index out of range by any service, and by
+  a function indexing a list or string (#1124)
+- Add `KRPC.RunFunction`, which runs a server side function once within a single physics tick,
+  with arguments of the types `KRPC.Expression.ParameterTypes` gives (#1124)
+- Add `KRPC.CompileFunction`, which compiles a server side function before its first run
+  (#1124)
+- Add `KRPC.Expression.StateVariable`, a variable that keeps its value between evaluations of
+  a function (#1124)
+- Add `KRPC.AddFunctionStream`, which streams the value a server side function computes on each
+  update (#1124)
+- Add `KRPC.Expression.ReturnType` and `HasReturnType`, which report the type of the value a
+  function produces, and whether it produces one (#1124)
+- Expand `KRPC.Type` to name every type a procedure takes or returns, including long, unsigned,
+  bytes, class, enumeration, structure and collection types, and a nullable form of any type
+  (#1124)
+- Add `KRPC.TypeCode`, and the `Code`, `Service`, `Name`, `Types` and `Nullable` properties of
+  `KRPC.Type`, which report what a type is (#1124)
+- Fix `KRPC.Expression.Count`, which failed for every collection a procedure returns (#1124)
+- Fix `KRPC.Expression.OrderBy` to order strings by character code on every system locale
+  (#1124)
+- Fix `KRPC.Expression.Equal` and `NotEqual`, which compared objects, tuples, bytes and
+  collections by reference (#1124)
+- Fix `KRPC.Expression.CreateSet` to compare bytes, collections and structures by content
+  (#1124)
+- Fix `KRPC.Expression.Contains` and `ToSet`, which compared objects, tuples, bytes and
+  collections by reference (#1124)
+- Fix `KRPC.Expression.And`, `Or`, `ExclusiveOr`, `LeftShift` and `RightShift` for operands of
+  different integer types (#1124)
+- Fix `KRPC.Expression.Divide` and `Modulo` to wrap for the smallest integer divided by -1
+  (#1124)
+- Fix `KRPC.Expression.Sum`, `Min`, `Max` and `Average` over unsigned and long integers, and
+  wrap `Sum` on overflow (#1124)
+- **Breaking:** Rename `KRPC.Expression.Function` to `KRPC.Expression.Lambda` (#1124)
+- **Breaking:** Renumber the procedures of the `KRPC` service, so a client that calls them by
+  id must use stubs generated for this version (#1124)
+- **Breaking:** Rename the parameter of `KRPC.AddEvent` from `expression` to `function` (#1124)
+- **Breaking:** Give `KRPC.Expression.Power` the common type of its operands, rather than the
+  type of the first (#1124)
+- **Breaking:** Require the index into a tuple given to `KRPC.Expression.Get` to be a constant
+  (#1124)
+- **Breaking:** Limit `KRPC.Expression.CreateTuple` to seven elements, the most a kRPC tuple
+  type can hold (#1124)
+- **Breaking:** Reject calls to `KRPC` service procedures in a function (#1124)
+- Widen a number, tuple or collection given to `KRPC.Expression.Invoke`, and convert each element
+  of a tuple or collection given to `KRPC.Expression.Cast` (#1124)
+- Widen the numbers given to `KRPC.Expression.CreateList`, `CreateSet` and `CreateDictionary` to
+  a common type (#1124)
+- Widen the values of the collections given to `KRPC.Expression.Concat` to a common type
+  (#1124)
 - Add `KRPC.ObjectNotLoadedException`, for an object that exists but is not loaded, such as a
   part of an unloaded vessel (#1120)
 - **Breaking:** Throw `KRPC.UnsupportedSceneException` for a procedure called outside its game

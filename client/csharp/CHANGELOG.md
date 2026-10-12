@@ -22,6 +22,13 @@
 - Fix stream callbacks throwing an `InvalidCastException` on an error from the server (#1122)
 - Throw `InvalidOperationException` from `AddStream` on a connection with no stream server
   (#1122)
+- **Breaking:** Throw `NullReferenceException` for a null where a value is required, reported
+  by any service, in place of `RPCException` (#1124)
+- **Breaking:** Throw `KeyNotFoundException` for a missing key, and `IndexOutOfRangeException`
+  for an index out of range, reported by any service, in place of `RPCException` (#1124)
+- **Breaking:** Throw `DivideByZeroException`, `NotSupportedException`, `TimeoutException` and
+  `OverflowException` for the matching errors reported by any service, such as `AutoPilot.Wait`,
+  in place of `RPCException` (#1124)
 - Support a nullable structure field, list element, tuple item and dictionary value; a
   value-typed one uses the nullable form (`int?`) (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as

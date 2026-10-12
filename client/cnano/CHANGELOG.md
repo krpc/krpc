@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Renumber the `KRPC` service's procedures, so a program built against an
+  earlier version must be rebuilt (#1124)
 - Support a nullable structure field, list element, tuple item and dictionary value, each
   generated as a type holding the value beside a `bool` presence flag (#1091)
 - Support structure types, generated as a C struct with a member per field (#1066)
