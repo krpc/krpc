@@ -87,7 +87,6 @@ inline std::unique_ptr<krpc::Client> server_test::connect_client(std::function<v
     stream = connection;
   }
   if (shutdown != nullptr) *shutdown = shutdown_stream;
-  // Constructed in place, as the stream manager keeps the client's address
   return std::make_unique<krpc::Client>("C++ClientTest", rpc, stream);
 }
 

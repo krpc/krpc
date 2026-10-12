@@ -19,6 +19,7 @@ class StreamImpl;
 Client::Client()
     : lock(new std::mutex),
       listed_returns(std::make_shared<ListedReturns>()),
+      exception_throwers(std::make_shared<decltype(exception_throwers)::element_type>()),
       exception_throwers_lock(new std::mutex) {}
 
 Client::Client(const std::string& name, const std::string& address, unsigned int rpc_port,
@@ -29,9 +30,7 @@ Client::Client(const std::string& name, const std::string& address, unsigned int
 
 Client::Client(const std::string& name, std::shared_ptr<Connection> rpc,
                const std::shared_ptr<Connection>& stream)
-    : lock(new std::mutex),
-      listed_returns(std::make_shared<ListedReturns>()),
-      exception_throwers_lock(new std::mutex) {
+    : Client() {
   // Connect to RPC server
   rpc_connection = std::move(rpc);
   rpc_connection->connect();
@@ -56,7 +55,7 @@ Client::Client(const std::string& name, std::shared_ptr<Connection> rpc,
     stream->receive_message(response);
     if (response.status() != schema::ConnectionResponse::OK)
       throw ConnectionError(response.message());
-    stream_manager = std::make_shared<StreamManager>(this, stream);
+    stream_manager = StreamManager::create(this, stream);
   }
 }
 
@@ -234,15 +233,15 @@ schema::ProcedureCall Client::build_call(std::string_view service, std::string_v
 void Client::add_exception_thrower(const std::string& service, const std::string& name,
                                    const std::function<void(std::string)>& thrower) {
   std::lock_guard<std::mutex> guard(*exception_throwers_lock);
-  exception_throwers[std::make_pair(service, name)] = thrower;
+  (*exception_throwers)[std::make_pair(service, name)] = thrower;
 }
 
 void Client::throw_exception(const schema::Error& error) const {
   if (!error.service().empty() && !error.name().empty()) {
     auto key = std::make_pair(error.service(), error.name());
     std::unique_lock<std::mutex> guard(*exception_throwers_lock);
-    auto thrower = exception_throwers.find(key);
-    if (thrower == exception_throwers.end()) {
+    auto thrower = exception_throwers->find(key);
+    if (thrower == exception_throwers->end()) {
       // The type is unknown here if the generated header for its service was never
       // instantiated in this translation unit, so nothing registered a thrower for it.
       // Report the error itself, named by its type on the server.
@@ -283,9 +282,9 @@ std::unique_lock<std::mutex>& Client::get_stream_update_condition_lock() const {
   return streams().get_update_condition_lock();
 }
 
-void Client::acquire_stream_update() { streams().get_update_condition_lock().lock(); }
+void Client::acquire_stream_update() { streams().acquire_update(); }
 
-void Client::release_stream_update() { streams().get_update_condition_lock().unlock(); }
+void Client::release_stream_update() { streams().release_update(); }
 
 void Client::wait_for_stream_update(double timeout) {
   if (timeout < 0) {

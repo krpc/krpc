@@ -125,7 +125,8 @@ class Client {
     std::map<std::pair<std::string, std::string>, Returns> returns;
   };
   std::shared_ptr<ListedReturns> listed_returns;
-  std::map<std::pair<std::string, std::string>, std::function<void(std::string)>>
+  // Shared by every copy of the client, including the stream manager's own
+  std::shared_ptr<std::map<std::pair<std::string, std::string>, std::function<void(std::string)>>>
       exception_throwers;
   // Guards exception_throwers. Services register their throwers as they are constructed,
   // which can happen on any thread and at any time, while errors are turned into exceptions

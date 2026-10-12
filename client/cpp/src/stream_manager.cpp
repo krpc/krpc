@@ -31,7 +31,7 @@ std::exception_ptr closed_error() {
 }
 
 // Lock a mutex for the update thread. Once stop is set the returned lock does not own the
-// mutex, as the thread destroying the manager can hold it while it joins the update thread.
+// mutex, as the closing thread can hold it while it joins the update thread.
 std::unique_lock<std::mutex> lock_unless_stopped(std::mutex& mutex, const std::atomic_bool& stop) {
   std::unique_lock<std::mutex> lock(mutex, std::try_to_lock);
   auto delay = std::chrono::microseconds(10);
@@ -46,32 +46,53 @@ std::unique_lock<std::mutex> lock_unless_stopped(std::mutex& mutex, const std::a
 }  // namespace
 
 StreamManager::StreamManager(Client* client, const std::shared_ptr<Connection>& connection)
-    : client(client),
+    : client(std::make_unique<Client>(*client)),
       connection(connection),
       issued(-1),
       update_lock(new std::recursive_mutex),
-      stop(new std::atomic_bool(false)),
+      stop(false),
       closed(false),
       condition_lock(condition_mutex, std::defer_lock),
       next_callback_tag(0) {
-  // Started once every member it uses is constructed
-  update_thread = std::make_shared<std::thread>(update_thread_main, this, connection, stop);
+  this->client->stream_manager =
+      std::shared_ptr<StreamManager>(std::shared_ptr<StreamManager>(), this);
+}
+
+std::shared_ptr<StreamManager> StreamManager::create(
+    Client* client, const std::shared_ptr<Connection>& connection) {
+  std::shared_ptr<StreamManager> manager(new StreamManager(client, connection));
+  manager->self = manager;
+  manager->update_thread = std::thread(update_thread_main, manager);
+  // The clients' pointer, whose last copy closes the manager
+  return std::shared_ptr<StreamManager>(manager.get(), [manager](StreamManager*) mutable {
+    manager->close();
+    manager.reset();
+  });
 }
 
 StreamManager::~StreamManager() {
-  stop->store(true);
-  // The streams are ended on this thread, which can hold their conditions. The update thread
-  // skips any stream whose condition it cannot take once stop is set.
+  // Destroyed on the update thread once it exits, if it holds the last reference
+  if (update_thread.get_id() == std::this_thread::get_id())
+    update_thread.detach();
+  else if (update_thread.joinable())
+    update_thread.join();
+}
+
+void StreamManager::close() {
+  stop.store(true);
   try {
-    end_streams();
+    end_streams(false);
   } catch (const std::exception& exn) {
     std::cerr << "kRPC: failed to end the streams: " << exn.what() << "\n";
   }
-  update_thread->join();
+  // The update thread exits on its own once it sees stop. It cannot join itself, and a callback
+  // on it can be waiting for a stream condition this thread holds.
+  if (update_thread.get_id() == std::this_thread::get_id() || holds.held()) return;
+  update_thread.join();
 }
 
 std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCall& call) {
-  schema::Stream stream = services::KRPC(client).add_stream(call);
+  schema::Stream stream = services::KRPC(client.get()).add_stream(call);
   return get_stream(stream.id());
 }
 
@@ -82,7 +103,7 @@ void StreamManager::note_issued(uint64_t id) {
 }
 
 std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
-  auto stream_impl = std::make_shared<StreamImpl>(client, id, update_lock);
+  auto stream_impl = std::make_shared<StreamImpl>(client.get(), id, update_lock, self);
   std::exception_ptr ending;
   StreamImpl::EndCallbacks end_callbacks;
   {
@@ -139,7 +160,7 @@ void StreamManager::remove_stream(uint64_t id) {
   if (stream)
     remove_stream(stream.get());
   else
-    services::KRPC(client).remove_stream(id);
+    services::KRPC(client.get()).remove_stream(id);
 }
 
 void StreamManager::note_removed(uint64_t id) {
@@ -162,50 +183,64 @@ void StreamManager::remove_stream(StreamImpl* stream) {
   // ending holds whether or not the call succeeds
   auto ending = std::make_exception_ptr(StreamError("Stream does not exist"));
   call_end_callbacks(stream->end(ending), ending);
-  services::KRPC(client).remove_stream(id);
+  services::KRPC(client.get()).remove_stream(id);
 }
 
-void StreamManager::notify_closed() {
-  std::vector<std::shared_ptr<StreamImpl>> ended;
+void StreamManager::notify_closed() { end_streams(true); }
+
+// The conditions are taken with a try, in passes, so that a thread holding one stream's
+// condition while it waits on another's wakes on the other's ending and lets the first go. A
+// condition this thread holds is used as it is. A stream stays registered until it is ended,
+// so that a close finds the streams the update thread gives up on.
+void StreamManager::end_streams(bool give_up_on_close) {
+  std::vector<std::shared_ptr<StreamImpl>> remaining;
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
     closed = true;
-    for (const auto& entry : streams)
-      if (auto stream = entry.second.lock()) ended.push_back(stream);
-    unregistered.clear();
-    pending.clear();
-  }
-  auto ending = closed_error();
-  for (const auto& stream : ended) {
-    StreamImpl::EndCallbacks end_callbacks;
-    {
-      auto held = lock_unless_stopped(stream->get_condition_mutex(), *stop);
-      // Left registered for the thread destroying the manager to end
-      if (!held.owns_lock()) continue;
-      unregister(stream.get());
-      end_callbacks = stream->end_held(ending);
+    for (auto it = streams.begin(); it != streams.end();) {
+      if (auto stream = it->second.lock()) {
+        remaining.push_back(stream);
+        ++it;
+      } else {
+        it = streams.erase(it);
+      }
     }
-    call_end_callbacks(end_callbacks, ending);
-  }
-  auto held = lock_unless_stopped(condition_mutex, *stop);
-  condition.notify_all();
-}
-
-void StreamManager::end_streams() {
-  std::vector<std::shared_ptr<StreamImpl>> ended;
-  {
-    std::lock_guard<std::recursive_mutex> guard(*update_lock);
-    closed = true;
-    for (const auto& entry : streams)
-      if (auto stream = entry.second.lock()) ended.push_back(stream);
-    streams.clear();
     unregistered.clear();
     pending.clear();
   }
   auto ending = closed_error();
-  for (const auto& stream : ended) call_end_callbacks(stream->end(ending), ending);
-  // This thread can hold the condition, through get_update_condition_lock()
-  std::unique_lock<std::mutex> held(condition_mutex, std::try_to_lock);
+  auto delay = std::chrono::microseconds(10);
+  while (true) {
+    std::vector<std::shared_ptr<StreamImpl>> held_elsewhere;
+    for (const auto& stream : remaining) {
+      StreamImpl::EndCallbacks end_callbacks;
+      {
+        std::unique_lock<std::mutex> held(stream->get_condition_mutex(), std::defer_lock);
+        if (!stream->is_held() && !held.try_lock()) {
+          held_elsewhere.push_back(stream);
+          continue;
+        }
+        unregister(stream.get());
+        end_callbacks = stream->end_held(ending);
+      }
+      call_end_callbacks(end_callbacks, ending);
+    }
+    notify_update();
+    if (held_elsewhere.empty() || (give_up_on_close && stop.load())) return;
+    std::this_thread::sleep_for(delay);
+    delay = std::min(delay * 2, std::chrono::microseconds(1000));
+    remaining.swap(held_elsewhere);
+  }
+}
+
+// Notified while holding the condition mutex. A notification firing between a waiter checking
+// for an update and entering its wait is lost, and the waiter sleeps through the update.
+void StreamManager::notify_update() {
+  if (condition_owner.load() == std::this_thread::get_id()) {
+    condition.notify_all();
+    return;
+  }
+  auto held = lock_unless_stopped(condition_mutex, stop);
   condition.notify_all();
 }
 
@@ -223,6 +258,7 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   // held only to find the stream, and is released before the stream's condition is taken.
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    if (closed) return;
     auto it = streams.find(id);
     if (it == streams.end()) {
       // A result for a stream not registered yet is kept. One for an id below those is for
@@ -247,7 +283,7 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
     auto ending = error_ptr(result.error());
     StreamImpl::EndCallbacks end_callbacks;
     {
-      auto held = lock_unless_stopped(stream->get_condition_mutex(), *stop);
+      auto held = lock_unless_stopped(stream->get_condition_mutex(), stop);
       if (!held.owns_lock()) return;
       // An error is the final result, and the server has already removed the stream. A
       // stream removed or closed meanwhile has its ending already.
@@ -262,7 +298,7 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   uint64_t version = 0;
   uint64_t fired = 0;
   {
-    auto held = lock_unless_stopped(stream->get_condition_mutex(), *stop);
+    auto held = lock_unless_stopped(stream->get_condition_mutex(), stop);
     if (!held.owns_lock()) return;
     if (!stream->update_and_notify(result.value(), result.is_null(), &callbacks, &version, &fired))
       return;
@@ -273,6 +309,18 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
 std::condition_variable& StreamManager::get_update_condition() { return condition; }
 
 std::unique_lock<std::mutex>& StreamManager::get_update_condition_lock() { return condition_lock; }
+
+void StreamManager::acquire_update() {
+  condition_lock.lock();
+  condition_owner.store(std::this_thread::get_id());
+}
+
+void StreamManager::release_update() {
+  condition_owner.store(std::thread::id());
+  condition_lock.unlock();
+}
+
+Holds& StreamManager::stream_holds() { return holds; }
 
 int StreamManager::add_update_callback(const Callback& callback) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
@@ -287,44 +335,34 @@ void StreamManager::remove_update_callback(int tag) {
   callbacks.erase(tag);
 }
 
-void StreamManager::update_thread_main(StreamManager* stream_manager,
-                                       const std::shared_ptr<Connection>& connection,
-                                       const std::shared_ptr<std::atomic_bool>& stop) {
+void StreamManager::update_thread_main(const std::shared_ptr<StreamManager>& stream_manager) {
   try {
-    read_updates(stream_manager, connection, stop);
+    stream_manager->read_updates();
   } catch (...) {
     // A connection that fails, or a message that cannot be read, leaves the connection
-    // unusable
-    connection->close();
+    // unusable. Closing it can fail as well, which leaves it as unusable.
+    try {
+      stream_manager->connection->close();
+    } catch (const std::exception&) {  // NOLINT(bugprone-empty-catch)
+    }
   }
   // The connection is closed or failed, so no further update arrives
   stream_manager->notify_closed();
 }
 
-void StreamManager::read_updates(StreamManager* stream_manager,
-                                 const std::shared_ptr<Connection>& connection,
-                                 const std::shared_ptr<std::atomic_bool>& stop) {
-  Client* client = stream_manager->client;
-
-  auto apply_update = [stream_manager, client](const std::string& data) {
-    schema::StreamUpdate update;
-    decoder::decode(update, data, client);
-    for (const auto& result : update.results())
-      stream_manager->update(result.id(), result.result());
-    {
-      // Notify while holding the condition mutex. A notification firing between a
-      // waiter checking the stream value and entering its wait is lost, and the
-      // waiter sleeps through the update.
-      auto held = lock_unless_stopped(stream_manager->condition_mutex, *stream_manager->stop);
-      stream_manager->condition.notify_all();
-    }
+void StreamManager::read_updates() {
+  auto apply_update = [this](const std::string& data) {
+    schema::StreamUpdate message;
+    decoder::decode(message, data, client.get());
+    for (const auto& result : message.results()) update(result.id(), result.result());
+    notify_update();
     // Copy the callbacks under the update lock, as they run below without it held
-    Callbacks callbacks;
+    Callbacks update_callbacks;
     {
-      std::lock_guard<std::recursive_mutex> guard(*stream_manager->update_lock);
-      callbacks = stream_manager->callbacks;
+      std::lock_guard<std::recursive_mutex> guard(*update_lock);
+      update_callbacks = callbacks;
     }
-    for (const auto& callback : callbacks) {
+    for (const auto& callback : update_callbacks) {
       try {
         callback.second();
       } catch (const std::exception& exn) {
@@ -335,11 +373,11 @@ void StreamManager::read_updates(StreamManager* stream_manager,
     }
   };
 
-  while (!stop->load()) {
+  while (!stop.load()) {
     // Wait for next update message
     size_t size = 0;
     std::string data;
-    while (!stop->load()) {
+    while (!stop.load()) {
       try {
         data += connection->partial_receive(1);
         size = decoder::decode_size(data);
@@ -347,7 +385,7 @@ void StreamManager::read_updates(StreamManager* stream_manager,
       } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
       }
     }
-    if (stop->load()) break;
+    if (stop.load()) break;
 
     // Decode and apply the update
     apply_update(connection->receive(size));

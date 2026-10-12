@@ -44,10 +44,12 @@ bool Holds::remove() {
 }
 
 StreamImpl::StreamImpl(Client* client, uint64_t id,
-                       std::shared_ptr<std::recursive_mutex> update_lock)
+                       std::shared_ptr<std::recursive_mutex> update_lock,
+                       std::weak_ptr<StreamManager> manager)
     : client(client),
       id(id),
       update_lock(std::move(update_lock)),
+      manager(std::move(manager)),
       updated(false),
       _is_null(false),
       version(0),
@@ -66,8 +68,9 @@ float StreamImpl::rate() const { return _rate; }
 
 void StreamImpl::set_rate(float value) {
   _rate = value;
-  // The client of an ended stream can be gone
-  if (has_ended()) return;
+  // Holding the manager keeps its client alive for the call
+  auto held_manager = manager.lock();
+  if (!held_manager || has_ended()) return;
   services::KRPC(client).set_stream_rate(id, value);
 }
 
@@ -188,9 +191,17 @@ void StreamImpl::with_condition(const std::function<void(std::unique_lock<std::m
 
 bool StreamImpl::is_held() const { return holds.held(); }
 
-void StreamImpl::add_hold() { holds.add(); }
+// The manager counts the holds on all its streams, so that a close can tell whether the
+// closing thread holds one
+void StreamImpl::add_hold() {
+  holds.add();
+  if (auto held_manager = manager.lock()) held_manager->stream_holds().add();
+}
 
-bool StreamImpl::remove_hold() { return holds.remove(); }
+bool StreamImpl::remove_hold() {
+  if (auto held_manager = manager.lock()) held_manager->stream_holds().remove();
+  return holds.remove();
+}
 
 std::condition_variable& StreamImpl::get_condition() { return condition; }
 
@@ -214,7 +225,7 @@ int StreamImpl::add_callback(const Callback& callback) {
     value_version = version;
   }
   // Called with the value the stream already has, unless an update has passed it a later one
-  if (has_value) deliver(entry.get(), value, value_is_null, value_version);
+  if (has_value) deliver(entry.get(), value, value_is_null, value_version, true);
   return tag;
 }
 
@@ -234,7 +245,7 @@ int StreamImpl::add_event_callback(const Callback& callback, uint64_t seen) {
       replay_fired = fired;
     }
   }
-  if (replay) deliver(entry.get(), "\x01", false, replay_fired);
+  if (replay) deliver(entry.get(), "\x01", false, replay_fired, true);
   return tag;
 }
 
@@ -264,9 +275,9 @@ void StreamImpl::remove_end_callback(int tag) {
 }
 
 void StreamImpl::remove() {
-  // The client of an ended stream can be gone
-  if (has_ended()) return;
-  client->streams().remove_stream(this);
+  auto held_manager = manager.lock();
+  if (!held_manager || has_ended()) return;
+  held_manager->remove_stream(this);
 }
 
 void StreamImpl::call_callbacks(const Callbacks& callbacks, const std::string& data, bool is_null,
@@ -277,10 +288,17 @@ void StreamImpl::call_callbacks(const Callbacks& callbacks, const std::string& d
   }
 }
 
+// The adding thread skips the first call if the callback is running. Only the update thread can
+// be running it then, with a later value, and the callback can be waiting for a condition the
+// adding thread holds.
 void StreamImpl::deliver(CallbackEntry* entry, const std::string& data, bool is_null,
-                         uint64_t count) {
+                         uint64_t count, bool first) {
   if (entry->event && !is_firing(data, is_null)) return;
-  std::lock_guard<std::recursive_mutex> running(entry->mutex);
+  std::unique_lock<std::recursive_mutex> running(entry->mutex, std::defer_lock);
+  if (!first)
+    running.lock();
+  else if (!running.try_lock())
+    return;
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
     if (ending || entry->delivered >= count) return;

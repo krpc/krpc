@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <exception>
 #include <functional>
+#include <future>
 #include <memory>
 #include <mutex>  // NOLINT(build/c++11)
 #include <string>
@@ -326,6 +327,24 @@ TEST_F(test_event, test_remove_while_holding_condition) {
   event.remove();
   EXPECT_THROW(event.wait(), krpc::StreamError);
   event.release();
+}
+
+TEST_F(test_event, test_remove_after_locking_the_condition_lock) {
+  auto event = test_service.on_timer(10000);
+  std::promise<void> removed;
+  auto done = removed.get_future();
+  std::thread remover([event, removed = std::move(removed)]() mutable {
+    event.get_condition_lock().lock();
+    event.remove();
+    event.get_condition_lock().unlock();
+    removed.set_value();
+  });
+  if (done.wait_for(std::chrono::seconds(10)) != std::future_status::ready) {
+    remover.detach();
+    FAIL() << "remove did not return";
+  }
+  remover.join();
+  EXPECT_THROW(event.wait(), krpc::StreamError);
 }
 
 TEST_F(test_event, test_remove_through_another_handle_while_holding_condition) {

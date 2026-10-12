@@ -304,12 +304,12 @@ class idle_stream_manager {
         std::make_shared<krpc::Connection>("127.0.0.1", acceptor.local_endpoint().port());
     connection->connect();
     acceptor.accept(socket);
-    manager = std::make_unique<krpc::StreamManager>(client, connection);
+    manager = krpc::StreamManager::create(client, connection);
   }
   asio::io_context io_context;
   asio::ip::tcp::acceptor acceptor;
   asio::ip::tcp::socket socket;
-  std::unique_ptr<krpc::StreamManager> manager;
+  std::shared_ptr<krpc::StreamManager> manager;
 };
 
 static krpc::schema::ProcedureResult result_value(const std::string& value) {
@@ -865,6 +865,20 @@ TEST_F(test_stream, test_close_while_holding_condition) {
   ASSERT_THROW(x(), krpc::ConnectionError);
 }
 
+// Streams keep working through a copy of the client once the client that connected is gone
+TEST_F(test_stream, test_stream_after_the_original_client_is_destroyed) {
+  auto client = connect_client();
+  auto copy = std::make_unique<krpc::Client>(*client);
+  client.reset();
+  krpc::services::TestService service(copy.get());
+  auto x = service.counter_stream("test_stream.test_stream_after_the_original_client_is_destroyed");
+  auto value = x();
+  ASSERT_TRUE(eventually([&x, value] { return x() > value; }));
+  auto s = service.throw_invalid_operation_exception_stream();
+  ASSERT_THROW(s(), krpc::services::KRPC::InvalidOperationException);
+  x.remove();
+}
+
 // A thread holding the condition through one stream object can use another
 TEST_F(test_stream, test_another_handle_while_holding_condition) {
   auto x = test_service.int32_to_string_stream(50);
@@ -1017,4 +1031,160 @@ TEST_F(test_stream, test_remove_a_stream_not_noted) {
   auto count = test_service.counter(name);
   wait();
   ASSERT_EQ(count + 1, test_service.counter(name));
+}
+
+// Runs fn on a thread of its own. Returns false if it does not return within ten seconds, and
+// leaves it running, so fn owns what it uses. A std::function is not used, as moving one can copy
+// what it holds.
+template <typename F>
+static bool returns(F fn) {
+  std::promise<void> returned;
+  auto done = returned.get_future();
+  std::thread thread([fn = std::move(fn), returned = std::move(returned)]() mutable {
+    fn();
+    returned.set_value();
+  });
+  if (done.wait_for(std::chrono::seconds(10)) != std::future_status::ready) {
+    thread.detach();
+    return false;
+  }
+  thread.join();
+  return true;
+}
+
+// A thread holding one stream's condition while it waits on another lets the first go once the
+// other ends
+template <typename F>
+static void hold_one_wait_on_another(krpc::Stream<int32_t> held, krpc::Stream<std::string> waited,
+                                     F close) {
+  std::atomic_bool waiting(false);
+  std::thread waiter([held, waited, &waiting]() mutable {
+    held.acquire();
+    waiting.store(true);
+    EXPECT_THROW(waited.wait(), krpc::ConnectionError);
+    held.release();
+  });
+  ASSERT_TRUE(server_test::eventually([&waiting] { return waiting.load(); }));
+  ASSERT_TRUE(returns(std::move(close)));
+  waiter.join();
+  ASSERT_TRUE(server_test::eventually([held]() mutable {
+    try {
+      held();
+    } catch (const krpc::ConnectionError&) {
+      return true;
+    }
+    return false;
+  }));
+}
+
+TEST_F(test_stream, test_close_while_a_thread_holds_one_stream_and_waits_on_another) {
+  std::shared_ptr<krpc::Client> client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto held = service.counter_stream("test_stream.test_close_while_a_thread_holds_one_stream");
+  auto waited = service.int32_to_string_stream(52);
+  ASSERT_EQ("52", waited());
+  // The close is given the last copy of the client
+  hold_one_wait_on_another(held, waited,
+                           [client = std::move(client)]() mutable { client.reset(); });
+}
+
+TEST_F(test_stream, test_connection_failure_while_a_thread_holds_one_stream_and_waits_on_another) {
+  std::function<void()> shutdown;
+  auto client = connect_client(&shutdown);
+  krpc::services::TestService service(client.get());
+  auto held = service.counter_stream("test_stream.test_connection_failure_while_a_thread_holds");
+  auto waited = service.int32_to_string_stream(53);
+  ASSERT_EQ("53", waited());
+  hold_one_wait_on_another(held, waited, shutdown);
+}
+
+// Closing from a callback on the update thread does not wait for that thread
+TEST_F(test_stream, test_remove_after_locking_the_condition_lock) {
+  auto x = test_service.int32_to_string_stream(42);
+  ASSERT_EQ("42", x());
+  ASSERT_TRUE(returns([x]() mutable {
+    x.get_condition_lock().lock();
+    x.remove();
+    x.get_condition_lock().unlock();
+  }));
+  ASSERT_THROW(x(), krpc::StreamError);
+}
+
+// The thread adding a callback holds a condition that the callback, running on the update
+// thread with a later value, waits for. The first call is skipped rather than waiting for it.
+TEST_F(test_stream, test_add_callback_while_holding_a_condition_the_callback_waits_for) {
+  auto held = test_service.int32_to_string_stream(42);
+  auto x = test_service.counter_stream(
+      "test_stream.test_add_callback_while_holding_a_condition_the_callback_waits_for");
+  ASSERT_EQ("42", held());
+  x();
+  ASSERT_TRUE(returns([held, x]() mutable {
+    for (int i = 0; i < 200; i++) {
+      held.acquire();
+      auto tag = x.add_callback([held](int32_t) mutable {
+        auto handle = held;
+        handle.acquire();
+        handle.release();
+      });
+      held.release();
+      x.remove_callback(tag);
+    }
+  }));
+}
+
+TEST_F(test_stream, test_close_from_a_callback) {
+  auto client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto x = service.counter_stream("test_stream.test_close_from_a_callback");
+  std::atomic_bool closed(false);
+  x.add_callback([&client, &closed](int32_t) {
+    if (closed.load()) return;
+    client.reset();
+    closed.store(true);
+  });
+  ASSERT_TRUE(eventually([&closed] { return closed.load(); }));
+  ASSERT_THROW(x(), krpc::ConnectionError);
+}
+
+TEST_F(test_stream, test_close_from_an_end_callback) {
+  auto client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto x = service.counter_stream("test_stream.test_close_from_an_end_callback");
+  // Ended by the server, on the update thread
+  auto event = service.on_timer(100);
+  std::atomic_bool closed(false);
+  event.add_end_callback([&client, &closed](const std::exception_ptr&) {
+    client.reset();
+    closed.store(true);
+  });
+  ASSERT_TRUE(eventually([&closed] { return closed.load(); }));
+  ASSERT_THROW(x(), krpc::ConnectionError);
+}
+
+// The closing thread holds a stream's condition that a callback on the update thread waits for
+TEST_F(test_stream, test_close_while_holding_a_condition_a_callback_waits_for) {
+  std::shared_ptr<krpc::Client> client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto x = service.counter_stream("test_stream.test_close_while_holding_a_condition");
+  auto y = service.int32_to_string_stream(54);
+  ASSERT_EQ("54", y());
+  auto blocked = std::make_shared<std::atomic_bool>(false);
+  x.add_callback([y, blocked](int32_t) mutable {
+    blocked->store(true);
+    try {
+      y.wait(0);
+    } catch (const krpc::ConnectionError&) {  // NOLINT(bugprone-empty-catch): closed
+    }
+  });
+  // The closer has the last copy of the client
+  ASSERT_TRUE(returns([y, blocked, client = std::move(client)]() mutable {
+    y.acquire();
+    // The callback's next call waits for the condition
+    blocked->store(false);
+    while (!blocked->load()) std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    wait();
+    client.reset();
+    y.release();
+  }));
+  ASSERT_THROW(y(), krpc::ConnectionError);
 }

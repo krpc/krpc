@@ -303,6 +303,7 @@ inline void Stream<T>::remove_end_callback(int tag) {
 template <typename T>
 inline void Stream<T>::remove() {
   if (!impl) return;
+  sync_hold();
   impl->remove();
 }
 

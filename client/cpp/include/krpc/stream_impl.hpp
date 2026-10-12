@@ -16,6 +16,7 @@
 namespace krpc {
 
 class Client;
+class StreamManager;
 
 /** The number of holds each thread has on a condition. */
 class Holds {
@@ -43,7 +44,8 @@ class CallbackDecodeError : public std::runtime_error {
     alone. */
 class StreamImpl {
  public:
-  StreamImpl(Client* client, uint64_t id, std::shared_ptr<std::recursive_mutex> update_lock);
+  StreamImpl(Client* client, uint64_t id, std::shared_ptr<std::recursive_mutex> update_lock,
+             std::weak_ptr<StreamManager> manager = std::weak_ptr<StreamManager>());
   Client* get_client() const;
   uint64_t get_id() const;
   float rate() const;
@@ -127,11 +129,14 @@ class StreamImpl {
  private:
   /** Call a callback with a value, unless it has had this one or a later one, or the stream
       has ended. The count is the value's version, or for an event callback the number of
-      firings. An event callback is called only with a firing. */
-  void deliver(CallbackEntry* entry, const std::string& data, bool is_null, uint64_t count);
+      firings. An event callback is called only with a firing. The first call, made by the
+      thread adding the callback, is skipped if the callback is running. */
+  void deliver(CallbackEntry* entry, const std::string& data, bool is_null, uint64_t count,
+               bool first = false);
   Client* client;
   uint64_t id;
   std::shared_ptr<std::recursive_mutex> update_lock;
+  std::weak_ptr<StreamManager> manager;
   // Set after the value it flags, and read with no lock
   std::atomic<bool> updated;
   std::string data;
