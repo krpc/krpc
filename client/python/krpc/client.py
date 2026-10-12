@@ -1,10 +1,12 @@
 from __future__ import annotations
-from typing import cast, Callable, Generator, Iterable, Iterator, Optional, Type
+from typing import cast, Any, Callable, Generator, Iterable, Iterator, Optional, Type
 from types import TracebackType
 from contextlib import contextmanager
+import reprlib
 import sys
 import threading
 import warnings
+from krpc import limits
 from krpc.connection import Connection
 from krpc.definitions import CLASS, ENUMERATION, STRUCT, Definition, register_all
 from krpc.error import StreamError
@@ -47,6 +49,56 @@ def _client_class(
             "__qualname__": python_type.__qualname__,
         },
     )
+
+
+def _type_message(remote_type: Any) -> KRPC.Type:
+    """The protocol buffer type message describing a KRPC.Type object."""
+    typ = KRPC.Type()
+    typ.code = remote_type.code.value
+    service = remote_type.service
+    if service:
+        typ.service = service
+        typ.name = remote_type.name
+    typ.types.extend([_type_message(t) for t in remote_type.types])
+    typ.nullable = remote_type.nullable
+    return typ
+
+
+# Shortens a large argument value in an error
+_ARGUMENT_REPR = reprlib.Repr()
+_ARGUMENT_REPR.maxother = 80
+
+# The smallest and largest value of each integer type
+_INTEGER_RANGES = {
+    KRPC.Type.SINT32: (limits.SINT32_MIN, limits.SINT32_MAX),
+    KRPC.Type.SINT64: (limits.SINT64_MIN, limits.SINT64_MAX),
+    KRPC.Type.UINT32: (0, limits.UINT32_MAX),
+    KRPC.Type.UINT64: (0, limits.UINT64_MAX),
+}
+
+
+def _check_argument(value: object, ptype: KRPC.Type) -> None:
+    """Raises ValueError for a value the encoder would write without an error,
+    but which the type cannot hold: an integer out of its range, or a None at a
+    position that is not nullable."""
+    if value is None:
+        if not ptype.nullable:
+            raise ValueError("null value")
+        return
+    bounds = _INTEGER_RANGES.get(ptype.code)
+    if bounds is not None and isinstance(value, int):
+        if not bounds[0] <= value <= bounds[1]:
+            raise ValueError("integer out of range")
+    elif ptype.code in (KRPC.Type.LIST, KRPC.Type.SET):
+        for element in cast(Iterable[object], value):
+            _check_argument(element, ptype.types[0])
+    elif ptype.code == KRPC.Type.TUPLE:
+        for element, element_ptype in zip(cast(Iterable[object], value), ptype.types):
+            _check_argument(element, element_ptype)
+    elif ptype.code == KRPC.Type.DICTIONARY:
+        for key, element in cast(dict, value).items():  # type: ignore[type-arg]
+            _check_argument(key, ptype.types[0])
+            _check_argument(element, ptype.types[1])
 
 
 def _stub_definitions(
@@ -154,6 +206,11 @@ class Client(krpc.services.Client):
         self._rpc_connection_lock = threading.Lock()
         self._stream_connection = stream_connection
         self._stream_manager = StreamManager(self)
+        # The type a server side function returns, and the types of its
+        # parameters, by expression object identifier, so that each is
+        # introspected over the wire only once
+        self._expression_return_types: dict[int, Optional[KRPC.Type]] = {}
+        self._expression_parameter_types: dict[int, list[KRPC.Type]] = {}
 
         services = cast(
             KRPC.Services,
@@ -236,28 +293,159 @@ class Client(krpc.services.Client):
     ) -> None:
         self.close()
 
-    def add_stream(
-        self, func: Callable, *args: object, **kwargs: object  # type: ignore[type-arg]
-    ) -> Stream:
-        """Add a stream to the server"""
+    def add_stream(self, func: Any, *args: object, **kwargs: object) -> Stream:
+        """Add a stream to the server. Given a remote procedure and its arguments,
+        the stream repeats that call. Given a server side function, a
+        KRPC.Expression object, the stream evaluates it on each update. Raises
+        a StreamError without a stream connection, for a property setter, for
+        arguments to a function, and for a function with no value. Raises
+        TypeError for any other value."""
         if self._stream_connection is None:
             raise StreamError("Not connected to stream server")
         if func == setattr:
             raise StreamError("Cannot stream a property setter")
-        return_type = self._get_return_type(func, *args, **kwargs)
-        call = self.get_call(func, *args, **kwargs)
-        return krpc.stream.Stream.from_call(self, return_type, call)
+        if self._is_remote_procedure(func):
+            return_type = self._get_return_type(func, *args, **kwargs)
+            call = self.get_call(func, *args, **kwargs)
+            return krpc.stream.Stream.from_call(self, return_type, call)
+        self._check_function(func, "a remote procedure, ")
+        if args or kwargs:
+            raise StreamError("A server side function is streamed without arguments")
+        return_type = self._expression_return_type(func)
+        if return_type is None:
+            raise StreamError("The function does not evaluate to a value")
+        stream = self.krpc.add_function_stream(func)
+        return krpc.stream.Stream.from_stream_id(
+            self, stream.id, self._types.as_type(return_type)
+        )
+
+    @staticmethod
+    def _is_remote_procedure(func: Any) -> bool:
+        """Whether a callable is a remote procedure, or getattr naming a property
+        of a service or an object."""
+        if func == getattr:
+            return True
+        owner = getattr(func, "__self__", None)
+        name = getattr(func, "__name__", None)
+        return (
+            owner is not None
+            and name is not None
+            and hasattr(owner, "_build_call_" + name)
+        )
 
     @contextmanager
-    def stream(
-        self, func: Callable, *args: object, **kwargs: object  # type: ignore[type-arg]
-    ) -> Iterator[Stream]:
+    def stream(self, func: Any, *args: object, **kwargs: object) -> Iterator[Stream]:
         """'with' support for add_stream"""
         stream = self.add_stream(func, *args, **kwargs)
         try:
             yield stream
         finally:
             stream.remove()
+
+    def add_event(self, function: Any) -> Event:
+        """Create an event from a server side function that evaluates to a
+        boolean value. Raises a StreamError without a stream connection,
+        ValueError for a function that does not evaluate to a boolean value,
+        and TypeError for a value that is not a function."""
+        if self._stream_connection is None:
+            raise StreamError("Not connected to stream server")
+        self._check_function(function)
+        return cast(Event, self.krpc.add_event(function))
+
+    def _check_function(self, function: Any, procedure: str = "") -> None:
+        """Raises TypeError for a value that is not a KRPC.Expression object."""
+        expression = self._types.class_type("KRPC", "Expression").python_type
+        if isinstance(function, expression):
+            return
+        raise TypeError(
+            "expected %sa KRPC.Expression object, got a value of type %s"
+            % (procedure, type(function).__name__)
+        )
+
+    def run(self, function: Any, *args: object) -> Any:
+        """Run a function on the server, within a single physics tick, and
+        return the value it produces. The value is None when the function has
+        no result or its result is null. The function is a KRPC.Expression
+        object, and the arguments are passed to its parameters. Raises
+        TypeError for a value that is not a function, and for an argument its
+        parameter cannot take."""
+        self._check_function(function)
+        return_type = self._expression_return_type(function)
+        parameter_types = self._parameter_types(function)
+        arguments = self._encode_arguments(parameter_types, list(args))
+        data = self.krpc.run_function(function, arguments)
+        # A null value has no data
+        if data is None or return_type is None:
+            return None
+        return Decoder.decode(self, data, self._types.as_type(return_type))
+
+    def _expression_return_type(
+        self, expression: Any, cache: bool = True
+    ) -> Optional[KRPC.Type]:
+        """Build the protocol buffer type message describing the type of the
+        values a server side function evaluates to, by introspecting its
+        return type on the server. None for an expression with no value."""
+        object_id = expression._object_id
+        if object_id in self._expression_return_types:
+            return self._expression_return_types[object_id]
+        return_type = (
+            _type_message(expression.return_type)
+            if expression.has_return_type
+            else None
+        )
+        if cache:
+            self._expression_return_types[object_id] = return_type
+        return return_type
+
+    def _parameter_types(self, expression: Any) -> list[KRPC.Type]:
+        """The protocol buffer type messages describing the types of a server
+        side function's parameters, introspected on the server."""
+        object_id = expression._object_id
+        if object_id not in self._expression_parameter_types:
+            self._expression_parameter_types[object_id] = [
+                _type_message(typ) for typ in expression.parameter_types
+            ]
+        return self._expression_parameter_types[object_id]
+
+    def _encode_arguments(
+        self, parameter_types: list[KRPC.Type], args: list[object]
+    ) -> list[Optional[bytes]]:
+        """Encode the arguments of a call to a server side function, one per
+        parameter. A None is sent as a null argument."""
+        if len(args) != len(parameter_types):
+            raise TypeError(
+                "the function takes %d argument%s, got %d"
+                % (
+                    len(parameter_types),
+                    "" if len(parameter_types) == 1 else "s",
+                    len(args),
+                )
+            )
+        return [
+            self._encode_argument(position, arg, typ)
+            for position, (arg, typ) in enumerate(zip(args, parameter_types), 1)
+        ]
+
+    def _encode_argument(
+        self, position: int, value: object, ptype: KRPC.Type
+    ) -> Optional[bytes]:
+        """Encode an argument of a call to a server side function, coerced to
+        the type of its parameter as the arguments of a remote procedure call
+        are. Raises TypeError naming the argument's position for a value the
+        parameter cannot take. A None is sent as a null argument, which the
+        server checks."""
+        if value is None:
+            return None
+        typ = self._types.as_type(ptype)
+        try:
+            value = self._types.coerce_to(value, typ)
+            _check_argument(value, ptype)
+            return Encoder.encode(value, typ)
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            raise TypeError(
+                "run() argument %d must be a %s, got %s"
+                % (position, typ, _ARGUMENT_REPR.repr(value))
+            ) from exc
 
     @property
     def stream_update_condition(self) -> threading.Condition:

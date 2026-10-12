@@ -67,6 +67,19 @@ one emits a ``DeprecationWarning`` naming the replacement to use instead. The de
 noted in the member's docstring. Python hides ``DeprecationWarning`` by default; run Python with
 ``-W default`` or use the ``warnings`` module to see them.
 
+Server Side Functions
+---------------------
+
+A server side function is code that runs inside the game, on the server.
+:meth:`krpc.client.Client.run` evaluates one once and returns its value. Every value it reads comes
+from the same physics tick. For example, the following reads the vessel's altitude and speed
+together:
+
+.. literalinclude:: /scripts/client/python/RunFunction.py
+
+Use ``run`` for a function with effects, such as setting a property. An event or a function stream
+evaluates its function on every update, repeating the effects.
+
 .. _python-client-streams:
 
 Streaming Data
@@ -117,14 +130,14 @@ clients streams are automatically stopped when it disconnects.
    object is garbage collected. Each call to ``add_stream`` adds another stream.
 
 Synchronizing with Stream Updates
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
 then take some action. kRPC provides two mechanisms to do this efficiently: *condition variables*
 and *callbacks*.
 
 Condition Variables
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 Each stream has a condition variable associated with it, that is notified whenever the value of the
 stream changes. The condition variables are instances of ``threading.Condition`` from the Python
@@ -150,7 +163,7 @@ can also be done explicitly using ``acquire`` and ``release``:
 .. literalinclude:: /scripts/client/python/ConditionVariables2.py
 
 Callbacks
-^^^^^^^^^
+~~~~~~~~~
 
 Streams allow you to register callback functions that are called whenever the value of the stream
 changes. Callback functions should take a single argument, which is the new value of the stream, and
@@ -170,7 +183,7 @@ A callback added to a stream that already has a value is called with that value 
    synchronization.
 
 Stream Endings
-^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~
 
 The following example streams the temperature of a part until the part is destroyed:
 
@@ -192,6 +205,46 @@ holds the stream instead. It resumes once the object or scene is available.
 To handle an ending in a callback, add an end callback with
 :meth:`krpc.stream.Stream.add_end_callback`. It is called once, with the exception.
 
+Streaming Server Side Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pass a server side function to :meth:`krpc.client.Client.add_stream` to stream its value. The server
+evaluates the function on each stream update, within one physics tick. The value can be any type the
+server can send, including collections and objects. For example, the following streams the vessel's
+altitude in kilometers:
+
+.. code-block:: python
+
+   import time
+   import krpc
+
+   conn = krpc.connect()
+   vessel = conn.space_center.active_vessel
+   flight = vessel.flight()
+
+   expression = conn.krpc.Expression
+
+   # Build a function that computes
+   # the vessel's altitude in kilometers
+   expr = expression.divide(
+       expression.call(conn.get_call(getattr, flight, "mean_altitude")),
+       expression.constant_double(1000),
+   )
+
+   # Stream the value of the function
+   stream = conn.add_stream(expr)
+   while True:
+       print("Altitude:", stream(), "km")
+       time.sleep(1)
+
+Each call to ``add_stream`` creates a separate stream, which evaluates the function again on each
+update.
+
+A function stream or event ends on any exception its function raises. This includes
+``ObjectNotLoadedException`` from the ``KRPC`` service, raised while the game loads or when a vessel
+unloads. To keep a function running through a load, catch the exception in the function with
+``Expression.try_catch``.
+
 .. _python-client-events:
 
 Events
@@ -205,9 +258,8 @@ A call to ``wait`` returns straight away if the event has fired since the previo
 event object, so no firing is missed between two calls. Several firings between two calls make
 ``wait`` return once.
 
-You can also create a custom event from a server side function, which is code that runs inside
-the game. The following builds the function ``mean_altitude > 1000``, and creates an event that
-triggers when the function returns true:
+You can also create a custom event from a server side function. The following builds the function
+``mean_altitude > 1000``, and creates an event that triggers when the function returns true:
 
 .. literalinclude:: /scripts/client/python/Event.py
 
@@ -269,14 +321,38 @@ Client API Reference
 
    .. method:: add_stream(func, *args, **kwargs)
 
-      Create a stream for the function *func* called with arguments *args* and *kwargs*. Returns a
-      :class:`krpc.stream.Stream` object. Each call creates a new stream.
+      Create a stream for the remote procedure *func* called with arguments *args* and *kwargs*.
+      Returns a :class:`krpc.stream.Stream` object. Each call creates a new stream.
+
+      *func* can also be a server side function, a ``KRPC.Expression`` object, which the stream
+      evaluates on each update. A server side function takes no arguments. A function with no
+      result raises ``StreamError``. Any other value raises ``TypeError``.
 
    .. method:: stream(func, *args, **kwargs)
 
       Allows use of the ``with`` statement to create a stream and automatically remove it from the
-      server when it goes out of scope. The function to be streamed should be passed as *func*, and
-      its arguments as *args* and *kwargs*.
+      server when it goes out of scope. The remote procedure or server side function to be
+      streamed should be passed as *func*, and its arguments as *args* and *kwargs*.
+
+   .. method:: add_event(function)
+
+      Create an event from a server side function that evaluates to a boolean value. Returns
+      a :class:`krpc.event.Event` object.
+
+      Raises ``StreamError`` without a stream connection, and for a compiled function with
+      parameters. A function that does not evaluate to a boolean value raises ``ValueError``,
+      and a value that is not a function raises ``TypeError``.
+
+   .. method:: run(function, *args)
+
+      Run a function on the server, within a single physics tick, and return the value it
+      produces. The value is ``None`` when the function has no result or its result is null.
+      The function is a ``KRPC.Expression`` object, and the arguments are passed to its
+      parameters. This is the intended way to run a function with side effects once, where an
+      event or a stream runs it on every update.
+
+      Raises ``TypeError`` for a value that is not a function, and for an argument its parameter
+      cannot take, naming the argument's position.
 
    .. attribute:: stream_update_condition
 

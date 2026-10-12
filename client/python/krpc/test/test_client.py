@@ -757,6 +757,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "benchmark",
                     "stream",
                     "add_stream",
+                    "add_event",
+                    "run",
                     "stream_update_condition",
                     "wait_for_stream_update",
                     "add_stream_update_callback",

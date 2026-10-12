@@ -395,7 +395,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             counter,
         )
 
-        event = self.conn.krpc.add_event(expr)
+        event = self.conn.add_event(expr)
         with event.condition:
             event.wait()
             # The counter advances on each evaluation and on this read, and the
