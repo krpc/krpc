@@ -6,6 +6,11 @@
 - **Breaking:** Throw `ArithmeticException` for a division by zero or an overflow, and
   `UnsupportedOperationException` for an unsupported operation, reported by any service, in place
   of `RPCException` (#1124)
+- Add `Connection.run`, which runs a server side function within a single physics tick,
+  passing it any arguments, and returns its value (#1129)
+- Add a `Connection.addStream` overload taking a server side function (#1129)
+- Add `Connection.addEvent`, which creates an event from a server side function (#1129)
+- Make `RemoteObject.id` public, for passing to `Expression.constantObject` (#1129)
 - **Breaking:** Start a stream when it is added, removing `Stream.start`,
   `Stream.startAndWait` and `Event.start` (#1122)
 - Wait for a stream's first value in `Stream.get` (#1122)
