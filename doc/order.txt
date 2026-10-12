@@ -94,6 +94,11 @@ KRPC.Expression.CreateDictionary
 KRPC.Expression.CreateEmptyList
 KRPC.Expression.CreateEmptySet
 KRPC.Expression.CreateEmptyDictionary
+KRPC.Expression.Append
+KRPC.Expression.Set
+KRPC.Expression.Remove
+KRPC.Expression.RemoveAt
+KRPC.Expression.Clear
 KRPC.Expression.DictionaryKeys
 KRPC.Expression.DictionaryValues
 KRPC.Expression.ToList

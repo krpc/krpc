@@ -54,6 +54,35 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void StateVariableCollectionChangesInPlace ()
+        {
+            var values = Expression.StateVariable ("values", Expression.CreateList (
+                new List<Expression> { Expression.ConstantInt (1) }));
+            var function = Expression.Block (new List<Expression> {
+                Expression.Append (values, Expression.ConstantInt (2)),
+                values
+            });
+            CollectionAssert.AreEqual (new List<int> { 1, 2 }, Run<IList<int>> (function));
+            CollectionAssert.AreEqual (new List<int> { 1, 2, 2 }, Run<IList<int>> (function));
+        }
+
+        [Test]
+        public void StreamOfAStateVariableCollectionSendsEachChange ()
+        {
+            var values = Expression.StateVariable ("values", Expression.CreateList (
+                new List<Expression> { Expression.ConstantInt (1) }));
+            var stream = new global::KRPC.Service.FunctionStream (Expression.Block (new List<Expression> {
+                Expression.Append (values, Expression.ConstantInt (2)),
+                values
+            }));
+            stream.UpdateInternal ();
+            stream.Sent ();
+            stream.UpdateInternal ();
+            Assert.IsTrue (stream.Changed);
+            CollectionAssert.AreEqual (new List<int> { 1, 2, 2 }, (IList<int>)stream.Result.Value);
+        }
+
+        [Test]
         public void StateVariableTypeIsTheInitialValues ()
         {
             var total = Expression.StateVariable ("total", Expression.ConstantDouble (0.5));
