@@ -11,6 +11,11 @@ from krpc.connection import Connection
 from krpc.definitions import CLASS, ENUMERATION, STRUCT, Definition, register_all
 from krpc.error import StreamError
 from krpc.event import Event
+from krpc.functioncompiler import (
+    Parameters,
+    NO_VALUE,
+    compile_function_with_type,
+)
 from krpc.types import Types, TypeBase, DefaultArgument, EXCEPTION_TYPES
 from krpc.service import (
     create_service,
@@ -186,7 +191,7 @@ def _stub_definitions(
         )
 
 
-class Client(krpc.services.Client):
+class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attributes
     """
     A kRPC client, through which all Remote Procedure Calls are made.
     Services provided by the server that the client connects
@@ -211,6 +216,15 @@ class Client(krpc.services.Client):
         # introspected over the wire only once
         self._expression_return_types: dict[int, Optional[KRPC.Type]] = {}
         self._expression_parameter_types: dict[int, list[KRPC.Type]] = {}
+        # The parameters of a function compiled by compile, which bind a call's
+        # arguments to them
+        self._function_parameters: dict[int, Parameters] = {}
+        # The service definitions the function compiler reads, built on the first
+        # compile, and the objects naming a type by their type message. Both cost
+        # round trips to build, and every function compiled for this connection
+        # shares them
+        self._expression_metadata: Any = None
+        self._expression_remote_types: dict[bytes, Any] = {}
 
         services = cast(
             KRPC.Services,
@@ -296,10 +310,11 @@ class Client(krpc.services.Client):
     def add_stream(self, func: Any, *args: object, **kwargs: object) -> Stream:
         """Add a stream to the server. Given a remote procedure and its arguments,
         the stream repeats that call. Given a server side function, a
-        KRPC.Expression object, the stream evaluates it on each update. Raises
-        a StreamError without a stream connection, for a property setter, for
-        arguments to a function, and for a function with no value. Raises
-        TypeError for any other value."""
+        KRPC.Expression object, the stream evaluates it on each update. The
+        function may also be a lambda taking no arguments, compiled with
+        compile on every call. Raises a StreamError without a stream
+        connection, for a property setter, for arguments to a function, and
+        for a function with no value. Raises TypeError for any other value."""
         if self._stream_connection is None:
             raise StreamError("Not connected to stream server")
         if func == setattr:
@@ -311,10 +326,13 @@ class Client(krpc.services.Client):
         self._check_function(func, "a remote procedure, ")
         if args or kwargs:
             raise StreamError("A server side function is streamed without arguments")
-        return_type = self._expression_return_type(func)
+        # Checked before the return type is looked up, which can make remote calls
+        if not callable(func):
+            self._check_no_parameters(func)
+        function, return_type, _ = self._function_and_type(func, streamed=True)
         if return_type is None:
             raise StreamError("The function does not evaluate to a value")
-        stream = self.krpc.add_function_stream(func)
+        stream = self.krpc.add_function_stream(function)
         return krpc.stream.Stream.from_stream_id(
             self, stream.id, self._types.as_type(return_type)
         )
@@ -342,36 +360,107 @@ class Client(krpc.services.Client):
         finally:
             stream.remove()
 
+    def compile(self, func: Callable) -> Any:  # type: ignore[type-arg]
+        """Compile a lambda, taking no arguments, into a server side function
+        (a KRPC.Expression object) that computes the same result on the server.
+        Remote procedure calls made by the function are re-invoked on each
+        evaluation; other values are captured when the function is compiled.
+        Compiling takes a round trip per node of the function, so compile a
+        function once and pass the result to add_stream, add_event or run to
+        use it repeatedly.
+        The server compiles the function too, so its first run is as fast as
+        later ones."""
+        function, return_type, parameters = compile_function_with_type(self, func)
+        self.krpc.compile_function(function)
+        self._function_parameters[function._object_id] = parameters
+        # A type the compiler tracked need not be introspected on the first run
+        if return_type is NO_VALUE:
+            self._expression_return_types[function._object_id] = None
+        elif return_type is not None:
+            self._expression_return_types[function._object_id] = return_type
+        return function
+
+    def _function_and_type(
+        self, function: Any, streamed: bool = False
+    ) -> tuple[Any, Optional[KRPC.Type], Optional[Parameters]]:
+        """The server side function for a KRPC.Expression object or a lambda,
+        the type of the values it evaluates to, and its parameters. The compiler
+        tracks the type of a lambda, so the server is asked only for a type the
+        compiler does not know. A function built with the expression API has no
+        parameters to bind arguments with."""
+        # A Python function is compiled again on each call, as a cached function
+        # would keep the values it captured when it was first compiled
+        if callable(function):
+            function, return_type, parameters = compile_function_with_type(
+                self, function, streamed
+            )
+            if return_type is NO_VALUE:
+                return function, None, parameters
+            if return_type is not None:
+                return function, return_type, parameters
+            # A function compiled for one use is not looked up again
+            return (
+                function,
+                self._expression_return_type(function, cache=False),
+                parameters,
+            )
+        return (
+            function,
+            self._expression_return_type(function),
+            self._function_parameters.get(function._object_id),
+        )
+
     def add_event(self, function: Any) -> Event:
         """Create an event from a server side function that evaluates to a
-        boolean value. Raises a StreamError without a stream connection,
-        ValueError for a function that does not evaluate to a boolean value,
-        and TypeError for a value that is not a function."""
+        boolean value. The function may also be given as a lambda taking no
+        arguments, which is compiled using compile on every call. Raises a
+        StreamError without a stream connection. Raises ValueError for a
+        function that does not evaluate to a boolean value, and TypeError for a
+        value that is not a function."""
         if self._stream_connection is None:
             raise StreamError("Not connected to stream server")
         self._check_function(function)
+        if callable(function):
+            function, _, _ = compile_function_with_type(self, function, streamed=True)
+        self._check_no_parameters(function)
         return cast(Event, self.krpc.add_event(function))
 
     def _check_function(self, function: Any, procedure: str = "") -> None:
-        """Raises TypeError for a value that is not a KRPC.Expression object."""
+        """Raises TypeError for a value that is neither a Python function nor
+        a KRPC.Expression object."""
         expression = self._types.class_type("KRPC", "Expression").python_type
-        if isinstance(function, expression):
+        if callable(function) or isinstance(function, expression):
             return
         raise TypeError(
-            "expected %sa KRPC.Expression object, got a value of type %s"
-            % (procedure, type(function).__name__)
+            "expected %sa KRPC.Expression object, or a lambda, "
+            "got a value of type %s" % (procedure, type(function).__name__)
         )
+
+    def _check_no_parameters(self, function: Any) -> None:
+        """Raises a StreamError if a function compiled by compile takes
+        parameters, as a stream or an event runs its function with no
+        arguments."""
+        parameters = self._function_parameters.get(function._object_id)
+        if parameters is not None and parameters.ptypes:
+            raise StreamError(
+                "A function that takes parameters cannot be streamed or used as "
+                "an event"
+            )
 
     def run(self, function: Any, *args: object) -> Any:
         """Run a function on the server, within a single physics tick, and
         return the value it produces. The value is None when the function has
-        no result or its result is null. The function is a KRPC.Expression
-        object, and the arguments are passed to its parameters. Raises
-        TypeError for a value that is not a function, and for an argument its
-        parameter cannot take."""
+        no result or its result is null. The function may be given as a
+        KRPC.Expression object, or as a lambda, which is compiled using
+        compile on every call. The arguments are passed to the function's
+        parameters. Raises TypeError for a value that is not a function, and
+        for an argument its parameter cannot take."""
         self._check_function(function)
-        return_type = self._expression_return_type(function)
-        parameter_types = self._parameter_types(function)
+        function, return_type, parameters = self._function_and_type(function)
+        if parameters is None:
+            parameter_types = self._parameter_types(function)
+        else:
+            parameter_types = parameters.ptypes
         arguments = self._encode_arguments(parameter_types, list(args))
         data = self.krpc.run_function(function, arguments)
         # A null value has no data

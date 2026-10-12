@@ -1,5 +1,8 @@
+from typing import Any
 import unittest
+from unittest import mock
 
+import krpc.functioncompiler
 from krpc.error import StreamError
 from krpc.test.servertestcase import ServerTestCase
 
@@ -65,6 +68,21 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         with self.conn.stream(expression.to_list(selected)) as stream:
             self.assertEqual([1, 2, 3], stream())
 
+    def test_function_stream_error(self) -> None:
+        expression = self.conn.krpc.Expression
+        expr = expression.call(
+            self.conn.get_call(self.conn.test_service.throw_argument_exception)
+        )
+        # A stream's error is raised as the exception type the error maps to
+        with self.conn.stream(expr) as stream:
+            with self.assertRaises(ValueError) as context:
+                stream()
+            self.assertIn("Invalid argument", str(context.exception))
+        obj = self.conn.test_service.create_test_object("streamerror")
+        with self.conn.stream(lambda: {"a": obj.int_property}["b"]) as missing:
+            with self.assertRaises(KeyError):
+                missing()
+
     def test_function_of_nullable_elements(self) -> None:
         service = self.conn.test_service
         expr = self.conn.krpc.Expression.call(
@@ -76,6 +94,90 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         return_type = expr.return_type
         self.assertTrue(return_type.types[0].nullable)
         self.assertFalse(return_type.nullable)
+
+    def test_nullable_reference_call_in_a_collection(self) -> None:
+        service = self.conn.test_service
+        obj = service.create_test_object("nullableelement")
+        # A nullable string or object element is sent with a presence flag, and the
+        # values of a set and the keys of a dictionary are sent without one
+        self.assertEqual(
+            ["hello"],
+            self.conn.run(lambda: [service.echo_nullable_string("hello")]),
+        )
+        self.assertEqual(
+            {"hello"},
+            self.conn.run(lambda: {service.echo_nullable_string("hello")}),
+        )
+        self.assertEqual(
+            [obj, obj],
+            self.conn.run(lambda: [obj, service.echo_test_object(obj)]),
+        )
+        self.assertEqual(
+            {1: obj, 2: obj},
+            self.conn.run(lambda: {1: obj, 2: service.echo_test_object(obj)}),
+        )
+        with self.conn.stream(
+            lambda: {service.echo_nullable_string("key"): service.echo_test_object(obj)}
+        ) as stream:
+            self.assertEqual({"key": obj}, stream())
+
+    def test_nullable_reference_elements(self) -> None:
+        service = self.conn.test_service
+        obj = service.create_test_object("nullableelements")
+        null = service.echo_test_object
+        self.assertEqual(
+            [obj, None],
+            self.conn.run(
+                lambda: service.echo_list_of_nullable_objects([obj, null(None)])
+            ),
+        )
+        self.assertEqual(
+            {"a": obj, "b": None},
+            self.conn.run(
+                lambda: service.echo_dictionary_of_nullable_objects(
+                    {"a": obj, "b": null(None)}
+                )
+            ),
+        )
+        self.assertEqual(
+            (1, None),
+            self.conn.run(
+                lambda: service.echo_tuple_with_a_nullable_object((1, null(None)))
+            ),
+        )
+        self.assertEqual(
+            ["a", None],
+            self.conn.run(lambda: ["a", service.echo_nullable_string(None)]),
+        )
+        with self.conn.stream(
+            lambda: [
+                (x, x is None)
+                for x in service.echo_list_of_nullable_objects([null(None), obj])
+            ]
+        ) as stream:
+            self.assertEqual([(None, True), (obj, False)], stream())
+
+    def test_null_in_a_set(self) -> None:
+        service = self.conn.test_service
+        # The values of a set cannot be null, which the server checks
+        with self.assertRaises(TypeError):
+            self.conn.run(lambda: {"a", service.echo_nullable_string(None)})
+
+    def test_type_the_compiler_does_not_know(self) -> None:
+        obj = self.conn.test_service.create_test_object("untracked")
+        obj.int_property = 4
+        compile_with_type = krpc.functioncompiler.compile_function_with_type
+
+        def without_type(*args: Any) -> Any:
+            function, _, parameters = compile_with_type(*args)
+            return function, None, parameters
+
+        # The helpers ask the server for the type of a value the compiler did not
+        # track, and treat the function as valueless only when it has no value
+        with mock.patch("krpc.client.compile_function_with_type", without_type):
+            self.assertEqual([4], self.conn.run(lambda: [obj.int_property]))
+            with self.conn.stream(lambda: [obj.int_property]) as stream:
+                self.assertEqual([4], stream())
 
     def test_function_stream_lazy_collection_rejected(self) -> None:
         expression = self.conn.krpc.Expression
@@ -113,6 +215,22 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         with event.condition:
             event.wait(2)
             self.assertTrue(event.stream())
+
+    def test_events_over_one_function(self) -> None:
+        obj = self.conn.test_service.create_test_object("sharedevent")
+        obj.int_property = 0
+        function = self.conn.compile(lambda: obj.int_property > 0)
+        first = self.conn.add_event(function)
+        second = self.conn.add_event(function)
+        # Each add creates its own event, so removing one leaves the other
+        # pylint: disable=protected-access
+        self.assertNotEqual(
+            first.stream._stream.stream_id, second.stream._stream.stream_id
+        )
+        first.remove()
+        obj.int_property = 1
+        with second.condition:
+            self.assertTrue(second.wait(10))
 
     def test_function_streams_over_one_function(self) -> None:
         expression = self.conn.krpc.Expression
@@ -170,6 +288,40 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         with self.conn.stream(expr) as stream:
             self.assertEqual("TestFunction.field", stream())
 
+    def test_boolean_operators_short_circuit(self) -> None:
+        service = self.conn.test_service
+        counter = service.counter
+        obj = service.create_test_object("shortcircuit")
+        obj.int_property = 0
+        # The left operand is computed on the server, which skips the right operand,
+        # so the client's own call is the first one
+        self.assertFalse(
+            self.conn.run(
+                lambda: obj.int_property > 0 and counter("TestFunction.and") > 0
+            )
+        )
+        self.assertEqual(1, counter("TestFunction.and"))
+        self.assertTrue(
+            self.conn.run(
+                lambda: obj.int_property == 0 or counter("TestFunction.or") > 0
+            )
+        )
+        self.assertEqual(1, counter("TestFunction.or"))
+
+    def test_folded_boolean_operator_skips_the_right_operand(self) -> None:
+        counter = self.conn.test_service.counter
+        # The constant left operand decides the result when compiling
+        self.assertFalse(
+            self.conn.run(lambda: False and counter("TestFunction.folded") > 0)
+        )
+        self.assertEqual(1, counter("TestFunction.folded"))
+
+    def test_chained_comparison_reads_the_middle_operand_once(self) -> None:
+        counter = self.conn.test_service.counter
+        # The counter gives 1 on its first call and 2 on its second, so reading it
+        # a second time would make the right hand comparison fail
+        self.assertTrue(self.conn.run(lambda: 0 < counter("TestFunction.chained") < 2))
+
     def test_return_type_introspection(self) -> None:
         expression = self.conn.krpc.Expression
         type_code = self.conn.krpc.TypeCode
@@ -181,6 +333,15 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         self.assertEqual(type_code.class_, obj_type.code)
         self.assertEqual("TestService", obj_type.service)
         self.assertEqual("TestClass", obj_type.name)
+
+    def test_compiled_function_type_is_not_introspected(self) -> None:
+        obj = self.conn.test_service.create_test_object("compiledtype")
+        obj.int_property = 3
+        function = self.conn.compile(lambda: obj.int_property * 2)
+        with mock.patch(
+            "krpc.client._type_message", side_effect=AssertionError("introspected")
+        ):
+            self.assertEqual(6, self.conn.run(function))
 
     def test_function_nullable_value(self) -> None:
         expression = self.conn.krpc.Expression
@@ -283,6 +444,12 @@ class TestFunction(ServerTestCase, unittest.TestCase):
             self.conn.add_event(function)
         self.assertIn("cannot take parameters", str(cm.exception))
 
+    def test_event_without_a_stream_connection(self) -> None:
+        obj = self.conn.test_service.create_test_object("nostreamevent")
+        with mock.patch.object(self.conn, "_stream_connection", None):
+            with self.assertRaisesRegex(StreamError, "Not connected"):
+                self.conn.add_event(lambda: obj.int_property > 0)
+
     def test_plain_stream_of_a_function_procedure_rejected(self) -> None:
         expression = self.conn.krpc.Expression
         expr = expression.constant_int(1)
@@ -294,6 +461,14 @@ class TestFunction(ServerTestCase, unittest.TestCase):
             with self.assertRaises(RuntimeError) as cm:
                 self.conn.add_stream(procedure, expr)
             self.assertIn("cannot be streamed", str(cm.exception))
+
+    def test_stream_of_a_function_with_arguments_rejected(self) -> None:
+        expr = self.conn.krpc.Expression.constant_int(1)
+        for function in (expr, lambda: 1):
+            with self.assertRaisesRegex(StreamError, "without arguments"):
+                self.conn.add_stream(function, 1)
+            with self.assertRaisesRegex(StreamError, "without arguments"):
+                self.conn.add_stream(function, value=1)
 
 
 if __name__ == "__main__":
