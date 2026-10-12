@@ -53,6 +53,7 @@
     <Compile Include="Service\KRPC\ExpressionTest.Strings.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.Values.cs" />
     <Compile Include="Service\KRPC\TypeTest.cs" />
+    <Compile Include="Service\StdLib\StdLibTest.cs" />
     <Compile Include="StreamUpdateTest.cs" />
     <Compile Include="TickHoldTest.cs" />
     <Compile Include="UpdateEventsTest.cs" />

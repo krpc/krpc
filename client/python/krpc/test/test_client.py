@@ -747,6 +747,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
             set(
                 [
                     "krpc",
+                    "std_lib",
                     "test_service",
                     # Owns the class that an extension member of TestService returns
                     "test_service2",

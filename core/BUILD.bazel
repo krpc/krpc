@@ -10,6 +10,7 @@ filegroup(
     srcs = [
         ":KRPC.Core",
         ":ServiceDefinitions",
+        ":StdLibServiceDefinitions",
     ],
     visibility = ["//:__pkg__"],
 )
@@ -125,6 +126,14 @@ genrule(
         "//tools/TestServer:__pkg__",
         "//tools/krpctools:__pkg__",
     ],
+)
+
+service_definitions(
+    name = "StdLibServiceDefinitions",
+    out = "KRPC.StdLib.json",
+    assemblies = [":KRPC.Core"],
+    service = "StdLib",
+    visibility = ["//visibility:public"],
 )
 
 csharp_assembly_info(

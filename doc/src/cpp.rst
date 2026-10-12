@@ -6,6 +6,7 @@ C++
 
    cpp/client
    cpp/api/krpc
+   cpp/api/stdlib
    cpp/api/space-center
    cpp/api/drawing
    cpp/api/ui
