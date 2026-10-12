@@ -311,10 +311,11 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
         """Add a stream to the server. Given a remote procedure and its arguments,
         the stream repeats that call. Given a server side function, a
         KRPC.Expression object, the stream evaluates it on each update. The
-        function may also be a lambda taking no arguments, compiled with
-        compile on every call. Raises a StreamError without a stream
-        connection, for a property setter, for arguments to a function, and
-        for a function with no value. Raises TypeError for any other value."""
+        function may also be a Python function or lambda taking no arguments,
+        compiled with compile on every call. Raises a StreamError without a
+        stream connection, for a property setter, for arguments to a function,
+        for a function with no value, and for a compiled function that takes
+        parameters. Raises TypeError for any other value."""
         if self._stream_connection is None:
             raise StreamError("Not connected to stream server")
         if func == setattr:
@@ -361,15 +362,13 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
             stream.remove()
 
     def compile(self, func: Callable) -> Any:  # type: ignore[type-arg]
-        """Compile a lambda, taking no arguments, into a server side function
-        (a KRPC.Expression object) that computes the same result on the server.
-        Remote procedure calls made by the function are re-invoked on each
-        evaluation; other values are captured when the function is compiled.
-        Compiling takes a round trip per node of the function, so compile a
-        function once and pass the result to add_stream, add_event or run to
-        use it repeatedly.
-        The server compiles the function too, so its first run is as fast as
-        later ones."""
+        """Compile a Python function or lambda into a server side function, a
+        KRPC.Expression object. Each run makes the function's remote procedure
+        calls again, and uses its other values as they were when it was
+        compiled. A def can take parameters, each with a type annotation, and
+        the run method passes its arguments to them. Compiling takes a round
+        trip per node, so compile a function once to use it repeatedly. Can be
+        used as a decorator."""
         function, return_type, parameters = compile_function_with_type(self, func)
         self.krpc.compile_function(function)
         self._function_parameters[function._object_id] = parameters
@@ -383,11 +382,11 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
     def _function_and_type(
         self, function: Any, streamed: bool = False
     ) -> tuple[Any, Optional[KRPC.Type], Optional[Parameters]]:
-        """The server side function for a KRPC.Expression object or a lambda,
-        the type of the values it evaluates to, and its parameters. The compiler
-        tracks the type of a lambda, so the server is asked only for a type the
-        compiler does not know. A function built with the expression API has no
-        parameters to bind arguments with."""
+        """The server side function for a KRPC.Expression object or a Python
+        function, the type of the values it evaluates to, and its parameters.
+        The compiler tracks the type of a Python function, so the server is
+        asked only for a type the compiler does not know. A function built with
+        the expression API has no parameters to bind arguments with."""
         # A Python function is compiled again on each call, as a cached function
         # would keep the values it captured when it was first compiled
         if callable(function):
@@ -412,11 +411,12 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
 
     def add_event(self, function: Any) -> Event:
         """Create an event from a server side function that evaluates to a
-        boolean value. The function may also be given as a lambda taking no
-        arguments, which is compiled using compile on every call. Raises a
-        StreamError without a stream connection. Raises ValueError for a
-        function that does not evaluate to a boolean value, and TypeError for a
-        value that is not a function."""
+        boolean value. The function may also be a Python function or lambda
+        taking no arguments, compiled with compile on every call. Raises a
+        StreamError without a stream connection, and for a compiled function
+        that takes parameters. Raises ValueError for a function that does not
+        evaluate to a boolean value, and TypeError for a value that is not a
+        function."""
         if self._stream_connection is None:
             raise StreamError("Not connected to stream server")
         self._check_function(function)
@@ -432,7 +432,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
         if callable(function) or isinstance(function, expression):
             return
         raise TypeError(
-            "expected %sa KRPC.Expression object, or a lambda, "
+            "expected %sa KRPC.Expression object, or a Python function or lambda, "
             "got a value of type %s" % (procedure, type(function).__name__)
         )
 
@@ -447,21 +447,29 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
                 "an event"
             )
 
-    def run(self, function: Any, *args: object) -> Any:
+    def run(self, function: Any, *args: object, **kwargs: object) -> Any:
         """Run a function on the server, within a single physics tick, and
         return the value it produces. The value is None when the function has
         no result or its result is null. The function may be given as a
-        KRPC.Expression object, or as a lambda, which is compiled using
-        compile on every call. The arguments are passed to the function's
-        parameters. Raises TypeError for a value that is not a function, and
-        for an argument its parameter cannot take."""
+        KRPC.Expression object, or as a Python function or lambda, which is
+        compiled using compile on every call. The arguments are passed to the
+        function's parameters. A function built with the expression API takes
+        positional arguments only. Raises TypeError for a value that is not a
+        function, and for an argument its parameter cannot take."""
         self._check_function(function)
         function, return_type, parameters = self._function_and_type(function)
-        if parameters is None:
-            parameter_types = self._parameter_types(function)
-        else:
+        if parameters is not None:
+            values = parameters.bind(args, kwargs)
             parameter_types = parameters.ptypes
-        arguments = self._encode_arguments(parameter_types, list(args))
+        elif kwargs:
+            raise TypeError(
+                "a function built with the expression API takes positional "
+                "arguments only"
+            )
+        else:
+            values = list(args)
+            parameter_types = self._parameter_types(function)
+        arguments = self._encode_arguments(parameter_types, values)
         data = self.krpc.run_function(function, arguments)
         # A null value has no data
         if data is None or return_type is None:

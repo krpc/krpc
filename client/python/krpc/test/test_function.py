@@ -262,6 +262,18 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         with self.assertRaises(StreamError):
             self.conn.add_stream(call)
 
+    def test_compiled_valueless_function_caches_no_type(self) -> None:
+        service = self.conn.test_service
+
+        def reset() -> None:
+            service.reset_custom_exception_later()
+
+        # pylint: disable=protected-access
+        cached = len(self.conn._expression_return_types)
+        for _ in range(3):
+            self.assertIsNone(self.conn.run(reset))
+        self.assertEqual(cached, len(self.conn._expression_return_types))
+
     def test_function_stream_struct(self) -> None:
         expression = self.conn.krpc.Expression
         expr = expression.call(
@@ -287,6 +299,36 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         expr = expression.get_field(struct, "StringField")
         with self.conn.stream(expr) as stream:
             self.assertEqual("TestFunction.field", stream())
+
+    def test_expression_create_struct(self) -> None:
+        expression = self.conn.krpc.Expression
+        types = self.conn.krpc.Type
+        test_enum = self.conn.test_service.TestEnum
+        struct = expression.create_struct(
+            types.struct_type("TestService", "TestStruct"),
+            [
+                expression.constant_int(3),
+                expression.constant_string("built"),
+                expression.cast(
+                    expression.constant_int(test_enum.value_c.value),
+                    types.enumeration_type("TestService", "TestEnum"),
+                ),
+                expression.create_list([expression.constant_int(7)]),
+            ],
+        )
+        expr = expression.call_with_arguments(
+            self.conn.get_call(
+                self.conn.test_service.struct_echo,
+                self.conn.test_service.TestStruct(0, "", test_enum.value_a, []),
+            ),
+            {0: struct},
+        )
+        with self.conn.stream(expr) as stream:
+            value = stream()
+            self.assertEqual(3, value.int_field)
+            self.assertEqual("built", value.string_field)
+            self.assertEqual(test_enum.value_c, value.enum_field)
+            self.assertEqual([7], value.list_field)
 
     def test_boolean_operators_short_circuit(self) -> None:
         service = self.conn.test_service
@@ -443,6 +485,23 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             self.conn.add_event(function)
         self.assertIn("cannot take parameters", str(cm.exception))
+
+    def test_stream_of_a_compiled_function_with_parameters_rejected(self) -> None:
+        obj = self.conn.test_service.create_test_object("compiledparameters")
+
+        def above(x: int) -> bool:
+            return obj.int_property > x
+
+        function = self.conn.compile(above)
+        # Rejected before the return type is introspected
+        # pylint: disable=protected-access
+        self.conn._expression_return_types.pop(function._object_id, None)
+        with mock.patch(
+            "krpc.client._type_message", side_effect=AssertionError("introspected")
+        ):
+            for add in (self.conn.add_stream, self.conn.add_event):
+                with self.assertRaisesRegex(StreamError, "takes parameters"):
+                    add(function)
 
     def test_event_without_a_stream_connection(self) -> None:
         obj = self.conn.test_service.create_test_object("nostreamevent")

@@ -79,7 +79,7 @@ class Metadata:
 
     def __init__(self, client: Client):
         # (service, class name or None, Python member name, kind) -> procedure
-        # where kind is 'getter', 'method' or 'static'
+        # where kind is 'getter', 'setter', 'method' or 'static'
         self.members: Dict[
             Tuple[str, Optional[str], str, str], Tuple[str, KRPC.Procedure]
         ] = {}
@@ -87,9 +87,14 @@ class Metadata:
         # with, in order. A field is named to the server by the name it is declared
         # with, which can differ from the pythonic name of a value's attribute
         self.struct_fields: Dict[Tuple[str, str], List[str]] = {}
+        # (service, exception name) of every exception the services declare
+        self.exceptions: List[Tuple[str, str]] = []
         # (service, procedure name) -> procedure
         self.procedures: Dict[Tuple[str, str], KRPC.Procedure] = {}
         for service in client.krpc.get_services().services:
+            self.exceptions.extend(
+                (service.name, exception.name) for exception in service.exceptions
+            )
             for struct in service.structs:
                 self.struct_fields[(service.name, struct.name)] = [
                     field.name for field in struct.fields
@@ -103,6 +108,8 @@ class Metadata:
                     member = _member_name(Attributes.get_class_member_name(name))
                     if Attributes.is_a_class_property_getter(name):
                         key = (service.name, class_name, member, "getter")
+                    elif Attributes.is_a_class_property_setter(name):
+                        key = (service.name, class_name, member, "setter")
                     elif Attributes.is_a_class_static_method(name):
                         key = (service.name, class_name, member, "static")
                     elif Attributes.is_a_class_method(name):
@@ -110,6 +117,9 @@ class Metadata:
                 elif Attributes.is_a_property_getter(name):
                     member = _member_name(Attributes.get_property_name(name))
                     key = (service.name, None, member, "getter")
+                elif Attributes.is_a_property_setter(name):
+                    member = _member_name(Attributes.get_property_name(name))
+                    key = (service.name, None, member, "setter")
                 elif Attributes.is_a_procedure(name):
                     key = (service.name, None, _member_name(name), "method")
                 if key is not None:
@@ -278,6 +288,14 @@ def common_ptype(ptypes: Sequence[Optional[KRPC.Type]]) -> Optional[KRPC.Type]:
             return None
         joined.types.append(common)
     return joined
+
+
+def is_no_more_nullable(ptype: KRPC.Type, than: KRPC.Type) -> bool:
+    """Whether every nullable position of a type is also nullable in another
+    type of the same shape."""
+    if ptype.nullable and not than.nullable:
+        return False
+    return all(is_no_more_nullable(a, b) for a, b in zip(ptype.types, than.types))
 
 
 # The types whose values the server holds by value, where a null is part of the

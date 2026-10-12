@@ -1,4 +1,5 @@
-"""Compilation of Python expressions into server side expression nodes."""
+"""Compilation of Python expressions into server side expression nodes.
+Statement compilation lives in krpc.functionstatements."""
 
 # One class compiles every kind of expression node, as the builtin functions and
 # the comprehensions share the compiler's state
@@ -19,12 +20,14 @@ from typing import (
     List,
     NamedTuple,
     Optional,
+    Set,
     Tuple,
     Type,
     TYPE_CHECKING,
     cast,
 )
 
+from krpc.encoder import Encoder
 from krpc.error import FunctionCompilationError
 from krpc.expressionutils import (
     Metadata,
@@ -41,6 +44,19 @@ from krpc.expressionutils import (
     same_shape,
     unwrap_class,
     with_nullable,
+)
+from krpc.definiteassignment import (
+    assigned_names,
+    local_function_nonlocal,
+    nonlocal_names,
+)
+from krpc.functionstatements import (
+    UNTYPED,
+    Recompile,
+    UntypedRead,
+    _StatementCompiler,
+    annotation_ptype,
+    compile_lambda_body,
 )
 from krpc.service import _member_name
 from krpc.stream import Stream
@@ -70,7 +86,7 @@ class Parameters(NamedTuple):
 def compile_function(
     client: Client, func: Callable, streamed: bool = False  # type: ignore[type-arg]
 ) -> Any:
-    """Compile a lambda into a server side function.
+    """Compile a Python function into a server side function.
 
     Its result is a KRPC.Expression object that, when evaluated on the
     server, computes what the function would compute if it were run on the
@@ -87,11 +103,23 @@ NO_VALUE = KRPC.Type()
 def compile_function_with_type(
     client: Client, func: Callable, streamed: bool = False  # type: ignore[type-arg]
 ) -> Tuple[Any, Optional[KRPC.Type], Parameters]:
-    """Compile a lambda into a server side function, and return it
+    """Compile a Python function into a server side function, and return it
     with the type of the values it evaluates to, as tracked by the compiler,
     and its parameters. The type is NO_VALUE for a function that evaluates to
     no value, and None for one whose type the compiler does not know."""
-    return _Compiler(client, func).compile(streamed)
+    # A variable is declared with the type of the first value assigned to it. A
+    # later value that can be None where the first cannot widens the type, and
+    # the function is compiled again with the variable declared that way
+    variable_types: Dict[Tuple[Any, str], KRPC.Type] = {}
+    client_values: Dict[Tuple[int, ...], Any] = {}
+    while True:
+        compiler = _Compiler(client, func, variable_types, client_values)
+        try:
+            result = compiler.compile(streamed)
+        except Recompile:
+            continue
+        if not compiler._variables_widened:
+            return result
 
 
 _BINARY_OPS: Dict[type, Tuple[str, Callable[[Any, Any], Any]]] = {
@@ -143,6 +171,20 @@ _INTEGER_RANGES = {
     KRPC.Type.UINT32: (0, 2**32),
     KRPC.Type.UINT64: (0, 2**64),
 }
+
+
+def _annotation_types(func: Callable) -> Dict[str, type]:  # type: ignore[type-arg]
+    """The types named in a function's evaluated annotations, by name,
+    including those inside a typing form such as List[T]. A string annotation
+    names no type."""
+    types: Dict[str, type] = {}
+    pending = list(getattr(func, "__annotations__", {}).values())
+    while pending:
+        annotation = unwrap_class(pending.pop())
+        if isinstance(annotation, type):
+            types.setdefault(annotation.__name__, annotation)
+        pending.extend(getattr(annotation, "__args__", ()))
+    return types
 
 
 def _in_range(value: int, code: int) -> bool:
@@ -353,6 +395,16 @@ def _is_a_plain_read(node: ast.AST) -> bool:
     return False
 
 
+def _position(node: ast.AST) -> Tuple[int, ...]:
+    """The span of the source a node was parsed from."""
+    return (
+        getattr(node, "lineno", 0),
+        getattr(node, "col_offset", 0),
+        getattr(node, "end_lineno", 0) or 0,
+        getattr(node, "end_col_offset", 0) or 0,
+    )
+
+
 class _Untyped(FunctionCompilationError):
     """A None or an empty collection with no type to give it."""
 
@@ -362,12 +414,31 @@ class _Compiler:
         self,
         client: Client,
         func: Callable,  # type: ignore[type-arg]
+        variable_types: Optional[Dict[Tuple[Any, str], KRPC.Type]] = None,
+        client_values: Optional[Dict[Tuple[int, ...], Any]] = None,
     ):
         self._client = client
         self._expr = client.krpc.Expression
         self._type = client.krpc.Type
         self._func = func
+        # The types the function's parameter and return annotations name, by
+        # name, as Python evaluated them where the function is defined
+        self._annotation_types: Dict[str, type] = _annotation_types(func)
         self._scopes: List[Dict[str, _Result]] = []
+        # The names the function assigns, which never resolve to a global
+        self._local_names: Set[str] = set()
+        # The names the function declares nonlocal, which are state variables
+        self._state_names: Set[str] = set()
+        # name -> (function expression, [(parameter name, ptype)], return ptype)
+        self._local_functions: Dict[str, Any] = {}
+        # The local functions defined in a nested block, which are not callable
+        # after it
+        self._block_functions: Set[str] = set()
+        # The statement compiler for the function body being compiled, when
+        # there is one; used by assignment expressions
+        self._active_statements: Any = None
+        # The call written as a statement being compiled, whose value is discarded
+        self._statement_call: Optional[ast.AST] = None
         # The number of remote procedure calls the function makes
         self._remote_calls = 0
         # Calls of procedures that return no value
@@ -381,6 +452,18 @@ class _Compiler:
         # Naming a type is a round trip, so the objects naming them are shared
         # by every function compiled for this connection
         self._remote_types: Dict[bytes, Any] = client._expression_remote_types
+        # (function body, variable name) -> the type a variable is declared with,
+        # where a value assigned to it after the first can be None
+        self._variable_types: Dict[Tuple[Any, str], KRPC.Type] = (
+            {} if variable_types is None else variable_types
+        )
+        # Whether compiling the function widened the type of a variable
+        self._variables_widened = False
+        # The values of the client side calls, by their position in the source,
+        # so each call runs once however many times the function is compiled
+        self._client_values: Dict[Tuple[int, ...], Any] = (
+            {} if client_values is None else client_values
+        )
 
     def compile(
         self, streamed: bool = False
@@ -399,16 +482,22 @@ class _Compiler:
     ) -> Tuple[Any, Optional[KRPC.Type], Parameters]:
         node = self._parse()
         self._node = node
-        parameters = self._parameters(node)
+        nested = local_function_nonlocal(node)
+        if nested is not None:
+            raise self._error(
+                nested, "nonlocal is supported only in the function being compiled"
+            )
+        self._state_names = nonlocal_names(node)
+        self._local_names = assigned_names(node) - self._state_names
+        parameters = self._parameters(node, streamed)
         if isinstance(node, ast.Lambda):
             result = self._compile_statement(node.body)
             valueless = any(result.expression is call for call in self._valueless_calls)
         else:
-            raise self._error(
-                node,
-                "a function with a body of statements is not supported; use a lambda",
-            )
-        if streamed and self._remote_calls == 0:
+            statements = _StatementCompiler(self)
+            result = statements.compile_body(node.body, node.returns, parameters)
+            valueless = statements.valueless
+        if streamed and self._remote_calls == 0 and not self._state_names:
             raise self._error(
                 node,
                 "the function makes no remote procedure call, so its value is the "
@@ -423,18 +512,76 @@ class _Compiler:
             ),
         )
 
-    def _parameters(self, node: Any) -> List[Any]:
-        """The parameters of the function to compile, of which a lambda has none."""
+    def _parameters(self, node: Any, streamed: bool) -> List[Any]:
+        """The parameters of the function to compile, each a (name, ptype,
+        parameter expression) triple. Only a def takes parameters, each with a
+        type annotation, and a default the parameter's type can hold."""
         arguments = node.args
-        if (
-            arguments.posonlyargs
-            or arguments.args
-            or arguments.kwonlyargs
-            or arguments.vararg
-            or arguments.kwarg
-        ):
-            raise self._error(node, "a lambda with parameters cannot be compiled")
-        return []
+        names = arguments.posonlyargs + arguments.args + arguments.kwonlyargs
+        if isinstance(node, ast.Lambda):
+            if names or arguments.vararg or arguments.kwarg:
+                raise self._error(
+                    node,
+                    "a lambda with parameters cannot be compiled; use a def with "
+                    "type annotations",
+                )
+            return []
+        if arguments.vararg or arguments.kwarg:
+            raise self._error(node, "*args and **kwargs parameters are not supported")
+        if names and streamed:
+            raise self._error(
+                node,
+                "a function that is streamed, or checked for an event, cannot take "
+                "parameters",
+            )
+        defaults = {
+            name: parameter.default
+            for name, parameter in inspect.signature(self._func).parameters.items()
+            if parameter.default is not inspect.Parameter.empty
+        }
+        parameters = []
+        for argument in names:
+            if argument.annotation is None:
+                raise self._error(
+                    argument,
+                    "annotate the type of parameter '%s'" % argument.arg,
+                )
+            ptype = annotation_ptype(self, argument.annotation)
+            if argument.arg in defaults:
+                self._check_default(argument, ptype, defaults[argument.arg])
+            parameter = self._expr.parameter(
+                argument.arg, self._remote_type(argument, ptype)
+            )
+            parameters.append((argument.arg, ptype, parameter))
+        return parameters
+
+    def _check_default(self, node: ast.arg, ptype: KRPC.Type, value: object) -> None:
+        """Check that a parameter's default value is one its type can hold. A
+        collection must be of the kind the type names, as the encoder takes any
+        iterable."""
+        valid = ptype.nullable
+        kind = _COLLECTION_KINDS.get(ptype.code)
+        if value is not None and kind is not None and not isinstance(value, kind):
+            if _is_empty_collection(value) and kind in _EMPTY_FORMS:
+                raise self._error(node, self._empty_kind_message(value, kind))
+        elif value is not None:
+            try:
+                Encoder.encode(value, self._client._types.as_type(ptype))
+                # The encoder writes any int as a varint, whatever its size
+                bounds = _INTEGER_RANGES.get(ptype.code)
+                valid = (
+                    bounds is None
+                    or not isinstance(value, int)
+                    or bounds[0] <= value < bounds[1]
+                )
+            except Exception:  # pylint: disable=broad-exception-caught
+                valid = False
+        if not valid:
+            raise self._error(
+                node,
+                "the default value of parameter '%s' is not a value of type %s"
+                % (node.arg, _type_name(ptype)),
+            )
 
     def _parse(self) -> ast.AST:
         func = self._func
@@ -542,7 +689,19 @@ class _Compiler:
     def _lookup(self, name: str, node: Optional[ast.AST] = None) -> _Result:
         for scope in reversed(self._scopes):
             if name in scope:
-                return scope[name]
+                result = scope[name]
+                if result.is_value and result.value is UNTYPED:
+                    raise UntypedRead(name)
+                return result
+        if name in self._local_functions or name in self._block_functions:
+            raise self._error(
+                node,
+                "local function '%s' can only be called" % name,
+            )
+        if name in self._local_names:
+            raise self._error(
+                node, "the local variable '%s' is read before it is assigned" % name
+            )
         func = self._func
         freevars = func.__code__.co_freevars
         if name in freevars and func.__closure__ is not None:
@@ -578,9 +737,18 @@ class _Compiler:
         finally:
             self._node = previous
 
-    def _compile_statement(self, node: ast.AST) -> _Result:
-        """Compile an expression that appears as a statement."""
-        return self._compile(node)
+    def _compile_statement(self, node: ast.AST, discarded: bool = False) -> _Result:
+        """Compile an expression that appears as a statement. A discarded
+        statement is one whose value is not used, which a client side call
+        cannot be."""
+        if not discarded:
+            return self._compile(node)
+        previous = self._statement_call
+        self._statement_call = node
+        try:
+            return self._compile(node)
+        finally:
+            self._statement_call = previous
 
     def _compile_constant(self, node: ast.Constant) -> _Result:
         return _Result(value=node.value, is_value=True)
@@ -653,6 +821,17 @@ class _Compiler:
     def _compile_call(self, node: ast.Call) -> _Result:
         self._check_unpacking(node)
         func = node.func
+        # Calls of local functions defined within the compiled function
+        if isinstance(func, ast.Name) and func.id in self._local_functions:
+            return self._compile_local_function_call(node, func.id)
+        if isinstance(func, ast.Name) and func.id in self._block_functions:
+            raise self._error(
+                node,
+                "local function '%s' is defined in a nested block, so it can only "
+                "be called within that block" % func.id,
+            )
+        if self._is_typing_cast(func):
+            return self._compile_typing_cast(node)
         # Calls of supported builtin functions, and of captured bound methods
         # of remote objects and services
         if isinstance(func, ast.Name):
@@ -679,9 +858,9 @@ class _Compiler:
                 if self._is_remote_struct(member):
                     return self._compile_struct_construction(node, member)
             if not base.is_value and base.ptype is not None:
-                view = self._compile_dictionary_view(node, func.attr, base)
-                if view is not None:
-                    return view
+                mutation = self._compile_collection_mutation(node, func, base)
+                if mutation is not None:
+                    return mutation
             if self._is_a_string(base) and func.attr in _STRING_METHODS:
                 arguments = [self._compile(arg) for arg in node.args]
                 if not base.is_value or any(
@@ -921,6 +1100,32 @@ class _Compiler:
             ptype=promote(left.ptype, right.ptype),
         )
 
+    def _compile_local_function_call(self, node: ast.Call, name: str) -> _Result:
+        function, parameters, return_ptype = self._local_functions[name]
+        if node.keywords:
+            raise self._error(
+                node,
+                "'%s' takes positional arguments only" % name,
+            )
+        if len(node.args) != len(parameters):
+            raise self._error(
+                node,
+                "'%s' takes %d positional argument%s"
+                % (name, len(parameters), "" if len(parameters) == 1 else "s"),
+            )
+        arguments: Dict[str, Any] = {}
+        for (parameter_name, parameter_ptype), argument in zip(parameters, node.args):
+            arguments[parameter_name] = self._widened_expression(
+                node,
+                parameter_ptype,
+                self._compile(argument),
+                "for parameter '%s' of '%s'" % (parameter_name, name),
+            )
+        return _Result(
+            expression=self._expr.invoke(function, arguments),
+            ptype=return_ptype,
+        )
+
     def _remote_bound_method(self, value: object) -> Optional[Tuple[object, str]]:
         """When the value is a bound method of a remote object, service or
         remote class, return the object it is bound to and the member name."""
@@ -937,6 +1142,78 @@ class _Compiler:
         ):
             return owner, name
         return None
+
+    # The operations changing a collection, by the Python method reaching each one
+    # and the type of collection it is called on, with the number of arguments it
+    # takes
+    _COLLECTION_MUTATIONS = {
+        ("append", KRPC.Type.LIST): ("append", 1),
+        ("add", KRPC.Type.SET): ("append", 1),
+        ("remove", KRPC.Type.LIST): ("remove", 1),
+        ("clear", KRPC.Type.LIST): ("clear", 0),
+        ("remove", KRPC.Type.SET): ("remove", 1),
+        ("discard", KRPC.Type.SET): ("remove", 1),
+        ("clear", KRPC.Type.SET): ("clear", 0),
+        ("clear", KRPC.Type.DICTIONARY): ("clear", 0),
+    }
+
+    def _compile_collection_mutation(
+        self, node: ast.Call, func: ast.Attribute, base: _Result
+    ) -> Optional[_Result]:
+        """Compile a method call that changes a server side collection, such as
+        appending to a list variable, or one that views a dictionary."""
+        name = func.attr
+        code = base.ptype.code if base.ptype is not None else None
+        entry = self._COLLECTION_MUTATIONS.get((name, code))
+        if entry is None:
+            return self._compile_dictionary_view(node, name, base)
+        operation, arity = entry
+        if len(node.args) != arity or node.keywords:
+            raise self._error(
+                node,
+                "'%s' takes %d argument%s here"
+                % (name, arity, "" if arity == 1 else "s"),
+            )
+        args = [
+            self._converted_expression(
+                self._compile(arg),
+                self._element_ptype(node, base),
+                node,
+                "for an element of the collection",
+            )
+            for arg in node.args
+        ]
+        expression = getattr(self._expr, operation)(base.expression, *args)
+        if name == "remove":
+            # Removing a value that is not there is an error, as in Python
+            if code == KRPC.Type.LIST:
+                return _Result(
+                    expression=self._removed(
+                        expression, "ArgumentException", "value not in list"
+                    )
+                )
+            return _Result(
+                expression=self._removed(
+                    expression, "KeyNotFoundException", "value not in set"
+                )
+            )
+        if name == "discard":
+            # Whether a value was removed is not part of Python's discard, so the
+            # result is dropped by a test whose body has no effect
+            return _Result(
+                expression=self._expr.if_then(
+                    expression, self._expr.constant_bool(False)
+                )
+            )
+        return _Result(expression=expression)
+
+    def _removed(self, removal: Any, exception: str, message: str) -> Any:
+        """A removal that raises the given kRPC exception when the value is not
+        in the collection."""
+        return self._expr.if_then(
+            self._expr.not_(removal),
+            self._expr.throw("KRPC", exception, self._expr.constant_string(message)),
+        )
 
     def _compile_dictionary_view(
         self, node: ast.Call, name: str, base: _Result
@@ -1080,6 +1357,12 @@ class _Compiler:
                 "compiled; make the stream's remote procedure call in the function "
                 "instead",
             )
+        if node is self._statement_call:
+            raise self._error(
+                node,
+                "a client side function called as a statement would run once, "
+                "when the function is compiled",
+            )
         if args is None:
             args = [self._compile(arg) for arg in node.args]
         keywords = {
@@ -1093,6 +1376,9 @@ class _Compiler:
                 "cannot call a client side function with an argument "
                 "computed on the server",
             )
+        position = _position(node)
+        if position in self._client_values:
+            return _Result(value=self._client_values[position], is_value=True)
         value = self._fold(
             node,
             lambda: func(
@@ -1101,6 +1387,7 @@ class _Compiler:
             ),
             prefix="error calling client side function: ",
         ).value
+        self._client_values[position] = value
         return _Result(value=value, is_value=True)
 
     def _compile_remote_call(
@@ -2784,7 +3071,50 @@ class _Compiler:
             ptype=build_ptype(KRPC.Type.STRING),
         )
 
+    def _compile_namedexpr(self, node: ast.NamedExpr) -> _Result:
+        if self._active_statements is None:
+            raise self._error(
+                node,
+                "assignment expressions are only supported within a function body",
+            )
+        if not isinstance(node.target, ast.Name):
+            raise self._error(node, "unsupported assignment target")
+        value = self._compile(node.value)
+        return self._active_statements.assign_named(node, node.target.id, value)
+
     # Builtin functions
+
+    def _is_typing_cast(self, func: ast.expr) -> bool:
+        if isinstance(func, ast.Name):
+            target = self._lookup(func.id, func)
+            return target.is_value and target.value is cast
+        if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name):
+            base = self._lookup(func.value.id, func.value)
+            return base.is_value and getattr(base.value, func.attr, None) is cast
+        return False
+
+    def _compile_typing_cast(self, node: ast.Call) -> _Result:
+        """typing.cast(T, value), which gives a value the type T. A None takes
+        the type, and any other value is converted to it, including a float to
+        an integer type, which truncates it."""
+        if len(node.args) != 2 or node.keywords:
+            raise self._error(node, "cast takes a type and a value")
+        ptype = annotation_ptype(self, node.args[0])
+        value = self._to_expression(self._compile(node.args[1]), ptype)
+        if value.ptype == ptype:
+            return value
+        if value.ptype is not None and not _convertible(value.ptype, ptype):
+            raise self._error(
+                node,
+                "cannot cast a value of type %s to %s"
+                % (_type_name(value.ptype), _type_name(ptype)),
+            )
+        return _Result(
+            expression=self._expr.cast(
+                value.expression, self._remote_type(node, ptype)
+            ),
+            ptype=ptype,
+        )
 
     @staticmethod
     def _is_supported_builtin(value: object) -> bool:
@@ -3186,7 +3516,7 @@ class _Compiler:
         parameter = self._expr.parameter(name, self._remote_type(node, element))
         self._scopes.append({name: _Result(expression=parameter, ptype=element)})
         try:
-            body = self._to_expression(self._compile(key.body))
+            body = compile_lambda_body(self, key)
         finally:
             self._scopes.pop()
         self._check_orderable(
@@ -3671,7 +4001,10 @@ class _Compiler:
         if value is None:
             if ptype is None:
                 raise self._error(
-                    self._node, "cannot determine the type of None", _Untyped
+                    self._node,
+                    "cannot determine the type of None; give it one with an "
+                    "annotation or typing.cast",
+                    _Untyped,
                 )
             return self._null(self._node, ptype)
         if _is_empty_collection(value) and ptype is not None:
@@ -3785,7 +4118,9 @@ class _Compiler:
             if not elements:
                 raise self._error(
                     self._node,
-                    "cannot determine the type of an empty collection",
+                    "cannot determine the type of an empty collection; give it one "
+                    "with an annotation or typing.cast, for example "
+                    "cast(List[int], [])",
                     _Untyped,
                 )
             expressions = [element.expression for element in elements]
@@ -3813,7 +4148,9 @@ class _Compiler:
         if not keys:
             raise self._error(
                 self._node,
-                "cannot determine the type of an empty dictionary",
+                "cannot determine the type of an empty dictionary; give it one "
+                "with an annotation or typing.cast, for example "
+                "cast(Dict[str, int], {})",
                 _Untyped,
             )
         ptype = build_ptype(
@@ -4058,9 +4395,10 @@ class _Compiler:
         where: str,
         hint: str = "",
     ) -> Any:
-        """Convert a value to a type fixed in advance, such as the counter of
-        range(). An implicit conversion widens, so a value of a wider type is an
-        error. The where and hint strings name the place in the error message."""
+        """Convert a value to a type fixed in advance, by a variable's
+        declaration or a local function's parameter. An implicit conversion
+        widens, so a value of a wider type is an error. The where and hint
+        strings name the place in the error message."""
         if target is None:
             return self._to_expression(value).expression
         if (

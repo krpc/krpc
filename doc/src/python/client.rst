@@ -70,10 +70,10 @@ noted in the member's docstring. Python hides ``DeprecationWarning`` by default;
 Server Side Functions
 ---------------------
 
-A server side function is code that runs inside the game, on the server. Pass a lambda to
-:meth:`krpc.client.Client.run` to compile it into a server side function, run it once and return its
-value. Every value it reads comes from the same physics tick. For example, the following reads the
-vessel's altitude and speed together:
+A server side function is code that runs inside the game, on the server. Pass a Python function or
+lambda to :meth:`krpc.client.Client.run` to compile it into a server side function, run it once and
+return its value. Every value it reads comes from the same physics tick. For example, the following
+reads the vessel's altitude and speed together:
 
 .. literalinclude:: /scripts/client/python/RunFunction.py
 
@@ -210,10 +210,10 @@ To handle an ending in a callback, add an end callback with
 Streaming Server Side Functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Pass a lambda to :meth:`krpc.client.Client.add_stream` to stream its value, computed on the server.
-The server evaluates the function on each stream update, within one physics tick. The value can be
-any type the server can send, including collections and objects. For example, the following streams
-the vessel's altitude in kilometers:
+Pass a Python function or lambda to :meth:`krpc.client.Client.add_stream` to stream its value,
+computed on the server. The server evaluates the function on each stream update, within one physics
+tick. The value can be any type the server can send, including collections and objects. For example,
+the following streams the vessel's altitude in kilometers:
 
 .. literalinclude:: /scripts/client/python/CompiledFunctionStream.py
 
@@ -222,8 +222,19 @@ update.
 
 A function stream or event ends on any exception its function raises. This includes
 ``ObjectNotLoadedException`` from the ``KRPC`` service, raised while the game loads or when a vessel
-unloads. To keep a function running through a load, catch the exception in the function with
-``Expression.try_catch``.
+unloads. To keep a function running through a load, catch the exception in the function:
+
+.. code-block:: python
+
+   def altitude_km():
+       try:
+           return flight.mean_altitude / 1000
+       except conn.krpc.ObjectNotLoadedException:
+           return 0.0
+
+   stream = conn.add_stream(altitude_km)
+
+For an event, the handler returns ``False`` so the event does not fire.
 
 .. _python-client-events:
 
@@ -238,8 +249,8 @@ A call to ``wait`` returns straight away if the event has fired since the previo
 event object, so no firing is missed between two calls. Several firings between two calls make
 ``wait`` return once.
 
-You can also create a custom event from a lambda. The following creates an event that triggers when
-``mean_altitude > 1000``:
+You can also create a custom event from a Python function or lambda. The following creates an event
+that triggers when ``mean_altitude > 1000``:
 
 .. literalinclude:: /scripts/client/python/CompiledEvent.py
 
@@ -252,19 +263,46 @@ The same event can be built by hand from ``KRPC.Expression`` nodes, with the exp
 Compiling Server Side Functions
 -------------------------------
 
-Pass a lambda that takes no arguments to :meth:`krpc.client.Client.compile` to compile it into a
-server side function. :meth:`krpc.client.Client.add_event`, :meth:`krpc.client.Client.add_stream`
-and :meth:`krpc.client.Client.run` take the result, and run it without compiling it again. The
-following compiles a function once, and runs it every second:
+Pass a Python function or lambda to :meth:`krpc.client.Client.compile` to compile it into a server
+side function. :meth:`krpc.client.Client.add_event`, :meth:`krpc.client.Client.add_stream` and
+:meth:`krpc.client.Client.run` take the result, and run it without compiling it again. The following
+compiles a function once, and runs it every second:
 
 .. literalinclude:: /scripts/client/python/CompiledFunction.py
 
-Given a lambda, ``add_event``, ``add_stream`` and ``run`` compile it again on every call, so its
-captured variables take their current values. A compiled function keeps the values from when it was
-compiled. Compiling makes a remote procedure call per node.
+Given a Python function or lambda, ``add_event``, ``add_stream`` and ``run`` compile it again on
+every call, so its captured variables take their current values. A compiled function keeps the
+values from when it was compiled. Compiling makes a remote procedure call per node.
 
 To use a function repeatedly, compile it once with ``compile`` and pass the result. ``compile``
 also compiles the function on the server, so its first run is as fast as later ones.
+
+``compile`` also works as a decorator, which replaces the function with its compiled form:
+
+.. code-block:: python
+
+   @conn.compile
+   def altitude_km():
+       return flight.mean_altitude / 1000
+
+   stream = conn.add_stream(altitude_km)
+
+A ``def`` can take parameters, each with a type annotation. ``run`` passes its arguments to them,
+with defaults and keyword arguments as in Python:
+
+.. code-block:: python
+
+   @conn.compile
+   def altitude_above(height: float, scale: float = 1000) -> float:
+       return (flight.mean_altitude - height) / scale
+
+   print(conn.run(altitude_above, 70000))
+   print(conn.run(altitude_above, 70000, scale=1))
+
+Only a ``def`` takes parameters. An event or a function stream runs its function with no arguments.
+Passing ``add_event`` or ``add_stream`` a ``def`` with parameters raises
+:class:`krpc.error.FunctionCompilationError`, and a compiled function with parameters raises
+``StreamError``.
 
 The compiler translates the function's source code into a server side function that computes
 the same result on the server:
@@ -287,7 +325,9 @@ the same result on the server:
 * ``==``, ``!=`` and ``in`` take values of the same kind. Numbers of different types widen to a
   common type.
 * ``None`` takes its type from where it is used: a parameter, the other branch of a
-  conditional, or the other elements of a list.
+  conditional, the other elements of a list, the function's other returns, or the variable's
+  other assignments. Elsewhere, give it a type with an annotation or ``typing.cast``, for
+  example ``cast(Optional[str], None)``.
 * Comprehensions compile to the server's collection operations, including dictionary
   comprehensions and several ``for`` clauses with conditions.
 * The builtin functions ``len``, ``sum``, ``any``, ``all``, ``reversed``, ``abs``, ``round``,
@@ -312,6 +352,83 @@ the same result on the server:
 * Reading an attribute of a structure a service defines reads that field of it on the server.
   Calling the structure type builds one there, with its field values given by position, by
   field name, or both.
+
+A Python function can also contain statements, which run on the server. This one shuts down
+the engines that have run out of fuel, and returns how many it shut down:
+
+.. literalinclude:: /scripts/client/python/CompiledStatements.py
+
+A function body can contain:
+
+* ``if``, ``elif`` and ``else``, ``while`` and ``for`` loops with ``break`` and ``continue``,
+  and early returns.
+* Local variables, and assignment expressions (``:=``).
+* Assignment to the properties of remote objects and services.
+* Remote calls written as statements, for their effects.
+* Assignment that unpacks a tuple, as in ``a, b = b, a``, and a ``for`` target that does.
+* ``+=`` and the other augmented assignments. ``+=`` on a list extends it in place.
+* Assignment to a list or dictionary element.
+* ``append`` on a list and ``add`` on a set.
+* ``del`` of a list index or a dictionary key, ``remove`` on a list or a set, ``discard`` on a
+  set, and ``clear`` on any collection.
+* Local function definitions with annotated parameter types, and lambdas without parameters
+  assigned to names. Calls to them run on the server.
+* ``raise``, and ``try`` with ``except`` and ``finally`` clauses.
+
+Local variables and functions follow these rules:
+
+* A variable takes its type from its first assignment. Annotate an assignment of an empty
+  collection, for example ``result: list[int] = []``. An empty collection passed as an argument,
+  or used beside a typed value, takes that type.
+* An annotation names ``int``, ``float``, ``bool`` or ``str``, a ``list``, ``set``, ``dict`` or
+  ``tuple`` of types, or a class, enumeration or structure a service defines.
+* ``typing.cast(T, value)`` converts the value to ``T`` on the server. A float cast to ``int``
+  is truncated toward zero, where assigning it to an ``int`` variable is an error.
+* A variable assigned ``None`` can hold ``None``. A variable holding a string, an object or a
+  collection can also be ``None`` when a value assigned to it can.
+* An annotation such as ``Optional[int]`` or ``int | None`` allows ``None`` for any type.
+  Assigning ``None`` to a variable or a parameter annotated with a type that does not allow it is
+  an error.
+* A ``None`` reaching a variable, a parameter or a set that does not take one raises an error
+  when the function runs.
+* A name assigned anywhere in the function is local to all of it, as in Python.
+* Reading a variable is an error unless every path to the read assigns it first. An assignment
+  in a loop or a ``try`` body does not count after the loop or the ``try``.
+* A local function reads a variable when it is called, so the variable can be assigned after the
+  function's definition, if every path to each call assigns it.
+* A captured collection is copied to the server, so assigning to or deleting one of its
+  elements is an error.
+* A captured variable declared ``nonlocal`` in the function is a state variable. It starts
+  with the value it holds when the function is compiled. A compiled function keeps its value
+  between runs, as does a stream or an event. The value belongs to the compiled function, so two
+  streams of one function advance it twice per update. A function compiled again on each call
+  starts it again. A local function cannot declare one.
+* A state variable's type comes from its starting value. To give it another type, cast it in
+  a statement of the function's body before any other use of it, for example
+  ``values = cast(List[int], values)`` for a list that starts empty, or
+  ``last = cast(Optional[float], last)`` for a value that starts as ``None``.
+* A local function defined or redefined in a nested block can only be called within that
+  block.
+* A function that returns a value must end with a ``return`` or ``raise`` statement, an ``if``
+  or ``try`` that returns or raises on every path, or a ``while True`` loop with no ``break``.
+
+Exceptions map to the exceptions the server raises:
+
+* ``raise`` takes an exception a service declares, or one of the builtins below.
+* An exception a service declares is named by its class, such as
+  ``conn.krpc.ObjectNotLoadedException``.
+* ``RuntimeError`` stands for ``KRPC.InvalidOperationException``.
+* ``ValueError`` stands for the three argument exceptions.
+* ``TypeError``, ``KeyError``, ``IndexError``, ``ZeroDivisionError``, ``NotImplementedError``,
+  ``TimeoutError`` and ``OverflowError`` stand for the matching kRPC exceptions.
+* ``raise Exception`` raises a ``KRPC.Error``, with the message ``str()`` gives its argument.
+* An ``except`` clause naming a base class, such as ``LookupError``, catches the exceptions
+  derived from it. ``except RuntimeError`` catches every other exception the services declare,
+  apart from ``KRPC.Error``.
+* An ``except`` clause can name a tuple of exceptions. Its ``as`` name holds the exception's
+  message.
+* ``except Exception``, a bare ``except`` and a tuple naming ``Exception`` catch every exception.
+* A ``break``, ``continue`` or ``return`` cannot leave a ``finally`` clause.
 
 Some results differ from Python's, as the server computes with fixed size numbers and its own
 collection operations:
@@ -344,10 +461,11 @@ naming it. Examples are a format specifier, ``str.format``, and a call to a clie
 with server side arguments.
 
 Reading a stream inside a function is an error, as the stream would be read once, when the
-function is compiled.
+function is compiled. So is a call to a client side function written as a statement, such as
+``time.sleep(1)``.
 
-A lambda passed to ``add_event`` or ``add_stream`` without ``compile`` is an error when it makes no
-remote procedure call, as its value is the same on every update.
+A Python function passed to ``add_event`` or ``add_stream`` without ``compile`` is an error when it
+makes no remote procedure call and uses no state variable, as its value is the same on every update.
 
 Client API Reference
 --------------------
@@ -411,9 +529,10 @@ Client API Reference
       Returns a :class:`krpc.stream.Stream` object. Each call creates a new stream.
 
       *func* can also be a server side function, which the stream evaluates on each update. It
-      is a ``KRPC.Expression`` object, or a lambda that is compiled with :meth:`compile` on every
-      call. A server side function takes no arguments. A function with no result raises
-      ``StreamError``. Any other value raises ``TypeError``.
+      is a ``KRPC.Expression`` object, or a Python function or lambda that is compiled with
+      :meth:`compile` on every call. A server side function takes no arguments. A function with
+      no result, or a compiled function with parameters, raises ``StreamError``. Any other value
+      raises ``TypeError``.
 
    .. method:: stream(func, *args, **kwargs)
 
@@ -423,26 +542,29 @@ Client API Reference
 
    .. method:: compile(func)
 
-      Compile a lambda that takes no arguments into a server side function, a
-      ``KRPC.Expression`` object. Raises :class:`krpc.error.FunctionCompilationError` for a
-      construct with no server side equivalent. See :ref:`python-client-compiling-functions`.
+      Compile a Python function or lambda into a server side function, a ``KRPC.Expression``
+      object. A ``def`` can take parameters, each with a type annotation. Can be used as a
+      decorator. Raises :class:`krpc.error.FunctionCompilationError` for a construct with no
+      server side equivalent. See :ref:`python-client-compiling-functions`.
 
    .. method:: add_event(function)
 
       Create an event from a server side function that evaluates to a boolean value. The
-      function can also be a lambda that takes no arguments, which is compiled with
-      :meth:`compile` on every call. Returns a :class:`krpc.event.Event` object.
+      function can also be a Python function or lambda that takes no arguments, which is
+      compiled with :meth:`compile` on every call. Returns a
+      :class:`krpc.event.Event` object.
 
       Raises ``StreamError`` without a stream connection, and for a compiled function with
       parameters. A function that does not evaluate to a boolean value raises ``ValueError``,
       and a value that is not a function raises ``TypeError``.
 
-   .. method:: run(function, *args)
+   .. method:: run(function, *args, **kwargs)
 
       Run a function on the server, within a single physics tick, and return the value it
       produces. The value is ``None`` when the function has no result or its result is null.
-      The function is a ``KRPC.Expression`` object, or a lambda, which is compiled with
-      :meth:`compile` on every call. The arguments are passed to the function's parameters.
+      The function is a ``KRPC.Expression`` object, or a Python function or lambda, which is
+      compiled with :meth:`compile` on every call. The arguments are passed to the function's
+      parameters. A function built with the expression API takes positional arguments only.
       This is the intended way to run a function with side effects once, where an event or a
       stream runs it on every update.
 
@@ -505,7 +627,7 @@ Client API Reference
 
 .. class:: krpc.error.FunctionCompilationError
 
-   Raised when a lambda cannot be compiled into a server side function. The error
+   Raised when a Python function cannot be compiled into a server side function. The error
    message names the unsupported construct. See :ref:`python-client-compiling-functions`.
 
 .. class:: krpc.stream.Stream
