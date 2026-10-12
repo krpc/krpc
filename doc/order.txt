@@ -73,6 +73,15 @@ KRPC.Expression.Cast
 KRPC.Expression.Parameter
 KRPC.Expression.Lambda
 KRPC.Expression.Invoke
+KRPC.Expression.CreateTuple
+KRPC.Expression.CreateStruct
+KRPC.Expression.CreateList
+KRPC.Expression.CreateSet
+KRPC.Expression.CreateDictionary
+KRPC.Expression.CreateEmptyList
+KRPC.Expression.CreateEmptySet
+KRPC.Expression.CreateEmptyDictionary
+KRPC.Expression.GetField
 KRPC.Type
 KRPC.Type.Double
 KRPC.Type.Float

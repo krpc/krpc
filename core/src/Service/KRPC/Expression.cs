@@ -87,6 +87,24 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// A spec for the given type, with the given specs for the values it contains. A
+        /// null leaves that position as the type declares it.
+        /// </summary>
+        static TypeSpec SpecWith (System.Type type, params TypeSpec[] containedTypes)
+        {
+            var plain = TypeSpec.Create (type);
+            if (plain.Types.Count != containedTypes.Length)
+                return plain;
+            var types = new TypeSpec [containedTypes.Length];
+            for (int i = 0; i < types.Length; i++) {
+                var position = plain.Types [i].DeclaredType;
+                types [i] = containedTypes [i] == null
+                    ? plain.Types [i] : TypeSpec.Create (position, containedTypes [i]);
+            }
+            return TypeSpec.Create (type, plain.Nullable, types);
+        }
+
+        /// <summary>
         /// Check a value at a position that cannot hold null, where the value can. A
         /// nullable value type has already been converted to the value it holds, which
         /// throws for a null. Position describes where the value is going, for the error.
@@ -1613,6 +1631,16 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// A call building a set of the given values.
+        /// </summary>
+        static LinqExpression SetOfCall (System.Type valueType, LinqExpression values)
+        {
+            return LinqExpression.Call (typeof (Expression)
+                .GetMethod (nameof (SetOf), BindingFlags.Static | BindingFlags.NonPublic)
+                .MakeGenericMethod (valueType), values);
+        }
+
+        /// <summary>
         /// Greater than numerical comparison.
         /// </summary>
         /// <param name="arg0">The first operand.</param>
@@ -1768,9 +1796,13 @@ namespace KRPC.Service.KRPC
             LinqExpression left = ifTrue;
             LinqExpression right = ifFalse;
             PromoteNullableOperands (ref left, ref right);
-            if (left != null && right != null && left.Type != right.Type) {
-                left = AsCollectionInterface (left);
-                right = AsCollectionInterface (right);
+            if (left.Type != right.Type) {
+                // Tuples and collections join position by position
+                var common = CommonType (new [] { left.Type, right.Type });
+                if (common != null) {
+                    left = Widen (left, common);
+                    right = Widen (right, common);
+                }
             }
             if (left.Type != right.Type)
                 throw new InvalidOperationException (
