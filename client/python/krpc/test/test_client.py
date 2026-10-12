@@ -765,7 +765,6 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "get_services",
                     "get_status",
                     "add_stream",
-                    "start_stream",
                     "set_stream_rate",
                     "remove_stream",
                     "add_event",
@@ -787,6 +786,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "ObjectDestroyedException",
                     "ObjectNotLoadedException",
                     "UnsupportedSceneException",
+                    "StreamRemovedException",
                 ]
             ),
             set(x for x in dir(self.conn.krpc) if not x.startswith("_")),
@@ -865,6 +865,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "throw_argument_out_of_range_exception",
                     "on_timer",
                     "on_timer_using_lambda",
+                    "remove_event_after",
                     "deprecated_procedure",
                     "deprecated_procedure_no_message",
                     "deprecated_property",

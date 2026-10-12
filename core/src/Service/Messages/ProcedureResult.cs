@@ -1,3 +1,5 @@
+using Google.Protobuf;
+
 namespace KRPC.Service.Messages
 {
     #pragma warning disable 1591
@@ -16,8 +18,14 @@ namespace KRPC.Service.Messages
             set {
                 value_ = value;
                 HasValue = true;
+                EncodedValue = null;
             }
         }
+
+        /// <summary>
+        /// The value encoded at <see cref="Spec"/>, when it was encoded before being sent.
+        /// </summary>
+        internal ByteString EncodedValue { get; set; }
 
         public bool HasError { get; private set; }
 
@@ -38,6 +46,7 @@ namespace KRPC.Service.Messages
             value_ = null;
             HasValue = false;
             Spec = null;
+            EncodedValue = null;
             error = null;
             HasError = false;
         }

@@ -191,11 +191,16 @@ Streams allow the client to repeatedly execute an RPC on the server and receive 
 needing to repeatedly call the RPC directly, avoiding the communication overhead that this would
 involve.
 
-A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`. This
-procedure takes an optional boolean argument that controls whether the stream starts sending data to
-the client or not. If not, :ref:`communication-protocol-start-stream` can be called later on to
-start the stream. Once the client is finished with the stream, it can remove it from the server by
-calling :ref:`communication-protocol-remove-stream`. Streams are automatically removed when the
+A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`. Each
+call creates a new stream with a new identifier, including a call for the same RPC as an existing
+stream. The stream sends its first result in the update after it is added.
+
+A stream over a game object that is not loaded sends no result until the object loads. A stream over
+a procedure that is not available in the current game scene sends no result until the game returns
+to a scene where it is. An event still sends its first result, which says whether it has fired.
+
+Once the client is finished with the stream, it can remove it from the server by calling
+:ref:`communication-protocol-remove-stream`. Streams are automatically removed when the
 client that created it disconnects from the server. Streams are local to each client and there is no
 way to share a stream between clients.
 
@@ -207,6 +212,13 @@ since the last update that was sent, its value is omitted from the update messag
 minimize network traffic. A client can also control the rate of the stream, by specifying a target
 number of Hertz. The server computes a time delay from the target rate, and only updates the stream
 if at least that time has passed since the last time the stream was updated.
+
+The first result travels on the stream connection and the ``AddStream`` response on the RPC
+connection, so the result can arrive first. The same holds for every response carrying an ``Event``
+message. A client keeps the results for an identifier higher than any it has been given, and applies
+them once the response carrying that identifier arrives. The server issues identifiers in increasing
+order, so a client notes each identifier in the order the responses arrive. A result for a lower
+identifier with no stream on the client is for a stream that has ended, and is dropped.
 
 Anatomy of a Stream Update
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -241,12 +253,19 @@ The fields are:
   :ref:`communication-protocol-anatomy-of-a-response` for details on the format and contents of this
   message.
 
+A result with its ``error`` field set is the last result for that stream. The server removes the
+stream after sending it, and sends nothing more for its identifier. When the server removes a stream
+itself, for example an event that has finished, the error is a ``StreamRemovedException`` from the
+``KRPC`` service. A stream removed by the client with :ref:`communication-protocol-remove-stream`
+gets no final result.
+
 Events
 ------
 
 Events are a wrapper over a stream that returns a boolean value. The event is triggered when the
 stream returns true. Remote procedures that return an event return an ``Event`` message that
-contains a ``Stream`` message describing the underlying stream for the event.
+contains a ``Stream`` message describing the underlying stream for the event. The stream starts when
+the event is created, and its first result says whether it has fired.
 
 The format for an ``Event`` message is simply the following:
 
@@ -320,21 +339,10 @@ service provided by the server. The content of these ``Service`` messages are :r
 AddStream
 ^^^^^^^^^
 
-The ``AddStream`` procedure adds a new stream to the server. Its first argument is the RPC to
-invoke, encoded as a ``ProcedureCall`` message. The second argument is a boolean value indicating
-whether the stream should start sending data to the client immediately. The procedure returns a
+The ``AddStream`` procedure adds a new stream to the server. Its argument is the RPC to invoke,
+encoded as a ``ProcedureCall`` message. The procedure returns a
 ``Stream`` message describing the stream that was added. See
 :ref:`communication-protocol-anatomy-of-a-request` for the format and contents of this message. See
-:ref:`communication-protocol-streams` for more information on working with streams.
-
-.. _communication-protocol-start-stream:
-
-StartStream
-^^^^^^^^^^^
-
-The ``StartStream`` procedure starts a stream sending data to a client, if it has not yet been
-started. It takes a single argument -- the identifier of the stream to start. This is the identifier
-returned when the stream was added by calling :ref:`communication-protocol-add-stream`. See
 :ref:`communication-protocol-streams` for more information on working with streams.
 
 .. _communication-protocol-remove-stream:
@@ -346,6 +354,9 @@ The ``RemoveStream`` procedure removes a stream from the server. It takes a sing
 identifier of the stream to be removed. This is the identifier returned when the stream was added by
 calling :ref:`communication-protocol-add-stream`. See :ref:`communication-protocol-streams` for more
 information on working with streams.
+
+Removing a stream that has already ended does nothing. An identifier the server never issued raises
+``KRPC.ArgumentException``. ``SetStreamRate`` follows the same rules.
 
 .. _communication-protocol-service-description-message:
 

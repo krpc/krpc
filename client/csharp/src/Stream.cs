@@ -94,23 +94,6 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Start the stream.
-        /// </summary>
-        public void Start(bool wait = true) {
-            if (stream.Started)
-                return;
-            if (!wait) {
-                stream.Start();
-            } else {
-                var condition = stream.Condition;
-                lock (condition) {
-                    stream.Start();
-                    Monitor.Wait (condition);
-                }
-            }
-        }
-
-        /// <summary>
         /// The rate of the stream, in Hertz.
         /// </summary>
         public float Rate {
@@ -121,15 +104,25 @@ namespace KRPC.Client
         /// <summary>
         /// The most recent value of the stream.
         /// </summary>
+        /// <remarks>
+        /// Blocks until the first value arrives. Throws the exception that ended the stream, if
+        /// it has ended.
+        /// </remarks>
         public TReturnType Get () {
-            if (!stream.Started)
-                Start();
-            var value = stream.Value;
-            var exn = value as System.Exception;
-            if (exn != null)
-                throw exn;
+            if (!stream.Updated) {
+                var condition = stream.Condition;
+                lock (condition) {
+                    while (!stream.Updated && !stream.Ended)
+                        Monitor.Wait (condition);
+                }
+            }
+            return Convert (stream.Value);
+        }
+
+        TReturnType Convert (object value)
+        {
             if (convert != null)
-                return convert(value);
+                return convert (value);
             return (TReturnType) value;
         }
 
@@ -141,24 +134,27 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Wait until the next stream update.
+        /// Wait until the next stream update or a timeout in seconds. Returns true if the stream
+        /// updated, and false on a timeout.
         /// </summary>
-        public void Wait (double timeout = -1) {
-            if (!stream.Started)
-                stream.Start();
-            if (timeout >= 0)
-                Monitor.Wait (stream.Condition, (int)(timeout*1000.0));
-            else
-                Monitor.Wait (stream.Condition);
+        /// <remarks>
+        /// Throws the exception that ended the stream, if it ends before or during the wait.
+        /// </remarks>
+        public bool Wait (double timeout = -1) {
+            stream.ThrowIfEnded ();
+            var version = stream.Version;
+            return stream.Wait (() => stream.Version != version, timeout);
         }
 
         /// <summary>
         /// Add a callback that is invoked whenever the stream is updated.
         /// </summary>
+        /// <remarks>
+        /// The callback is invoked straight away with the value the stream already has, if any.
+        /// An error ends the stream and does not invoke the callback.
+        /// </remarks>
         public int AddCallback (Action<TReturnType> callback) {
-            if (convert != null)
-                return stream.AddCallback ((object x) => callback(convert(x)));
-            return stream.AddCallback ((object x) => callback((TReturnType)x));
+            return stream.AddCallback ((object x) => callback (Convert (x)));
         }
 
         /// <summary>
@@ -169,8 +165,29 @@ namespace KRPC.Client
         }
 
         /// <summary>
+        /// Add a callback that is invoked once when the stream ends, with the exception that
+        /// ended it.
+        /// </summary>
+        /// <remarks>
+        /// The callback is invoked straight away if the stream has already ended.
+        /// </remarks>
+        public int AddEndCallback (Action<System.Exception> callback) {
+            return stream.AddEndCallback (callback);
+        }
+
+        /// <summary>
+        /// Remove an end callback, based on its tag.
+        /// </summary>
+        public void RemoveEndCallback (int tag) {
+            stream.RemoveEndCallback (tag);
+        }
+
+        /// <summary>
         /// Remove the stream from the server.
         /// </summary>
+        /// <remarks>
+        /// Each add creates a separate stream, so this leaves the other streams of the same call.
+        /// </remarks>
         public void Remove ()
         {
             stream.Remove ();

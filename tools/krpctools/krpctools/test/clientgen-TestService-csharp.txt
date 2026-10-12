@@ -622,7 +622,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec29),
                 global::KRPC.Client.Encoder.Encode (repeats, TypeSpecs.Spec29)
             };
-            var _result = connection.Invoke ("TestService", "OnTimer", _args);
+            var _result = connection.Invoke ("TestService", "OnTimer", _args, typeof (global::KRPC.Client.Event));
             return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec35, connection);
         }
 
@@ -632,7 +632,7 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec29)
             };
-            var _result = connection.Invoke ("TestService", "OnTimerUsingLambda", _args);
+            var _result = connection.Invoke ("TestService", "OnTimerUsingLambda", _args, typeof (global::KRPC.Client.Event));
             return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec35, connection);
         }
 
@@ -647,6 +647,16 @@ namespace KRPC.Client.Services.TestService
             };
             var _result = connection.Invoke ("TestService", "OptionalArguments", _args);
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "RemoveEventAfter", typeof(TypeSpecs))]
+        public global::KRPC.Client.Event RemoveEventAfter (uint milliseconds)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec29)
+            };
+            var _result = connection.Invoke ("TestService", "RemoveEventAfter", _args, typeof (global::KRPC.Client.Event));
+            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec35, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ResetCustomExceptionLater", typeof(TypeSpecs))]

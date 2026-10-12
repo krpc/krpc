@@ -10,8 +10,9 @@ var _args = new ByteString[] {
 {% endfor %}
 };
 {% endmacro %}
-{% macro call(service, procedure, has_return, has_args, is_static=False) %}
-{% if has_return %}var _result = {% endif %}connection.Invoke ("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% macro call(service, procedure, has_return, has_args, is_static=False, return_type=None) %}
+{% set returns_stream = return_type in ('global::KRPC.Client.Event', 'global::KRPC.Schema.KRPC.Stream') %}
+{% if has_return %}var _result = {% endif %}connection.Invoke ("{{service}}", "{{procedure}}"{% if has_args %}, _args{% elif returns_stream %}, null{% endif %}{% if returns_stream %}, typeof ({{return_type}}){% endif %});
 {% endmacro %}
 {% macro return(type, spec, is_nullable=False) %}
 {% if is_nullable %}
@@ -138,7 +139,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=12) }}
 {% endif %}
-{{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0) | indent(width=12) }}
+{{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0, return_type=procedure.return_type) | indent(width=12) }}
 {% if procedure.return_type != 'void' %}{{ return(procedure.return_type, procedure.return_spec, procedure.return_is_nullable) | indent(width=12) }}
 {% endif %}
         }
@@ -155,7 +156,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         public {{ property.type }} {{ property_name }} {
         {% if property.getter %}
             get {
-{{ call(service_name, property.getter.remote_name, true, false) | indent(width=16) }}
+{{ call(service_name, property.getter.remote_name, true, false, return_type=property.type) | indent(width=16) }}
 {{ return(property.type, property.return_spec, property.return_is_nullable) | indent(width=16) }}
             }
         {% endif %}
@@ -375,7 +376,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         public {{ method.return_type }} {{ method_name }} ({{ sig_parameters(method.parameters) }})
         {
 {{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name, 'spec': cls.spec}] + method.parameters) | indent(width=12) }}
-{{ call(service_name, method.remote_name, method.return_type != 'void', true) | indent(width=12) }}
+{{ call(service_name, method.remote_name, method.return_type != 'void', true, return_type=method.return_type) | indent(width=12) }}
 {% if method.return_type != 'void' %}{{ return(method.return_type, method.return_spec, method.return_is_nullable) | indent(width=12) }}
 {% endif %}
         }
@@ -394,7 +395,7 @@ namespace KRPC.Client.Services.{{ service_name }}
                 throw new ArgumentNullException (nameof (connection));
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}
-{{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true) | indent(width=12) }}
+{{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, true, method.return_type) | indent(width=12) }}
 {% if method.return_type != 'void' %}{{ return(method.return_type, method.return_spec, method.return_is_nullable) | indent(width=12) }}
 {% endif %}
         }
@@ -412,7 +413,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% if property.getter %}
             get {
 {{ args([{'name': 'this', 'name_value': 'this', 'type': service_name+'.'+class_name, 'spec': cls.spec }]) | indent(width=16) }}
-{{ call(service_name, property.getter.remote_name, true, true) | indent(width=16) }}
+{{ call(service_name, property.getter.remote_name, true, true, return_type=property.type) | indent(width=16) }}
 {{ return(property.type, property.return_spec, property.return_is_nullable) | indent(width=16) }}
             }
         {% endif %}

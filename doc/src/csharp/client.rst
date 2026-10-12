@@ -93,6 +93,11 @@ object of type :type:`Stream`. The most recent value of the stream can be obtain
 :meth:`Stream.Remove` on the stream object. All of a clients streams are automatically stopped when
 it disconnects.
 
+.. note::
+
+   A stream runs on the server until you remove it or the connection closes, even once the stream
+   object is garbage collected. Each call to ``AddStream`` adds another stream.
+
 Synchronizing with Stream Updates
 ---------------------------------
 
@@ -120,12 +125,6 @@ The body of the loop calls ``Wait`` on the stream, which causes the program to b
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
 whilst waiting.
 
-.. note::
-
-   The stream does not start receiving updates until the first call to ``Wait``. This means that the
-   example code will not miss any updates to the streams value, as it will have already locked the
-   condition variable before the first stream update is received.
-
 Callbacks
 ^^^^^^^^^
 
@@ -138,20 +137,36 @@ For example the following program registers two callbacks that are invoked when 
 
 .. literalinclude:: /scripts/client/csharp/Callbacks.cs
 
-.. note::
-
-   When a stream is created it does not start receiving updates until ``Start`` is called. This is
-   implicitly called when accessing the value of a stream, but as this example does not do this an
-   explicit call to ``Start`` is required.
+A callback added to a stream that already has a value is called with that value straight away.
 
 .. note::
 
-   The callbacks are registered before the call to ``Start`` so that stream updates are not missed.
+   The callback function may be called from a different thread than the one that created the
+   stream. Any changes to shared state must therefore be protected with appropriate
+   synchronization.
 
-.. note::
+Stream Endings
+^^^^^^^^^^^^^^
 
-   The callback function may be called from a different thread to that which created the stream. Any
-   changes to shared state must therefore be protected with appropriate synchronization.
+The following example streams the temperature of a part until the part is destroyed:
+
+.. literalinclude:: /scripts/client/csharp/StreamEnd.cs
+
+Once a stream ends, calling ``Get`` or ``Wait`` on the stream throws the exception that ended it. A
+stream ends when its procedure throws an exception, when the server removes it, when you remove it,
+or when the connection closes.
+
+A stream that the server removes, such as an event that has finished, ends with
+``KRPC.Client.Services.KRPC.StreamRemovedException``. A stream you remove ends with an
+``InvalidOperationException``, and a closed connection with a ``ConnectionException``.
+
+An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.
+
+.. seealso:: :doc:`/tutorials/object-lifetime`
+
+To handle an ending in a callback, add an end callback with :meth:`Stream.AddEndCallback`. It is
+called once, with the exception.
 
 .. _csharp-client-events:
 
@@ -168,6 +183,10 @@ expression ``MeanAltitude > 1000`` and then creates an event that will be trigge
 expression returns true:
 
 .. literalinclude:: /scripts/client/csharp/Event.cs
+
+A call to ``Wait`` returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+``Wait`` return once.
 
 Client API Reference
 --------------------
@@ -234,19 +253,9 @@ Client API Reference
    This class represents a stream. See :ref:`csharp-client-streams`.
 
    Stream objects implement ``GetHashCode``, ``Equals``, ``operator ==`` and ``operator !=`` such
-   that two stream objects are equal if they are bound to the same stream on the server.
-
-   .. method:: void Start(bool wait = true)
-
-      Starts the stream. When a stream is created by calling :meth:`Connection.AddStream` it does
-      not start sending updates to the client until this method is called.
-
-      If wait is true, this method will block until at least one update has been received from the
-      server.
-
-      If wait is false, the method starts the stream and returns immediately. Subsequent calls to
-      :meth:`Get` may raise an ``InvalidOperationException`` if the stream does not yet contain a
-      value.
+   that two stream objects are equal if they are bound to the same stream on the server. Each call
+   to :meth:`Connection.AddStream` creates a new stream, so two streams of the same call are not
+   equal.
 
    .. property:: float Rate { get; set; }
 
@@ -254,39 +263,37 @@ Client API Reference
 
    .. method:: ReturnType Get()
 
-      Returns the most recent value for the stream. If executing the remote procedure for the stream
-      throws an exception, calling this method will rethrow the exception. Raises an
-      ``InvalidOperationException`` if no update has been received from the server.
-
-      If the stream has not been started this method calls ``Start(true)`` to start the stream and
-      wait until at least one update has been received.
+      Returns the most recent value for the stream, waiting for the first value if none has arrived
+      yet. Throws the exception that ended the stream, if it has ended, such as an exception thrown
+      by the remote procedure.
 
    .. property:: object Condition { get; }
 
       A condition variable that is notified (using ``Monitor.PulseAll``) whenever the value of the
       stream changes.
 
-   .. method:: void Wait(double timeout = -1)
+   .. method:: bool Wait(double timeout = -1)
 
-      This method blocks until the value of the stream changes or the operation times out.
+      This method blocks until the value of the stream changes or the operation times out. Returns
+      ``true`` if the value changed, and ``false`` on a timeout.
 
       The streams condition variable must be locked before calling this method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation.
-
-      If the stream has not been started this method calls ``Start(false)`` to start the stream
-      (without waiting for at least one update to be received).
+      the operation. Throws the exception that ended the stream, if it ends before or during the
+      wait.
 
    .. method:: int AddCallback(Action<ReturnType> callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
-      stream. Returns a unique identifier for the callback which can be used to remove it.
+      stream. If the stream already has a value, the callback is invoked with it straight away.
+      An error ends the stream and does not invoke the callback. Calling ``Get()`` throws it.
+      Returns a unique identifier for the callback which can be used to remove it.
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
+         The callback function may be called from a different thread than the one that created the
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
@@ -295,9 +302,21 @@ Client API Reference
       Removes a callback from the stream. The tag is the identifier returned when the callback was
       added.
 
+   .. method:: int AddEndCallback(Action<System.Exception> callback)
+
+      Adds a callback function that is invoked once when the stream ends. The callback function
+      should take one argument, which is passed the exception that ended the stream. It is invoked
+      straight away if the stream has already ended. Returns a unique identifier for the callback
+      which can be used to remove it.
+
+   .. method:: void RemoveEndCallback(int tag)
+
+      Removes an end callback from the stream. The tag is the identifier returned when the callback
+      was added.
+
    .. method:: void Remove()
 
-      Removes the stream from the server.
+      Removes the stream from the server. Other streams of the same call are not affected.
 
 .. class:: Event
 
@@ -307,38 +326,47 @@ Client API Reference
    Event objects implement ``GetHashCode``, ``Equals``, ``operator ==`` and ``operator !=`` such
    that two event objects are equal if they are bound to the same underlying stream on the server.
 
-   .. method:: void Start()
-
-      Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called.
-
    .. property:: object Condition { get; }
 
       The condition variable that is notified (using ``Monitor.PulseAll``) whenever the event
       occurs.
 
-   .. method:: void Wait(double timeout = -1)
+   .. method:: bool Wait(double timeout = -1)
 
-      This method blocks until the event occurs or the operation times out.
+      This method blocks until the event occurs or the operation times out. It returns straight
+      away if the event has occurred since the previous call on this event object. Returns ``true``
+      if the event occurred, and ``false`` on a timeout.
 
       The events condition variable must be locked before calling this method.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation.
-
-      If the event has not been started this method calls ``Start()`` to start the underlying
-      stream.
+      the operation. Throws the exception that ended the event, if it ends before or during the
+      wait.
 
    .. method:: int AddCallback(Action callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments. Returns a unique identifier for the callback
-      which can be used to remove it.
+      should be a function that takes zero arguments. If the event has not ended and has fired
+      since the last ``Wait`` on this event object returned and since its callbacks were last
+      invoked, the callback is invoked once straight away. An error ends the event and does not
+      invoke the callback. Returns a unique identifier for the callback which can be used to
+      remove it.
 
    .. method:: void RemoveCallback(int tag)
 
       Removes a callback from the event. The tag is the identifier returned when the callback was
       added.
+
+   .. method:: int AddEndCallback(Action<System.Exception> callback)
+
+      Adds a callback function that is invoked once when the event ends, with the exception that
+      ended it. It is invoked straight away if the event has already ended. Returns a unique
+      identifier for the callback which can be used to remove it.
+
+   .. method:: void RemoveEndCallback(int tag)
+
+      Removes an end callback from the event. The tag is the identifier returned when the callback
+      was added.
 
    .. method:: void Remove()
 

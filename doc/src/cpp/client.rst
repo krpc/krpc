@@ -159,6 +159,11 @@ Each stream updates on its own, so two streams read one after the other can give
 different physics ticks. To read several values from one physics tick, make the calls while
 holding the tick, as described in :ref:`holding-a-tick`.
 
+.. note::
+
+   A stream runs on the server until you remove it or the connection closes, even once every copy
+   of the stream object is destroyed. Each call to a ``_stream`` function adds another stream.
+
 Synchronizing with Stream Updates
 ---------------------------------
 
@@ -170,8 +175,10 @@ Condition Variables
 ^^^^^^^^^^^^^^^^^^^
 
 Each stream has a condition variable associated with it, that is notified whenever the value of the
-stream changes. The condition variables are instances of ``std::condition_variable``. These can be
-used to block the current thread of execution until the value of the stream changes.
+stream changes. The condition variables are instances of ``krpc::Condition``, used like
+``std::condition_variable`` over the re-entrant mutex ``krpc::RecursiveMutex``. A wait releases
+every level of the thread's lock. These can be used to block the current thread of execution until
+the value of the stream changes.
 
 The following example waits until the abort button is pressed in game, by waiting for the value of
 :func:`krpc::services::SpaceCenter::Control::abort` to change to true:
@@ -186,12 +193,6 @@ The body of the loop calls ``wait`` on the stream, which causes the program to b
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
 whilst waiting.
 
-.. note::
-
-   The stream does not start receiving updates until the first call to ``wait``. This means that the
-   example code will not miss any updates to the streams value, as it will have already locked the
-   condition variable before the first stream update is received.
-
 Callbacks
 ^^^^^^^^^
 
@@ -204,20 +205,38 @@ For example the following program registers two callbacks that are invoked when 
 
 .. literalinclude:: /scripts/client/cpp/Callbacks.cpp
 
-.. note::
-
-   When a stream is created it does not start receiving updates until ``start`` is called. This is
-   implicitly called when accessing the value of a stream, but as this example does not do this an
-   explicit call to ``start`` is required.
+A callback added to a stream that already has a value is called with that value straight away.
 
 .. note::
 
-   The callbacks are registered before the call to ``start`` so that stream updates are not missed.
+   The callback function may be called from a different thread than the one that created the
+   stream. Any changes to shared state must therefore be protected with appropriate
+   synchronization.
 
-.. note::
+Stream Endings
+^^^^^^^^^^^^^^
 
-   The callback function may be called from a different thread to that which created the stream. Any
-   changes to shared state must therefore be protected with appropriate synchronization.
+The following example streams the temperature of a part until the part is destroyed:
+
+.. literalinclude:: /scripts/client/cpp/StreamEnd.cpp
+
+Once a stream ends, reading the stream or waiting on it throws the exception that ended it. A stream
+ends when its procedure throws an exception, when the server removes it, when you remove it, or when
+the connection closes.
+
+A stream that the server removes, such as an event that has finished, ends with
+``krpc::services::KRPC::StreamRemovedException``. A stream you remove ends with
+``krpc::StreamError``, and a closed connection with ``krpc::ConnectionError``.
+
+An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.
+
+.. seealso::
+
+   :doc:`/tutorials/object-lifetime`
+
+To handle an ending in a callback, add an end callback with
+:func:`krpc::Stream::add_end_callback`. It is called once, with the exception.
 
 .. _cpp-client-events:
 
@@ -234,6 +253,10 @@ expression ``mean_altitude > 1000`` and then creates an event that will be trigg
 expression returns true:
 
 .. literalinclude:: /scripts/client/cpp/Event.cpp
+
+A call to ``wait`` returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+``wait`` return once.
 
 Client API Reference
 --------------------
@@ -289,21 +312,22 @@ Client API Reference
 
       Destructs the client object and closes the connection to the server.
 
-   .. function:: std::condition_variable& get_stream_update_condition() const
+   .. function:: Condition& get_stream_update_condition() const
 
       A condition variable that is notified whenever a stream update message finishes processing.
 
-   .. function:: std::unique_lock<std::mutex>& get_stream_update_condition_lock() const
+   .. function:: std::unique_lock<RecursiveMutex>& get_stream_update_condition_lock() const
 
-      The lock for the stream update condition variable.
+      A lock on the re-entrant mutex for the stream update condition variable. Every copy of the
+      client shares the lock, so one thread at a time uses it.
 
    .. function:: void acquire_stream_update()
 
-      Acquires a lock on the mutex for the stream update condition variable.
+      Locks the mutex for the stream update condition variable.
 
    .. function:: void release_stream_update()
 
-      Releases the lock on the mutex for the stream update condition variable.
+      Unlocks the mutex for the stream update condition variable.
 
    .. function:: void wait_for_stream_update(double timeout = -1)
 
@@ -322,8 +346,8 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
-         stream. Any changes to shared state must therefore be protected with appropriate
+         The callback function may be called from a different thread than the one that created
+         the stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
    .. function:: void remove_stream_update_callback(int tag)
@@ -335,21 +359,10 @@ Client API Reference
 
    This class represents a stream. See :ref:`cpp-client-streams`.
 
-   Streams are created by calling a remove procedure with ``_stream`` appended to its name.
+   Streams are created by calling a remote procedure with ``_stream`` appended to its name.
 
-   Stream objects are copy constructible and assignable. A stream is removed from the server when
-   all stream objects that refer to it are destroyed.
-
-   .. function:: void start(bool wait = true)
-
-      Starts the stream. When a stream is created it does not start sending updates to the client
-      until this method is called.
-
-      If wait is true, this method will block until at least one update has been received from the
-      server.
-
-      If wait is false, the method starts the stream and returns immediately. Subsequent calls to
-      ``operator()`` may throw a ``krpc::StreamError`` exception.
+   Stream objects are copy constructible and assignable, and every copy refers to the same stream.
+   Call :func:`remove` to remove the stream from the server.
 
    .. function:: float rate() const
    .. function:: void set_rate(float rate)
@@ -358,47 +371,55 @@ Client API Reference
 
    .. function:: T operator()()
 
-      Get the most recently received value from the stream.
+      Get the most recently received value from the stream, waiting for the first value if none has
+      arrived yet. Throws the exception that ended the stream, if it has ended, such as an exception
+      thrown by the remote procedure.
 
-   .. function:: std::condition_variable& get_condition() const
+   .. function:: Condition& get_condition() const
 
-      A condition variable that is notified whenever the value of the stream changes.
+      A condition variable that is notified whenever the value of the stream changes. Every copy
+      of the stream object shares it.
 
-   .. function:: std::unique_lock<std::mutex>& get_condition_lock() const
+   .. function:: std::unique_lock<RecursiveMutex>& get_condition_lock() const
 
-      The lock for the condition variable.
+      A lock on the re-entrant mutex for the condition variable. Each stream object has its own
+      lock, used by one thread, so a thread waiting on a stream uses its own copy of the stream
+      object.
 
    .. function:: void acquire()
 
-      Acquires a lock on the mutex for the condition variable.
+      Locks the mutex for the condition variable. Every copy of the stream object shares the
+      mutex, so a lock taken through one copy can be released through another.
 
    .. function:: void release()
 
-      Releases the lock on the mutex for the condition variable.
+      Unlocks the mutex for the condition variable.
 
-   .. function:: void wait(double timeout = -1)
+   .. function:: bool wait(double timeout = -1)
 
-      This method blocks until the value of the stream changes or the operation times out.
+      This method blocks until the value of the stream changes or the operation times out. Returns
+      true if the value changed, and false on a timeout.
 
-      The streams condition variable must be locked (by calling ``acquire``) before calling this
-      method.
+      The method locks the condition variable itself, unless the thread holds it. To wait for a
+      change from a value you have read, call ``acquire`` before reading it, so that no update
+      lands between the read and the wait.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation.
-
-      If the stream has not been started this method calls ``start(false)`` to start the stream
-      (without waiting for at least one update to be received).
+      the operation. Throws the exception that ended the stream, if it ends before or during the
+      wait.
 
    .. function:: int add_callback(const std::function<void(T)>& callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
-      stream. Returns a unique identifier for the callback which can be used to remove it.
+      stream. If the stream already has a value, the callback is invoked with it straight away.
+      An error from the stream does not invoke the callback. Calling the stream throws it.
+      Returns a unique identifier for the callback which can be used to remove it.
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
-         stream. Any changes to shared state must therefore be protected with appropriate
+         The callback function may be called from a different thread than the one that created
+         the stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
    .. function:: void remove_callback(int tag)
@@ -406,13 +427,27 @@ Client API Reference
       Removes a callback from the stream. The tag is the identifier returned when the callback was
       added.
 
+   .. function:: int add_end_callback(const std::function<void(std::exception_ptr)>& callback)
+
+      Adds a callback function that is invoked once when the stream ends. The callback function
+      is passed the exception that ended the stream. It is invoked straight away if the stream has
+      already ended. Returns a unique identifier for the callback which can be used to remove it.
+
+   .. function:: void remove_end_callback(int tag)
+
+      Removes an end callback from the stream. The tag is the identifier returned when the
+      callback was added.
+
    .. function:: void remove()
 
-      Removes the stream from the server.
+      Removes the stream from the server. Every copy of the stream object refers to the same
+      stream. Another stream added for the same call stays live.
 
    .. function:: bool operator==(const Stream<T>& rhs)
 
-      Returns true if the two stream objects are bound to the same stream.
+      Returns true if the two stream objects are bound to the same stream. Each call to a
+      ``_stream`` function adds a new stream, so two streams added for the same call are not
+      equal.
 
    .. function:: bool operator!=(const Stream<T>& rhs)
 
@@ -427,52 +462,66 @@ Client API Reference
    This class represents an event. See :ref:`cpp-client-events`. It is wrapper around a
    ``Stream<bool>`` that indicates when the event occurs.
 
-   Event objects are copy constructible and assignable. An event is removed from the server when all
-   event objects that refer to it are destroyed.
+   Event objects are copy constructible and assignable, and every copy refers to the same event.
+   Call :func:`remove` to remove the event from the server.
 
-   .. function:: void start()
+   .. function:: Condition& get_condition() const
 
-      Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called.
+      A condition variable that is notified whenever the event occurs. Every copy of the event
+      object shares it.
 
-   .. function:: std::condition_variable& get_condition() const
+   .. function:: std::unique_lock<RecursiveMutex>& get_condition_lock() const
 
-      The condition variable that is notified whenever the event occurs.
-
-   .. function:: std::unique_lock<std::mutex>& get_condition_lock() const
-
-      The lock for the condition variable.
+      A lock on the re-entrant mutex for the condition variable. Each event object has its own
+      lock, used by one thread, so a thread waiting on an event uses its own copy of the event
+      object.
 
    .. function:: void acquire()
 
-      Acquires a lock on the mutex for the condition variable.
+      Locks the mutex for the condition variable. Every copy of the event object, and its
+      underlying stream, shares the mutex.
 
    .. function:: void release()
 
-      Releases the lock on the mutex for the condition variable.
+      Unlocks the mutex for the condition variable.
 
-   .. function:: void wait(double timeout = -1)
+   .. function:: bool wait(double timeout = -1)
 
-      This method blocks until the event occurs or the operation times out.
+      This method blocks until the event occurs or the operation times out. It returns straight
+      away if the event has occurred since the previous call on this event object. Returns true if
+      the event occurred, and false on a timeout.
 
-      The events condition variable must be locked before calling this method.
+      The method locks the condition variable itself, unless the thread holds it.
 
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
-      the operation.
-
-      If the event has not been started this method calls ``start()`` to start the underlying
-      stream.
+      the operation. Throws the exception that ended the event, if it ends before or during the
+      wait.
 
    .. function:: int add_callback(const std::function<void()>& callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments. Returns a unique identifier for the callback
-      which can be used to remove the callback.
+      should be a function that takes zero arguments. If the event has occurred since the previous
+      call to ``wait`` on this event object, and no callback was invoked for it, the callback is
+      invoked once straight away. A callback added after the event has ended is not invoked for
+      an earlier firing. An error from the event does not invoke the callback. Waiting on the
+      event throws it. Returns a unique identifier for the callback which can be used to remove
+      the callback.
 
    .. function:: void remove_callback(int tag)
 
       Removes a callback from the event. The tag is the identifier returned when the callback was
       added.
+
+   .. function:: int add_end_callback(const std::function<void(std::exception_ptr)>& callback)
+
+      Adds a callback function that is invoked once when the event ends, with the exception that
+      ended it. It is invoked straight away if the event has already ended. Returns a unique
+      identifier for the callback which can be used to remove it.
+
+   .. function:: void remove_end_callback(int tag)
+
+      Removes an end callback from the event. The tag is the identifier returned when the callback
+      was added.
 
    .. function:: void remove()
 
@@ -493,6 +542,34 @@ Client API Reference
    .. function:: operator bool()
 
       Returns whether the event object is bound to a stream.
+
+.. class:: RecursiveMutex
+
+   The mutex of a stream's, an event's or the stream update's condition variable. The thread
+   holding it can lock it again, and each lock is matched by an unlock. It provides ``lock``, ``try_lock``, ``try_lock_for``,
+   ``try_lock_until`` and ``unlock``, so it can be held with ``std::unique_lock`` and
+   ``std::lock_guard``.
+
+   .. function:: bool held_by_this_thread() const
+
+      Whether the calling thread holds the mutex.
+
+.. class:: Condition
+
+   The condition variable of a stream, an event or the stream update. Its ``wait``, ``wait_for``
+   and ``wait_until`` take a ``std::unique_lock<RecursiveMutex>``, with or without a predicate,
+   as ``std::condition_variable`` does. A wait releases every lock the calling thread holds on
+   the mutex, and takes them again before it returns.
+
+   .. function:: void wait()
+   .. function:: template <typename Rep, typename Period> std::cv_status wait_for(const std::chrono::duration<Rep, Period>& duration)
+   .. function:: template <typename Clock, typename Duration> std::cv_status wait_until(const std::chrono::time_point<Clock, Duration>& deadline)
+
+      Waits as the overloads taking a lock do, for a thread that holds the mutex through
+      ``acquire`` or a lock of its own.
+
+   .. function:: void notify_one()
+   .. function:: void notify_all()
 
 .. function:: template <typename T> std::size_t hash_value(const T& value)
 

@@ -92,6 +92,13 @@ class TestUtils {
     }
   }
 
+  /** The message for an event over the given stream id. */
+  static krpc.schema.KRPC.Event eventMessage(long id) {
+    return krpc.schema.KRPC.Event.newBuilder()
+        .setStream(krpc.schema.KRPC.Stream.newBuilder().setId(id))
+        .build();
+  }
+
   public static String hexlify(byte[] data) {
     StringBuilder builder = new StringBuilder();
     for (byte b : data) {

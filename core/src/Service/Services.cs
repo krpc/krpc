@@ -133,12 +133,9 @@ namespace KRPC.Service
         public ProcedureResult ExecuteCall (ProcedureSignature procedure, object instance, object[] arguments)
         {
             try {
-                if ((CallContext.GameScene & procedure.GameScene) == 0)
-                    throw new KRPC.UnsupportedSceneException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
-                object returnValue = procedure.Handler.Invoke (instance, arguments);
+                object returnValue = Invoke (procedure, instance, arguments);
                 var result = new ProcedureResult ();
                 if (procedure.HasReturnType) {
-                    CheckReturnValue (procedure, returnValue);
                     result.Spec = procedure.ReturnSpec;
                     result.Value = returnValue;
                 }
@@ -150,6 +147,21 @@ namespace KRPC.Service
             } catch (System.Exception e) {
                 return new ProcedureResult { Error = HandleException (e) };
             }
+        }
+
+        /// <summary>
+        /// Executes a procedure call and returns its return value.
+        /// Throws YieldException, containing a continuation, if the call yields.
+        /// Throws the exception the procedure throws if the call fails.
+        /// </summary>
+        internal object Invoke (ProcedureSignature procedure, object instance, object[] arguments)
+        {
+            if ((CallContext.GameScene & procedure.GameScene) == 0)
+                throw new KRPC.UnsupportedSceneException ("Procedure not available in game scene '" + GameSceneUtils.Name(CallContext.GameScene) + "'");
+            object returnValue = procedure.Handler.Invoke (instance, arguments);
+            if (procedure.HasReturnType)
+                CheckReturnValue (procedure, returnValue);
+            return returnValue;
         }
 
         /// <summary>
@@ -196,13 +208,11 @@ namespace KRPC.Service
                 returnValue = procedure.Handler.Invoke (instance, arguments);
             } catch (YieldException) {
                 throw;
-            } catch (RPCException e) {
-                result.Reset ();
-                result.Error = HandleException (e);
-                return;
             } catch (System.Exception e) {
+                // Not logged for an error that holds a stream, which a held stream reads on
+                // every update
                 result.Reset ();
-                result.Error = HandleException (e);
+                result.Error = HandleException (e, !IsHeld (e));
                 return;
             }
             result.Reset ();
@@ -361,16 +371,38 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Convert an exception thrown by an RPC into an error message.
+        /// Whether an exception puts a stream on hold: an object is not loaded, or the procedure
+        /// is not available in the current game scene.
         /// </summary>
-        internal Error HandleException(System.Exception exn)
+        internal static bool IsHeld (System.Exception exn)
+        {
+            if (exn is RPCException && exn.InnerException != null)
+                exn = exn.InnerException;
+            return exn is KRPC.ObjectNotLoadedException || exn is KRPC.UnsupportedSceneException;
+        }
+
+        /// <summary>
+        /// Whether an error holds a stream, as for <see cref="IsHeld(System.Exception)" />.
+        /// </summary>
+        internal static bool IsHeld (Error error)
+        {
+            return error.Service == "KRPC" &&
+                (error.Name == "ObjectNotLoadedException" || error.Name == "UnsupportedSceneException");
+        }
+
+        /// <summary>
+        /// Convert an exception thrown by an RPC into an error message, and log it at debug
+        /// level if log is set.
+        /// </summary>
+        internal Error HandleException(System.Exception exn, bool log = true)
         {
             if (exn is RPCException && exn.InnerException != null)
                 exn = exn.InnerException;
             var message = exn.Message;
             var verboseErrors = Configuration.Instance.VerboseErrors;
-            var stackTrace = verboseErrors ? exn.StackTrace : string.Empty;
-            if (Logger.ShouldLog (Logger.Severity.Debug)) {
+            // An exception that was never thrown has no stack trace
+            var stackTrace = verboseErrors ? exn.StackTrace ?? string.Empty : string.Empty;
+            if (log && Logger.ShouldLog (Logger.Severity.Debug)) {
                 Logger.WriteLine (message, Logger.Severity.Debug);
                 if (verboseErrors)
                     Logger.WriteLine (stackTrace, Logger.Severity.Debug);

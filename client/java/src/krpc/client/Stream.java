@@ -1,8 +1,6 @@
 package krpc.client;
 
-import java.io.IOException;
 import java.util.function.Consumer;
-import krpc.schema.KRPC.Error;
 import krpc.schema.KRPC.ProcedureCall;
 import krpc.schema.KRPC.Type;
 
@@ -48,34 +46,6 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Start the stream.
-   */
-  public void start() throws RPCException {
-    if (stream.getStarted()) {
-      return;
-    }
-    stream.start();
-  }
-
-  /**
-   * Start the stream and wait for the first update.
-   */
-  public void startAndWait() throws RPCException, StreamException {
-    if (stream.getStarted()) {
-      return;
-    }
-    Object condition = stream.getCondition();
-    synchronized (condition) {
-      stream.start();
-      try {
-        condition.wait();
-      } catch (InterruptedException exn) {
-        throw new StreamException("wait was interrupted", exn);
-      }
-    }
-  }
-
-  /**
    * The rate of the stream, in Hertz. Zero if the rate is unlimted.
    */
   public float getRate() throws RPCException {
@@ -90,66 +60,91 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Get the most recent value for the stream.
+   * Get the most recent value for the stream, waiting for the first value if none has arrived
+   * yet. Throws the exception that ended the stream, if it has ended.
    */
   @SuppressWarnings("unchecked")
   public T get() throws RPCException, StreamException {
-    if (!stream.getStarted()) {
-      startAndWait();
-    }
-    Object value = stream.getValue();
-    if (value instanceof Error) {
-      connection.throwException((Error) value);
-    } else if (value instanceof RPCException) {
-      throw (RPCException) value;
-    } else if (value instanceof StreamException) {
-      throw (StreamException) value;
-    }
-    return (T) value;
+    return (T) stream.waitForValue();
   }
 
   /**
-   * Condition variable that is notified when the streams value changes.
+   * Condition variable that is notified when the stream's value changes, and when the stream ends.
    */
   public Object getCondition() {
     return stream.getCondition();
   }
 
   /**
-   * Wait until the next stream update.
+   * Wait until the next stream update. Throws the exception that ended the stream, if it ends
+   * before or during the wait.
    */
   public void waitForUpdate() throws RPCException, StreamException {
-    if (!stream.getStarted()) {
-      stream.start();
-    }
-    try {
-      stream.getCondition().wait();
-    } catch (InterruptedException exn) {
-      throw new StreamException("wait was interrupted", exn);
-    }
+    waitForUpdateUntil(deadline(-1));
   }
 
   /**
-   * Wait until the next stream update, with a timeout in seconds.
+   * Wait until the next stream update, with a timeout in seconds. Returns true if the stream
+   * updated, and false on a timeout. Throws the exception that ended the stream, if it ends
+   * before or during the wait.
    */
-  public void waitForUpdateWithTimeout(double timeout) throws RPCException, StreamException {
-    if (!stream.getStarted()) {
-      stream.start();
+  public boolean waitForUpdateWithTimeout(double timeout) throws RPCException, StreamException {
+    return waitForUpdateUntil(deadline(timeout));
+  }
+
+  /** A deadline of zero waits indefinitely. */
+  private boolean waitForUpdateUntil(long deadline) throws RPCException, StreamException {
+    stream.throwIfEnded();
+    long version = stream.getVersion();
+    while (stream.getVersion() == version) {
+      stream.throwIfEnded();
+      if (!waitOn(stream.getCondition(), deadline)) {
+        return false;
+      }
     }
-    if (timeout == 0) {
-      return;
+    return true;
+  }
+
+  /**
+   * The deadline, in System.nanoTime() nanoseconds, for a timeout in seconds. Zero for a
+   * negative timeout, which waits indefinitely.
+   */
+  static long deadline(double timeout) {
+    if (timeout < 0) {
+      return 0;
     }
+    // Zero is reserved for no deadline
+    long deadline = System.nanoTime() + (long) (timeout * 1e9);
+    return deadline == 0 ? 1 : deadline;
+  }
+
+  /**
+   * Waits on a condition the caller holds, until notified or the deadline passes. Returns false
+   * if the deadline had passed on entry. A deadline of zero waits indefinitely.
+   */
+  static boolean waitOn(Object condition, long deadline) throws StreamException {
     try {
-      stream.getCondition().wait((long) (timeout * 1000));
+      if (deadline == 0) {
+        condition.wait();
+        return true;
+      }
+      long remaining = deadline - System.nanoTime();
+      if (remaining <= 0) {
+        return false;
+      }
+      condition.wait(remaining / 1000000, (int) (remaining % 1000000));
+      return true;
     } catch (InterruptedException exn) {
       throw new StreamException("wait was interrupted", exn);
     }
   }
 
   /**
-   * Add a callback that is invoked whenever the stream is updated.
+   * Add a callback that is invoked whenever the stream is updated with a value. It is invoked
+   * straight away with the value the stream already has, if any. An error ends the stream and
+   * does not invoke the callback.
    * Returns an integer tag for the callback which uniquely identifies it,
-   * and allows it to be removed using remove_callback()
+   * and allows it to be removed using removeCallback()
    */
   @SuppressWarnings("unchecked")
   public int addCallback(Consumer<T> callback) {
@@ -164,7 +159,24 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Remove the stream from the server.
+   * Add a callback that is invoked once when the stream ends, with the exception that ended it.
+   * It is invoked straight away if the stream has already ended. Returns an integer tag for the
+   * callback, which allows it to be removed using removeEndCallback()
+   */
+  public int addEndCallback(Consumer<Exception> callback) {
+    return stream.addEndCallback(callback);
+  }
+
+  /**
+   * Remove an end callback based on its tag.
+   */
+  public void removeEndCallback(int tag) {
+    stream.removeEndCallback(tag);
+  }
+
+  /**
+   * Remove the stream from the server. Each call to addStream creates its own stream, so this
+   * leaves other streams for the same call running.
    */
   public void remove() throws RPCException {
     stream.remove();

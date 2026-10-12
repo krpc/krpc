@@ -206,14 +206,24 @@ class Client(krpc.services.Client):
 
     def close(self) -> None:
         self._rpc_connection.close()
+        # Streams end before the join, as the caller can hold a stream's condition, which
+        # the update thread then stops trying to take
+        self._stream_manager.request_close()
+        deferred = self._stream_manager.notify_closed()
         if self._stream_thread is not None:
             self._stream_thread_stop.set()
             # Callbacks run on the update thread, so a client closed from one would join the
-            # thread it is running on, which raises
-            if threading.current_thread() is not self._stream_thread:
+            # thread it is running on, which raises. A callback can also wait for a
+            # condition the caller holds, so the update thread then ends once the caller
+            # releases it.
+            if (
+                threading.current_thread() is not self._stream_thread
+                and not self._stream_manager.holds_a_condition()
+            ):
                 self._stream_thread.join()
-        # No further updates will arrive, so wake anything waiting for one
-        self._stream_manager.notify_closed()
+        # An exception from an end callback is raised once the client has closed
+        if deferred is not None:
+            raise deferred
 
     def __enter__(self) -> Client:
         return self
@@ -322,6 +332,7 @@ class Client(krpc.services.Client):
 
         # Build the request. A request carries exactly one call, so the call is filled in
         # where it belongs
+        args = list(args)
         request = KRPC.Request()
         self._encode_call(request.calls.add(), service, procedure, args, param_types)
 
@@ -331,6 +342,15 @@ class Client(krpc.services.Client):
             response = cast(
                 KRPC.Response, self._rpc_connection.receive_message(KRPC.Response)
             )
+            self._note_stream_id(response, return_type)
+            if (
+                service == "KRPC"
+                and procedure == "RemoveStream"
+                and not response.HasField("error")
+                and response.results
+                and not response.results[0].HasField("error")
+            ):
+                self._stream_manager.note_removed(cast(int, args[0]))
 
         # Check for an error response
         if response.HasField("error"):
@@ -348,6 +368,27 @@ class Client(krpc.services.Client):
         if isinstance(value, KRPC.Event):
             value = Event(self, value)
         return value
+
+    def _note_stream_id(
+        self, response: KRPC.Response, return_type: Optional[TypeBase]
+    ) -> None:
+        """Note the id of a stream or event the server returned. Called in the order the
+        replies arrive, so the stream manager keeps the latest value and any ending sent
+        for the stream before it is registered."""
+        if return_type is None or return_type.python_type not in (
+            KRPC.Stream,
+            KRPC.Event,
+        ):
+            return
+        if response.HasField("error") or not response.results:
+            return
+        result = response.results[0]
+        if result.HasField("error") or result.is_null:
+            return
+        message = return_type.python_type()
+        message.ParseFromString(result.value)
+        stream = message if isinstance(message, KRPC.Stream) else message.stream
+        self._stream_manager.note_issued(stream.id)
 
     def _build_call(
         self,

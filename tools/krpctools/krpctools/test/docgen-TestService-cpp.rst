@@ -529,6 +529,16 @@
 
    
 
+   .. function:: ::krpc::Event remove_event_after(uint32_t milliseconds)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: void reset_custom_exception_later()
 
 

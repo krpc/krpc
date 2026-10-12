@@ -1,18 +1,17 @@
 package krpc.client;
 
-import java.io.IOException;
 import java.lang.Runnable;
+import java.util.function.Consumer;
 import krpc.client.Stream;
 import krpc.schema.KRPC;
-import krpc.schema.KRPC.Error;
-import krpc.schema.KRPC.ProcedureCall;
 import krpc.schema.KRPC.Type;
 import krpc.schema.KRPC.Type.TypeCode;
 
 /** Represents a server-side event that can be waited on. */
 public class Event implements Comparable<Event> {
-  private Connection connection;
   private Stream<Boolean> stream;
+  // The number of firings when a wait on this handle last returned
+  private volatile long seen = 0;
 
   Event(Connection connection, KRPC.Event event) {
     Type returnType = Type.newBuilder().setCode(TypeCode.BOOL).build();
@@ -46,62 +45,59 @@ public class Event implements Comparable<Event> {
   }
 
   /**
-   * Start the event.
-   */
-  public void start() throws RPCException {
-    stream.start();
-  }
-
-  /**
-   * Condition variable that is notified when the event occurs.
+   * Condition variable that is notified when the event occurs, and when the event ends.
    */
   public Object getCondition() {
     return stream.getCondition();
   }
 
   /**
-   * Wait until the event occurs.
+   * Wait until the event occurs. Returns straight away if the event has occurred since the last
+   * wait on this event object. Throws the exception that ended the event, if it ends before or
+   * during the wait.
    */
   public void waitFor() throws RPCException, StreamException {
-    if (!stream.stream.getStarted()) {
-      start();
-    }
-    stream.stream.setValue(false);
-    while (!stream.get()) {
-      stream.waitForUpdate();
-    }
+    waitForUntil(Stream.deadline(-1));
   }
 
   /**
-   * Wait until the event occurs, with a timeout in seconds.
+   * Wait until the event occurs, with a timeout in seconds. Returns straight away if the event
+   * has occurred since the last wait on this event object. Returns true if the event occurred,
+   * and false on a timeout. Throws the exception that ended the event, if it ends before or
+   * during the wait.
    */
-  public void waitForWithTimeout(double timeout) throws RPCException, StreamException {
-    if (!stream.stream.getStarted()) {
-      start();
-    }
-    stream.stream.setValue(false);
-    while (!stream.get()) {
-      boolean origValue = stream.get();
-      stream.waitForUpdateWithTimeout(timeout);
-      if (stream.get() == origValue) {
-        // Value did not change, must have timed out
-        return;
+  public boolean waitForWithTimeout(double timeout) throws RPCException, StreamException {
+    return waitForUntil(Stream.deadline(timeout));
+  }
+
+  /** A deadline of zero waits indefinitely. */
+  private boolean waitForUntil(long deadline) throws RPCException, StreamException {
+    StreamImpl impl = stream.stream;
+    long seenOnEntry = seen;
+    while (impl.getFired() <= seenOnEntry) {
+      impl.throwIfEnded();
+      if (!Stream.waitOn(impl.getCondition(), deadline)) {
+        return false;
       }
     }
+    seen = impl.getFired();
+    return true;
   }
 
   /**
-   * Add a callback that is invoked whenever the stream is updated.
+   * Add a callback that is invoked whenever the event occurs. It is invoked straight away if the
+   * event has occurred since the last wait on this event object, and no callback has been invoked
+   * for it. A callback added after the event has ended is not invoked for an earlier firing. An
+   * error ends the event and does not invoke the callback.
    * Returns an integer tag for the callback which uniquely identifies it,
    * and allows it to be removed using removeCallback()
    */
   public int addCallback(Runnable callback) {
-    return stream.addCallback(
-        (Boolean value) -> {
-          if (value) {
-            callback.run();
-          }
-        });
+    long seenNow;
+    synchronized (stream.getCondition()) {
+      seenNow = seen;
+    }
+    return stream.stream.addEventCallback(callback, seenNow);
   }
 
   /**
@@ -109,6 +105,22 @@ public class Event implements Comparable<Event> {
    */
   public void removeCallback(int tag) {
     stream.removeCallback(tag);
+  }
+
+  /**
+   * Add a callback that is invoked once when the event ends, with the exception that ended it.
+   * It is invoked straight away if the event has already ended. Returns an integer tag for the
+   * callback, which allows it to be removed using removeEndCallback()
+   */
+  public int addEndCallback(Consumer<Exception> callback) {
+    return stream.addEndCallback(callback);
+  }
+
+  /**
+   * Remove an end callback based on its tag.
+   */
+  public void removeEndCallback(int tag) {
+    stream.removeEndCallback(tag);
   }
 
   /**

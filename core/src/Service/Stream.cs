@@ -8,7 +8,7 @@ namespace KRPC.Service
     /// <summary>
     /// A stream.
     /// </summary>
-    public abstract class Stream : Equatable<Stream>
+    public abstract class Stream
     {
         internal StreamResult StreamResult { get; private set; }
 
@@ -20,11 +20,7 @@ namespace KRPC.Service
         float rate;
         float delay;
         Stopwatch timer;
-
-        /// <summary>
-        /// Whether the stream has been started.
-        /// </summary>
-        public bool Started { get; private set; }
+        bool updated;
 
         /// <summary>
         /// The value of the stream.
@@ -54,20 +50,9 @@ namespace KRPC.Service
         protected Stream ()
         {
             StreamResult = new StreamResult ();
-            Started = false;
             rate = 0;
             delay = 0;
-            timer = new Stopwatch();
-        }
-
-        /// <summary>
-        /// Start the stream.
-        /// </summary>
-        public void Start()
-        {
-            Started = true;
-            Changed |= StreamResult.Result.HasValue || StreamResult.Result.HasError;
-            timer.Start();
+            timer = Stopwatch.StartNew ();
         }
 
         /// <summary>
@@ -86,9 +71,11 @@ namespace KRPC.Service
         /// Rate limiting is applied by this method.
         /// </summary>
         public void Update() {
-            if (rate != 0 && timer.ElapsedMilliseconds < delay) {
+            // The first update is never rate limited, so a new stream sends its value at once
+            if (updated && rate != 0 && timer.ElapsedMilliseconds < delay) {
                 return;
             }
+            updated = true;
             UpdateInternal();
             if (rate != 0) {
                 timer.Reset();
@@ -100,6 +87,17 @@ namespace KRPC.Service
         /// Implements the actual stream update.
         /// </summary>
         public virtual void UpdateInternal() {
+        }
+
+        /// <summary>
+        /// Set the result to an error, which ends the stream once it is sent.
+        /// </summary>
+        internal void SetError (System.Exception exn)
+        {
+            var result = StreamResult.Result;
+            result.Reset ();
+            result.Error = Services.Instance.HandleException (exn);
+            Changed = true;
         }
 
         /// <summary>

@@ -54,7 +54,7 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Trigger the event.
+        /// Trigger the event. Call from the thread that updates the server.
         /// </summary>
         public void Trigger ()
         {
@@ -62,8 +62,12 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Remove the event.
+        /// End the event, once its firings are sent.
         /// </summary>
+        /// <remarks>
+        /// The client receives a <see cref="KRPC.StreamRemovedException"/>.
+        /// Call from the thread that updates the server.
+        /// </remarks>
         public void Remove ()
         {
             stream.Remove ();

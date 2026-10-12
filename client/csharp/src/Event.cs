@@ -11,6 +11,7 @@ namespace KRPC.Client
     public class Event : IEquatable<Event>
     {
         readonly Stream<bool> stream;
+        long seen;
 
         internal Event (Connection connection, KRPC.Schema.KRPC.Event evnt)
         {
@@ -71,13 +72,6 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Start the event
-        /// </summary>
-        public void Start() {
-            stream.Start(false);
-        }
-
-        /// <summary>
         /// Condition variable that is notified when the event occurs.
         /// </summary>
         public object Condition {
@@ -85,26 +79,37 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Wait until the event occurs.
+        /// Wait until the event occurs or a timeout in seconds. Returns true if the event
+        /// occurred, and false on a timeout.
         /// </summary>
-        public void Wait (double timeout = -1) {
-            if (!stream.stream.Started)
-                Start();
-            stream.stream.Value = false;
-            while (!stream.Get ()) {
-                var origValue = stream.Get ();
-                stream.Wait (timeout);
-                if (timeout >= 0 && stream.Get () == origValue)
-                    // Value did not change, must have timed out
-                    return;
-            }
+        /// <remarks>
+        /// Returns straight away if the event has occurred since the previous wait on this
+        /// event object. Throws the exception that ended the event, if it ends before or during
+        /// the wait.
+        /// </remarks>
+        public bool Wait (double timeout = -1) {
+            var impl = stream.stream;
+            // A firing not yet seen is returned before the ending
+            var last = seen;
+            if (!impl.Wait (() => impl.Fired > last, timeout))
+                return false;
+            seen = impl.Fired;
+            return true;
         }
 
         /// <summary>
-        /// Add a callback that is invoked whenever the stream is updated.
+        /// Add a callback that is invoked whenever the event occurs.
         /// </summary>
+        /// <remarks>
+        /// The callback is invoked straight away, once, if the event has not ended and has fired
+        /// since the last wait on this event object returned and since its callbacks were last
+        /// invoked. An error ends the event and does not invoke the callback.
+        /// </remarks>
         public int AddCallback (Action callback) {
-            return stream.AddCallback ((bool x) => { if (x) callback(); });
+            long last;
+            lock (stream.Condition)
+                last = seen;
+            return stream.stream.AddEventCallback (callback, last);
         }
 
         /// <summary>
@@ -112,6 +117,24 @@ namespace KRPC.Client
         /// </summary>
         public void RemoveCallback (int key) {
             stream.RemoveCallback (key);
+        }
+
+        /// <summary>
+        /// Add a callback that is invoked once when the event ends, with the exception that
+        /// ended it.
+        /// </summary>
+        /// <remarks>
+        /// The callback is invoked straight away if the event has already ended.
+        /// </remarks>
+        public int AddEndCallback (Action<System.Exception> callback) {
+            return stream.AddEndCallback (callback);
+        }
+
+        /// <summary>
+        /// Remove an end callback, based on its tag.
+        /// </summary>
+        public void RemoveEndCallback (int tag) {
+            stream.RemoveEndCallback (tag);
         }
 
         /// <summary>

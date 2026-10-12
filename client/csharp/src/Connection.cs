@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net;
@@ -163,7 +164,7 @@ namespace KRPC.Client
                     streamReader.Buffer, streamReader.Offset, streamReader.Size);
                 if (response.Status != ConnectionResponse.Types.Status.Ok)
                     throw new ConnectionException (response.Message);
-                StreamManager = new StreamManager (this, streamReader);
+                StreamManager = new StreamManager (this, streamReader, streamSocket.Close);
             }
 
             Services.KRPC.Service.AddExceptionTypes (this);
@@ -198,10 +199,9 @@ namespace KRPC.Client
                     rpcSocket.Close ();
                     if (streamSocket != null)
                         streamSocket.Close ();
-                    // Join the update thread, so that it has ended by the time this returns.
-                    // This has to come after the sockets are closed: the thread spends its time
-                    // blocked in a read that does not observe the stop event, and closing the
-                    // socket underneath it releases the read.
+                    // Closing the sockets releases the read the update thread blocks in, so the
+                    // stream manager can then join the thread. The stream manager skips the join
+                    // on the update thread, or when this thread holds a stream's condition.
                     if (StreamManager != null)
                         StreamManager.Dispose ();
                 }
@@ -215,6 +215,12 @@ namespace KRPC.Client
                 throw new ObjectDisposedException (GetType ().Name);
         }
 
+        void CheckStreamServer ()
+        {
+            if (StreamManager == null)
+                throw new InvalidOperationException ("The connection has no stream server");
+        }
+
         /// <summary>
         /// Create a new stream from the given lambda expression.
         /// Returns a stream object that can be used to obtain the latest value of the stream.
@@ -224,6 +230,7 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
+            CheckStreamServer ();
             return AddStreamFromExpression<TResult> (expression);
         }
 
@@ -233,6 +240,7 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (Expression<Func<TResult>> expression)
         {
             CheckDisposed ();
+            CheckStreamServer ();
             return AddStreamFromExpression<TResult> (expression);
         }
 
@@ -255,6 +263,163 @@ namespace KRPC.Client
         /// </summary>
         public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
+            return Invoke (service, procedure, arguments, StreamReturnType (service, procedure));
+        }
+
+        // The type returned by each procedure called through the overload without one, by
+        // service and then procedure. Null for a procedure that returns no stream or event.
+        readonly ConcurrentDictionary<string, ConcurrentDictionary<string, System.Type>> streamReturnTypes =
+            new ConcurrentDictionary<string, ConcurrentDictionary<string, System.Type>> ();
+        readonly object listingLock = new object ();
+        IDictionary<string, System.Type> listedReturnTypes;
+
+        /// <summary>
+        /// The type a procedure returns if it is a stream or an event, and null otherwise. Looked
+        /// up in the service's stubs, or in the server's list of services if the stubs are not
+        /// loaded. Stubs from an earlier version of the client pass no type.
+        /// </summary>
+        System.Type StreamReturnType (string service, string procedure)
+        {
+            if (StreamManager == null)
+                return null;
+            ConcurrentDictionary<string, System.Type> types;
+            if (!streamReturnTypes.TryGetValue (service, out types))
+                types = streamReturnTypes.GetOrAdd (service, new ConcurrentDictionary<string, System.Type> ());
+            System.Type type;
+            if (types.TryGetValue (procedure, out type))
+                return type;
+            bool found;
+            type = StubReturnType (service, procedure, out found);
+            if (!found) {
+                var listed = ListedReturnTypes ();
+                // Not stored, as the update thread does not fetch the list
+                if (listed == null)
+                    return null;
+                listed.TryGetValue (service + "." + procedure, out type);
+            }
+            types [procedure] = type;
+            return type;
+        }
+
+        /// <summary>
+        /// The return types the server lists, fetched once per connection. Null on the update
+        /// thread before they are fetched, as a call there can wait behind a callback.
+        /// </summary>
+        IDictionary<string, System.Type> ListedReturnTypes ()
+        {
+            lock (listingLock) {
+                if (listedReturnTypes == null) {
+                    if (StreamManager.OnUpdateThread)
+                        return null;
+                    listedReturnTypes = ListStreamReturnTypes ();
+                }
+                return listedReturnTypes;
+            }
+        }
+
+        /// <summary>
+        /// The procedures the server lists that return a stream or an event, by service and
+        /// procedure name, with the type each returns.
+        /// </summary>
+        internal IDictionary<string, System.Type> ListStreamReturnTypes ()
+        {
+            var types = new Dictionary<string, System.Type> ();
+            global::KRPC.Schema.KRPC.Services services;
+            try {
+                services = global::KRPC.Schema.KRPC.Services.Parser.ParseFrom (
+                    Invoke ("KRPC", "GetServices", null, typeof (global::KRPC.Schema.KRPC.Services)).Value);
+            } catch (System.Exception) {
+                // Best effort, as an id not noted keeps its early results only while it is
+                // above every noted id
+                return types;
+            }
+            foreach (var service in services.Services_) {
+                foreach (var procedure in service.Procedures) {
+                    if (procedure.ReturnType == null)
+                        continue;
+                    var code = procedure.ReturnType.Code;
+                    if (code == global::KRPC.Schema.KRPC.Type.Types.TypeCode.Stream)
+                        types [service.Name + "." + procedure.Name] = typeof (global::KRPC.Schema.KRPC.Stream);
+                    else if (code == global::KRPC.Schema.KRPC.Type.Types.TypeCode.Event)
+                        types [service.Name + "." + procedure.Name] = typeof (Event);
+                }
+            }
+            return types;
+        }
+
+        // The type returned by each procedure in the loaded stubs, by service and then procedure
+        static readonly ConcurrentDictionary<string, IDictionary<string, System.Type>> stubReturnTypes =
+            new ConcurrentDictionary<string, IDictionary<string, System.Type>> ();
+
+        /// <summary>
+        /// The type a procedure returns if it is a stream or an event, and null otherwise, from
+        /// the service's stubs. Found is false if the stubs are not loaded or lack the procedure.
+        /// </summary>
+        static System.Type StubReturnType (string service, string procedure, out bool found)
+        {
+            IDictionary<string, System.Type> types;
+            if (!stubReturnTypes.TryGetValue (service, out types)) {
+                types = FindStubReturnTypes (service);
+                if (types == null) {
+                    found = false;
+                    return null;
+                }
+                stubReturnTypes [service] = types;
+            }
+            System.Type type;
+            found = types.TryGetValue (procedure, out type);
+            // A property setter carries no attribute, and returns nothing
+            if (!found && (procedure.StartsWith ("set_", StringComparison.Ordinal) ||
+                           procedure.Contains ("_set_")))
+                found = true;
+            if (type == typeof (global::KRPC.Schema.KRPC.Stream) || type == typeof (Event))
+                return type;
+            return null;
+        }
+
+        /// <summary>
+        /// The type returned by each procedure of a service, read from the attributes of its
+        /// stubs. Null if the stubs are not loaded.
+        /// </summary>
+        static IDictionary<string, System.Type> FindStubReturnTypes (string service)
+        {
+            var ns = "KRPC.Client.Services." + service;
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies ()) {
+                if (assembly.GetType (ns + ".Service") == null)
+                    continue;
+                System.Type[] classes;
+                try {
+                    classes = assembly.GetTypes ();
+                } catch (ReflectionTypeLoadException exn) {
+                    classes = exn.Types;
+                }
+                var types = new Dictionary<string, System.Type> ();
+                const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance |
+                    BindingFlags.Static | BindingFlags.DeclaredOnly;
+                foreach (var cls in classes) {
+                    if (cls == null || cls.Namespace != ns)
+                        continue;
+                    foreach (var member in cls.GetMembers (flags)) {
+                        var attribute = (RPCAttribute)Attribute.GetCustomAttribute (member, typeof (RPCAttribute));
+                        if (attribute == null || attribute.Service != service)
+                            continue;
+                        var method = member as MethodInfo;
+                        var property = member as PropertyInfo;
+                        types [attribute.Procedure] =
+                            method != null ? method.ReturnType : property != null ? property.PropertyType : null;
+                    }
+                }
+                return types;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Invoke a remote procedure that returns a value of the given type.
+        /// Should not be called directly. This interface is used by service client stubs.
+        /// </summary>
+        public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments, System.Type returnType)
+        {
             CheckDisposed ();
             Response response;
 
@@ -268,6 +433,8 @@ namespace KRPC.Client
                 rpcReader.Read ();
                 response = Response.Parser.ParseFrom (
                     rpcReader.Buffer, rpcReader.Offset, rpcReader.Size);
+                NoteStreamId (response, returnType);
+                NoteStreamRemoved (service, procedure, arguments, response);
             }
 
             if (response.Error != null)
@@ -275,6 +442,56 @@ namespace KRPC.Client
             if (response.Results[0].Error != null)
                 throw GetException (response.Results [0].Error);
             return response.Results[0];
+        }
+
+        /// <summary>
+        /// Note the id of a stream or event the server returned. Called in the order the
+        /// replies arrive, so the stream manager keeps the latest value and an ending sent for
+        /// the stream before it is registered.
+        /// </summary>
+        internal void NoteStreamId (Response response, System.Type returnType)
+        {
+            if (StreamManager == null || returnType == null)
+                return;
+            var isStream = returnType == typeof(global::KRPC.Schema.KRPC.Stream);
+            if (!isStream && returnType != typeof(Event))
+                return;
+            if (response.Error != null || response.Results.Count == 0)
+                return;
+            var result = response.Results [0];
+            if (result.Error != null || result.IsNull)
+                return;
+            global::KRPC.Schema.KRPC.Stream stream;
+            try {
+                stream = isStream
+                    ? global::KRPC.Schema.KRPC.Stream.Parser.ParseFrom (result.Value)
+                    : global::KRPC.Schema.KRPC.Event.Parser.ParseFrom (result.Value).Stream;
+            } catch (InvalidProtocolBufferException) {
+                // The call has succeeded, and its caller decodes the value
+                return;
+            }
+            if (stream != null)
+                StreamManager.NoteIssued (stream.Id);
+        }
+
+        /// <summary>
+        /// Stop keeping results for a stream id removed by a call to KRPC.RemoveStream, made
+        /// through any stub.
+        /// </summary>
+        void NoteStreamRemoved (string service, string procedure, IList<ByteString> arguments, Response response)
+        {
+            if (StreamManager == null || procedure != "RemoveStream" || service != "KRPC" ||
+                arguments == null || arguments.Count != 1 || arguments [0] == null)
+                return;
+            if (response.Error != null || response.Results.Count == 0 || response.Results [0].Error != null)
+                return;
+            ulong id;
+            try {
+                id = new CodedInputStream (arguments [0].ToByteArray ()).ReadUInt64 ();
+            } catch (InvalidProtocolBufferException) {
+                return;
+            }
+            StreamManager.NoteRemoved (id);
         }
 
         /// <summary>
@@ -476,7 +693,9 @@ namespace KRPC.Client
             return instanceExpr.Compile () ();
         }
 
-        readonly IDictionary<string, System.Type> exceptionTypes = new Dictionary<string, System.Type>();
+        // Read by the stream update thread while a service registers its exception types
+        readonly ConcurrentDictionary<string, System.Type> exceptionTypes =
+            new ConcurrentDictionary<string, System.Type> ();
 
         /// <summary>
         /// Add an exception type to the client.

@@ -27,8 +27,8 @@ namespace KRPC.Service
         /// Calling this method again will then re-execute the procedure call that yielded.
         /// If the procedure completes a return value is returned, and the continuation is reset
         /// such that it can be called again.
-        /// If the procedure throws an exception, the continuation should not be run
-        /// again (the stream should be removed from the server).
+        /// If the procedure throws an exception that holds the stream, the continuation is reset.
+        /// Any other exception ends the stream, and the continuation cannot be run again.
         /// </summary>
         public ProcedureResult Run ()
         {
@@ -42,8 +42,9 @@ namespace KRPC.Service
             } catch (YieldException<ProcedureCallContinuation> e) {
                 continuation = e.Value;
                 throw new YieldException<StreamContinuation> (this);
-            } catch (System.Exception) {
-                continuation = null;
+            } catch (System.Exception e) {
+                // A held stream is run again from the start
+                continuation = Services.IsHeld (e) ? originalContinuation : null;
                 throw;
             }
         }
@@ -63,8 +64,9 @@ namespace KRPC.Service
             } catch (YieldException<ProcedureCallContinuation> e) {
                 continuation = e.Value;
                 throw new YieldException<StreamContinuation> (this);
-            } catch (System.Exception) {
-                continuation = null;
+            } catch (System.Exception e) {
+                // A held stream is run again from the start
+                continuation = Services.IsHeld (e) ? originalContinuation : null;
                 throw;
             }
         }

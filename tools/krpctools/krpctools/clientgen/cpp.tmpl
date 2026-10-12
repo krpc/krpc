@@ -6,8 +6,8 @@ _args.reserve({{ parameters | length }});
 _args.push_back(encoder::encode_arg({{x.name}}));
 {% endfor %}
 {% endmacro %}
-{% macro call(service, procedure, has_return, has_args, is_static=False) %}
-{% if has_return %}auto _data = {% endif %}{% if is_static %}_client.{% else %}this->_client->{% endif %}invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% macro call(service, procedure, return_type, has_args, is_static=False) %}
+{% if return_type != 'void' %}auto _data = {% endif %}{% if is_static %}_client.{% else %}this->_client->{% endif %}invoke("{{service}}", "{{procedure}}", {% if has_args %}_args{% else %}{}{% endif %}, ::krpc::Client::Returns::{% if return_type in ('::krpc::Event', 'std::optional<::krpc::Event>') %}event{% elif return_type in ('krpc::schema::Stream', 'std::optional<krpc::schema::Stream>') %}stream{% else %}value{% endif %});
 {% endmacro %}
 {% macro return(type, set_client, is_static=False) %}
 {{type}} _result{};
@@ -401,7 +401,7 @@ inline {{ service_name }}::{{ service_name }}(Client* client):
 inline {{ procedure.return_type }} {{ service_name }}::{{ procedure_name }}({{ impl_parameters(procedure.parameters) }}) {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=2) }}
 {% endif %}
-{{ call(service_name, procedure.remote_name, procedure.return_type != 'void', procedure.parameters | length > 0) | indent(width=2) }}
+{{ call(service_name, procedure.remote_name, procedure.return_type, procedure.parameters | length > 0) | indent(width=2) }}
 {% if procedure.return_type != 'void' %}{{ return(procedure.return_type, procedure.return_set_client) | indent(width=2) }}
 {% endif %}
 }
@@ -432,7 +432,7 @@ inline {{ service_name }}::{{ class_name }}::{{ class_name }}(Client* client, ui
 
 inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters(method.parameters) }}) {
 {{ args([{'name': '*this'}] + method.parameters) | indent(width=2) }}
-{{ call(service_name, method.remote_name, method.return_type != 'void', True) | indent(width=2) }}
+{{ call(service_name, method.remote_name, method.return_type, True) | indent(width=2) }}
 {% if method.return_type != 'void' %}{{ return(method.return_type, method.return_set_client) | indent(width=2) }}
 {% endif %}
 }
@@ -442,7 +442,7 @@ inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_
 inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}  {{ args(method.parameters) | indent(width=2) }}
 {% endif %}
-{{ call(service_name, method.remote_name, method.return_type != 'void', method.parameters | length > 0, True) | indent(width=2) }}
+{{ call(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
 {% if method.return_type != 'void' %}  {{ return(method.return_type, method.return_set_client, True) | indent(width=2) }}
 {% endif %}
 }

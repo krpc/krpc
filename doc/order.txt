@@ -6,7 +6,6 @@ KRPC.GetStatus
 KRPC.GetServices
 KRPC.AddStream
 KRPC.RemoveStream
-KRPC.StartStream
 KRPC.SetStreamRate
 KRPC.AddEvent
 KRPC.HoldTick
@@ -89,6 +88,7 @@ KRPC.ArgumentOutOfRangeException
 KRPC.ObjectDestroyedException
 KRPC.ObjectNotLoadedException
 KRPC.UnsupportedSceneException
+KRPC.StreamRemovedException
 SpaceCenter
 SpaceCenter.GameMode
 SpaceCenter.Expansions

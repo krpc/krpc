@@ -616,11 +616,14 @@ namespace KRPC
                     // Update streams
                     bool changed = false;
                     foreach (var stream in clientStreams) {
-                        if (stream.Started) {
-                            stream.Update();
-                            rpcsExecuted++;
-                            changed |= stream.Changed;
+                        // An exception fails only this stream
+                        try {
+                            stream.Update ();
+                        } catch (System.Exception exn) {
+                            stream.SetError (exn);
                         }
+                        rpcsExecuted++;
+                        changed |= stream.Changed;
                     }
                     // If anything changed, produce an update
                     if (changed) {
@@ -777,24 +780,14 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Add a stream to the server.
+        /// Add a stream to the server, with a new id.
         /// </summary>
-        internal ulong AddStream (IClient rpcClient, Service.Stream stream, bool requireNew = true)
+        internal ulong AddStream (IClient rpcClient, Service.Stream stream)
         {
             var id = rpcClient.Guid;
             if (!streamClients.ContainsKey (id))
                 throw new InvalidOperationException ("No stream client is connected for this RPC client");
             var streamClient = streamClients [id];
-
-            foreach (var entry in streams [streamClient]) {
-                if (stream == entry.Value) {
-                    // Prevent race condition when removing and re-adding streams by checking if the added stream was marked for removal
-                    removeStreams.Remove(entry.Key);
-                    if (requireNew)
-                        throw new ArgumentException ("Stream already exists", nameof (stream));
-                    return entry.Key;
-                }
-            }
 
             stream.Id = nextStreamId;
             nextStreamId++;
@@ -807,32 +800,15 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Start a stream.
-        /// </summary>
-        internal void StartStream(IClient rpcClient, ulong streamId)
-        {
-            var id = rpcClient.Guid;
-            if (!streamClients.ContainsKey(id))
-                throw new InvalidOperationException("No stream client is connected for this RPC client");
-            var streamClient = streamClients[id];
-            if (!streams[streamClient].ContainsKey(streamId))
-                throw new InvalidOperationException("Stream does not exist with this id");
-            streams [streamClient] [streamId].Start ();
-            Logger.WriteLine("Started stream " + streamId + " for client " + streamClient.Address, Logger.Severity.Debug);
-        }
-
-        /// <summary>
         /// Set the update rate for a stream.
         /// </summary>
         internal void SetStreamRate(IClient rpcClient, ulong streamId, float rate)
         {
-            var id = rpcClient.Guid;
-            if (!streamClients.ContainsKey(id))
-                throw new InvalidOperationException("No stream client is connected for this RPC client");
-            var streamClient = streamClients[id];
-
-            streams [streamClient] [streamId].Rate = rate;
-            Logger.WriteLine("Set rate for stream for client " + streamClient.Address, Logger.Severity.Debug);
+            var stream = GetStream (rpcClient, streamId);
+            if (stream == null)
+                return;
+            stream.Rate = rate;
+            Logger.WriteLine("Set rate for stream " + streamId, Logger.Severity.Debug);
         }
 
         /// <summary>
@@ -840,33 +816,34 @@ namespace KRPC
         /// </summary>
         internal void RemoveStream (IClient rpcClient, ulong streamId)
         {
-            var id = rpcClient.Guid;
-            if (!streamClients.ContainsKey (id))
-                throw new InvalidOperationException ("No stream client is connected for this RPC client");
-            var streamClient = streamClients [id];
-            var clientStreams = streams [streamClient];
-            if (!clientStreams.ContainsKey (streamId))
+            if (GetStream (rpcClient, streamId) == null)
                 return;
-            removeStreams[streamId] = streamClient;
+            removeStreams[streamId] = streamClients [rpcClient.Guid];
         }
 
         /// <summary>
-        /// Remove a stream from the server, for all clients.
+        /// The client's stream with the given id, or null if the stream has ended.
+        /// Throws an exception if the id has never been issued.
         /// </summary>
-        internal void RemoveStream (ulong streamId)
+        Service.Stream GetStream (IClient rpcClient, ulong streamId)
         {
-            foreach (var entry in streams) {
-                var streamClient = entry.Key;
-                var clientStreams = entry.Value;
-                if (clientStreams.ContainsKey (streamId))
-                    removeStreams[streamId] = streamClient;
-            }
+            IClient<NoMessage,StreamUpdate> streamClient;
+            if (!streamClients.TryGetValue (rpcClient.Guid, out streamClient))
+                throw new InvalidOperationException ("No stream client is connected for this RPC client");
+            if (streamId >= nextStreamId)
+                throw new ArgumentException ("No stream exists with id " + streamId, nameof (streamId));
+            Service.Stream stream;
+            streams [streamClient].TryGetValue (streamId, out stream);
+            return stream;
         }
 
         private void RemoveStreamInternal (IClient<NoMessage,StreamUpdate> client, ulong id)
         {
             if (streams.ContainsKey (client) && streams [client].ContainsKey (id)) {
                 streams [client].Remove (id);
+                var stream = client.Stream as Server.Message.StreamStream;
+                if (stream != null)
+                    stream.Removed (id);
                 Logger.WriteLine ("Removed stream " + id + " for client " + client.Address, Logger.Severity.Debug);
                 StreamRPCs--;
             }

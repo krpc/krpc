@@ -111,6 +111,11 @@ stream can be obtained by calling :func:`krpc.stream.Stream.__call__`. A stream 
 removed from the server by calling :func:`krpc.stream.Stream.remove` on the stream object. All of a
 clients streams are automatically stopped when it disconnects.
 
+.. note::
+
+   A stream runs on the server until you remove it or the connection closes, even once the stream
+   object is garbage collected. Each call to ``add_stream`` adds another stream.
+
 Synchronizing with Stream Updates
 ---------------------------------
 
@@ -139,12 +144,6 @@ The body of the loop calls ``wait`` on the stream, which causes the program to b
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
 whilst waiting.
 
-.. note::
-
-   The stream does not start receiving updates until the first call to ``wait``. This means that the
-   example code will not miss any updates to the streams value, as it will have already locked the
-   condition variable before the first stream update is received.
-
 The example code above uses a ``with`` statement to acquire the lock on the condition variable. This
 can also be done explicitly using ``acquire`` and ``release``:
 
@@ -162,20 +161,36 @@ For example the following program registers two callbacks that are invoked when 
 
 .. literalinclude:: /scripts/client/python/Callbacks.py
 
-.. note::
-
-   When a stream is created it does not start receiving updates until ``start`` is called. This is
-   implicitly called when accessing the value of a stream, but as this example does not do this an
-   explicit call to ``start`` is required.
+A callback added to a stream that already has a value is called with that value straight away.
 
 .. note::
 
-   The callbacks are registered before the call to ``start`` so that stream updates are not missed.
+   The callback function may be called from a different thread than the one that created the
+   stream. Any changes to shared state must therefore be protected with appropriate
+   synchronization.
 
-.. note::
+Stream Endings
+^^^^^^^^^^^^^^
 
-   The callback function may be called from a different thread to that which created the stream. Any
-   changes to shared state must therefore be protected with appropriate synchronization.
+The following example streams the temperature of a part until the part is destroyed:
+
+.. literalinclude:: /scripts/client/python/StreamEnd.py
+
+Once a stream ends, calling the stream or waiting on it raises the exception that ended it. A stream
+ends when its procedure raises an exception, when the server removes it, when you remove it, or when
+the connection closes.
+
+A stream that the server removes, such as an event that has finished, ends with
+``StreamRemovedException`` from the ``KRPC`` service. A stream you remove ends with ``StreamError``,
+and a closed connection with ``ConnectionError``.
+
+An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.
+
+.. seealso:: :doc:`/tutorials/object-lifetime`
+
+To handle an ending in a callback, add an end callback with
+:meth:`krpc.stream.Stream.add_end_callback`. It is called once, with the exception.
 
 .. _python-client-events:
 
@@ -192,6 +207,10 @@ expression ``mean_altitude > 1000`` and then creates an event that will be trigg
 expression returns true:
 
 .. literalinclude:: /scripts/client/python/Event.py
+
+A call to ``wait`` returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+``wait`` return once.
 
 Client API Reference
 --------------------
@@ -252,7 +271,7 @@ Client API Reference
    .. method:: add_stream(func, *args, **kwargs)
 
       Create a stream for the function *func* called with arguments *args* and *kwargs*. Returns a
-      :class:`krpc.stream.Stream` object.
+      :class:`krpc.stream.Stream` object. Each call creates a new stream.
 
    .. method:: stream(func, *args, **kwargs)
 
@@ -280,7 +299,7 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
+         The callback function may be called from a different thread than the one that created the
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
@@ -318,30 +337,15 @@ Client API Reference
 
    This class represents a stream. See :ref:`python-client-streams`.
 
-   .. method:: start(wait=True)
-
-      Starts the stream. When a stream is created by calling :meth:`krpc.client.Client.add_stream`
-      it does not start sending updates to the client until this method is called.
-
-      If wait is true, this method will block until at least one update has been received from the
-      server.
-
-      If wait is false, the method starts the stream and returns immediately. Subsequent calls to
-      :meth:`__call__` may raise a ``StreamError`` exception if the stream does not yet contain a
-      value.
-
    .. attribute:: rate
 
       The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
 
    .. method:: __call__()
 
-      Returns the most recent value for the stream. If executing the remote procedure for the stream
-      throws an exception, calling this method will rethrow the exception. Raises a ``StreamError``
-      exception if no update has been received from the server.
-
-      If the stream has not been started this method calls ``start(True)`` to start the stream and
-      wait until at least one update has been received.
+      Returns the most recent value for the stream, waiting for the first value if none has arrived
+      yet. Raises the exception that ended the stream, if it has ended, such as an exception thrown
+      by the remote procedure.
 
    .. attribute:: condition
 
@@ -350,24 +354,26 @@ Client API Reference
 
    .. method:: wait(timeout=None)
 
-      This method blocks until the value of the stream changes or the operation times out.
+      This method blocks until the value of the stream changes or the operation times out. Returns
+      ``True`` if the value changed, and ``False`` on a timeout.
 
       The streams condition variable must be locked before calling this method.
 
       If *timeout* is specified and is not ``None``, it should be a floating point number specifying
       the timeout in seconds for the operation.
 
-      If the stream has not been started this method calls ``start(False)`` to start the stream
-      (without waiting for at least one update to be received).
+      Raises the exception that ended the stream, if it ends before or during the wait.
 
    .. method:: add_callback(callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
-      callback function should take one argument, which is passed the new value of the stream.
+      callback function should take one argument, which is passed the new value of the stream. If
+      the stream already has a value, the callback is invoked with it straight away.
+      An error from the stream does not invoke the callback. Calling the stream raises it.
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
+         The callback function may be called from a different thread than the one that created the
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
@@ -375,19 +381,24 @@ Client API Reference
 
       Removes a callback function from the stream.
 
+   .. method:: add_end_callback(callback)
+
+      Adds a callback function that is invoked once when the stream ends. The callback function
+      should take one argument, which is passed the exception that ended the stream. It is
+      invoked straight away if the stream has already ended.
+
+   .. method:: remove_end_callback(callback)
+
+      Removes an end callback function from the stream.
+
    .. method:: remove()
 
-      Removes the stream from the server.
+      Removes the stream from the server. Other streams of the same call are not affected.
 
 .. class:: krpc.event.Event
 
    This class represents an event. See :ref:`python-client-events`. It is wrapper around a stream of
    type ``bool`` that indicates when the event occurs.
-
-   .. method:: start()
-
-      Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called.
 
    .. attribute:: condition
 
@@ -396,24 +407,38 @@ Client API Reference
 
    .. method:: wait(timeout=None)
 
-      This method blocks until the event occurs or the operation times out.
+      This method blocks until the event occurs or the operation times out. It returns straight
+      away if the event has occurred since the previous call on this event object. Returns
+      ``True`` if the event occurred, and ``False`` on a timeout.
 
       The events condition variable must be locked before calling this method.
 
       If *timeout* is specified and is not ``None``, it should be a floating point number specifying
       the timeout in seconds for the operation.
 
-      If the event has not been started this method calls ``start()`` to start the underlying
-      stream.
+      Raises the exception that ended the event, if it ends before or during the wait.
 
    .. method:: add_callback(callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments.
+      should be a function that takes zero arguments. It is invoked straight away if the event
+      has occurred since the previous call to :meth:`krpc.event.Event.wait` on this event
+      object, and the event's callbacks have not been invoked for it. A callback added after the
+      event has ended is not invoked for an earlier firing. An error from the event does not invoke
+      the callback. Waiting on the event raises it.
 
    .. method:: remove_callback(callback)
 
       Removes a callback function from the event.
+
+   .. method:: add_end_callback(callback)
+
+      Adds a callback function that is invoked once when the event ends, with the exception that
+      ended it. It is invoked straight away if the event has already ended.
+
+   .. method:: remove_end_callback(callback)
+
+      Removes an end callback function from the event.
 
    .. method:: remove()
 

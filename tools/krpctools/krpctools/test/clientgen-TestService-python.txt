@@ -1667,6 +1667,27 @@ class TestService:
             self._client._types.string_type
         )
 
+    def remove_event_after(self, milliseconds: int) -> Event:
+        return self._client._invoke(
+            "TestService",
+            "RemoveEventAfter",
+            [milliseconds],
+            [self._client._types.uint32_type],
+            self._client._types.event_type
+        )
+
+    def _return_type_remove_event_after(self) -> TypeBase:
+        return self._client._types.event_type
+
+    def _build_call_remove_event_after(self, milliseconds: int) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "RemoveEventAfter",
+            [milliseconds],
+            [self._client._types.uint32_type],
+            self._client._types.event_type
+        )
+
     def reset_custom_exception_later(self) -> None:
         return self._client._invoke(
             "TestService",

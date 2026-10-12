@@ -96,6 +96,11 @@ value of the stream can be obtained by calling :meth:`Stream.get`. A stream can 
 removed from the server by calling :meth:`Stream.remove` on the stream object. All of a clients
 streams are automatically stopped when it disconnects.
 
+.. note::
+
+   A stream runs on the server until you remove it or the connection closes, even once the stream
+   object is garbage collected. Each call to ``addStream`` adds another stream.
+
 Synchronizing with Stream Updates
 ---------------------------------
 
@@ -106,9 +111,8 @@ and *callbacks*.
 Condition Variables
 ^^^^^^^^^^^^^^^^^^^
 
-Each stream has a condition variable associated with it, that is notified whenever the value of the
-stream changes. These can be used to block the current thread of execution until the value of the
-stream changes.
+Each stream has a condition variable that is notified whenever the value of the stream changes, and
+when the stream ends. You can wait on it to block the current thread until one of these happens.
 
 The following example waits until the abort button is pressed in game, by waiting for the value of
 :meth:`krpc.client.services.SpaceCenter.Control.getAbort()` to change to true:
@@ -123,12 +127,6 @@ The body of the loop calls ``waitForUpdate`` on the stream, which causes the pro
 the value changes. This prevents the loop from 'spinning' and so it does not consume processing
 resources whilst waiting.
 
-.. note::
-
-   The stream does not start receiving updates until the first call to ``waitForUpdate``. This means
-   that the example code will not miss any updates to the streams value, as it will have already
-   locked the condition variable before the first stream update is received.
-
 Callbacks
 ^^^^^^^^^
 
@@ -141,20 +139,36 @@ For example the following program registers two callbacks that are invoked when 
 
 .. literalinclude:: /scripts/client/java/Callbacks.java
 
-.. note::
-
-   When a stream is created it does not start receiving updates until ``start`` is called. This is
-   implicitly called when accessing the value of a stream, but as this example does not do this an
-   explicit call to ``start`` is required.
+A callback added to a stream that already has a value is called with that value straight away.
 
 .. note::
 
-   The callbacks are registered before the call to ``start`` so that stream updates are not missed.
+   The callback function may be called from a different thread than the one that created the
+   stream. Any changes to shared state must therefore be protected with appropriate
+   synchronization.
 
-.. note::
+Stream Endings
+^^^^^^^^^^^^^^
 
-   The callback function may be called from a different thread to that which created the stream. Any
-   changes to shared state must therefore be protected with appropriate synchronization.
+The following example streams the temperature of a part until the part is destroyed:
+
+.. literalinclude:: /scripts/client/java/StreamEnd.java
+
+Once a stream ends, getting its value or waiting on it throws the exception that ended it. A stream
+ends when its procedure throws an exception, when the server removes it, when you remove it, or when
+the connection closes.
+
+A stream that the server removes, such as an event that has finished, ends with
+``KRPC.StreamRemovedException``. A stream you remove ends with a ``StreamException``. A closed
+connection ends it with a ``StreamException`` whose cause is a ``ConnectionException``.
+
+An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.
+
+.. seealso:: :doc:`/tutorials/object-lifetime`
+
+To handle an ending in a callback, add an end callback with :meth:`Stream.addEndCallback`. It is
+called once, with the exception.
 
 .. _java-client-events:
 
@@ -171,6 +185,10 @@ expression ``MeanAltitude > 1000`` and then creates an event that will be trigge
 expression returns true:
 
 .. literalinclude:: /scripts/client/java/CustomEvent.java
+
+A call to ``waitFor`` returns straight away if the event has fired since the previous call on the
+same event object, so no firing is missed between two calls. Several firings between two calls make
+``waitFor`` return once.
 
 Client API Reference
 --------------------
@@ -254,19 +272,8 @@ Client API Reference
    This class represents a stream. See :rst:ref:`java-client-streams`.
 
    Stream objects implement ``hashCode`` and ``equals`` such that two stream objects are equal if
-   they are bound to the same stream on the server.
-
-   .. method:: void start()
-   .. method:: void startAndWait()
-
-      Starts the stream. When a stream is created it does not start sending updates to the client
-      until this method is called.
-
-      The ``startAndWait`` method will block until at least one update has been received from the
-      server.
-
-      The ``start`` method starts the stream and returns immediately. Subsequent calls to ``get()``
-      may throw a ``StreamException``.
+   they are bound to the same stream on the server. Each call to :meth:`Connection.addStream`
+   creates a new stream, so two streams added for the same call are not equal.
 
    .. method:: float getRate()
    .. method:: void setRate(float rate)
@@ -275,39 +282,39 @@ Client API Reference
 
    .. method:: T get()
 
-      Returns the most recent value for the stream. If executing the remote procedure for the stream
-      throws an exception, calling this method will rethrow the exception. Raises a
-      ``StreamException`` if no update has been received from the server.
-
-      If the stream has not been started this method calls ``startAndWait()`` to start the stream
-      and wait until at least one update has been received.
+      Returns the most recent value for the stream, waiting for the first value if none has
+      arrived yet. Throws the exception that ended the stream, if it has ended, such as an
+      exception thrown by the remote procedure.
 
    .. method:: Object getCondition()
 
       A condition variable that is notified (using ``notifyAll``) whenever the value of the stream
-      changes.
+      changes, and when the stream ends.
 
    .. method:: void waitForUpdate()
-   .. method:: void waitForUpdateWithTimeout(double timeout)
+   .. method:: boolean waitForUpdateWithTimeout(double timeout)
 
       These methods block until the value of the stream changes or the operation times out.
+      ``waitForUpdateWithTimeout`` returns ``true`` if the value changed, and ``false`` on a
+      timeout.
 
       The streams condition variable must be locked before calling this method.
 
       If *timeout* is specified it is the timeout in seconds for the operation.
 
-      If the stream has not been started this method calls ``start`` to start the stream (without
-      waiting for at least one update to be received).
+      Throws the exception that ended the stream, if it ends before or during the wait.
 
    .. method:: int addCallback(java.util.function.Consumer<T> callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
-      stream. Returns a unique identifier for the callback which can be used to remove it.
+      stream. If the stream already has a value, the callback is invoked with it straight away.
+      An error ends the stream and does not invoke the callback. Calling ``get()`` throws it.
+      Returns a unique identifier for the callback which can be used to remove it.
 
       .. note::
 
-         The callback function may be called from a different thread to that which created the
+         The callback function may be called from a different thread than the one that created the
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
@@ -316,9 +323,21 @@ Client API Reference
       Removes a callback function from the stream. The tag is the identifier returned when the
       callback was added.
 
+   .. method:: int addEndCallback(java.util.function.Consumer<Exception> callback)
+
+      Adds a callback function that is invoked once when the stream ends. The callback function
+      should take one argument, which is passed the exception that ended the stream. It is invoked
+      straight away if the stream has already ended. Returns a unique identifier for the callback
+      which can be used to remove it.
+
+   .. method:: void removeEndCallback(int tag)
+
+      Removes an end callback function from the stream. The tag is the identifier returned when
+      the callback was added.
+
    .. method:: void remove()
 
-      Remove the stream from the server.
+      Remove the stream from the server. Other streams added for the same call keep running.
 
 .. type:: class Event
 
@@ -328,36 +347,47 @@ Client API Reference
    Event objects implement ``hashCode`` and ``equals`` such that two event objects are equal if they
    are bound to the same underlying stream on the server.
 
-   .. method:: void start()
-
-      Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called.
-
    .. method:: Object getCondition()
 
-      The condition variable that is notified (using ``notifyAll``) whenever the event occurs.
+      The condition variable that is notified (using ``notifyAll``) whenever the event occurs, and
+      when the event ends.
 
    .. method:: void waitFor()
-   .. method:: void waitForWithTimeout(double timeout)
+   .. method:: boolean waitForWithTimeout(double timeout)
 
-      These methods block until the event occurs or the operation times out.
+      These methods block until the event occurs or the operation times out. They return straight
+      away if the event has occurred since the previous call on this event object.
+      ``waitForWithTimeout`` returns ``true`` if the event occurred, and ``false`` on a timeout.
 
       The events condition variable must be locked before calling this method.
 
       If *timeout* is specified it is the timeout in seconds for the operation.
 
-      If the event has not been started this method calls ``start()`` to start the underlying
-      stream.
+      Throws the exception that ended the event, if it ends before or during the wait.
 
    .. method:: int addCallback(java.lang.Runnable callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments. Returns an integer tag identifying the
-      callback which can be used to remove it later.
+      should be a function that takes zero arguments. If the event has occurred since the
+      last wait on this event object, and no callback has been invoked for it, the callback is
+      invoked straight away. A callback added after the event has ended is not invoked for an
+      earlier firing. An error ends the event and does not invoke the callback. Returns an integer
+      tag identifying the callback which can be used to remove it later.
 
    .. method:: void removeCallback(int tag)
 
       Removes a callback function from the event.
+
+   .. method:: int addEndCallback(java.util.function.Consumer<Exception> callback)
+
+      Adds a callback function that is invoked once when the event ends, with the exception that
+      ended it. It is invoked straight away if the event has already ended. Returns an integer tag
+      identifying the callback which can be used to remove it later.
+
+   .. method:: void removeEndCallback(int tag)
+
+      Removes an end callback function from the event. The tag is the identifier returned when
+      the callback was added.
 
    .. method:: void remove()
 

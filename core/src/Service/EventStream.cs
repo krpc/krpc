@@ -13,38 +13,64 @@ namespace KRPC.Service
 
         Func<bool> continuation;
         bool shouldRemove;
+        System.Exception pendingError;
 
         public EventStream ()
         {
-            Changed = false;
+            // The first update sends whether the event has fired
+            SetValue (false);
         }
 
-        public EventStream (Func<bool> eventContinuation)
+        public EventStream (Func<bool> eventContinuation) : this ()
         {
-            Changed = false;
             continuation = eventContinuation;
         }
 
-        public override bool Equals (Service.Stream other)
-        {
-            return ReferenceEquals (this, other);
-        }
-
-        public override int GetHashCode ()
-        {
-            return 0;
-        }
-
         public override void UpdateInternal() {
-            if (continuation != null && continuation())
-                Trigger();
-            if (shouldRemove)
-                Core.Instance.RemoveStream (Id);
+            // An error is sent after the firing it came with
+            if (pendingError != null) {
+                if (!HasUnsentFiring)
+                    SetError (pendingError);
+                return;
+            }
+            // An event that is ending does not fire again, so the end is sent
+            if (continuation != null && !shouldRemove) {
+                try {
+                    if (continuation ())
+                        Trigger ();
+                } catch (System.Exception e) {
+                    // An object that is not loaded, or a procedure not available in the scene,
+                    // holds the event
+                    if (Services.IsHeld (e))
+                        return;
+                    if (HasUnsentFiring)
+                        pendingError = e;
+                    else
+                        SetError (e);
+                    return;
+                }
+            }
+            // A firing and an error both reset the result, so the end waits for an update
+            // with no firing to send
+            if (shouldRemove && !HasUnsentFiring)
+                SetError (new KRPC.StreamRemovedException ("The event has finished"));
+        }
+
+        bool HasUnsentFiring {
+            get { return Changed && Result.HasValue && (bool)Result.Value; }
         }
 
         public void Trigger () {
-            Result.Spec = BoolSpec;
-            Result.Value = true;
+            SetValue (true);
+        }
+
+        // An error and a value are sent together, so setting the value clears the error
+        void SetValue (bool value)
+        {
+            var result = Result;
+            result.Reset ();
+            result.Spec = BoolSpec;
+            result.Value = value;
             Changed = true;
         }
 
@@ -55,7 +81,7 @@ namespace KRPC.Service
         public override void Sent () {
             Changed = false;
             var result = Result;
-            if ((bool)result.Value)
+            if (result.HasValue && (bool)result.Value)
                 result.Value = false;
         }
     }

@@ -673,6 +673,19 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, krpc_schema_Event * result, uint32_t milliseconds)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_ResetCustomExceptionLater(krpc_connection_t connection)
 
 

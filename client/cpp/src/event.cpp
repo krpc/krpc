@@ -1,8 +1,11 @@
 #include "krpc/event.hpp"
 
+#include <cstdint>
 #include <memory>
+#include <mutex>  // NOLINT(build/c++11)
 #include <string>
 
+#include "krpc/condition.hpp"
 #include "krpc/krpc.pb.hpp"
 #include "krpc/stream_impl.hpp"
 
@@ -15,11 +18,9 @@ Event::Event() {}
 Event::Event(Client* client, const krpc::schema::Event& message)
     : _stream(client, message.stream().id()) {}
 
-void Event::start() { _stream.start(false); }
+Condition& Event::get_condition() const { return _stream.get_condition(); }
 
-std::condition_variable& Event::get_condition() const { return _stream.get_condition(); }
-
-std::unique_lock<std::mutex>& Event::get_condition_lock() const {
+std::unique_lock<RecursiveMutex>& Event::get_condition_lock() const {
   return _stream.get_condition_lock();
 }
 
@@ -27,23 +28,41 @@ void Event::acquire() { _stream.acquire(); }
 
 void Event::release() { _stream.release(); }
 
-void Event::wait(double timeout) {
-  start();
-  _stream.impl->update(std::string("\x00", 1), false, nullptr);
-  while (!_stream()) {
-    bool origValue = _stream();
-    _stream.wait(timeout);
-    if (timeout >= 0 && _stream() == origValue)
-      // Value did not change, must have timed out
-      return;
-  }
+bool Event::wait(double timeout) {
+  _stream.check_exists();
+  auto& impl = _stream.impl;
+  std::lock_guard<RecursiveMutex> held(impl->get_condition_mutex());
+  // A firing not yet seen returns before an ending is thrown
+  auto last_seen = seen;
+  if (!impl->wait(timeout, [&impl, last_seen] { return impl->get_fired() > last_seen; }))
+    return false;
+  seen = impl->get_fired();
+  return true;
 }
 
 int Event::add_callback(const Callback& callback) {
-  return _stream.add_callback([callback](bool _) { callback(); });
+  _stream.check_exists();
+  auto& impl = _stream.impl;
+  uint64_t last_seen = 0;
+  {
+    std::lock_guard<RecursiveMutex> held(impl->get_condition_mutex());
+    last_seen = seen;
+  }
+  return impl->add_event_callback(
+      [callback](const std::string& data, bool is_null) {
+        // An encoded bool true
+        if (!is_null && data == "\x01") callback();
+      },
+      last_seen);
 }
 
 void Event::remove_callback(int tag) { return _stream.remove_callback(tag); }
+
+int Event::add_end_callback(const EndCallback& callback) {
+  return _stream.add_end_callback(callback);
+}
+
+void Event::remove_end_callback(int tag) { _stream.remove_end_callback(tag); }
 
 void Event::remove() { _stream.remove(); }
 

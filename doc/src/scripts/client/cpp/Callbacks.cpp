@@ -18,7 +18,6 @@ int main() {
 
   abort.add_callback(check_abort1);
   abort.add_callback(check_abort2);
-  abort.start();
 
   // Keep the program running...
   while (true) {

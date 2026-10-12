@@ -30,7 +30,7 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (5, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (73, service.Procedures.Count);
+            Assert.AreEqual (72, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (1, service.Enumerations.Count);
 
@@ -54,15 +54,9 @@ namespace KRPC.Test.Service.KRPC
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "AddStream") {
                     MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.Messages.Stream));
-                    MessageAssert.HasParameters (proc, 2);
+                    MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, typeof (global::KRPC.Service.Messages.ProcedureCall), "call");
-                    MessageAssert.HasParameterWithDefaultValue (proc, 1, typeof (bool), "start", true);
                     MessageAssert.HasDocumentation (proc);
-                } else if (proc.Name == "StartStream") {
-                    MessageAssert.HasNoReturnType(proc);
-                    MessageAssert.HasParameters(proc, 1);
-                    MessageAssert.HasParameter(proc, 0, typeof(ulong), "id");
-                    MessageAssert.HasDocumentation(proc);
                 } else if (proc.Name == "SetStreamRate") {
                     MessageAssert.HasNoReturnType(proc);
                     MessageAssert.HasParameters(proc, 2);
@@ -113,7 +107,7 @@ namespace KRPC.Test.Service.KRPC
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (16, foundProcedures);
+            Assert.AreEqual (15, foundProcedures);
 
             bool foundEnumeration = false;
             foreach (var enumeration in service.Enumerations) {
@@ -169,10 +163,13 @@ namespace KRPC.Test.Service.KRPC
                 } else if (exception.Name == "UnsupportedSceneException") {
                     MessageAssert.HasDocumentation (exception,
                         "<doc>\n<summary>\nThe procedure is not available in the current game scene.\n</summary>\n</doc>");
+                } else if (exception.Name == "StreamRemovedException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA stream was removed by the server, e.g. an event that has finished.\n</summary>\n</doc>");
                 }
                 foundExceptions++;
             }
-            Assert.AreEqual (7, foundExceptions);
+            Assert.AreEqual (8, foundExceptions);
         }
 
         [Test]

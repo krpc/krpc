@@ -38,7 +38,8 @@ namespace KRPC.Server.ProtocolBuffers
                 if (procedureResult.Value == null)
                     result.IsNull = true;
                 else
-                    result.Value = Encoder.Encode (procedureResult.Value, procedureResult.Spec);
+                    result.Value = procedureResult.EncodedValue ??
+                        Encoder.Encode (procedureResult.Value, procedureResult.Spec);
             }
             if (procedureResult.HasError)
                 result.Error = procedureResult.Error.ToProtobufMessage ();
