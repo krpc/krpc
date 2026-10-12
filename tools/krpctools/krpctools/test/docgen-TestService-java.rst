@@ -388,6 +388,13 @@
       :param TestClass obj:
    
 
+   .. method:: krpc.schema.KRPC.Event removeEventAfter(int milliseconds)
+
+
+
+      :param int milliseconds:
+   
+
    .. method:: void resetCustomExceptionLater()
 
 

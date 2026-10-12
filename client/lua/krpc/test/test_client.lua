@@ -586,6 +586,7 @@ function TestClient:test_test_service_service_members()
      'on_timer',
      'on_timer_using_lambda',
      'optional_arguments',
+     'remove_event_after',
      'reset_custom_exception_later',
      'reset_invalid_operation_exception_later',
      'return_null_when_not_allowed',

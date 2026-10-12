@@ -586,6 +586,17 @@ Service documentation string.
 
 
 
+.. staticmethod:: remove_event_after(milliseconds)
+
+
+
+   :param int milliseconds:
+   :rtype: :class:`krpc.schema.KRPC.Event`
+   
+
+
+
+
 .. staticmethod:: reset_custom_exception_later()
 
 

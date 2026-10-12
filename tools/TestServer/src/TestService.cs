@@ -764,6 +764,25 @@ namespace TestServer
             return evnt.Message;
         }
 
+        [KRPCProcedure]
+        public static KRPC.Service.Messages.Event RemoveEventAfter (uint milliseconds) {
+            // An event that ends without firing
+            int elapsed = 0;
+            var timer = new System.Timers.Timer (milliseconds);
+            timer.Elapsed += (s, e) => {
+                Volatile.Write (ref elapsed, 1);
+                timer.Enabled = false;
+            };
+            var evnt = new KRPC.Service.Event (
+                (KRPC.Service.Event e) => {
+                    if (Volatile.Read (ref elapsed) == 1)
+                        e.Remove ();
+                    return false;
+                });
+            timer.Start();
+            return evnt.Message;
+        }
+
         /// <summary>
         /// Deprecated procedure documentation string.
         /// </summary>

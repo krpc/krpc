@@ -211,6 +211,8 @@ class TestService : public Service {
 
   std::string optional_arguments(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
+  ::krpc::Event remove_event_after(uint32_t milliseconds);
+
   void reset_custom_exception_later();
 
   void reset_invalid_operation_exception_later();
@@ -385,6 +387,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::string> optional_arguments_stream(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
+  ::krpc::Stream<::krpc::Event> remove_event_after_stream(uint32_t milliseconds);
+
   ::krpc::Stream<TestService::TestClass> return_null_when_not_allowed_stream();
 
   ::krpc::Stream<std::set<int32_t>> set_default_stream(std::set<int32_t> x);
@@ -520,6 +524,8 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall on_timer_using_lambda_call(uint32_t milliseconds);
 
   ::krpc::schema::ProcedureCall optional_arguments_call(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
+
+  ::krpc::schema::ProcedureCall remove_event_after_call(uint32_t milliseconds);
 
   ::krpc::schema::ProcedureCall reset_custom_exception_later_call();
 
@@ -1744,6 +1750,17 @@ inline std::string TestService::optional_arguments(std::string x, std::string y 
   return _result;
 }
 
+inline ::krpc::Event TestService::remove_event_after(uint32_t milliseconds) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(milliseconds));
+  auto _data = this->_client->invoke("TestService", "RemoveEventAfter", _args, ::krpc::Client::Returns::event);
+  ::krpc::Event _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline void TestService::reset_custom_exception_later() {
   this->_client->invoke("TestService", "ResetCustomExceptionLater", {}, ::krpc::Client::Returns::value);
 }
@@ -2331,6 +2348,13 @@ inline ::krpc::Stream<std::string> TestService::optional_arguments_stream(std::s
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "OptionalArguments", _args));
 }
 
+inline ::krpc::Stream<::krpc::Event> TestService::remove_event_after_stream(uint32_t milliseconds) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(milliseconds));
+  return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("TestService", "RemoveEventAfter", _args));
+}
+
 inline ::krpc::Stream<TestService::TestClass> TestService::return_null_when_not_allowed_stream() {
   return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "ReturnNullWhenNotAllowed"));
 }
@@ -2789,6 +2813,13 @@ inline ::krpc::schema::ProcedureCall TestService::optional_arguments_call(std::s
   _args.push_back(encoder::encode_arg(z));
   _args.push_back(encoder::encode_arg(obj));
   return this->_client->build_call("TestService", "OptionalArguments", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::remove_event_after_call(uint32_t milliseconds) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(milliseconds));
+  return this->_client->build_call("TestService", "RemoveEventAfter", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::reset_custom_exception_later_call() {

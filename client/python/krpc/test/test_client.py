@@ -865,6 +865,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "throw_argument_out_of_range_exception",
                     "on_timer",
                     "on_timer_using_lambda",
+                    "remove_event_after",
                     "deprecated_procedure",
                     "deprecated_procedure_no_message",
                     "deprecated_property",

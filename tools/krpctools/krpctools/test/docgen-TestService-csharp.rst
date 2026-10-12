@@ -521,6 +521,16 @@
 
       :Game Scenes: All
 
+   .. method:: KRPC.Schema.KRPC.Event RemoveEventAfter(uint milliseconds)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. method:: void ResetCustomExceptionLater()
 
 
