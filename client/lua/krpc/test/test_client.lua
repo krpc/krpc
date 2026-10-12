@@ -502,7 +502,9 @@ function TestClient:test_krpc_service_members()
      'Type',
      'TypeCode',
      'add_event',
+     'add_function_stream',
      'add_stream',
+     'compile_function',
      'get_client_id',
      'get_client_name',
      'get_clients',
@@ -516,6 +518,7 @@ function TestClient:test_krpc_service_members()
      'next_tick',
      'release_tick',
      'remove_stream',
+     'run_function',
      'set_game_scene',
      'set_paused',
      'set_stream_rate'})

@@ -50,6 +50,18 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
+        public void EncodeProcedureResultWithEncodedValue ()
+        {
+            var result = new ProcedureResult ();
+            result.Spec = TypeSpec.Create (typeof(int));
+            result.Value = 42;
+            result.EncodedValue = Encoder.Encode (43, result.Spec);
+            Assert.AreEqual (result.EncodedValue, result.ToProtobufMessage ().Value);
+            result.Value = 44;
+            Assert.AreEqual (Encoder.Encode (44, result.Spec), result.ToProtobufMessage ().Value);
+        }
+
+        [Test]
         public void EncodeProcedureResultWithNullValue ()
         {
             var result = new ProcedureResult ();

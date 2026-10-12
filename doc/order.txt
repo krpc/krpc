@@ -5,12 +5,15 @@ KRPC.Clients
 KRPC.GetStatus
 KRPC.GetServices
 KRPC.AddStream
+KRPC.AddFunctionStream
 KRPC.RemoveStream
 KRPC.SetStreamRate
 KRPC.AddEvent
 KRPC.HoldTick
 KRPC.ReleaseTick
 KRPC.NextTick
+KRPC.CompileFunction
+KRPC.RunFunction
 KRPC.GameScene
 KRPC.GameScene.SpaceCenter
 KRPC.GameScene.Flight
@@ -28,6 +31,7 @@ KRPC.GameStateLoads
 KRPC.Expression
 KRPC.Expression.ReturnType
 KRPC.Expression.HasReturnType
+KRPC.Expression.ParameterTypes
 KRPC.Expression.ConstantDouble
 KRPC.Expression.ConstantFloat
 KRPC.Expression.ConstantInt

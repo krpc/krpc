@@ -26,7 +26,7 @@ namespace KRPC.Service.KRPC
         TypeSpec[] parameterSpecs;
         TypeSpec resultSpec;
 
-        Func<object> compiled;
+        Func<object[], object> compiled;
         bool isChecked;
 
         internal Expression(LinqExpression expression)
@@ -212,43 +212,172 @@ namespace KRPC.Service.KRPC
             "The function evaluated to null, which its result does not allow";
 
         /// <summary>
+        /// The parameters of the function. A function created with <see cref="Lambda"/>
+        /// takes the lambda's parameters, and any other function takes none.
+        /// </summary>
+        internal IList<ParameterExpression> Parameters {
+            get {
+                var lambda = internalExpression as LambdaExpression;
+                return lambda == null ? (IList<ParameterExpression>)NoParameters : lambda.Parameters;
+            }
+        }
+
+        static readonly ParameterExpression[] NoParameters = new ParameterExpression [0];
+
+        /// <summary>
+        /// The spec of the function's parameter at the given position.
+        /// </summary>
+        TypeSpec ParameterSpec (int position)
+        {
+            return parameterSpecs == null || parameterSpecs [position] == null
+                ? TypeSpec.Create (Parameters [position].Type) : parameterSpecs [position];
+        }
+
+        /// <summary>
+        /// The type of the value the function evaluates to. A function created with
+        /// <see cref="Lambda"/> evaluates to the value it returns when called.
+        /// </summary>
+        System.Type ResultType {
+            get {
+                var lambda = internalExpression as LambdaExpression;
+                return lambda == null ? internalExpression.Type : lambda.ReturnType;
+            }
+        }
+
+        /// <summary>
+        /// The spec of the value the function evaluates to. Null for a function with no value.
+        /// </summary>
+        internal TypeSpec FunctionSpec {
+            get {
+                if (!(internalExpression is LambdaExpression))
+                    return Spec;
+                if (ResultType == typeof (void))
+                    return null;
+                return resultSpec ?? TypeSpec.Create (ResultType);
+            }
+        }
+
+        /// <summary>
         /// Compile the expression, if it has not been compiled already.
         /// </summary>
         internal void Compile ()
         {
             if (compiled != null)
                 return;
-            compiled = LinqExpression.Lambda<Func<object>> (
-                LinqExpression.Convert (internalExpression, typeof (object))).Compile ();
+            // A function with parameters takes its arguments from an array
+            var arguments = LinqExpression.Parameter (typeof (object[]), "arguments");
+            LinqExpression value = internalExpression;
+            var lambda = internalExpression as LambdaExpression;
+            if (lambda != null)
+                value = LinqExpression.Invoke (lambda, lambda.Parameters.Select (
+                    (x, i) => LinqExpression.Convert (
+                        LinqExpression.ArrayIndex (arguments, LinqExpression.Constant (i)), x.Type)));
+            LinqExpression body;
+            if (value.Type == typeof (void))
+                body = LinqExpression.Block (value, LinqExpression.Constant (null));
+            else
+                body = LinqExpression.Convert (value, typeof (object));
+            compiled = LinqExpression.Lambda<Func<object[], object>> (body, arguments).Compile ();
         }
 
         /// <summary>
-        /// Evaluate the expression. Throws an exception if a procedure it calls pauses
-        /// execution, or if it evaluates to null where its result cannot be null.
+        /// Evaluate the expression with the given arguments, giving null for an expression
+        /// with no value. Throws an exception if a procedure it calls pauses execution, or if
+        /// it evaluates to null where its result cannot be null.
         /// </summary>
-        internal object Evaluate ()
+        internal object Evaluate (object[] arguments = null)
         {
             Compile ();
             object value;
             try {
-                value = compiled ();
+                value = compiled (arguments ?? NoArguments);
             } catch (YieldException) {
                 throw new InvalidOperationException (YieldedMessage);
             }
-            if (ReferenceEquals (value, null) && !Spec.Nullable)
+            if (ReferenceEquals (value, null) && HasReturnType && !FunctionSpec.Nullable)
                 throw new NullReferenceException (NullResultMessage);
             return value;
+        }
+
+        static readonly object[] NoArguments = new object [0];
+
+        /// <summary>
+        /// Decode the encoded arguments of a call to the function, one per parameter. Throws
+        /// an exception if the number of arguments differs from the number of parameters, or
+        /// an argument is null where its parameter cannot be.
+        /// </summary>
+        internal object[] DecodeArguments (IList<byte[]> arguments)
+        {
+            var parameters = Parameters;
+            var count = arguments == null ? 0 : arguments.Count;
+            if (count != parameters.Count)
+                throw new ArgumentException (ArgumentCountMessage (parameters.Count, count));
+            var values = new object [count];
+            for (int i = 0; i < count; i++) {
+                var spec = ParameterSpec (i);
+                if (arguments [i] == null) {
+                    if (!spec.Nullable)
+                        throw new ArgumentException (
+                            "The argument for parameter " + parameters [i].Name +
+                            " is null, which its type does not allow");
+                    continue;
+                }
+                // An unknown object or a short tuple fails to decode, and an object of the
+                // wrong class decodes as itself
+                object value = null;
+                try {
+                    value = Server.ProtocolBuffers.Encoder.Decode (
+                        Google.Protobuf.ByteString.CopyFrom (arguments [i]), spec);
+                } catch (ObjectDestroyedException) {
+                    throw;
+                } catch (System.Exception) {
+                }
+                if (ReferenceEquals (value, null) || !spec.Type.IsInstanceOfType (value))
+                    throw new ArgumentException (
+                        "The argument for parameter " + parameters [i].Name +
+                        " is not a value of type " + spec.Type);
+                values [i] = value;
+            }
+            return values;
+        }
+
+        /// <summary>
+        /// Throws an exception if the function takes parameters, as a function that is
+        /// streamed or checked for an event is evaluated with no arguments.
+        /// </summary>
+        internal void CheckNoParameters ()
+        {
+            if (Parameters.Count > 0)
+                throw new ArgumentException (
+                    "A function that is streamed, or checked for an event, cannot take parameters");
         }
 
         /// <summary>
         /// The type of the value the expression evaluates to. Throws an exception if the
         /// value cannot be sent to a client.
         /// </summary>
+        /// <remarks>
+        /// A function created with <see cref="Lambda"/> evaluates to the value it returns.
+        /// </remarks>
         [KRPCProperty]
         public Type ReturnType {
             get {
                 GetValidReturnType ();
-                return new Type (Spec);
+                return new Type (FunctionSpec);
+            }
+        }
+
+        /// <summary>
+        /// The types of the function's parameters.
+        /// </summary>
+        /// <remarks>
+        /// Empty for a function that is not created with <see cref="Lambda"/>.
+        /// </remarks>
+        [KRPCProperty]
+        public IList<Type> ParameterTypes {
+            get {
+                return Enumerable.Range (0, Parameters.Count)
+                    .Select (i => new Type (ParameterSpec (i))).ToList ();
             }
         }
 
@@ -261,7 +390,7 @@ namespace KRPC.Service.KRPC
         /// </remarks>
         [KRPCProperty]
         public bool HasReturnType {
-            get { return internalExpression.Type != typeof (void); }
+            get { return ResultType != typeof (void); }
         }
 
         /// <summary>
@@ -269,7 +398,7 @@ namespace KRPC.Service.KRPC
         /// </summary>
         internal System.Type GetValidReturnType ()
         {
-            var type = internalExpression.Type;
+            var type = ResultType;
             if (type == typeof (void))
                 throw new InvalidOperationException (
                     "The function does not evaluate to a value");
@@ -775,8 +904,9 @@ namespace KRPC.Service.KRPC
         /// </summary>
         /// <remarks>
         /// The instance the call is made on, and the values of its arguments, are fixed
-        /// when the expression is created. A collection the procedure returns is copied, as a
-        /// client would receive it.
+        /// when the expression is created. A call to a procedure with no return value is
+        /// evaluated for its effects. A collection the procedure returns is copied, as a client
+        /// would receive it.
         /// </remarks>
         /// <param name="call">The procedure call.</param>
         [KRPCMethod]
@@ -1915,6 +2045,9 @@ namespace KRPC.Service.KRPC
         /// <summary>
         /// A function with the given parameters and body.
         /// </summary>
+        /// <remarks>
+        /// A body with no value is evaluated for its effects.
+        /// </remarks>
         /// <returns>A function.</returns>
         /// <param name="parameters">The parameters of the function.</param>
         /// <param name="body">The body of the function.</param>

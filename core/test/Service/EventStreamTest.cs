@@ -146,6 +146,16 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void FunctionEventFromALambdaWithNoParameters ()
+        {
+            var stream = new EventStream (global::KRPC.Service.KRPC.KRPC.EventCondition (
+                Expression.Lambda (new List<Expression> (),
+                    Expression.Equal (Expression.ConstantInt (1), Expression.ConstantInt (1)))));
+            stream.UpdateInternal ();
+            Assert.AreEqual (true, stream.Result.Value);
+        }
+
+        [Test]
         public void FunctionThatIsNotBooleanIsRejected ()
         {
             var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (

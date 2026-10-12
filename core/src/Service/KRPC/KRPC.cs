@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
-using LinqExpression = System.Linq.Expressions.Expression;
 
 namespace KRPC.Service.KRPC
 {
@@ -277,6 +276,85 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// Add a stream of the value a server side function computes on each update.
+        /// </summary>
+        /// <remarks>
+        /// Each call adds a new stream, with values of the type given by
+        /// <see cref="Expression.ReturnType"/>. Any exception from the function ends the
+        /// stream, including one for an object that is not loaded. A procedure that pauses
+        /// execution to resume on a later tick produces an error on the stream.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Messages.Stream AddFunctionStream (Expression function)
+        {
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            var functionStream = new FunctionStream (function);
+            return new Messages.Stream (Core.Instance.AddStream (CallContext.Client, functionStream));
+        }
+
+        /// <summary>
+        /// Compile a server side function, so that running, streaming or adding it as an
+        /// event does not compile it.
+        /// </summary>
+        /// <remarks>
+        /// Compiling a large function takes time on the game's main thread. Compiling it
+        /// in advance keeps that time out of its first run.
+        /// </remarks>
+        [KRPCProcedure]
+        public static void CompileFunction (Expression function)
+        {
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            function.Check ();
+            function.Compile ();
+        }
+
+        /// <summary>
+        /// Run a server side function once, within a single physics tick, and return
+        /// the value it produces.
+        /// </summary>
+        /// <remarks>
+        /// The arguments are encoded at the types given by <see cref="Expression.ParameterTypes"/>.
+        /// Throws an exception if a procedure the function calls pauses execution, and the
+        /// effects up to the pause remain.
+        /// </remarks>
+        /// <returns>The encoded value of the function, or no bytes for a function with no
+        /// value.</returns>
+        /// <param name="function">The function to run.</param>
+        /// <param name="arguments">The encoded arguments, one per parameter.</param>
+        [KRPCProcedure (Nullable = true)]
+        public static byte[] RunFunction (
+            Expression function,
+            [KRPCDefaultValue (typeof (NoArguments))]
+            [KRPCNullable (Position.Element)] IList<byte[]> arguments = null)
+        {
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            function.Check ();
+            // Check the value can be sent and the arguments decode before evaluating, so
+            // a call that fails has no effects
+            if (function.HasReturnType)
+                function.GetValidReturnType ();
+            var values = function.DecodeArguments (arguments);
+            var value = function.Evaluate (values);
+            if (!function.HasReturnType)
+                return new byte [0];
+            // A null is sent in the result's is_null flag
+            if (ReferenceEquals (value, null))
+                return null;
+            return Server.ProtocolBuffers.Encoder.Encode (value, function.FunctionSpec).ToByteArray ();
+        }
+
+        static class NoArguments
+        {
+            public static object Create ()
+            {
+                return new List<byte[]> ();
+            }
+        }
+
+        /// <summary>
         /// Create an event from a server side function that evaluates to a boolean value.
         /// </summary>
         /// <remarks>
@@ -299,8 +377,9 @@ namespace KRPC.Service.KRPC
         {
             if (ReferenceEquals (function, null))
                 throw new ArgumentNullException (nameof (function));
-            var type = ((LinqExpression)function).Type;
-            if (type != typeof (bool) && type != typeof (bool?))
+            function.CheckNoParameters ();
+            var type = function.HasReturnType ? function.FunctionSpec.Type : typeof (void);
+            if (type != typeof (bool))
                 throw new ArgumentException ("The function must evaluate to a boolean value");
             function.Check ();
             function.Compile ();
