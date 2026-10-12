@@ -105,6 +105,19 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// The spec of the values a list, set or sequence holds, or of the values of a
+        /// dictionary.
+        /// </summary>
+        static TypeSpec ElementSpec (Expression collection)
+        {
+            var types = collection.Spec.Types;
+            if (types.Count > 0)
+                return types [types.Count - 1];
+            var arguments = collection.Type.IsGenericType ? collection.Type.GetGenericArguments () : null;
+            return arguments == null ? null : TypeSpec.Create (arguments [arguments.Length - 1]);
+        }
+
+        /// <summary>
         /// Check a value at a position that cannot hold null, where the value can. A
         /// nullable value type has already been converted to the value it holds, which
         /// throws for a null. Position describes where the value is going, for the error.
@@ -375,7 +388,9 @@ namespace KRPC.Service.KRPC
         /// value cannot be sent to a client.
         /// </summary>
         /// <remarks>
-        /// A function created with <see cref="Lambda"/> evaluates to the value it returns.
+        /// A function created with <see cref="Lambda"/> evaluates to the value it returns. A
+        /// lazily evaluated collection, such as from <see cref="Select"/>, is sent once
+        /// converted by <see cref="ToList"/> or <see cref="ToSet"/>.
         /// </remarks>
         [KRPCProperty]
         public Type ReturnType {
@@ -429,7 +444,8 @@ namespace KRPC.Service.KRPC
             if (!TypeUtils.IsAValidType (type))
                 throw new InvalidOperationException (
                     "The function evaluates to a value of type " + type + ", " +
-                    "which cannot be sent to a client.");
+                    "which cannot be sent to a client. If the value is a lazily " +
+                    "evaluated collection, use ToList or ToSet to convert it.");
             return type;
         }
 
@@ -1623,6 +1639,16 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// A call giving the comparer for values of the given type.
+        /// </summary>
+        static LinqExpression ValuesComparerCall (System.Type type)
+        {
+            return LinqExpression.Call (typeof (Expression)
+                .GetMethod (nameof (ValuesComparer), BindingFlags.Static | BindingFlags.NonPublic)
+                .MakeGenericMethod (type));
+        }
+
+        /// <summary>
         /// A set of the given values, compared with <see cref="ValueEquals"/>.
         /// </summary>
         internal static HashSet<T> SetOf<T> (IEnumerable<T> values)
@@ -2105,6 +2131,32 @@ namespace KRPC.Service.KRPC
             lambda.parameterSpecs = parameters.Select (x => x.Spec).ToArray ();
             lambda.resultSpec = bodySpec;
             return lambda;
+        }
+
+        /// <summary>
+        /// A function given to an operation that passes it values of the given specs. Where
+        /// a value can hold a null that the parameter cannot, the function is wrapped in one
+        /// that checks the value first.
+        /// </summary>
+        static LinqExpression AdaptFunction (Expression function, string position, params TypeSpec[] argumentSpecs)
+        {
+            var lambda = function.internalExpression as LambdaExpression;
+            var parameterSpecs = function.parameterSpecs;
+            if (lambda == null || parameterSpecs == null || parameterSpecs.Length != argumentSpecs.Length)
+                return function;
+            var adapted = false;
+            var parameters = lambda.Parameters.Select (x => LinqExpression.Parameter (x.Type, x.Name)).ToArray ();
+            var arguments = new LinqExpression [parameters.Length];
+            for (int i = 0; i < parameters.Length; i++) {
+                arguments [i] = argumentSpecs [i] == null ? parameters [i] : CheckNulls (
+                    parameters [i], TypeSpec.Create (parameters [i].Type, argumentSpecs [i]),
+                    parameterSpecs [i], position);
+                adapted |= arguments [i] != parameters [i];
+            }
+            if (!adapted)
+                return function;
+            return LinqExpression.Lambda (
+                lambda.Type, LinqExpression.Invoke (lambda, arguments), parameters);
         }
 
         /// <summary>

@@ -726,6 +726,10 @@ namespace KRPC.Client
                     return new ArgumentOutOfRangeException (string.Empty, message);
                 if (key == "KRPC.NullReferenceException")
                     return new NullReferenceException (message);
+                if (key == "KRPC.KeyNotFoundException")
+                    return new KeyNotFoundException (message);
+                if (key == "KRPC.IndexOutOfRangeException")
+                    return new IndexOutOfRangeException (message);
                 System.Type exnType;
                 if (!exceptionTypes.TryGetValue (key, out exnType)) {
                     // The type is unknown here if the service it belongs to was never

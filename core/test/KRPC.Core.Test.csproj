@@ -42,6 +42,7 @@
     <Compile Include="CoreTest.cs" />
     <Compile Include="ScriptedClient.cs" />
     <Compile Include="Service\FunctionStreamTest.cs" />
+    <Compile Include="Service\KRPC\ExpressionTest.Collections.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.RunFunction.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.Values.cs" />

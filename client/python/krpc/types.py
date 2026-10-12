@@ -58,6 +58,8 @@ EXCEPTION_TYPES = {
     "ArgumentNullException": ValueError,
     "ArgumentOutOfRangeException": ValueError,
     "NullReferenceException": TypeError,
+    "KeyNotFoundException": KeyError,
+    "IndexOutOfRangeException": IndexError,
 }
 
 

@@ -30,7 +30,7 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (5, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (96, service.Procedures.Count);
+            Assert.AreEqual (132, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (2, service.Enumerations.Count);
 
@@ -157,6 +157,12 @@ namespace KRPC.Test.Service.KRPC
                 } else if (exception.Name == "NullReferenceException") {
                     MessageAssert.HasDocumentation (exception,
                         "<doc>\n<summary>\nA value was null where its type does not allow one.\n</summary>\n</doc>");
+                } else if (exception.Name == "KeyNotFoundException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nA key was not found in a dictionary.\n</summary>\n</doc>");
+                } else if (exception.Name == "IndexOutOfRangeException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nAn index was outside the bounds of a collection, string or array.\n</summary>\n</doc>");
                 } else if (exception.Name == "ObjectDestroyedException") {
                     MessageAssert.HasDocumentation (exception,
                         "<doc>\n<summary>\nThe game object that a service object refers to no longer exists,\nso the object cannot be used. For example, the part it represents\nwas destroyed, or the vessel it belongs to was recovered.\n</summary>\n</doc>");
@@ -172,7 +178,7 @@ namespace KRPC.Test.Service.KRPC
                 }
                 foundExceptions++;
             }
-            Assert.AreEqual (9, foundExceptions);
+            Assert.AreEqual (11, foundExceptions);
         }
 
         [Test]

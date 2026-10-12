@@ -788,6 +788,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "ArgumentNullException",
                     "ArgumentOutOfRangeException",
                     "NullReferenceException",
+                    "KeyNotFoundException",
+                    "IndexOutOfRangeException",
                     "ObjectDestroyedException",
                     "ObjectNotLoadedException",
                     "UnsupportedSceneException",

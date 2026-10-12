@@ -205,5 +205,25 @@ namespace KRPC.Test.Service
             StringAssert.Contains ("paused execution", stream.Result.Error.Description);
             Assert.IsNotNull (stream.Result.Error.StackTrace);
         }
+
+        [Test]
+        public void LazyCollectionRejected ()
+        {
+            var list = Expression.CreateList (new List<Expression> {
+                Expression.ConstantInt (1), Expression.ConstantInt (2)
+            });
+            var param = Expression.Parameter ("x", Type.Int ());
+            var func = Expression.Lambda (
+                new List<Expression> { param },
+                Expression.Multiply (param, Expression.ConstantInt (2)));
+            var selected = Expression.Select (list, func);
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => new FunctionStream (selected));
+
+            var stream = new FunctionStream (Expression.ToList (selected));
+            stream.UpdateInternal ();
+            Assert.IsTrue (stream.Result.HasValue);
+            CollectionAssert.AreEqual (new [] { 2, 4 }, (List<int>)stream.Result.Value);
+        }
     }
 }

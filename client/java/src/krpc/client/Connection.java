@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import krpc.schema.KRPC;
 
@@ -587,6 +588,12 @@ public class Connection implements AutoCloseable {
       }
       if (key.equals("KRPC.NullReferenceException")) {
         return new NullPointerException(message);
+      }
+      if (key.equals("KRPC.IndexOutOfRangeException")) {
+        return new IndexOutOfBoundsException(message);
+      }
+      if (key.equals("KRPC.KeyNotFoundException")) {
+        return new NoSuchElementException(message);
       }
       Class<?> exnType = exceptionTypes.get(key);
       Constructor<?> ctor = null;
