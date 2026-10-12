@@ -29,6 +29,16 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void NoStreamServer ()
+        {
+            using (var connection = Connect ("CSharpClientTestNoStreamServer", stream: null)) {
+                var exn = Assert.Throws<InvalidOperationException> (
+                    () => connection.AddStream (() => connection.TestService ().FloatToString (3.14159f)));
+                Assert.AreEqual ("The connection has no stream server", exn.Message);
+            }
+        }
+
+        [Test]
         public void Property ()
         {
             Connection.TestService ().StringProperty = "foo";

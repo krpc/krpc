@@ -215,6 +215,12 @@ namespace KRPC.Client
                 throw new ObjectDisposedException (GetType ().Name);
         }
 
+        void CheckStreamServer ()
+        {
+            if (StreamManager == null)
+                throw new InvalidOperationException ("The connection has no stream server");
+        }
+
         /// <summary>
         /// Create a new stream from the given lambda expression.
         /// Returns a stream object that can be used to obtain the latest value of the stream.
@@ -224,6 +230,7 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
+            CheckStreamServer ();
             return AddStreamFromExpression<TResult> (expression);
         }
 
@@ -233,6 +240,7 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (Expression<Func<TResult>> expression)
         {
             CheckDisposed ();
+            CheckStreamServer ();
             return AddStreamFromExpression<TResult> (expression);
         }
 
