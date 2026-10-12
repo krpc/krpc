@@ -66,13 +66,12 @@ bool StreamImpl::store(const std::string& data, bool is_null) {
   return true;
 }
 
-// We hold the condition across the store and the notification, so that a notification
-// cannot fire between a waiter checking the value and entering its wait. The callbacks are
-// read with the value stored, so a callback added after this is called with the value by
-// add_callback.
+// The caller holds the condition across the store and the notification, so that a
+// notification cannot fire between a waiter checking the value and entering its wait. The
+// callbacks are read with the value stored, so a callback added after this is called with the
+// value by add_callback.
 bool StreamImpl::update_and_notify(const std::string& data, bool is_null, Callbacks* callbacks,
                                    uint64_t* version) {
-  std::lock_guard<std::mutex> guard(condition_mutex);
   {
     std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
     if (!store(data, is_null)) return false;

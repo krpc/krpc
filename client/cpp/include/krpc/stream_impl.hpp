@@ -36,9 +36,9 @@ class StreamImpl {
   /** Store a value, with the update lock held. Returns false, storing nothing, if the stream
       has ended. */
   bool store(const std::string& data, bool is_null);
-  /** Store a value and wake the threads waiting for one. Returns false, storing nothing, if
-      the stream has ended. Otherwise sets callbacks to those to call with the value, and
-      version to its version. */
+  /** Store a value and wake the threads waiting for one, with the condition held. Returns
+      false, storing nothing, if the stream has ended. Otherwise sets callbacks to those to
+      call with the value, and version to its version. */
   bool update_and_notify(const std::string& data, bool is_null, Callbacks* callbacks,
                          uint64_t* version);
   /** Call each callback with a value, with no lock held. A callback already called with this

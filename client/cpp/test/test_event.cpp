@@ -298,6 +298,24 @@ TEST_F(test_event, test_remove_through_another_handle_while_holding_condition) {
   event.release();
 }
 
+TEST_F(test_event, test_connection_failure_wakes_an_event_wait) {
+  std::function<void()> shutdown;
+  auto client = connect_client(&shutdown);
+  krpc::services::TestService service(client.get());
+  auto event = service.on_timer(10000);
+  std::atomic_bool waiting(false);
+  std::thread waiter([&event, &waiting] {
+    event.acquire();
+    waiting.store(true);
+    EXPECT_THROW(event.wait(), krpc::ConnectionError);
+    event.release();
+  });
+  ASSERT_TRUE(eventually([&waiting] { return waiting.load(); }));
+  // Stands in for the server closing the connection
+  shutdown();
+  waiter.join();
+}
+
 TEST_F(test_event, test_close_wakes_an_event_wait) {
   auto client = connect_client();
   krpc::services::TestService service(client.get());

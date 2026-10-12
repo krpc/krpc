@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <exception>
 #include <functional>
+#include <future>
 #include <memory>
 #include <mutex>  // NOLINT(build/c++11)
 #include <optional>
@@ -344,10 +345,16 @@ TEST_F(test_stream, test_callback_skips_an_older_value) {
   krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
   krpc::StreamImpl::Callbacks callbacks;
   uint64_t version = 0;
-  ASSERT_TRUE(stream.update_and_notify("a", false, &callbacks, &version));
+  {
+    std::lock_guard<std::mutex> held(stream.get_condition_mutex());
+    ASSERT_TRUE(stream.update_and_notify("a", false, &callbacks, &version));
+  }
   std::vector<std::string> values;
   stream.add_callback([&values](const std::string& value, bool) { values.push_back(value); });
-  ASSERT_TRUE(stream.update_and_notify("b", false, &callbacks, &version));
+  {
+    std::lock_guard<std::mutex> held(stream.get_condition_mutex());
+    ASSERT_TRUE(stream.update_and_notify("b", false, &callbacks, &version));
+  }
   stream.call_callbacks(callbacks, "b", false, version);
   // A first call with the earlier value, made after the update
   stream.call_callbacks(callbacks, "a", false, 1);
@@ -793,6 +800,30 @@ TEST_F(test_stream, test_connection_failure_wakes_a_waiting_thread) {
   waiter.join();
   // The end callbacks run after the waiters wake
   ASSERT_TRUE(eventually([&ended] { return ended.load() == 1; }));
+  ASSERT_THROW(x(), krpc::ConnectionError);
+}
+
+// The update thread has values for the stream while the closing thread holds its condition
+TEST_F(test_stream, test_close_while_holding_condition) {
+  std::shared_ptr<krpc::Client> client = connect_client();
+  krpc::services::TestService service(client.get());
+  auto x = service.counter_stream("test_stream.test_close_while_holding_condition");
+  ASSERT_GT(x(), 0);
+  std::promise<void> closed;
+  auto done = closed.get_future();
+  // Owns what it uses, so that it can be left running if the close hangs
+  std::thread closer([x, client = std::move(client), closed = std::move(closed)]() mutable {
+    x.acquire();
+    wait();
+    client.reset();
+    x.release();
+    closed.set_value();
+  });
+  if (done.wait_for(std::chrono::seconds(10)) != std::future_status::ready) {
+    closer.detach();
+    FAIL() << "Closing the client while holding a stream's condition did not return";
+  }
+  closer.join();
   ASSERT_THROW(x(), krpc::ConnectionError);
 }
 

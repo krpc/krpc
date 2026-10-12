@@ -43,7 +43,8 @@ class StreamManager {
   typedef std::map<int, Callback> Callbacks;
   int add_update_callback(const Callback& callback);
   void remove_update_callback(int tag);
-  /** End every stream, after the connection has closed and no further update can arrive. */
+  /** End every stream, after the connection has closed and no further update can arrive.
+      Called on the update thread. */
   void notify_closed();
 
  private:
@@ -53,6 +54,10 @@ class StreamManager {
   static void read_updates(StreamManager* stream_manager,
                            const std::shared_ptr<Connection>& connection,
                            const std::shared_ptr<std::atomic_bool>& stop);
+  /** End every stream, on the thread destroying the manager. */
+  void end_streams();
+  /** Remove a stream from the registry. Returns false if it is not registered. */
+  bool unregister(const StreamImpl* stream);
   /** The exception an error is thrown as. */
   std::exception_ptr error_ptr(const schema::Error& error) const;
   Client* client;
