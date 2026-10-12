@@ -537,6 +537,27 @@ TEST_F(test_event, test_callback_added_after_a_firing_given_to_another_is_not_ca
   ASSERT_EQ(0, second.load());
 }
 
+TEST_F(test_event, test_event_that_ends_without_firing) {
+  auto event = test_service.remove_event_after(100);
+  std::atomic<int> calls(0);
+  std::atomic<int> ended(0);
+  std::atomic_bool removed(false);
+  event.add_callback([&calls] { calls++; });
+  event.add_end_callback([&ended, &removed](const std::exception_ptr& ending) {
+    try {
+      std::rethrow_exception(ending);
+    } catch (const krpc::services::KRPC::StreamRemovedException&) {
+      removed.store(true);
+    } catch (...) {  // NOLINT(bugprone-empty-catch): the flag stays false
+    }
+    ended++;
+  });
+  EXPECT_THROW(event.wait(), krpc::services::KRPC::StreamRemovedException);
+  ASSERT_TRUE(eventually([&ended] { return ended.load() == 1; }));
+  ASSERT_TRUE(removed.load());
+  ASSERT_EQ(0, calls.load());
+}
+
 TEST_F(test_event, test_a_removed_callback_does_not_take_a_firing) {
   krpc::StreamImpl stream(&conn, 1, std::make_shared<std::recursive_mutex>());
   std::atomic<int> removed(0);
