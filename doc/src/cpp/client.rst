@@ -342,10 +342,10 @@ Client API Reference
 
    This class represents a stream. See :ref:`cpp-client-streams`.
 
-   Streams are created by calling a remove procedure with ``_stream`` appended to its name.
+   Streams are created by calling a remote procedure with ``_stream`` appended to its name.
 
-   Stream objects are copy constructible and assignable. A stream is removed from the server when
-   all stream objects that refer to it are destroyed.
+   Stream objects are copy constructible and assignable, and every copy refers to the same stream.
+   Call :func:`remove` to remove the stream from the server.
 
    .. function:: float rate() const
    .. function:: void set_rate(float rate)
@@ -422,11 +422,13 @@ Client API Reference
    .. function:: void remove()
 
       Removes the stream from the server. Every copy of the stream object refers to the same
-      stream.
+      stream. Another stream added for the same call stays live.
 
    .. function:: bool operator==(const Stream<T>& rhs)
 
-      Returns true if the two stream objects are bound to the same stream.
+      Returns true if the two stream objects are bound to the same stream. Each call to a
+      ``_stream`` function adds a new stream, so two streams added for the same call are not
+      equal.
 
    .. function:: bool operator!=(const Stream<T>& rhs)
 
@@ -441,8 +443,8 @@ Client API Reference
    This class represents an event. See :ref:`cpp-client-events`. It is wrapper around a
    ``Stream<bool>`` that indicates when the event occurs.
 
-   Event objects are copy constructible and assignable. An event is removed from the server when all
-   event objects that refer to it are destroyed.
+   Event objects are copy constructible and assignable, and every copy refers to the same event.
+   Call :func:`remove` to remove the event from the server.
 
    .. function:: std::condition_variable& get_condition() const
 

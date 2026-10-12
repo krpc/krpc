@@ -174,7 +174,7 @@ void StreamManager::remove_stream(StreamImpl* stream) {
   auto id = stream->get_id();
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
-    // The server can give a stream added since the id of this one, which stays live
+    // Another handle can have removed the stream already
     auto it = streams.find(id);
     if (it == streams.end() || it->second.lock().get() != stream) return;
     streams.erase(it);

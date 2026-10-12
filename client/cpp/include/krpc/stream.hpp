@@ -67,8 +67,8 @@ class Stream {
   int add_end_callback(const EndCallback& callback);
   /** Remove an end callback, based on its tag */
   void remove_end_callback(int tag);
-  /** Remove the stream from the server. Streams for the same call share one stream on the
-      server, so removing one removes them all. */
+  /** Remove the stream from the server, for every copy of the stream object. Another stream
+      added for the same call stays live. */
   void remove();
   bool operator==(const Stream<T>& rhs) const;
   bool operator!=(const Stream<T>& rhs) const;
