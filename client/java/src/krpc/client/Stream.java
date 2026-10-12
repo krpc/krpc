@@ -175,8 +175,8 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * Remove the stream from the server. Streams for the same call share one stream on the server,
-   * so removing one removes them all.
+   * Remove the stream from the server. Each call to addStream creates its own stream, so this
+   * leaves other streams for the same call running.
    */
   public void remove() throws RPCException {
     stream.remove();

@@ -96,6 +96,11 @@ value of the stream can be obtained by calling :meth:`Stream.get`. A stream can 
 removed from the server by calling :meth:`Stream.remove` on the stream object. All of a clients
 streams are automatically stopped when it disconnects.
 
+.. note::
+
+   A stream runs on the server until you remove it or the connection closes, even once the stream
+   object is garbage collected. Each call to ``addStream`` adds another stream.
+
 Synchronizing with Stream Updates
 ---------------------------------
 
@@ -262,7 +267,8 @@ Client API Reference
    This class represents a stream. See :rst:ref:`java-client-streams`.
 
    Stream objects implement ``hashCode`` and ``equals`` such that two stream objects are equal if
-   they are bound to the same stream on the server.
+   they are bound to the same stream on the server. Each call to :meth:`Connection.addStream`
+   creates a new stream, so two streams added for the same call are not equal.
 
    .. method:: float getRate()
    .. method:: void setRate(float rate)
@@ -326,7 +332,7 @@ Client API Reference
 
    .. method:: void remove()
 
-      Remove the stream from the server.
+      Remove the stream from the server. Other streams added for the same call keep running.
 
 .. type:: class Event
 
