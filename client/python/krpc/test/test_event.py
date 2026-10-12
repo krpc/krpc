@@ -270,6 +270,26 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         self.assertEqual(1, len(ended))
         self.assertIsInstance(ended[0], self.conn.krpc.StreamRemovedException)
 
+    def test_event_that_ends_without_firing(self) -> None:
+        event = self.conn.test_service.remove_event_after(200)
+        called = []
+        ended = []
+        done = threading.Event()
+
+        def end_callback(ending: Exception) -> None:
+            ended.append(ending)
+            done.set()
+
+        event.add_callback(lambda: called.append(True))
+        event.add_end_callback(end_callback)
+        with event.condition:
+            with self.assertRaises(self.conn.krpc.StreamRemovedException):
+                event.wait()
+        self.assertTrue(done.wait(10))
+        self.assertEqual(1, len(ended))
+        self.assertIsInstance(ended[0], self.conn.krpc.StreamRemovedException)
+        self.assertEqual([], called)
+
     def test_firing_before_wait(self) -> None:
         event = self.conn.test_service.on_timer(100)
         time.sleep(0.5)
