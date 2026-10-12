@@ -244,40 +244,32 @@ TEST_F(test_stream, test_remove_stream_with_no_handles) {
   ASSERT_EQ(0, updates.load());
 }
 
-TEST_F(test_stream, test_removing_a_stream_again_through_another_handle) {
+TEST_F(test_stream, test_remove_then_add_stream) {
   auto first = test_service.int32_to_string_stream(46);
-  auto second = test_service.int32_to_string_stream(46);
+  krpc::Stream<std::string> copy = first;
+  ASSERT_EQ("46", first());
   first.remove();
-  // The server can give the new stream the removed one's id
-  auto third = test_service.int32_to_string_stream(46);
+  copy.remove();
+  auto second = test_service.int32_to_string_stream(46);
+  ASSERT_EQ("46", second());
   second.remove();
-  ASSERT_EQ("46", third());
-  third.remove();
 }
 
+// Each add is a stream of its own, so removing one leaves the other updating
 TEST_F(test_stream, test_add_stream_twice) {
-  auto s0 = test_service.int32_to_string_stream(42);
-  ASSERT_EQ("42", s0());
-  wait();
-  ASSERT_EQ("42", s0());
-
-  auto s1 = test_service.int32_to_string_stream(42);
-  ASSERT_EQ(s0, s1);
-  ASSERT_EQ("42", s0());
-  ASSERT_EQ("42", s1());
-  wait();
-  ASSERT_EQ("42", s0());
-  ASSERT_EQ("42", s1());
-
-  auto s2 = test_service.int32_to_string_stream(43);
-  ASSERT_NE(s0, s2);
-  ASSERT_EQ("42", s0());
-  ASSERT_EQ("42", s1());
-  ASSERT_EQ("43", s2());
-  wait();
-  ASSERT_EQ("42", s0());
-  ASSERT_EQ("42", s1());
-  ASSERT_EQ("43", s2());
+  auto s0 = test_service.counter_stream("test_stream.test_add_stream_twice");
+  auto s1 = test_service.counter_stream("test_stream.test_add_stream_twice");
+  ASSERT_NE(s0, s1);
+  s0();
+  s1();
+  s0.remove();
+  ASSERT_THROW(s0(), krpc::StreamError);
+  auto value = s1();
+  s1.acquire();
+  ASSERT_TRUE(s1.wait(10));
+  s1.release();
+  ASSERT_NE(value, s1());
+  s1.remove();
 }
 
 TEST_F(test_stream, test_read_straight_after_add) {
@@ -726,7 +718,11 @@ TEST_F(test_stream, test_equality) {
   ASSERT_TRUE(s1 != s2);
   ASSERT_FALSE(s2 == s1);
   ASSERT_TRUE(s2 != s1);
+  // Two adds of the same call are two streams
   s2 = test_service.counter_stream("test_stream.test_assignable");
+  ASSERT_FALSE(s1 == s2);
+  ASSERT_TRUE(s1 != s2);
+  s2 = s1;
   ASSERT_TRUE(s1 == s2);
   ASSERT_FALSE(s1 != s2);
   ASSERT_TRUE(s2 == s1);

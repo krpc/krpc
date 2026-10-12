@@ -247,7 +247,7 @@ namespace KRPC.Service.KRPC
         public static Messages.Stream AddStream (ProcedureCall call)
         {
             var callStream = new ProcedureCallStream (call);
-            return new Messages.Stream (Core.Instance.AddStream (CallContext.Client, callStream, false));
+            return new Messages.Stream (Core.Instance.AddStream (CallContext.Client, callStream));
         }
 
         /// <summary>

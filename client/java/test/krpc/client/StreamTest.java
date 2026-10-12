@@ -288,43 +288,46 @@ public class StreamTest {
     }
   }
 
-  @Test
+  @Test(timeout = 30000)
   public void testAddStreamTwice()
-      throws RPCException, StreamException, NoSuchMethodException {
+      throws RPCException, StreamException {
     Stream<String> stream0 = connection.addStream(TestService.class, "int32ToString", 42);
-    assertEquals("42", stream0.get());
-    pause();
-    assertEquals("42", stream0.get());
-
     Stream<String> stream1 = connection.addStream(TestService.class, "int32ToString", 42);
-    assertTrue(stream0.equals(stream1));
+    assertFalse(stream0.equals(stream1));
     assertEquals("42", stream0.get());
     assertEquals("42", stream1.get());
-    pause();
-    assertEquals("42", stream0.get());
+    stream0.remove();
+    assertThrows(StreamException.class, () -> stream0.get());
+    synchronized (stream1.getCondition()) {
+      // Times out, as the value does not change, but the stream stays live
+      stream1.waitForUpdateWithTimeout(0.1);
+    }
     assertEquals("42", stream1.get());
+    stream1.remove();
+  }
 
-    Stream<String> stream2 = connection.addStream(TestService.class, "int32ToString", 43);
-    assertFalse(stream0.equals(stream2));
-    assertEquals("42", stream0.get());
-    assertEquals("42", stream1.get());
-    assertEquals("43", stream2.get());
-    pause();
-    assertEquals("42", stream0.get());
-    assertEquals("42", stream1.get());
-    assertEquals("43", stream2.get());
+  @Test(timeout = 30000)
+  public void testRemoveThenAddStream()
+      throws RPCException, StreamException {
+    Stream<String> first = connection.addStream(TestService.class, "int32ToString", 46);
+    assertEquals("46", first.get());
+    first.remove();
+    Stream<String> second = connection.addStream(TestService.class, "int32ToString", 46);
+    assertFalse(first.equals(second));
+    assertEquals("46", second.get());
+    second.remove();
   }
 
   @Test(timeout = 30000)
   public void testRemovingStreamAgainThroughAnotherHandle()
       throws RPCException, StreamException {
-    Stream<String> first = connection.addStream(TestService.class, "int32ToString", 46);
-    Stream<String> second = connection.addStream(TestService.class, "int32ToString", 46);
+    Stream<String> first = connection.addStream(TestService.class, "int32ToString", 53);
+    Stream<String> second = new Stream<String>(
+        connection, first.stream.getReturnType(), first.stream.getId());
     first.remove();
-    // The server can give the new stream the removed one's id
-    Stream<String> third = connection.addStream(TestService.class, "int32ToString", 46);
+    Stream<String> third = connection.addStream(TestService.class, "int32ToString", 53);
     second.remove();
-    assertEquals("46", third.get());
+    assertEquals("53", third.get());
     third.remove();
   }
 
@@ -714,11 +717,12 @@ public class StreamTest {
     Stream<Integer> stream2 = connection.addStream(
         TestService.class, "counter", "StreamTest.testEquality1", 1);
 
+    // Each add creates a new stream, even for an equal call
     assertTrue(stream0.equals(stream0));
-    assertTrue(stream0.equals(stream1));
+    assertFalse(stream0.equals(stream1));
     assertFalse(stream0.equals(stream2));
     assertFalse(stream0.equals(null));
-    assertTrue(stream0.hashCode() == stream1.hashCode());
+    assertFalse(stream0.hashCode() == stream1.hashCode());
     assertFalse(stream0.hashCode() == stream2.hashCode());
   }
 

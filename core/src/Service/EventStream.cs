@@ -25,16 +25,6 @@ namespace KRPC.Service
             continuation = eventContinuation;
         }
 
-        public override bool Equals (Service.Stream other)
-        {
-            return ReferenceEquals (this, other);
-        }
-
-        public override int GetHashCode ()
-        {
-            return 0;
-        }
-
         public override void UpdateInternal() {
             // An event that is ending does not fire again, so the end is sent
             if (continuation != null && !shouldRemove) {

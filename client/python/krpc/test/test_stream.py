@@ -219,28 +219,15 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
     def test_add_stream_twice(self) -> None:
         s0 = self.conn.add_stream(self.conn.test_service.int32_to_string, 42)
-        stream_impl = s0._stream
-        self.assertEqual("42", s0())
-        self.wait()
-        self.assertEqual("42", s0())
-
         s1 = self.conn.add_stream(self.conn.test_service.int32_to_string, 42)
-        self.assertEqual(stream_impl, s1._stream)
+        self.assertNotEqual(s0._stream.stream_id, s1._stream.stream_id)
         self.assertEqual("42", s0())
         self.assertEqual("42", s1())
+        s0.remove()
+        self.assertRaises(StreamError, s0)
         self.wait()
-        self.assertEqual("42", s0())
         self.assertEqual("42", s1())
-
-        s2 = self.conn.add_stream(self.conn.test_service.int32_to_string, 43)
-        self.assertNotEqual(stream_impl, s2._stream)
-        self.assertEqual("42", s0())
-        self.assertEqual("42", s1())
-        self.assertEqual("43", s2())
-        self.wait()
-        self.assertEqual("42", s0())
-        self.assertEqual("42", s1())
-        self.assertEqual("43", s2())
+        s1.remove()
 
     def test_remove_then_add_stream(self) -> None:
         stream = self.conn.add_stream(self.conn.test_service.int32_to_string, 0)

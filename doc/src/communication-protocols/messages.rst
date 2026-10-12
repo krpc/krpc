@@ -191,8 +191,10 @@ Streams allow the client to repeatedly execute an RPC on the server and receive 
 needing to repeatedly call the RPC directly, avoiding the communication overhead that this would
 involve.
 
-A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`. The
-stream sends its first result in the update after it is added, and that result is always sent. Once
+A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`. Each
+call creates a new stream with a new identifier, including a call for the same RPC as an existing
+stream. The stream sends its first result in the update after it is added, and that result is
+always sent. Once
 the client is finished with the stream, it can remove it from the server by calling
 :ref:`communication-protocol-remove-stream`. Streams are automatically removed when the
 client that created it disconnects from the server. Streams are local to each client and there is no

@@ -780,26 +780,14 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Add a stream to the server.
+        /// Add a stream to the server, with a new id.
         /// </summary>
-        internal ulong AddStream (IClient rpcClient, Service.Stream stream, bool requireNew = true)
+        internal ulong AddStream (IClient rpcClient, Service.Stream stream)
         {
             var id = rpcClient.Guid;
             if (!streamClients.ContainsKey (id))
                 throw new InvalidOperationException ("No stream client is connected for this RPC client");
             var streamClient = streamClients [id];
-
-            foreach (var entry in streams [streamClient]) {
-                if (stream == entry.Value) {
-                    // Prevent race condition when removing and re-adding streams by checking if the added stream was marked for removal
-                    removeStreams.Remove(entry.Key);
-                    if (requireNew)
-                        throw new ArgumentException ("Stream already exists", nameof (stream));
-                    // The client has no value for an id it removed
-                    entry.Value.Resend ();
-                    return entry.Key;
-                }
-            }
 
             stream.Id = nextStreamId;
             nextStreamId++;

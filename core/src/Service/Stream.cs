@@ -8,7 +8,7 @@ namespace KRPC.Service
     /// <summary>
     /// A stream.
     /// </summary>
-    public abstract class Stream : Equatable<Stream>
+    public abstract class Stream
     {
         internal StreamResult StreamResult { get; private set; }
 
@@ -53,14 +53,6 @@ namespace KRPC.Service
             rate = 0;
             delay = 0;
             timer = Stopwatch.StartNew ();
-        }
-
-        /// <summary>
-        /// Send the current value in the next update.
-        /// </summary>
-        internal void Resend ()
-        {
-            Changed |= StreamResult.Result.HasValue || StreamResult.Result.HasError;
         }
 
         /// <summary>

@@ -108,16 +108,6 @@ namespace KRPC.Test
                 result.Value = value;
                 Result = result;
             }
-
-            public override bool Equals (global::KRPC.Service.Stream other)
-            {
-                return ReferenceEquals (this, other);
-            }
-
-            public override int GetHashCode ()
-            {
-                return value;
-            }
         }
 
         sealed class ThrowingStream : global::KRPC.Service.Stream
@@ -125,16 +115,6 @@ namespace KRPC.Test
             public override void UpdateInternal ()
             {
                 throw new InvalidOperationException ("the stream failed");
-            }
-
-            public override bool Equals (global::KRPC.Service.Stream other)
-            {
-                return ReferenceEquals (this, other);
-            }
-
-            public override int GetHashCode ()
-            {
-                return 0;
             }
         }
 
@@ -295,6 +275,30 @@ namespace KRPC.Test
             var id = Add (new EventStream ());
             Assert.AreEqual (false, ResultFor (Update (), id).Value);
             Assert.AreEqual (0, Update ().Count);
+        }
+
+        [Test]
+        public void EqualStreamsAreEvaluatedAndSentSeparately ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("foo");
+            TestService.Service = mock.Object;
+            var call = new ProcedureCall ("TestService", "ProcedureNoArgsReturns");
+            var first = Add (new ProcedureCallStream (call));
+            var second = Add (new ProcedureCallStream (call));
+            Assert.AreNotEqual (first, second);
+
+            var update = Update ();
+            Assert.AreEqual ("foo", ResultFor (update, first).Value);
+            Assert.AreEqual ("foo", ResultFor (update, second).Value);
+            mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Exactly (2));
+
+            // Removing one leaves the other
+            core.RemoveStream (rpcClient, first);
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("bar");
+            update = Update ();
+            Assert.AreEqual (1, update.Count);
+            Assert.AreEqual ("bar", ResultFor (update, second).Value);
         }
     }
 }

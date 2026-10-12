@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
 
@@ -8,7 +7,6 @@ namespace KRPC.Service
     sealed class ProcedureCallStream : Stream
     {
         ProcedureSignature procedure;
-        object[] arguments;
         StreamContinuation continuation;
 
         public ProcedureCallStream (ProcedureCall call)
@@ -23,7 +21,8 @@ namespace KRPC.Service
             if (created != null)
                 throw new KRPC.InvalidOperationException (
                     procedure.FullyQualifiedName + " returns " + created + ", and cannot be streamed.");
-            arguments = services.GetArguments (procedure, call.Arguments);
+            // Decoded to check them when the stream is added
+            services.GetArguments (procedure, call.Arguments);
             continuation = new StreamContinuation (call);
         }
 
@@ -38,22 +37,6 @@ namespace KRPC.Service
             if (type == typeof (Messages.Event))
                 return "an event";
             return null;
-        }
-
-        public override bool Equals (Stream other)
-        {
-            if (ReferenceEquals (other, null))
-                return false;
-            var obj = other as ProcedureCallStream;
-            if (ReferenceEquals (obj, null))
-                return false;
-            return procedure == obj.procedure &&
-                Enumerable.SequenceEqual (arguments, obj.arguments);
-        }
-
-        public override int GetHashCode ()
-        {
-            return procedure.GetHashCode ();
         }
 
         public override void UpdateInternal() {

@@ -83,8 +83,6 @@ namespace KRPC.Client.Test
                 Assert.AreEqual (42, x.Get ());
                 Wait ();
             }
-            Assert.AreEqual (
-                Connection.AddStream (() => obj.IntProperty), x);
             var call = Connection.GetCall (() => obj.IntProperty * 1);
             Assert.AreEqual (
                 Connection.GetCall (() => obj.IntProperty).Procedure, call.Procedure);
@@ -104,12 +102,7 @@ namespace KRPC.Client.Test
                 Assert.AreEqual (126, y.Get ());
                 Wait ();
             }
-            Assert.AreNotEqual (
-                Connection.AddStream (() => obj.IntProperty), x);
-            Assert.AreEqual (
-                Connection.AddStream (() => obj.IntProperty * 2), x);
-            Assert.AreEqual (
-                Connection.AddStream (() => 2 * obj.IntProperty), x);
+            Assert.AreEqual (84, Connection.AddStream (() => 2 * obj.IntProperty).Get ());
         }
 
         [Test]
@@ -302,13 +295,13 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void RemoveThroughAStaleHandle ()
+        public void RemoveThenAdd ()
         {
             var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (44));
             Assert.AreEqual ("44", s0.Get ());
             s0.Remove ();
-            // The server can give the same id to the stream added again, while it removes the first
             var s1 = Connection.AddStream (() => Connection.TestService ().Int32ToString (44));
+            // Removing the first again leaves the stream added since
             s0.Remove ();
             // Run on a thread so a regression fails here instead of hanging the suite
             string value = null;
@@ -343,28 +336,19 @@ namespace KRPC.Client.Test
         [Test]
         public void AddStreamTwice ()
         {
-            var s0 = Connection.AddStream (() => Connection.TestService ().Int32ToString (42));
-            Assert.AreEqual ("42", s0.Get ());
-            Wait ();
-            Assert.AreEqual ("42", s0.Get ());
-
-            var s1 = Connection.AddStream (() => Connection.TestService ().Int32ToString (42));
-            Assert.AreEqual (s0, s1);
-            Assert.AreEqual ("42", s0.Get ());
-            Assert.AreEqual ("42", s1.Get ());
-            Wait ();
-            Assert.AreEqual ("42", s0.Get ());
-            Assert.AreEqual ("42", s1.Get ());
-
-            var s2 = Connection.AddStream (() => Connection.TestService ().Int32ToString (43));
-            Assert.AreNotEqual (s0, s2);
-            Assert.AreEqual ("42", s0.Get ());
-            Assert.AreEqual ("42", s1.Get ());
-            Assert.AreEqual ("43", s2.Get ());
-            Wait ();
-            Assert.AreEqual ("42", s0.Get ());
-            Assert.AreEqual ("42", s1.Get ());
-            Assert.AreEqual ("43", s2.Get ());
+            var s0 = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.AddStreamTwice", 1));
+            var s1 = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.AddStreamTwice", 1));
+            Assert.AreNotEqual (s0.stream.Id, s1.stream.Id);
+            Assert.AreNotEqual (s0, s1);
+            Assert.Greater (s0.Get (), 0);
+            Assert.Greater (s1.Get (), 0);
+            s0.Remove ();
+            Assert.Throws<InvalidOperationException> (() => s0.Get ());
+            lock (s1.Condition)
+                Assert.IsTrue (s1.Wait (10));
+            s1.Remove ();
         }
 
         [Test]
@@ -1119,10 +1103,9 @@ namespace KRPC.Client.Test
         public void TestEquality () {
             var s0 = Connection.AddStream (
                 () => Connection.TestService ().Counter ("StreamTest.TestEquality0", 1));
-            var s1 = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.TestEquality0", 1));
+            var s1 = new Stream<int> (Connection, s0.stream.Id);
             var s2 = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.TestEquality1", 1));
+                () => Connection.TestService ().Counter ("StreamTest.TestEquality0", 1));
 
             Assert.True (s0.Equals (s0));
 
@@ -1130,6 +1113,7 @@ namespace KRPC.Client.Test
             Assert.True (s0 == s1);
             Assert.False (s0 != s1);
 
+            // Each add is a separate stream, even of an equal call
             Assert.False (s0.Equals (s2));
             Assert.False (s0 == s2);
             Assert.True (s0 != s2);
