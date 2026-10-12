@@ -38,6 +38,10 @@
   update (#1124)
 - Add `KRPC.Expression.ReturnType` and `HasReturnType`, which report the type of the value a
   function produces, and whether it produces one (#1124)
+- Add the `StdLib` service, a standard library of scalar mathematics and of vector and quaternion
+  operations over the tuples the SpaceCenter service uses (#1125)
+- Add `StdLib.Print`, which writes a line to the game's log, for debugging server side functions
+  (#1125)
 - Expand `KRPC.Type` to name every type a procedure takes or returns, including long, unsigned,
   bytes, class, enumeration, structure and collection types, and a nullable form of any type
   (#1124)
