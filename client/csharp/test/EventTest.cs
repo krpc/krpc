@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
 using KRPC.Client.Services.TestService;
 using KRPC.Client.Services.KRPC;
@@ -64,7 +66,6 @@ namespace KRPC.Client.Test
             e.AddCallback (() => called.Set ());
             var timer = new Stopwatch ();
             timer.Start ();
-            e.Start ();
             called.WaitOne (1000);
             var time = timer.ElapsedMilliseconds;
             Assert.Greater (time, 150);
@@ -78,7 +79,6 @@ namespace KRPC.Client.Test
             e.AddCallback (() => called.Set ());
             var timer = new Stopwatch ();
             timer.Start ();
-            e.Start ();
             called.WaitOne (100);
             var time = timer.ElapsedMilliseconds;
             // WaitOne returns on its 100ms timeout, before the 1000ms event fires.
@@ -93,7 +93,6 @@ namespace KRPC.Client.Test
             e.AddCallback (() => { count++; });
             var timer = new Stopwatch ();
             timer.Start ();
-            e.Start ();
             while (count < 5) {
             }
             var time = timer.ElapsedMilliseconds;
@@ -118,7 +117,6 @@ namespace KRPC.Client.Test
             e.RemoveCallback (callback2Tag);
             var timer = new Stopwatch ();
             timer.Start ();
-            e.Start ();
             stop.WaitOne ();
             var time = timer.ElapsedMilliseconds;
             Assert.Greater (time, 150);
@@ -201,7 +199,6 @@ namespace KRPC.Client.Test
         [Test]
         public void FiringBeforeWait () {
             var e = Connection.TestService ().OnTimer (100);
-            e.Start ();
             Thread.Sleep (500);
             lock (e.Condition) {
                 var timer = Stopwatch.StartNew ();
@@ -213,7 +210,6 @@ namespace KRPC.Client.Test
         [Test]
         public void FiringsCoalesce () {
             var e = Connection.TestService ().OnTimer (50, 3);
-            e.Start ();
             Thread.Sleep (500);
             lock (e.Condition) {
                 Assert.True (e.Wait ());
@@ -224,7 +220,6 @@ namespace KRPC.Client.Test
         [Test]
         public void TwoThreadsWaitOnOneEvent () {
             var e = Connection.TestService ().OnTimer (1000);
-            e.Start ();
             var woke = 0;
             var threads = new List<Thread> ();
             for (var i = 0; i < 2; i++) {
@@ -244,6 +239,115 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void CallbackAfterAWaitIsNotCalled () {
+            var e = Connection.TestService ().OnTimer (500, 2);
+            lock (e.Condition)
+                Assert.True (e.Wait ());
+            var count = 0;
+            e.AddCallback (() => Interlocked.Increment (ref count));
+            Assert.AreEqual (0, count);
+        }
+
+        [Test]
+        public void CallbackAfterAnUnseenFiringIsCalledOnce () {
+            var e = Connection.TestService ().OnTimer (500, 2);
+            // Between the two firings
+            Thread.Sleep (750);
+            var count = 0;
+            e.AddCallback (() => Interlocked.Increment (ref count));
+            Assert.AreEqual (1, count);
+        }
+
+        [Test]
+        public void CallbackAfterAFiringPassedToACallbackIsNotCalled () {
+            var e = Connection.TestService ().OnTimer (500, 2);
+            var called = new ManualResetEvent (false);
+            e.AddCallback (() => called.Set ());
+            Assert.True (called.WaitOne (10000));
+            var count = 0;
+            e.AddCallback (() => Interlocked.Increment (ref count));
+            Assert.AreEqual (0, count);
+        }
+
+        /// <summary>
+        /// An event over an id the server has not issued, so no update arrives for it.
+        /// </summary>
+        Event UnissuedEvent (ulong id)
+        {
+            return new Event (Connection, new KRPC.Schema.KRPC.Event {
+                Stream = new KRPC.Schema.KRPC.Stream { Id = id }
+            });
+        }
+
+        void Fire (ulong id)
+        {
+            Connection.StreamManager.Update (id, new KRPC.Schema.KRPC.ProcedureResult {
+                Value = Google.Protobuf.ByteString.CopyFrom (0x01)
+            });
+        }
+
+        [Test]
+        public void AFiringPassedToAValueCallbackIsReplayed () {
+            var e = UnissuedEvent (1000021);
+            var values = new List<bool> ();
+            e.Stream.AddCallback (values.Add);
+            Fire (1000021);
+            CollectionAssert.AreEqual (new [] { true }, values);
+            var count = 0;
+            e.AddCallback (() => count++);
+            Assert.AreEqual (1, count);
+        }
+
+        [Test]
+        public void ACallbackRemovedBeforeItsReplayTakesNoFiring () {
+            var stream = UnissuedEvent (1000022).Stream.stream;
+            Fire (1000022);
+            var calls = new List<int> ();
+            int key;
+            long replay;
+            var callback = stream.RegisterEventCallback (() => calls.Add (1), 0, out key, out replay);
+            Assert.AreEqual (1, replay);
+            // Stands in for a removal between the reservation and the replay
+            stream.RemoveCallback (key);
+            stream.Replay (callback, replay);
+            stream.AddEventCallback (() => calls.Add (2), 0);
+            CollectionAssert.AreEqual (new [] { 2 }, calls);
+        }
+
+        [Test]
+        public void TwoLateCallbacksDoNotBothReplayAFiring () {
+            var stream = UnissuedEvent (1000023).Stream.stream;
+            Fire (1000023);
+            var calls = new List<int> ();
+            int key;
+            long replay;
+            var callback = stream.RegisterEventCallback (() => calls.Add (1), 0, out key, out replay);
+            // Stands in for a second add while the first replay is in flight
+            stream.AddEventCallback (() => calls.Add (2), 0);
+            stream.Replay (callback, replay);
+            CollectionAssert.AreEqual (new [] { 1 }, calls);
+        }
+
+        [Test]
+        public void ARemovedCallbackDoesNotTakeAFiring () {
+            var manager = Connection.StreamManager;
+            var stream = manager.GetStream (TypeSpec.For (typeof (bool)), 1000020);
+            var removed = 0;
+            var key = stream.AddEventCallback (() => removed++, 0);
+            var callback = stream.Callbacks [key];
+            stream.RemoveCallback (key);
+            manager.Update (1000020, new KRPC.Schema.KRPC.ProcedureResult {
+                Value = Google.Protobuf.ByteString.CopyFrom (0x01)
+            });
+            // Stands in for an update thread that copied the callback before its removal
+            stream.Call (callback, 1, true);
+            var called = 0;
+            stream.AddEventCallback (() => called++, 0);
+            Assert.AreEqual (0, removed);
+            Assert.AreEqual (1, called);
+        }
+
+        [Test]
         public void ErrorEndsTheEvent () {
             var expr = Expr.Equal (Connection,
                 Expr.Call (Connection,
@@ -259,7 +363,6 @@ namespace KRPC.Client.Test
         [Test]
         public void RemoveWakesAnEventWait () {
             var e = Connection.TestService ().OnTimer (10000);
-            e.Start ();
             var raised = new ManualResetEvent (false);
             var thread = new Thread (() => {
                 lock (e.Condition) {
@@ -281,7 +384,6 @@ namespace KRPC.Client.Test
         public void CloseWakesAnEventWait () {
             var connection = Connect ("CSharpClientTest");
             var e = connection.TestService ().OnTimer (10000);
-            e.Start ();
             var raised = new ManualResetEvent (false);
             var thread = new Thread (() => {
                 lock (e.Condition) {
@@ -297,6 +399,54 @@ namespace KRPC.Client.Test
             Thread.Sleep (200);
             connection.Dispose ();
             Assert.True (raised.WaitOne (10000));
+        }
+
+        [Test]
+        public void ServerDisconnectWakesAnEventWait () {
+            using (var connection = Connect ("CSharpClientTest")) {
+                var e = connection.TestService ().OnTimer (10000);
+                var raised = new ManualResetEvent (false);
+                var thread = new Thread (() => {
+                    lock (e.Condition) {
+                        try {
+                            e.Wait ();
+                        } catch (ConnectionException) {
+                            raised.Set ();
+                        }
+                    }
+                });
+                thread.IsBackground = true;
+                thread.Start ();
+                Thread.Sleep (200);
+                // Stands in for the server closing the connection
+                var field = typeof (Connection).GetField (
+                    "streamSocket", BindingFlags.NonPublic | BindingFlags.Instance);
+                ((Socket)field.GetValue (connection)).Shutdown (SocketShutdown.Both);
+                Assert.True (raised.WaitOne (10000));
+            }
+        }
+
+        [Test]
+        public void AnInvokeWithoutAReturnTypeNotesAnEventId ()
+        {
+            using (var connection = Connect ("CSharpClientTest")) {
+                var result = connection.Invoke ("TestService", "OnTimer", new [] {
+                    Encoder.Encode (100000u, TypeSpec.For (typeof (uint))),
+                    Encoder.Encode (1u, TypeSpec.For (typeof (uint)))
+                });
+                var id = KRPC.Schema.KRPC.Event.Parser.ParseFrom (result.Value).Stream.Id;
+                Assert.IsTrue (connection.StreamManager.Keeps (id));
+                connection.KRPC ().RemoveStream (id);
+            }
+        }
+
+        [Test]
+        public void TheListedReturnTypesAreStreamsAndEvents ()
+        {
+            var types = Connection.ListStreamReturnTypes ();
+            Assert.AreEqual (typeof (Event), types ["TestService.OnTimer"]);
+            Assert.AreEqual (typeof (KRPC.Schema.KRPC.Stream), types ["KRPC.AddStream"]);
+            Assert.IsFalse (types.ContainsKey ("TestService.FloatToString"));
         }
     }
 }

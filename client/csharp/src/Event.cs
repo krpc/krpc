@@ -72,16 +72,6 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Start the event.
-        /// </summary>
-        /// <remarks>
-        /// Throws the exception that ended the event, if it has ended.
-        /// </remarks>
-        public void Start() {
-            stream.Start(false);
-        }
-
-        /// <summary>
         /// Condition variable that is notified when the event occurs.
         /// </summary>
         public object Condition {
@@ -99,10 +89,6 @@ namespace KRPC.Client
         /// </remarks>
         public bool Wait (double timeout = -1) {
             var impl = stream.stream;
-            if (!impl.Started) {
-                impl.ThrowIfEnded ();
-                impl.Start ();
-            }
             // A firing not yet seen is returned before the ending
             var last = seen;
             if (!impl.Wait (() => impl.Fired > last, timeout))
@@ -112,10 +98,18 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Add a callback that is invoked whenever the stream is updated.
+        /// Add a callback that is invoked whenever the event occurs.
         /// </summary>
+        /// <remarks>
+        /// The callback is invoked straight away, once, if the event has not ended and has fired
+        /// since the last wait on this event object returned and since its callbacks were last
+        /// invoked. An error ends the event and does not invoke the callback.
+        /// </remarks>
         public int AddCallback (Action callback) {
-            return stream.AddCallback ((bool x) => { if (x) callback(); });
+            long last;
+            lock (stream.Condition)
+                last = seen;
+            return stream.stream.AddEventCallback (callback, last);
         }
 
         /// <summary>

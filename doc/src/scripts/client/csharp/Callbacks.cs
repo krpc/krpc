@@ -17,7 +17,6 @@ class Program {
             (bool x) => {
                 Console.WriteLine("Abort 2 called with a value of " + x);
             });
-        abort.Start();
 
         // Keep the program running...
         while (true) {

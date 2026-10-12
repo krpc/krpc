@@ -94,29 +94,6 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Start the stream.
-        /// </summary>
-        /// <remarks>
-        /// Throws the exception that ended the stream, if it ends before or during the wait.
-        /// </remarks>
-        public void Start(bool wait = true) {
-            stream.ThrowIfEnded ();
-            if (stream.Started)
-                return;
-            if (!wait) {
-                stream.Start();
-            } else {
-                var condition = stream.Condition;
-                lock (condition) {
-                    stream.Start();
-                    while (!stream.Updated && !stream.Ended)
-                        Monitor.Wait (condition);
-                    stream.ThrowIfEnded ();
-                }
-            }
-        }
-
-        /// <summary>
         /// The rate of the stream, in Hertz.
         /// </summary>
         public float Rate {
@@ -128,12 +105,17 @@ namespace KRPC.Client
         /// The most recent value of the stream.
         /// </summary>
         /// <remarks>
-        /// Throws the exception that ended the stream, if it has ended.
+        /// Blocks until the first value arrives. Throws the exception that ended the stream, if
+        /// it has ended.
         /// </remarks>
         public TReturnType Get () {
-            stream.ThrowIfEnded ();
-            if (!stream.Started)
-                Start();
+            if (!stream.Updated) {
+                var condition = stream.Condition;
+                lock (condition) {
+                    while (!stream.Updated && !stream.Ended)
+                        Monitor.Wait (condition);
+                }
+            }
             return Convert (stream.Value);
         }
 
@@ -160,8 +142,6 @@ namespace KRPC.Client
         /// </remarks>
         public bool Wait (double timeout = -1) {
             stream.ThrowIfEnded ();
-            if (!stream.Started)
-                stream.Start();
             var version = stream.Version;
             return stream.Wait (() => stream.Version != version, timeout);
         }
@@ -169,6 +149,10 @@ namespace KRPC.Client
         /// <summary>
         /// Add a callback that is invoked whenever the stream is updated.
         /// </summary>
+        /// <remarks>
+        /// The callback is invoked straight away with the value the stream already has, if any.
+        /// An error ends the stream and does not invoke the callback.
+        /// </remarks>
         public int AddCallback (Action<TReturnType> callback) {
             return stream.AddCallback ((object x) => callback (Convert (x)));
         }

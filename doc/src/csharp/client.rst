@@ -120,12 +120,6 @@ The body of the loop calls ``Wait`` on the stream, which causes the program to b
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
 whilst waiting.
 
-.. note::
-
-   The stream does not start receiving updates until the first call to ``Wait``. This means that the
-   example code will not miss any updates to the streams value, as it will have already locked the
-   condition variable before the first stream update is received.
-
 Callbacks
 ^^^^^^^^^
 
@@ -138,15 +132,7 @@ For example the following program registers two callbacks that are invoked when 
 
 .. literalinclude:: /scripts/client/csharp/Callbacks.cs
 
-.. note::
-
-   When a stream is created it does not start receiving updates until ``Start`` is called. This is
-   implicitly called when accessing the value of a stream, but as this example does not do this an
-   explicit call to ``Start`` is required.
-
-.. note::
-
-   The callbacks are registered before the call to ``Start`` so that stream updates are not missed.
+A callback added to a stream that already has a value is called with that value straight away.
 
 .. note::
 
@@ -257,32 +243,15 @@ Client API Reference
    Stream objects implement ``GetHashCode``, ``Equals``, ``operator ==`` and ``operator !=`` such
    that two stream objects are equal if they are bound to the same stream on the server.
 
-   .. method:: void Start(bool wait = true)
-
-      Starts the stream. When a stream is created by calling :meth:`Connection.AddStream` it does
-      not start sending updates to the client until this method is called.
-
-      If wait is true, this method will block until at least one update has been received from the
-      server.
-
-      If wait is false, the method starts the stream and returns immediately. Subsequent calls to
-      :meth:`Get` may raise an ``InvalidOperationException`` if the stream does not yet contain a
-      value.
-
-      Throws the exception that ended the stream, if it ends before or during the wait.
-
    .. property:: float Rate { get; set; }
 
       The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
 
    .. method:: ReturnType Get()
 
-      Returns the most recent value for the stream. Throws the exception that ended the stream, if
-      it has ended, such as an exception thrown by the remote procedure. Throws an
-      ``InvalidOperationException`` if no update has been received from the server.
-
-      If the stream has not been started this method calls ``Start(true)`` to start the stream and
-      wait until at least one update has been received.
+      Returns the most recent value for the stream, waiting for the first value if none has arrived
+      yet. Throws the exception that ended the stream, if it has ended, such as an exception thrown
+      by the remote procedure.
 
    .. property:: object Condition { get; }
 
@@ -300,14 +269,13 @@ Client API Reference
       the operation. Throws the exception that ended the stream, if it ends before or during the
       wait.
 
-      If the stream has not been started this method calls ``Start(false)`` to start the stream
-      (without waiting for at least one update to be received).
-
    .. method:: int AddCallback(Action<ReturnType> callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
-      stream. Returns a unique identifier for the callback which can be used to remove it.
+      stream. If the stream already has a value, the callback is invoked with it straight away.
+      An error ends the stream and does not invoke the callback. Calling ``Get()`` throws it.
+      Returns a unique identifier for the callback which can be used to remove it.
 
       .. note::
 
@@ -344,11 +312,6 @@ Client API Reference
    Event objects implement ``GetHashCode``, ``Equals``, ``operator ==`` and ``operator !=`` such
    that two event objects are equal if they are bound to the same underlying stream on the server.
 
-   .. method:: void Start()
-
-      Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called. Throws the exception that ended the event, if it has ended.
-
    .. property:: object Condition { get; }
 
       The condition variable that is notified (using ``Monitor.PulseAll``) whenever the event
@@ -366,14 +329,14 @@ Client API Reference
       the operation. Throws the exception that ended the event, if it ends before or during the
       wait.
 
-      If the event has not been started this method calls ``Start()`` to start the underlying
-      stream.
-
    .. method:: int AddCallback(Action callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments. Returns a unique identifier for the callback
-      which can be used to remove it.
+      should be a function that takes zero arguments. If the event has not ended and has fired
+      since the last ``Wait`` on this event object returned and since its callbacks were last
+      invoked, the callback is invoked once straight away. An error ends the event and does not
+      invoke the callback. Returns a unique identifier for the callback which can be used to
+      remove it.
 
    .. method:: void RemoveCallback(int tag)
 
