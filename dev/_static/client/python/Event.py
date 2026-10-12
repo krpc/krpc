@@ -14,7 +14,7 @@ expr = conn.krpc.Expression.greater_than(
 )
 
 # Create an event from the function
-event = conn.krpc.add_event(expr)
+event = conn.add_event(expr)
 
 # Wait on the event
 with event.condition:
