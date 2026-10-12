@@ -38,6 +38,8 @@
     <Compile Include="Encoder.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="ExpressionUtils.cs" />
+    <Compile Include="FunctionCompilationException.cs" />
+    <Compile Include="FunctionCompiler.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="MessageReader.cs" />
     <Compile Include="ProcedureSpecs.cs" />

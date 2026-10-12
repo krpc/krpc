@@ -57,6 +57,21 @@ Many procedures return an object identifying something in the game, such as a ve
 a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
 behaves when a game is loaded or what it identifies is destroyed.
 
+Server Side Functions
+---------------------
+
+A server side function is code that runs inside the game, on the server. Pass a lambda expression to
+:meth:`Connection.Run` to compile it into a server side function, run it once and return its value.
+Every value it reads comes from the same physics tick. For example, the following reads the vessel's
+altitude and speed together:
+
+.. literalinclude:: /scripts/client/csharp/RunFunction.cs
+
+Use ``Run`` for a function with effects, such as a call of ``ActivateNextStage``. An event or a
+function stream evaluates its function on every update, repeating the effects.
+
+:ref:`csharp-client-compiling-lambdas` describes what a function can contain.
+
 .. _csharp-client-streams:
 
 Streaming Data
@@ -85,13 +100,19 @@ It calls :meth:`Connection.AddStream` once at the start of the program to create
 then repeatedly prints the position returned by the stream. The stream is automatically closed when
 the client disconnects.
 
-A stream can be created for any method call by calling :meth:`Connection.AddStream` and passing it
-a lambda expression that invokes the desired method. This lambda expression must take zero arguments
-and be a method call or property access, which may be multiplied by a constant. It returns a stream
-object of type :type:`Stream`. The most recent value of the stream can be obtained by calling
-:meth:`Stream.Get`. A stream can be stopped and removed from the server by calling
-:meth:`Stream.Remove` on the stream object. All of a clients streams are automatically stopped when
-it disconnects.
+To stream a method call, pass :meth:`Connection.AddStream` a lambda expression with no parameters
+that makes the call. A single call with fixed arguments is streamed as that call. The instance it
+is made on is evaluated once, when the stream is created. For example,
+``vessel.Flight(frame).MeanAltitude`` streams the ``MeanAltitude`` call.
+
+Any other lambda is compiled into a server side function, as
+:ref:`csharp-client-compiling-lambdas` describes. A call with a remote procedure call in an
+argument is one of these, and the argument's call is made on each update.
+
+:meth:`Connection.AddStream` returns a stream object of type :type:`Stream`. The most recent
+value of the stream can be obtained by calling :meth:`Stream.Get`. A stream can be stopped and
+removed from the server by calling :meth:`Stream.Remove` on the stream object. All of a client's
+streams are automatically stopped when it disconnects.
 
 .. note::
 
@@ -99,14 +120,14 @@ it disconnects.
    object is garbage collected. Each call to ``AddStream`` adds another stream.
 
 Synchronizing with Stream Updates
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
 then take some action. kRPC provides two mechanisms to do this efficiently: *condition variables*
 and *callbacks*.
 
 Condition Variables
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 Each stream has a condition variable associated with it, that is notified whenever the value of the
 stream changes. These can be used to block the current thread of execution until the value of the
@@ -126,7 +147,7 @@ changes. This prevents the loop from 'spinning' and so it does not consume proce
 whilst waiting.
 
 Callbacks
-^^^^^^^^^
+~~~~~~~~~
 
 Streams allow you to register callback functions that are called whenever the value of the stream
 changes. Callback functions should take a single argument, which is the new value of the stream, and
@@ -168,6 +189,40 @@ holds the stream instead. It resumes once the object or scene is available.
 To handle an ending in a callback, add an end callback with :meth:`Stream.AddEndCallback`. It is
 called once, with the exception.
 
+Streaming Server Side Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pass a lambda expression to :meth:`Connection.AddStream` to stream its value, computed on the
+server. The server evaluates the function on each stream update, within one physics tick. The value
+can be any type the server can send, including collections and objects. For example, the following
+streams the vessel's altitude in kilometers:
+
+.. literalinclude:: /scripts/client/csharp/CompiledFunctionStream.cs
+
+Given a function built with the expression API, :meth:`Connection.AddStream` takes the type of
+its value as a type parameter. The type must be able to hold the value, or ``AddStream`` throws an
+``InvalidOperationException``.
+
+A function stream or event ends at the first exception its function throws. This includes the
+``KRPC.ObjectNotLoadedException`` of a call on a part of an unloaded vessel, or on a vessel during
+a game load. To keep the function running, catch the exception with ``Expression.TryCatch``. The
+following event does not fire while the part is not loaded:
+
+.. code-block:: csharp
+
+   var hot = Expression.Variable(connection, "hot", Type.Bool(connection));
+   var function = Expression.BlockWithVariables(connection,
+       new List<Expression> { hot },
+       new List<Expression> {
+           Expression.TryCatch(connection,
+               Expression.Assign(connection, hot,
+                   connection.Compile(() => part.Temperature > 1000)),
+               "KRPC", "ObjectNotLoadedException", null,
+               Expression.Assign(connection, hot, Expression.ConstantBool(connection, false))),
+           hot
+       });
+   var evnt = connection.AddEvent(function);
+
 .. _csharp-client-events:
 
 Events
@@ -181,11 +236,137 @@ A call to ``Wait`` returns straight away if the event has fired since the previo
 event object, so no firing is missed between two calls. Several firings between two calls make
 ``Wait`` return once.
 
-You can also create a custom event from a server side function, which is code that runs inside
-the game. The following builds the function ``MeanAltitude > 1000``, and creates an event that
-triggers when the function returns true:
+You can also create a custom event from a lambda expression. The following creates an event that
+triggers when ``MeanAltitude > 1000``:
+
+.. literalinclude:: /scripts/client/csharp/CompiledEvent.cs
+
+You can also build the event's function with the expression API, and pass it to
+:meth:`Connection.AddEvent`. :meth:`Connection.GetCall` gives the call of a procedure, for
+``Expression.Call``. The following builds the same event:
 
 .. literalinclude:: /scripts/client/csharp/Event.cs
+
+.. _csharp-client-compiling-lambdas:
+
+Compiling Server Side Functions
+-------------------------------
+
+Pass a lambda expression to :meth:`Connection.Compile` to compile it into a server side function.
+:meth:`Connection.AddEvent`, :meth:`Connection.AddStream` and :meth:`Connection.Run` take the
+result, and run it without compiling it again. The following compiles a function once, and runs it
+every second:
+
+.. literalinclude:: /scripts/client/csharp/CompiledFunction.cs
+
+Given a lambda, ``AddEvent`` and ``Run`` translate it on every call, and so does ``AddStream``
+unless it streams a single call. The lambda's captured variables take their current values. A
+compiled function keeps the values from when it was compiled.
+
+Compiling makes a remote procedure call per node. To use a lambda repeatedly, compile it once with
+``Compile`` and pass the result. ``Compile`` also compiles the function on the server, so its first
+run is as fast as later ones.
+
+A lambda can take up to four parameters. ``Run`` passes its arguments to them:
+
+.. code-block:: csharp
+
+   var flight = connection.SpaceCenter().ActiveVessel.Flight();
+   var altitudeAbove = connection.Compile((double height) => flight.MeanAltitude - height);
+   Console.WriteLine(connection.Run<double>(altitudeAbove, 70000));
+
+An argument is encoded at its parameter's type, and a number widens as C# widens it. A signed
+integer that is not negative converts to an unsigned parameter at least as wide, so a ``long``
+converts to a ``ulong`` but not a ``uint``.
+
+An array other than an ``object[]``, passed as the only argument, is the argument of a function
+with one parameter. An event or a function stream takes a function with no parameters.
+
+The lambda is a C# expression tree, so C#'s expression tree rules apply. It holds a single
+expression, and a call in it gives every argument, including the optional ones. Build a function
+with statements, or one that raises or handles exceptions, with the expression API.
+
+The compiler translates the lambda's expression tree into a server side function that computes
+the same result on the server:
+
+* Property accesses and method calls on remote objects and services become calls in the
+  function, made again on each evaluation. This includes calls on the elements of a collection
+  in a LINQ operator. The procedures of the ``KRPC`` service cannot be called.
+* Captured variables, literals and any sub-expression that makes no remote call are evaluated
+  once, when the function is compiled, and embedded as constants. A captured value in a string
+  concatenation is formatted on the client, as C# formats it.
+* A delegate call is an error. So is a call to a method, a constructor, a computed property or an
+  operator defined outside the .NET base library and the kRPC client. Call it outside the lambda
+  and use its result. An auto-property is read once, when compiling, as a captured variable is.
+* Passing a delegate, or a value whose type overrides a method such as ``ToString``, to the base
+  library is an error, as in ``"a" + obj``, ``list.Select(MyMethod)`` and your own
+  ``IEnumerable<T>`` or ``IComparer<T>`` given to LINQ. So is reading ``Lazy<T>.Value``.
+* Operators, conditional expressions, casts and indexing compile to the matching expression
+  operators. So do ``List``, ``HashSet`` and ``Dictionary`` initializers, ``Tuple.Create``, and
+  a tuple's ``Item1`` to ``Item7``. A dictionary's ``Keys`` and ``Values`` are lists of its keys
+  and values.
+* ``&&`` and ``||`` short-circuit on the server. ``&`` and ``|`` evaluate both operands.
+* Comparing a value with ``null`` tests whether it is null. ``??``, ``HasValue``, ``Value`` and
+  ``GetValueOrDefault`` behave as in C#.
+* ``==`` and ``!=`` compare tuples and collections by their contents. C# compares them by
+  reference.
+* An ordering comparison with a nullable number is false when the number is null. Arithmetic
+  and logic on a null throw.
+* The ``System.Math`` methods ``Abs``, ``Sign``, ``Min``, ``Max``, ``Clamp``, ``Floor``,
+  ``Ceiling``, ``Round``, ``Pow``, ``Sqrt``, ``Exp``, ``Log``, ``Log10``, ``Sin``, ``Cos``,
+  ``Tan``, ``Asin``, ``Acos``, ``Atan`` and ``Atan2`` take server side arguments. Integer
+  ``Abs``, ``Min``, ``Max`` and ``Clamp`` are exact at their own type. ``Math.Round`` takes the
+  ``MidpointRounding.ToEven`` and ``AwayFromZero`` modes, given as a client side value. Unlike
+  C#, it takes any number of decimal places, and a negative number rounds to tens, hundreds and
+  beyond.
+* ``Console.WriteLine`` writes a line to the game's log with ``StdLib.Print``. It formats its
+  arguments as ``string.Format`` does. Convert a number computed on the server with
+  ``ToString(CultureInfo.InvariantCulture)`` before passing it.
+* The string members ``Length``, ``Substring``, ``IndexOf``, ``Contains``, ``StartsWith``,
+  ``EndsWith``, ``Replace``, ``ToUpperInvariant``, ``ToLowerInvariant``, ``Trim``,
+  ``TrimStart`` and ``TrimEnd`` compile to the server's string operations. So does
+  ``string.Join``.
+* An interpolated string, ``string.Concat``, and ``string.Format`` with plain ``{0}``
+  placeholders compile to a concatenation.
+* ``ToString`` of an object computed on the server gives the server's name for its class, which
+  differs from the client's.
+* A ``double`` converted to a string on the server is formatted by the server's runtime. It can
+  print fewer digits than the client, as in ``0.3`` for ``0.30000000000000004``.
+* An index out of range in ``list[i]``, ``ElementAt`` or ``Substring`` throws
+  ``IndexOutOfRangeException``, where C# throws ``ArgumentOutOfRangeException``.
+* The LINQ operators ``Select``, ``Where``, ``SelectMany``, ``Any`` and ``All`` with a
+  predicate, ``Count``, ``Sum``, ``Min``, ``Max`` and ``Average`` without one, ``Contains``,
+  ``OrderBy``, ``Concat``, ``Skip``, ``Take``, ``First``, ``Last``, ``ElementAt``,
+  ``Distinct``, ``Reverse``, ``Union``, ``Intersect``, ``Except``, ``Zip``, ``ToDictionary``,
+  ``ToList`` and ``ToHashSet`` compile to the server's collection operations. A key repeated
+  in ``ToDictionary`` takes the last of its values, where C# throws.
+* A lambda that evaluates to an ``IEnumerable<T>`` evaluates to a list. One that evaluates to
+  the ``IOrderedEnumerable<T>`` of ``OrderBy`` is an error. Call ``ToList`` on it.
+* Reading a field of a structure a service defines reads that field of it on the server.
+  Constructing one with ``new`` builds it there. Comparing two with ``<``, ``>``, ``<=`` or
+  ``>=`` is an error.
+* Reading a stream with ``Stream.Get`` is an error. Make the stream's remote procedure call in
+  the lambda instead.
+
+The server formats and compares strings with the invariant culture. A call that depends on the
+current culture is an error:
+
+* A number converts to a string with ``ToString(CultureInfo.InvariantCulture)``. Format an
+  interpolated string with ``FormattableString.Invariant``, or call ``string.Format`` with
+  ``CultureInfo.InvariantCulture``.
+* ``IndexOf``, ``StartsWith`` and ``EndsWith`` with a string argument take
+  ``StringComparison.Ordinal``.
+* ``ToUpper`` and ``ToLower`` take ``CultureInfo.InvariantCulture``.
+* ``OrderBy`` with a string key takes ``StringComparer.Ordinal``.
+
+Integer arithmetic wraps around on overflow, so ``checked`` arithmetic is an error.
+
+A construct with no server side equivalent throws :type:`FunctionCompilationException` naming it.
+Examples are ``GroupBy``, ``Aggregate``, ``MinBy``, ``MaxBy`` and a format specifier.
+
+A lambda that makes no remote procedure call is an error in an event or a stream, as its value is
+the same on every update. An ``Action`` lambda that makes no remote procedure call is an error in
+``Compile`` and ``Run``, as it has no effect on the server.
 
 Client API Reference
 --------------------
@@ -235,7 +416,66 @@ Client API Reference
 
    .. method:: Stream<ReturnType> AddStream<ReturnType>(LambdaExpression expression)
 
-      Create a new stream from the given lambda expression.
+      Create a stream from a lambda expression. A single remote procedure call with fixed
+      arguments is streamed as that call. A cast of a call to a ``KRPC`` service procedure is
+      too, with the cast made on the client. Any other lambda is translated as
+      :meth:`Connection.Compile` translates it, on every call. Throws an ``ArgumentException`` if
+      ``ReturnType`` cannot hold the lambda's value, and :type:`FunctionCompilationException` if
+      the lambda cannot be compiled.
+
+   .. method:: Stream<ReturnType> AddStream<ReturnType>(KRPC.Client.Services.KRPC.Expression function)
+
+      Create a stream of the value of a server side function. Throws an
+      ``InvalidOperationException`` if the function has no value or the type parameter cannot
+      hold its value.
+
+   .. method:: KRPC.Client.Services.KRPC.Expression Compile<ReturnType>(Expression<Func<ReturnType>> expression)
+
+      Compile a lambda expression into a server side function. Throws
+      :type:`FunctionCompilationException` if the lambda cannot run on the server. Compiling
+      makes a remote procedure call per node, so compile a function once and reuse it. The
+      server compiles the function too, so its first run is as fast as later ones.
+
+   .. method:: KRPC.Client.Services.KRPC.Expression Compile(Expression<Action> expression)
+
+      Compile a lambda expression with no value into a server side function.
+
+   .. method:: KRPC.Client.Services.KRPC.Expression Compile<T1,ReturnType>(Expression<Func<T1,ReturnType>> expression)
+
+      Compile a lambda expression with a parameter into a server side function. Overloads take
+      up to four parameters, and a lambda with no value.
+
+   .. method:: Event AddEvent(Expression<Func<bool>> expression)
+
+      Create an event from a lambda expression that evaluates to a boolean value. The lambda is
+      translated as :meth:`Connection.Compile` translates it, on every call.
+
+   .. method:: Event AddEvent(KRPC.Client.Services.KRPC.Expression function)
+
+      Create an event from a server side function that evaluates to a boolean value.
+
+   .. method:: ReturnType Run<ReturnType>(KRPC.Client.Services.KRPC.Expression function, params object[] args)
+
+      Run a server side function within a single physics tick, and return its value. The
+      arguments are passed to the function's parameters. Throws an
+      ``InvalidOperationException`` if the function has no value or the type parameter cannot hold
+      its value, and an ``ArgumentException`` if the number of arguments is wrong or a parameter
+      cannot take its argument. A null result needs a reference type or a nullable value type as
+      the type parameter.
+
+   .. method:: ReturnType Run<ReturnType>(Expression<Func<ReturnType>> expression)
+
+      Run a lambda expression on the server within a single physics tick, and return its value.
+      The lambda is translated as :meth:`Connection.Compile` translates it, on every call.
+
+   .. method:: void Run(KRPC.Client.Services.KRPC.Expression function, params object[] args)
+
+      Run a server side function with no value within a single physics tick. The arguments are
+      passed to the function's parameters.
+
+   .. method:: void Run(Expression<Action> expression)
+
+      Run a lambda expression with no value on the server within a single physics tick.
 
    .. method:: KRPC.Schema.KRPC.ProcedureCall GetCall(LambdaExpression expression)
 
@@ -245,6 +485,10 @@ Client API Reference
    .. method:: void Dispose()
 
       Closes the connection and frees the resources associated with it.
+
+.. class:: FunctionCompilationException
+
+   Thrown when a lambda expression cannot be compiled into a server side function.
 
 .. class:: Stream<ReturnType>
 
@@ -264,6 +508,9 @@ Client API Reference
       Returns the most recent value for the stream, waiting for the first value if none has arrived
       yet. Throws the exception that ended the stream, if it has ended, such as an exception thrown
       by the remote procedure.
+
+      Throws an ``InvalidOperationException`` if the value is a null that ``ReturnType``
+      cannot hold.
 
    .. property:: object Condition { get; }
 
