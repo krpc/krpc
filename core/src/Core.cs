@@ -816,14 +816,11 @@ namespace KRPC
         /// </summary>
         internal void StartStream(IClient rpcClient, ulong streamId)
         {
-            var id = rpcClient.Guid;
-            if (!streamClients.ContainsKey(id))
-                throw new InvalidOperationException("No stream client is connected for this RPC client");
-            var streamClient = streamClients[id];
-            if (!streams[streamClient].ContainsKey(streamId))
-                throw new InvalidOperationException("Stream does not exist with this id");
-            streams [streamClient] [streamId].Start ();
-            Logger.WriteLine("Started stream " + streamId + " for client " + streamClient.Address, Logger.Severity.Debug);
+            var stream = GetStream (rpcClient, streamId);
+            if (stream == null)
+                return;
+            stream.Start ();
+            Logger.WriteLine("Started stream " + streamId, Logger.Severity.Debug);
         }
 
         /// <summary>
@@ -831,13 +828,11 @@ namespace KRPC
         /// </summary>
         internal void SetStreamRate(IClient rpcClient, ulong streamId, float rate)
         {
-            var id = rpcClient.Guid;
-            if (!streamClients.ContainsKey(id))
-                throw new InvalidOperationException("No stream client is connected for this RPC client");
-            var streamClient = streamClients[id];
-
-            streams [streamClient] [streamId].Rate = rate;
-            Logger.WriteLine("Set rate for stream for client " + streamClient.Address, Logger.Severity.Debug);
+            var stream = GetStream (rpcClient, streamId);
+            if (stream == null)
+                return;
+            stream.Rate = rate;
+            Logger.WriteLine("Set rate for stream " + streamId, Logger.Severity.Debug);
         }
 
         /// <summary>
@@ -845,14 +840,25 @@ namespace KRPC
         /// </summary>
         internal void RemoveStream (IClient rpcClient, ulong streamId)
         {
-            var id = rpcClient.Guid;
-            if (!streamClients.ContainsKey (id))
-                throw new InvalidOperationException ("No stream client is connected for this RPC client");
-            var streamClient = streamClients [id];
-            var clientStreams = streams [streamClient];
-            if (!clientStreams.ContainsKey (streamId))
+            if (GetStream (rpcClient, streamId) == null)
                 return;
-            removeStreams[streamId] = streamClient;
+            removeStreams[streamId] = streamClients [rpcClient.Guid];
+        }
+
+        /// <summary>
+        /// The client's stream with the given id, or null if the stream has ended.
+        /// Throws an exception if the id has never been issued.
+        /// </summary>
+        Service.Stream GetStream (IClient rpcClient, ulong streamId)
+        {
+            IClient<NoMessage,StreamUpdate> streamClient;
+            if (!streamClients.TryGetValue (rpcClient.Guid, out streamClient))
+                throw new InvalidOperationException ("No stream client is connected for this RPC client");
+            if (streamId >= nextStreamId)
+                throw new ArgumentException ("No stream exists with id " + streamId, nameof (streamId));
+            Service.Stream stream;
+            streams [streamClient].TryGetValue (streamId, out stream);
+            return stream;
         }
 
         /// <summary>

@@ -263,6 +263,10 @@ namespace KRPC.Service.KRPC
         /// <summary>
         /// Set the update rate for a stream in Hz.
         /// </summary>
+        /// <remarks>
+        /// Does nothing for a stream that has ended. Throws an exception if the id has never
+        /// been issued.
+        /// </remarks>
         [KRPCProcedure]
         public static void SetStreamRate (ulong id, float rate)
         {
@@ -272,6 +276,10 @@ namespace KRPC.Service.KRPC
         /// <summary>
         /// Remove a streaming request.
         /// </summary>
+        /// <remarks>
+        /// Does nothing for a stream that has ended. Throws an exception if the id has never
+        /// been issued.
+        /// </remarks>
         [KRPCProcedure]
         // FIXME: should be a Stream not a ulong
         public static void RemoveStream (ulong id)

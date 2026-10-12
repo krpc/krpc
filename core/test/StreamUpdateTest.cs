@@ -217,5 +217,27 @@ namespace KRPC.Test
             Assert.AreEqual (42, ResultFor (update, working).Value);
             Assert.AreEqual (new List<ulong> { failing }, streamClient.Recorded.RemovedIds);
         }
+
+        [Test]
+        public void ManagementCallsOnAnEndedStreamDoNothing ()
+        {
+            var id = Add (new ConstantStream (42));
+            core.RemoveStream (rpcClient, id);
+            Update ();
+            Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
+            core.RemoveStream (rpcClient, id);
+            core.SetStreamRate (rpcClient, id, 1);
+            core.StartStream (rpcClient, id);
+            Assert.AreEqual (0, Update ().Count);
+        }
+
+        [Test]
+        public void ManagementCallsOnAnIdNeverIssuedThrow ()
+        {
+            var id = Add (new ConstantStream (42));
+            Assert.Throws<ArgumentException> (() => core.RemoveStream (rpcClient, id + 1));
+            Assert.Throws<ArgumentException> (() => core.SetStreamRate (rpcClient, id + 1, 1));
+            Assert.Throws<ArgumentException> (() => core.StartStream (rpcClient, id + 1));
+        }
     }
 }
