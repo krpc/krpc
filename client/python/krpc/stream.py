@@ -33,23 +33,6 @@ class Stream:
         stream = client._stream_manager.add_stream(return_type, call)
         return cls(stream)
 
-    def start(self, wait: bool = True) -> None:
-        """Start the stream. If wait is true,
-        blocks until the stream has received its first update.
-        Raises the error that ended the stream, if it ends before or during the wait."""
-        stream = self._stream
-        stream.raise_if_ended()
-        if stream.started:
-            return
-        if not wait:
-            stream.start()
-        else:
-            with stream.condition:
-                stream.start()
-                while not stream.updated and not stream.ended:
-                    stream.condition.wait()
-                stream.raise_if_ended()
-
     @property
     def rate(self) -> float:
         """The update rate for the stream in Hertz.
@@ -63,12 +46,14 @@ class Stream:
         self._stream.rate = value
 
     def __call__(self):  # type: ignore[no-untyped-def]
-        """Get the most recent value for this stream. Raises the error that ended the
-        stream, if it has ended."""
-        self._stream.raise_if_ended()
-        if not self._stream.started:
-            self.start()
-        return self._stream.value
+        """Get the most recent value for this stream. Blocks until the first value
+        arrives. Raises the error that ended the stream, if it has ended."""
+        stream = self._stream
+        if not stream.updated:
+            with stream.condition:
+                while not stream.updated and not stream.ended:
+                    stream.condition.wait()
+        return stream.value
 
     @property
     def condition(self) -> threading.Condition:
@@ -85,8 +70,6 @@ class Stream:
         stream, if it ends before or during the wait."""
         stream = self._stream
         stream.raise_if_ended()
-        if not stream.started:
-            stream.start()
         version = stream.version
         deadline = None if timeout is None else time.monotonic() + timeout
         while stream.version == version:
@@ -101,7 +84,8 @@ class Stream:
         return True
 
     def add_callback(self, callback: Callable[[Any], None]) -> None:
-        """Add a callback that is invoked whenever the stream is updated. An
+        """Add a callback that is invoked whenever the stream is updated. It is
+        invoked straight away with the value the stream already has, if any. An
         error from the stream does not invoke the callback."""
         self._stream.add_callback(callback)
 

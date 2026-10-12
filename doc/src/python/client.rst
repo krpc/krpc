@@ -139,12 +139,6 @@ The body of the loop calls ``wait`` on the stream, which causes the program to b
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
 whilst waiting.
 
-.. note::
-
-   The stream does not start receiving updates until the first call to ``wait``. This means that the
-   example code will not miss any updates to the streams value, as it will have already locked the
-   condition variable before the first stream update is received.
-
 The example code above uses a ``with`` statement to acquire the lock on the condition variable. This
 can also be done explicitly using ``acquire`` and ``release``:
 
@@ -162,15 +156,7 @@ For example the following program registers two callbacks that are invoked when 
 
 .. literalinclude:: /scripts/client/python/Callbacks.py
 
-.. note::
-
-   When a stream is created it does not start receiving updates until ``start`` is called. This is
-   implicitly called when accessing the value of a stream, but as this example does not do this an
-   explicit call to ``start`` is required.
-
-.. note::
-
-   The callbacks are registered before the call to ``start`` so that stream updates are not missed.
+A callback added to a stream that already has a value is called with that value straight away.
 
 .. note::
 
@@ -339,32 +325,15 @@ Client API Reference
 
    This class represents a stream. See :ref:`python-client-streams`.
 
-   .. method:: start(wait=True)
-
-      Starts the stream. When a stream is created by calling :meth:`krpc.client.Client.add_stream`
-      it does not start sending updates to the client until this method is called.
-
-      If wait is true, this method will block until at least one update has been received from the
-      server.
-
-      If wait is false, the method starts the stream and returns immediately. Subsequent calls to
-      :meth:`__call__` may raise a ``StreamError`` exception if the stream does not yet contain a
-      value.
-
-      Raises the exception that ended the stream, if it ends before or during the wait.
-
    .. attribute:: rate
 
       The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
 
    .. method:: __call__()
 
-      Returns the most recent value for the stream. Raises the exception that ended the stream, if
-      it has ended, such as an exception thrown by the remote procedure. Raises a ``StreamError``
-      exception if no update has been received from the server.
-
-      If the stream has not been started this method calls ``start(True)`` to start the stream and
-      wait until at least one update has been received.
+      Returns the most recent value for the stream, waiting for the first value if none has arrived
+      yet. Raises the exception that ended the stream, if it has ended, such as an exception thrown
+      by the remote procedure.
 
    .. attribute:: condition
 
@@ -381,14 +350,13 @@ Client API Reference
       If *timeout* is specified and is not ``None``, it should be a floating point number specifying
       the timeout in seconds for the operation.
 
-      If the stream has not been started this method calls ``start(False)`` to start the stream
-      (without waiting for at least one update to be received). Raises the exception that ended
-      the stream, if it ends before or during the wait.
+      Raises the exception that ended the stream, if it ends before or during the wait.
 
    .. method:: add_callback(callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
-      callback function should take one argument, which is passed the new value of the stream.
+      callback function should take one argument, which is passed the new value of the stream. If
+      the stream already has a value, the callback is invoked with it straight away.
       An error from the stream does not invoke the callback. Calling the stream raises it.
 
       .. note::
@@ -421,11 +389,6 @@ Client API Reference
    This class represents an event. See :ref:`python-client-events`. It is wrapper around a stream of
    type ``bool`` that indicates when the event occurs.
 
-   .. method:: start()
-
-      Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called. Raises the exception that ended the event, if it has ended.
-
    .. attribute:: condition
 
       The condition variable (of type ``threading.Condition``) that is notified whenever the event
@@ -442,13 +405,16 @@ Client API Reference
       If *timeout* is specified and is not ``None``, it should be a floating point number specifying
       the timeout in seconds for the operation.
 
-      If the event has not been started this method calls ``start()`` to start the underlying
-      stream. Raises the exception that ended the event, if it ends before or during the wait.
+      Raises the exception that ended the event, if it ends before or during the wait.
 
    .. method:: add_callback(callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments.
+      should be a function that takes zero arguments. It is invoked straight away if the event
+      has occurred since the previous call to :meth:`krpc.event.Event.wait` on this event
+      object, and the event's callbacks have not been invoked for it. A callback added after the
+      event has ended is not invoked for an earlier firing. An error from the event does not invoke
+      the callback. Waiting on the event raises it.
 
    .. method:: remove_callback(callback)
 
