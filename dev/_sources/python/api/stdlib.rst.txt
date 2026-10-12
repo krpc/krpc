@@ -1,0 +1,700 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: StdLib
+
+Standard Library
+================
+
+
+.. module:: StdLib
+
+A standard library of scalar mathematics, vector and quaternion operations, and
+printing, for use within server side functions.
+
+.. note::
+
+   Vectors are position and direction tuples, and rotations are unit quaternion tuples
+   in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
+   stated otherwise.
+
+
+
+.. attribute:: pi
+
+   The constant pi.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: float
+   
+
+
+
+
+.. attribute:: e
+
+   The constant e, the base of the natural logarithm.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: abs(x)
+
+   The absolute value of a number.
+
+   :param float x: The number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: sign(x)
+
+   The sign of a number: -1 if it is negative, 1 if it is positive,
+   and 0 if it is zero or not a number.
+
+   :param float x: The number.
+   :rtype: int
+   
+
+
+
+
+.. staticmethod:: copy_sign(x, y)
+
+   The magnitude of the first number with the sign of the second.
+
+   :param float x: The number giving the magnitude.
+   :param float y: The number giving the sign.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: is_nan(x)
+
+   Whether a number is not a number.
+
+   :param float x: The number.
+   :rtype: bool
+   
+
+
+
+
+.. staticmethod:: is_finite(x)
+
+   Whether a number is neither infinite nor not a number.
+
+   :param float x: The number.
+   :rtype: bool
+   
+
+
+
+
+.. staticmethod:: floor(x)
+
+   The largest whole number less than or equal to the given number.
+
+   :param float x: The number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: ceiling(x)
+
+   The smallest whole number greater than or equal to the given number.
+
+   :param float x: The number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: round(x, [digits = 0])
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded to the nearer even number.
+
+   :param float x: The number.
+   :param int digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+   :rtype: float
+   
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. staticmethod:: round_half_away_from_zero(x, [digits = 0])
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded away from zero.
+
+   :param float x: The number.
+   :param int digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+   :rtype: float
+   
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. staticmethod:: round_half_up(x, [digits = 0])
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded toward positive infinity.
+
+   :param float x: The number.
+   :param int digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+   :rtype: float
+   
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. staticmethod:: sqrt(x)
+
+   The square root of a number.
+
+   :param float x: The number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: hypot(x, y)
+
+   The length of the hypotenuse of a right triangle with the given sides.
+
+   :param float x: The first side.
+   :param float y: The second side.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: sin(x)
+
+   The sine of an angle, in radians.
+
+   :param float x: The angle.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: cos(x)
+
+   The cosine of an angle, in radians.
+
+   :param float x: The angle.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: tan(x)
+
+   The tangent of an angle, in radians.
+
+   :param float x: The angle.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: asin(x)
+
+   The angle, in radians, whose sine is the given number.
+
+   :param float x: The number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: acos(x)
+
+   The angle, in radians, whose cosine is the given number.
+
+   :param float x: The number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: atan(x)
+
+   The angle, in radians, whose tangent is the given number.
+
+   :param float x: The number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: atan2(y, x)
+
+   The angle, in radians, between the positive x axis and the point (x, y).
+
+   :param float y: The y coordinate.
+   :param float x: The x coordinate.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: log(x, [new_base = 2.718281828459045])
+
+   The logarithm of a number, natural unless another base is given.
+
+   :param float x: The number.
+   :param float new_base: The base of the logarithm.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: log10(x)
+
+   The base 10 logarithm of a number.
+
+   :param float x: The number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: exp(x)
+
+   The number e raised to the given power.
+
+   :param float x: The power.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: min(x, y)
+
+   The smaller of two numbers.
+
+   :param float x: The first number.
+   :param float y: The second number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: max(x, y)
+
+   The larger of two numbers.
+
+   :param float x: The first number.
+   :param float y: The second number.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: clamp(x, min, max)
+
+   The given number limited to the given range.
+
+   :param float x: The number.
+   :param float min: The minimum of the range.
+   :param float max: The maximum of the range.
+   :rtype: float
+   
+
+   .. note::
+
+      Throws an exception if the minimum is greater than the maximum.
+
+
+
+
+.. staticmethod:: lerp(a, b, t)
+
+   Linear interpolation between two numbers.
+
+   :param float a: The number when t is 0.
+   :param float b: The number when t is 1.
+   :param float t: The interpolation parameter.
+   :rtype: float
+   
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+
+
+.. staticmethod:: inverse_lerp(a, b, x)
+
+   The interpolation parameter of a number between two others,
+   limited to the range 0 to 1.
+
+   :param float a: The number at 0.
+   :param float b: The number at 1.
+   :param float x: The number.
+   :rtype: float
+   
+
+   .. note::
+
+      Returns 0 if the two numbers are equal.
+
+
+
+
+.. staticmethod:: degrees_to_radians(x)
+
+   The angle in radians of an angle in degrees.
+
+   :param float x: The angle in degrees.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: radians_to_degrees(x)
+
+   The angle in degrees of an angle in radians.
+
+   :param float x: The angle in radians.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: vector_add(u, v)
+
+   The sum of two vectors.
+
+   :param tuple u: The first vector.
+   :param tuple v: The second vector.
+   :rtype: tuple(float, float, float)
+   
+
+
+
+
+.. staticmethod:: vector_subtract(u, v)
+
+   The difference of two vectors.
+
+   :param tuple u: The first vector.
+   :param tuple v: The second vector.
+   :rtype: tuple(float, float, float)
+   
+
+
+
+
+.. staticmethod:: vector_scale(v, scale)
+
+   A vector scaled by a number.
+
+   :param tuple v: The vector.
+   :param float scale: The scaling factor.
+   :rtype: tuple(float, float, float)
+   
+
+
+
+
+.. staticmethod:: vector_dot(u, v)
+
+   The dot product of two vectors.
+
+   :param tuple u: The first vector.
+   :param tuple v: The second vector.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: vector_cross(u, v)
+
+   The cross product of two vectors.
+
+   :param tuple u: The first vector.
+   :param tuple v: The second vector.
+   :rtype: tuple(float, float, float)
+   
+
+
+
+
+.. staticmethod:: vector_magnitude(v)
+
+   The magnitude (length) of a vector.
+
+   :param tuple v: The vector.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: vector_normalize(v)
+
+   A vector scaled to a magnitude of 1.
+
+   :param tuple v: The vector.
+   :rtype: tuple(float, float, float)
+   
+
+   .. note::
+
+      Throws an exception if the vector is zero.
+
+
+
+
+.. staticmethod:: vector_distance(u, v)
+
+   The distance between two positions.
+
+   :param tuple u: The first position.
+   :param tuple v: The second position.
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: vector_angle(u, v)
+
+   The angle between two vectors, in radians, between 0 and pi.
+
+   :param tuple u: The first vector.
+   :param tuple v: The second vector.
+   :rtype: float
+   
+
+   .. note::
+
+      Throws an exception if either vector is zero.
+
+
+
+
+.. staticmethod:: vector_lerp(u, v, t)
+
+   Linear interpolation between two vectors.
+
+   :param tuple u: The vector when t is 0.
+   :param tuple v: The vector when t is 1.
+   :param float t: The interpolation parameter.
+   :rtype: tuple(float, float, float)
+   
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+
+
+.. staticmethod:: quaternion_multiply(q, r)
+
+   The composition of two rotations: the rotation r followed by the
+   rotation q.
+
+   :param tuple q: The second rotation.
+   :param tuple r: The first rotation.
+   :rtype: tuple(float, float, float, float)
+   
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_inverse(q)
+
+   The inverse of a rotation.
+
+   :param tuple q: The rotation.
+   :rtype: tuple(float, float, float, float)
+   
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_rotate_vector(q, v)
+
+   A vector rotated by a rotation.
+
+   :param tuple q: The rotation.
+   :param tuple v: The vector.
+   :rtype: tuple(float, float, float)
+   
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_from_axis_angle(axis, angle)
+
+   The rotation about an axis by an angle.
+
+   :param tuple axis: The axis of rotation.
+   :param float angle: The angle of rotation, in radians.
+   :rtype: tuple(float, float, float, float)
+   
+
+   .. note::
+
+      Throws an exception if the axis is zero.
+
+
+
+
+.. staticmethod:: quaternion_to_axis_angle(q)
+
+   The axis and angle of a rotation, with the angle in radians between 0 and pi.
+
+   :param tuple q: The rotation.
+   :rtype: tuple(tuple(float, float, float), float)
+   
+
+   .. note::
+
+      The axis is a unit vector, or zero for no rotation. Throws an exception if the
+      quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_from_to_rotation(u, v)
+
+   The shortest rotation that takes one direction onto another.
+
+   :param tuple u: The direction to rotate from.
+   :param tuple v: The direction to rotate to.
+   :rtype: tuple(float, float, float, float)
+   
+
+   .. note::
+
+      Opposite directions give a half turn about an arbitrary perpendicular axis.
+      Throws an exception if either vector is zero.
+
+
+
+
+.. staticmethod:: quaternion_look_rotation(forward, up)
+
+   The rotation that takes the z axis onto a forward direction, and the y axis
+   toward an up direction.
+
+   :param tuple forward: The direction of the z axis.
+   :param tuple up: The direction the y axis points toward.
+   :rtype: tuple(float, float, float, float)
+   
+
+   .. note::
+
+      The up direction need not be perpendicular to the forward direction. Throws an
+      exception if either vector is zero, or if they are parallel.
+
+
+
+
+.. staticmethod:: quaternion_angle(q, r)
+
+   The angle of the rotation that takes one rotation to another,
+   in radians, between 0 and pi.
+
+   :param tuple q: The first rotation.
+   :param tuple r: The second rotation.
+   :rtype: float
+   
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+
+
+.. staticmethod:: quaternion_slerp(q, r, t)
+
+   Spherical linear interpolation between two rotations.
+
+   :param tuple q: The rotation when t is 0.
+   :param tuple r: The rotation when t is 1.
+   :param float t: The interpolation parameter.
+   :rtype: tuple(float, float, float, float)
+   
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates. Throws an exception if either quaternion is zero.
+
+
+
+
+.. staticmethod:: print(message)
+
+   Writes a message to the game's log, for debugging.
+
+   :param str message: The message.
+   
+
+   .. note::
+
+      A function evaluated by a stream or an event prints on every update. The message is
+      written at the Info level, so a server log level of Warning or Error hides it.

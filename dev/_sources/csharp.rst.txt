@@ -6,6 +6,7 @@ C#
 
    csharp/client
    csharp/api/krpc
+   csharp/api/stdlib
    csharp/api/space-center
    csharp/api/drawing
    csharp/api/ui

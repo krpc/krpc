@@ -39,6 +39,8 @@ Core
 * Add ``KRPC.Expression.StateVariable``, a variable that keeps its value between evaluations of a function (:issue:`1124`)
 * Add ``KRPC.AddFunctionStream``, which streams the value a server side function computes on each update (:issue:`1124`)
 * Add ``KRPC.Expression.ReturnType`` and ``HasReturnType``, which report the type of the value a function produces, and whether it produces one (:issue:`1124`)
+* Add the ``StdLib`` service, a standard library of scalar mathematics and of vector and quaternion operations over the tuples the SpaceCenter service uses (:issue:`1125`)
+* Add ``StdLib.Print``, which writes a line to the game's log, for debugging server side functions (:issue:`1125`)
 * Expand ``KRPC.Type`` to name every type a procedure takes or returns, including long, unsigned, bytes, class, enumeration, structure and collection types, and a nullable form of any type (:issue:`1124`)
 * Add ``KRPC.TypeCode``, and the ``Code``, ``Service``, ``Name``, ``Types`` and ``Nullable`` properties of ``KRPC.Type``, which report what a type is (:issue:`1124`)
 * Fix ``KRPC.Expression.Count``, which failed for every collection a procedure returns (:issue:`1124`)
