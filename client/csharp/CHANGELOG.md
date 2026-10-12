@@ -29,12 +29,28 @@
 - **Breaking:** Throw `DivideByZeroException`, `NotSupportedException`, `TimeoutException` and
   `OverflowException` for the matching errors reported by any service, such as `AutoPilot.Wait`,
   in place of `RPCException` (#1124)
+- Add `Connection.Compile`, which compiles a lambda into a server side function (#1128)
+- Compile operators, conditionals, casts, `System.Math` methods, string operations, collection,
+  tuple and structure constructors, and the common LINQ operators in a lambda (#1128)
+- Compile `Console.WriteLine` to `StdLib.Print`, which writes a line to the game's log (#1128)
+- Throw `FunctionCompilationException` naming a construct a compiled lambda cannot contain,
+  including a call that depends on the current culture (#1128)
+- Add `Connection.Run`, which runs a server side function or a lambda within a single
+  physics tick, passing it any arguments, and returns its value (#1128)
+- Add a `Connection.AddStream<T>` overload taking a server side function (#1128)
+- Add `Connection.AddEvent`, which creates an event from a lambda or a server side function
+  (#1128)
+- Compile a lambda passed to `AddStream` other than a single call, so a stream can compute a
+  value (#1128)
+- **Breaking:** Evaluate the remote calls in the arguments of a call passed to `AddStream` on
+  every update, not once when the stream is created (#1128)
+- Throw `InvalidOperationException` from `Stream.Get` for a null value the stream's type cannot
+  hold (#1128)
 - Support a nullable structure field, list element, tuple item and dictionary value; a
   value-typed one uses the nullable form (`int?`) (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as
   a `struct` with a constructor, `IEquatable`, `IComparable` and the comparison operators over
   its fields (#1066)
-- Stream expressions can be multiplied by a constant (#1062)
 - **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
   form (`int?`) (#1017)
 - Add `Connection.ConnectLocal`, which connects to a server on the same machine over unix
