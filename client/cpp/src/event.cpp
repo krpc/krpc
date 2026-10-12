@@ -15,8 +15,6 @@ Event::Event() {}
 Event::Event(Client* client, const krpc::schema::Event& message)
     : _stream(client, message.stream().id()) {}
 
-void Event::start() { _stream.start(false); }
-
 std::condition_variable& Event::get_condition() const { return _stream.get_condition(); }
 
 std::unique_lock<std::mutex>& Event::get_condition_lock() const {
@@ -32,10 +30,6 @@ bool Event::wait(double timeout) {
   auto& impl = _stream.impl;
   bool fired = false;
   impl->with_condition([this, &impl, timeout, &fired](std::unique_lock<std::mutex>& held) {
-    if (!impl->has_started()) {
-      impl->throw_if_ended();
-      impl->start();
-    }
     // A firing not yet seen returns before an ending is thrown
     auto last_seen = seen;
     fired =
@@ -46,7 +40,9 @@ bool Event::wait(double timeout) {
 }
 
 int Event::add_callback(const Callback& callback) {
-  return _stream.add_callback([callback](bool _) { callback(); });
+  return _stream.add_callback([callback](bool fired) {
+    if (fired) callback();
+  });
 }
 
 void Event::remove_callback(int tag) { return _stream.remove_callback(tag); }

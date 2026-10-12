@@ -1,5 +1,6 @@
 #include "krpc/stream_manager.hpp"
 
+#include <algorithm>
 #include <condition_variable>  // NOLINT(build/c++11)
 #include <cstddef>
 #include <exception>
@@ -31,6 +32,7 @@ std::exception_ptr closed_error() {
 StreamManager::StreamManager(Client* client, const std::shared_ptr<Connection>& connection)
     : client(client),
       connection(connection),
+      issued(-1),
       update_lock(new std::recursive_mutex),
       stop(new std::atomic_bool(false)),
       closed(false),
@@ -46,22 +48,60 @@ StreamManager::~StreamManager() {
 }
 
 std::shared_ptr<StreamImpl> StreamManager::add_stream(const schema::ProcedureCall& call) {
-  schema::Stream stream = services::KRPC(client).add_stream(call, false);
+  schema::Stream stream = services::KRPC(client).add_stream(call, true);
   return get_stream(stream.id());
 }
 
-std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
+void StreamManager::note_issued(uint64_t id) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  auto it = streams.find(id);
-  if (it != streams.end())
-    if (auto stream = it->second.lock()) return stream;
-  auto stream_impl = std::make_shared<StreamImpl>(client, id, update_lock);
-  if (closed) {
-    auto ending = closed_error();
-    call_end_callbacks(stream_impl->end(ending), ending);
-    return stream_impl;
+  issued = std::max(issued, static_cast<int64_t>(id));
+  if (streams.find(id) == streams.end()) unregistered.insert(id);
+}
+
+std::shared_ptr<StreamImpl> StreamManager::get_stream(uint64_t id) {
+  std::shared_ptr<StreamImpl> stream_impl;
+  // The result that ends the stream, if one is pending
+  const schema::ProcedureResult* final_result = nullptr;
+  std::vector<schema::ProcedureResult> results;
+  bool was_closed = false;
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    auto it = streams.find(id);
+    if (it != streams.end())
+      if (auto stream = it->second.lock()) return stream;
+    stream_impl = std::make_shared<StreamImpl>(client, id, update_lock);
+    was_closed = closed;
+    unregistered.erase(id);
+    auto pending_it = pending.find(id);
+    if (pending_it != pending.end()) {
+      results.swap(pending_it->second);
+      pending.erase(pending_it);
+    }
+    if (!was_closed) {
+      // The pending results are stored as an update would store them. The stream is new, so
+      // it has no waiters or callbacks yet.
+      for (const auto& result : results) {
+        if (result.has_error()) {
+          final_result = &result;
+          break;
+        }
+        stream_impl->store(result.value(), result.is_null());
+      }
+      // A final result ends the stream, and the server has already removed it
+      if (!final_result) streams[id] = stream_impl;
+    }
   }
-  streams[id] = stream_impl;
+  std::exception_ptr ending;
+  if (was_closed) {
+    ending = closed_error();
+  } else if (final_result) {
+    try {
+      client->throw_exception(final_result->error());
+    } catch (...) {
+      ending = std::current_exception();
+    }
+  }
+  if (ending) call_end_callbacks(stream_impl->end(ending), ending);
   return stream_impl;
 }
 
@@ -100,6 +140,8 @@ void StreamManager::notify_closed() {
     for (const auto& entry : streams)
       if (auto stream = entry.second.lock()) ended.push_back(stream);
     streams.clear();
+    unregistered.clear();
+    pending.clear();
   }
   auto ending = closed_error();
   for (const auto& stream : ended) call_end_callbacks(stream->end(ending), ending);
@@ -109,19 +151,22 @@ void StreamManager::notify_closed() {
 
 void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   std::shared_ptr<StreamImpl> stream;
-  StreamImpl::Callbacks callbacks;
   // Locks are taken in the order stream condition, then update lock. The update lock is
-  // held only to find the stream and copy its callbacks, and is released before the
-  // stream's condition is taken. The callbacks run below without it held.
+  // held only to find the stream, and is released before the stream's condition is taken.
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
     auto it = streams.find(id);
-    if (it == streams.end()) return;
+    if (it == streams.end()) {
+      // A result for a stream not registered yet is kept. One for an id below those is for
+      // a stream that has ended.
+      if (static_cast<int64_t>(id) > issued || unregistered.count(id) > 0)
+        pending[id].push_back(result);
+      return;
+    }
     stream = it->second.lock();
     if (!stream) return;
     // An error is the final result, and the server has already removed the stream
     if (result.has_error()) streams.erase(it);
-    callbacks = stream->get_callbacks();
   }
 
   if (result.has_error()) {
@@ -135,19 +180,9 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
     return;
   }
 
-  if (!stream->update_and_notify(result.value(), result.is_null())) return;
-
-  // An exception leaving the update thread calls std::terminate and ends the process, so
-  // anything a callback throws is reported here, including a value that fails to decode
-  for (const auto& callback : callbacks) {
-    try {
-      callback.second(result.value(), result.is_null());
-    } catch (const std::exception& exn) {
-      std::cerr << "kRPC: exception thrown by a stream callback: " << exn.what() << "\n";
-    } catch (...) {
-      std::cerr << "kRPC: unknown exception thrown by a stream callback\n";
-    }
-  }
+  StreamImpl::Callbacks callbacks;
+  if (!stream->update_and_notify(result.value(), result.is_null(), &callbacks)) return;
+  call_callbacks(callbacks, result.value(), result.is_null());
 }
 
 std::condition_variable& StreamManager::get_update_condition() { return condition; }

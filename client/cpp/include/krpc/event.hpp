@@ -19,8 +19,6 @@ class Event {
  public:
   Event();
   Event(Client* client, const krpc::schema::Event& message);
-  /** Start the event. Throws the exception that ended the event, if it has ended. */
-  void start();
   /** Condition variable that is notified when the event occurs */
   std::condition_variable& get_condition() const;
   /** Lock used with the condition variable. Each event object has its own. */

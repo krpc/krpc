@@ -38,6 +38,13 @@ class Client {
       std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
 
+  /** Invoke a procedure that returns a new stream, as a KRPC.Stream message, or a new event,
+      as a KRPC.Event message if is_event is true. */
+  schema::ProcedureResult invoke_add_stream(
+      std::string_view service, std::string_view procedure,
+      const std::vector<encoder::Value>& args = std::vector<encoder::Value>(),
+      bool is_event = false);
+
   schema::Request build_request(
       std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
@@ -51,7 +58,11 @@ class Client {
   friend class StreamManager;
   friend class StreamImpl;
   void throw_exception(const schema::Error& error) const;
-  schema::ProcedureResult send_request(const schema::Request& request);
+  // The message a procedure returns a new stream as, if it returns one
+  enum class NewStream : uint8_t { none, stream, event };
+  schema::ProcedureResult send_request(const schema::Request& request,
+                                       NewStream new_stream = NewStream::none);
+  void note_stream_id(NewStream new_stream);
   static void add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args);
   StreamManager& streams() const;
 

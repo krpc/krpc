@@ -82,7 +82,6 @@ TEST_F(test_event, test_event_callback) {
   called.test_and_set();
   event.add_callback([&called]() { called.clear(); });
   auto start_time = std::chrono::high_resolution_clock::now();
-  event.start();
   while (called.test_and_set()) {
   }
   auto end_time = std::chrono::high_resolution_clock::now();
@@ -97,7 +96,6 @@ TEST_F(test_event, test_event_callback_timeout) {
   called.test_and_set();
   event.add_callback([&called]() { called.clear(); });
   auto start_time = std::chrono::high_resolution_clock::now();
-  event.start();
   while (called.test_and_set()) {
     auto time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = time - start_time;
@@ -116,7 +114,6 @@ TEST_F(test_event, test_event_callback_loop) {
   std::atomic<int> count(0);
   event.add_callback([&count]() { count++; });
   auto start_time = std::chrono::high_resolution_clock::now();
-  event.start();
   while (count < 5) {
   }
   auto end_time = std::chrono::high_resolution_clock::now();
@@ -136,7 +133,6 @@ TEST_F(test_event, test_event_remove_callback) {
   auto called2_tag = event.add_callback([&called2]() { called2.clear(); });
   event.remove_callback(called2_tag);
   auto start_time = std::chrono::high_resolution_clock::now();
-  event.start();
   while (called1.test_and_set()) {
   }
   auto end_time = std::chrono::high_resolution_clock::now();
@@ -223,7 +219,6 @@ TEST_F(test_event, test_server_removed_event) {
 
 TEST_F(test_event, test_firing_before_wait) {
   auto event = test_service.on_timer(100);
-  event.start();
   std::this_thread::sleep_for(std::chrono::milliseconds(500));
   event.acquire();
   auto start_time = std::chrono::steady_clock::now();
@@ -235,7 +230,6 @@ TEST_F(test_event, test_firing_before_wait) {
 
 TEST_F(test_event, test_firings_coalesce) {
   auto event = test_service.on_timer(50, 3);
-  event.start();
   std::this_thread::sleep_for(std::chrono::milliseconds(500));
   event.acquire();
   ASSERT_TRUE(event.wait());
@@ -246,7 +240,6 @@ TEST_F(test_event, test_firings_coalesce) {
 // Each thread waits on its own copy of the event object, as each has its own lock
 TEST_F(test_event, test_two_threads_wait_on_one_event) {
   auto event = test_service.on_timer(1000);
-  event.start();
   std::atomic<int> woke(0);
   auto wait = [&woke](krpc::Event copy) {
     copy.acquire();
@@ -275,7 +268,6 @@ TEST_F(test_event, test_error_ends_the_event) {
 TEST_F(test_event, test_remove_wakes_an_event_wait) {
   auto event = test_service.on_timer(10000);
   krpc::Event copy = event;
-  event.start();
   std::atomic_bool waiting(false);
   std::thread waiter([&copy, &waiting] {
     copy.acquire();
@@ -310,7 +302,6 @@ TEST_F(test_event, test_close_wakes_an_event_wait) {
   auto client = connect_client();
   krpc::services::TestService service(client.get());
   auto event = service.on_timer(10000);
-  event.start();
   std::atomic_bool waiting(false);
   std::thread waiter([&event, &waiting] {
     event.acquire();

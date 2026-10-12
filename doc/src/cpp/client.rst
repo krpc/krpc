@@ -186,12 +186,6 @@ The body of the loop calls ``wait`` on the stream, which causes the program to b
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
 whilst waiting.
 
-.. note::
-
-   The stream does not start receiving updates until the first call to ``wait``. This means that the
-   example code will not miss any updates to the streams value, as it will have already locked the
-   condition variable before the first stream update is received.
-
 Callbacks
 ^^^^^^^^^
 
@@ -204,15 +198,7 @@ For example the following program registers two callbacks that are invoked when 
 
 .. literalinclude:: /scripts/client/cpp/Callbacks.cpp
 
-.. note::
-
-   When a stream is created it does not start receiving updates until ``start`` is called. This is
-   implicitly called when accessing the value of a stream, but as this example does not do this an
-   explicit call to ``start`` is required.
-
-.. note::
-
-   The callbacks are registered before the call to ``start`` so that stream updates are not missed.
+A callback added to a stream that already has a value is called with that value straight away.
 
 .. note::
 
@@ -361,19 +347,6 @@ Client API Reference
    Stream objects are copy constructible and assignable. A stream is removed from the server when
    all stream objects that refer to it are destroyed.
 
-   .. function:: void start(bool wait = true)
-
-      Starts the stream. When a stream is created it does not start sending updates to the client
-      until this method is called.
-
-      If wait is true, this method will block until at least one update has been received from the
-      server.
-
-      If wait is false, the method starts the stream and returns immediately. Subsequent calls to
-      ``operator()`` may throw a ``krpc::StreamError`` exception.
-
-      Throws the exception that ended the stream, if it ends before or during the wait.
-
    .. function:: float rate() const
    .. function:: void set_rate(float rate)
 
@@ -381,9 +354,9 @@ Client API Reference
 
    .. function:: T operator()()
 
-      Get the most recently received value from the stream. Throws the exception that ended the
-      stream, if it has ended, such as an exception thrown by the remote procedure. Throws a
-      ``StreamError`` if no update has been received from the server.
+      Get the most recently received value from the stream, waiting for the first value if none has
+      arrived yet. Throws the exception that ended the stream, if it has ended, such as an exception
+      thrown by the remote procedure.
 
    .. function:: std::condition_variable& get_condition() const
 
@@ -414,14 +387,12 @@ Client API Reference
       the operation. Throws the exception that ended the stream, if it ends before or during the
       wait.
 
-      If the stream has not been started this method calls ``start(false)`` to start the stream
-      (without waiting for at least one update to be received).
-
    .. function:: int add_callback(const std::function<void(T)>& callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
-      stream. Returns a unique identifier for the callback which can be used to remove it.
+      stream. If the stream already has a value, the callback is invoked with it straight away.
+      Returns a unique identifier for the callback which can be used to remove it.
 
       .. note::
 
@@ -470,11 +441,6 @@ Client API Reference
    Event objects are copy constructible and assignable. An event is removed from the server when all
    event objects that refer to it are destroyed.
 
-   .. function:: void start()
-
-      Starts the event. When an event is created, it will not receive updates from the server until
-      this method is called. Throws the exception that ended the event, if it has ended.
-
    .. function:: std::condition_variable& get_condition() const
 
       The condition variable that is notified whenever the event occurs.
@@ -503,9 +469,6 @@ Client API Reference
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
       the operation. Throws the exception that ended the event, if it ends before or during the
       wait.
-
-      If the event has not been started this method calls ``start()`` to start the underlying
-      stream.
 
    .. function:: int add_callback(const std::function<void()>& callback)
 

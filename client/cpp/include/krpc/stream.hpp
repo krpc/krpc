@@ -28,15 +28,12 @@ class Stream {
   Stream<T>& operator=(const Stream<T>& other);
   Stream<T>& operator=(Stream<T>&& other) noexcept;
   ~Stream();
-  /** Start the stream. Throws the exception that ended the stream, if it ends before or
-      during the wait. */
-  void start(bool wait = true);
   /** The rate of the stream, in Hertz. Zero if the rate is unlimited. */
   float rate();
   /** Set the rate of the stream, in Hertz. Zero if the rate is unlimited. */
   void set_rate(float value);
-  /** Get the most recent value for this stream. Throws the exception that ended the stream,
-      if it has ended. */
+  /** Get the most recent value for this stream. Blocks until the first value arrives. Throws
+      the exception that ended the stream, if it has ended. */
   T operator()();
   /** Condition variable that is notified when the stream updates */
   std::condition_variable& get_condition() const;
@@ -52,9 +49,9 @@ class Stream {
   bool wait(double timeout = -1);
   typedef std::function<void(T)> Callback;
   /**
-   * Add a callback that is invoked whenever the stream is updated.
-   * Returns an integer tag for the callback which uniquely identifies it,
-   * and allows it to be removed using remove_callback()
+   * Add a callback that is invoked whenever the stream is updated. It is invoked straight
+   * away with the value the stream already has, if any. Returns an integer tag for the
+   * callback which uniquely identifies it, and allows it to be removed using remove_callback()
    */
   int add_callback(const Callback& callback);
   /** Remove a callback, based on its tag */
@@ -144,22 +141,6 @@ inline void Stream<T>::drop_hold() {
 }
 
 template <typename T>
-inline void Stream<T>::start(bool wait) {
-  check_exists();
-  impl->throw_if_ended();
-  if (impl->has_started()) return;
-  if (!wait) {
-    impl->start();
-    return;
-  }
-  impl->with_condition([this](std::unique_lock<std::mutex>& held) {
-    impl->start();
-    impl->get_condition().wait(held, [this] { return impl->has_updated() || impl->has_ended(); });
-  });
-  impl->throw_if_ended();
-}
-
-template <typename T>
 inline float Stream<T>::rate() {
   check_exists();
   return impl->rate();
@@ -174,8 +155,11 @@ inline void Stream<T>::set_rate(float value) {
 template <typename T>
 inline T Stream<T>::operator()() {
   check_exists();
-  impl->throw_if_ended();
-  if (!impl->has_started()) start();
+  if (!impl->has_updated()) {
+    impl->with_condition([this](std::unique_lock<std::mutex>& held) {
+      impl->wait(&held, -1, [this] { return impl->has_updated(); });
+    });
+  }
   bool is_null = false;
   auto data = impl->get_data(&is_null);
   return decode_value(data, is_null);
@@ -231,7 +215,6 @@ inline bool Stream<T>::wait(double timeout) {
   bool updated = false;
   impl->with_condition([this, timeout, &updated](std::unique_lock<std::mutex>& held) {
     impl->throw_if_ended();
-    if (!impl->has_started()) impl->start();
     auto version = impl->get_version();
     updated =
         impl->wait(&held, timeout, [this, version] { return impl->get_version() != version; });

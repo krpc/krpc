@@ -22,7 +22,6 @@ StreamImpl::StreamImpl(Client* client, uint64_t id,
     : client(client),
       id(id),
       update_lock(std::move(update_lock)),
-      started(false),
       updated(false),
       _is_null(false),
       version(0),
@@ -35,13 +34,6 @@ Client* StreamImpl::get_client() const { return client; }
 
 uint64_t StreamImpl::get_id() const { return id; }
 
-void StreamImpl::start() {
-  if (!started) {
-    services::KRPC(client).start_stream(id);
-    started = true;
-  }
-}
-
 float StreamImpl::rate() const { return _rate; }
 
 void StreamImpl::set_rate(float value) {
@@ -51,8 +43,6 @@ void StreamImpl::set_rate(float value) {
   services::KRPC(client).set_stream_rate(id, value);
 }
 
-bool StreamImpl::has_started() const { return started; }
-
 std::string StreamImpl::get_data(bool* is_null) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   if (ending) std::rethrow_exception(ending);
@@ -61,23 +51,31 @@ std::string StreamImpl::get_data(bool* is_null) {
   return data;
 }
 
+bool StreamImpl::store(const std::string& data, bool is_null) {
+  // The stream can be removed while its value is in flight. The ending it stored is kept.
+  if (ending) return false;
+  // Store the value before the flag that says there is one. A reader checks the flag first
+  // and takes no lock, so the other order lets it see the flag set and read the value that
+  // has not been stored yet.
+  this->data = data;
+  this->_is_null = is_null;
+  updated = true;
+  version++;
+  // An encoded bool true
+  if (!is_null && data == "\x01") fired++;
+  return true;
+}
+
 // We hold the condition across the store and the notification, so that a notification
-// cannot fire between a waiter checking the value and entering its wait.
-bool StreamImpl::update_and_notify(const std::string& data, bool is_null) {
+// cannot fire between a waiter checking the value and entering its wait. The callbacks are
+// read with the value stored, so a callback added after this is called with the value by
+// add_callback.
+bool StreamImpl::update_and_notify(const std::string& data, bool is_null, Callbacks* callbacks) {
   std::lock_guard<std::mutex> guard(condition_mutex);
   {
     std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
-    // The stream can be removed while its value is in flight. The ending it stored is kept.
-    if (ending) return false;
-    // Store the value before the flag that says there is one. A reader checks the flag
-    // first and takes no lock, so the other order lets it see the flag set and read the
-    // value that has not been stored yet.
-    this->data = data;
-    this->_is_null = is_null;
-    updated = true;
-    version++;
-    // An encoded bool true
-    if (!is_null && data == "\x01") fired++;
+    if (!store(data, is_null)) return false;
+    *callbacks = this->callbacks;
   }
   condition.notify_all();
   return true;
@@ -177,13 +175,22 @@ std::condition_variable& StreamImpl::get_condition() { return condition; }
 
 std::mutex& StreamImpl::get_condition_mutex() { return condition_mutex; }
 
-const StreamImpl::Callbacks& StreamImpl::get_callbacks() const { return callbacks; }
-
 int StreamImpl::add_callback(const Callback& callback) {
-  std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  auto tag = next_callback_tag;
-  next_callback_tag++;
-  callbacks[tag] = callback;
+  int tag = 0;
+  bool has_value = false;
+  std::string value;
+  bool value_is_null = false;
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    tag = next_callback_tag;
+    next_callback_tag++;
+    callbacks[tag] = callback;
+    has_value = updated && !ending;
+    value = data;
+    value_is_null = _is_null;
+  }
+  // Called with the value the stream already has, which no update passes to it
+  if (has_value) call_callbacks({{tag, callback}}, value, value_is_null);
   return tag;
 }
 
@@ -216,6 +223,20 @@ void StreamImpl::remove() {
   // The client of an ended stream can be gone
   if (has_ended()) return;
   client->streams().remove_stream(this);
+}
+
+void call_callbacks(const StreamImpl::Callbacks& callbacks, const std::string& data, bool is_null) {
+  // An exception leaving the update thread calls std::terminate. Anything a callback throws is
+  // reported, including a value that fails to decode.
+  for (const auto& callback : callbacks) {
+    try {
+      callback.second(data, is_null);
+    } catch (const std::exception& exn) {
+      std::cerr << "kRPC: exception thrown by a stream callback: " << exn.what() << "\n";
+    } catch (...) {
+      std::cerr << "kRPC: unknown exception thrown by a stream callback\n";
+    }
+  }
 }
 
 void call_end_callbacks(const StreamImpl::EndCallbacks& callbacks,

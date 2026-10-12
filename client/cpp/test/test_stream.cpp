@@ -1,6 +1,9 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
+#include <asio/io_context.hpp>
+#include <asio/ip/address.hpp>
+#include <asio/ip/tcp.hpp>
 #include <atomic>
 #include <chrono>  // NOLINT(build/c++11)
 #include <cstddef>
@@ -18,6 +21,8 @@
 #include "krpc/error.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream.hpp"
+#include "krpc/stream_impl.hpp"
+#include "krpc/stream_manager.hpp"
 #include "server_test.hpp"
 #include "services/test_service.hpp"
 
@@ -187,7 +192,7 @@ TEST_F(test_stream, test_remove_errors_another_handle) {
 TEST_F(test_stream, test_remove_wakes_a_waiting_thread) {
   krpc::Stream<std::string> x = test_service.float_to_string_stream(3.14159);
   krpc::Stream<std::string> y = x;
-  x.start();
+  ASSERT_EQ("3.14159", x());
   std::atomic_bool waiting(false);
   std::thread waiter([&y, &waiting] {
     y.acquire();
@@ -251,6 +256,65 @@ TEST_F(test_stream, test_add_stream_twice) {
   ASSERT_EQ("42", s0());
   ASSERT_EQ("42", s1());
   ASSERT_EQ("43", s2());
+}
+
+TEST_F(test_stream, test_read_straight_after_add) {
+  auto x = test_service.int32_to_string_stream(48);
+  ASSERT_EQ("48", x());
+}
+
+TEST_F(test_stream, test_callback_added_after_the_first_value) {
+  auto x = test_service.int32_to_string_stream(49);
+  ASSERT_EQ("49", x());
+  std::vector<std::string> values;
+  x.add_callback([&values](const std::string& value) { values.push_back(value); });
+  ASSERT_EQ(std::vector<std::string>{"49"}, values);
+}
+
+// A stream manager on a connection to a server that sends nothing, so the only results it
+// applies are those a test passes to update
+class idle_stream_manager {
+ public:
+  explicit idle_stream_manager(krpc::Client* client)
+      : acceptor(io_context, asio::ip::tcp::endpoint(asio::ip::make_address("127.0.0.1"), 0)),
+        socket(io_context) {
+    auto connection =
+        std::make_shared<krpc::Connection>("127.0.0.1", acceptor.local_endpoint().port());
+    connection->connect();
+    acceptor.accept(socket);
+    manager = std::make_unique<krpc::StreamManager>(client, connection);
+  }
+  asio::io_context io_context;
+  asio::ip::tcp::acceptor acceptor;
+  asio::ip::tcp::socket socket;
+  std::unique_ptr<krpc::StreamManager> manager;
+};
+
+static krpc::schema::ProcedureResult result_value(const std::string& value) {
+  krpc::schema::ProcedureResult result;
+  result.set_value(value);
+  return result;
+}
+
+TEST_F(test_stream, test_result_before_the_add_reply_is_kept) {
+  idle_stream_manager idle(&conn);
+  auto& manager = *idle.manager;
+  manager.note_issued(3);
+  // One for an id noted but not registered, and one for an id not yet noted
+  manager.update(3, result_value("\x2a"));
+  manager.update(4, result_value("\x2b"));
+  bool is_null = false;
+  ASSERT_EQ("\x2a", manager.get_stream(3)->get_data(&is_null));
+  ASSERT_EQ("\x2b", manager.get_stream(4)->get_data(&is_null));
+}
+
+TEST_F(test_stream, test_result_for_an_ended_stream_is_dropped) {
+  idle_stream_manager idle(&conn);
+  auto& manager = *idle.manager;
+  manager.note_issued(5);
+  manager.get_stream(5);
+  manager.update(2, result_value("\x2a"));
+  ASSERT_FALSE(manager.get_stream(2)->has_updated());
 }
 
 TEST_F(test_stream, test_invalid_operation_exception_immediately) {
@@ -351,7 +415,6 @@ TEST_F(test_stream, test_wait_timeout_long) {
 TEST_F(test_stream, test_remove_callback_while_holding_condition) {
   auto x = test_service.counter_stream("test_stream.test_remove_callback_while_holding_condition");
   auto tag = x.add_callback([](int) {});
-  x.start();
   x.acquire();
   x.wait();
   // Let the update thread reach the next update and block on the condition we hold
@@ -369,7 +432,6 @@ TEST_F(test_stream, test_remove_callback_while_holding_condition) {
 TEST_F(test_stream, test_wait_update) {
   auto x = test_service.counter_stream("test_stream.test_wait_update", 10);
   conn.acquire_stream_update();
-  x.start(false);
   conn.wait_for_stream_update();
   auto count = x();
   ASSERT_LT(count, 10);
@@ -384,7 +446,6 @@ TEST_F(test_stream, test_wait_update) {
 TEST_F(test_stream, test_wait_update_timeout_short) {
   auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_short", 10);
   conn.acquire_stream_update();
-  x.start(false);
   conn.wait_for_stream_update();
   auto count = x();
   conn.wait_for_stream_update(0);
@@ -395,7 +456,6 @@ TEST_F(test_stream, test_wait_update_timeout_short) {
 TEST_F(test_stream, test_wait_update_timeout_long) {
   auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_long", 10);
   conn.acquire_stream_update();
-  x.start(false);
   conn.wait_for_stream_update();
   auto count = x();
   ASSERT_LT(count, 10);
@@ -407,32 +467,37 @@ TEST_F(test_stream, test_wait_update_timeout_long) {
   conn.release_stream_update();
 }
 
-TEST_F(test_stream, test_callback) {
-  std::atomic<int> test_callback_value(-1);
-  std::atomic_flag error;
-  error.test_and_set();
-  std::atomic_flag stop;
-  stop.test_and_set();
-
-  auto callback = [&test_callback_value, &error, &stop](int x) {
-    if (x > 5) {
-      stop.clear();
-    } else if (test_callback_value + 1 != x) {
+// Counts consecutive values passed to a callback. The stream can update before the callback
+// is added, so counting starts from the first value passed.
+class callback_counter {
+ public:
+  callback_counter() {
+    error.test_and_set();
+    stop.test_and_set();
+  }
+  void operator()(int x) {
+    if (count > 0 && last + 1 != x) {
       error.clear();
       stop.clear();
-    } else {
-      test_callback_value++;
     }
-  };
+    last = x;
+    count++;
+    if (count > 5) stop.clear();
+  }
+  std::atomic<int> last{0};
+  std::atomic<int> count{0};
+  std::atomic_flag error;
+  std::atomic_flag stop;
+};
 
+TEST_F(test_stream, test_callback) {
+  callback_counter counter;
   auto x = test_service.counter_stream("test_stream.test_callback", 10);
-  x.add_callback(callback);
-  x.start();
-  while (stop.test_and_set()) {
+  x.add_callback([&counter](int value) { counter(value); });
+  while (counter.stop.test_and_set()) {
   }
   x.remove();
-  ASSERT_TRUE(error.test_and_set());
-  ASSERT_EQ(test_callback_value, 5);
+  ASSERT_TRUE(counter.error.test_and_set());
 }
 
 // A callback that throws must not escape the update thread: an exception leaving it calls
@@ -451,7 +516,6 @@ TEST_F(test_stream, test_callback_that_throws) {
   x.add_callback([&stop](int value) {
     if (value > 5) stop.clear();
   });
-  x.start();
   while (stop.test_and_set()) {
   }
   x.remove();
@@ -466,7 +530,6 @@ TEST_F(test_stream, test_callback_on_errored_stream) {
 
   auto x = test_service.throw_invalid_operation_exception_stream();
   x.add_callback([&called](int value) { called.clear(); });
-  x.start(false);
   for (int i = 0; i < 5; i++) wait();
 
   // The stream still reports its error to a reader, and the callback was never given a value
@@ -488,7 +551,6 @@ TEST_F(test_stream, test_remove_callback) {
   x.add_callback(callback1);
   auto callback2_tag = x.add_callback(callback2);
   x.remove_callback(callback2_tag);
-  x.start();
   while (called1.test_and_set()) {
   }
   x.remove();
@@ -501,9 +563,8 @@ TEST_F(test_stream, test_update_callback) {
 
   auto callback = [&stop]() { stop.clear(); };
 
-  auto x = test_service.counter_stream("test_stream.test_update_callback", 10);
   conn.add_stream_update_callback(callback);
-  x.start();
+  auto x = test_service.counter_stream("test_stream.test_update_callback", 10);
   while (stop.test_and_set()) {
   }
   x.remove();
@@ -519,11 +580,10 @@ TEST_F(test_stream, test_remove_update_callback) {
 
   auto callback2 = [&called2]() { called2.clear(); };
 
-  auto x = test_service.counter_stream("test_stream.test_remove_update_callback", 10);
   conn.add_stream_update_callback(callback1);
   auto callback2_tag = conn.add_stream_update_callback(callback2);
   conn.remove_stream_update_callback(callback2_tag);
-  x.start();
+  auto x = test_service.counter_stream("test_stream.test_remove_update_callback", 10);
   while (called1.test_and_set()) {
   }
   x.remove();
@@ -531,29 +591,12 @@ TEST_F(test_stream, test_remove_update_callback) {
 }
 
 TEST_F(test_stream, test_rate) {
-  std::atomic<int> test_rate_value(0);
-  std::atomic_flag error;
-  error.test_and_set();
-  std::atomic_flag stop;
-  stop.test_and_set();
-
-  auto callback = [&test_rate_value, &error, &stop](int x) {
-    if (x > 5) {
-      stop.clear();
-    } else if (test_rate_value + 1 != x) {
-      error.clear();
-      stop.clear();
-    } else {
-      test_rate_value++;
-    }
-  };
-
+  callback_counter counter;
   auto x = test_service.counter_stream("test_stream.test_rate");
-  x.add_callback(callback);
   x.set_rate(5);
-  x.start();
+  x.add_callback([&counter](int value) { counter(value); });
   auto start = std::chrono::system_clock::now();
-  while (stop.test_and_set()) {
+  while (counter.stop.test_and_set()) {
   }
   auto end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed = end - start;
@@ -563,8 +606,7 @@ TEST_F(test_stream, test_rate) {
   ASSERT_GT(elapsed.count(), 1.0);
   ASSERT_LT(elapsed.count(), 3.0);
   x.remove();
-  ASSERT_TRUE(error.test_and_set());
-  ASSERT_EQ(test_rate_value, 5);
+  ASSERT_TRUE(counter.error.test_and_set());
 }
 
 TEST_F(test_stream, test_default_constructable) {
@@ -713,7 +755,7 @@ TEST_F(test_stream, test_another_handle_while_holding_condition) {
   auto x = test_service.int32_to_string_stream(50);
   x.acquire();
   auto y = x;
-  // Starts the stream and waits for its first value
+  // Waits for the stream's first value
   ASSERT_EQ("50", y());
   y.remove();
   EXPECT_THROW(x.wait(), krpc::StreamError);

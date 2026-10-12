@@ -6,8 +6,10 @@
 #include <functional>
 #include <map>
 #include <memory>
-#include <mutex>   // NOLINT(build/c++11)
+#include <mutex>  // NOLINT(build/c++11)
+#include <set>
 #include <thread>  // NOLINT(build/c++11)
+#include <vector>
 
 namespace krpc {
 
@@ -25,6 +27,9 @@ class StreamManager {
   ~StreamManager();
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
   std::shared_ptr<StreamImpl> get_stream(uint64_t id);
+  /** Note a stream id the server has given this client. Called in the order the server's
+      replies arrive. */
+  void note_issued(uint64_t id);
   void remove_stream(uint64_t id);
   /** Remove a stream from the server, and end it for every handle. Does nothing if the
       stream has already ended. */
@@ -49,6 +54,12 @@ class StreamManager {
   Client* client;
   std::shared_ptr<Connection> connection;
   std::map<uint64_t, std::weak_ptr<StreamImpl>> streams;
+  // The highest stream id the server has given this client, and those of its ids not yet
+  // registered. A result for one of these, or for a higher id, can arrive before its stream
+  // is registered, and is kept until it is.
+  int64_t issued;
+  std::set<uint64_t> unregistered;
+  std::map<uint64_t, std::vector<schema::ProcedureResult>> pending;
   std::shared_ptr<std::recursive_mutex> update_lock;
   std::shared_ptr<std::atomic_bool> stop;
   // Whether the connection has closed, after which a stream is ended as it is added

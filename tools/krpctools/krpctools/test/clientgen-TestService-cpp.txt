@@ -1712,7 +1712,7 @@ inline ::krpc::Event TestService::on_timer(uint32_t milliseconds, uint32_t repea
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(milliseconds));
   _args.push_back(encoder::encode_arg(repeats));
-  auto _data = this->_client->invoke("TestService", "OnTimer", _args);
+  auto _data = this->_client->invoke_add_stream("TestService", "OnTimer", _args, true);
   ::krpc::Event _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1723,7 +1723,7 @@ inline ::krpc::Event TestService::on_timer_using_lambda(uint32_t milliseconds) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(milliseconds));
-  auto _data = this->_client->invoke("TestService", "OnTimerUsingLambda", _args);
+  auto _data = this->_client->invoke_add_stream("TestService", "OnTimerUsingLambda", _args, true);
   ::krpc::Event _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);

@@ -21,16 +21,19 @@ class StreamImpl {
   StreamImpl(Client* client, uint64_t id, std::shared_ptr<std::recursive_mutex> update_lock);
   Client* get_client() const;
   uint64_t get_id() const;
-  void start();
-  bool has_started() const;
   float rate() const;
   void set_rate(float value);
   /** A copy of the encoded value, and whether the value is null, read together. Throws the
       exception that ended the stream, if it has ended. */
   std::string get_data(bool* is_null);
+  typedef std::function<void(const std::string&, bool)> Callback;
+  typedef std::map<int, Callback> Callbacks;
+  /** Store a value, with the update lock held. Returns false, storing nothing, if the stream
+      has ended. */
+  bool store(const std::string& data, bool is_null);
   /** Store a value and wake the threads waiting for one. Returns false, storing nothing, if
-      the stream has ended. */
-  bool update_and_notify(const std::string& data, bool is_null);
+      the stream has ended. Otherwise sets callbacks to those to call with the value. */
+  bool update_and_notify(const std::string& data, bool is_null, Callbacks* callbacks);
   bool has_updated() const;
   /** The number of values received. */
   uint64_t get_version() const;
@@ -61,9 +64,7 @@ class StreamImpl {
   bool remove_hold();
   std::condition_variable& get_condition();
   std::mutex& get_condition_mutex();
-  typedef std::function<void(const std::string&, bool)> Callback;
-  typedef std::map<int, Callback> Callbacks;
-  const Callbacks& get_callbacks() const;
+  /** Add a callback. One added to a stream with a value is called with it here. */
   int add_callback(const Callback& callback);
   void remove_callback(int tag);
   /** Add an end callback. One added after the stream ended is called here. */
@@ -77,7 +78,6 @@ class StreamImpl {
   Client* client;
   uint64_t id;
   std::shared_ptr<std::recursive_mutex> update_lock;
-  bool started;
   bool updated;
   std::string data;
   bool _is_null;
@@ -96,6 +96,10 @@ class StreamImpl {
   int next_end_callback_tag;
   float _rate;
 };
+
+/** Call each callback with a value. A callback that throws is reported, and the rest are
+    still called. */
+void call_callbacks(const StreamImpl::Callbacks& callbacks, const std::string& data, bool is_null);
 
 /** Call each end callback with the ending. A callback that throws is reported, and the
     rest are still called. */

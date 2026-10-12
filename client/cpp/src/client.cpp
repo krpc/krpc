@@ -80,12 +80,26 @@ schema::ProcedureResult Client::invoke(std::string_view service, std::string_vie
   return this->send_request(request_buffer);
 }
 
+schema::ProcedureResult Client::invoke_add_stream(std::string_view service,
+                                                  std::string_view procedure,
+                                                  const std::vector<encoder::Value>& args,
+                                                  bool is_event) {
+  std::lock_guard<std::mutex> lock_guard(*lock);
+  request_buffer.Clear();
+  schema::ProcedureCall* call = request_buffer.add_calls();
+  call->set_service(service);
+  call->set_procedure(procedure);
+  add_arguments(call, args);
+  return this->send_request(request_buffer, is_event ? NewStream::event : NewStream::stream);
+}
+
 // Send a request and return the result it is answered by. Called with lock held, which makes
 // the response and the bytes the request is written as safe to keep from one call to the next.
-schema::ProcedureResult Client::send_request(const schema::Request& request) {
+schema::ProcedureResult Client::send_request(const schema::Request& request, NewStream new_stream) {
   encoder::encode_message_with_size(request, &request_data);
   rpc_connection->send(request_data);
   rpc_connection->receive_message(response_buffer);
+  if (new_stream != NewStream::none) note_stream_id(new_stream);
 
   if (response_buffer.has_error()) throw_exception(response_buffer.error());
 
@@ -95,6 +109,23 @@ schema::ProcedureResult Client::send_request(const schema::Request& request) {
   if (result.has_error()) throw_exception(result.error());
 
   return result;
+}
+
+// Note the id of a new stream with the stream manager. Called with lock held, so ids are noted
+// in the order the replies arrive, and the manager keeps every result sent for a stream before
+// it is registered.
+void Client::note_stream_id(NewStream new_stream) {
+  if (!stream_manager || response_buffer.has_error() || response_buffer.results_size() == 0) return;
+  const auto& result = response_buffer.results(0);
+  if (result.has_error() || result.is_null()) return;
+  // A reply that fails to parse fails again where the caller decodes it
+  if (new_stream == NewStream::event) {
+    schema::Event message;
+    if (message.ParseFromString(result.value())) stream_manager->note_issued(message.stream().id());
+  } else {
+    schema::Stream message;
+    if (message.ParseFromString(result.value())) stream_manager->note_issued(message.id());
+  }
 }
 
 void Client::add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args) {
