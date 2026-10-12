@@ -93,6 +93,11 @@ object of type :type:`Stream`. The most recent value of the stream can be obtain
 :meth:`Stream.Remove` on the stream object. All of a clients streams are automatically stopped when
 it disconnects.
 
+.. note::
+
+   A stream runs on the server until you remove it or the connection closes, even once the stream
+   object is garbage collected. Each call to ``AddStream`` adds another stream.
+
 Synchronizing with Stream Updates
 ---------------------------------
 
@@ -241,7 +246,9 @@ Client API Reference
    This class represents a stream. See :ref:`csharp-client-streams`.
 
    Stream objects implement ``GetHashCode``, ``Equals``, ``operator ==`` and ``operator !=`` such
-   that two stream objects are equal if they are bound to the same stream on the server.
+   that two stream objects are equal if they are bound to the same stream on the server. Each call
+   to :meth:`Connection.AddStream` creates a new stream, so two streams of the same call are not
+   equal.
 
    .. property:: float Rate { get; set; }
 
@@ -302,7 +309,7 @@ Client API Reference
 
    .. method:: void Remove()
 
-      Removes the stream from the server.
+      Removes the stream from the server. Other streams of the same call are not affected.
 
 .. class:: Event
 

@@ -229,8 +229,7 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Remove a stream from the server and end it, unless it has already ended or a stream
-        /// added since has taken its id.
+        /// Remove a stream from the server and end it, unless it has already ended.
         /// </summary>
         public void RemoveStream (StreamImpl stream)
         {

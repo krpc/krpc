@@ -186,7 +186,7 @@ namespace KRPC.Client
         /// Remove the stream from the server.
         /// </summary>
         /// <remarks>
-        /// Streams of the same procedure call are one stream, so removing one removes them all.
+        /// Each add creates a separate stream, so this leaves the other streams of the same call.
         /// </remarks>
         public void Remove ()
         {
