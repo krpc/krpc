@@ -49,6 +49,9 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
 ### C# sources
 
  * **New C# file → add `<Compile Include="…" />` to the project's `.csproj`.** `//:csproj-test` catches misses.
+ * **New C# target → load `csharp_library`/`csharp_binary`/`csharp_nunit_test` from `//tools/build:csharp.bzl`**,
+   not `@rules_dotnet`. The wrappers run the culture analyzers (`tools/build/dotnet/analyzers.globalconfig`);
+   only the doc examples use the plain rules.
  * Reproduce a CI compile failure: `dotnet build <project>.csproj -c Debug -warnaserror -p:SolutionDir=$PWD/`
    (needs generated files staged).
 
