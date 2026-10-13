@@ -530,6 +530,9 @@ Lua client
 Python client
 ^^^^^^^^^^^^^
 
+* Fix type checkers skipping the code after a name the service defines, such as ``conn.space_center.ReferenceFrame`` (:issue:`1134`)
+* Fix type checkers typing a stream value as ``object`` (:issue:`1134`)
+* Fix type checkers rejecting ``stream_port=None`` in ``krpc.connect`` (:issue:`1134`)
 * :breaking:`Breaking` Start a stream when it is added, removing ``Stream.start`` and ``Event.start`` (:issue:`1122`)
 * Call a callback added to a stream that has a value with that value straight away (:issue:`1122`)
 * Call a callback added to an event straight away for a firing not yet passed to a wait or another callback (:issue:`1122`)
@@ -571,6 +574,8 @@ Python client
 krpctools
 ^^^^^^^^^
 
+* Generate python stubs that declare a service's classes, enumerations, structures and exceptions for type checkers (:issue:`1134`)
+* Fix ``krpc-clientgen`` failing to load a generator from a file (:issue:`1134`)
 * :breaking:`Breaking` Generate C# and C++ stubs that mark the calls returning a stream or an event, which need a v0.7.0 client (:issue:`1122`)
 * Fix the python stubs for a service that names a type the KRPC service defines failing to import (:issue:`1094`)
 * Fix a generated python exception type not naming the service and class it was built from (:issue:`1094`)

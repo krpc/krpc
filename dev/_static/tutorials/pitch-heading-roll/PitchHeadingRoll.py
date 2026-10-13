@@ -33,7 +33,6 @@ def angle_between_vectors(u, v):
 
 
 while True:
-
     vessel_direction = vessel.direction(vessel.surface_reference_frame)
 
     # Get the direction of the vessel in the horizon plane

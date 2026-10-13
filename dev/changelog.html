@@ -1132,6 +1132,9 @@
 <section id="python-client">
 <h3>Python client<a class="headerlink" href="#python-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fix type checkers skipping the code after a name the service defines, such as <code class="docutils literal notranslate"><span class="pre">conn.space_center.ReferenceFrame</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1134">#1134</a>)</p></li>
+<li><p>Fix type checkers typing a stream value as <code class="docutils literal notranslate"><span class="pre">object</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1134">#1134</a>)</p></li>
+<li><p>Fix type checkers rejecting <code class="docutils literal notranslate"><span class="pre">stream_port=None</span></code> in <code class="docutils literal notranslate"><span class="pre">krpc.connect</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1134">#1134</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Start a stream when it is added, removing <code class="docutils literal notranslate"><span class="pre">Stream.start</span></code> and <code class="docutils literal notranslate"><span class="pre">Event.start</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1122">#1122</a>)</p></li>
 <li><p>Call a callback added to a stream that has a value with that value straight away (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1122">#1122</a>)</p></li>
 <li><p>Call a callback added to an event straight away for a firing not yet passed to a wait or another callback (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1122">#1122</a>)</p></li>
@@ -1173,6 +1176,8 @@
 <section id="krpctools">
 <h3>krpctools<a class="headerlink" href="#krpctools" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Generate python stubs that declare a service’s classes, enumerations, structures and exceptions for type checkers (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1134">#1134</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code> failing to load a generator from a file (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1134">#1134</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Generate C# and C++ stubs that mark the calls returning a stream or an event, which need a v0.7.0 client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1122">#1122</a>)</p></li>
 <li><p>Fix the python stubs for a service that names a type the KRPC service defines failing to import (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>
 <li><p>Fix a generated python exception type not naming the service and class it was built from (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1094">#1094</a>)</p></li>

@@ -1087,7 +1087,6 @@ close to the target apoapsis.</p>
 <span class="n">srbs_separated</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">turn_angle</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-
     <span class="c1"># Gravity turn</span>
     <span class="k">if</span> <span class="n">altitude</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">turn_start_altitude</span> <span class="ow">and</span> <span class="n">altitude</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">turn_end_altitude</span><span class="p">:</span>
         <span class="n">frac</span> <span class="o">=</span> <span class="p">(</span><span class="n">altitude</span><span class="p">()</span> <span class="o">-</span> <span class="n">turn_start_altitude</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
