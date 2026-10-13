@@ -15,21 +15,21 @@ import lib
 # Each is required: an entry matching nothing means the build has moved and the
 # archive would silently ship incomplete.
 CONTENTS = (
-    'bazel-bin/core/AssemblyInfo.cs',
-    'bazel-bin/core/TestAssemblyInfo.cs',
-    'bazel-bin/server/AssemblyInfo.cs',
-    'bazel-bin/protobuf/KRPC_unity.cs',
-    'bazel-bin/client/csharp/AssemblyInfo.cs',
-    'bazel-bin/protobuf/KRPC.cs',
-    'bazel-bin/client/csharp/Services/',
-    'bazel-bin/service/*/AssemblyInfo.cs',
-    'bazel-bin/tools/*/AssemblyInfo.cs',
-    'bazel-krpc/external/+http_archive+csharp_json',
-    'bazel-krpc/external/+http_archive+csharp_moq',
-    'bazel-krpc/external/+http_archive+csharp_options',
-    'bazel-krpc/external/+http_archive+ksp/KSP_Data/Managed',
-    'bazel-bin/tools/build/ksp/Google.Protobuf.dll',
-    'bazel-bin/tools/build/ksp/KRPC.IO.Ports.dll',
+    "bazel-bin/core/AssemblyInfo.cs",
+    "bazel-bin/core/TestAssemblyInfo.cs",
+    "bazel-bin/server/AssemblyInfo.cs",
+    "bazel-bin/protobuf/KRPC_unity.cs",
+    "bazel-bin/client/csharp/AssemblyInfo.cs",
+    "bazel-bin/protobuf/KRPC.cs",
+    "bazel-bin/client/csharp/Services/",
+    "bazel-bin/service/*/AssemblyInfo.cs",
+    "bazel-bin/tools/*/AssemblyInfo.cs",
+    "bazel-krpc/external/+http_archive+csharp_json",
+    "bazel-krpc/external/+http_archive+csharp_moq",
+    "bazel-krpc/external/+http_archive+csharp_options",
+    "bazel-krpc/external/+http_archive+ksp/KSP_Data/Managed",
+    "bazel-bin/tools/build/ksp/Google.Protobuf.dll",
+    "bazel-bin/tools/build/ksp/KRPC.IO.Ports.dll",
 )
 
 
@@ -50,20 +50,20 @@ def add(archive, path):
 
 
 def main():
-    lib.require('bazel')
-    lib.run('bazel', 'build', '//:csproj')
+    lib.require("bazel")
+    lib.run("bazel", "build", "//:csproj")
 
-    output = Path(f'bazel-bin/krpc-genfiles-{lib.VERSION}.zip')
+    output = Path(f"bazel-bin/krpc-genfiles-{lib.VERSION}.zip")
     output.unlink(missing_ok=True)
-    with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
+    with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
         for pattern in CONTENTS:
             matches = sorted(glob.glob(pattern))
             if not matches:
-                raise lib.ReleaseError(f'nothing matched {pattern}')
+                raise lib.ReleaseError(f"nothing matched {pattern}")
             for match in matches:
                 add(archive, Path(match))
-    print(f'Wrote {output}')
+    print(f"Wrote {output}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lib.main(main)

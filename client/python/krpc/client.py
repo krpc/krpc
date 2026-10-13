@@ -569,7 +569,9 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
 
     @staticmethod
     def get_call(
-        func: Callable, *args: object, **kwargs: object  # type: ignore[type-arg]
+        func: Callable,
+        *args: object,
+        **kwargs: object,  # type: ignore[type-arg]
     ) -> KRPC.ProcedureCall:
         """Convert a remote procedure call to a KRPC.ProcedureCall message"""
         if func == getattr:

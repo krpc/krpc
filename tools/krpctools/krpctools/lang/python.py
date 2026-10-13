@@ -18,7 +18,6 @@ from .language import Language, float32_literal
 
 
 class PythonLanguage(Language):
-
     keywords = keyword.kwlist
 
     value_map = {"null": "None", "true": "True", "false": "False"}

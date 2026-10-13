@@ -22,7 +22,6 @@ from ..lang.java import JavaLanguage
 
 
 class JavaGenerator(Generator):
-
     language = JavaLanguage()
 
     parse_plain_cref_member = staticmethod(lower_camel_case)
@@ -301,7 +300,6 @@ class JavaGenerator(Generator):
 
 
 class JavaDocParser(DocParser):
-
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 

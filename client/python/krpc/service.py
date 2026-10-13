@@ -353,7 +353,9 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
 
 
 def _skipping_unknown_types(
-    what: str, build: Callable[..., None], *args: object  # type: ignore[type-arg]
+    what: str,
+    build: Callable[..., None],
+    *args: object,  # type: ignore[type-arg]
 ) -> None:
     """Run one step of building a service, skipping it with a warning if it names a type this
     client does not know about, rather than failing to create the service at all. That is
@@ -600,7 +602,9 @@ class ServiceBase(DynamicType):
         setattr(cls, exception.name, exception_type)
 
     @classmethod
-    def _parse_procedure(cls, procedure: KRPC.Procedure) -> Tuple[
+    def _parse_procedure(
+        cls, procedure: KRPC.Procedure
+    ) -> Tuple[
         List[str],
         List[TypeBase],
         List[bool],

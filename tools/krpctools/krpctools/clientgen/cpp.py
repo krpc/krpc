@@ -12,7 +12,6 @@ def _cpp_template_fix(typ):
 
 
 class CppGenerator(Generator):
-
     language = CppLanguage()
 
     plain_cref_separator = "::"
@@ -142,7 +141,6 @@ class CppGenerator(Generator):
 
 
 class CppDocParser(DocParser):
-
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 

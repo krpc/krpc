@@ -10,7 +10,6 @@ PNG = base64.b64decode(
 
 
 class TestImage(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

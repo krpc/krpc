@@ -4,7 +4,6 @@ import krpctest
 
 
 class TestArc(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -83,7 +82,6 @@ class TestArc(krpctest.TestCase):
 
 
 class TestCircle(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

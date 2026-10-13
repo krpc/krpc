@@ -22,7 +22,6 @@ from .docparser import flatten_deprecation_reason
 
 
 class Generator:
-
     def __init__(self, macro_template, service, definitions):
         self._macro_template = macro_template
         self._service = service

@@ -17,7 +17,6 @@ from .language import Language
 
 
 class JavaLanguage(Language):
-
     keywords = set(
         [
             "abstract",

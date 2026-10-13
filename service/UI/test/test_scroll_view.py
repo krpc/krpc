@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestScrollView(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

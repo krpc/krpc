@@ -21,7 +21,6 @@ from ..utils import as_type
 
 
 class CnanoGenerator(Generator):
-
     language = CnanoLanguage()
 
     def __init__(self, macro_template, service, definitions):
@@ -338,7 +337,6 @@ class CnanoGenerator(Generator):
 
 
 class CNanoDocParser(DocParser):
-
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 

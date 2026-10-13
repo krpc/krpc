@@ -61,7 +61,9 @@ def main() -> int:
         black_args.extend(files)
         pylint_args.extend(files)
 
-    os.environ.setdefault("PYLINTHOME", os.path.join(os.environ.get("TEST_TMPDIR", "."), "pylint"))
+    os.environ.setdefault(
+        "PYLINTHOME", os.path.join(os.environ.get("TEST_TMPDIR", "."), "pylint")
+    )
 
     result = run(black_args)
     result = run(pylint_args) or result

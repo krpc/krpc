@@ -16,7 +16,6 @@ from .language import Language, float32_literal
 
 
 class CppLanguage(Language):
-
     keywords = set(
         [
             "alignas",

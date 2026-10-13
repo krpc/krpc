@@ -4,7 +4,6 @@ import krpctest
 
 
 class TestOrbitPath(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

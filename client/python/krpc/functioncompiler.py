@@ -84,7 +84,9 @@ class Parameters(NamedTuple):
 
 
 def compile_function(
-    client: Client, func: Callable, streamed: bool = False  # type: ignore[type-arg]
+    client: Client,
+    func: Callable,
+    streamed: bool = False,  # type: ignore[type-arg]
 ) -> Any:
     """Compile a Python function into a server side function.
 
@@ -101,7 +103,9 @@ NO_VALUE = KRPC.Type()
 
 
 def compile_function_with_type(
-    client: Client, func: Callable, streamed: bool = False  # type: ignore[type-arg]
+    client: Client,
+    func: Callable,
+    streamed: bool = False,  # type: ignore[type-arg]
 ) -> Tuple[Any, Optional[KRPC.Type], Parameters]:
     """Compile a Python function into a server side function, and return it
     with the type of the values it evaluates to, as tracked by the compiler,
@@ -989,7 +993,9 @@ class _Compiler:
         return _Result(expression=structure, ptype=ptype)
 
     def _compile_math_call(
-        self, node: ast.Call, func: Callable  # type: ignore[type-arg]
+        self,
+        node: ast.Call,
+        func: Callable,  # type: ignore[type-arg]
     ) -> _Result:
         """Compile a call to a math module function: evaluated on the client
         when its arguments are known, and mapped to its server side equivalent
@@ -3143,7 +3149,9 @@ class _Compiler:
         )
 
     def _compile_builtin(
-        self, node: ast.Call, func: Callable  # type: ignore[type-arg]
+        self,
+        node: ast.Call,
+        func: Callable,  # type: ignore[type-arg]
     ) -> _Result:
         if func is print:
             return self._compile_print(node)
@@ -3252,7 +3260,9 @@ class _Compiler:
         raise self._error(node, "unsupported function %s()" % func.__name__)
 
     def _check_builtin_keywords(
-        self, node: ast.Call, func: Callable  # type: ignore[type-arg]
+        self,
+        node: ast.Call,
+        func: Callable,  # type: ignore[type-arg]
     ) -> None:
         """Raise for a keyword argument other than the key of sorted, min or max."""
         keys = ("key",) if func in (sorted, min, max) else ()
@@ -3857,7 +3867,9 @@ class _Compiler:
         )
 
     def _compile_scalar_min_max(
-        self, node: ast.Call, func: Callable  # type: ignore[type-arg]
+        self,
+        node: ast.Call,
+        func: Callable,  # type: ignore[type-arg]
     ) -> _Result:
         arguments = [self._compile(argument) for argument in node.args]
         if all(argument.is_value for argument in arguments):

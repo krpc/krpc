@@ -12,7 +12,6 @@ from ..utils import as_type
 
 
 class CsharpGenerator(Generator):
-
     language = CsharpLanguage()
 
     def __init__(self, macro_template, service, definitions):

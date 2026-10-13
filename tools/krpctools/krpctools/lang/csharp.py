@@ -15,7 +15,6 @@ from .language import Language, float32_literal
 
 
 class CsharpLanguage(Language):
-
     keywords = set(
         [
             "abstract",

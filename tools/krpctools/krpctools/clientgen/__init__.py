@@ -63,7 +63,6 @@ def main():
     args = parser.parse_args()
 
     try:
-
         # Check and expand input paths
         inputs = []
         for path in args.input:

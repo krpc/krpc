@@ -14,7 +14,6 @@ from .language import Language
 
 
 class CnanoLanguage(Language):
-
     keywords = set(
         [
             "alignas",

@@ -16,7 +16,6 @@ from .language import Language, float32_literal
 
 
 class LuaLanguage(Language):
-
     value_map = {"null": "nil", "true": "True", "false": "False"}
 
     type_map = {

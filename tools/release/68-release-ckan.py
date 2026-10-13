@@ -24,13 +24,14 @@ import lib
 
 # The published-releases-by-tag endpoint. A draft is not returned here, and a
 # draft is exactly the state that leaves the bot with nothing to pull.
-RELEASE_API = 'https://api.github.com/repos/krpc/krpc/releases/tags/{tag}'
+RELEASE_API = "https://api.github.com/repos/krpc/krpc/releases/tags/{tag}"
 
 # The directory the NetKAN bot writes kRPC's generated metadata to, one file per version.
 # The CKAN version comes from the KSP-AVC file, whose 3-part MAJOR.MINOR.PATCH
 # matches the release version, so the file is named for the tag: kRPC-v0.6.0.ckan.
-CKAN_META = ('https://raw.githubusercontent.com/KSP-CKAN/CKAN-meta/master/'
-             'kRPC/kRPC-{tag}.ckan')
+CKAN_META = (
+    "https://raw.githubusercontent.com/KSP-CKAN/CKAN-meta/master/kRPC/kRPC-{tag}.ckan"
+)
 
 # The time to wait for the metadata, and how often to look. Inflation is usually
 # minutes but can lag; override the wait with CKAN_POLL_MINUTES for a longer sit.
@@ -44,7 +45,7 @@ def exists(url):
     Any other failure is a problem the operator needs to see, so it is raised
     rather than reported as 'not there yet'.
     """
-    request = urllib.request.Request(url, method='HEAD')
+    request = urllib.request.Request(url, method="HEAD")
     try:
         urllib.request.urlopen(request, timeout=30)
         return True
@@ -52,25 +53,27 @@ def exists(url):
         if exception.code == 404:
             return False
         raise lib.ReleaseError(
-            f'could not reach {url} '
-            f'({exception.code} {exception.reason})') from exception
+            f"could not reach {url} ({exception.code} {exception.reason})"
+        ) from exception
     except urllib.error.URLError as exception:
         raise lib.ReleaseError(
-            f'could not reach {url}: {exception.reason}') from exception
+            f"could not reach {url}: {exception.reason}"
+        ) from exception
 
 
 def poll_minutes():
     """The wait in minutes, from CKAN_POLL_MINUTES if it is set and valid."""
-    value = os.environ.get('CKAN_POLL_MINUTES')
+    value = os.environ.get("CKAN_POLL_MINUTES")
     if value is None:
         return DEFAULT_POLL_MINUTES
     try:
         minutes = int(value)
     except ValueError:
         raise lib.ReleaseError(
-            f'CKAN_POLL_MINUTES is not an integer: {value!r}') from None
+            f"CKAN_POLL_MINUTES is not an integer: {value!r}"
+        ) from None
     if minutes < 0:
-        raise lib.ReleaseError('CKAN_POLL_MINUTES cannot be negative')
+        raise lib.ReleaseError("CKAN_POLL_MINUTES cannot be negative")
     return minutes
 
 
@@ -78,32 +81,30 @@ def main():
     release_url = RELEASE_API.format(tag=lib.TAG)
     if not exists(release_url):
         raise lib.ReleaseError(
-            f'no published GitHub release for {lib.TAG}; publish it '
-            f'(50-release-github.py) before CKAN can pull it')
+            f"no published GitHub release for {lib.TAG}; publish it "
+            f"(50-release-github.py) before CKAN can pull it"
+        )
 
     meta_url = CKAN_META.format(tag=lib.TAG)
     minutes = poll_minutes()
-    lib.banner(f'Waiting for CKAN to index {lib.TAG}')
-    print(f'Watching {meta_url}')
+    lib.banner(f"Waiting for CKAN to index {lib.TAG}")
+    print(f"Watching {meta_url}")
 
     deadline = time.monotonic() + minutes * 60
     while True:
         if exists(meta_url):
-            lib.banner('Done')
-            print(f'CKAN has {lib.TAG}: {meta_url}')
+            lib.banner("Done")
+            print(f"CKAN has {lib.TAG}: {meta_url}")
             return
         if time.monotonic() + POLL_SECONDS > deadline:
             break
-        print(f'{lib.DIM}not indexed yet; checking again in '
-              f'{POLL_SECONDS}s{lib.RESET}')
+        print(f"{lib.DIM}not indexed yet; checking again in {POLL_SECONDS}s{lib.RESET}")
         time.sleep(POLL_SECONDS)
 
-    lib.warning(
-        f'{lib.TAG} has not appeared in CKAN-meta after {minutes} minutes')
-    print('Inflation is automatic but can lag; it usually lands within a few '
-          'hours.')
-    print(f'Re-run this step later to confirm, or check: {meta_url}')
+    lib.warning(f"{lib.TAG} has not appeared in CKAN-meta after {minutes} minutes")
+    print("Inflation is automatic but can lag; it usually lands within a few hours.")
+    print(f"Re-run this step later to confirm, or check: {meta_url}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lib.main(main)

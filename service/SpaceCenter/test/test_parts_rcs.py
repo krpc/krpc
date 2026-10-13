@@ -4,7 +4,6 @@ from krpctest.geometry import cross, distance, dot, norm
 
 
 class RCSTestBase:
-
     # Keyed by language-independent internal part name (part.name); the inline
     # comment is the English title (part.title) for readability.
     rcs_data = {
@@ -49,7 +48,6 @@ class RCSTestBase:
 
 
 class RCSTest(RCSTestBase):
-
     def assert_torque_almost_equal(self, expected, actual):
         # Available torque is a center-of-mass-dependent golden value that
         # drifts slightly between KSP versions and runs. Compare each axis with
@@ -123,7 +121,6 @@ class RCSTest(RCSTestBase):
 
 
 class TestPartsRCS(krpctest.TestCase, RCSTestBase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -522,7 +519,6 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
 
 
 class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -562,7 +558,6 @@ class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
 
 
 class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

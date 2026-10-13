@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestPartsParachute(krpctest.TestCase):
-
     def setUp(self):
         self.new_save()
         self.launch_vessel_from_vab("PartsParachute")

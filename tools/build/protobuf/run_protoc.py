@@ -28,7 +28,7 @@ def main():
     # for this script's own options.
     if "--" in argv:
         split = argv.index("--")
-        pre_args, protoc_args = argv[:split], argv[split + 1:]
+        pre_args, protoc_args = argv[:split], argv[split + 1 :]
     else:
         pre_args, protoc_args = argv, []
 

@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestPartsFairing(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

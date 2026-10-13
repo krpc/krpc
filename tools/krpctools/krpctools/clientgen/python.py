@@ -40,7 +40,6 @@ class StubLanguage(PythonLanguage):
 
 
 class PythonGenerator(Generator):
-
     parse_plain_cref_member = staticmethod(snake_case)
 
     def __init__(self, macro_template, service, definitions):

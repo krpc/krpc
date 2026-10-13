@@ -214,7 +214,7 @@ class Procedure(Appendable):
                 documentation=documentation,
                 types=types,
                 procedure=self.fullname,
-                **info
+                **info,
             )
             for info in parameters
         ]
@@ -283,7 +283,7 @@ class ClassMethod(Appendable):
                 documentation=documentation,
                 types=types,
                 procedure=self.fullname,
-                **info
+                **info,
             )
             for info in parameters
         ]
@@ -327,7 +327,7 @@ class ClassStaticMethod(Appendable):
                 documentation=documentation,
                 types=types,
                 procedure=self.fullname,
-                **info
+                **info,
             )
             for info in parameters
         ]

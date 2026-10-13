@@ -83,7 +83,6 @@ def float32_literal(value):
 
 
 class Language:
-
     # Language source for each special value, keyed by (protobuf type code, symbolic name).
     # A value with no entry is written as an ordinary literal.
     special_values = {}

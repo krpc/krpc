@@ -25,7 +25,6 @@ else:
 
 
 class WebSocketsTest(unittest.TestCase):
-
     @staticmethod
     def address():
         return "127.0.0.1"
@@ -104,7 +103,6 @@ class WebSocketsTest(unittest.TestCase):
 
 
 class TestConnection(WebSocketsTest):
-
     def test_named_client(self):
         self.connect(self.address(), self.rpc_port(), None, name="TheClientName")
         call = KRPC.ProcedureCall()
@@ -132,7 +130,6 @@ class TestConnection(WebSocketsTest):
 
 
 class TestRPCServer(WebSocketsTest):
-
     @classmethod
     def setUpClass(cls):
         cls.connect(cls.address(), cls.rpc_port(), None)
@@ -165,7 +162,6 @@ class TestRPCServer(WebSocketsTest):
 
 
 class TestStreamServer(WebSocketsTest):
-
     @classmethod
     def setUpClass(cls):
         cls.connect(

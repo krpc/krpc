@@ -62,17 +62,17 @@ import lib
 # too, but handled separately by graft_krpc_service since their location moved
 # between releases.
 CONTENT_PATHS = (
-    'doc/src',
-    'doc/api',
-    'doc/order.txt',
-    'service/SpaceCenter/src',
-    'service/Drawing/src',
-    'service/UI/src',
-    'service/InfernalRobotics/src',
-    'service/KerbalAlarmClock/src',
-    'service/RemoteTech/src',
-    'service/LiDAR/src',
-    'service/DockingCamera/src',
+    "doc/src",
+    "doc/api",
+    "doc/order.txt",
+    "service/SpaceCenter/src",
+    "service/Drawing/src",
+    "service/UI/src",
+    "service/InfernalRobotics/src",
+    "service/KerbalAlarmClock/src",
+    "service/RemoteTech/src",
+    "service/LiDAR/src",
+    "service/DockingCamera/src",
 )
 
 # The per-component CHANGELOG.md files the unified changelog page is merged from,
@@ -82,37 +82,37 @@ CONTENT_PATHS = (
 # version being built. Other CHANGELOG.md files in the tree (the top-level one,
 # tools/krpctest, tools/buildenv) do not feed the page and are left alone.
 CHANGELOG_PATHS = (
-    'core/CHANGELOG.md',
-    'server/CHANGELOG.md',
-    'service/SpaceCenter/CHANGELOG.md',
-    'service/Drawing/CHANGELOG.md',
-    'service/UI/CHANGELOG.md',
-    'service/InfernalRobotics/CHANGELOG.md',
-    'service/KerbalAlarmClock/CHANGELOG.md',
-    'service/RemoteTech/CHANGELOG.md',
-    'service/LiDAR/CHANGELOG.md',
-    'service/DockingCamera/CHANGELOG.md',
-    'client/cnano/CHANGELOG.md',
-    'client/csharp/CHANGELOG.md',
-    'client/cpp/CHANGELOG.md',
-    'client/java/CHANGELOG.md',
-    'client/lua/CHANGELOG.md',
-    'client/python/CHANGELOG.md',
-    'tools/krpctools/CHANGELOG.md',
+    "core/CHANGELOG.md",
+    "server/CHANGELOG.md",
+    "service/SpaceCenter/CHANGELOG.md",
+    "service/Drawing/CHANGELOG.md",
+    "service/UI/CHANGELOG.md",
+    "service/InfernalRobotics/CHANGELOG.md",
+    "service/KerbalAlarmClock/CHANGELOG.md",
+    "service/RemoteTech/CHANGELOG.md",
+    "service/LiDAR/CHANGELOG.md",
+    "service/DockingCamera/CHANGELOG.md",
+    "client/cnano/CHANGELOG.md",
+    "client/csharp/CHANGELOG.md",
+    "client/cpp/CHANGELOG.md",
+    "client/java/CHANGELOG.md",
+    "client/lua/CHANGELOG.md",
+    "client/python/CHANGELOG.md",
+    "tools/krpctools/CHANGELOG.md",
 )
 
 # A CHANGELOG.md version header: '## [X.Y.Z]', with an optional leading 'v'
 # (older frozen-doc sources predate the prefix) and any trailing marker such as
 # ' - unreleased'. Kept in step with changeloggen's own header parsing.
-CHANGELOG_HEADER_RE = re.compile(r'^##\s+\[v?(\d[^\]]*)\]')
+CHANGELOG_HEADER_RE = re.compile(r"^##\s+\[v?(\d[^\]]*)\]")
 
 # The built-in KRPC service sources. Pinning them to the content ref keeps later
 # changes to the KRPC service API (e.g. the GameScene API, #897) out of the
 # frozen build. The sources moved from server/ to core/ in 0.5.4; for an earlier
 # content ref they are grafted from their old server/ location into the current
 # core/ location, where the toolchain's core/src/**/*.cs glob compiles them.
-KRPC_SERVICE_DEST = 'core/src/Service/KRPC'
-KRPC_SERVICE_REFS = ('core/src/Service/KRPC', 'server/src/Service/KRPC')
+KRPC_SERVICE_DEST = "core/src/Service/KRPC"
+KRPC_SERVICE_REFS = ("core/src/Service/KRPC", "server/src/Service/KRPC")
 
 # Grafting an old service API onto newer core/server can drop a type the current
 # toolchain still references. The only such case to date is the namespace-level
@@ -122,8 +122,8 @@ KRPC_SERVICE_REFS = ('core/src/Service/KRPC', 'server/src/Service/KRPC')
 # lets the graft compile; lacking [KRPCEnum] it is not scanned into the service
 # definition, so the frozen docs keep the content ref's own GameScene. A version
 # whose API already carries the type needs no shim.
-GAMESCENE_TYPE = 'KRPC.Service.KRPC.GameScene'
-GAMESCENE_SHIM = '''namespace KRPC.Service.KRPC
+GAMESCENE_TYPE = "KRPC.Service.KRPC.GameScene"
+GAMESCENE_SHIM = """namespace KRPC.Service.KRPC
 {
     /// <summary>
     /// Compatibility shim for the frozen documentation build, written by
@@ -155,7 +155,7 @@ GAMESCENE_SHIM = '''namespace KRPC.Service.KRPC
         Administration,
     }
 }
-'''
+"""
 
 # A release before 0.5.4 has the KRPC service in server/, with its Paused and
 # CurrentGameScene properties implemented against server and KSP symbols: the
@@ -167,8 +167,8 @@ GAMESCENE_SHIM = '''namespace KRPC.Service.KRPC
 # with the server's own KRPC.Addon, and they carry no [KRPC*] attribute, so the
 # scanner ignores them. The shim is written only when the grafted service still
 # references these symbols.
-KRPC_COMPAT_SHIM_PATH = 'core/src/Service/KRPC/DocsCompat.cs'
-KRPC_COMPAT_SHIM = '''namespace KRPC.Service.KRPC
+KRPC_COMPAT_SHIM_PATH = "core/src/Service/KRPC/DocsCompat.cs"
+KRPC_COMPAT_SHIM = """namespace KRPC.Service.KRPC
 {
     /// <summary>
     /// Compatibility shim for the frozen documentation build, written by
@@ -234,7 +234,7 @@ KRPC_COMPAT_SHIM = '''namespace KRPC.Service.KRPC
         }
     }
 }
-'''
+"""
 
 
 def run_in(cwd, *command):
@@ -244,9 +244,9 @@ def run_in(cwd, *command):
     the build worktree instead.
     """
     command = [str(argument) for argument in command]
-    print(f'{lib.DIM}$ (cd {cwd}) {" ".join(command)}{lib.RESET}')
+    print(f"{lib.DIM}$ (cd {cwd}) {' '.join(command)}{lib.RESET}")
     if subprocess.run(command, cwd=cwd).returncode != 0:
-        raise lib.ReleaseError(f'{command[0]} failed')
+        raise lib.ReleaseError(f"{command[0]} failed")
 
 
 def require_clean_tree():
@@ -256,22 +256,23 @@ def require_clean_tree():
     change would silently not be in the build; untracked files (a previous
     output zip) are ignored.
     """
-    if lib.capture('git', 'diff-index', '--name-only', 'HEAD', '--'):
+    if lib.capture("git", "diff-index", "--name-only", "HEAD", "--"):
         raise lib.ReleaseError(
-            'the working tree has uncommitted changes to tracked files')
+            "the working tree has uncommitted changes to tracked files"
+        )
 
 
 def content_ref(version):
     """The ref the documentation content comes from: the fixup branch if there
     is one (local or on origin), otherwise the release tag."""
-    branch = f'v{version}-docs'
-    if lib.succeeds('git', 'show-ref', '--verify', '--quiet',
-                    f'refs/heads/{branch}'):
+    branch = f"v{version}-docs"
+    if lib.succeeds("git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"):
         return branch
-    if lib.succeeds('git', 'show-ref', '--verify', '--quiet',
-                    f'refs/remotes/origin/{branch}'):
-        return f'origin/{branch}'
-    return f'v{version}'
+    if lib.succeeds(
+        "git", "show-ref", "--verify", "--quiet", f"refs/remotes/origin/{branch}"
+    ):
+        return f"origin/{branch}"
+    return f"v{version}"
 
 
 def graft(worktree, base, ref):
@@ -284,15 +285,22 @@ def graft(worktree, base, ref):
     custom.css and layout.html -- and restore the current checkout's versions so
     the frozen build uses the current theme and footer template.
     """
-    lib.run('git', '-C', worktree, 'rm', '-rq', *CONTENT_PATHS)
-    lib.run('git', '-C', worktree, 'checkout', ref, '--', *CONTENT_PATHS)
+    lib.run("git", "-C", worktree, "rm", "-rq", *CONTENT_PATHS)
+    lib.run("git", "-C", worktree, "checkout", ref, "--", *CONTENT_PATHS)
     graft_krpc_service(worktree, ref)
-    lib.run('git', '-C', worktree, 'rm', '-rqf', '--ignore-unmatch',
-            'doc/src/_static', 'doc/src/_templates')
-    lib.run('git', '-C', worktree, 'checkout', base, '--', 'doc/src/_static')
-    if lib.succeeds('git', 'cat-file', '-e', f'{base}:doc/src/_templates'):
-        lib.run('git', '-C', worktree, 'checkout', base, '--',
-                'doc/src/_templates')
+    lib.run(
+        "git",
+        "-C",
+        worktree,
+        "rm",
+        "-rqf",
+        "--ignore-unmatch",
+        "doc/src/_static",
+        "doc/src/_templates",
+    )
+    lib.run("git", "-C", worktree, "checkout", base, "--", "doc/src/_static")
+    if lib.succeeds("git", "cat-file", "-e", f"{base}:doc/src/_templates"):
+        lib.run("git", "-C", worktree, "checkout", base, "--", "doc/src/_templates")
 
 
 def graft_krpc_service(worktree, ref):
@@ -304,23 +312,27 @@ def graft_krpc_service(worktree, ref):
     location, where the toolchain's core/src/**/*.cs glob compiles them as the
     frozen KRPC service.
     """
-    source = next((path for path in KRPC_SERVICE_REFS
-                   if lib.succeeds('git', 'cat-file', '-e', f'{ref}:{path}')),
-                  None)
+    source = next(
+        (
+            path
+            for path in KRPC_SERVICE_REFS
+            if lib.succeeds("git", "cat-file", "-e", f"{ref}:{path}")
+        ),
+        None,
+    )
     if source is None:
         raise lib.ReleaseError(
-            f'{ref} has no KRPC service sources at '
-            f'{" or ".join(KRPC_SERVICE_REFS)}')
-    lib.run('git', '-C', worktree, 'rm', '-rqf', '--ignore-unmatch',
-            KRPC_SERVICE_DEST)
+            f"{ref} has no KRPC service sources at {' or '.join(KRPC_SERVICE_REFS)}"
+        )
+    lib.run("git", "-C", worktree, "rm", "-rqf", "--ignore-unmatch", KRPC_SERVICE_DEST)
     if source == KRPC_SERVICE_DEST:
-        lib.run('git', '-C', worktree, 'checkout', ref, '--', KRPC_SERVICE_DEST)
+        lib.run("git", "-C", worktree, "checkout", ref, "--", KRPC_SERVICE_DEST)
         return
     # Relocate: materialize the ref's tree at its old path, then move it into the
     # current core/ location. The stale index entry the checkout leaves at the old
     # path is harmless, as the build reads the worktree and the move leaves the
     # sources only at the core/ location.
-    lib.run('git', '-C', worktree, 'checkout', ref, '--', source)
+    lib.run("git", "-C", worktree, "checkout", ref, "--", source)
     dest = worktree / KRPC_SERVICE_DEST
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.move(str(worktree / source), str(dest))
@@ -329,15 +341,16 @@ def graft_krpc_service(worktree, ref):
 def maybe_write_gamescene_shim(worktree):
     """Write the GameScene compatibility shim if the current toolchain needs it
     and the grafted content doesn't already provide the type."""
-    shim = worktree / 'core/src/Service/KRPC/GameScene.cs'
+    shim = worktree / "core/src/Service/KRPC/GameScene.cs"
     if shim.exists():
         return
     referenced = any(
-        GAMESCENE_TYPE in path.read_text(encoding='utf-8')
-        for directory in ('core/src', 'server/src')
-        for path in (worktree / directory).rglob('*.cs'))
+        GAMESCENE_TYPE in path.read_text(encoding="utf-8")
+        for directory in ("core/src", "server/src")
+        for path in (worktree / directory).rglob("*.cs")
+    )
     if referenced:
-        shim.write_text(GAMESCENE_SHIM, encoding='utf-8')
+        shim.write_text(GAMESCENE_SHIM, encoding="utf-8")
 
 
 def maybe_write_krpc_compat_shim(worktree):
@@ -345,14 +358,16 @@ def maybe_write_krpc_compat_shim(worktree):
     implements the pre-0.5.4 Paused and CurrentGameScene properties against
     symbols the core/ assembly cannot see."""
     service = worktree / KRPC_SERVICE_DEST
-    markers = ('Addon.Instance', 'PauseMenu.', 'EditorDriver', 'EditorFacility')
+    markers = ("Addon.Instance", "PauseMenu.", "EditorDriver", "EditorFacility")
     references = any(
         any(marker in text for marker in markers)
-        for path in service.rglob('*.cs')
-        for text in (path.read_text(encoding='utf-8'),))
+        for path in service.rglob("*.cs")
+        for text in (path.read_text(encoding="utf-8"),)
+    )
     if references:
         (worktree / KRPC_COMPAT_SHIM_PATH).write_text(
-            KRPC_COMPAT_SHIM, encoding='utf-8')
+            KRPC_COMPAT_SHIM, encoding="utf-8"
+        )
 
 
 def ensure_changelog_in_toctree(worktree):
@@ -367,31 +382,37 @@ def ensure_changelog_in_toctree(worktree):
     the frozen page keeps the changelog in its navigation. A ref that already
     lists it is left unchanged.
     """
-    index = worktree / 'doc/src/index.rst'
-    text = index.read_text(encoding='utf-8')
-    if re.search(r'^[ \t]+changelog[ \t]*$', text, flags=re.MULTILINE):
+    index = worktree / "doc/src/index.rst"
+    text = index.read_text(encoding="utf-8")
+    if re.search(r"^[ \t]+changelog[ \t]*$", text, flags=re.MULTILINE):
         return
-    text, count = re.subn(r'^([ \t]+)internals[ \t]*\n',
-                          r'\1internals\n\1changelog\n',
-                          text, count=1, flags=re.MULTILINE)
+    text, count = re.subn(
+        r"^([ \t]+)internals[ \t]*\n",
+        r"\1internals\n\1changelog\n",
+        text,
+        count=1,
+        flags=re.MULTILINE,
+    )
     if count != 1:
         raise lib.ReleaseError(
-            'could not find the internals toctree entry in doc/src/index.rst '
-            'to insert the changelog entry after')
-    index.write_text(text, encoding='utf-8')
+            "could not find the internals toctree entry in doc/src/index.rst "
+            "to insert the changelog entry after"
+        )
+    index.write_text(text, encoding="utf-8")
 
 
 def version_key(version):
     """Semver-ish sort key matching changeloggen: a higher tuple is newer, and a
     release sorts above its own pre-releases."""
-    core, _, pre = version.partition('-')
-    nums = [int(part) if part.isdigit() else 0 for part in core.split('.')]
+    core, _, pre = version.partition("-")
+    nums = [int(part) if part.isdigit() else 0 for part in core.split(".")]
     while len(nums) < 3:
         nums.append(0)
     if not pre:
         return (tuple(nums), 1, ())
-    pre_parts = tuple((0, int(part)) if part.isdigit() else (1, part)
-                      for part in pre.split('.'))
+    pre_parts = tuple(
+        (0, int(part)) if part.isdigit() else (1, part) for part in pre.split(".")
+    )
     return (tuple(nums), 0, pre_parts)
 
 
@@ -412,32 +433,33 @@ def trim_changelogs(worktree, version):
             continue
         kept = []
         keeping = True  # the preamble before the first header is kept
-        for line in changelog.read_text(encoding='utf-8').splitlines(
-                keepends=True):
+        for line in changelog.read_text(encoding="utf-8").splitlines(keepends=True):
             match = CHANGELOG_HEADER_RE.match(line)
             if match:
                 keeping = version_key(match.group(1)) <= ceiling
             if keeping:
                 kept.append(line)
-        changelog.write_text(''.join(kept), encoding='utf-8')
+        changelog.write_text("".join(kept), encoding="utf-8")
 
 
 def pin_version(worktree, version):
     """Pin the version stamp (build subpath, html_baseurl, switcher match)."""
-    config = worktree / 'config.bzl'
-    text, count = re.subn(r'^version = ".*"$', f'version = "{version}"',
-                          config.read_text(encoding='utf-8'), flags=re.MULTILINE)
+    config = worktree / "config.bzl"
+    text, count = re.subn(
+        r'^version = ".*"$',
+        f'version = "{version}"',
+        config.read_text(encoding="utf-8"),
+        flags=re.MULTILINE,
+    )
     if count != 1:
-        raise lib.ReleaseError('failed to pin the version in config.bzl')
-    config.write_text(text, encoding='utf-8')
+        raise lib.ReleaseError("failed to pin the version in config.bzl")
+    config.write_text(text, encoding="utf-8")
 
 
 def check_changelog(zip_path):
     with zipfile.ZipFile(zip_path) as archive:
-        if not any(Path(name).name == 'changelog.html'
-                   for name in archive.namelist()):
-            raise lib.ReleaseError(
-                'changelog.html missing from the built site')
+        if not any(Path(name).name == "changelog.html" for name in archive.namelist()):
+            raise lib.ReleaseError("changelog.html missing from the built site")
 
 
 def publish(zip_path, publish_dir, version):
@@ -452,64 +474,72 @@ def publish(zip_path, publish_dir, version):
     target.mkdir(parents=True)
     with zipfile.ZipFile(zip_path) as archive:
         archive.extractall(target)
-    lib.run(sys.executable, lib.ROOT / 'doc' / 'gen_docs_index.py', publish_dir)
-    lib.run('git', '-C', publish_dir, 'add', '-A')
-    if lib.succeeds('git', '-C', publish_dir, 'diff', '--cached', '--quiet'):
-        print('\nNo documentation changes to publish.')
+    lib.run(sys.executable, lib.ROOT / "doc" / "gen_docs_index.py", publish_dir)
+    lib.run("git", "-C", publish_dir, "add", "-A")
+    if lib.succeeds("git", "-C", publish_dir, "diff", "--cached", "--quiet"):
+        print("\nNo documentation changes to publish.")
         return
-    lib.run('git', '-C', publish_dir, 'commit', '-q', '-m',
-            f'Refresh docs for {version}')
-    print(f'\nStaged and committed into {publish_dir}. Review the diff, '
-          'then push:')
-    print(f'  git -C {publish_dir} push origin HEAD:gh-pages')
+    lib.run(
+        "git", "-C", publish_dir, "commit", "-q", "-m", f"Refresh docs for {version}"
+    )
+    print(f"\nStaged and committed into {publish_dir}. Review the diff, then push:")
+    print(f"  git -C {publish_dir} push origin HEAD:gh-pages")
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('version', help='release version to build, e.g. 0.5.4')
-    parser.add_argument('--publish', metavar='DIR',
-                        help='stage into gh-pages checkout DIR and commit')
-    parser.add_argument('--output', metavar='FILE',
-                        help='where to copy the built html.zip without --publish')
-    parser.add_argument('--worktree', metavar='DIR',
-                        help='build worktree location')
-    parser.add_argument('--keep-worktree', action='store_true',
-                        help='keep the build worktree on success')
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument("version", help="release version to build, e.g. 0.5.4")
+    parser.add_argument(
+        "--publish", metavar="DIR", help="stage into gh-pages checkout DIR and commit"
+    )
+    parser.add_argument(
+        "--output",
+        metavar="FILE",
+        help="where to copy the built html.zip without --publish",
+    )
+    parser.add_argument("--worktree", metavar="DIR", help="build worktree location")
+    parser.add_argument(
+        "--keep-worktree",
+        action="store_true",
+        help="keep the build worktree on success",
+    )
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
     version = args.version
-    tag = f'v{version}'
+    tag = f"v{version}"
 
-    lib.require('git', 'bazel')
-    if not lib.succeeds('git', 'rev-parse', '-q', '--verify',
-                        f'{tag}^{{commit}}'):
-        raise lib.ReleaseError(f'tag {tag} not found')
+    lib.require("git", "bazel")
+    if not lib.succeeds("git", "rev-parse", "-q", "--verify", f"{tag}^{{commit}}"):
+        raise lib.ReleaseError(f"tag {tag} not found")
     require_clean_tree()
 
-    worktree = (Path(args.worktree) if args.worktree
-                else lib.ROOT.parent / f'krpc-worktree-docs-{version}')
+    worktree = (
+        Path(args.worktree)
+        if args.worktree
+        else lib.ROOT.parent / f"krpc-worktree-docs-{version}"
+    )
     if worktree.exists():
-        raise lib.ReleaseError(f'{worktree} already exists')
+        raise lib.ReleaseError(f"{worktree} already exists")
 
     publish_dir = None
     if args.publish:
         publish_dir = Path(args.publish).resolve()
-        if not (publish_dir / '.git').exists():
+        if not (publish_dir / ".git").exists():
             raise lib.ReleaseError(
-                f'--publish target {publish_dir} is not a git checkout')
+                f"--publish target {publish_dir} is not a git checkout"
+            )
 
     ref = content_ref(version)
-    base = lib.capture('git', 'rev-parse', 'HEAD')
-    branch = lib.capture('git', 'rev-parse', '--abbrev-ref', 'HEAD')
-    print(f'Building {version} docs: content from {ref}, toolchain from '
-          f'{branch}.')
+    base = lib.capture("git", "rev-parse", "HEAD")
+    branch = lib.capture("git", "rev-parse", "--abbrev-ref", "HEAD")
+    print(f"Building {version} docs: content from {ref}, toolchain from {branch}.")
 
-    lib.run('git', 'worktree', 'add', '-q', '--detach', worktree, base)
+    lib.run("git", "worktree", "add", "-q", "--detach", worktree, base)
     try:
         graft(worktree, base, ref)
         maybe_write_gamescene_shim(worktree)
@@ -518,36 +548,41 @@ def main():
         ensure_changelog_in_toctree(worktree)
         pin_version(worktree, version)
 
-        lib.banner('Building the docs (this verifies the graft)')
-        run_in(worktree, 'bazel', 'build', '//doc:html')
-        run_in(worktree, 'bazel', 'test', '//doc:check-documented')
+        lib.banner("Building the docs (this verifies the graft)")
+        run_in(worktree, "bazel", "build", "//doc:html")
+        run_in(worktree, "bazel", "test", "//doc:check-documented")
 
-        zip_path = worktree / 'bazel-bin' / 'doc' / 'html.zip'
+        zip_path = worktree / "bazel-bin" / "doc" / "html.zip"
         check_changelog(zip_path)
 
         if publish_dir:
             publish(zip_path, publish_dir, version)
         else:
-            output = (Path(args.output) if args.output
-                      else lib.ROOT / f'krpc-doc-{version}.zip')
+            output = (
+                Path(args.output)
+                if args.output
+                else lib.ROOT / f"krpc-doc-{version}.zip"
+            )
             # html.zip is a read-only Bazel output; copy its contents into a
             # fresh writable file, replacing any read-only one an earlier run
             # left behind, rather than cloning its mode.
             output.unlink(missing_ok=True)
             shutil.copyfile(zip_path, output)
-            print(f'\nBuilt site: {output}')
+            print(f"\nBuilt site: {output}")
             print(f'Inspect it with: unzip -l "{output}"')
     except BaseException:
-        lib.error(f'the build worktree is left at {worktree} for inspection')
+        lib.error(f"the build worktree is left at {worktree} for inspection")
         raise
 
     if args.keep_worktree:
-        print(f'\nBuild worktree kept at {worktree} (remove with: '
-              f'git worktree remove {worktree}).')
+        print(
+            f"\nBuild worktree kept at {worktree} (remove with: "
+            f"git worktree remove {worktree})."
+        )
     else:
-        lib.run('git', 'worktree', 'remove', '--force', worktree)
-    print('\nDone.')
+        lib.run("git", "worktree", "remove", "--force", worktree)
+    print("\nDone.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lib.main(main)

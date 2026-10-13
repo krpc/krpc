@@ -79,9 +79,7 @@ class Encoder:
             dict_obj = cast(Mapping, x)  # type: ignore[type-arg]
             encode_key = cls._item_encoder(typ.key_type)
             encode_value = cls._item_encoder(typ.value_type)
-            for key, value in sorted(
-                dict_obj.items(), key=lambda i: i[0]
-            ):  # type: ignore[no-any-return]
+            for key, value in sorted(dict_obj.items(), key=lambda i: i[0]):  # type: ignore[no-any-return]
                 entry = KRPC.DictionaryEntry()
                 entry.key = encode_key(key)
                 entry.value = encode_value(value)

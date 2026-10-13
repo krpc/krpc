@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestPartsControlSurface(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         active_vessel = cls.connect().space_center.active_vessel

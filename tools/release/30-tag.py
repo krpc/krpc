@@ -17,38 +17,38 @@ def finalize_changelogs():
     """
     changed = lib.strip_unreleased()
     if changed:
-        lib.banner(f'Finalizing changelogs for {lib.TAG}')
-        lib.run('git', 'commit', '-m', f'Finalize changelog for {lib.TAG}',
-                *changed)
+        lib.banner(f"Finalizing changelogs for {lib.TAG}")
+        lib.run("git", "commit", "-m", f"Finalize changelog for {lib.TAG}", *changed)
 
 
 def main():
-    lib.require('git')
+    lib.require("git")
     finalize_changelogs()
     lib.require_clean_tree()
 
-    if lib.succeeds('git', 'rev-parse', '-q', '--verify',
-                    f'refs/tags/{lib.TAG}'):
-        if lib.capture('git', 'rev-parse', f'{lib.TAG}^{{commit}}') != \
-                lib.capture('git', 'rev-parse', 'HEAD'):
-            raise lib.ReleaseError(
-                f'tag {lib.TAG} already exists but points elsewhere')
-        print(f'Tag {lib.TAG} already exists and points at HEAD.')
+    if lib.succeeds("git", "rev-parse", "-q", "--verify", f"refs/tags/{lib.TAG}"):
+        if lib.capture("git", "rev-parse", f"{lib.TAG}^{{commit}}") != lib.capture(
+            "git", "rev-parse", "HEAD"
+        ):
+            raise lib.ReleaseError(f"tag {lib.TAG} already exists but points elsewhere")
+        print(f"Tag {lib.TAG} already exists and points at HEAD.")
     else:
-        lib.banner(f'Tagging HEAD as {lib.TAG}')
-        lib.run('git', 'tag', '-a', lib.TAG, '-m', f'kRPC {lib.TAG}')
+        lib.banner(f"Tagging HEAD as {lib.TAG}")
+        lib.run("git", "tag", "-a", lib.TAG, "-m", f"kRPC {lib.TAG}")
 
-    lib.banner('Pushing to GitHub')
-    lib.confirm(f'Push main and {lib.TAG} to origin?')
-    lib.run('git', 'push', 'origin', 'main')
-    lib.run('git', 'push', 'origin', lib.TAG)
+    lib.banner("Pushing to GitHub")
+    lib.confirm(f"Push main and {lib.TAG} to origin?")
+    lib.run("git", "push", "origin", "main")
+    lib.run("git", "push", "origin", lib.TAG)
 
-    lib.banner('Done')
-    print('Wait for the CI workflow to pass before continuing:')
-    print("  gh run watch $(gh run list --branch main --workflow ci "
-          "--limit 1 --json databaseId --jq '.[0].databaseId')")
-    print('Next: tools/release/40-build-assets.py')
+    lib.banner("Done")
+    print("Wait for the CI workflow to pass before continuing:")
+    print(
+        "  gh run watch $(gh run list --branch main --workflow ci "
+        "--limit 1 --json databaseId --jq '.[0].databaseId')"
+    )
+    print("Next: tools/release/40-build-assets.py")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lib.main(main)

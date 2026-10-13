@@ -713,7 +713,6 @@ def _read_updates(
     """Read stream updates until the client stops the thread, or the connection fails.
     Returns the error that ended the connection, if it failed."""
     while True:
-
         # Read the size and position of the update message
         data = b""
         while True:

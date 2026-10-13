@@ -60,9 +60,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         ):
             self.conn.compile(
                 # pylint: disable-next=used-before-assignment,undefined-variable
-                lambda: obj.int_property
-                + y
-                + (y := 1)
+                lambda: obj.int_property + y + (y := 1)
             )
 
         def reads_the_global():
@@ -527,14 +525,17 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         )
         self.assertTrue(
             self.conn.run(
-                lambda: counter("Compiler.indict")
-                in {1: 0, counter("Compiler.indict"): 0}
+                lambda: (
+                    counter("Compiler.indict") in {1: 0, counter("Compiler.indict"): 0}
+                )
             )
         )
         self.assertTrue(
             self.conn.run(
-                lambda: str(counter("Compiler.instr"))
-                in "1" + str(counter("Compiler.instr"))
+                lambda: (
+                    str(counter("Compiler.instr"))
+                    in "1" + str(counter("Compiler.instr"))
+                )
             )
         )
 
@@ -1157,15 +1158,19 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             self.assertEqual(
                 either,
                 self.conn.run(
-                    lambda: (obj.int_property > 1 if obj.int_property != 0 else None)
-                    or False
+                    lambda: (
+                        (obj.int_property > 1 if obj.int_property != 0 else None)
+                        or False
+                    )
                 ),
             )
             self.assertEqual(
                 both,
                 self.conn.run(
-                    lambda: (obj.int_property > 1 if obj.int_property != 0 else None)
-                    and True
+                    lambda: (
+                        (obj.int_property > 1 if obj.int_property != 0 else None)
+                        and True
+                    )
                 ),
             )
 
@@ -2552,8 +2557,9 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         )
         self.assertTrue(
             self.conn.run(
-                lambda: service.increment_dictionary({"a": obj.int_property})
-                == {"a": 2}
+                lambda: (
+                    service.increment_dictionary({"a": obj.int_property}) == {"a": 2}
+                )
             )
         )
         self.assertTrue(self.conn.run(lambda: [obj.int_property] in [[0], [1]]))
@@ -4408,8 +4414,10 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(
             "5000000000",
             self.evaluate(
-                lambda: self.conn.test_service.int64_to_string(5000000000)
-                + str(obj.int_property)[:0]
+                lambda: (
+                    self.conn.test_service.int64_to_string(5000000000)
+                    + str(obj.int_property)[:0]
+                )
             ),
         )
         with self.assertRaises(FunctionCompilationError):

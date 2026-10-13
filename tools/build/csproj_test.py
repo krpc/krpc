@@ -17,7 +17,9 @@ import xml.etree.ElementTree as ET
 
 # Project paths as listed in the solution, e.g.
 #     Project("{FAE0...}") = "KRPC.Core", "core\src\KRPC.Core.csproj", "{960F...}"
-SLN_PROJECT = re.compile(r'^Project\([^)]*\)\s*=\s*"[^"]*",\s*"([^"]*\.csproj)"', re.MULTILINE)
+SLN_PROJECT = re.compile(
+    r'^Project\([^)]*\)\s*=\s*"[^"]*",\s*"([^"]*\.csproj)"', re.MULTILINE
+)
 
 # Sources outside the project directory: the generated AssemblyInfo.cs, pulled in
 # as $(bazel-bin)\..., and files shared with a sibling project via a relative path.

@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestMapMarker(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestPartsWheel(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -211,7 +210,6 @@ class TestPartsWheel(krpctest.TestCase):
 
 
 class TestPartsWheelGrounded(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

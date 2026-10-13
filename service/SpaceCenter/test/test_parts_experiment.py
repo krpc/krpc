@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestPartsExperiment(krpctest.TestCase):
-
     # NOTE: part lookups here use the language-independent with_name/part.name.
     # The Experiment.title and ScienceSubject.title assertions below are KSP's
     # localized science strings (a separate domain from parts, with no neutral

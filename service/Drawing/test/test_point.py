@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestPoint(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

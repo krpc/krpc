@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestActionGroupsExtended(krpctest.TestCase):
-
     # Exercises kRPC's support for the Action Groups Extended mod, which raises the number of
     # action groups from the stock 0-9 to 0-250. When the mod is installed the SpaceCenter Control
     # class routes get/set/toggle and action queries for these groups through the mod instead of

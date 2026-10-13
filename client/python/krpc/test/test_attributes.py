@@ -5,7 +5,6 @@ from krpc.attributes import Attributes
 
 
 class TestAttributes(unittest.TestCase):
-
     cases = [
         "ProcedureName",
         "get_PropertyName",

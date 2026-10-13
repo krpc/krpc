@@ -45,7 +45,6 @@ def add_map_markers(test, drawing, ref):
 
 
 class TestMapView(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -105,7 +104,6 @@ class TestMapView(krpctest.TestCase):
 
 
 class TestEditor(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -149,7 +147,6 @@ class TestEditor(krpctest.TestCase):
 
 
 class TestTrackingStation(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

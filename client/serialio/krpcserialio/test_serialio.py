@@ -108,7 +108,6 @@ class SerialIOTest(unittest.TestCase):
 
 
 class TestRPCServer(SerialIOTest):
-
     @classmethod
     def setUpClass(cls):
         cls.connect(cls.port_name())

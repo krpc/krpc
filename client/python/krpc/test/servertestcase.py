@@ -12,7 +12,9 @@ _compile_function_with_type = krpc.functioncompiler.compile_function_with_type
 
 
 def _checked_compile_function_with_type(
-    client: Client, func: Callable, streamed: bool = False  # type: ignore[type-arg]
+    client: Client,
+    func: Callable,
+    streamed: bool = False,  # type: ignore[type-arg]
 ) -> Tuple[Any, Optional[KRPC.Type], Parameters]:
     """Compile a function, and check that the types the compiler tracks for its
     value and its parameters are the types the server gives them. The client

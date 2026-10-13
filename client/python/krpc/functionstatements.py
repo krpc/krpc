@@ -258,7 +258,8 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
                 raise compiler._error(
                     compiler._node,
                     "the state variable '%s' is None when the function is compiled, "
-                    "which gives it no type" % name
+                    "which gives it no type"
+                    % name
                     + hint % (name, "Optional[float]", name),
                 )
             if value.is_value and self._is_empty_collection(value.value):

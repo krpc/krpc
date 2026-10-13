@@ -3,7 +3,6 @@ import krpctest
 
 
 class TestPartsRadiator(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -65,7 +64,6 @@ class TestPartsRadiator(krpctest.TestCase):
 
 
 class TestPartsRadiatorBreak(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

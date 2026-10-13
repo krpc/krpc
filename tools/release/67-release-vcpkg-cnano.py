@@ -14,8 +14,8 @@ import vcpkg
 
 def main():
     credentials = lib.load_credentials()
-    vcpkg.publish('krpc-cnano', Path('client/cnano/vcpkg-port'), credentials)
+    vcpkg.publish("krpc-cnano", Path("client/cnano/vcpkg-port"), credentials)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lib.main(main)

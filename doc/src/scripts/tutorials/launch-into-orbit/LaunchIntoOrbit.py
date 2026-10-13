@@ -39,7 +39,6 @@ vessel.auto_pilot.target_pitch_and_heading(90, 90)
 srbs_separated = False
 turn_angle = 0
 while True:
-
     # Gravity turn
     if altitude() > turn_start_altitude and altitude() < turn_end_altitude:
         frac = (altitude() - turn_start_altitude) / (
