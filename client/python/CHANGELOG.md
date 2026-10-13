@@ -1,4 +1,8 @@
 ## [v0.7.0] - unreleased
+- Fix type checkers skipping the code after a name the service defines, such as
+  `conn.space_center.ReferenceFrame` (#1134)
+- Fix type checkers typing a stream value as `object` (#1134)
+- Fix type checkers rejecting `stream_port=None` in `krpc.connect` (#1134)
 - **Breaking:** Start a stream when it is added, removing `Stream.start` and `Event.start`
   (#1122)
 - Call a callback added to a stream that has a value with that value straight away (#1122)

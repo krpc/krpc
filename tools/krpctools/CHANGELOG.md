@@ -1,4 +1,7 @@
 ## [v0.7.0] - unreleased
+- Generate python stubs that declare a service's classes, enumerations, structures and
+  exceptions for type checkers (#1134)
+- Fix `krpc-clientgen` failing to load a generator from a file (#1134)
 - **Breaking:** Generate C# and C++ stubs that mark the calls returning a stream or an event,
   which need a v0.7.0 client (#1122)
 - Fix the python stubs for a service that names a type the KRPC service defines failing to
