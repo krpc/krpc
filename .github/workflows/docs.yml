@@ -42,7 +42,7 @@ jobs:
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
         with:
