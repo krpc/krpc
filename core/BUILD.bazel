@@ -52,7 +52,6 @@ csharp_library(
         "TestingTools",
         # TestServer exposes the expression tree printer as a test-only RPC
         "TestServer",
-        "TestServer.Debug",
         "TestService",
         "DynamicProxyGenAssembly2",
         # The Benchmark service runs a call through Services, the server's own dispatch path
@@ -80,7 +79,6 @@ csharp_library(
         "TestingTools",
         # TestServer exposes the expression tree printer as a test-only RPC
         "TestServer",
-        "TestServer.Debug",
         "TestService",
         "DynamicProxyGenAssembly2",
         # The Benchmark service runs a call through Services, the server's own dispatch path
