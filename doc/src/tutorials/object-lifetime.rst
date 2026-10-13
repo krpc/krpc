@@ -107,6 +107,9 @@ scenes, and carries on when the game returns to one where it is available.
 ``KRPC.GameStateLoads`` counts the game states that have finished loading. A stream of it updates
 when a load is complete.
 
+A stream or event over a :ref:`server side function <tutorial-server-side-functions>` ends with
+``KRPC.ObjectNotLoadedException``, unless the function catches it.
+
 Objects in the Editor
 ---------------------
 

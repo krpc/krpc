@@ -132,6 +132,9 @@ the following reads the vessel's altitude and speed together:
 Use ``run`` for a function with effects, such as setting a property. An event or a function stream
 evaluates its function on every update, repeating the effects.
 
+The :ref:`server side functions tutorial <tutorial-server-side-functions>` shows how to build larger
+functions.
+
 .. note::
 
    :func:`krpc::add_stream`, :func:`krpc::run` and :func:`krpc::add_event` are defined in

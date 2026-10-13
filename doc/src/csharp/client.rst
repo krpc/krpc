@@ -70,7 +70,8 @@ altitude and speed together:
 Use ``Run`` for a function with effects, such as a call of ``ActivateNextStage``. An event or a
 function stream evaluates its function on every update, repeating the effects.
 
-:ref:`csharp-client-compiling-lambdas` describes what a function can contain.
+:ref:`csharp-client-compiling-lambdas` describes what a function can contain. The :ref:`server side
+functions tutorial <tutorial-server-side-functions>` shows how to build larger functions.
 
 .. _csharp-client-streams:
 
@@ -241,9 +242,9 @@ triggers when ``MeanAltitude > 1000``:
 
 .. literalinclude:: /scripts/client/csharp/CompiledEvent.cs
 
-You can also build the event's function with the expression API, and pass it to
-:meth:`Connection.AddEvent`. :meth:`Connection.GetCall` gives the call of a procedure, for
-``Expression.Call``. The following builds the same event:
+You can also build the event's function with the :ref:`expression API <server-side-functions-api>`,
+and pass it to :meth:`Connection.AddEvent`. :meth:`Connection.GetCall` gives the call of a
+procedure, for ``Expression.Call``. The following builds the same event:
 
 .. literalinclude:: /scripts/client/csharp/Event.cs
 
@@ -284,7 +285,8 @@ with one parameter. An event or a function stream takes a function with no param
 
 The lambda is a C# expression tree, so C#'s expression tree rules apply. It holds a single
 expression, and a call in it gives every argument, including the optional ones. Build a function
-with statements, or one that raises or handles exceptions, with the expression API.
+with statements, or one that raises or handles exceptions, with the
+:ref:`expression API <server-side-functions-api>`.
 
 The compiler translates the lambda's expression tree into a server side function that computes
 the same result on the server:
