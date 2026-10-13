@@ -37,7 +37,7 @@ RUN USE_BAZEL_VERSION=9.3.0 bazel --ignore_all_rc_files version && \
 # build uses rules_dotnet's own hermetic SDK/runtime, resolved through the test
 # runfiles, not this one.
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends dotnet-sdk-8.0 && \
+    apt-get install -y --no-install-recommends dotnet-sdk-10.0 && \
     apt-get clean
 
 # Install latex

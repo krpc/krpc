@@ -92,11 +92,11 @@ csharp_library(
     deps = deps,
 )
 
-# net8.0 build of the client, for the unit tests. A separate target rather
+# net10.0 build of the client, for the unit tests. A separate target rather
 # than a multi-targeted KRPC.Client so that the default build flavor staged
 # into the nupkg stays net472.
 csharp_library(
-    name = "KRPC.Client.net8",
+    name = "KRPC.Client.net10",
     srcs = srcs,
     out = "KRPC.Client",
     internals_visible_to = test_assemblies,
@@ -107,7 +107,7 @@ csharp_library(
         "CS1685",
         "CS1701",
     ],
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
     warning_level = 4,
@@ -255,7 +255,7 @@ test_nowarn = [
 ]
 
 test_deps = [
-    ":KRPC.Client.net8",
+    ":KRPC.Client.net10",
     "//tools/build/dotnet:Castle.Core",
     "//tools/build/dotnet:Google.Protobuf",
     "//tools/build/dotnet:Moq",
@@ -278,7 +278,7 @@ csharp_nunit_test(
     ],
     out = "KRPC.Client.Test.Unit",
     nowarn = test_nowarn,
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     deps = test_deps,
 )
 
@@ -297,7 +297,7 @@ csharp_nunit_test(
     out = "KRPC.Client.Test.CommunicationTCPIP",
     nowarn = test_nowarn,
     tags = ["requires-network"],
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     deps = test_deps,
 )
 
@@ -312,7 +312,7 @@ csharp_nunit_test(
     ],
     out = "KRPC.Client.Test.CommunicationLocalSocket",
     nowarn = test_nowarn,
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     deps = test_deps,
 )
 
@@ -335,7 +335,7 @@ csharp_nunit_test(
     out = "KRPC.Client.Test",
     nowarn = test_nowarn,
     tags = ["requires-network"],
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     visibility = ["//:__pkg__"],
     deps = test_deps,
 )
@@ -355,10 +355,10 @@ csharp_binary(
         "CS1573",
         "CS1701",
     ],
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     visibility = ["//tools/benchmarks:__pkg__"],
     deps = [
-        ":KRPC.Client.net8",
+        ":KRPC.Client.net10",
         "//tools/build/dotnet:Google.Protobuf",
     ],
 )

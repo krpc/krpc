@@ -1677,7 +1677,7 @@ namespace KRPC.Client.Test
                 testService.IncrementList (new List<int> { 1, 2 })
                     .Select (x => x.ToString (CultureInfo.InvariantCulture)))));
             Assert.AreEqual ("abcde", Evaluate (
-                () => string.Concat ("a", "b", "c", "d", testService.StringProperty)));
+                () => string.Concat (new [] { "a", "b", "c", "d", testService.StringProperty })));
             Assert.Throws<FunctionCompilationException> (
                 () => Connection.Compile (
                     () => string.Concat (testService.IncrementList (new List<int> { 1 }))));

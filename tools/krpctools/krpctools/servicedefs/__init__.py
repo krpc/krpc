@@ -53,7 +53,7 @@ def main():
 
 def servicedefs(ksp, service, assemblies):
     """Generate service definitions from assembly DLLs using the
-    ServiceDefinitions tool (requires the .NET 8 runtime)"""
+    ServiceDefinitions tool (requires the .NET 10 runtime)"""
 
     if not os.path.exists(ksp):
         raise RuntimeError("Kerbal Space Program directory does not exist.")

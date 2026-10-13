@@ -5,7 +5,7 @@ game. It's intended purpose is for automated testing of kRPC clients.
 
 ## Usage
 
-Requires the [.NET 8 runtime](https://dotnet.microsoft.com/download/dotnet/8.0)
+Requires the [.NET 10 runtime](https://dotnet.microsoft.com/download/dotnet/10.0)
 to be installed.
 
 To run, execute "./TestServer" (or "dotnet TestServer.dll") from a command
