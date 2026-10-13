@@ -554,6 +554,7 @@
 <li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -763,6 +764,16 @@ your Kerbals by deploying all the parachutes:</p>
 </pre></div>
 </div>
 </div></div>
+<p>The script deploys the parachutes one call at a time, and the game can advance between the
+calls. In Python, a <a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side function</span></a> deploys them all
+in the same physics tick, with a single call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">deploy_parachutes</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">parachute</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">parachutes</span><span class="p">:</span>
+        <span class="n">parachute</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+<span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">deploy_parachutes</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="control-from-here-for-docking-ports">
 <h2>‘Control From Here’ for Docking Ports<a class="headerlink" href="#control-from-here-for-docking-ports" title="Link to this heading">#</a></h2>
@@ -1080,6 +1091,29 @@ active and fueled engines on a rocket. See here for a description of the maths:
 <span class="n">isp</span> <span class="o">=</span> <span class="n">thrust</span> <span class="o">/</span> <span class="n">fuel_consumption</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Combined vacuum Isp = </span><span class="si">%d</span><span class="s2"> seconds&quot;</span> <span class="o">%</span> <span class="n">isp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+<p>The script reads the thrust and specific impulse of each engine with separate calls, which can
+land in different physics ticks. A <a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side function</span></a>
+reads them all in the same tick, with a single call:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-4-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-4-4-0" name="4-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-4-4-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-1" name="4-1" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-4-4-0" class="sphinx-tabs-panel" id="panel-4-4-0" name="4-0" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span>
+<span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span><span class="p">.</span><span class="n">Where</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Active</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">HasFuel</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="n">Select</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Thrust</span><span class="p">).</span><span class="n">Sum</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">/</span>
+<span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span><span class="p">.</span><span class="n">Where</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Active</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">HasFuel</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="n">Select</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">SpecificImpulse</span><span class="p">).</span><span class="n">Sum</span><span class="w"> </span><span class="p">());</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-4-1" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-1" name="4-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">combined_isp</span><span class="p">():</span>
+    <span class="n">engines</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">has_fuel</span><span class="p">]</span>
+    <span class="n">thrust</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">engines</span><span class="p">)</span>
+    <span class="n">fuel_consumption</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">engine</span><span class="o">.</span><span class="n">specific_impulse</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">engines</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">thrust</span> <span class="o">/</span> <span class="n">fuel_consumption</span>
+
+<span class="n">isp</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">combined_isp</span><span class="p">)</span>
 </pre></div>
 </div>
 </div></div>

@@ -552,6 +552,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Object Lifetime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -702,6 +703,8 @@ loads. A stream over an object that is destroyed ends with <code class="docutils
 scenes, and carries on when the game returns to one where it is available.</p>
 <p><code class="docutils literal notranslate"><span class="pre">KRPC.GameStateLoads</span></code> counts the game states that have finished loading. A stream of it updates
 when a load is complete.</p>
+<p>A stream or event over a <a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side function</span></a> ends with
+<code class="docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code>, unless the function catches it.</p>
 </section>
 <section id="objects-in-the-editor">
 <h2>Objects in the Editor<a class="headerlink" href="#objects-in-the-editor" title="Link to this heading">#</a></h2>

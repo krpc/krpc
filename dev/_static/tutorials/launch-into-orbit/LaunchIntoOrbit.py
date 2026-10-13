@@ -64,15 +64,17 @@ while True:
 
 # Disable engines when target apoapsis is reached
 vessel.control.throttle = 0.25
-while apoapsis() < target_altitude:
-    pass
+event = conn.add_event(lambda: vessel.orbit.apoapsis_altitude >= target_altitude)
+with event.condition:
+    event.wait()
 print("Target apoapsis reached")
 vessel.control.throttle = 0.0
 
 # Wait until out of atmosphere
 print("Coasting out of atmosphere")
-while altitude() < 70500:
-    pass
+event = conn.add_event(lambda: vessel.flight().mean_altitude >= 70500)
+with event.condition:
+    event.wait()
 
 # Plan circularization burn (using vis-viva equation)
 print("Planning circularization burn")
@@ -107,17 +109,17 @@ conn.space_center.warp_to(burn_ut - lead_time)
 
 # Execute burn
 print("Ready to execute burn")
-time_to_apoapsis = conn.add_stream(getattr, vessel.orbit, "time_to_apoapsis")
-while time_to_apoapsis() - (burn_time / 2.0) > 0:
-    pass
+event = conn.add_event(lambda: vessel.orbit.time_to_apoapsis <= burn_time / 2.0)
+with event.condition:
+    event.wait()
 print("Executing burn")
 vessel.control.throttle = 1.0
 time.sleep(burn_time - 0.1)
 print("Fine tuning")
 vessel.control.throttle = 0.05
-remaining_burn = conn.add_stream(node.remaining_burn_vector, node.reference_frame)
-while remaining_burn()[1] > 0:
-    pass
+event = conn.add_event(lambda: node.remaining_burn_vector(node.reference_frame)[1] <= 0)
+with event.condition:
+    event.wait()
 vessel.control.throttle = 0.0
 node.remove()
 

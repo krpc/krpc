@@ -93,7 +93,7 @@ int main() {
       break;
     double altitude;
     krpc_SpaceCenter_Flight_SurfaceAltitude(conn, &altitude, flight);
-    printf("Altitude = %2.f meters\n", altitude);
+    printf("Altitude = %.1f meters\n", altitude);
     sleep(1);
   }
   printf("Landed!\n");

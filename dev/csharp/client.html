@@ -800,7 +800,8 @@ altitude and speed together:</p>
 </div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">Run</span></code> for a function with effects, such as a call of <code class="docutils literal notranslate"><span class="pre">ActivateNextStage</span></code>. An event or a
 function stream evaluates its function on every update, repeating the effects.</p>
-<p><a class="reference internal" href="#csharp-client-compiling-lambdas"><span class="std std-ref">Compiling Server Side Functions</span></a> describes what a function can contain.</p>
+<p><a class="reference internal" href="#csharp-client-compiling-lambdas"><span class="std std-ref">Compiling Server Side Functions</span></a> describes what a function can contain. The <a class="reference internal" href="../tutorials/server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side
+functions tutorial</span></a> shows how to build larger functions.</p>
 </section>
 <section id="streaming-data">
 <span id="csharp-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
@@ -1073,9 +1074,9 @@ triggers when <code class="docutils literal notranslate"><span class="pre">MeanA
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>You can also build the event’s function with the expression API, and pass it to
-<a class="reference internal" href="#method-Connection.AddEvent" title="Connection.AddEvent method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddEvent</span></code></a>. <a class="reference internal" href="#method-Connection.GetCall" title="Connection.GetCall method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.GetCall</span></code></a> gives the call of a procedure, for
-<code class="docutils literal notranslate"><span class="pre">Expression.Call</span></code>. The following builds the same event:</p>
+<p>You can also build the event’s function with the <a class="reference internal" href="../tutorials/server-side-functions.html#server-side-functions-api"><span class="std std-ref">expression API</span></a>,
+and pass it to <a class="reference internal" href="#method-Connection.AddEvent" title="Connection.AddEvent method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddEvent</span></code></a>. <a class="reference internal" href="#method-Connection.GetCall" title="Connection.GetCall method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.GetCall</span></code></a> gives the call of a
+procedure, for <code class="docutils literal notranslate"><span class="pre">Expression.Call</span></code>. The following builds the same event:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.KRPC</span><span class="p">;</span>
@@ -1155,7 +1156,8 @@ converts to a <code class="docutils literal notranslate"><span class="pre">ulong
 with one parameter. An event or a function stream takes a function with no parameters.</p>
 <p>The lambda is a C# expression tree, so C#’s expression tree rules apply. It holds a single
 expression, and a call in it gives every argument, including the optional ones. Build a function
-with statements, or one that raises or handles exceptions, with the expression API.</p>
+with statements, or one that raises or handles exceptions, with the
+<a class="reference internal" href="../tutorials/server-side-functions.html#server-side-functions-api"><span class="std std-ref">expression API</span></a>.</p>
 <p>The compiler translates the lambda’s expression tree into a server side function that computes
 the same result on the server:</p>
 <ul class="simple">

@@ -1,6 +1,5 @@
 using System;
 using KRPC.Client;
-using KRPC.Client.Services.KRPC;
 using KRPC.Client.Services.SpaceCenter;
 
 class SubOrbitalFlight
@@ -20,25 +19,19 @@ class SubOrbitalFlight
         vessel.Control.ActivateNextStage ();
 
         {
-            var solidFuel = Connection.GetCall(() => vessel.Resources.Amount("SolidFuel"));
-            var expr = Expression.LessThan(
-                conn, Expression.Call(conn, solidFuel), Expression.ConstantFloat(conn, 0.1f));
-            var evnt = conn.KRPC().AddEvent(expr);
+            var evnt = conn.AddEvent (() => vessel.Resources.Amount ("SolidFuel") < 0.1f);
             lock (evnt.Condition) {
-                evnt.Wait();
+                evnt.Wait ();
             }
         }
-
         Console.WriteLine ("Booster separation");
         vessel.Control.ActivateNextStage ();
 
+        var flight = vessel.Flight ();
         {
-            var meanAltitude = Connection.GetCall(() => vessel.Flight(null).MeanAltitude);
-            var expr = Expression.GreaterThan(
-                conn, Expression.Call(conn, meanAltitude), Expression.ConstantDouble(conn, 10000));
-            var evnt = conn.KRPC().AddEvent(expr);
+            var evnt = conn.AddEvent (() => flight.MeanAltitude > 10000);
             lock (evnt.Condition) {
-                evnt.Wait();
+                evnt.Wait ();
             }
         }
 
@@ -46,12 +39,9 @@ class SubOrbitalFlight
         vessel.AutoPilot.TargetPitchAndHeading (60, 90);
 
         {
-            var apoapsisAltitude = Connection.GetCall(() => vessel.Orbit.ApoapsisAltitude);
-            var expr = Expression.GreaterThan(
-                conn, Expression.Call(conn, apoapsisAltitude), Expression.ConstantDouble(conn, 100000));
-            var evnt = conn.KRPC().AddEvent(expr);
+            var evnt = conn.AddEvent (() => vessel.Orbit.ApoapsisAltitude > 100000);
             lock (evnt.Condition) {
-                evnt.Wait();
+                evnt.Wait ();
             }
         }
 
@@ -62,22 +52,19 @@ class SubOrbitalFlight
         vessel.AutoPilot.Engaged = false;
 
         {
-            var srfAltitude = Connection.GetCall(() => vessel.Flight(null).SurfaceAltitude);
-            var expr = Expression.LessThan(
-                conn, Expression.Call(conn, srfAltitude), Expression.ConstantDouble(conn, 1000));
-            var evnt = conn.KRPC().AddEvent(expr);
+            var evnt = conn.AddEvent (() => flight.SurfaceAltitude < 1000);
             lock (evnt.Condition) {
-                evnt.Wait();
+                evnt.Wait ();
             }
         }
 
         vessel.Control.ActivateNextStage ();
 
         while (vessel.Flight (vessel.Orbit.Body.ReferenceFrame).VerticalSpeed < -0.1) {
-            Console.WriteLine ("Altitude = {0:F1} meters", vessel.Flight ().SurfaceAltitude);
+            Console.WriteLine ("Altitude = {0:F1} meters", flight.SurfaceAltitude);
             System.Threading.Thread.Sleep (1000);
         }
         Console.WriteLine ("Landed!");
-        conn.Dispose();
+        conn.Dispose ();
     }
 }

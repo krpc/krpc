@@ -110,6 +110,25 @@ calls of that tick, so a target set inside a held tick is flown on that tick.
 tick at ``update``: calls before it set what the loop flies the tick with, and calls after it
 read what the loop did. See :ref:`when the control loop runs <autopilot-update-mode>`.
 
+Server Side Functions
+---------------------
+
+A :ref:`server side function <tutorial-server-side-functions>` runs on the server, within a single
+tick. One function reads the state, computes the control and writes it, all in that tick:
+
+.. code-block:: python
+
+   @conn.compile
+   def step():
+       error = target_pitch - vessel.flight().pitch
+       vessel.control.pitch = max(-1, min(1, 0.05 * error))
+
+   while True:
+       conn.run(step)
+
+Each iteration is one call, and runs in whichever tick the call lands on. The game can run ticks
+between the iterations, so a loop that has to act on every tick still uses ``next_tick``.
+
 The Cost of a Hold
 ------------------
 

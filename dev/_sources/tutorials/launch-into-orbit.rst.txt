@@ -25,7 +25,7 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 1-42
+         :lines: 1-48
 
    .. group-tab:: C#
 
@@ -37,13 +37,13 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 1-36
+         :lines: 1-38
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 1-51
+         :lines: 1-53
 
    .. group-tab:: Lua
 
@@ -69,7 +69,7 @@ close to the target apoapsis.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 44-79
+         :lines: 50-85
 
    .. group-tab:: C#
 
@@ -81,13 +81,13 @@ close to the target apoapsis.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 38-72
+         :lines: 40-74
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 53-90
+         :lines: 55-92
 
    .. group-tab:: Lua
 
@@ -101,8 +101,13 @@ close to the target apoapsis.
          :language: python
          :lines: 33-63
 
-Next, the program fine tunes the apoapsis, using 25% thrust, then waits until
-the rocket has left Kerbin's atmosphere.
+Next, the program fine tunes the apoapsis using 25% thrust, then waits until the rocket has
+left Kerbin's atmosphere. Each wait is an event, which the server checks every physics tick. See
+:ref:`tutorial-server-side-functions` for how events work.
+
+The Python and C# clients compile the event's condition from a lambda, and the C++ and Java
+clients build it with the :ref:`expression API <server-side-functions-api>`. The C and Lua
+programs poll in a loop, as those clients have no events.
 
 .. tabs::
 
@@ -110,25 +115,25 @@ the rocket has left Kerbin's atmosphere.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 81-97
+         :lines: 87-103
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 81-91
+         :lines: 81-99
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 74-84
+         :lines: 76-101
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 92-102
+         :lines: 94-122
 
    .. group-tab:: Lua
 
@@ -140,7 +145,7 @@ the rocket has left Kerbin's atmosphere.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 65-75
+         :lines: 65-77
 
 It is now time to plan the circularization burn. First, we calculate the delta-v
 required to circularize the orbit using the `vis-viva equation
@@ -161,25 +166,25 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 99-128
+         :lines: 105-134
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 93-111
+         :lines: 101-119
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 86-104
+         :lines: 103-121
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 104-122
+         :lines: 124-142
 
    .. group-tab:: Lua
 
@@ -191,7 +196,7 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 77-94
+         :lines: 79-96
 
 Next, we need to rotate the craft and wait until the circularization burn. We
 orientate the ship along the y-axis of the maneuver node's reference frame
@@ -203,25 +208,25 @@ orientate the ship along the y-axis of the maneuver node's reference frame
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 130-143
+         :lines: 136-149
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 113-123
+         :lines: 121-131
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 106-116
+         :lines: 123-133
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 124-136
+         :lines: 144-156
 
    .. group-tab:: Lua
 
@@ -233,12 +238,14 @@ orientate the ship along the y-axis of the maneuver node's reference frame
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 96-106
+         :lines: 98-108
 
-This next part executes the burn. It sets maximum throttle, then throttles down
-to 5% approximately a tenth of a second before the predicted end of the burn. It then
-monitors the remaining delta-v until it flips around to point retrograde (at
-which point the node has been executed).
+Finally, the program waits for an event that fires half the burn time before apoapsis, then sets
+maximum throttle to start the burn.
+
+It throttles down to 5% about a tenth of a second before the predicted end of the burn. A last
+event fires when the remaining delta-v flips around to point retrograde, which marks the node as
+executed:
 
 .. tabs::
 
@@ -246,25 +253,25 @@ which point the node has been executed).
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 145-
+         :lines: 151-
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 125-
+         :lines: 133-
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 118-
+         :lines: 135-
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 138-
+         :lines: 158-
 
    .. group-tab:: Lua
 
@@ -276,6 +283,6 @@ which point the node has been executed).
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 108-
+         :lines: 110-
 
 The rocket should now be in a circular 150km orbit above Kerbin.

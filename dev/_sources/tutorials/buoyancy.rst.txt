@@ -79,6 +79,20 @@ settings, a part is destroyed when its pressure exceeds :attr:`Part.max_pressure
        if part.static_pressure + part.dynamic_pressure > part.max_pressure:
            print(part.title, "is over its pressure limit")
 
+The loop reads the parts with separate calls, which can land in different physics ticks. A
+:ref:`server side function <tutorial-server-side-functions>` reads every part in the same tick,
+with a single call:
+
+.. code-block:: python
+
+   over_limit = conn.run(
+       lambda: [
+           part.title
+           for part in vessel.parts.all
+           if part.static_pressure + part.dynamic_pressure > part.max_pressure
+       ]
+   )
+
 :meth:`CelestialBody.pressure_at` takes a negative altitude for a point under the sea, to
 plan how deep a dive can go.
 

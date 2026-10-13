@@ -552,6 +552,7 @@
 <li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -701,6 +702,22 @@ calls of that tick, so a target set inside a held tick is flown on that tick.</p
 tick at <code class="docutils literal notranslate"><span class="pre">update</span></code>: calls before it set what the loop flies the tick with, and calls after it
 read what the loop did. See <a class="reference internal" href="autopilot.html#autopilot-update-mode"><span class="std std-ref">when the control loop runs</span></a>.</p>
 </section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p>A <a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side function</span></a> runs on the server, within a single
+tick. One function reads the state, computes the control and writes it, all in that tick:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@conn</span><span class="o">.</span><span class="n">compile</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">():</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">target_pitch</span> <span class="o">-</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">pitch</span>
+    <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">error</span><span class="p">))</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Each iteration is one call, and runs in whichever tick the call lands on. The game can run ticks
+between the iterations, so a loop that has to act on every tick still uses <code class="docutils literal notranslate"><span class="pre">next_tick</span></code>.</p>
+</section>
 <section id="the-cost-of-a-hold">
 <h2>The Cost of a Hold<a class="headerlink" href="#the-cost-of-a-hold" title="Link to this heading">#</a></h2>
 <p>A hold costs real time. The game renders no frame, takes no input and runs no physics while a
@@ -786,6 +803,7 @@ the pause menu for as long as it lasts.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consecutive-ticks">Consecutive Ticks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-worked-example">A Worked Example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-autopilot">The AutoPilot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cost-of-a-hold">The Cost of a Hold</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limits-of-a-hold">Limits of a Hold</a></li>
 </ul>

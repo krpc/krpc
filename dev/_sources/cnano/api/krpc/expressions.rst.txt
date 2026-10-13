@@ -5,7 +5,9 @@
 Expressions
 ===========
 
-The nodes a server side function is built from, and the types they work with.
+The nodes a server side function is built from, and the types they work with. See the
+:rst:ref:`server side functions tutorial <tutorial-server-side-functions>` for how a function is
+assembled and run.
 
 
 .. type:: krpc_KRPC_Expression_t

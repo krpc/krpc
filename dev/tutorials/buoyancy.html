@@ -552,6 +552,7 @@
 <li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -674,6 +675,18 @@ settings, a part is destroyed when its pressure exceeds <a class="reference inte
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">part</span><span class="o">.</span><span class="n">static_pressure</span> <span class="o">+</span> <span class="n">part</span><span class="o">.</span><span class="n">dynamic_pressure</span> <span class="o">&gt;</span> <span class="n">part</span><span class="o">.</span><span class="n">max_pressure</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;is over its pressure limit&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The loop reads the parts with separate calls, which can land in different physics ticks. A
+<a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side function</span></a> reads every part in the same tick,
+with a single call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">over_limit</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="k">lambda</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">part</span><span class="o">.</span><span class="n">title</span>
+        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">all</span>
+        <span class="k">if</span> <span class="n">part</span><span class="o">.</span><span class="n">static_pressure</span> <span class="o">+</span> <span class="n">part</span><span class="o">.</span><span class="n">dynamic_pressure</span> <span class="o">&gt;</span> <span class="n">part</span><span class="o">.</span><span class="n">max_pressure</span>
+    <span class="p">]</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="../python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.pressure_at" title="SpaceCenter.CelestialBody.pressure_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CelestialBody.pressure_at()</span></code></a> takes a negative altitude for a point under the sea, to

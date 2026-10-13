@@ -2,12 +2,12 @@
 #include <chrono>
 #include <thread>
 #include <krpc.hpp>
+#include <krpc/function_stream.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
 
 int main() {
   krpc::Client conn = krpc::connect("Sub-orbital flight");
-  krpc::services::KRPC krpc(&conn);
   krpc::services::SpaceCenter space_center(&conn);
 
   auto vessel = space_center.active_vessel().value();
@@ -26,20 +26,19 @@ int main() {
     auto solid_fuel = vessel.resources().amount_call("SolidFuel");
     auto expr = Expr::less_than(
       conn, Expr::call(conn, solid_fuel), Expr::constant_float(conn, 0.1));
-    auto event = krpc.add_event(expr);
+    auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
     event.release();
   }
-
   std::cout << "Booster separation" << std::endl;
   vessel.control().activate_next_stage();
 
+  auto flight = vessel.flight();
   {
-    auto mean_altitude = vessel.flight().mean_altitude_call();
     auto expr = Expr::greater_than(
-      conn, Expr::call(conn, mean_altitude), Expr::constant_double(conn, 10000));
-    auto event = krpc.add_event(expr);
+      conn, Expr::call(conn, flight.mean_altitude_call()), Expr::constant_double(conn, 10000));
+    auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
     event.release();
@@ -52,7 +51,7 @@ int main() {
     auto apoapsis_altitude = vessel.orbit().apoapsis_altitude_call();
     auto expr = Expr::greater_than(
       conn, Expr::call(conn, apoapsis_altitude), Expr::constant_double(conn, 100000));
-    auto event = krpc.add_event(expr);
+    auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
     event.release();
@@ -65,10 +64,9 @@ int main() {
   vessel.auto_pilot().set_engaged(false);
 
   {
-    auto srf_altitude = vessel.flight().surface_altitude_call();
     auto expr = Expr::less_than(
-      conn, Expr::call(conn, srf_altitude), Expr::constant_double(conn, 1000));
-    auto event = krpc.add_event(expr);
+      conn, Expr::call(conn, flight.surface_altitude_call()), Expr::constant_double(conn, 1000));
+    auto event = krpc::add_event(expr);
     event.acquire();
     event.wait();
     event.release();
@@ -77,7 +75,7 @@ int main() {
   vessel.control().activate_next_stage();
 
   while (vessel.flight(vessel.orbit().body().reference_frame()).vertical_speed() < -0.1) {
-    std::cout << "Altitude = " << vessel.flight().surface_altitude() << " meters" << std::endl;
+    std::cout << "Altitude = " << flight.surface_altitude() << " meters" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
   std::cout << "Landed!" << std::endl;
