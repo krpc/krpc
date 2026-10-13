@@ -38,8 +38,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
+      # The recursive search skips the BUILD files of the external repositories,
+      # named *.BUILD, so those are passed by name.
       - name: bazel
-        run: buildifier -mode check -lint warn -r .
+        run: buildifier -mode check -lint warn -r . $(find . -name '*.BUILD')
 
   # One entry per thing built or tested. `build` and `test` hold Bazel target
   # patterns and either may be left out; `artifact` and `path` upload the
