@@ -317,6 +317,14 @@ http_archive(
 )
 
 http_archive(
+    name = "csharp_netanalyzers",
+    build_file_content = "exports_files(['analyzers/dotnet/cs/Microsoft.CodeAnalysis.NetAnalyzers.dll', 'analyzers/dotnet/cs/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll'])",
+    sha256 = "67a3086fd949b2460e122059477ea9c05239c167a46a3c79589bd50366bf7fd6",
+    type = "zip",
+    url = "https://www.nuget.org/api/v2/package/Microsoft.CodeAnalysis.NetAnalyzers/8.0.0",
+)
+
+http_archive(
     name = "csharp_options",
     build_file_content = "exports_files(['lib/NDesk.Options.dll'])",
     sha256 = "0fa76d0ed1eb9fba757b0aa677903e1b8873735eec136a51dde24eda57d10c61",

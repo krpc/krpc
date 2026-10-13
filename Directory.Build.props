@@ -1,0 +1,14 @@
+<Project>
+  <!--
+    Enable the .NET analyzers for every project. They are off by default because
+    these projects target the .NET Framework. The rules they report are set in
+    the global config, which the Bazel build uses too.
+  -->
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildThisFileDirectory)tools/build/dotnet/analyzers.globalconfig" />
+  </ItemGroup>
+</Project>
