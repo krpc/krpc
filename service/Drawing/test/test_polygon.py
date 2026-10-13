@@ -13,7 +13,7 @@ class TestPolygon(krpctest.TestCase):
         cls.vessel = cls.connect().space_center.active_vessel
         cls.ref = cls.vessel.reference_frame
 
-    vertices = [(0, 0, 0), (0, 10, 0), (10, 10, 0)]
+    vertices: list[tuple[float, float, float]] = [(0, 0, 0), (0, 10, 0), (10, 10, 0)]
 
     def add_polygon(self):
         return self.drawing.add_polygon(self.vertices, self.ref, False)

@@ -48,7 +48,7 @@ class Stream:
         Zero if the rate is unlimited."""
         self._stream.rate = value
 
-    def __call__(self):  # type: ignore[no-untyped-def]
+    def __call__(self) -> Any:
         """Get the most recent value for this stream. Blocks until the first value
         arrives. Raises the error that ended the stream, if it has ended."""
         stream = self._stream

@@ -13,7 +13,9 @@ from python.runfiles import runfiles
 
 if __name__ == "__main__":
     r = runfiles.Create()
+    assert r is not None
     generator = r.Rlocation("protoc_nanopb/generator/nanopb_generator.py")
+    assert generator is not None
     # The generator imports its bundled proto package from its own directory
     sys.path.insert(0, os.path.dirname(generator))
     sys.argv = [generator, "--protoc-plugin"]

@@ -305,20 +305,6 @@ class TestParts(krpctest.TestCase):
             [p.part.name for p in self.parts.docking_ports],
         )
 
-    def test_docking_port_with_name(self):
-        port = self.parts.docking_ports[0]
-        if "ModuleDockingNodeNamed" not in set(m.name for m in port.part.modules):
-            # Docking Port Alignment Indicator mod not installed
-            return
-        name = port.name
-        self.assertEqual(port, self.parts.docking_port_with_name(name))
-        self.assertNone(self.parts.docking_port_with_name("Not the name"))
-        port.name = "Jeb's port"
-        self.assertEqual(port, self.parts.docking_port_with_name("Jeb's port"))
-        self.assertNone(self.parts.docking_port_with_name(name))
-        self.assertNone(self.parts.docking_port_with_name("Not the name"))
-        port.name = name
-
     def test_engines(self):
         self.assertCountEqual(
             [

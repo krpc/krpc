@@ -1,7 +1,7 @@
 import unittest
 import warnings
 from inspect import signature
-from typing import NamedTuple
+from typing import Any, NamedTuple
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.client import _stub_definitions
@@ -13,6 +13,9 @@ from krpc.types import Types
 
 class FakeClient:
     """As much of a client as creating a service needs, without a connection to a server"""
+
+    # Set by create_services
+    ServiceA: Any
 
     def __init__(self) -> None:
         self._types = Types()
@@ -104,7 +107,7 @@ def struct_using_service(
 
 def unknown_type() -> KRPC.Type:
     typ = KRPC.Type()
-    typ.code = UNKNOWN_TYPE_CODE
+    typ.code = UNKNOWN_TYPE_CODE  # pyright: ignore[reportAttributeAccessIssue]
     return typ
 
 
@@ -119,7 +122,7 @@ class TestServiceDefinitions(unittest.TestCase):
         ]
         register_all(client._types, definitions)
         for service in services:
-            setattr(client, service.name, create_service(client, service))  # type: ignore[arg-type]
+            setattr(client, service.name, create_service(client, service))  # pyright: ignore[reportArgumentType]
         return client
 
     def check_default(self, client: FakeClient, expected: str) -> None:
@@ -207,7 +210,8 @@ class TestServiceDefinitions(unittest.TestCase):
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
             register_all(
-                client._types, _stub_definitions(client, service, StubService())
+                client._types,
+                _stub_definitions(client, service, StubService()),  # pyright: ignore[reportArgumentType]
             )
         self.assertTrue(
             any("ServiceB.Thing" in str(warning.message) for warning in caught)

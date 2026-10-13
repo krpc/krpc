@@ -236,7 +236,7 @@ class TestDecodeDefaultValue(unittest.TestCase):
     def test_decodes_an_enumeration_value(self) -> None:
         typ = self.enumeration()
         value = decode_default_value(None, self.encode(2), typ, self.location)
-        self.assertEqual(typ.python_type.fast, value)
+        self.assertEqual(typ.python_type["fast"], value)
 
     def test_enumeration_that_was_never_registered(self) -> None:
         with self.assertRaises(RuntimeError) as cm:

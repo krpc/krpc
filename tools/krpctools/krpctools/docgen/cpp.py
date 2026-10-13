@@ -27,7 +27,7 @@ from .nodes import (
 )
 
 
-class CppDomain(Domain):
+class CppDomain(Domain[CppLanguage]):
     name = "cpp"
     prettyname = "C++"
     sphinxname = "cpp"

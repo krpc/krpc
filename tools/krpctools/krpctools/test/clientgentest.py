@@ -1,10 +1,22 @@
 import json
+import unittest
 from importlib.resources import files
+from typing import TYPE_CHECKING
 
+from ..clientgen.generator import Generator
 from ..definitions import Definitions
 
+# A mixin, so that the base class is not collected as a test case of its own
+if TYPE_CHECKING:
+    _Base = unittest.TestCase
+else:
+    _Base = object
 
-class ClientGenTestCase:
+
+class ClientGenTestCase(_Base):
+    language: str
+    generator: type[Generator]
+
     def generate(self, service_name, defs):
         macro_template = (
             files("krpctools.clientgen")

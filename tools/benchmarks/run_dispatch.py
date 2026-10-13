@@ -20,6 +20,7 @@ SUITE = "server, game-less"
 
 
 def main():
+    assert __doc__ is not None
     args = runner.arguments(__doc__.splitlines()[0])
     # Paced, as the game is. These cases time a loop the server runs inside one call, so the
     # update the call landed in is amortized away and the pacing does not reach the numbers.

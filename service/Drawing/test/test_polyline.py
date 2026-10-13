@@ -12,7 +12,7 @@ class TestPolyline(krpctest.TestCase):
         cls.drawing = cls.conn.drawing
         cls.ref = cls.conn.space_center.active_vessel.reference_frame
 
-    vertices = [(0, 0, 0), (0, 10, 0), (10, 10, 0)]
+    vertices: list[tuple[float, float, float]] = [(0, 0, 0), (0, 10, 0), (10, 10, 0)]
 
     def test_polyline(self):
         polyline = self.drawing.add_polyline(self.vertices, self.ref)
@@ -31,7 +31,13 @@ class TestPolyline(krpctest.TestCase):
         polyline.end_arrow = True
         self.wait()
         # A polyline can change its number of vertices
-        vertices = [(0, 0, 0), (5, 0, 0), (5, 5, 0), (0, 5, 0), (0, 0, 5)]
+        vertices: list[tuple[float, float, float]] = [
+            (0, 0, 0),
+            (5, 0, 0),
+            (5, 5, 0),
+            (0, 5, 0),
+            (0, 0, 5),
+        ]
         polyline.vertices = vertices
         self.wait()
         self.assertEqual(vertices, polyline.vertices)

@@ -1,10 +1,19 @@
+from __future__ import annotations
+
 import unittest
+from typing import TYPE_CHECKING
 
 import krpctest
 from krpctest.geometry import angle_between, dot, norm
 
+if TYPE_CHECKING:
+    from krpc.services.spacecenter import Parts, Vessel
 
-class EngineTestBase:
+
+class EngineTestBase(krpctest.Mixin):
+    vessel: Vessel | None
+    parts: Parts
+
     # Keyed by language-independent internal part name (part.name); the inline
     # comment is the English title (part.title) for readability.
     engine_data = {
@@ -247,7 +256,7 @@ class EngineTest(EngineTestBase):
         self.set_idle(engine)
 
 
-class TestPartsEngine(krpctest.TestCase, EngineTestBase):
+class TestPartsEngine(EngineTestBase, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -468,7 +477,7 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.assertRaises(RuntimeError, engine.toggle_thrust_reversal)
 
 
-class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
+class TestPartsEngineMSL(EngineTest, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -515,7 +524,7 @@ class TestPartsEngineMSL(krpctest.TestCase, EngineTest):
         engine.active = False
 
 
-class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
+class TestPartsEngineVacuum(EngineTest, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -569,7 +578,7 @@ class TestPartsEngineVacuum(krpctest.TestCase, EngineTest):
         self.set_idle(engine)
 
 
-class TestPartsEngineReverser(krpctest.TestCase, EngineTestBase):
+class TestPartsEngineReverser(EngineTestBase, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -676,7 +685,7 @@ class TestGimbalOverrideAttitude(krpctest.TestCase):
         self.assertLess(dot(spin_positive, spin_negative), 0)
 
 
-class TestPartsEngineSupersonic(krpctest.TestCase, EngineTestBase):
+class TestPartsEngineSupersonic(EngineTestBase, krpctest.TestCase):
     """The reported thrust of an air-breathing engine must apply KSP's fuel-flow
     multiplier cap (``flowMultCap``).
 

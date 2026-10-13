@@ -45,6 +45,7 @@ class ReferenceCraft(BenchmarkTestCase):
             cls.remove_other_vessels()
             cls.set_circular_orbit("Kerbin", 100000)
         cls.vessel = cls.connect().space_center.active_vessel
+        assert cls.vessel is not None
         cls.parts = cls.vessel.parts
         cls.part = cls.parts.root
         cls.module = cls.part.modules[-1]

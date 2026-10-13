@@ -2,7 +2,7 @@
 
 The framework is split into focused submodules:
 
- * :mod:`krpctest.testcase` — the ``TestCase`` base class tests subclass.
+ * :mod:`krpctest.testcase` — the ``TestCase`` base class tests subclass, and ``Mixin``.
  * :mod:`krpctest.assertions` — tolerance-based assertion helpers.
  * :mod:`krpctest.game` — KSP process lifecycle and server-connection management.
  * :mod:`krpctest.env` — filesystem locations shared with the install/run entrypoints.
@@ -12,6 +12,6 @@ The framework is split into focused submodules:
 keeps working.
 """
 
-from krpctest.testcase import TestCase
+from krpctest.testcase import Mixin, TestCase
 
-__all__ = ["TestCase"]
+__all__ = ["Mixin", "TestCase"]

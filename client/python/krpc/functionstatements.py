@@ -374,7 +374,7 @@ class _StatementCompiler:
         self._compiler._scopes.append(scope)
         previous = self._compiler._active_statements
         self._compiler._active_statements = self
-        self._declared: list[Any] = []
+        self._declared = []
         self._saw_valued_return = False
         self._null_return = False
         self._annotated = set()
@@ -708,7 +708,9 @@ class _StatementCompiler:
             return result.expression
         return self._compiler._expr.return_(result.expression)
 
-    def _compile_assignment(self, statement: ast.stmt) -> list[Any]:
+    def _compile_assignment(
+        self, statement: ast.Assign | ast.AnnAssign | ast.AugAssign
+    ) -> list[Any]:
         annotation: KRPC.Type | None = None
         if isinstance(statement, ast.Assign):
             if len(statement.targets) != 1:
@@ -1036,7 +1038,7 @@ class _StatementCompiler:
 
     def _assign_variable(
         self,
-        node: ast.stmt,
+        node: ast.AST,
         name: str,
         value: _Result,
         annotation: KRPC.Type | None = None,
@@ -1055,6 +1057,7 @@ class _StatementCompiler:
                 if is_none:
                     return None
                 self._type_untyped(node, name, value)
+            assert variable.ptype is not None
             if annotation is not None and annotation != variable.ptype:
                 raise compiler._error(
                     node,
@@ -1123,7 +1126,7 @@ class _StatementCompiler:
         scope[name] = _Result(expression=variable_expression, ptype=ptype)
         return self._compiler._expr.assign(variable_expression, expression)
 
-    def _type_untyped(self, node: ast.stmt, name: str, value: _Result) -> None:
+    def _type_untyped(self, node: ast.AST, name: str, value: _Result) -> NoReturn:
         """Note the type of a variable assigned None before, from a value
         assigned to it later, and compile the function again."""
         converted = self._compiler._to_expression(value)
@@ -1140,7 +1143,7 @@ class _StatementCompiler:
         raise Recompile()
 
     def _assigned_expression(
-        self, node: ast.stmt, name: str, target: KRPC.Type | None, value: _Result
+        self, node: ast.AST, name: str, target: KRPC.Type | None, value: _Result
     ) -> Any:
         """The expression assigned to a variable, converted to the variable's
         type. A variable takes its type from its annotation or its first value,
@@ -1456,6 +1459,7 @@ class _StatementCompiler:
             variable = scope[name]
             if variable.is_value and variable.value is UNTYPED:
                 self._note_type(name, element)
+            assert variable.ptype is not None
             if with_nullable(plain_ptype(variable.ptype), False) != with_nullable(
                 plain_ptype(element), False
             ):
@@ -1871,7 +1875,10 @@ def annotation_ptype(compiler: _Compiler, node: ast.expr) -> KRPC.Type:
     if isinstance(node, ast.Name) and node.id in _ANNOTATION_VALUE_CODES:
         return build_ptype(_ANNOTATION_VALUE_CODES[node.id])
     if isinstance(node, ast.Subscript):
-        code = _ANNOTATION_COLLECTION_CODES.get(_type_name(node.value))
+        collection = _type_name(node.value)
+        code = (
+            None if collection is None else _ANNOTATION_COLLECTION_CODES.get(collection)
+        )
         if code is not None:
             return _collection_annotation_ptype(compiler, node, code)
     remote = _remote_annotation_ptype(compiler, node, _annotation_value(compiler, node))

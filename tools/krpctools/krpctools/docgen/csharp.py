@@ -26,7 +26,7 @@ from .nodes import (
 )
 
 
-class CsharpDomain(Domain):
+class CsharpDomain(Domain[CsharpLanguage]):
     name = "csharp"
     prettyname = "C#"
     sphinxname = "csharp"

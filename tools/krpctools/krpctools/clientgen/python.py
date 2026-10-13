@@ -41,8 +41,10 @@ class StubLanguage(PythonLanguage):
         return super().parse_type(typ)
 
 
-class PythonGenerator(Generator):
-    parse_plain_cref_member = staticmethod(snake_case)
+class PythonGenerator(Generator[StubLanguage]):
+    @staticmethod
+    def parse_plain_cref_member(name):
+        return snake_case(name)
 
     def __init__(self, macro_template, service, definitions):
         super().__init__(macro_template, service, definitions)

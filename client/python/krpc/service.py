@@ -80,7 +80,7 @@ def _update_names(*names: str) -> list[str]:
 
 
 def _construct_func(
-    invoke: Callable,  # type: ignore[type-arg]
+    invoke: Callable,
     service_name: str,
     procedure_name: str,
     prefix_param_names: Iterable[str],
@@ -89,7 +89,7 @@ def _construct_func(
     param_required: Iterable[bool],
     param_default: Iterable[object | None],
     return_type: TypeBase | None,
-) -> Callable:  # type: ignore[type-arg]
+) -> Callable:
     """Build function to invoke a remote procedure"""
 
     prefix_param_names = _update_names(*prefix_param_names)
@@ -124,7 +124,7 @@ def _construct_func(
         "return_type": return_type,
     }
     fn = eval(code, context)
-    return cast(Callable, fn)  # type: ignore[type-arg]
+    return cast(Callable, fn)
 
 
 def _parse_deprecation_reason(reason: str, service_name: str) -> str:
@@ -155,11 +155,11 @@ def _deprecated_doc(doc: str, reason: str, service_name: str) -> str:
 
 
 def _wrap_deprecated(
-    func: Callable,  # type: ignore[type-arg]
+    func: Callable,
     qualified_name: str,
     reason: str,
     service_name: str,
-) -> Callable:  # type: ignore[type-arg]
+) -> Callable:
     """Wrap an invoker so that calling it emits a DeprecationWarning"""
     message = qualified_name + " is deprecated"
     if reason:
@@ -350,7 +350,7 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
 def _skipping_unknown_types(
     what: str,
     build: Callable[..., None],
-    *args: object,  # type: ignore[type-arg]
+    *args: object,
 ) -> None:
     """Run one step of building a service, skipping it with a warning if it names a type this
     client does not know about, rather than failing to create the service at all. That is
@@ -428,7 +428,7 @@ def create_service(client: Client, service: KRPC.Service) -> object:
 
     _add_class_members(cls, service)
 
-    return cls()  # type: ignore[operator]
+    return cls()  # pyright: ignore[reportCallIssue]
 
 
 def _add_class_members(
@@ -519,7 +519,7 @@ def extended_stub_classes(service: KRPC.Service, stub: object) -> set[str]:
     The stubs are generated from one version of a service. The server may declare more
     members for its classes, either because another mod adds them or because the server
     is newer."""
-    classes = stub._classes  # type: ignore[attr-defined]
+    classes = stub._classes  # pyright: ignore[reportAttributeAccessIssue]
     names: set[str] = set()
     for procedure in service.procedures:
         if not Attributes.is_a_class_member(procedure.name):
@@ -537,7 +537,7 @@ def merge_service(client: Client, service: KRPC.Service, stub: object) -> None:
     The members go on this client's subclass of each pre-generated class, which the type
     registry already holds (see extended_stub_classes). Members the stubs already have are
     left alone, as are classes the stubs omit."""
-    classes = stub._classes  # type: ignore[attr-defined]
+    classes = stub._classes  # pyright: ignore[reportAttributeAccessIssue]
     cls = cast(
         ServiceBase,
         type(
@@ -727,6 +727,10 @@ class ServiceBase(DynamicType):
                 return_type,
             )
             getter_return_type = return_type
+            cls._add_method("_build_call_" + member_name, build_call)
+            cls._add_method(
+                "_return_type_" + member_name, lambda self: getter_return_type
+            )
         if setter:
             param_names, param_types, _, _, _ = cls._parse_procedure(setter)
             setter_fn = _construct_func(
@@ -744,11 +748,7 @@ class ServiceBase(DynamicType):
                 setter_fn = _wrap_deprecated(
                     setter_fn, qualified_name, setter.deprecated_reason, cls._name
                 )
-        name = member_name
-        cls._add_property(name, getter_fn, setter_fn, doc=doc)
-        if getter:
-            cls._add_method("_build_call_" + name, build_call)
-            cls._add_method("_return_type_" + name, lambda self: getter_return_type)
+        cls._add_property(member_name, getter_fn, setter_fn, doc=doc)
 
     @classmethod
     def _add_service_class_method(
@@ -873,8 +873,8 @@ class ServiceBase(DynamicType):
             doc = _deprecated_doc(doc or "", getter.deprecated_reason, cls._name)
         elif setter and setter.deprecated:
             doc = _deprecated_doc(doc or "", setter.deprecated_reason, cls._name)
-        getter_fn: Callable | None = None  # type: ignore[type-arg]
-        setter_fn: Callable | None = None  # type: ignore[type-arg]
+        getter_fn: Callable | None = None
+        setter_fn: Callable | None = None
         if getter:
             getter_name = getter.name
             param_names, param_types, _, _, return_type = cls._parse_procedure(getter)
@@ -908,6 +908,10 @@ class ServiceBase(DynamicType):
                 return_type,
             )
             getter_return_type = return_type
+            class_cls._add_method("_build_call_" + member_name, build_call)
+            class_cls._add_method(
+                "_return_type_" + member_name, lambda self: getter_return_type
+            )
         if setter:
             param_names, param_types, _, _, return_type = cls._parse_procedure(setter)
             setter_fn = _construct_func(
@@ -925,10 +929,4 @@ class ServiceBase(DynamicType):
                 setter_fn = _wrap_deprecated(
                     setter_fn, qualified_name, setter.deprecated_reason, cls._name
                 )
-        property_name = member_name
-        class_cls._add_property(property_name, getter_fn, setter_fn, doc=doc)
-        if getter:
-            class_cls._add_method("_build_call_" + property_name, build_call)
-            class_cls._add_method(
-                "_return_type_" + property_name, lambda self: getter_return_type
-            )
+        class_cls._add_property(member_name, getter_fn, setter_fn, doc=doc)

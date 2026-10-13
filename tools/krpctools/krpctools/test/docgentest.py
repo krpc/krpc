@@ -1,13 +1,25 @@
 import json
 import tempfile
+import unittest
 from importlib.resources import files
+from typing import TYPE_CHECKING
 
 from ..definitions import Definitions
 from ..docgen import process_file
+from ..docgen.domain import Domain
 from ..docgen.nodes import Service
 
+# A mixin, so that the base class is not collected as a test case of its own
+if TYPE_CHECKING:
+    _Base = unittest.TestCase
+else:
+    _Base = object
 
-class DocGenTestCase:
+
+class DocGenTestCase(_Base):
+    language: str
+    domain: type[Domain]
+
     @staticmethod
     def load(name):
         return json.loads(

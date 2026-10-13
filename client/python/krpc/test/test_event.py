@@ -182,7 +182,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
 
         def remove_then_call(*args: object, **kwargs: object) -> None:
             event.remove_callback(callback)
-            call(*args, **kwargs)  # type: ignore[arg-type]
+            call(*args, **kwargs)  # pyright: ignore[reportArgumentType]
 
         # Removed between the reservation of the firing and the replay
         with mock.patch.object(stream, "call", remove_then_call):
@@ -203,7 +203,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             if not called:
                 called.append(0)
                 event.add_callback(lambda: called.append(2))
-            call(*args, **kwargs)  # type: ignore[arg-type]
+            call(*args, **kwargs)  # pyright: ignore[reportArgumentType]
 
         # The second callback is added between the reservation of the firing for the
         # first callback and its replay
@@ -212,7 +212,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         self.assertEqual([0, 1], called)
 
     def test_a_removed_callback_does_not_take_a_firing(self) -> None:
-        manager = StreamManager(None)
+        manager = StreamManager(None)  # pyright: ignore[reportArgumentType]
         stream = manager.get_stream(self.conn._types.bool_type, 1)
         removed: list[bool] = []
         stream.add_event_callback(lambda: removed.append(True), 0)
@@ -349,6 +349,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
                 done.set()
 
             event.add_end_callback(end_callback)
+            assert conn._stream_connection is not None
             # Stands in for the server closing the connection
             conn._stream_connection._socket.shutdown(socket.SHUT_RDWR)
             self.assertTrue(done.wait(10))
@@ -373,6 +374,7 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             thread = threading.Thread(target=wait, daemon=True)
             thread.start()
             time.sleep(0.2)
+            assert conn._stream_connection is not None
             # Stands in for the server closing the connection
             conn._stream_connection._socket.shutdown(socket.SHUT_RDWR)
             self.assertTrue(raised.wait(10))

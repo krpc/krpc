@@ -251,7 +251,7 @@ test_suite(
     name = "test",
     tests = [
         ":check-documented",
-        ":check-scripts-mypy",
+        ":check-scripts-pyright",
         ":lint",
         ":spelling",
     ],  # ':linkcheck'
@@ -263,18 +263,16 @@ test_suite(
 # and BasicArduino.ino (which needs an Arduino toolchain) have no automated
 # check.
 py_test(
-    name = "check-scripts-mypy",
+    name = "check-scripts-pyright",
     size = "medium",
-    srcs = ["check_scripts_mypy.py"],
-    data = glob(["src/scripts/**/*.py"]),
-    # Without this, auto-generated __init__.py files in the runfiles tree make
-    # mypy resolve the example scripts as packages rooted at the runfiles
-    # directory, which is not a valid package name, and it aborts.
+    srcs = ["check_scripts_pyright.py"],
+    data = glob(["src/scripts/**/*.py"]) + ["//:pyrightconfig.json"],
+    # Generated __init__.py files would make the scripts directories packages
     legacy_create_init = False,
-    main = "check_scripts_mypy.py",
+    main = "check_scripts_pyright.py",
     deps = [
         "//client/python:krpc_lib",
-        "@pypi//mypy",
+        "@pypi//basedpyright",
     ],
 )
 
@@ -426,6 +424,7 @@ java_binary_multiple(
 test_suite(
     name = "lint",
     tests = [
+        ":pyright",
         ":ruff",
     ],
 )

@@ -12,10 +12,18 @@ import shutil
 import sys
 import time
 import unittest
+from typing import TYPE_CHECKING, Any, cast
 
 from krpctest import game
 from krpctest.assertions import AssertionsMixin
 from krpctest.env import get_ksp_dir
+
+if TYPE_CHECKING:
+    import krpc.client
+
+    class Connection(krpc.client.Client):
+        # Created by the client from the server's definitions, as it has no stubs
+        testing_tools: Any
 
 
 class TestCase(AssertionsMixin):
@@ -53,12 +61,12 @@ class TestCase(AssertionsMixin):
             cls.ensure_game(cls.mods, cls.expansions)
             _raw(cls)
 
-        setUpClass.__func__._krpctest_wrapped = True
+        setUpClass.__func__._krpctest_wrapped = True  # pyright: ignore[reportFunctionMemberAccess]
         cls.setUpClass = setUpClass
 
     @classmethod
-    def connect(cls, use_cached=True):
-        return game.connect(use_cached)
+    def connect(cls, use_cached=True) -> "Connection":
+        return cast("Connection", game.connect(use_cached))
 
     @classmethod
     def ensure_game(cls, mods=None, expansions=None):
@@ -129,6 +137,7 @@ class TestCase(AssertionsMixin):
             # Resolve the craft directory relative to the test file, not the working
             # directory, so tests work regardless of where they are run from.
             test_file = sys.modules[cls.__module__].__file__
+            assert test_file is not None
             directory = os.path.join(
                 os.path.dirname(os.path.abspath(test_file)), "craft"
             )
@@ -371,3 +380,11 @@ class TestCase(AssertionsMixin):
             message=message,
             interval=interval,
         )
+
+
+# The base of a mixin of tests. It type checks as a TestCase, and is a plain class at
+# runtime so that unittest does not collect the mixin as a test case of its own.
+if TYPE_CHECKING:
+    Mixin = TestCase
+else:
+    Mixin = object

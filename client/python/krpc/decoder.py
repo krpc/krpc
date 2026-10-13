@@ -7,7 +7,7 @@ from typing import (
     cast,
 )
 
-import google.protobuf
+import google.protobuf.message
 from google.protobuf.internal import decoder as protobuf_decoder
 from google.protobuf.internal import wire_format as protobuf_wire_format
 
@@ -36,13 +36,13 @@ if TYPE_CHECKING:
 # protobuf's varint reader and zigzag decoder are internal and carry no types, so they are
 # bound here with the types they do have. A call carrying a collection reaches them once
 # per value, so this also saves looking them up on their module that many times
-_pb_decode_varint: Callable[[bytes, int], tuple[int, int]] = (
-    protobuf_decoder._DecodeVarint  # type: ignore[attr-defined]
+_pb_decode_varint: Callable[[bytes | bytearray, int], tuple[int, int]] = (
+    protobuf_decoder._DecodeVarint
 )
 _pb_zigzag_decode: Callable[[int], int] = protobuf_wire_format.ZigZagDecode
 
 
-def _decode_varint(data: bytes) -> tuple[int, int]:
+def _decode_varint(data: bytes | bytearray) -> tuple[int, int]:
     """Decode the varint at the start of the data, returning its value and the
     number of bytes it occupies. Raises IndexError if the data does not hold a
     complete varint.
@@ -138,7 +138,7 @@ class Decoder:
         return _decode_varint(data)[0]
 
     @classmethod
-    def decode_size_prefix(cls, data: bytes) -> tuple[int, int]:
+    def decode_size_prefix(cls, data: bytes | bytearray) -> tuple[int, int]:
         """Decode the size prefix of a message, returning the size of the message
         and the number of bytes the prefix itself occupies. Raises IndexError if
         the data does not yet hold a complete prefix."""

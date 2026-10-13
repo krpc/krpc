@@ -6,6 +6,7 @@ import warnings
 from collections.abc import Callable
 
 import krpc
+import krpc.error
 import krpc.limits
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import RPCError
@@ -118,7 +119,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.conn.test_service.object_property = obj
         self.assertEqual(obj, self.conn.test_service.object_property)
 
-    def assert_warns_deprecation(self, action: Callable[[], None]) -> None:
+    def assert_warns_deprecation(self, action: Callable[[], object]) -> None:
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
             action()
@@ -150,16 +151,16 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_extension_members(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
-        self.assertEqual("value=jeb42", obj.extension_method(42))
-        self.assertEqual("value=jeb", obj.extension_property)
-        obj.extension_read_write_property = 42
-        self.assertEqual(42, obj.extension_read_write_property)
+        self.assertEqual("value=jeb42", obj.extension_method(42))  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual("value=jeb", obj.extension_property)  # pyright: ignore[reportAttributeAccessIssue]
+        obj.extension_read_write_property = 42  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual(42, obj.extension_read_write_property)  # pyright: ignore[reportAttributeAccessIssue]
         # The extension property writes through to the class's own int_property
         self.assertEqual(42, obj.int_property)
 
     def test_extension_member_returning_class_from_other_service(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
-        obj2 = obj.extension_method_returning_class_from_other_service()
+        obj2 = obj.extension_method_returning_class_from_other_service()  # pyright: ignore[reportAttributeAccessIssue]
         self.assertEqual("TestClass2", type(obj2).__name__)
         self.assertEqual("value=jeb", obj2.value)
 
@@ -169,8 +170,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
         other = self.connect()
         try:
             obj = other.test_service.create_test_object("jeb")
-            self.assertEqual("value=jeb", obj.extension_property)
-            obj2 = obj.extension_method_returning_class_from_other_service()
+            self.assertEqual("value=jeb", obj.extension_property)  # pyright: ignore[reportAttributeAccessIssue]
+            obj2 = obj.extension_method_returning_class_from_other_service()  # pyright: ignore[reportAttributeAccessIssue]
             self.assertIs(other, obj2._client)
             self.assertIn("extension_method", dir(other.test_service.TestClass))
         finally:
@@ -223,7 +224,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_non_nullable_parameter_rejects_null(self) -> None:
         with self.assertRaises(krpc.error.RPCError):
-            self.conn.test_service.not_nullable_object(None)
+            self.conn.test_service.not_nullable_object(None)  # pyright: ignore[reportArgumentType]
 
     def test_nullable_class_method(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
@@ -258,7 +259,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_non_nullable_property_rejects_null(self) -> None:
         with self.assertRaises(krpc.error.RPCError):
-            self.conn.test_service.string_property = None
+            self.conn.test_service.string_property = None  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_nullable_class_property(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
@@ -488,7 +489,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
         )
         # A tuple of the field values coerces to the structure
         self.assertEqual(
-            value, service.struct_echo((42, "jeb", service.TestEnum.value_b, [1, 2, 3]))
+            value,
+            service.struct_echo((42, "jeb", service.TestEnum.value_b, [1, 2, 3])),  # pyright: ignore[reportArgumentType]
         )
 
     def test_nested_structs(self) -> None:

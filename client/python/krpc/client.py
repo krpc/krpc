@@ -10,6 +10,7 @@ from typing import Any, cast
 
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.services
+import krpc.stream
 import krpc.streammanager
 from krpc import limits
 from krpc.connection import Connection
@@ -102,7 +103,7 @@ def _check_argument(value: object, ptype: KRPC.Type) -> None:
         for element, element_ptype in zip(cast(Iterable[object], value), ptype.types):
             _check_argument(element, element_ptype)
     elif ptype.code == KRPC.Type.DICTIONARY:
-        for key, element in cast(dict, value).items():  # type: ignore[type-arg]
+        for key, element in cast(dict, value).items():
             _check_argument(key, ptype.types[0])
             _check_argument(element, ptype.types[1])
 
@@ -132,7 +133,7 @@ def _stub_definitions(
     def register_struct(
         struct: KRPC.Struct, python_type: type
     ) -> Callable[[Types], None]:
-        field_names = python_type._fields  # type: ignore[attr-defined]
+        field_names = python_type._fields
         build_as: type | None = python_type
         if len(struct.fields) < len(field_names):
             # Fields are only ever appended to a structure, so a server that declares fewer
@@ -160,14 +161,14 @@ def _stub_definitions(
     # one client cannot go on it. The client's own subclass is what carries the members that
     # only the server's definition declares
     extended = extended_stub_classes(service_info, service)
-    classes = service._classes  # type: ignore[attr-defined]
+    classes = service._classes  # pyright: ignore[reportAttributeAccessIssue]
     for class_name, python_type in classes.items():
         if class_name in extended:
             python_type = _client_class(client, name, class_name, python_type)
         yield Definition(
             CLASS, name, class_name, [], register_class(class_name, python_type)
         )
-    enumerations = service._enumerations  # type: ignore[attr-defined]
+    enumerations = service._enumerations  # pyright: ignore[reportAttributeAccessIssue]
     for enum_name, python_type in enumerations.items():
         yield Definition(
             ENUMERATION,
@@ -179,7 +180,7 @@ def _stub_definitions(
     # The field types of a structure come from the service definition, so that the same code
     # decodes a structure whether its stubs were generated ahead of time or not. Only the
     # type a value is built as comes from the stubs
-    structs = service._structs  # type: ignore[attr-defined]
+    structs = service._structs  # pyright: ignore[reportAttributeAccessIssue]
     for struct in service_info.structs:
         python_type = structs.get(struct.name)
         if python_type is None:
@@ -204,7 +205,7 @@ class Client(krpc.services.Client):
     def __init__(
         self,
         rpc_connection: Connection,
-        stream_connection: Connection,
+        stream_connection: Connection | None,
         use_pregenerated_stubs: bool = True,
     ) -> None:
         super().__init__()
@@ -363,7 +364,7 @@ class Client(krpc.services.Client):
         finally:
             stream.remove()
 
-    def compile(self, func: Callable) -> Any:  # type: ignore[type-arg]
+    def compile(self, func: Callable) -> Any:
         """Compile a Python function or lambda into a server side function, a
         KRPC.Expression object. Each run makes the function's remote procedure
         calls again, and uses its other values as they were when it was
@@ -573,11 +574,11 @@ class Client(krpc.services.Client):
     def get_call(
         func: Callable,
         *args: object,
-        **kwargs: object,  # type: ignore[type-arg]
+        **kwargs: object,
     ) -> KRPC.ProcedureCall:
         """Convert a remote procedure call to a KRPC.ProcedureCall message"""
         if func == getattr:
-            name = args[1]
+            name = cast(str, args[1])
             builder = getattr(args[0], "_build_call_" + name)
             args = tuple()
             kwargs = {}
@@ -585,26 +586,26 @@ class Client(krpc.services.Client):
             raise StreamError("Cannot create a call for a property setter")
         else:
             builder = getattr(
-                func.__self__,  # type: ignore[attr-defined]
+                func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
                 "_build_call_" + func.__name__,
             )
         return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
 
     @staticmethod
     def _get_return_type(
-        func: Callable,  # type: ignore[type-arg]
+        func: Callable,
         *args: object,
         **kwargs: object,
     ) -> TypeBase:
         """Get the return type for a remote procedure call"""
         if func == getattr:
-            name = args[1]
+            name = cast(str, args[1])
             return_type_fn = getattr(args[0], "_return_type_" + name)
         elif func == setattr:
             raise StreamError("Cannot get return type for a property setter")
         else:
             return_type_fn = getattr(
-                func.__self__,  # type: ignore[attr-defined]
+                func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
                 "_return_type_" + func.__name__,
             )
         return cast(TypeBase, return_type_fn())

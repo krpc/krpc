@@ -175,6 +175,7 @@ def run(config):
         environment["RUNFILES_DIR"] = environment["TEST_SRCDIR"]
 
     socat = None
+    server_port = None
     server_process = None
     sockets = None
     try:

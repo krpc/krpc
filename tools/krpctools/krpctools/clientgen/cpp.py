@@ -13,11 +13,14 @@ def _cpp_template_fix(typ):
     return typ[:-2] + "> >" if typ.endswith(">>") else typ
 
 
-class CppGenerator(Generator):
+class CppGenerator(Generator[CppLanguage]):
     language = CppLanguage()
 
     plain_cref_separator = "::"
-    parse_plain_cref_member = staticmethod(snake_case)
+
+    @staticmethod
+    def parse_plain_cref_member(name):
+        return snake_case(name)
 
     def parse_set_client(self, procedure):
         return isinstance(self.get_return_type(procedure), ClassType)

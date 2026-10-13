@@ -287,7 +287,7 @@ class StreamImpl:
                 if self._replaying == fired:
                     self._replaying = 0
 
-    def remove_callback(self, fn: Callable[[object], None]) -> None:
+    def remove_callback(self, fn: Callable[..., None]) -> None:
         with self._update_lock:
             self._callbacks = [x for x in self._callbacks if x.fn != fn]
 
@@ -472,14 +472,11 @@ class StreamManager:
     def holds_a_condition(self) -> bool:
         """Whether this thread holds the update condition or the condition of a
         stream."""
-        if self._condition._is_owned():  # type: ignore[attr-defined]
+        if self._condition._is_owned():  # pyright: ignore[reportAttributeAccessIssue]
             return True
         with self._update_lock:
             streams = list(self._registered)
-        return any(
-            x.condition._is_owned()  # type: ignore[attr-defined]
-            for x in streams
-        )
+        return any(x.condition._is_owned() for x in streams)  # pyright: ignore[reportAttributeAccessIssue]
 
     def notify_closed(
         self, on_update_thread: bool = False, cause: Exception | None = None

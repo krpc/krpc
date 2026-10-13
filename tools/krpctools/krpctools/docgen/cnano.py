@@ -27,7 +27,7 @@ from .nodes import (
 )
 
 
-class CnanoDomain(Domain):
+class CnanoDomain(Domain[CnanoLanguage]):
     name = "cnano"
     prettyname = "Cnano"
     sphinxname = "c"

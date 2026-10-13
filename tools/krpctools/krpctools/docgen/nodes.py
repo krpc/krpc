@@ -240,6 +240,7 @@ class Property(Appendable):
             self.deprecated = getter.deprecated
             self.deprecated_reason = getter.deprecated_reason
         else:
+            assert setter is not None
             self.type = setter.parameters[0].type
             self.game_scenes = setter.game_scenes
             self.documentation = setter.documentation
@@ -350,6 +351,7 @@ class ClassProperty(Appendable):
             self.deprecated = getter.deprecated
             self.deprecated_reason = getter.deprecated_reason
         else:
+            assert setter is not None
             self.type = setter.parameters[1].type
             self.game_scenes = setter.game_scenes
             self.documentation = setter.documentation

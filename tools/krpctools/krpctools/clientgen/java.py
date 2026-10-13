@@ -21,10 +21,12 @@ from .docparser import DocParser
 from .generator import Generator
 
 
-class JavaGenerator(Generator):
+class JavaGenerator(Generator[JavaLanguage]):
     language = JavaLanguage()
 
-    parse_plain_cref_member = staticmethod(lower_camel_case)
+    @staticmethod
+    def parse_plain_cref_member(name):
+        return lower_camel_case(name)
 
     def parse_type_specification(self, typ):
         if typ is None:

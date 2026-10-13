@@ -27,7 +27,7 @@ from .nodes import (
 )
 
 
-class LuaDomain(Domain):
+class LuaDomain(Domain[LuaLanguage]):
     name = "lua"
     prettyname = "Lua"
     sphinxname = "lua"

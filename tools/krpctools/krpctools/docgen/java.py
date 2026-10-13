@@ -28,7 +28,7 @@ from .nodes import (
 )
 
 
-class JavaDomain(Domain):
+class JavaDomain(Domain[JavaLanguage]):
     name = "java"
     prettyname = "Java"
     sphinxname = "java"
@@ -104,7 +104,7 @@ class JavaDomain(Domain):
         if isinstance(typ, SetType):
             return ":class:`java.util.Set<%s>`" % self._type(typ.value_type, True)
         if isinstance(typ, TupleType):
-            name = self.tuple_types[len(typ.value_types) - 1]
+            name = self.language.tuple_types[len(typ.value_types) - 1]
             return ":class:`org.javatuples.%s<%s>`" % (
                 name,
                 ",".join(self._type(typ, True) for typ in typ.value_types),

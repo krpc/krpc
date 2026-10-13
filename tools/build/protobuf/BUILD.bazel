@@ -114,4 +114,5 @@ py_pyright_test(
     size = "medium",
     srcs = glob(["*.py"]),
     python_version = "3.12",
+    deps = ["@rules_python//python/runfiles"],
 )

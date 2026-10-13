@@ -14,7 +14,7 @@ class TestPartsReactionWheel(krpctest.TestCase):
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
-        cls.wheels = parts.wheels
+        cls.wheels = parts.reaction_wheels
         cls.wheel = parts.with_name("asasmodule1-2")[0].reaction_wheel
 
     def test_reaction_wheel(self):

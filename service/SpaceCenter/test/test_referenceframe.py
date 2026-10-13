@@ -1464,10 +1464,10 @@ class TestOrbitReferenceFrame(krpctest.TestCase):
         velocity = orbit.velocity_at(ut, ref)
         # The frame moves with the orbit, so the orbit is at rest in it. Take the
         # direction from the non-rotating frame and rotate it in instead.
-        prograde = normalize(vector(orbit.velocity_at(ut, self.nonrot)))
+        x, y, z = normalize(orbit.velocity_at(ut, self.nonrot))
         self.assertAlmostEqual(
             (0, 1, 0),
-            self.space_center.transform_direction(tuple(prograde), self.nonrot, ref),
+            self.space_center.transform_direction((x, y, z), self.nonrot, ref),
             places=4,
         )
         self.assertAlmostEqual((0, 0, 0), velocity, delta=5)

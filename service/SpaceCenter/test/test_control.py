@@ -1,11 +1,29 @@
+from __future__ import annotations
+
 import time
 import unittest
+from typing import TYPE_CHECKING
 
 import krpctest
 from krpctest.geometry import normalize
 
+if TYPE_CHECKING:
+    from krpc.services.spacecenter import (
+        AutoPilot,
+        Control,
+        Flight,
+        SpaceCenter,
+        Vessel,
+    )
 
-class ControlMixin:
+
+class ControlMixin(krpctest.Mixin):
+    space_center: SpaceCenter
+    vessel: Vessel | None
+    control: Control
+    auto_pilot: AutoPilot
+    orbital_flight: Flight
+
     def test_state(self):
         self.assertEqual(self.space_center.ControlState.full, self.control.state)
         self.assertEqual(self.space_center.ControlSource.kerbal, self.control.source)
@@ -229,7 +247,7 @@ class ControlMixin:
         # covered by test_speed_mode_with_target on the active vessel.
 
 
-class TestControlActiveVessel(krpctest.TestCase, ControlMixin):
+class TestControlActiveVessel(ControlMixin, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -288,7 +306,7 @@ class TestControlActiveVessel(krpctest.TestCase, ControlMixin):
         self.assertEqual(self.control.roll, 0)
 
 
-class TestControlNonActiveVessel(krpctest.TestCase, ControlMixin):
+class TestControlNonActiveVessel(ControlMixin, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -402,7 +420,6 @@ class TestControlRover(krpctest.TestCase):
         # (with a timeout so a rover that never settles doesn't hang the suite).
         self.control.wheel_throttle = 0
         self.control.wheel_steering = 0
-        self.control.wheel_steer = 0
         self.control.brakes = True
         deadline = time.time() + 10
         while self.flight.horizontal_speed > 0.02 and time.time() < deadline:
@@ -419,7 +436,7 @@ class TestControlRover(krpctest.TestCase):
         self.assertAlmostEqual(0, self.flight.horizontal_speed, delta=0.03)
 
         # Forward throttle for 1 second
-        self.control.wheel_steer = 0
+        self.control.wheel_steering = 0
         self.control.wheel_throttle = 0.5
         self.control.brakes = False
         self.wait(1)
@@ -448,7 +465,7 @@ class TestControlRover(krpctest.TestCase):
         self.assertAlmostEqual(0, self.flight.horizontal_speed, delta=0.03)
 
         # Reverse throttle for 1 second
-        self.control.wheel_steer = 0
+        self.control.wheel_steering = 0
         self.control.wheel_throttle = -0.5
         self.control.brakes = False
         self.wait(1)

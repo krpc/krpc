@@ -56,6 +56,7 @@ LIST_VALUES = 100
 
 
 def main():
+    assert __doc__ is not None
     args = runner.arguments(__doc__.splitlines()[0])
     results, environment = measure(args.server)
     runner.report(results, SUITE, environment, args.json)

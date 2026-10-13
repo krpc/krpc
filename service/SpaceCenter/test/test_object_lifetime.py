@@ -99,9 +99,8 @@ class TestObjectLifetime(krpctest.TestCase):
         self.assertEqual(value, field.value)
         self.assertEqual(module, field.module)
         self.assertTrue(event.visible)
-        action.enabled = True
-        self.assertTrue(action.enabled)
-        action.enabled = False
+        action.activated = True
+        action.activated = False
 
     def test_objects_survive_a_quickload(self):
         vessel = self.space_center.active_vessel

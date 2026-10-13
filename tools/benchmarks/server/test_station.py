@@ -28,6 +28,7 @@ class Station(BenchmarkTestCase):
             cls.remove_other_vessels()
             cls.set_circular_orbit("Kerbin", 100000)
         cls.vessel = cls.connect().space_center.active_vessel
+        assert cls.vessel is not None
         cls.parts = cls.vessel.parts
         cls.part = cls.parts.root
         cls.scenario = "Station300 (%d parts)" % len(cls.parts.all)

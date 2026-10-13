@@ -112,6 +112,7 @@ def run(server, client, transport=testserver.TCP):
 
 
 def arguments():
+    assert __doc__ is not None
     parser = runner.parser(__doc__.splitlines()[0])
     parser.add_argument(
         "--name",

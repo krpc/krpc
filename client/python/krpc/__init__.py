@@ -41,7 +41,7 @@ def connect(
     name: str | None = None,
     address: str = DEFAULT_ADDRESS,
     rpc_port: int = DEFAULT_RPC_PORT,
-    stream_port: int = DEFAULT_STREAM_PORT,
+    stream_port: int | None = DEFAULT_STREAM_PORT,
     use_pregenerated_stubs: bool = True,
     timeout: float | None = None,
 ) -> Client:

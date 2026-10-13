@@ -11,7 +11,7 @@ from ..utils import as_type
 from .generator import Generator
 
 
-class CsharpGenerator(Generator):
+class CsharpGenerator(Generator[CsharpLanguage]):
     language = CsharpLanguage()
 
     def __init__(self, macro_template, service, definitions):

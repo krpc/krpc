@@ -401,7 +401,11 @@ def ensure_changelog_in_toctree(worktree):
     index.write_text(text, encoding="utf-8")
 
 
-def version_key(version):
+# The release numbers, whether it is a release, and the pre-release parts
+VersionKey = tuple[tuple[int, ...], int, tuple[tuple[int, int | str], ...]]
+
+
+def version_key(version) -> VersionKey:
     """Semver-ish sort key matching changeloggen: a higher tuple is newer, and a
     release sorts above its own pre-releases."""
     core, _, pre = version.partition("-")

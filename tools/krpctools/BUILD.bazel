@@ -132,7 +132,10 @@ py_test(
 
 test_suite(
     name = "lint",
-    tests = [":ruff"],
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
 )
 
 py_ruff_test(

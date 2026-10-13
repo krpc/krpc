@@ -1,10 +1,20 @@
+from __future__ import annotations
+
 import unittest
+from typing import TYPE_CHECKING
 
 import krpctest
 from krpctest.geometry import cross, distance, dot, norm
 
+if TYPE_CHECKING:
+    from krpc.services.spacecenter import Control, Parts, Vessel
 
-class RCSTestBase:
+
+class RCSTestBase(krpctest.Mixin):
+    vessel: Vessel | None
+    control: Control
+    parts: Parts
+
     # Keyed by language-independent internal part name (part.name); the inline
     # comment is the English title (part.title) for readability.
     rcs_data = {
@@ -121,7 +131,7 @@ class RCSTest(RCSTestBase):
         self.check_properties(rcs)
 
 
-class TestPartsRCS(krpctest.TestCase, RCSTestBase):
+class TestPartsRCS(RCSTestBase, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -340,9 +350,9 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         self.control.rcs = True
         self.wait()
         positive, negative = rcs.available_force
-        for axis in range(3):
+        for unit in ((1, 0, 0), (0, 1, 0), (0, 0, 1)):
             for sign in (1, -1):
-                translation = tuple(sign if i == axis else 0 for i in range(3))
+                translation = (sign * unit[0], sign * unit[1], sign * unit[2])
                 force = rcs.override_force((0, 0, 0), translation)
                 for i in range(3):
                     self.assertLessEqual(force[i], positive[i] + 1)
@@ -519,7 +529,7 @@ class TestPartsRCS(krpctest.TestCase, RCSTestBase):
         self.set_fuel_enabled(True)
 
 
-class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
+class TestPartsRCSMSL(RCSTest, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -558,7 +568,7 @@ class TestPartsRCSMSL(krpctest.TestCase, RCSTest):
         )
 
 
-class TestPartsRCSVacuum(krpctest.TestCase, RCSTest):
+class TestPartsRCSVacuum(RCSTest, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

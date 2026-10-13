@@ -27,7 +27,7 @@ from .nodes import (
 )
 
 
-class PythonDomain(Domain):
+class PythonDomain(Domain[PythonLanguage]):
     name = "python"
     prettyname = "Python"
     sphinxname = "py"

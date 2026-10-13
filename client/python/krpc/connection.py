@@ -3,7 +3,7 @@ from __future__ import annotations
 import select
 import socket
 
-import google.protobuf
+import google.protobuf.message
 
 from krpc import winsock
 from krpc.decoder import Decoder
@@ -19,7 +19,7 @@ class Connection:
         self._address = address
         self._port = port
         self._timeout = timeout
-        self._socket: socket.socket = None  # type: ignore[assignment]
+        self._socket: socket.socket = None  # pyright: ignore[reportAttributeAccessIssue]
         # Data read from the socket that has not been consumed yet
         self._buffer = bytearray()
 

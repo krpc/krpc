@@ -39,12 +39,12 @@ class TestReceiveMessage(unittest.TestCase):
     @staticmethod
     def connection(*chunks: bytes) -> Connection:
         conn = Connection("localhost", 0)
-        conn._socket = ScriptedSocket(list(chunks))  # type: ignore[assignment]
+        conn._socket = ScriptedSocket(list(chunks))  # pyright: ignore[reportAttributeAccessIssue]
         return conn
 
     def receive(self, conn: Connection) -> bytes:
         message = conn.receive_message(KRPC.Response)
-        return message.results[0].value  # type: ignore[attr-defined,no-any-return]
+        return message.results[0].value  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_whole_message_in_one_read(self) -> None:
         conn = self.connection(self.encoded(b"foo"))

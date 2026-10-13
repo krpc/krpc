@@ -380,11 +380,11 @@ class TestExpressionTree(ServerTestCase, unittest.TestCase):
 
     maxDiff = None
 
-    def dump(self, func: Callable[[], Any]) -> str:
+    def dump(self, func: Callable[..., Any]) -> str:
         expression = self.conn.compile(func)
         return self.conn.test_service.dump_expression_tree(expression)
 
-    def check(self, expected: str, func: Callable[[], Any]) -> None:
+    def check(self, expected: str, func: Callable[..., Any]) -> None:
         self.assertEqual(expected, self.dump(func))
 
     def test_remote_property_comparison(self) -> None:

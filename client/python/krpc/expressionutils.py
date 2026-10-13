@@ -68,7 +68,7 @@ class Result:
 def build_ptype(code: int, types: list[KRPC.Type] | None = None) -> KRPC.Type:
     """Build a protocol buffer type message"""
     typ = KRPC.Type()
-    typ.code = code  # type: ignore[assignment]
+    typ.code = code  # pyright: ignore[reportAttributeAccessIssue]
     if types:
         typ.types.extend(types)
     return typ

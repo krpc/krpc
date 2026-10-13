@@ -1,5 +1,6 @@
 import functools
 import math
+from typing import Any, overload
 
 
 def rad2deg(rad):
@@ -10,6 +11,10 @@ def norm(v):
     return math.sqrt(sum(x * x for x in v))
 
 
+@overload
+def normalize(v: tuple[float, float, float]) -> tuple[float, float, float]: ...
+@overload
+def normalize(v: Any) -> tuple[float, ...]: ...
 def normalize(v):
     mag = norm(v)
     return tuple(x / mag for x in v)
@@ -112,7 +117,7 @@ class Vector:
     def __eq__(self, u):
         return all(x == y for x, y in zip(self.v, u))
 
-    __hash__ = None
+    __hash__ = None  # pyright: ignore[reportAssignmentType]
 
     def __lt__(self, u):
         return all(x < y for x, y in zip(self.v, u))

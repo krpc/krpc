@@ -92,7 +92,10 @@ py_test(
 
 test_suite(
     name = "lint",
-    tests = [":ruff"],
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
 )
 
 py_ruff_test(
@@ -114,5 +117,6 @@ py_pyright_test(
     deps = [
         ":krpctest_lib",
         "@pypi//protobuf",
+        "@pypi//pytest",
     ],
 )

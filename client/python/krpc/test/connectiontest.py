@@ -91,7 +91,7 @@ class ConnectionTest(unittest.TestCase):
         conn.send(b"disconnect")
         self.assertEqual(b"disconnect", conn.receive(10))
         # Wait for the connection to close
-        while conn._socket.recv(1) != b"":  # type: ignore[union-attr]
+        while conn._socket.recv(1) != b"":
             pass
 
     def test_send_receive(self) -> None:

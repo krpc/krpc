@@ -281,6 +281,7 @@ test_suite(
 test_suite(
     name = "lint",
     tests = [
+        ":pyright",
         ":ruff",
     ],
 )

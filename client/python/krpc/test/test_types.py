@@ -90,12 +90,12 @@ class TestTypes(unittest.TestCase):
         )
         self.assertTrue(issubclass(typ.python_type, Enum))
         self.assertEqual("enum documentation", typ.python_type.__doc__)
-        self.assertEqual(0, typ.python_type.a.value)  # type: ignore[attr-defined]
-        self.assertEqual(42, typ.python_type.b.value)  # type: ignore[attr-defined]
-        self.assertEqual(100, typ.python_type.c.value)  # type: ignore[attr-defined]
-        self.assertEqual("doca", typ.python_type.a.__doc__)  # type: ignore[attr-defined]
-        self.assertEqual("docb", typ.python_type.b.__doc__)  # type: ignore[attr-defined]
-        self.assertEqual("docc", typ.python_type.c.__doc__)  # type: ignore[attr-defined]
+        self.assertEqual(0, typ.python_type.a.value)  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual(42, typ.python_type.b.value)  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual(100, typ.python_type.c.value)  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual("doca", typ.python_type.a.__doc__)  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual("docb", typ.python_type.b.__doc__)  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual("docc", typ.python_type.c.__doc__)  # pyright: ignore[reportAttributeAccessIssue]
         typ2 = types.as_type(typ.protobuf_type)
         self.assertEqual(typ, typ2)
 
@@ -253,6 +253,7 @@ class TestTypes(unittest.TestCase):
         self.assertIs(enumeration.python_type, nullable_enumeration.python_type)
         struct = types.struct_type("ServiceName", "StructName")
         nullable_struct = types.nullable(struct)
+        assert isinstance(nullable_struct, StructType)
         struct.set_fields([("count", types.uint32_type)])
         self.assertIs(struct.python_type, nullable_struct.python_type)
         self.assertEqual(struct.field_types, nullable_struct.field_types)
@@ -436,57 +437,57 @@ class TestTypes(unittest.TestCase):
 
 class _MyClass(ClassBase):
     @StaticMethod
-    def my_static(cls, x: int) -> int:  # type: ignore[misc]
-        return cls._client(x)  # type: ignore[attr-defined]
+    def my_static(cls, x: int) -> int:
+        return cls._client(x)  # pyright: ignore[reportCallIssue]
 
 
 class TestStaticMethod(unittest.TestCase):
     def setUp(self) -> None:
         if hasattr(_MyClass, "_client"):
-            del _MyClass._client  # type: ignore[attr-defined]
+            del _MyClass._client  # pyright: ignore[reportAttributeAccessIssue]
 
-    def _make_instance(self, client_fn: object) -> ClassBase:
+    def _make_instance(self, client_fn: object) -> _MyClass:
         instance = object.__new__(_MyClass)
-        instance._client = client_fn  # type: ignore[attr-defined]
+        instance._client = client_fn  # pyright: ignore[reportAttributeAccessIssue]
         instance._object_id = 1
         return instance
 
     def test_call_via_class_with_client_set(self) -> None:
-        _MyClass._client = lambda x: x * 2  # type: ignore[attr-defined]
-        self.assertEqual(6, _MyClass.my_static(3))  # type: ignore[call-arg]
+        _MyClass._client = lambda x: x * 2  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual(6, _MyClass.my_static(3))
 
     def test_call_via_instance_without_class_client(self) -> None:
         instance = self._make_instance(lambda x: x + 10)
-        self.assertEqual(15, instance.my_static(5))  # type: ignore[call-arg]
+        self.assertEqual(15, instance.my_static(5))
 
     def test_instance_client_injected_onto_class(self) -> None:
-        def identity(x):  # type: ignore[no-untyped-def]
+        def identity(x):
             return x
 
         instance = self._make_instance(identity)
-        instance.my_static(0)  # type: ignore[call-arg]
-        self.assertIs(identity, _MyClass._client)  # type: ignore[attr-defined]
+        instance.my_static(0)
+        self.assertIs(identity, _MyClass._client)  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_bound_has_dunder_self_and_name(self) -> None:
-        _MyClass._client = lambda x: x  # type: ignore[attr-defined]
+        _MyClass._client = lambda x: x  # pyright: ignore[reportAttributeAccessIssue]
         bound = _MyClass.my_static
-        self.assertIs(_MyClass, bound.__self__)
+        self.assertIs(_MyClass, bound.__self__)  # pyright: ignore[reportFunctionMemberAccess]
         self.assertEqual("my_static", bound.__name__)
 
     def test_bound_via_instance_has_dunder_self(self) -> None:
         instance = self._make_instance(lambda x: x)
         bound = instance.my_static
-        self.assertIs(_MyClass, bound.__self__)
+        self.assertIs(_MyClass, bound.__self__)  # pyright: ignore[reportFunctionMemberAccess]
 
 
 class TestWrappedClass(unittest.TestCase):
     def setUp(self) -> None:
         if hasattr(_MyClass, "_client"):
-            del _MyClass._client  # type: ignore[attr-defined]
+            del _MyClass._client  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_static_methods_use_the_wrapping_client(self) -> None:
-        wrapped1 = WrappedClass(lambda x: x * 2, _MyClass)  # type: ignore[arg-type]
-        wrapped2 = WrappedClass(lambda x: x + 100, _MyClass)  # type: ignore[arg-type]
+        wrapped1 = WrappedClass(lambda x: x * 2, _MyClass)  # pyright: ignore[reportArgumentType]
+        wrapped2 = WrappedClass(lambda x: x + 100, _MyClass)  # pyright: ignore[reportArgumentType]
         # Retrieve both static methods before calling either: a single _client slot shared on the
         # class would let the second client's value leak into the first client's call.
         method1 = wrapped1.my_static
@@ -497,7 +498,7 @@ class TestWrappedClass(unittest.TestCase):
         self.assertFalse(hasattr(_MyClass, "_client"))
 
     def test_construction_through_wrapper(self) -> None:
-        wrapped = WrappedClass(lambda x: x, _MyClass)  # type: ignore[arg-type]
+        wrapped = WrappedClass(lambda x: x, _MyClass)  # pyright: ignore[reportArgumentType]
         instance = wrapped(None, 1)
         self.assertIsInstance(instance, _MyClass)
 

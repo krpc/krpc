@@ -10,6 +10,7 @@ import lib
 
 
 def main():
+    assert __doc__ is not None
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
         "--expunge",

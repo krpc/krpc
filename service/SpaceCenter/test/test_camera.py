@@ -1,6 +1,14 @@
+from __future__ import annotations
+
 import unittest
+from typing import TYPE_CHECKING
 
 import krpctest
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from krpc.services.spacecenter import Camera
 
 
 class TestCamera(krpctest.TestCase):
@@ -57,7 +65,11 @@ class TestCamera(krpctest.TestCase):
         self.assertRaises(RuntimeError, getattr, self.camera, "focussed_crew_member")
 
 
-class CameraTestBase:
+class CameraTestBase(krpctest.Mixin):
+    camera: Camera
+    pitches: Sequence[float]
+    headings: Sequence[float]
+
     def reset_distance(self):
         self.camera.distance = self.camera.default_distance
 
@@ -80,7 +92,10 @@ class CameraTestBase:
             self.assertAlmostEqual(pitch, self.camera.pitch, places=1)
 
 
-class CameraDistanceTestBase:
+class CameraDistanceTestBase(krpctest.Mixin):
+    camera: Camera
+    distances: Sequence[float]
+
     def test_distance(self):
         self.assertGreater(self.camera.default_distance, self.camera.min_distance)
         self.assertLess(self.camera.default_distance, self.camera.max_distance)
@@ -92,7 +107,7 @@ class CameraDistanceTestBase:
             self.assertAlmostEqual(distance, self.camera.distance, places=3)
 
 
-class TestCameraFlight(krpctest.TestCase, CameraTestBase, CameraDistanceTestBase):
+class TestCameraFlight(CameraTestBase, CameraDistanceTestBase, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -108,7 +123,7 @@ class TestCameraFlight(krpctest.TestCase, CameraTestBase, CameraDistanceTestBase
         cls.distances = (1, 5, 10, 20)
 
 
-class TestCameraIVA(krpctest.TestCase, CameraTestBase):
+class TestCameraIVA(CameraTestBase, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -221,7 +236,7 @@ class TestCameraIVACrew(krpctest.TestCase):
             self.assertEqual(expected, self.camera.focussed_crew_member)
 
 
-class TestCameraMap(krpctest.TestCase, CameraTestBase, CameraDistanceTestBase):
+class TestCameraMap(CameraTestBase, CameraDistanceTestBase, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

@@ -68,6 +68,7 @@ test_suite(
 test_suite(
     name = "lint",
     tests = [
+        ":pyright",
         ":ruff",
     ],
 )
@@ -82,6 +83,8 @@ py_pyright_test(
     name = "pyright",
     size = "medium",
     srcs = glob(["test/*.py"]),
+    # The tests do not check for None results
+    disable = ["reportOptionalMemberAccess"],
     deps = [
         "//client/python:krpc_lib",
         "//tools/krpctest:krpctest_lib",

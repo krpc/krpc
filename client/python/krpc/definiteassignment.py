@@ -4,6 +4,7 @@ path to the read has assigned it."""
 from __future__ import annotations
 
 import ast
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
@@ -247,7 +248,7 @@ class DefiniteAssignment:
         self,
         name: str,
         node: ast.AST,
-        body: list[ast.AST],
+        body: Sequence[ast.AST],
         own: set[str],
         parameters: set[str],
         assigned: frozenset[str],

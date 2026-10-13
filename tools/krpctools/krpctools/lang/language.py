@@ -1,5 +1,6 @@
 import math
 import struct
+from collections.abc import Collection
 
 # The extremes come from the python client, which krpctools already builds on. They describe
 # the protobuf types rather than anything about python, so every language's generator reads
@@ -85,6 +86,10 @@ class Language:
     # A value with no entry is written as an ordinary literal.
     special_values = {}
 
+    # Set by a language with reserved words, or with values named differently
+    keywords: Collection[str]
+    value_map: dict[str, str]
+
     def __init__(self):
         self.module = None
 
@@ -100,7 +105,7 @@ class Language:
     def parse_type(self, typ):
         raise NotImplementedError
 
-    def parse_default_value(self, value, typ):
+    def parse_default_value(self, value, typ) -> str | None:
         return None
 
     def parse_special_value(self, value, typ):

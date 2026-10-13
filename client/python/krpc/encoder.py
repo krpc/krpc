@@ -5,7 +5,7 @@ from collections.abc import Callable, Collection, Iterable, Mapping
 from enum import Enum
 from typing import Any, cast
 
-import google.protobuf
+import google.protobuf.message
 from google.protobuf.internal import encoder as protobuf_encoder
 from google.protobuf.internal import wire_format as protobuf_wire_format
 
@@ -28,8 +28,8 @@ from krpc.types import (
 
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
-_pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]
-_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]
+_pb_VarintEncoder = protobuf_encoder._VarintEncoder()
+_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()
 
 # protobuf's zigzag encoder carries no types, so it is bound here with the type it does
 # have. A call carrying a collection reaches it once per value, so this also saves looking
@@ -64,7 +64,7 @@ class Encoder:
         if isinstance(typ, EnumerationType):
             return cls._encode_value(cast(Enum, x).value, cls._types.sint32_type)
         if isinstance(typ, ClassType):
-            object_id = x._object_id  # type: ignore[attr-defined]
+            object_id = x._object_id  # pyright: ignore[reportAttributeAccessIssue]
             return cls._encode_value(object_id, cls._types.uint64_type)
         if isinstance(typ, ListType):
             list_msg = KRPC.List()
@@ -76,10 +76,10 @@ class Encoder:
         if isinstance(typ, DictionaryType):
             dict_msg = KRPC.Dictionary()
             entries = []
-            dict_obj = cast(Mapping, x)  # type: ignore[type-arg]
+            dict_obj = cast(Mapping, x)
             encode_key = cls._item_encoder(typ.key_type)
             encode_value = cls._item_encoder(typ.value_type)
-            for key, value in sorted(dict_obj.items(), key=lambda i: i[0]):  # type: ignore[no-any-return]
+            for key, value in sorted(dict_obj.items(), key=lambda i: i[0]):
                 entry = KRPC.DictionaryEntry()
                 entry.key = encode_key(key)
                 entry.value = encode_value(value)
@@ -126,7 +126,7 @@ class Encoder:
         length = len(data)
         if length < 128:
             return _SINGLE_BYTE_VARINTS[length] + data
-        size: bytes = protobuf_encoder._VarintBytes(length)  # type: ignore[attr-defined]
+        size: bytes = protobuf_encoder._VarintBytes(length)
         return size + data
 
     @classmethod

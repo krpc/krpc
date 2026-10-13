@@ -12,7 +12,9 @@ class TestServo(krpctest.TestCase):
         cls.launch_vessel_from_vab("InfernalRobotics")
         cls.remove_other_vessels()
         cls.ir = cls.connect().infernal_robotics
-        cls.vessel = cls.connect().space_center.active_vessel
+        vessel = cls.connect().space_center.active_vessel
+        assert vessel is not None
+        cls.vessel = vessel
         cls.Mode = cls.connect().infernal_robotics.ServoMode
 
     def _recenter(self, servo):

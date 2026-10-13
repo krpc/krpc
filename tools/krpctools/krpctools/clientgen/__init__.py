@@ -149,7 +149,7 @@ def load_generator(path):
     module = importlib.import_module(modulepath)
     generator = module.generator
     with builtins.open(module.tmpl, encoding="utf-8") as fp:
-        macro_template = "".join(fp.readlines()).decode("utf-8")
+        macro_template = "".join(fp.readlines())
     return generator, macro_template
 
 

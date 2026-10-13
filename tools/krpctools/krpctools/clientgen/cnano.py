@@ -20,7 +20,7 @@ from .docparser import DocParser
 from .generator import Generator
 
 
-class CnanoGenerator(Generator):
+class CnanoGenerator(Generator[CnanoLanguage]):
     language = CnanoLanguage()
 
     def __init__(self, macro_template, service, definitions):
