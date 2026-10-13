@@ -14,6 +14,10 @@
   player quits to the main menu (#1041)
 - Fix setting `KRPC.GameScene` from one editor straight to the other leaving the flight camera
   unable to follow a vessel for the rest of the session (#1038)
+- Fix setting `KRPC.GameScene` back to flight failing with a null reference error, after it
+  was used to leave flight (#1117)
+- Save the game when setting `KRPC.GameScene` leaves flight, unless the game cannot be
+  saved (#1117)
 - Sweep objects whose game objects no longer exist out of the object store when the game
   loads, changes scene or destroys a part or a vessel (#1051)
 
