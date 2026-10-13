@@ -1,4 +1,4 @@
-load("//:config.bzl", "assembly_version", "author", "version")
+load("//:config.bzl", "assembly_version", "author")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library", "csharp_nunit_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
@@ -22,12 +22,6 @@ test_suite(
     ],
 )
 
-genrule(
-    name = "version",
-    outs = ["VERSION.txt"],
-    cmd = 'echo "%s" > "$@"' % version,
-)
-
 csharp_assembly_info(
     name = "AssemblyInfo",
     cls_compliant = False,
@@ -37,15 +31,7 @@ csharp_assembly_info(
     version = assembly_version,
     visibility = [
         "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
-        "//tools/ServiceDefinitions:__pkg__",  # Make visible to ServiceDefinitions so it can build KRPC.Core.dll with .NET 4.5 references
     ],
-)
-
-# Make sources visible to ServiceDefinitions so it can build KRPC.Core.dll with .NET 4.5 references
-filegroup(
-    name = "KRPC.Core-src",
-    srcs = glob(["src/**/*.cs"]),
-    visibility = ["//tools/ServiceDefinitions:__pkg__"],
 )
 
 srcs = glob(["src/**/*.cs"]) + [
