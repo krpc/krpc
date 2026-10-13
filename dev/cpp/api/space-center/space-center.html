@@ -978,6 +978,19 @@ current save game.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8can_saveEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter8can_saveEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8can_saveEv"></span><span id="krpc::services::SpaceCenter::can_save"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">can_save</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8can_saveEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the game can be saved.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game cannot be saved in some flight states, e.g. while under acceleration
+or moving over the surface. Setting
+<a class="reference internal" href="../krpc/krpc.html#_CPPv4N4krpc8services4KRPC10game_sceneEv" title="krpc::services::KRPC::game_scene"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">KRPC::game_scene()</span></code></a> to leave flight saves the
+game only when this is true.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter20can_revert_to_launchEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter20can_revert_to_launchEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter20can_revert_to_launchEv"></span><span id="krpc::services::SpaceCenter::can_revert_to_launch"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">can_revert_to_launch</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter20can_revert_to_launchEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the current flight can be reverted to launch.</p>

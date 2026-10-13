@@ -972,6 +972,19 @@ current save game.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getCanSave()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanSave</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getCanSave()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the game can be saved.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game cannot be saved in some flight states, e.g. while under acceleration
+or moving over the surface. Setting
+<a class="reference internal" href="../krpc/krpc.html#krpc.client.services.KRPC.KRPC.getGameScene()" title="krpc.client.services.KRPC.KRPC.getGameScene()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">KRPC.getGameScene()</span></code></a> to leave flight saves the
+game only when this is true.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.canRevertToLaunch()">
  <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">canRevertToLaunch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.canRevertToLaunch()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the current flight can be reverted to launch.</p>

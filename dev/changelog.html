@@ -688,6 +688,8 @@
 <li><p>Fix the end of a long serial port name being neither visible nor editable in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1065">#1065</a>)</p></li>
 <li><p>The server is stopped whenever no game is loaded, so a client is disconnected when the player quits to the main menu (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1041">#1041</a>)</p></li>
 <li><p>Fix setting <code class="docutils literal notranslate"><span class="pre">KRPC.GameScene</span></code> from one editor straight to the other leaving the flight camera unable to follow a vessel for the rest of the session (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1038">#1038</a>)</p></li>
+<li><p>Fix setting <code class="docutils literal notranslate"><span class="pre">KRPC.GameScene</span></code> back to flight failing with a null reference error, after it was used to leave flight (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1117">#1117</a>)</p></li>
+<li><p>Save the game when setting <code class="docutils literal notranslate"><span class="pre">KRPC.GameScene</span></code> leaves flight, unless the game cannot be saved (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1117">#1117</a>)</p></li>
 <li><p>Sweep objects whose game objects no longer exist out of the object store when the game loads, changes scene or destroys a part or a vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
 </ul>
 </section>
@@ -706,6 +708,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">SpaceCenter.RevertToLaunch</span></code> returns once the scene has reloaded, as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Load</span></code> does. Vessel data read straight after the call is that of the reverted vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1097">#1097</a>)</p></li>
 <li><p>Setting <code class="docutils literal notranslate"><span class="pre">SpaceCenter.ActiveVessel</span></code> from the space center or tracking station keeps the game’s contracts (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1102">#1102</a>)</p></li>
 <li><p>The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and setting <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Alarm.EventOffset</span></code>, change when the alarm goes off (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1114">#1114</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.CanSave</span></code>, whether the game can be saved (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1117">#1117</a>)</p></li>
 </ul>
 </li>
 <li><p>Editor</p>

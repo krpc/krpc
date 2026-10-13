@@ -969,6 +969,19 @@ current save game.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CanSave">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CanSave</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CanSave" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the game can be saved.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game cannot be saved in some flight states, e.g. while under acceleration
+or moving over the surface. Setting
+<a class="reference internal" href="../krpc/krpc.html#c.krpc_KRPC_GameScene" title="krpc_KRPC_GameScene"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_GameScene()</span></code></a> to leave flight saves the
+game only when this is true.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CanRevertToLaunch">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CanRevertToLaunch</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CanRevertToLaunch" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the current flight can be reverted to launch.</p>

@@ -888,7 +888,8 @@ scene. Setting it to <a class="reference internal" href="#KRPC.GameScene.flight"
 active vessel, and fails if there is none. Moving between
 <a class="reference internal" href="#KRPC.GameScene.editor_vab" title="KRPC.GameScene.editor_vab"><code class="xref py py-attr docutils literal notranslate"><span class="pre">GameScene.editor_vab</span></code></a> and <a class="reference internal" href="#KRPC.GameScene.editor_sph" title="KRPC.GameScene.editor_sph"><code class="xref py py-attr docutils literal notranslate"><span class="pre">GameScene.editor_sph</span></code></a>
 keeps the vessel that is being constructed, as the game’s own switch
-editor button does.</p>
+editor button does. Leaving flight saves the game first, unless the game
+cannot be saved, e.g. while under acceleration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>

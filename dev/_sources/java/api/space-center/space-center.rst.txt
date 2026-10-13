@@ -207,6 +207,20 @@ SpaceCenter
 
          This is the same as calling :meth:`load(String)` with the name "quicksave".
 
+   .. method:: boolean getCanSave()
+
+
+      Whether the game can be saved.
+
+   
+
+      .. note::
+
+         The game cannot be saved in some flight states, e.g. while under acceleration
+         or moving over the surface. Setting
+         :meth:`KRPC.getGameScene()` to leave flight saves the
+         game only when this is true.
+
    .. method:: boolean canRevertToLaunch()
 
       Whether the current flight can be reverted to launch.

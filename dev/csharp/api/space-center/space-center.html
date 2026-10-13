@@ -1019,6 +1019,24 @@ current save game.</p>
 </div>
 </dd></dl>
 
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.SpaceCenter.CanSave">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">CanSave</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.CanSave" title="Link to this definition">#</a></dt>
+<dd><p>Whether the game can be saved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game cannot be saved in some flight states, e.g. while under acceleration
+or moving over the surface. Setting
+<a class="reference internal" href="../krpc/krpc.html#property-KRPC.Client.Services.KRPC.KRPC.GameScene" title="KRPC.Client.Services.KRPC.KRPC.GameScene property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">KRPC.GameScene</span></code></a> to leave flight saves the
+game only when this is true.</p>
+</div>
+</dd></dl>
+
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.SpaceCenter.CanRevertToLaunch">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">CanRevertToLaunch</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.SpaceCenter.CanRevertToLaunch" title="Link to this definition">#</a></dt>

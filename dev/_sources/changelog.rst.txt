@@ -102,6 +102,8 @@ Server
 * Fix the end of a long serial port name being neither visible nor editable in the server window (:issue:`1065`)
 * The server is stopped whenever no game is loaded, so a client is disconnected when the player quits to the main menu (:issue:`1041`)
 * Fix setting ``KRPC.GameScene`` from one editor straight to the other leaving the flight camera unable to follow a vessel for the rest of the session (:issue:`1038`)
+* Fix setting ``KRPC.GameScene`` back to flight failing with a null reference error, after it was used to leave flight (:issue:`1117`)
+* Save the game when setting ``KRPC.GameScene`` leaves flight, unless the game cannot be saved (:issue:`1117`)
 * Sweep objects whose game objects no longer exist out of the object store when the game loads, changes scene or destroys a part or a vessel (:issue:`1051`)
 
 
@@ -120,6 +122,7 @@ SpaceCenter service
   * ``SpaceCenter.RevertToLaunch`` returns once the scene has reloaded, as ``SpaceCenter.Load`` does. Vessel data read straight after the call is that of the reverted vessel (:issue:`1097`)
   * Setting ``SpaceCenter.ActiveVessel`` from the space center or tracking station keeps the game's contracts (:issue:`1102`)
   * The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and setting ``SpaceCenter.Alarm.EventOffset``, change when the alarm goes off (:issue:`1114`)
+  * Add ``SpaceCenter.CanSave``, whether the game can be saved (:issue:`1117`)
 
 * Editor
 

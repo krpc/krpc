@@ -1016,6 +1016,27 @@ current save game.</p>
 </div>
 </dd></dl>
 
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.can_save">
+<span class="sig-name descname"><span class="pre">can_save</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.can_save" title="Link to this definition">#</a></dt>
+<dd><p>Whether the game can be saved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game cannot be saved in some flight states, e.g. while under acceleration
+or moving over the surface. Setting
+<a class="reference internal" href="../krpc/krpc.html#KRPC.KRPC.game_scene" title="KRPC.KRPC.game_scene"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KRPC.game_scene</span></code></a> to leave flight saves the
+game only when this is true.</p>
+</div>
+</dd></dl>
+
 <dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="SpaceCenter.can_revert_to_launch">
 <span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">can_revert_to_launch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.can_revert_to_launch" title="Link to this definition">#</a></dt>

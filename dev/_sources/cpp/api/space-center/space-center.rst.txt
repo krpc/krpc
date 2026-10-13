@@ -221,6 +221,19 @@ SpaceCenter
 
          This is the same as calling :func:`load` with the name "quicksave".
 
+   .. function:: bool can_save()
+
+      Whether the game can be saved.
+
+   
+
+      .. note::
+
+         The game cannot be saved in some flight states, e.g. while under acceleration
+         or moving over the surface. Setting
+         :func:`KRPC::game_scene` to leave flight saves the
+         game only when this is true.
+
    .. function:: bool can_revert_to_launch()
 
       Whether the current flight can be reverted to launch.

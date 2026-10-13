@@ -285,6 +285,24 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. attribute:: can_save
+
+   Whether the game can be saved.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   
+
+   .. note::
+
+      The game cannot be saved in some flight states, e.g. while under acceleration
+      or moving over the surface. Setting
+      :attr:`KRPC.game_scene` to leave flight saves the
+      game only when this is true.
+
+
+
+
 .. staticmethod:: can_revert_to_launch()
 
    Whether the current flight can be reverted to launch.

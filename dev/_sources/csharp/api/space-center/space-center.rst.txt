@@ -217,6 +217,20 @@ SpaceCenter
 
          This is the same as calling :meth:`SpaceCenter.Load <SpaceCenter.SpaceCenter.Load>` with the name "quicksave".
 
+   .. property:: bool CanSave { get; }
+
+      Whether the game can be saved.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game cannot be saved in some flight states, e.g. while under acceleration
+         or moving over the surface. Setting
+         :prop:`KRPC.GameScene <KRPC.KRPC.GameScene>` to leave flight saves the
+         game only when this is true.
+
    .. method:: bool CanRevertToLaunch()
 
       Whether the current flight can be reverted to launch.
