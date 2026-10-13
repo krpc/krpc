@@ -497,11 +497,13 @@ http_archive(
     url = "https://github.com/meirumeiru/InfernalRobotics/releases/download/v3.1.22/InfernalRobotics_v3.1.22.zip",
 )
 
+# The maintained fork of KerbalAlarmClock. It needs ClickThroughBlocker, ToolbarControl and
+# Harmony, shared with RealChute and AGExt.
 http_archive(
     name = "kerbal_alarm_clock",
     build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/TriggerTech/**']), visibility = ['//visibility:public'])",
-    sha256 = "5fbaf7a1c69dec68557f4ce956e0f85956e66ffd828545914f23b79024fc3d67",
-    url = "https://github.com/TriggerAu/KerbalAlarmClock/releases/download/v3.14.0.0/KerbalAlarmClock_3.14.0.0.zip",
+    sha256 = "cdc06631ce478de4656d309ed04df08a2ebeb19e1d3b7fe79b221e38c1e04410",
+    url = "https://github.com/linuxgurugamer/KerbalAlarmClock/releases/download/3.14.2.7/KerbalAlarmClock-1.12.5-3.14.2.7.zip",
 )
 
 http_archive(
@@ -590,8 +592,8 @@ http_archive(
 http_archive(
     name = "kspburst",
     build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/000_KSPBurst/**']), visibility = ['//visibility:public'])",
-    sha256 = "83ad604b2a0b3f646f69fe7a6679f4955cbd6cd16613db89919ed460bd2a19dd",
-    url = "https://github.com/KSPModdingLibs/KSPBurst/releases/download/v1.7.4.9/KSPBurst_1.7.4.9.zip",
+    sha256 = "6295c300c1a11b520b2037370f192a4fabe919ee1afb93bdb594e4499b298c45",
+    url = "https://github.com/KSPModdingLibs/KSPBurst/releases/download/v1.7.4.11/KSPBurst_1.7.4.11.zip",
 )
 
 # SpaceTuxLibrary — LinuxGuruGamer's shared library bundle (KSP_Log, etc.), an AGExt dependency.
@@ -608,8 +610,8 @@ http_archive(
 http_archive(
     name = "realfuels",
     build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/RealFuels/**']), visibility = ['//visibility:public'])",
-    sha256 = "8f1e5b5f081a084839682a4757b0df10a08d0b34ffd30b45fa80e2f61c8361d5",
-    url = "https://github.com/KSP-RO/RealFuels/releases/download/v15.15.0.0/RealFuels_v15.15.0.0.zip",
+    sha256 = "5e14f5bd87111380025a3bc93e4e3f84cbe9c9d19c1dd8c0d3212c12ab11cc1e",
+    url = "https://github.com/KSP-RO/RealFuels/releases/download/v15.16.1.0/RealFuels_v15.16.1.0.zip",
 )
 
 # RealFuels' engine configs for stock parts. RealFuels itself only patches fuel tanks; without
@@ -640,8 +642,16 @@ http_archive(
 http_archive(
     name = "routils",
     build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/ROUtils/**']), visibility = ['//visibility:public'])",
-    sha256 = "28421577470ef3f1f8af0d4ecfbace88acea01f3848455bb2672573bf6911f18",
-    url = "https://github.com/KSP-RO/ROUtils/releases/download/v1.1.1.0/ROUtils-v1.1.1.0.zip",
+    sha256 = "3118abbe9cbf61cbaa6f395d3bf0786ed402a8eaa54833799869dd57fdc99d39",
+    url = "https://github.com/KSP-RO/ROUtils/releases/download/v1.2.0.0/ROUtils-v1.2.0.0.zip",
+)
+
+# ROUtils' assembly dependency for serializing its curves.
+http_archive(
+    name = "serializationfix",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/000_SerializationFix/**']), visibility = ['//visibility:public'])",
+    sha256 = "8232add723a443545c729b5d48e36806ed90d70576030e29b2f7436dac2c9445",
+    url = "https://github.com/Phantomical/KSPSerializationFix/releases/download/v1.0.1/KSPSerializationFix.zip",
 )
 
 http_archive(
