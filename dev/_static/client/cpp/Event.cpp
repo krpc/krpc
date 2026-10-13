@@ -1,11 +1,11 @@
 #include <iostream>
 #include <krpc.hpp>
+#include <krpc/function_stream.hpp>
 #include <krpc/services/krpc.hpp>
 #include <krpc/services/space_center.hpp>
 
 int main() {
   auto conn = krpc::connect();
-  krpc::services::KRPC krpc(&conn);
   krpc::services::SpaceCenter sc(&conn);
   auto flight = sc.active_vessel().value().flight();
 
@@ -19,7 +19,7 @@ int main() {
     Expr::call(conn, mean_altitude),
     Expr::constant_double(conn, 1000));
 
-  auto event = krpc.add_event(expr);
+  auto event = krpc::add_event(expr);
   event.acquire();
   event.wait();
   std::cout << "Altitude reached 1000m" << std::endl;

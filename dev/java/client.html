@@ -726,7 +726,7 @@ It requires Java 17 or later.</p>
 </div>
 <p>To compile this program using javac on the command line, save the source as <code class="docutils literal notranslate"><span class="pre">Example.java</span></code> and run
 the following:</p>
-<pre class="literal-block">javac -cp krpc-java-0.7.0-702-8e78c51.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java</pre>
+<pre class="literal-block">javac -cp krpc-java-0.7.0-706-bd02d8c.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java</pre>
 <p>Note that you may need to change the paths to the JAR files.</p>
 <section id="connecting-to-the-server">
 <h3>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h3>
@@ -784,6 +784,50 @@ vessel and then prints out its altitude:</p>
 <p>Many procedures return an object identifying something in the game, such as a vessel or
 a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
 behaves when a game is loaded or what it identifies is destroyed.</p>
+</section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p>A server side function is code that runs inside the game, on the server. <a class="reference internal" href="#krpc.client.Connection.run(KRPC.Expression, Object)" title="krpc.client.Connection.run(KRPC.Expression, Object)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.run</span></code></a>
+evaluates one once and returns its value. Every value it reads comes from the same physics tick. For
+example, the following reads the vessel’s altitude and speed together:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Arrays</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.schema.KRPC.ProcedureCall</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.javatuples.Pair</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RunFunction</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">      </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getBody</span><span class="p">().</span><span class="na">getReferenceFrame</span><span class="p">());</span>
+
+<span class="w">      </span><span class="c1">// Get the remote procedure calls as message objects,</span>
+<span class="w">      </span><span class="c1">// so they can be passed to the server</span>
+<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getMeanAltitude&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getSpeed&quot;</span><span class="p">);</span>
+
+<span class="w">      </span><span class="c1">// Build a function that reads the altitude and the speed</span>
+<span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">createTuple</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span>
+<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
+<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">speed</span><span class="p">)));</span>
+
+<span class="w">      </span><span class="c1">// Run the function once, so both values come from the same physics tick</span>
+<span class="w">      </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span>
+<span class="w">          </span><span class="s">&quot;Altitude: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getValue0</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; m, speed: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getValue1</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; m/s&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">run</span></code> for a function with effects, such as setting a property. An event or a function stream
+evaluates its function on every update, repeating the effects.</p>
 </section>
 <section id="streaming-data">
 <span id="java-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
@@ -849,13 +893,13 @@ closed.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>It calls <a class="reference internal" href="#krpc.client.Connection.addStream(RemoteObject, String, Object)" title="krpc.client.Connection.addStream(RemoteObject, String, Object)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> once at the start of the program to create the stream, and
+<p>It calls <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> once at the start of the program to create the stream, and
 then repeatedly prints the position returned by the stream. The stream is automatically closed when
 the client disconnects.</p>
-<p>A stream can be created for any method call by calling <a class="reference internal" href="#krpc.client.Connection.addStream(RemoteObject, String, Object)" title="krpc.client.Connection.addStream(RemoteObject, String, Object)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> and passing it
+<p>A stream can be created for any method call by calling <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> and passing it
 information about which method to stream. The example above passes a remote object, the name of the
 method to call, followed by the arguments to pass to the method (if
-any). <a class="reference internal" href="#krpc.client.Connection.addStream(RemoteObject, String, Object)" title="krpc.client.Connection.addStream(RemoteObject, String, Object)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> returns a stream object of type <a class="reference internal" href="#krpc.client.Stream" title="krpc.client.Stream"><code class="xref java java-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent
+any). <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> returns a stream object of type <a class="reference internal" href="#krpc.client.Stream" title="krpc.client.Stream"><code class="xref java java-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent
 value of the stream can be obtained by calling <a class="reference internal" href="#krpc.client.Stream.get()" title="krpc.client.Stream.get()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stream.get</span></code></a>. A stream can be stopped and
 removed from the server by calling <a class="reference internal" href="#krpc.client.Stream.remove()" title="krpc.client.Stream.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stream.remove</span></code></a> on the stream object. All of a clients
 streams are automatically stopped when it disconnects.</p>
@@ -864,14 +908,13 @@ streams are automatically stopped when it disconnects.</p>
 <p>A stream runs on the server until you remove it or the connection closes, even once the stream
 object is garbage collected. Each call to <code class="docutils literal notranslate"><span class="pre">addStream</span></code> adds another stream.</p>
 </div>
-</section>
 <section id="synchronizing-with-stream-updates">
-<h2>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h2>
+<h3>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h3>
 <p>A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
 then take some action. kRPC provides two mechanisms to do this efficiently: <em>condition variables</em>
 and <em>callbacks</em>.</p>
 <section id="condition-variables">
-<h3>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h3>
+<h4>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h4>
 <p>Each stream has a condition variable that is notified whenever the value of the stream changes, and
 when the stream ends. You can wait on it to block the current thread until one of these happens.</p>
 <p>The following example waits until the abort button is pressed in game, by waiting for the value of
@@ -910,7 +953,7 @@ the value changes. This prevents the loop from ‘spinning’ and so it does not
 resources whilst waiting.</p>
 </section>
 <section id="callbacks">
-<h3>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h3>
+<h4>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h4>
 <p>Streams allow you to register callback functions that are called whenever the value of the stream
 changes. Callback functions should take a single argument, which is the new value of the stream, and
 should return nothing.</p>
@@ -956,6 +999,7 @@ should return nothing.</p>
 stream. Any changes to shared state must therefore be protected with appropriate
 synchronization.</p>
 </div>
+</section>
 </section>
 <section id="stream-endings">
 <h3>Stream Endings<a class="headerlink" href="#stream-endings" title="Link to this heading">#</a></h3>
@@ -1006,6 +1050,52 @@ holds the stream instead. It resumes once the object or scene is available.</p>
 <p>To handle an ending in a callback, add an end callback with <a class="reference internal" href="#krpc.client.Stream.addEndCallback(java.util.function.Consumer)" title="krpc.client.Stream.addEndCallback(java.util.function.Consumer)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stream.addEndCallback</span></code></a>. It is
 called once, with the exception.</p>
 </section>
+<section id="streaming-server-side-functions">
+<h3>Streaming Server Side Functions<a class="headerlink" href="#streaming-server-side-functions" title="Link to this heading">#</a></h3>
+<p>Pass a server side function to <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> to stream its value. The server
+evaluates the function on each stream update, within one physics tick. The value can be any type
+the server can send, including collections and objects. For example, the following streams the
+vessel’s altitude in kilometers:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Stream</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FunctionStream</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">      </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="p">,</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+
+<span class="w">      </span><span class="c1">// Build a function that computes</span>
+<span class="w">      </span><span class="c1">// the vessel&#39;s altitude in kilometers</span>
+<span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">divide</span><span class="p">(</span>
+<span class="w">          </span><span class="n">connection</span><span class="p">,</span>
+<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getMeanAltitude&quot;</span><span class="p">)),</span>
+<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+
+<span class="w">      </span><span class="c1">// Stream the value of the function</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Altitude: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; km&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The type parameter must be able to hold the function’s value. Otherwise the assignment of a value
+throws a <code class="docutils literal notranslate"><span class="pre">ClassCastException</span></code>.</p>
+<p>A function stream or event ends on any exception its function throws. This includes
+<code class="docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code>, which a game load or an unloaded vessel causes. To keep running
+through a load, the function catches that exception with <code class="docutils literal notranslate"><span class="pre">Expression.tryCatch</span></code>.</p>
+</section>
 </section>
 <section id="events">
 <span id="java-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
@@ -1015,14 +1105,12 @@ implemented using streams and condition variables.</p>
 <p>A call to <code class="docutils literal notranslate"><span class="pre">waitFor</span></code> returns straight away if the event has fired since the previous call on the
 same event object, so no firing is missed between two calls. Several firings between two calls make
 <code class="docutils literal notranslate"><span class="pre">waitFor</span></code> return once.</p>
-<p>You can also create a custom event from a server side function, which is code that runs inside
-the game. The following builds the function <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that
-triggers when the function returns true:</p>
+<p>You can also create a custom event from a server side function. The following builds the function
+<code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that triggers when the function returns true:</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Event</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
@@ -1033,7 +1121,6 @@ triggers when the function returns true:</p>
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CustomEvent</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">KRPC</span><span class="w"> </span><span class="n">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 <span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 <span class="w">      </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
 
@@ -1047,7 +1134,7 @@ triggers when the function returns true:</p>
 <span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
 <span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
 
-<span class="w">      </span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 <span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">waitFor</span><span class="p">();</span>
 <span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
@@ -1170,6 +1257,37 @@ window.</p></li>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.addStream(KRPC.Expression)">
+ <a class="reference internal" href="#krpc.client.Stream" title="krpc.client.Stream"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">T</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">addStream</span></span><span class="sig-paren">(</span><a class="reference internal" href="api/krpc/krpc.html#krpc.client.services.KRPC" title="krpc.client.services.KRPC"><span class="pre">KRPC</span></a><span class="pre">.</span><a class="reference internal" href="api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="Link to this definition">#</a></dt>
+<dd><p>Create a stream from a server side function. Each call creates a new stream. Throws a
+<code class="docutils literal notranslate"><span class="pre">StreamException</span></code> if the function has no value, and an <code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code> if it
+has parameters.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.run(KRPC.Expression, Object)">
+ <span class="pre">T</span> <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><a class="reference internal" href="api/krpc/krpc.html#krpc.client.services.KRPC" title="krpc.client.services.KRPC"><span class="pre">KRPC</span></a><span class="pre">.</span><a class="reference internal" href="api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a><span class="pre">...</span><em> <span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.run(KRPC.Expression, Object)" title="Link to this definition">#</a></dt>
+<dd><p>Run a server side function within a single physics tick, and return its value. The value
+is null for a function with no value. The arguments are passed to the function’s
+parameters, with a number widened as Java widens it. An <code class="docutils literal notranslate"><span class="pre">int</span></code> passes to an unsigned
+parameter bit for bit, and a <code class="docutils literal notranslate"><span class="pre">long</span></code> to an unsigned 64-bit parameter, as the client holds
+unsigned values. A <code class="docutils literal notranslate"><span class="pre">byte</span></code> or <code class="docutils literal notranslate"><span class="pre">short</span></code> that is not negative converts to an unsigned
+parameter, and an <code class="docutils literal notranslate"><span class="pre">int</span></code> that is not negative to an unsigned 64-bit parameter. Throws an
+<code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code> if the number of arguments differs from the number of
+parameters, or if a parameter cannot take its argument. The server checks a null for a
+parameter that is not nullable, and an object of another class, and these also throw an
+<code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code>.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.addEvent(KRPC.Expression)">
+ <a class="reference internal" href="#krpc.client.Event" title="krpc.client.Event"><span class="pre">Event</span></a> <span class="sig-name descname"><span class="pre">addEvent</span></span><span class="sig-paren">(</span><a class="reference internal" href="api/krpc/krpc.html#krpc.client.services.KRPC" title="krpc.client.services.KRPC"><span class="pre">KRPC</span></a><span class="pre">.</span><a class="reference internal" href="api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.addEvent(KRPC.Expression)" title="Link to this definition">#</a></dt>
+<dd><p>Create an event from a server side function that evaluates to a boolean value. Each call
+creates a new event. Throws an <code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code> if the function does not
+evaluate to a boolean value, or has parameters.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.Connection.getCall(Class, String, Object)">
  <span class="pre">krpc</span><span class="pre">.</span><span class="pre">schema</span><span class="pre">.</span><span class="pre">KRPC</span><span class="pre">.</span><span class="pre">ProcedureCall</span> <span class="sig-name descname"><span class="pre">getCall</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="java.lang.Class"><span class="pre">Class</span></a><span class="pre">&lt;</span><span class="pre">?</span><span class="pre">&gt;</span><em> <span class="pre">clazz</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">method</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a><span class="pre">...</span><em> <span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.getCall(Class, String, Object)" title="Link to this definition">#</a></dt>
 <dd><p>Returns a procedure call message for the given static method call. This allows descriptions of
@@ -1198,7 +1316,7 @@ procedure calls to be passed to the server, for example when constructing custom
  <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Stream</span></span><span class="pre">&lt;T&gt;</span><a class="headerlink" href="#krpc.client.Stream" title="Link to this definition">#</a></dt>
 <dd><p>This class represents a stream. See <a class="reference internal" href="#java-client-streams"><span class="std std-ref">Streaming Data</span></a>.</p>
 <p>Stream objects implement <code class="docutils literal notranslate"><span class="pre">hashCode</span></code> and <code class="docutils literal notranslate"><span class="pre">equals</span></code> such that two stream objects are equal if
-they are bound to the same stream on the server. Each call to <a class="reference internal" href="#krpc.client.Connection.addStream(RemoteObject, String, Object)" title="krpc.client.Connection.addStream(RemoteObject, String, Object)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a>
+they are bound to the same stream on the server. Each call to <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a>
 creates a new stream, so two streams added for the same call are not equal.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.Stream.getRate()">
@@ -1369,6 +1487,13 @@ the callback was added.</p>
 <dt class="sig sig-object java" id="krpc.client.RemoteObject">
 <span class="pre">abstract</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">RemoteObject</span></span><a class="headerlink" href="#krpc.client.RemoteObject" title="Link to this definition">#</a></dt>
 <dd><p>The abstract base class for all remote objects.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.RemoteObject.id">
+ <span class="pre">long</span> <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#krpc.client.RemoteObject.id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of the object on the server, e.g. to pass to
+<code class="docutils literal notranslate"><span class="pre">KRPC.Expression.constantObject</span></code>.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -1426,11 +1551,15 @@ the callback was added.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-server-side-functions">Streaming Server Side Functions</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>

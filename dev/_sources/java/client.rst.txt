@@ -60,6 +60,18 @@ Many procedures return an object identifying something in the game, such as a ve
 a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
 behaves when a game is loaded or what it identifies is destroyed.
 
+Server Side Functions
+---------------------
+
+A server side function is code that runs inside the game, on the server. :meth:`Connection.run`
+evaluates one once and returns its value. Every value it reads comes from the same physics tick. For
+example, the following reads the vessel's altitude and speed together:
+
+.. literalinclude:: /scripts/client/java/RunFunction.java
+
+Use ``run`` for a function with effects, such as setting a property. An event or a function stream
+evaluates its function on every update, repeating the effects.
+
 .. _java-client-streams:
 
 Streaming Data
@@ -102,14 +114,14 @@ streams are automatically stopped when it disconnects.
    object is garbage collected. Each call to ``addStream`` adds another stream.
 
 Synchronizing with Stream Updates
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
 then take some action. kRPC provides two mechanisms to do this efficiently: *condition variables*
 and *callbacks*.
 
 Condition Variables
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 Each stream has a condition variable that is notified whenever the value of the stream changes, and
 when the stream ends. You can wait on it to block the current thread until one of these happens.
@@ -128,7 +140,7 @@ the value changes. This prevents the loop from 'spinning' and so it does not con
 resources whilst waiting.
 
 Callbacks
-^^^^^^^^^
+~~~~~~~~~
 
 Streams allow you to register callback functions that are called whenever the value of the stream
 changes. Callback functions should take a single argument, which is the new value of the stream, and
@@ -170,6 +182,23 @@ holds the stream instead. It resumes once the object or scene is available.
 To handle an ending in a callback, add an end callback with :meth:`Stream.addEndCallback`. It is
 called once, with the exception.
 
+Streaming Server Side Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pass a server side function to :meth:`Connection.addStream` to stream its value. The server
+evaluates the function on each stream update, within one physics tick. The value can be any type
+the server can send, including collections and objects. For example, the following streams the
+vessel's altitude in kilometers:
+
+.. literalinclude:: /scripts/client/java/FunctionStream.java
+
+The type parameter must be able to hold the function's value. Otherwise the assignment of a value
+throws a ``ClassCastException``.
+
+A function stream or event ends on any exception its function throws. This includes
+``KRPC.ObjectNotLoadedException``, which a game load or an unloaded vessel causes. To keep running
+through a load, the function catches that exception with ``Expression.tryCatch``.
+
 .. _java-client-events:
 
 Events
@@ -183,9 +212,8 @@ A call to ``waitFor`` returns straight away if the event has fired since the pre
 same event object, so no firing is missed between two calls. Several firings between two calls make
 ``waitFor`` return once.
 
-You can also create a custom event from a server side function, which is code that runs inside
-the game. The following builds the function ``MeanAltitude > 1000``, and creates an event that
-triggers when the function returns true:
+You can also create a custom event from a server side function. The following builds the function
+``MeanAltitude > 1000``, and creates an event that triggers when the function returns true:
 
 .. literalinclude:: /scripts/client/java/CustomEvent.java
 
@@ -249,6 +277,31 @@ Client API Reference
    .. method:: Stream<T> addStream(RemoteObject instance, String method, Object... args)
 
       Create a stream for a method call to the given remote object.
+
+   .. method:: Stream<T> addStream(KRPC.Expression function)
+
+      Create a stream from a server side function. Each call creates a new stream. Throws a
+      ``StreamException`` if the function has no value, and an ``IllegalArgumentException`` if it
+      has parameters.
+
+   .. method:: T run(KRPC.Expression function, Object... args)
+
+      Run a server side function within a single physics tick, and return its value. The value
+      is null for a function with no value. The arguments are passed to the function's
+      parameters, with a number widened as Java widens it. An ``int`` passes to an unsigned
+      parameter bit for bit, and a ``long`` to an unsigned 64-bit parameter, as the client holds
+      unsigned values. A ``byte`` or ``short`` that is not negative converts to an unsigned
+      parameter, and an ``int`` that is not negative to an unsigned 64-bit parameter. Throws an
+      ``IllegalArgumentException`` if the number of arguments differs from the number of
+      parameters, or if a parameter cannot take its argument. The server checks a null for a
+      parameter that is not nullable, and an object of another class, and these also throw an
+      ``IllegalArgumentException``.
+
+   .. method:: Event addEvent(KRPC.Expression function)
+
+      Create an event from a server side function that evaluates to a boolean value. Each call
+      creates a new event. Throws an ``IllegalArgumentException`` if the function does not
+      evaluate to a boolean value, or has parameters.
 
    .. method:: krpc.schema.KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
 
@@ -399,3 +452,8 @@ Client API Reference
 .. type:: abstract class RemoteObject
 
    The abstract base class for all remote objects.
+
+   .. field:: long id
+
+      The identifier of the object on the server, e.g. to pass to
+      ``KRPC.Expression.constantObject``.

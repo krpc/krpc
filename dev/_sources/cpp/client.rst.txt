@@ -120,6 +120,23 @@ Many procedures return an object identifying something in the game, such as a ve
 a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
 behaves when a game is loaded or what it identifies is destroyed.
 
+Server Side Functions
+---------------------
+
+A server side function is code that runs inside the game, on the server. :func:`krpc::run` evaluates
+one once and returns its value. Every value it reads comes from the same physics tick. For example,
+the following reads the vessel's altitude and speed together:
+
+.. literalinclude:: /scripts/client/cpp/RunFunction.cpp
+
+Use ``run`` for a function with effects, such as setting a property. An event or a function stream
+evaluates its function on every update, repeating the effects.
+
+.. note::
+
+   :func:`krpc::add_stream`, :func:`krpc::run` and :func:`krpc::add_event` are defined in
+   ``krpc/function_stream.hpp``.
+
 .. _cpp-client-streams:
 
 Streaming Data
@@ -165,14 +182,14 @@ holding the tick, as described in :ref:`holding-a-tick`.
    of the stream object is destroyed. Each call to a ``_stream`` function adds another stream.
 
 Synchronizing with Stream Updates
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
 then take some action. kRPC provides two mechanisms to do this efficiently: *condition variables*
 and *callbacks*.
 
 Condition Variables
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 Each stream has a condition variable associated with it, that is notified whenever the value of the
 stream changes. The condition variables are instances of ``krpc::Condition``, used like
@@ -194,7 +211,7 @@ changes. This prevents the loop from 'spinning' and so it does not consume proce
 whilst waiting.
 
 Callbacks
-^^^^^^^^^
+~~~~~~~~~
 
 Streams allow you to register callback functions that are called whenever the value of the stream
 changes. Callback functions should take a single argument, which is the new value of the stream, and
@@ -238,6 +255,25 @@ holds the stream instead. It resumes once the object or scene is available.
 To handle an ending in a callback, add an end callback with
 :func:`krpc::Stream::add_end_callback`. It is called once, with the exception.
 
+Streaming Server Side Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pass a server side function to :func:`krpc::add_stream` to stream its value. The server evaluates
+the function on each stream update, within one physics tick. The value can be any type the server
+can send, including collections and objects. For example, the following streams the vessel's
+altitude in kilometers:
+
+.. literalinclude:: /scripts/client/cpp/FunctionStream.cpp
+
+The template type must describe the function's value, or :func:`krpc::add_stream` throws
+``std::invalid_argument``. A nested position that can hold null, such as a list element, needs a
+``std::optional``. The value itself can be a ``std::optional`` or not, and reading a null without
+one throws ``std::runtime_error``.
+
+A function stream or event ends on any exception its function throws. This includes
+``krpc::services::KRPC::ObjectNotLoadedException``, which a game load or an unloaded vessel causes.
+To keep running through a load, the function catches that exception with ``Expr::try_catch``.
+
 .. _cpp-client-events:
 
 Events
@@ -251,9 +287,8 @@ A call to ``wait`` returns straight away if the event has fired since the previo
 event object, so no firing is missed between two calls. Several firings between two calls make
 ``wait`` return once.
 
-You can also create a custom event from a server side function, which is code that runs inside
-the game. The following builds the function ``mean_altitude > 1000``, and creates an event that
-triggers when the function returns true:
+You can also create a custom event from a server side function. The following builds the function
+``mean_altitude > 1000``, and creates an event that triggers when the function returns true:
 
 .. literalinclude:: /scripts/client/cpp/Event.cpp
 
@@ -300,6 +335,45 @@ Client API Reference
       * **stream_path** (*std::string*) -- The path of the socket the Stream Server is listening
         on. This should match the stream socket path shown in the in-game server window. Defaults
         as ``rpc_path`` does.
+
+.. function:: template <typename T> Stream<T> add_stream(const services::KRPC::Expression& function)
+
+   Create a stream from a server side function, evaluated on each update. Each call creates a new
+   stream. Throws ``std::invalid_argument`` if the template type does not describe the function's
+   value, and ``StreamError`` if the client has no stream connection. Throws
+   ``krpc::services::KRPC::ArgumentException`` if the function has parameters.
+
+   Reading a null value throws ``std::runtime_error`` unless the template type is a
+   ``std::optional``. In a callback, that error is written to ``stderr`` and the callback does not
+   run.
+
+.. function:: template <typename T = void, typename... Args> T run(const services::KRPC::Expression& function, const Args&... args)
+
+   Run a server side function within a single physics tick, and return its value, or run it for
+   its effects when the template type is ``void``. The arguments are passed to the function's
+   parameters, with ``std::nullopt`` or ``nullptr`` for a null.
+
+   A number converts to a ``double`` parameter, and an integer or a ``float`` to a ``float``
+   parameter, as C++ converts it implicitly, which can round. An integer converts to a signed
+   parameter that holds every value of its type, and an integer that is not negative to an
+   unsigned parameter at least as wide. A number a collection or a tuple holds converts the same
+   way.
+
+   Throws ``std::invalid_argument`` if the template type does not describe the function's value,
+   the number of arguments differs from the number of parameters, or an argument does not match
+   its parameter. Throws ``std::runtime_error`` for a null value unless the template type is a
+   ``std::optional``.
+
+   A class, enumeration or structure argument is checked by kind only. The server checks its
+   class, and a null for a parameter that is not nullable, and throws
+   ``krpc::services::KRPC::ArgumentException`` for a mismatch.
+
+.. function:: Event add_event(const services::KRPC::Expression& function)
+
+   Create an event from a server side function that evaluates to a boolean value. Each call
+   creates a new event. Throws ``StreamError`` if the client has no stream connection, and
+   ``krpc::services::KRPC::ArgumentException`` if the function does not evaluate to a boolean
+   value or has parameters.
 
 .. class:: Client
 

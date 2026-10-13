@@ -435,6 +435,9 @@ C# client
 C++ client
 ^^^^^^^^^^
 
+* Add ``krpc::run``, which runs a server side function within a single physics tick, passing it any arguments, and returns its value (:issue:`1129`)
+* Add ``krpc::add_stream``, which streams the value of a server side function (:issue:`1129`)
+* Add ``krpc::add_event``, which creates an event from a server side function (:issue:`1129`)
 * :breaking:`Breaking` Remove ``Client::freeze_streams`` and ``Client::thaw_streams``. Calls made while holding the tick with ``KRPC::hold_tick`` give values from one physics tick (:issue:`1118`)
 * :breaking:`Breaking` Start a stream when it is added, removing ``Stream::start`` and ``Event::start`` (:issue:`1122`)
 * :breaking:`Breaking` Return a ``krpc::Condition`` from the ``get_condition`` methods and ``Client::get_stream_update_condition``, with locks over the re-entrant ``krpc::RecursiveMutex`` (:issue:`1122`)
@@ -477,6 +480,10 @@ Java client
 * :breaking:`Breaking` Throw ``NullPointerException`` for a null where a value is required, reported by any service, in place of ``RPCException`` (:issue:`1124`)
 * :breaking:`Breaking` Throw ``NoSuchElementException`` for a missing key, and ``IndexOutOfBoundsException`` for an index out of range, reported by any service, in place of ``RPCException`` (:issue:`1124`)
 * :breaking:`Breaking` Throw ``ArithmeticException`` for a division by zero or an overflow, and ``UnsupportedOperationException`` for an unsupported operation, reported by any service, in place of ``RPCException`` (:issue:`1124`)
+* Add ``Connection.run``, which runs a server side function within a single physics tick, passing it any arguments, and returns its value (:issue:`1129`)
+* Add a ``Connection.addStream`` overload taking a server side function (:issue:`1129`)
+* Add ``Connection.addEvent``, which creates an event from a server side function (:issue:`1129`)
+* Make ``RemoteObject.id`` public, for passing to ``Expression.constantObject`` (:issue:`1129`)
 * :breaking:`Breaking` Start a stream when it is added, removing ``Stream.start``, ``Stream.startAndWait`` and ``Event.start`` (:issue:`1122`)
 * Wait for a stream's first value in ``Stream.get`` (:issue:`1122`)
 * Call a callback added to a stream that has a value with that value straight away (:issue:`1122`)

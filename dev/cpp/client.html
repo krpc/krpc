@@ -821,6 +821,50 @@ its altitude:</p>
 a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
 behaves when a game is loaded or what it identifies is destroyed.</p>
 </section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p>A server side function is code that runs inside the game, on the server. <a class="reference internal" href="#_CPPv4I0DpEN4krpc3runE1TRKN8services4KRPC10ExpressionEDpRK4Args" title="krpc::run"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::run()</span></code></a> evaluates
+one once and returns its value. Every value it reads comes from the same physics tick. For example,
+the following reads the vessel’s altitude and speed together:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;tuple&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/function_stream.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">orbit</span><span class="p">().</span><span class="n">body</span><span class="p">().</span><span class="n">reference_frame</span><span class="p">());</span>
+
+<span class="w">  </span><span class="c1">// Get the remote procedure calls as message objects,</span>
+<span class="w">  </span><span class="c1">// so they can be passed to the server</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">mean_altitude_call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">mean_altitude_call</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">speed_call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">speed_call</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Build a function that reads the altitude and the speed</span>
+<span class="w">  </span><span class="k">typedef</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="o">::</span><span class="n">Expression</span><span class="w"> </span><span class="n">Expr</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">create_tuple</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">mean_altitude_call</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">speed_call</span><span class="p">)});</span>
+
+<span class="w">  </span><span class="c1">// Run the function once, so both values come from the same physics tick</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">altitude</span><span class="p">,</span><span class="w"> </span><span class="n">speed</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">run</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Altitude: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">altitude</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; m, speed: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; m/s&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">run</span></code> for a function with effects, such as setting a property. An event or a function stream
+evaluates its function on every update, repeating the effects.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#_CPPv4I0EN4krpc10add_streamE6StreamI1TERKN8services4KRPC10ExpressionE" title="krpc::add_stream"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::add_stream()</span></code></a>, <a class="reference internal" href="#_CPPv4I0DpEN4krpc3runE1TRKN8services4KRPC10ExpressionEDpRK4Args" title="krpc::run"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::run()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc9add_eventERKN8services4KRPC10ExpressionE" title="krpc::add_event"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::add_event()</span></code></a> are defined in
+<code class="docutils literal notranslate"><span class="pre">krpc/function_stream.hpp</span></code>.</p>
+</div>
+</section>
 <section id="streaming-data">
 <span id="cpp-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
 <p>A common use case for kRPC is to continuously extract data from the game. The naive approach to do
@@ -894,14 +938,13 @@ holding the tick, as described in <a class="reference internal" href="../tutoria
 <p>A stream runs on the server until you remove it or the connection closes, even once every copy
 of the stream object is destroyed. Each call to a <code class="docutils literal notranslate"><span class="pre">_stream</span></code> function adds another stream.</p>
 </div>
-</section>
 <section id="synchronizing-with-stream-updates">
-<h2>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h2>
+<h3>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h3>
 <p>A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
 then take some action. kRPC provides two mechanisms to do this efficiently: <em>condition variables</em>
 and <em>callbacks</em>.</p>
 <section id="condition-variables">
-<h3>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h3>
+<h4>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h4>
 <p>Each stream has a condition variable associated with it, that is notified whenever the value of the
 stream changes. The condition variables are instances of <code class="docutils literal notranslate"><span class="pre">krpc::Condition</span></code>, used like
 <code class="docutils literal notranslate"><span class="pre">std::condition_variable</span></code> over the re-entrant mutex <code class="docutils literal notranslate"><span class="pre">krpc::RecursiveMutex</span></code>. A wait releases
@@ -933,7 +976,7 @@ changes. This prevents the loop from ‘spinning’ and so it does not consume p
 whilst waiting.</p>
 </section>
 <section id="callbacks">
-<h3>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h3>
+<h4>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h4>
 <p>Streams allow you to register callback functions that are called whenever the value of the stream
 changes. Callback functions should take a single argument, which is the new value of the stream, and
 should return nothing.</p>
@@ -973,6 +1016,7 @@ should return nothing.</p>
 stream. Any changes to shared state must therefore be protected with appropriate
 synchronization.</p>
 </div>
+</section>
 </section>
 <section id="stream-endings">
 <h3>Stream Endings<a class="headerlink" href="#stream-endings" title="Link to this heading">#</a></h3>
@@ -1017,6 +1061,50 @@ holds the stream instead. It resumes once the object or scene is available.</p>
 <p>To handle an ending in a callback, add an end callback with
 <a class="reference internal" href="#_CPPv4N4krpc6Stream16add_end_callbackERKNSt8functionIFvNSt13exception_ptrEEEE" title="krpc::Stream::add_end_callback"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::Stream::add_end_callback()</span></code></a>. It is called once, with the exception.</p>
 </section>
+<section id="streaming-server-side-functions">
+<h3>Streaming Server Side Functions<a class="headerlink" href="#streaming-server-side-functions" title="Link to this heading">#</a></h3>
+<p>Pass a server side function to <a class="reference internal" href="#_CPPv4I0EN4krpc10add_streamE6StreamI1TERKN8services4KRPC10ExpressionE" title="krpc::add_stream"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::add_stream()</span></code></a> to stream its value. The server evaluates
+the function on each stream update, within one physics tick. The value can be any type the server
+can send, including collections and objects. For example, the following streams the vessel’s
+altitude in kilometers:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/function_stream.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">().</span><span class="n">flight</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Build a function that computes</span>
+<span class="w">  </span><span class="c1">// the vessel&#39;s altitude in kilometers</span>
+<span class="w">  </span><span class="k">typedef</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="o">::</span><span class="n">Expression</span><span class="w"> </span><span class="n">Expr</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">divide</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">mean_altitude_call</span><span class="p">()),</span>
+<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+
+<span class="w">  </span><span class="c1">// Stream the value of the function</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">add_stream</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Altitude: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">stream</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; km&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The template type must describe the function’s value, or <a class="reference internal" href="#_CPPv4I0EN4krpc10add_streamE6StreamI1TERKN8services4KRPC10ExpressionE" title="krpc::add_stream"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">krpc::add_stream()</span></code></a> throws
+<code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>. A nested position that can hold null, such as a list element, needs a
+<code class="docutils literal notranslate"><span class="pre">std::optional</span></code>. The value itself can be a <code class="docutils literal notranslate"><span class="pre">std::optional</span></code> or not, and reading a null without
+one throws <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code>.</p>
+<p>A function stream or event ends on any exception its function throws. This includes
+<code class="docutils literal notranslate"><span class="pre">krpc::services::KRPC::ObjectNotLoadedException</span></code>, which a game load or an unloaded vessel causes.
+To keep running through a load, the function catches that exception with <code class="docutils literal notranslate"><span class="pre">Expr::try_catch</span></code>.</p>
+</section>
 </section>
 <section id="events">
 <span id="cpp-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
@@ -1026,17 +1114,16 @@ streams and condition variables.</p>
 <p>A call to <code class="docutils literal notranslate"><span class="pre">wait</span></code> returns straight away if the event has fired since the previous call on the same
 event object, so no firing is missed between two calls. Several firings between two calls make
 <code class="docutils literal notranslate"><span class="pre">wait</span></code> return once.</p>
-<p>You can also create a custom event from a server side function, which is code that runs inside
-the game. The following builds the function <code class="docutils literal notranslate"><span class="pre">mean_altitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that
-triggers when the function returns true:</p>
+<p>You can also create a custom event from a server side function. The following builds the function
+<code class="docutils literal notranslate"><span class="pre">mean_altitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that triggers when the function returns true:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/function_stream.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/krpc.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
-<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="w"> </span><span class="n">krpc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
 <span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">().</span><span class="n">flight</span><span class="p">();</span>
 
@@ -1050,7 +1137,7 @@ triggers when the function returns true:</p>
 <span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">mean_altitude</span><span class="p">),</span>
 <span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
 
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 <span class="w">  </span><span class="n">event</span><span class="p">.</span><span class="n">acquire</span><span class="p">();</span>
 <span class="w">  </span><span class="n">event</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Altitude reached 1000m&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
@@ -1107,6 +1194,47 @@ as <code class="docutils literal notranslate"><span class="pre">rpc_path</span><
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN4krpc10add_streamE6StreamI1TERKN8services4KRPC10ExpressionE">
+<span id="_CPPv3I0EN4krpc10add_streamERKN8services4KRPC10ExpressionE"></span><span id="_CPPv2I0EN4krpc10add_streamERKN8services4KRPC10ExpressionE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4I0EN4krpc6StreamE" title="krpc::Stream"><span class="n"><span class="pre">Stream</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN4krpc10add_streamE6StreamI1TERKN8services4KRPC10ExpressionE" title="krpc::add_stream::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_stream</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">services</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="api/krpc/krpc.html#_CPPv4N4krpc8services4KRPCE" title="krpc::services::KRPC"><span class="n"><span class="pre">KRPC</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN4krpc10add_streamE6StreamI1TERKN8services4KRPC10ExpressionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Create a stream from a server side function, evaluated on each update. Each call creates a new
+stream. Throws <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code> if the template type does not describe the function’s
+value, and <code class="docutils literal notranslate"><span class="pre">StreamError</span></code> if the client has no stream connection. Throws
+<code class="docutils literal notranslate"><span class="pre">krpc::services::KRPC::ArgumentException</span></code> if the function has parameters.</p>
+<p>Reading a null value throws <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> unless the template type is a
+<code class="docutils literal notranslate"><span class="pre">std::optional</span></code>. In a callback, that error is written to <code class="docutils literal notranslate"><span class="pre">stderr</span></code> and the callback does not
+run.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0DpEN4krpc3runE1TRKN8services4KRPC10ExpressionEDpRK4Args">
+<span id="_CPPv3I0DpEN4krpc3runERKN8services4KRPC10ExpressionEDpRK4Args"></span><span id="_CPPv2I0DpEN4krpc3runERKN8services4KRPC10ExpressionEDpRK4Args"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="sig-name descname"><span class="n"><span class="pre">Args</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4I0DpEN4krpc3runE1TRKN8services4KRPC10ExpressionEDpRK4Args" title="krpc::run::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">services</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="api/krpc/krpc.html#_CPPv4N4krpc8services4KRPCE" title="krpc::services::KRPC"><span class="n"><span class="pre">KRPC</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">function</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0DpEN4krpc3runE1TRKN8services4KRPC10ExpressionEDpRK4Args" title="krpc::run::Args"><span class="n"><span class="pre">Args</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN4krpc3runE1TRKN8services4KRPC10ExpressionEDpRK4Args" title="Link to this definition">#</a><br /></dt>
+<dd><p>Run a server side function within a single physics tick, and return its value, or run it for
+its effects when the template type is <code class="docutils literal notranslate"><span class="pre">void</span></code>. The arguments are passed to the function’s
+parameters, with <code class="docutils literal notranslate"><span class="pre">std::nullopt</span></code> or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> for a null.</p>
+<p>A number converts to a <code class="docutils literal notranslate"><span class="pre">double</span></code> parameter, and an integer or a <code class="docutils literal notranslate"><span class="pre">float</span></code> to a <code class="docutils literal notranslate"><span class="pre">float</span></code>
+parameter, as C++ converts it implicitly, which can round. An integer converts to a signed
+parameter that holds every value of its type, and an integer that is not negative to an
+unsigned parameter at least as wide. A number a collection or a tuple holds converts the same
+way.</p>
+<p>Throws <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code> if the template type does not describe the function’s value,
+the number of arguments differs from the number of parameters, or an argument does not match
+its parameter. Throws <code class="docutils literal notranslate"><span class="pre">std::runtime_error</span></code> for a null value unless the template type is a
+<code class="docutils literal notranslate"><span class="pre">std::optional</span></code>.</p>
+<p>A class, enumeration or structure argument is checked by kind only. The server checks its
+class, and a null for a parameter that is not nullable, and throws
+<code class="docutils literal notranslate"><span class="pre">krpc::services::KRPC::ArgumentException</span></code> for a mismatch.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc9add_eventERKN8services4KRPC10ExpressionE">
+<span id="_CPPv3N4krpc9add_eventERKN8services4KRPC10ExpressionE"></span><span id="_CPPv2N4krpc9add_eventERKN8services4KRPC10ExpressionE"></span><span id="krpc::add_event__services::KRPC::ExpressionCR"></span><a class="reference internal" href="#_CPPv4N4krpc5EventE" title="krpc::Event"><span class="n"><span class="pre">Event</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_event</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">services</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="api/krpc/krpc.html#_CPPv4N4krpc8services4KRPCE" title="krpc::services::KRPC"><span class="n"><span class="pre">KRPC</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="api/krpc/expressions.html#_CPPv4N4krpc8services4KRPC10ExpressionE" title="krpc::services::KRPC::Expression"><span class="n"><span class="pre">Expression</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc9add_eventERKN8services4KRPC10ExpressionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Create an event from a server side function that evaluates to a boolean value. Each call
+creates a new event. Throws <code class="docutils literal notranslate"><span class="pre">StreamError</span></code> if the client has no stream connection, and
+<code class="docutils literal notranslate"><span class="pre">krpc::services::KRPC::ArgumentException</span></code> if the function does not evaluate to a boolean
+value or has parameters.</p>
 </dd></dl>
 
 <dl class="cpp class">
@@ -1556,11 +1684,15 @@ any of the collection types, so a container keyed by one needs this:</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-server-side-functions">Streaming Server Side Functions</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
