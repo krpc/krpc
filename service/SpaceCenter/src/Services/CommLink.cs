@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -8,7 +9,7 @@ using ObjectNotLoadedException = KRPC.Service.KRPC.ObjectNotLoadedException;
 namespace KRPC.SpaceCenter.Services
 {
     /// <summary>
-    /// Represents a communication node in the network. For example, a vessel or the KSC.
+    /// Represents a communication link between two nodes in the network.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
     public class CommLink : Equatable<CommLink>, IGameObjectState
@@ -18,8 +19,8 @@ namespace KRPC.SpaceCenter.Services
         // works out the vessel's connection, so a link object stands for one hop at one
         // moment
         readonly Guid vesselId;
-        readonly CommNode start;
-        readonly CommNode end;
+        readonly CommNet.CommNode start;
+        readonly CommNet.CommNode end;
 
         /// <summary>
         /// Construct from a KSP CommLink object, and the vessel whose control path it is
@@ -30,8 +31,8 @@ namespace KRPC.SpaceCenter.Services
             if (ReferenceEquals (link, null))
                 throw new ArgumentNullException (nameof (link));
             vesselId = vessel;
-            start = new CommNode (link.start);
-            end = new CommNode (link.end);
+            start = link.start;
+            end = link.end;
         }
 
         /// <summary>
@@ -55,12 +56,26 @@ namespace KRPC.SpaceCenter.Services
         public GameObjectState GameObjectState {
             get {
                 var state = FlightGlobalsExtensions.VesselState (vesselId)
-                    .LeastAlive (start.GameObjectState)
-                    .LeastAlive (end.GameObjectState);
+                    .LeastAlive (NodeState (start))
+                    .LeastAlive (NodeState (end));
                 if (state != GameObjectState.Live)
                     return state;
                 return Find () != null ? GameObjectState.Live : GameObjectState.Dormant;
             }
+        }
+
+        /// <summary>
+        /// The state of the object a node hangs off. The game offers no identifier for a
+        /// node, so the transform it was built with is what can be read. The game tears
+        /// that transform down with the vessel, and a node built without one, such as a
+        /// ground station, stays live.
+        /// </summary>
+        static GameObjectState NodeState (CommNet.CommNode node)
+        {
+            var transform = node.transform;
+            if (ReferenceEquals (transform, null))
+                return GameObjectState.Live;
+            return transform != null ? GameObjectState.Live : GameObjectState.Destroyed;
         }
 
         /// <summary>
@@ -79,8 +94,8 @@ namespace KRPC.SpaceCenter.Services
             for (var i = 0; i < path.Count; i++) {
                 var link = path [i];
                 if (link != null &&
-                    ReferenceEquals (link.start, start.InternalNode) &&
-                    ReferenceEquals (link.end, end.InternalNode))
+                    ReferenceEquals (link.start, start) &&
+                    ReferenceEquals (link.end, end))
                     return link;
             }
             return null;
@@ -107,7 +122,7 @@ namespace KRPC.SpaceCenter.Services
         public override bool Equals (CommLink other)
         {
             return !ReferenceEquals (other, null) && vesselId == other.vesselId &&
-            start.Equals (other.start) && end.Equals (other.end);
+            ReferenceEquals (start, other.start) && ReferenceEquals (end, other.end);
         }
 
         /// <summary>
@@ -115,7 +130,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return Hash.Of (vesselId).And (start).And (end);
+            // The nodes' identity hashes, so that nothing the game does to a node changes
+            // the code while a client holds this object
+            return Hash.Of (vesselId)
+                .And (RuntimeHelpers.GetHashCode (start))
+                .And (RuntimeHelpers.GetHashCode (end));
         }
 
         /// <summary>
@@ -139,15 +158,15 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public CommNode Start {
-            get { return start; }
+            get { return new CommNode (start); }
         }
 
         /// <summary>
-        /// Start point of the link.
+        /// End point of the link.
         /// </summary>
         [KRPCProperty]
         public CommNode End {
-            get { return end; }
+            get { return new CommNode (end); }
         }
     }
 }
