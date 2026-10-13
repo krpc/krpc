@@ -16,7 +16,7 @@ std::string hexlify(const std::string& data) {
   return result;
 }
 
-static unsigned char hex2uint(unsigned char x) {
+static unsigned int hex2uint(unsigned char x) {
   if (48 <= x && x <= 57)
     return x - 48;
   else if (97 <= x && x <= 102)

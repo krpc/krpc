@@ -400,9 +400,9 @@ void StreamManager::keep(uint64_t id, const schema::ProcedureResult& result) {
   if (kept.ending) return;
   auto copy = std::make_shared<schema::ProcedureResult>(result);
   if (result.has_error())
-    kept.ending = copy;
+    kept.ending = std::move(copy);
   else
-    kept.value = copy;
+    kept.value = std::move(copy);
 }
 
 void StreamManager::update_thread_main(const std::shared_ptr<StreamManager>& stream_manager) {
