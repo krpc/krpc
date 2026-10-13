@@ -10,5 +10,7 @@ from python.runfiles import runfiles
 
 if __name__ == "__main__":
     r = runfiles.Create()
+    assert r is not None
     plugin = r.Rlocation("protoc_lua/protoc-plugin/protoc-gen-lua")
+    assert plugin is not None
     runpy.run_path(plugin, run_name="__main__")

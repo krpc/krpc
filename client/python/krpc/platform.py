@@ -1,5 +1,5 @@
-import struct
 import binascii
+import struct
 
 POS_INF = 1e10000
 NEG_INF = -POS_INF

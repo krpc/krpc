@@ -1,11 +1,11 @@
 import argparse
-import json
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
 from importlib.resources import files
+
 from ..version import __version__
 
 
@@ -101,7 +101,7 @@ def servicedefs(ksp, service, assemblies):
         shutil.rmtree(bindir)
         raise RuntimeError(ex.output) from ex
 
-    with open(tmpout, "r", encoding="utf-8") as fp:
+    with open(tmpout, encoding="utf-8") as fp:
         return fp.read()
 
     shutil.rmtree(bindir)

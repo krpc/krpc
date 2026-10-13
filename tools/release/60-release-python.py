@@ -8,19 +8,20 @@ import lib
 
 
 def main():
-    lib.require('bazel', 'twine')
+    lib.require("bazel", "twine")
     credentials = lib.load_credentials()
 
-    lib.banner('Building and testing the Python client')
-    lib.run('bazel', 'build', '//client/python:python-pypi')
-    lib.run('bazel', 'test', '//client/python:test', '--cache_test_results=no')
+    lib.banner("Building and testing the Python client")
+    lib.run("bazel", "build", "//client/python:python-pypi")
+    lib.run("bazel", "test", "//client/python:test", "--cache_test_results=no")
 
-    lib.banner('Uploading to PyPI')
-    lib.confirm(f'Upload krpc {lib.VERSION} to PyPI? '
-                f'(uploads cannot be replaced)')
-    lib.twine_upload(credentials['PYPI_TOKEN_KRPC'],
-                     f'bazel-bin/client/python/krpc-{lib.VERSION}.tar.gz')
+    lib.banner("Uploading to PyPI")
+    lib.confirm(f"Upload krpc {lib.VERSION} to PyPI? (uploads cannot be replaced)")
+    lib.twine_upload(
+        credentials["PYPI_TOKEN_KRPC"],
+        f"bazel-bin/client/python/krpc-{lib.VERSION}.tar.gz",
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lib.main(main)

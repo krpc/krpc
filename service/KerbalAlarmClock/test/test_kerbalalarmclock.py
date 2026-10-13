@@ -1,4 +1,5 @@
 import unittest
+
 import krpctest
 
 
@@ -115,11 +116,12 @@ class TestKerbalAlarmClock(krpctest.TestCase):
     def test_property_type_readonly(self):
         alarm = self.create()
         with self.assertRaises(AttributeError):
-            alarm.type = self.type.maneuver
+            alarm.type = self.type.maneuver  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_property_vessel(self):
         alarm = self.create()
         vessel = self.sc.active_vessel
+        assert vessel is not None
         alarm.vessel = vessel
         self.assertEqual(vessel, alarm.vessel)
 

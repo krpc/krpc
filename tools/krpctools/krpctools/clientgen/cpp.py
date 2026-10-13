@@ -1,9 +1,11 @@
 import collections
+
 from krpc.types import ClassType
 from krpc.utils import snake_case
-from .generator import Generator
-from .docparser import DocParser
+
 from ..lang.cpp import CppLanguage
+from .docparser import DocParser
+from .generator import Generator
 
 
 def _cpp_template_fix(typ):
@@ -11,12 +13,14 @@ def _cpp_template_fix(typ):
     return typ[:-2] + "> >" if typ.endswith(">>") else typ
 
 
-class CppGenerator(Generator):
-
+class CppGenerator(Generator[CppLanguage]):
     language = CppLanguage()
 
     plain_cref_separator = "::"
-    parse_plain_cref_member = staticmethod(snake_case)
+
+    @staticmethod
+    def parse_plain_cref_member(name):
+        return snake_case(name)
 
     def parse_set_client(self, procedure):
         return isinstance(self.get_return_type(procedure), ClassType)
@@ -142,7 +146,6 @@ class CppGenerator(Generator):
 
 
 class CppDocParser(DocParser):
-
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 

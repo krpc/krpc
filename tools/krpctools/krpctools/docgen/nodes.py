@@ -1,5 +1,7 @@
 from collections import OrderedDict, defaultdict
+
 from krpc.attributes import Attributes
+
 from ..utils import as_type, decode_default_value
 
 
@@ -16,8 +18,7 @@ class Appendable:
 
 
 class Service(Appendable):
-    # pylint: disable=too-many-arguments,too-many-locals
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         name,
         procedures,
@@ -163,7 +164,6 @@ class Class(Appendable):
 
 
 class Parameter(Appendable):
-    # pylint: disable=redefined-builtin
     def __init__(
         self,
         name,
@@ -214,7 +214,7 @@ class Procedure(Appendable):
                 documentation=documentation,
                 types=types,
                 procedure=self.fullname,
-                **info
+                **info,
             )
             for info in parameters
         ]
@@ -240,6 +240,7 @@ class Property(Appendable):
             self.deprecated = getter.deprecated
             self.deprecated_reason = getter.deprecated_reason
         else:
+            assert setter is not None
             self.type = setter.parameters[0].type
             self.game_scenes = setter.game_scenes
             self.documentation = setter.documentation
@@ -251,7 +252,6 @@ class Property(Appendable):
 
 
 class ClassMethod(Appendable):
-    # pylint: disable=too-many-instance-attributes,too-many-arguments
     member_type = "class_method"
 
     def __init__(
@@ -283,7 +283,7 @@ class ClassMethod(Appendable):
                 documentation=documentation,
                 types=types,
                 procedure=self.fullname,
-                **info
+                **info,
             )
             for info in parameters
         ]
@@ -295,7 +295,6 @@ class ClassMethod(Appendable):
 
 
 class ClassStaticMethod(Appendable):
-    # pylint: disable=too-many-instance-attributes,too-many-arguments
     member_type = "class_static_method"
 
     def __init__(
@@ -327,7 +326,7 @@ class ClassStaticMethod(Appendable):
                 documentation=documentation,
                 types=types,
                 procedure=self.fullname,
-                **info
+                **info,
             )
             for info in parameters
         ]
@@ -352,6 +351,7 @@ class ClassProperty(Appendable):
             self.deprecated = getter.deprecated
             self.deprecated_reason = getter.deprecated_reason
         else:
+            assert setter is not None
             self.type = setter.parameters[1].type
             self.game_scenes = setter.game_scenes
             self.documentation = setter.documentation
@@ -439,7 +439,6 @@ class Struct(Appendable):
 
 
 class StructField(Appendable):
-    # pylint: disable=redefined-builtin
     def __init__(
         self,
         service_name,

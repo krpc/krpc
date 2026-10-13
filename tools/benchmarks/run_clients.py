@@ -57,6 +57,7 @@ def measure(args, name, client):
 
 
 def arguments():
+    assert __doc__ is not None
     parser = runner.parser(__doc__.splitlines()[0])
     parser.add_argument(
         "--client",

@@ -1,7 +1,14 @@
 import os.path
+from typing import Generic, TypeVar
+
+from ..lang.language import Language
+
+LanguageT = TypeVar("LanguageT", bound=Language)
 
 
-class Domain:
+class Domain(Generic[LanguageT]):
+    language: LanguageT
+
     def __init__(self, macros):
         self.macros = os.path.basename(macros)
         self.macros_dir = os.path.abspath(os.path.dirname(macros))
@@ -44,7 +51,7 @@ class Domain:
     def ref(self, obj):
         return self.shorten_ref(obj.fullname, obj)
 
-    def shorten_ref(self, name, obj=None):  # pylint: disable=unused-argument
+    def shorten_ref(self, name, obj=None):
         name = name.split(".")
         if name[0] == self.module:
             del name[0]

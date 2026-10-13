@@ -1,7 +1,8 @@
 import unittest
+
 from krpc.decoder import Decoder
-from krpc.types import Types
 from krpc.platform import unhexlify
+from krpc.types import Types
 
 
 class TestDecoder(unittest.TestCase):
@@ -15,7 +16,7 @@ class TestDecoder(unittest.TestCase):
 
     def test_decode_value(self) -> None:
         value = Decoder.decode(None, unhexlify("ac02"), self.types.uint32_type)
-        self.assertEqual(int(300), value)
+        self.assertEqual(300, value)
 
     def test_decode_unicode_string(self) -> None:
         value = Decoder.decode(None, unhexlify("03e284a2"), self.types.string_type)
@@ -29,14 +30,14 @@ class TestDecoder(unittest.TestCase):
     def test_decode_message(self) -> None:
         message = "0a0b536572766963654e616d65120d50726f6365647572654e616d65"
         call = Decoder.decode(None, unhexlify(message), self.types.procedure_call_type)
-        self.assertEqual("ServiceName", call.service)  # type: ignore[attr-defined]
-        self.assertEqual("ProcedureName", call.procedure)  # type: ignore[attr-defined]
+        self.assertEqual("ServiceName", call.service)  # pyright: ignore[reportAttributeAccessIssue]
+        self.assertEqual("ProcedureName", call.procedure)  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_decode_class(self) -> None:
         typ = self.types.class_type("ServiceName", "ClassName")
         value = Decoder.decode(None, unhexlify("ac02"), typ)
         self.assertTrue(isinstance(value, typ.python_type))
-        self.assertEqual(300, value._object_id)  # type: ignore[attr-defined]
+        self.assertEqual(300, value._object_id)  # pyright: ignore[reportAttributeAccessIssue]
 
 
 if __name__ == "__main__":

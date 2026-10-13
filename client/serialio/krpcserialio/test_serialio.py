@@ -1,15 +1,16 @@
 import os
 import unittest
+
 import google.protobuf
-from google.protobuf.internal.decoder import _DecodeVarint, _DecodeSignedVarint
-from google.protobuf.internal import encoder as protobuf_encoder
-from google.protobuf.internal.wire_format import ZigZagEncode, ZigZagDecode
 import serial
+from google.protobuf.internal import encoder as protobuf_encoder
+from google.protobuf.internal.decoder import _DecodeSignedVarint, _DecodeVarint
+from google.protobuf.internal.wire_format import ZigZagDecode, ZigZagEncode
+
 import krpc.schema.KRPC_pb2 as KRPC
 
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
-# pylint: disable=invalid-name,protected-access
 _pb_VarintEncoder = protobuf_encoder._VarintEncoder()
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()
 _pb_version = google.protobuf.__version__.split(".")
@@ -25,7 +26,6 @@ else:
     # protobuf v3.3.0 and below
     _VarintEncoder = _pb_VarintEncoder
     _SignedVarintEncoder = _pb_SignedVarintEncoder
-# pylint: enable=invalid-name,protected-access
 
 
 def encode_varint(value):
@@ -108,7 +108,6 @@ class SerialIOTest(unittest.TestCase):
 
 
 class TestRPCServer(SerialIOTest):
-
     @classmethod
     def setUpClass(cls):
         cls.connect(cls.port_name())

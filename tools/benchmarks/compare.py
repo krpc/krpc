@@ -92,7 +92,6 @@ def noise_floor(paths):
 
 
 def compare(title, before_path, after_path, before, after, floors=None):
-    # pylint: disable=too-many-arguments,too-many-positional-arguments
     lines = [
         "",
         "kRPC benchmarks - %s, before against after" % title,

@@ -1,17 +1,21 @@
 import unittest
 import warnings
 from inspect import signature
-from typing import Dict, List, NamedTuple
+from typing import Any, NamedTuple
+
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.client import _stub_definitions
 from krpc.definitions import register_all
 from krpc.encoder import Encoder
 from krpc.service import create_service, service_definitions
 from krpc.types import Types
-import krpc.schema.KRPC_pb2 as KRPC
 
 
 class FakeClient:
     """As much of a client as creating a service needs, without a connection to a server"""
+
+    # Set by create_services
+    ServiceA: Any
 
     def __init__(self) -> None:
         self._types = Types()
@@ -103,13 +107,13 @@ def struct_using_service(
 
 def unknown_type() -> KRPC.Type:
     typ = KRPC.Type()
-    typ.code = UNKNOWN_TYPE_CODE
+    typ.code = UNKNOWN_TYPE_CODE  # pyright: ignore[reportAttributeAccessIssue]
     return typ
 
 
 class TestServiceDefinitions(unittest.TestCase):
     @staticmethod
-    def create_services(services: List[KRPC.Service]) -> FakeClient:
+    def create_services(services: list[KRPC.Service]) -> FakeClient:
         client = FakeClient()
         definitions = [
             definition
@@ -118,11 +122,11 @@ class TestServiceDefinitions(unittest.TestCase):
         ]
         register_all(client._types, definitions)
         for service in services:
-            setattr(client, service.name, create_service(client, service))  # type: ignore[arg-type]
+            setattr(client, service.name, create_service(client, service))  # pyright: ignore[reportArgumentType]
         return client
 
     def check_default(self, client: FakeClient, expected: str) -> None:
-        service = getattr(client, "ServiceA")
+        service = client.ServiceA
         default = signature(service.frob).parameters["mode"].default
         self.assertEqual(expected, str(default))
 
@@ -152,7 +156,7 @@ class TestServiceDefinitions(unittest.TestCase):
         service.enumerations.extend(enum_service("ServiceA").enumerations)
         self.check_default(self.create_services([service]), "Mode.fast")
 
-    def check_struct_is_skipped(self, services: List[KRPC.Service]) -> None:
+    def check_struct_is_skipped(self, services: list[KRPC.Service]) -> None:
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
             client = self.create_services(services)
@@ -161,7 +165,7 @@ class TestServiceDefinitions(unittest.TestCase):
         self.assertTrue(
             any("ServiceA.Frob" in message for message in messages), messages
         )
-        self.assertFalse(hasattr(getattr(client, "ServiceA"), "frob"))
+        self.assertFalse(hasattr(client.ServiceA, "frob"))
 
     def test_procedure_naming_a_skipped_struct_is_skipped(self) -> None:
         self.check_struct_is_skipped(
@@ -197,8 +201,8 @@ class TestServiceDefinitions(unittest.TestCase):
             appended: str
 
         class StubService:
-            _classes: Dict[str, type] = {}
-            _enumerations: Dict[str, type] = {}
+            _classes: dict[str, type] = {}
+            _enumerations: dict[str, type] = {}
             _structs = {"Thing": Thing}
 
         client = FakeClient()
@@ -206,7 +210,8 @@ class TestServiceDefinitions(unittest.TestCase):
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
             register_all(
-                client._types, _stub_definitions(client, service, StubService())
+                client._types,
+                _stub_definitions(client, service, StubService()),  # pyright: ignore[reportArgumentType]
             )
         self.assertTrue(
             any("ServiceB.Thing" in str(warning.message) for warning in caught)

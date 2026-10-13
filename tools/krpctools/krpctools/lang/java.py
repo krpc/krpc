@@ -1,23 +1,22 @@
-# pylint: disable=no-name-in-module
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
-    ValueType,
     ClassType,
-    EnumerationType,
-    StructType,
-    MessageType,
-    TupleType,
-    ListType,
-    SetType,
     DictionaryType,
+    EnumerationType,
+    ListType,
+    MessageType,
+    SetType,
+    StructType,
+    TupleType,
+    ValueType,
 )
 from krpc.utils import snake_case
+
 from ..utils import lower_camel_case
 from .language import Language
 
 
 class JavaLanguage(Language):
-
     keywords = set(
         [
             "abstract",

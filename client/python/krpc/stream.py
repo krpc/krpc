@@ -1,9 +1,12 @@
 from __future__ import annotations
+
 import threading
 import time
-from typing import Any, Callable, Optional, TYPE_CHECKING
-from krpc.types import TypeBase
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
+
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.types import TypeBase
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -45,7 +48,7 @@ class Stream:
         Zero if the rate is unlimited."""
         self._stream.rate = value
 
-    def __call__(self):  # type: ignore[no-untyped-def]
+    def __call__(self) -> Any:
         """Get the most recent value for this stream. Blocks until the first value
         arrives. Raises the error that ended the stream, if it has ended."""
         stream = self._stream
@@ -60,7 +63,7 @@ class Stream:
         """Condition variable that is notified when the stream updates."""
         return self._stream.condition
 
-    def wait(self, timeout: Optional[float] = None) -> bool:
+    def wait(self, timeout: float | None = None) -> bool:
         """Wait until the next stream update or a timeout occurs.
         The condition variable must be locked before calling this method.
 

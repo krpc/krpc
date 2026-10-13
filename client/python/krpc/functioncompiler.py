@@ -3,37 +3,37 @@ Statement compilation lives in krpc.functionstatements."""
 
 # One class compiles every kind of expression node, as the builtin functions and
 # the comprehensions share the compiler's state
-# pylint: disable=too-many-lines,too-many-instance-attributes
 
 from __future__ import annotations
+
 import ast
 import inspect
 import operator
 import textwrap
 import threading
 from collections import abc
+from collections.abc import Callable, Iterable
 from enum import Enum
 from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    NamedTuple,
-    Optional,
-    Set,
-    Tuple,
-    Type,
     TYPE_CHECKING,
+    Any,
+    NamedTuple,
+    TypeGuard,
     cast,
 )
 
+import krpc.schema.KRPC_pb2 as KRPC
+from krpc.definiteassignment import (
+    assigned_names,
+    local_function_nonlocal,
+    nonlocal_names,
+)
 from krpc.encoder import Encoder
 from krpc.error import FunctionCompilationError
 from krpc.expressionutils import (
-    Metadata,
-    Result as _Result,
     NUMERIC_CODES,
     NUMERIC_NAMES,
+    Metadata,
     build_ptype,
     common_numeric_code,
     common_ptype,
@@ -45,10 +45,8 @@ from krpc.expressionutils import (
     unwrap_class,
     with_nullable,
 )
-from krpc.definiteassignment import (
-    assigned_names,
-    local_function_nonlocal,
-    nonlocal_names,
+from krpc.expressionutils import (
+    Result as _Result,
 )
 from krpc.functionstatements import (
     UNTYPED,
@@ -61,7 +59,6 @@ from krpc.functionstatements import (
 from krpc.service import _member_name
 from krpc.stream import Stream
 from krpc.types import ClassBase, ClassType, EnumerationType, StructType
-import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -73,9 +70,9 @@ class Parameters(NamedTuple):
     side function takes them."""
 
     signature: inspect.Signature
-    ptypes: List[KRPC.Type]
+    ptypes: list[KRPC.Type]
 
-    def bind(self, args: Tuple[object, ...], kwargs: Dict[str, object]) -> List[object]:
+    def bind(self, args: tuple[object, ...], kwargs: dict[str, object]) -> list[object]:
         """The values of a call's arguments, one per parameter. Raises
         TypeError for arguments that do not bind, as Python does."""
         bound = self.signature.bind(*args, **kwargs)
@@ -84,7 +81,9 @@ class Parameters(NamedTuple):
 
 
 def compile_function(
-    client: Client, func: Callable, streamed: bool = False  # type: ignore[type-arg]
+    client: Client,
+    func: Callable,
+    streamed: bool = False,
 ) -> Any:
     """Compile a Python function into a server side function.
 
@@ -101,8 +100,10 @@ NO_VALUE = KRPC.Type()
 
 
 def compile_function_with_type(
-    client: Client, func: Callable, streamed: bool = False  # type: ignore[type-arg]
-) -> Tuple[Any, Optional[KRPC.Type], Parameters]:
+    client: Client,
+    func: Callable,
+    streamed: bool = False,
+) -> tuple[Any, KRPC.Type | None, Parameters]:
     """Compile a Python function into a server side function, and return it
     with the type of the values it evaluates to, as tracked by the compiler,
     and its parameters. The type is NO_VALUE for a function that evaluates to
@@ -110,8 +111,8 @@ def compile_function_with_type(
     # A variable is declared with the type of the first value assigned to it. A
     # later value that can be None where the first cannot widens the type, and
     # the function is compiled again with the variable declared that way
-    variable_types: Dict[Tuple[Any, str], KRPC.Type] = {}
-    client_values: Dict[Tuple[int, ...], Any] = {}
+    variable_types: dict[tuple[Any, str | None], KRPC.Type] = {}
+    client_values: dict[tuple[int, ...], Any] = {}
     while True:
         compiler = _Compiler(client, func, variable_types, client_values)
         try:
@@ -122,7 +123,7 @@ def compile_function_with_type(
             return result
 
 
-_BINARY_OPS: Dict[type, Tuple[str, Callable[[Any, Any], Any]]] = {
+_BINARY_OPS: dict[type, tuple[str, Callable[[Any, Any], Any]]] = {
     ast.Add: ("add", operator.add),
     ast.Sub: ("subtract", operator.sub),
     ast.Mult: ("multiply", operator.mul),
@@ -173,11 +174,11 @@ _INTEGER_RANGES = {
 }
 
 
-def _annotation_types(func: Callable) -> Dict[str, type]:  # type: ignore[type-arg]
+def _annotation_types(func: Callable) -> dict[str, type]:
     """The types named in a function's evaluated annotations, by name,
     including those inside a typing form such as List[T]. A string annotation
     names no type."""
-    types: Dict[str, type] = {}
+    types: dict[str, type] = {}
     pending = list(getattr(func, "__annotations__", {}).values())
     while pending:
         annotation = unwrap_class(pending.pop())
@@ -187,7 +188,7 @@ def _annotation_types(func: Callable) -> Dict[str, type]:  # type: ignore[type-a
     return types
 
 
-def _in_range(value: int, code: int) -> bool:
+def _in_range(value: int, code: KRPC.Type.TypeCode) -> bool:
     low, high = _INTEGER_RANGES[code]
     return low <= value < high
 
@@ -228,7 +229,7 @@ def _is_empty_collection(value: object) -> bool:
 
 
 # The Python type of the values of each collection type
-_COLLECTION_KINDS: Dict[int, type] = {
+_COLLECTION_KINDS: dict[int, type] = {
     KRPC.Type.LIST: list,
     KRPC.Type.SET: set,
     KRPC.Type.DICTIONARY: dict,
@@ -275,10 +276,10 @@ def _comparable(left: KRPC.Type, right: KRPC.Type) -> bool:
     return all(_comparable(a, b) for a, b in zip(left.types, right.types))
 
 
-def _math_functions() -> Dict[Any, Tuple[str, int, int]]:
+def _math_functions() -> dict[Any, tuple[str, int, int]]:
     """Functions from the math module with a server side equivalent, each with
     the smallest and largest number of arguments that equivalent takes."""
-    import math  # pylint: disable=import-outside-toplevel
+    import math
 
     return {
         # math.pow maps onto the power operator
@@ -310,7 +311,7 @@ def _math_functions() -> Dict[Any, Tuple[str, int, int]]:
 _MATH_FUNCTIONS = _math_functions()
 
 
-def _is_a_math_function(value: object) -> bool:
+def _is_a_math_function(value: object) -> TypeGuard[Callable[..., Any]]:
     """Whether a value is a math module function with a server side
     equivalent. A value that cannot be hashed is not."""
     try:
@@ -329,7 +330,7 @@ _KEY_CODES = (
     KRPC.Type.STRING,
 )
 
-_COMPARE_OPS: Dict[type, Tuple[str, Callable[[Any, Any], Any]]] = {
+_COMPARE_OPS: dict[type, tuple[str, Callable[[Any, Any], Any]]] = {
     ast.Eq: ("equal", operator.eq),
     ast.NotEq: ("not_equal", operator.ne),
     ast.Gt: ("greater_than", operator.gt),
@@ -342,7 +343,7 @@ _COMPARE_OPS: Dict[type, Tuple[str, Callable[[Any, Any], Any]]] = {
 # The string operations, by the Python method that reaches each one. A string is
 # its own kind of value on the server, so these are named apart from the
 # collection operations and dispatched on the static type of the value
-_STRING_METHODS: Dict[str, Tuple[str, int]] = {
+_STRING_METHODS: dict[str, tuple[str, int]] = {
     "upper": ("string_to_upper", 0),
     "lower": ("string_to_lower", 0),
     "strip": ("string_trim", 0),
@@ -377,8 +378,8 @@ def _count_sent_calls(client: Client) -> None:
             _SENT_CALLS.count = _sent_calls() + 1
             send(message)
 
-        connection.send_message = counted  # type: ignore[method-assign]
-        connection._counts_sent_calls = True  # type: ignore[attr-defined]
+        connection.send_message = counted
+        connection._counts_sent_calls = True  # pyright: ignore[reportAttributeAccessIssue]
 
 
 def _sent_calls() -> int:
@@ -395,7 +396,7 @@ def _is_a_plain_read(node: ast.AST) -> bool:
     return False
 
 
-def _position(node: ast.AST) -> Tuple[int, ...]:
+def _position(node: ast.AST) -> tuple[int, ...]:
     """The span of the source a node was parsed from."""
     return (
         getattr(node, "lineno", 0),
@@ -413,9 +414,9 @@ class _Compiler:
     def __init__(
         self,
         client: Client,
-        func: Callable,  # type: ignore[type-arg]
-        variable_types: Optional[Dict[Tuple[Any, str], KRPC.Type]] = None,
-        client_values: Optional[Dict[Tuple[int, ...], Any]] = None,
+        func: Callable,
+        variable_types: dict[tuple[Any, str | None], KRPC.Type] | None = None,
+        client_values: dict[tuple[int, ...], Any] | None = None,
     ):
         self._client = client
         self._expr = client.krpc.Expression
@@ -423,51 +424,52 @@ class _Compiler:
         self._func = func
         # The types the function's parameter and return annotations name, by
         # name, as Python evaluated them where the function is defined
-        self._annotation_types: Dict[str, type] = _annotation_types(func)
-        self._scopes: List[Dict[str, _Result]] = []
+        self._annotation_types: dict[str, type] = _annotation_types(func)
+        self._scopes: list[dict[str, _Result]] = []
         # The names the function assigns, which never resolve to a global
-        self._local_names: Set[str] = set()
+        self._local_names: set[str] = set()
         # The names the function declares nonlocal, which are state variables
-        self._state_names: Set[str] = set()
+        self._state_names: set[str] = set()
         # name -> (function expression, [(parameter name, ptype)], return ptype)
-        self._local_functions: Dict[str, Any] = {}
+        self._local_functions: dict[str, Any] = {}
         # The local functions defined in a nested block, which are not callable
         # after it
-        self._block_functions: Set[str] = set()
+        self._block_functions: set[str] = set()
         # The statement compiler for the function body being compiled, when
         # there is one; used by assignment expressions
         self._active_statements: Any = None
         # The call written as a statement being compiled, whose value is discarded
-        self._statement_call: Optional[ast.AST] = None
+        self._statement_call: ast.AST | None = None
         # The number of remote procedure calls the function makes
         self._remote_calls = 0
         # Calls of procedures that return no value
-        self._valueless_calls: List[Any] = []
+        self._valueless_calls: list[Any] = []
         # The node being compiled, which an error converting a value names
-        self._node: Optional[ast.AST] = None
+        self._node: ast.AST | None = None
         if client._expression_metadata is None:
             client._expression_metadata = Metadata(client)
         _count_sent_calls(client)
         self._metadata: Metadata = client._expression_metadata
         # Naming a type is a round trip, so the objects naming them are shared
         # by every function compiled for this connection
-        self._remote_types: Dict[bytes, Any] = client._expression_remote_types
+        self._remote_types: dict[bytes, Any] = client._expression_remote_types
         # (function body, variable name) -> the type a variable is declared with,
-        # where a value assigned to it after the first can be None
-        self._variable_types: Dict[Tuple[Any, str], KRPC.Type] = (
+        # where a value assigned to it after the first can be None. A name of None
+        # is the return type
+        self._variable_types: dict[tuple[Any, str | None], KRPC.Type] = (
             {} if variable_types is None else variable_types
         )
         # Whether compiling the function widened the type of a variable
         self._variables_widened = False
         # The values of the client side calls, by their position in the source,
         # so each call runs once however many times the function is compiled
-        self._client_values: Dict[Tuple[int, ...], Any] = (
+        self._client_values: dict[tuple[int, ...], Any] = (
             {} if client_values is None else client_values
         )
 
     def compile(
         self, streamed: bool = False
-    ) -> Tuple[Any, Optional[KRPC.Type], Parameters]:
+    ) -> tuple[Any, KRPC.Type | None, Parameters]:
         # The compiler recurses over the syntax tree, so a deep enough expression
         # exhausts the interpreter's stack
         try:
@@ -479,7 +481,7 @@ class _Compiler:
 
     def _compile_function(
         self, streamed: bool
-    ) -> Tuple[Any, Optional[KRPC.Type], Parameters]:
+    ) -> tuple[Any, KRPC.Type | None, Parameters]:
         node = self._parse()
         self._node = node
         nested = local_function_nonlocal(node)
@@ -512,7 +514,7 @@ class _Compiler:
             ),
         )
 
-    def _parameters(self, node: Any, streamed: bool) -> List[Any]:
+    def _parameters(self, node: Any, streamed: bool) -> list[Any]:
         """The parameters of the function to compile, each a (name, ptype,
         parameter expression) triple. Only a def takes parameters, each with a
         type annotation, and a default the parameter's type can hold."""
@@ -574,7 +576,7 @@ class _Compiler:
                     or not isinstance(value, int)
                     or bounds[0] <= value < bounds[1]
                 )
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception:
                 valid = False
         if not valid:
             raise self._error(
@@ -583,7 +585,7 @@ class _Compiler:
                 % (node.arg, _type_name(ptype)),
             )
 
-    def _parse(self) -> ast.AST:
+    def _parse(self) -> ast.Lambda | ast.FunctionDef:
         func = self._func
         if not inspect.isfunction(func):
             raise FunctionCompilationError(
@@ -665,7 +667,7 @@ class _Compiler:
         return candidates[0]
 
     @staticmethod
-    def _code_span(code: Any) -> Tuple[Any, Any]:
+    def _code_span(code: Any) -> tuple[Any, Any]:
         """The source positions at which the instructions of a code object start
         and end, as (line, column) pairs. None when the interpreter does not
         record columns."""
@@ -686,7 +688,7 @@ class _Compiler:
 
     # Name resolution
 
-    def _lookup(self, name: str, node: Optional[ast.AST] = None) -> _Result:
+    def _lookup(self, name: str, node: ast.AST | None = None) -> _Result:
         for scope in reversed(self._scopes):
             if name in scope:
                 result = scope[name]
@@ -930,7 +932,7 @@ class _Compiler:
         typ = self._struct_type_of(node, python_type)
         ptype = typ.protobuf_type
         names = typ.field_names
-        values: List[Optional[_Result]] = [None] * len(names)
+        values: list[_Result | None] = [None] * len(names)
         if len(node.args) > len(names):
             raise self._error(
                 node,
@@ -952,9 +954,10 @@ class _Compiler:
                 raise self._error(
                     node, "field '%s' is given more than one value" % keyword.arg
                 )
-            values[index] = self._compile(keyword.value)
-            if not values[index].is_value:
-                given.append(values[index])
+            field_value = self._compile(keyword.value)
+            values[index] = field_value
+            if not field_value.is_value:
+                given.append(field_value)
         missing = [name for name, value in zip(names, values) if value is None]
         if missing:
             raise self._error(
@@ -989,7 +992,9 @@ class _Compiler:
         return _Result(expression=structure, ptype=ptype)
 
     def _compile_math_call(
-        self, node: ast.Call, func: Callable  # type: ignore[type-arg]
+        self,
+        node: ast.Call,
+        func: Callable,
     ) -> _Result:
         """Compile a call to a math module function: evaluated on the client
         when its arguments are known, and mapped to its server side equivalent
@@ -1014,7 +1019,7 @@ class _Compiler:
             return self._compile_math_dist(node, arguments)
         return self._stdlib_call(node, member, arguments)
 
-    def _compile_math_dist(self, node: ast.Call, arguments: List[_Result]) -> _Result:
+    def _compile_math_dist(self, node: ast.Call, arguments: list[_Result]) -> _Result:
         """Compile math.dist of two points given as tuples, of any number of
         coordinates. Three coordinates map onto StdLib.VectorDistance, and any
         other number onto StdLib.Hypot of the differences."""
@@ -1090,7 +1095,7 @@ class _Compiler:
             ptype=build_ptype(KRPC.Type.SINT32),
         )
 
-    def _compile_math_pow(self, arguments: List[_Result]) -> _Result:
+    def _compile_math_pow(self, arguments: list[_Result]) -> _Result:
         """Compile math.pow onto the power operator, converting the base to a
         double so the result is a float as it is in Python."""
         left = self._ensure_double(self._to_expression(arguments[0]))
@@ -1113,7 +1118,7 @@ class _Compiler:
                 "'%s' takes %d positional argument%s"
                 % (name, len(parameters), "" if len(parameters) == 1 else "s"),
             )
-        arguments: Dict[str, Any] = {}
+        arguments: dict[str, Any] = {}
         for (parameter_name, parameter_ptype), argument in zip(parameters, node.args):
             arguments[parameter_name] = self._widened_expression(
                 node,
@@ -1126,7 +1131,7 @@ class _Compiler:
             ptype=return_ptype,
         )
 
-    def _remote_bound_method(self, value: object) -> Optional[Tuple[object, str]]:
+    def _remote_bound_method(self, value: object) -> tuple[object, str] | None:
         """When the value is a bound method of a remote object, service or
         remote class, return the object it is bound to and the member name."""
         if not callable(value):
@@ -1159,12 +1164,12 @@ class _Compiler:
 
     def _compile_collection_mutation(
         self, node: ast.Call, func: ast.Attribute, base: _Result
-    ) -> Optional[_Result]:
+    ) -> _Result | None:
         """Compile a method call that changes a server side collection, such as
         appending to a list variable, or one that views a dictionary."""
         name = func.attr
         code = base.ptype.code if base.ptype is not None else None
-        entry = self._COLLECTION_MUTATIONS.get((name, code))
+        entry = None if code is None else self._COLLECTION_MUTATIONS.get((name, code))
         if entry is None:
             return self._compile_dictionary_view(node, name, base)
         operation, arity = entry
@@ -1217,7 +1222,7 @@ class _Compiler:
 
     def _compile_dictionary_view(
         self, node: ast.Call, name: str, base: _Result
-    ) -> Optional[_Result]:
+    ) -> _Result | None:
         """Compile items(), keys() or values() of a server side dictionary. None
         for any other method."""
         ptype = base.ptype
@@ -1277,7 +1282,7 @@ class _Compiler:
     def _is_a_bool(result: _Result) -> bool:
         return result.ptype is not None and result.ptype.code == KRPC.Type.BOOL
 
-    def _check_numbers(self, node: ast.AST, results: List[_Result]) -> None:
+    def _check_numbers(self, node: ast.AST, results: list[_Result]) -> None:
         """Raise for an operand of a numeric operation whose type is known and is
         not a number."""
         for result in results:
@@ -1297,7 +1302,7 @@ class _Compiler:
         ) or (result.is_value and isinstance(result.value, str))
 
     def _compile_string_method(
-        self, node: ast.Call, name: str, base: _Result, arguments: List[_Result]
+        self, node: ast.Call, name: str, base: _Result, arguments: list[_Result]
     ) -> _Result:
         """Compile a method call on a string, such as upper() or split()."""
         operation, arity = _STRING_METHODS[name]
@@ -1343,8 +1348,8 @@ class _Compiler:
     def _compile_client_call(
         self,
         node: ast.Call,
-        func: Callable,  # type: ignore[type-arg]
-        args: Optional[List[_Result]] = None,
+        func: Any,
+        args: list[_Result] | None = None,
     ) -> _Result:
         """Call a client side function when compiling. The positional arguments
         are compiled here unless they are given."""
@@ -1383,7 +1388,7 @@ class _Compiler:
             node,
             lambda: func(
                 *[arg.value for arg in args],
-                **{name: arg.value for name, arg in keywords.items()},  # type: ignore[misc]
+                **{name: arg.value for name, arg in keywords.items()},  # pyright: ignore[reportCallIssue]
             ),
             prefix="error calling client side function: ",
         ).value
@@ -1399,7 +1404,7 @@ class _Compiler:
             service, procedure = self._member(
                 node, protobuf_type.service, protobuf_type.name, member, "static"
             )
-            instance_args: List[Optional[_Result]] = []
+            instance_args: list[_Result | None] = []
         elif base.is_value and self._is_service_object(base.value):
             service, procedure = self._member(
                 node, self._service_name(base.value), None, member, "method"
@@ -1415,7 +1420,7 @@ class _Compiler:
             instance_args = [base]
 
         parameters = list(procedure.parameters)[len(instance_args) :]
-        args: List[Optional[_Result]] = list(instance_args)
+        args: list[_Result | None] = list(instance_args)
         if len(node.args) > len(parameters):
             raise self._error(
                 node,
@@ -1426,7 +1431,7 @@ class _Compiler:
         given = [arg for arg in args if arg is not None and not arg.is_value]
         if node.keywords:
             names = [_member_name(parameter.name) for parameter in parameters]
-            values: Dict[int, _Result] = {}
+            values: dict[int, _Result] = {}
             for keyword in node.keywords:
                 if keyword.arg not in names:
                     raise self._error(
@@ -1501,6 +1506,7 @@ class _Compiler:
         ):
             ptype = join_ptype(left.ptype, right.ptype)
             if ptype is None:
+                assert left.ptype is not None and right.ptype is not None
                 raise self._error(
                     node,
                     "cannot add a value of type %s to a value of type %s"
@@ -1668,7 +1674,7 @@ class _Compiler:
 
     def _operand_expressions(
         self, node: ast.AST, left: _Result, right: _Result
-    ) -> Tuple[_Result, _Result]:
+    ) -> tuple[_Result, _Result]:
         """The two operands of a binary operator as expressions. An integer
         constant beside an unsigned 64 bit integer is built at that type, as no
         signed type combines with it."""
@@ -1704,7 +1710,7 @@ class _Compiler:
 
     def _common_ptype(
         self, node: ast.AST, left: _Result, right: _Result
-    ) -> Optional[KRPC.Type]:
+    ) -> KRPC.Type | None:
         """The type two numeric operands are promoted to. None when either type
         is unknown or is not a number."""
         ptype = promote(left.ptype, right.ptype)
@@ -1858,8 +1864,8 @@ class _Compiler:
         )
 
     def _in_source_order(
-        self, node: ast.AST, given: List[_Result], used: List[Optional[_Result]]
-    ) -> Tuple[List[Any], List[Any], List[Optional[_Result]]]:
+        self, node: ast.AST, given: list[_Result], used: list[_Result | None]
+    ) -> tuple[list[Any], list[Any], list[_Result | None]]:
         """Hold computed values in variables, assigned in the order they are
         given, when the server would evaluate them in the order they are used.
         Returns the variables, their assignments and the values as used."""
@@ -1869,9 +1875,9 @@ class _Compiler:
         if [id(x) for x in computed] == [id(x) for x in in_use]:
             return [], [], used
         expr = self._expr
-        variables: List[Any] = []
-        assignments: List[Any] = []
-        held: Dict[int, _Result] = {}
+        variables: list[Any] = []
+        assignments: list[Any] = []
+        held: dict[int, _Result] = {}
         for result in computed:
             if result.ptype is None:
                 raise self._error(node, "cannot determine the type of a value")
@@ -1892,7 +1898,7 @@ class _Compiler:
         self,
         node: ast.AST,
         ptype: KRPC.Type,
-        values: List[Tuple[str, _Result]],
+        values: list[tuple[str, _Result]],
         build: Callable[..., Any],
     ) -> Any:
         """Assign values that are used more than once to variables of one type,
@@ -1908,10 +1914,10 @@ class _Compiler:
         ]
         return expr.block_with_variables(variables, assignments + [build(*variables)])
 
-    def _stdlib_call(self, node: ast.AST, member: str, args: List[_Result]) -> _Result:
+    def _stdlib_call(self, node: ast.AST, member: str, args: list[_Result]) -> _Result:
         """Embed a call to a StdLib procedure in the expression."""
         service, procedure = self._member(node, "StdLib", None, member, "method")
-        arguments: List[Optional[_Result]] = list(args)
+        arguments: list[_Result | None] = list(args)
         return self._call_node(node, service, procedure, arguments)
 
     def _compile_boolop(self, node: ast.BoolOp) -> _Result:
@@ -1919,7 +1925,7 @@ class _Compiler:
         # Operands are compiled left to right, stopping at a constant that decides
         # the result, so later operands are not folded. A constant that does not
         # decide it is skipped, unless it is the last operand.
-        results: List[_Result] = []
+        results: list[_Result] = []
         for position, value in enumerate(node.values):
             result = self._compile(value)
             if (
@@ -2177,7 +2183,7 @@ class _Compiler:
         return self._expr.contains(container.expression, value.expression)
 
     def _numeric_membership(
-        self, node: ast.Compare, value: _Result, container: _Result, element: KRPC.Type
+        self, node: ast.AST, value: _Result, container: _Result, element: KRPC.Type
     ) -> Any:
         """A test of whether a number is in a collection of numbers of another
         type. Both are widened to their common type, as they are for =="""
@@ -2197,9 +2203,10 @@ class _Compiler:
         expr = self._expr
         parameter = expr.parameter("element", self._remote_type(node, element))
         widened = expr.cast(parameter, self._remote_type(node, wider))
+        cast_held = value.ptype.code != wider.code
 
         def contains(held: Any) -> Any:
-            if value.ptype.code != wider.code:
+            if cast_held:
                 held = expr.cast(held, self._remote_type(node, wider))
             return expr.any(
                 container.expression,
@@ -2274,7 +2281,7 @@ class _Compiler:
         return self._converted_expression(key, target, node, where)
 
     def _check_comparable(
-        self, node: ast.AST, left: Optional[KRPC.Type], right: Optional[KRPC.Type]
+        self, node: ast.AST, left: KRPC.Type | None, right: KRPC.Type | None
     ) -> None:
         """Raise for two values of known types the server cannot test for
         equality."""
@@ -2287,8 +2294,8 @@ class _Compiler:
         )
 
     def _folded_is_none(
-        self, node: ast.Compare, operands: List[_Result]
-    ) -> Optional[_Result]:
+        self, node: ast.Compare, operands: list[_Result]
+    ) -> _Result | None:
         """The result of a test of whether a value is None, when the value is of
         a type that is never None and computing it can neither have an effect
         nor raise."""
@@ -2312,8 +2319,8 @@ class _Compiler:
         comparing it with each element in turn until one is equal. The value and
         the tuple are each evaluated once, in that order."""
         expr = self._expr
-        variables: List[Any] = []
-        statements: List[Any] = []
+        variables: list[Any] = []
+        statements: list[Any] = []
 
         def held(name: str, result: _Result) -> _Result:
             result = self._to_expression(result)
@@ -2329,7 +2336,7 @@ class _Compiler:
             if container.is_value:
                 ptypes = [
                     self._to_expression(_Result(value=element, is_value=True)).ptype
-                    for element in cast(Tuple[object, ...], container.value)
+                    for element in cast(tuple[object, ...], container.value)
                     if element is not None
                 ]
             else:
@@ -2340,7 +2347,7 @@ class _Compiler:
         if container.is_value:
             elements = [
                 _Result(value=element, is_value=True)
-                for element in cast(Tuple[object, ...], container.value)
+                for element in cast(tuple[object, ...], container.value)
             ]
         else:
             held_tuple = held("tuple", container)
@@ -2384,15 +2391,15 @@ class _Compiler:
         )
 
     def _hoist_chained_operands(
-        self, node: ast.Compare, operands: List[_Result]
-    ) -> Tuple[List[Any], List[List[Any]]]:
+        self, node: ast.Compare, operands: list[_Result]
+    ) -> tuple[list[Any], list[list[Any]]]:
         """Assign the operands of a chained comparison, except the last, to
         temporaries, and replace them in place with the temporary. A middle
         operand stands in two comparisons, and Python evaluates each operand
         once, in order, and only while the comparisons so far hold. Returns the
         temporaries, and the assignments to make before each comparison."""
-        declared: List[Any] = []
-        preludes: List[List[Any]] = [[] for _ in node.ops]
+        declared: list[Any] = []
+        preludes: list[list[Any]] = [[] for _ in node.ops]
         if len(operands) <= 2:
             return declared, preludes
         for index in range(len(operands) - 1):
@@ -2438,9 +2445,11 @@ class _Compiler:
         base = self._to_expression(base)
         code = base.ptype.code if base.ptype is not None else None
         constant = (
-            index.is_value
+            index.value
+            if index.is_value
             and isinstance(index.value, int)
             and not isinstance(index.value, bool)
+            else None
         )
         if code is not None and code not in (
             KRPC.Type.STRING,
@@ -2448,20 +2457,21 @@ class _Compiler:
             KRPC.Type.DICTIONARY,
             KRPC.Type.TUPLE,
         ):
+            assert base.ptype is not None
             raise self._error(
                 node, "cannot index a value of type %s" % _type_name(base.ptype)
             )
-        if code == KRPC.Type.TUPLE and not constant:
+        if code == KRPC.Type.TUPLE and constant is None:
             raise self._error(node, "a tuple can only be indexed by a constant integer")
-        if constant and code != KRPC.Type.DICTIONARY:
+        if constant is not None and code != KRPC.Type.DICTIONARY:
             if code == KRPC.Type.TUPLE:
                 assert base.ptype is not None
                 size = len(base.ptype.types)
-                if not -size <= index.value < size:
+                if not -size <= constant < size:
                     raise self._error(node, "tuple index out of range")
-                index = _Result(value=index.value % size, is_value=True)
-            elif index.value < 0 and base.ptype is not None:
-                return self._compile_index_from_end(node, base, index.value)
+                index = _Result(value=constant % size, is_value=True)
+            elif constant < 0 and base.ptype is not None:
+                return self._compile_index_from_end(node, base, constant)
         if self._is_a_string(base):
             return _Result(
                 expression=self._expr.string_get(
@@ -2476,10 +2486,10 @@ class _Compiler:
                 ),
                 ptype=base.ptype.types[1],
             )
-        element: Optional[KRPC.Type] = None
+        element: KRPC.Type | None = None
         if code == KRPC.Type.TUPLE:
             assert base.ptype is not None
-            element = base.ptype.types[index.value]  # type: ignore[index]
+            element = base.ptype.types[index.value]  # pyright: ignore[reportArgumentType, reportCallIssue]
             position = self._expr.constant_int(index.value)
         else:
             if code == KRPC.Type.LIST:
@@ -2598,8 +2608,8 @@ class _Compiler:
             return self._compile_string_slice(node, collection, lower, upper)
         element = self._element_ptype(node, collection, "slice", ordered=True)
         expr = self._expr
-        variables: List[Any] = []
-        statements: List[Any] = []
+        variables: list[Any] = []
+        statements: list[Any] = []
 
         def held(name: str, value: _Result) -> Any:
             variable = expr.variable(name, self._remote_type(node, value.ptype))
@@ -2665,8 +2675,8 @@ class _Compiler:
         self,
         node: ast.Subscript,
         values: _Result,
-        lower: Optional[_Result],
-        upper: Optional[_Result],
+        lower: _Result | None,
+        upper: _Result | None,
     ) -> _Result:
         """Compile a slice of a tuple, by constant bounds, into a tuple of the
         values it holds. The type of each value is known only for a constant
@@ -2706,8 +2716,8 @@ class _Compiler:
         self,
         node: ast.Subscript,
         string: _Result,
-        lower: Optional[_Result],
-        upper: Optional[_Result],
+        lower: _Result | None,
+        upper: _Result | None,
     ) -> _Result:
         """Compile a slice of a string, as a substring taken by start and length.
         A bound past the end of the string is clamped to it, as Python does. An
@@ -2726,7 +2736,7 @@ class _Compiler:
             statements.append(expr.assign(variable, value.expression))
             return variable
 
-        def clamped(name: str, bound: Optional[_Result], default: Any) -> Any:
+        def clamped(name: str, bound: _Result | None, default: Any) -> Any:
             if bound is None:
                 return default
             value = self._slice_bound(node, name, bound, default, held)
@@ -2752,7 +2762,7 @@ class _Compiler:
     def _compile_set(self, node: ast.Set) -> _Result:
         return self._compile_elements(node.elts, "set")
 
-    def _compile_elements(self, elts: List[ast.expr], kind: str) -> _Result:
+    def _compile_elements(self, elts: list[ast.expr], kind: str) -> _Result:
         results = [self._compile(elt) for elt in elts]
         if all(result.is_value for result in results):
             values = [result.value for result in results]
@@ -2787,8 +2797,8 @@ class _Compiler:
         )
 
     def _collection_elements(
-        self, results: List[_Result]
-    ) -> Tuple[List[_Result], Optional[KRPC.Type]]:
+        self, results: list[_Result]
+    ) -> tuple[list[_Result], KRPC.Type | None]:
         """The elements of a list, a set, or the keys or values of a dictionary,
         as expressions, and the type the server widens them to. An integer
         constant among unsigned 64 bit integers is built at that type, as no
@@ -2891,10 +2901,10 @@ class _Compiler:
     def _compile_comprehension(
         self,
         node: ast.AST,
-        generators: List[ast.comprehension],
+        generators: list[ast.comprehension],
         elt: ast.expr,
-        quantifier: Optional[Callable[[Any, Any], Any]] = None,
-    ) -> Tuple[Any, Optional[KRPC.Type]]:
+        quantifier: Callable[[Any, Any], Any] | None = None,
+    ) -> tuple[Any, KRPC.Type | None]:
         """Compile a comprehension to select/where over its collection.
         Comprehensions with multiple 'for' clauses flatten via the server's
         select-many operation. Returns the resulting collection expression and
@@ -2935,7 +2945,7 @@ class _Compiler:
 
     def _bind_generator(
         self, node: ast.AST, generator: ast.comprehension
-    ) -> Tuple[Any, Any, Dict[str, _Result]]:
+    ) -> tuple[Any, Any, dict[str, _Result]]:
         """Compile one 'for' clause of a comprehension. Returns its collection,
         filtered by the clause's conditions, the parameter each value is passed
         to, and the scope naming the value or the parts it unpacks into."""
@@ -2966,9 +2976,9 @@ class _Compiler:
         self,
         node: ast.AST,
         target: ast.expr,
-        ptype: Optional[KRPC.Type],
-        path: Tuple[int, ...] = (),
-    ) -> List[Tuple[str, Tuple[int, ...], Optional[KRPC.Type]]]:
+        ptype: KRPC.Type | None,
+        path: tuple[int, ...] = (),
+    ) -> list[tuple[str, tuple[int, ...], KRPC.Type | None]]:
         """The names a target binds, each with the position of its value within
         the value being unpacked, and its type. A target is a name, or a tuple
         or list of targets that a tuple of as many values unpacks into."""
@@ -2991,7 +3001,7 @@ class _Compiler:
             return names
         raise self._error(node, "unsupported target (%s)" % type(target).__name__)
 
-    def _unpacked(self, value: Any, path: Tuple[int, ...]) -> Any:
+    def _unpacked(self, value: Any, path: tuple[int, ...]) -> Any:
         """The part of a tuple valued expression at a position found by _unpack."""
         for index in path:
             value = self._expr.get(value, self._expr.constant_int(index))
@@ -3041,7 +3051,7 @@ class _Compiler:
         )
 
     def _compile_joinedstr(self, node: ast.JoinedStr) -> _Result:
-        parts: List[_Result] = []
+        parts: list[_Result] = []
         for piece in node.values:
             if isinstance(piece, ast.Constant):
                 parts.append(_Result(value=piece.value, is_value=True))
@@ -3117,7 +3127,7 @@ class _Compiler:
         )
 
     @staticmethod
-    def _is_supported_builtin(value: object) -> bool:
+    def _is_supported_builtin(value: object) -> TypeGuard[Callable[..., Any]]:
         # Compared by identity, as a value can define equality to be anything
         return any(
             value is builtin
@@ -3143,7 +3153,9 @@ class _Compiler:
         )
 
     def _compile_builtin(
-        self, node: ast.Call, func: Callable  # type: ignore[type-arg]
+        self,
+        node: ast.Call,
+        func: Callable,
     ) -> _Result:
         if func is print:
             return self._compile_print(node)
@@ -3181,7 +3193,8 @@ class _Compiler:
             value = self._fold(node, func, result.value).value
             # reversed() gives an iterator, which is read into a list
             return _Result(
-                value=list(value) if func is reversed else value, is_value=True
+                value=list(cast(Iterable[Any], value)) if func is reversed else value,
+                is_value=True,
             )
         result = self._to_expression(result)
         if func is len:
@@ -3252,7 +3265,9 @@ class _Compiler:
         raise self._error(node, "unsupported function %s()" % func.__name__)
 
     def _check_builtin_keywords(
-        self, node: ast.Call, func: Callable  # type: ignore[type-arg]
+        self,
+        node: ast.Call,
+        func: Callable,
     ) -> None:
         """Raise for a keyword argument other than the key of sorted, min or max."""
         keys = ("key",) if func in (sorted, min, max) else ()
@@ -3280,7 +3295,7 @@ class _Compiler:
             if sep.value is not None:
                 separator = sep.value
         # The message's parts, with adjacent constants joined into one string
-        parts: List[_Result] = []
+        parts: list[_Result] = []
         for position, argument in enumerate(node.args):
             texts = [separator] if position > 0 else []
             part = self._compile(argument)
@@ -3288,7 +3303,7 @@ class _Compiler:
                 texts.append(str(part.value))
             if texts:
                 if parts and parts[-1].is_value:
-                    texts.insert(0, parts.pop().value)
+                    texts.insert(0, cast(str, parts.pop().value))
                 parts.append(_Result(value="".join(texts), is_value=True))
             if not part.is_value:
                 parts.append(part)
@@ -3327,7 +3342,7 @@ class _Compiler:
         return self._range_loop(node, arguments[0], arguments[1], step)
 
     def _range_loop(
-        self, node: Optional[ast.AST], start: _Result, end: _Result, step: _Result
+        self, node: ast.AST | None, start: _Result, end: _Result, step: _Result
     ) -> _Result:
         """A loop on the server building the list of values of a range. The
         loop counts in a long, so a step past the end of an int range does not
@@ -3496,8 +3511,8 @@ class _Compiler:
     def _folded_list(
         self,
         node: ast.Call,
-        func: Callable,  # type: ignore[type-arg]
-        arguments: List[_Result],
+        func: Callable,
+        arguments: list[_Result],
     ) -> _Result:
         """Call a builtin producing a sequence on arguments known when compiling,
         and read the sequence into a list."""
@@ -3506,7 +3521,7 @@ class _Compiler:
         )
 
     def _compile_key_function(
-        self, node: ast.Call, key: ast.expr, element: KRPC.Type
+        self, node: ast.Call, key: ast.expr, element: KRPC.Type | None
     ) -> Any:
         """Compile the lambda given as the key of a builtin, taking one value of the
         collection and producing the value to compare it by."""
@@ -3529,7 +3544,7 @@ class _Compiler:
         return node.func.id if isinstance(node.func, ast.Name) else "the function"
 
     def _check_orderable(
-        self, node: ast.AST, ptype: Optional[KRPC.Type], what: str
+        self, node: ast.AST, ptype: KRPC.Type | None, what: str
     ) -> None:
         """Raise for values of a known type that Python cannot order, such as
         objects and enumeration values."""
@@ -3542,7 +3557,7 @@ class _Compiler:
     def _compile_scalar_builtin(
         self,
         node: ast.Call,
-        func: Callable,  # type: ignore[type-arg]
+        func: Callable,
         argument: ast.expr,
     ) -> _Result:
         result = self._compile(argument)
@@ -3779,9 +3794,9 @@ class _Compiler:
     def _compile_aggregate(
         self,
         node: ast.Call,
-        func: Callable,  # type: ignore[type-arg]
+        func: Callable,
         result: _Result,
-        element: Optional[KRPC.Type],
+        element: KRPC.Type | None,
     ) -> _Result:
         """sum, min or max of a collection, with min and max taking an optional
         key."""
@@ -3857,7 +3872,9 @@ class _Compiler:
         )
 
     def _compile_scalar_min_max(
-        self, node: ast.Call, func: Callable  # type: ignore[type-arg]
+        self,
+        node: ast.Call,
+        func: Callable,
     ) -> _Result:
         arguments = [self._compile(argument) for argument in node.args]
         if all(argument.is_value for argument in arguments):
@@ -3874,7 +3891,7 @@ class _Compiler:
     def _min_max_pair(
         self,
         node: ast.Call,
-        func: Callable,  # type: ignore[type-arg]
+        func: Callable,
         left: _Result,
         right: _Result,
     ) -> _Result:
@@ -3903,7 +3920,7 @@ class _Compiler:
         if isinstance(node, ast.BoolOp):
             is_and = isinstance(node.op, ast.And)
             # As for a value, stopping at a constant that decides the result
-            tests: List[_Result] = []
+            tests: list[_Result] = []
             for value in node.values:
                 test = self._compile_condition(value)
                 if test.is_value and bool(test.value) == is_and:
@@ -3990,7 +4007,7 @@ class _Compiler:
         return result
 
     def _to_expression(
-        self, result: _Result, ptype: Optional[KRPC.Type] = None
+        self, result: _Result, ptype: KRPC.Type | None = None
     ) -> _Result:
         """A value as an expression. The type is that of a None or an empty
         collection, and of any None or empty collection within the value."""
@@ -4012,7 +4029,7 @@ class _Compiler:
             if empty is not None:
                 return empty
             kind = _COLLECTION_KINDS.get(ptype.code)
-            if kind in _EMPTY_FORMS:
+            if kind is not None and kind in _EMPTY_FORMS:
                 raise self._error(self._node, self._empty_kind_message(value, kind))
         if isinstance(value, range):
             return self._range_loop(
@@ -4078,7 +4095,7 @@ class _Compiler:
                     % (name, typ.protobuf_type.service, typ.protobuf_type.name),
                 )
                 for name, field, field_type in zip(
-                    typ.field_names, cast(Tuple[object, ...], value), typ.field_types
+                    typ.field_names, cast(tuple[object, ...], value), typ.field_types
                 )
             ]
             return _Result(
@@ -4094,7 +4111,7 @@ class _Compiler:
             "cannot use a value of type %s in an expression" % type(value).__name__,
         )
 
-    def _collection_expression(self, value: Any, ptype: Optional[KRPC.Type]) -> _Result:
+    def _collection_expression(self, value: Any, ptype: KRPC.Type | None) -> _Result:
         """A list, tuple, set or dictionary as an expression. The type is that of
         any None or empty collection within the value."""
         expr = self._expr
@@ -4131,7 +4148,8 @@ class _Compiler:
                 return _Result(
                     expression=expr.create_tuple(expressions),
                     ptype=build_ptype(
-                        KRPC.Type.TUPLE, [element.ptype for element in elements]
+                        KRPC.Type.TUPLE,
+                        cast(list[KRPC.Type], [element.ptype for element in elements]),
                     ),
                 )
             ptype = build_ptype(KRPC.Type.SET, [self._joined_ptype(elements)])
@@ -4166,7 +4184,7 @@ class _Compiler:
             ptype=ptype,
         )
 
-    def _empty_collection(self, value: object, ptype: KRPC.Type) -> Optional[_Result]:
+    def _empty_collection(self, value: object, ptype: KRPC.Type) -> _Result | None:
         """An empty list, set or dictionary of a collection type of the same
         kind. None for a type of another kind."""
         expr = self._expr
@@ -4200,7 +4218,7 @@ class _Compiler:
                 self._node, "a tuple can hold at most %d values" % _MAX_TUPLE_SIZE
             )
 
-    def _null(self, node: Optional[ast.AST], ptype: KRPC.Type) -> _Result:
+    def _null(self, node: ast.AST | None, ptype: KRPC.Type) -> _Result:
         """A null constant of a type, made nullable."""
         nullable = with_nullable(ptype, True)
         return _Result(
@@ -4212,22 +4230,22 @@ class _Compiler:
     def _is_none(result: _Result) -> bool:
         return result.is_value and result.value is None
 
-    def _check_not_none(self, results: List[_Result], message: str) -> None:
+    def _check_not_none(self, results: list[_Result], message: str) -> None:
         if any(self._is_none(result) for result in results):
             raise self._error(self._node, message)
 
     @staticmethod
     def _position_ptype(
-        ptype: Optional[KRPC.Type], code: int, position: int
-    ) -> Optional[KRPC.Type]:
+        ptype: KRPC.Type | None, code: int, position: int
+    ) -> KRPC.Type | None:
         """The type at a position of a collection type, if it is of that kind."""
         if ptype is None or ptype.code != code or position >= len(ptype.types):
             return None
         return ptype.types[position]
 
     def _typed_elements(
-        self, results: List[_Result], ptype: Optional[KRPC.Type] = None
-    ) -> List[_Result]:
+        self, results: list[_Result], ptype: KRPC.Type | None = None
+    ) -> list[_Result]:
         """Values that are combined into one type, such as the elements of a list
         or the branches of a conditional, as expressions. A None or an empty
         collection takes the given type, or else the type of the other values, as
@@ -4245,8 +4263,8 @@ class _Compiler:
         ]
 
     def _typed_or_none(
-        self, result: _Result, ptype: Optional[KRPC.Type]
-    ) -> Optional[_Result]:
+        self, result: _Result, ptype: KRPC.Type | None
+    ) -> _Result | None:
         """A value as an expression, or None when it holds a None or an empty
         collection with no type."""
         try:
@@ -4256,10 +4274,10 @@ class _Compiler:
 
     def _call_node(
         self,
-        node: Optional[ast.AST],
+        node: ast.AST | None,
         service: str,
         procedure: KRPC.Procedure,
-        args: List[Optional[_Result]],
+        args: list[_Result | None],
     ) -> _Result:
         # A StdLib call computes the same value from the same arguments
         if service != "StdLib":
@@ -4270,7 +4288,7 @@ class _Compiler:
         parameters = list(procedure.parameters)
         # Arguments are keyed by position. The server gives a position a keyword
         # argument skips the parameter's default
-        expressions: Dict[int, Any] = {}
+        expressions: dict[int, Any] = {}
         for position, arg in enumerate(args):
             if arg is None:
                 continue
@@ -4292,10 +4310,10 @@ class _Compiler:
 
     def _argument_expression(
         self,
-        node: Optional[ast.AST],
+        node: ast.AST | None,
         result: _Result,
         procedure: KRPC.Procedure,
-        parameter: Optional[KRPC.Parameter],
+        parameter: KRPC.Parameter | None,
     ) -> Any:
         if parameter is None:
             return self._converted_expression(result, None, node)
@@ -4310,8 +4328,8 @@ class _Compiler:
     def _converted_expression(
         self,
         result: _Result,
-        target: Optional[KRPC.Type],
-        node: Optional[ast.AST] = None,
+        target: KRPC.Type | None,
+        node: ast.AST | None = None,
         where: str = "",
         hint: str = "",
     ) -> Any:
@@ -4328,15 +4346,12 @@ class _Compiler:
             and not isinstance(result.value, bool)
         ):
             value = result.value
-            if isinstance(value, float) and target.code not in (
-                KRPC.Type.DOUBLE,
-                KRPC.Type.FLOAT,
-            ):
-                raise self._narrowing_error(node, KRPC.Type.DOUBLE, target, where, hint)
             if target.code == KRPC.Type.DOUBLE:
                 return self._expr.constant_double(float(value))
             if target.code == KRPC.Type.FLOAT:
                 return self._expr.constant_float(float(value))
+            if isinstance(value, float):
+                raise self._narrowing_error(node, KRPC.Type.DOUBLE, target, where, hint)
             if not _in_range(value, target.code):
                 message = "integer constant %d is out of range for %s" % (
                     value,
@@ -4378,7 +4393,7 @@ class _Compiler:
             )
         return converted.expression
 
-    def _integer_constant(self, value: int, code: int) -> Any:
+    def _integer_constant(self, value: int, code: KRPC.Type.TypeCode) -> Any:
         """A constant of one of the integer types."""
         return {
             KRPC.Type.SINT32: self._expr.constant_int,
@@ -4389,8 +4404,8 @@ class _Compiler:
 
     def _widened_expression(
         self,
-        node: Optional[ast.AST],
-        target: Optional[KRPC.Type],
+        node: ast.AST | None,
+        target: KRPC.Type | None,
         value: _Result,
         where: str,
         hint: str = "",
@@ -4429,8 +4444,8 @@ class _Compiler:
 
     def _narrowing_error(
         self,
-        node: Optional[ast.AST],
-        source: int,
+        node: ast.AST | None,
+        source: KRPC.Type.TypeCode,
         target: KRPC.Type,
         where: str,
         hint: str,
@@ -4447,10 +4462,10 @@ class _Compiler:
         self,
         node: ast.AST,
         service: str,
-        class_name: Optional[str],
+        class_name: str | None,
         member: str,
         kind: str,
-    ) -> Tuple[str, KRPC.Procedure]:
+    ) -> tuple[str, KRPC.Procedure]:
         entry = self._metadata.members.get((service, class_name, member, kind))
         if entry is None:
             target = service if class_name is None else service + "." + class_name
@@ -4459,7 +4474,7 @@ class _Compiler:
             )
         return entry
 
-    def _class_of(self, node: ast.AST, base: _Result) -> Tuple[str, str]:
+    def _class_of(self, node: ast.AST, base: _Result) -> tuple[str, str]:
         if base.ptype is None or base.ptype.code != KRPC.Type.CLASS:
             raise self._error(
                 node,
@@ -4487,7 +4502,7 @@ class _Compiler:
             "cannot determine the remote enumeration of %s" % python_type.__name__,
         )
 
-    def _struct_type_of(self, node: Optional[ast.AST], python_type: type) -> StructType:
+    def _struct_type_of(self, node: ast.AST | None, python_type: type) -> StructType:
         """The structure type a value of the given Python type belongs to."""
         for typ in self._client._types._types.values():
             if isinstance(typ, StructType) and typ.python_type is python_type:
@@ -4497,15 +4512,13 @@ class _Compiler:
         )
 
     def _struct_type_named(
-        self, node: Optional[ast.AST], service: str, name: str
+        self, node: ast.AST | None, service: str, name: str
     ) -> StructType:
         return self._known_struct_type(
             node, self._client._types.struct_type(service, name)
         )
 
-    def _known_struct_type(
-        self, node: Optional[ast.AST], typ: StructType
-    ) -> StructType:
+    def _known_struct_type(self, node: ast.AST | None, typ: StructType) -> StructType:
         """A structure type, checked to be one the server described the fields of.
 
         A structure whose fields name a type this client does not know is skipped
@@ -4519,7 +4532,7 @@ class _Compiler:
             )
         return typ
 
-    def _is_remote_struct(self, value: object) -> bool:
+    def _is_remote_struct(self, value: object) -> TypeGuard[type]:
         return isinstance(value, type) and any(
             isinstance(typ, StructType) and typ.python_type is value
             for typ in self._client._types._types.values()
@@ -4567,7 +4580,7 @@ class _Compiler:
             node, "cannot %s a value of type %s" % (action, _type_name(ptype))
         )
 
-    def _check_keys(self, node: Optional[ast.AST], ptype: Optional[KRPC.Type]) -> None:
+    def _check_keys(self, node: ast.AST | None, ptype: KRPC.Type | None) -> None:
         """Raise for a type holding a dictionary whose keys the server does not
         take."""
         if ptype is None:
@@ -4581,7 +4594,7 @@ class _Compiler:
         for element in ptype.types:
             self._check_keys(node, element)
 
-    def _remote_type(self, node: Optional[ast.AST], ptype: Optional[KRPC.Type]) -> Any:
+    def _remote_type(self, node: ast.AST | None, ptype: KRPC.Type | None) -> Any:
         self._check_keys(node, ptype)
         try:
             return remote_type(self._type, ptype, self._remote_types)
@@ -4589,11 +4602,11 @@ class _Compiler:
             raise self._error(node, str(exc)) from exc
 
     @staticmethod
-    def _widened_ptype(elements: List[_Result]) -> Optional[KRPC.Type]:
+    def _widened_ptype(elements: list[_Result]) -> KRPC.Type | None:
         """The type the server widens the elements of a collection to."""
         return common_ptype([element.ptype for element in elements])
 
-    def _joined_ptype(self, elements: List[_Result]) -> KRPC.Type:
+    def _joined_ptype(self, elements: list[_Result]) -> KRPC.Type:
         """The type the server widens the values of a captured collection to.
         Throws an error if they have no common type."""
         ptype = self._widened_ptype(elements)
@@ -4604,7 +4617,7 @@ class _Compiler:
         return ptype
 
     @staticmethod
-    def _collection_ptype(code: int, elements: List[_Result]) -> Optional[KRPC.Type]:
+    def _collection_ptype(code: int, elements: list[_Result]) -> KRPC.Type | None:
         if any(element.ptype is None for element in elements):
             return None
         return build_ptype(
@@ -4613,8 +4626,8 @@ class _Compiler:
 
     def _fold(
         self,
-        node: ast.AST,
-        func: Callable,  # type: ignore[type-arg]
+        node: ast.AST | None,
+        func: Callable,
         *args: Any,
         prefix: str = "",
     ) -> _Result:
@@ -4638,11 +4651,11 @@ class _Compiler:
 
     def _error(
         self,
-        node: Optional[ast.AST],
+        node: ast.AST | None,
         message: str,
-        error: Type[FunctionCompilationError] = FunctionCompilationError,
+        error: type[FunctionCompilationError] = FunctionCompilationError,
     ) -> FunctionCompilationError:
         location = ""
         if node is not None and hasattr(node, "lineno"):
-            location = " (line %d)" % node.lineno  # type: ignore[attr-defined]
+            location = " (line %d)" % node.lineno  # pyright: ignore[reportAttributeAccessIssue]
         return error("Cannot compile expression: " + message + location)

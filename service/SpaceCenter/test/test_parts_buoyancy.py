@@ -177,7 +177,7 @@ class TestPartsBuoyancy(krpctest.TestCase):
     def test_floating_trim(self):
         flight = self.afloat()
         center_of_buoyancy = flight.center_of_buoyancy
-        self.assertIsNotNone(center_of_buoyancy)
+        assert center_of_buoyancy is not None
         center_of_mass = flight.center_of_mass
         # A hull at rest carries its center of buoyancy on the same vertical line as
         # its center of mass. Any horizontal offset is a couple that rolls or pitches
@@ -233,6 +233,7 @@ class TestPartsBuoyancy(krpctest.TestCase):
         self.assertAlmostEqual(total, force, delta=force * 1e-6)
         # The center stays inside the hull whatever the waterline
         center_of_buoyancy = flight.fully_submerged_center_of_buoyancy
+        assert center_of_buoyancy is not None
         lower, upper = self.vessel.bounding_box(self.vessel.surface_reference_frame)
         for i in range(3):
             self.assertGreaterEqual(center_of_buoyancy[i], lower[i])
@@ -315,6 +316,7 @@ class TestEditorBuoyancy(krpctest.TestCase):
         vessel = self.space_center.editor.vessel
         frame = vessel.parts.root.reference_frame
         center_of_buoyancy = vessel.center_of_buoyancy(frame)
+        assert center_of_buoyancy is not None
         self.assertEqual(3, len(center_of_buoyancy))
         # It sits on the stack, within its length of the root part
         self.assertLess(norm(vector(center_of_buoyancy)), 100)

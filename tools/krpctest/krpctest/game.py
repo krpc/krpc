@@ -19,7 +19,6 @@ import time
 from importlib.resources import files
 
 import krpc
-
 from krpctest.env import get_ksp_dir, get_ksp_executable, kill_ksp
 
 # Progress messages (game loading, mod set in use) go to this logger at INFO. The pytest
@@ -68,7 +67,10 @@ _MOD_FLAGS = {
 
 # The KSP process this test run launched, or None if KSP was started externally (a
 # manually-started game is never killed or reinstalled).
-_owned_ksp = None  # pylint: disable=invalid-name
+_owned_ksp = None
+
+# The cached connection, cleared on restart
+_connection = None
 
 # Mod sets (as frozensets) that were installed and launched but did not become available
 # in-game, recorded so that ensure_game fails fast instead of relaunching KSP forever.
@@ -80,15 +82,13 @@ def _address():
 
 
 def connect(use_cached=True):
-    if connect.connection is not None and use_cached:
-        return connect.connection
+    global _connection  # noqa: PLW0603
+    if _connection is not None and use_cached:
+        return _connection
     connection = krpc.connect(name="krpctest", address=_address())
     if use_cached:
-        connect.connection = connection
+        _connection = connection
     return connection
-
-
-connect.connection = None
 
 
 def _auto_launch_enabled():
@@ -116,13 +116,14 @@ def _try_connect():
     """Return a connection to a running server, or None if none is reachable. Reuses the
     cached connection when present (cleared on restart), so repeated calls across test
     classes share one connection as before."""
-    if connect.connection is not None:
-        return connect.connection
+    global _connection  # noqa: PLW0603
+    if _connection is not None:
+        return _connection
     try:
         connection = krpc.connect(name="krpctest", address=_address())
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         return None
-    connect.connection = connection
+    _connection = connection
     return connection
 
 
@@ -165,7 +166,7 @@ def _install_mods(required):
     """Build and install the mod, reconciling GameData to exactly `required` (plus kRPC).
     Imported lazily to avoid a circular import (krpctest.install imports this module).
     """
-    from krpctest.install import install  # pylint: disable=import-outside-toplevel
+    from krpctest.install import install
 
     log.info(
         "building and installing kRPC (mods: %s)",
@@ -181,14 +182,14 @@ def _install_mods(required):
 def _launch_ksp(required):
     """Install the required mods, launch KSP, and wait for the server to come up. Marks the
     launched game as owned by this run so it may be restarted or stopped."""
-    global _owned_ksp  # pylint: disable=global-statement,invalid-name
+    global _owned_ksp  # noqa: PLW0603
     _install_mods(required)
     # Ensure the auto-loaded save exists, otherwise KSP stays at the main menu and the
     # server never starts.
     copy_blank_save("krpctest")
     ksp_dir = get_ksp_dir()
     log.info("launching KSP")
-    _owned_ksp = subprocess.Popen(  # pylint: disable=consider-using-with
+    _owned_ksp = subprocess.Popen(
         [get_ksp_executable(ksp_dir), "--krpctest-load-game=krpctest"],
         cwd=ksp_dir,
         stdout=subprocess.DEVNULL,
@@ -199,21 +200,21 @@ def _launch_ksp(required):
 
 def _stop_ksp():
     """Stop the KSP process this run launched (no-op if KSP was started externally)."""
-    global _owned_ksp  # pylint: disable=global-statement,invalid-name
+    global _owned_ksp, _connection  # noqa: PLW0603
     if _owned_ksp is None:
         return
     proc = _owned_ksp
     _owned_ksp = None
-    connect.connection = None
+    _connection = None
     log.info("stopping KSP")
     try:
         proc.terminate()
         proc.wait(timeout=30)
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         try:
             proc.kill()
             proc.wait(timeout=10)
-        except Exception:  # pylint: disable=broad-except
+        except Exception:
             pass
     if proc.poll() is None:
         # The handle didn't map to the live process; fall back to a name match.

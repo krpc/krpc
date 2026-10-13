@@ -1,4 +1,5 @@
 import unittest
+
 import krpctest
 
 
@@ -11,7 +12,9 @@ class TestInfernalRobotics(krpctest.TestCase):
         cls.launch_vessel_from_vab("InfernalRobotics")
         cls.remove_other_vessels()
         cls.ir = cls.connect().infernal_robotics
-        cls.vessel = cls.connect().space_center.active_vessel
+        vessel = cls.connect().space_center.active_vessel
+        assert vessel is not None
+        cls.vessel = vessel
 
     def test_available_and_ready(self):
         self.assertTrue(self.ir.available)

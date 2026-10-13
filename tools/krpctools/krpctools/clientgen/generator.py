@@ -1,5 +1,8 @@
 import collections
+from typing import Generic, TypeVar
+
 import jinja2
+
 from krpc.attributes import Attributes
 from krpc.definitions import topological_order
 from krpc.types import (
@@ -10,18 +13,23 @@ from krpc.types import (
     TupleType,
 )
 from krpc.utils import snake_case
+
+from ..lang.language import Language
 from ..utils import (
-    lower_camel_case,
-    indent,
-    single_line,
     as_type,
     decode_default_value,
+    indent,
     is_nullable,
+    lower_camel_case,
+    single_line,
 )
 from .docparser import flatten_deprecation_reason
 
+LanguageT = TypeVar("LanguageT", bound=Language)
 
-class Generator:
+
+class Generator(Generic[LanguageT]):
+    language: LanguageT
 
     def __init__(self, macro_template, service, definitions):
         self._macro_template = macro_template
@@ -35,6 +43,13 @@ class Generator:
     @property
     def service_name(self):
         return self._service
+
+    def parse_context(self, context):
+        raise NotImplementedError
+
+    @staticmethod
+    def parse_documentation(documentation):
+        raise NotImplementedError
 
     def generate_file(self, path):
         content = self.generate()

@@ -33,7 +33,6 @@ would leave the suite waiting for a reply that never comes.
 """
 
 import krpctest
-
 from tools.benchmarks import chunking
 from tools.benchmarks.report import Result
 
@@ -66,7 +65,7 @@ class BenchmarkTestCase(krpctest.TestCase):
         overhead is single-digit nanoseconds against a call that costs hundreds, and there is
         no delegate shape to match it against.
         """
-        benchmark = self.connect().benchmark
+        benchmark = self.connect().benchmark  # pyright: ignore[reportAttributeAccessIssue]
         return self._measure(
             None, lambda case, count: benchmark.call(call, count), name
         )
@@ -112,10 +111,6 @@ class BenchmarkTestCase(krpctest.TestCase):
         conn = self.connect()
         streams = [conn.add_stream(getattr, part, attribute) for part in parts]
         try:
-            # A stream the client has not read yet is not started, and the server skips it,
-            # so starting them explicitly is what makes this measure anything at all.
-            for stream in streams:
-                stream.start(wait=False)
             self.wait(self.stream_settle_seconds)
             status = conn.krpc.get_status()
             # A scene check, not a measurement: each stream is evaluated every fixed update,

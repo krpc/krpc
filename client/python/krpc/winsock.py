@@ -7,6 +7,7 @@ directly and the resulting handle is then handed to a socket object, which carri
 """
 
 from __future__ import annotations
+
 import ctypes
 import socket
 import sys
@@ -35,7 +36,7 @@ def _winsock() -> ctypes.CDLL:
     Winsock is already started: importing the socket module is what does it, and it stays
     started for the life of the process.
     """
-    library = ctypes.WinDLL("ws2_32", use_last_error=True)  # type: ignore[attr-defined]
+    library = ctypes.WinDLL("ws2_32", use_last_error=True)
     library.socket.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
     library.socket.restype = ctypes.c_void_p
     library.connect.argtypes = [
@@ -99,7 +100,7 @@ def connect(path: str) -> socket.socket:
             socket.AF_INET,
             socket.SOCK_STREAM,
             0,
-            fileno=handle,  # type: ignore[arg-type]
+            fileno=handle,
         )
     except OSError:
         library.closesocket(handle)

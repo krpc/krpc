@@ -12,14 +12,16 @@ import math
 import unittest
 
 
-class AssertionsMixin(unittest.TestCase):  # pylint: disable=too-many-public-methods
+class AssertionsMixin(unittest.TestCase):
     """Tolerance-based assertion helpers, mixed into ``TestCase``.
 
     Subclasses ``unittest.TestCase`` so ``assertAlmostEqual`` / ``assertNotAlmostEqual``
     override their stock counterparts (and so ``self.fail`` / ``self.assertEqual`` are
     available); it defines no tests of its own."""
 
-    def assertAlmostEqual(self, first, second, places=7, msg=None, delta=None):
+    def assertAlmostEqual(  # pyright: ignore[reportIncompatibleMethodOverride]
+        self, first, second, places=7, msg=None, delta=None
+    ):
         """Check that first is equal to second, within the given error"""
         if not self._is_almost_equal(first, second, places, delta):
             if msg is None:
@@ -27,7 +29,9 @@ class AssertionsMixin(unittest.TestCase):  # pylint: disable=too-many-public-met
                 msg = self._almost_equal_error_msg(msg, places, delta)
             self.fail(msg)
 
-    def assertNotAlmostEqual(self, first, second, places=7, msg=None, delta=None):
+    def assertNotAlmostEqual(  # pyright: ignore[reportIncompatibleMethodOverride]
+        self, first, second, places=7, msg=None, delta=None
+    ):
         """Check that first is not equal to second,
         within the given error"""
         if self._is_almost_equal(first, second, places, delta):

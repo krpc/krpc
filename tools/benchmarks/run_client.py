@@ -112,6 +112,7 @@ def run(server, client, transport=testserver.TCP):
 
 
 def arguments():
+    assert __doc__ is not None
     parser = runner.parser(__doc__.splitlines()[0])
     parser.add_argument(
         "--name",
@@ -147,8 +148,7 @@ def execute(client, endpoint):
     process = subprocess.run(
         [os.path.abspath(client)],
         env=environment,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         text=True,
         check=False,
     )

@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import Callable
+
 import unittest
+from collections.abc import Callable
+
 from krpc.attributes import Attributes
 
 
 class TestAttributes(unittest.TestCase):
-
     cases = [
         "ProcedureName",
         "get_PropertyName",

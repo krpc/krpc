@@ -1,4 +1,3 @@
-# pylint: disable=line-too-long,invalid-name,redefined-builtin,too-many-lines
 from __future__ import annotations
 import warnings
 from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
@@ -11,7 +10,17 @@ if TYPE_CHECKING:
     from krpc.services import Client
 
 
-class EmptyService:
+# The classes, enumerations, structures and exceptions put on the service in
+# __init__, declared for type checkers
+if TYPE_CHECKING:
+
+    class _EmptyServiceDefinitions:
+        pass
+else:
+    _EmptyServiceDefinitions = object
+
+
+class EmptyService(_EmptyServiceDefinitions):
 
     def __init__(self, client: Client) -> None:
         self._client = client
@@ -26,21 +35,24 @@ class EmptyService:
         for name, class_type in self._classes.items():
             self.__dict__[name] = WrappedClass(client, class_type)
 
-    def __getattr__(self, name):
-        # Reached only once the ordinary lookup has failed, which for a service means
-        # either a name it does not define, or one it does whose procedure or property
-        # raised an AttributeError of its own. Python discards that error before calling
-        # this, so it cannot be reported here; what can be done is to not report a member
-        # that does exist as missing, which would point at the wrong thing entirely.
-        cls = type(self)
-        if hasattr(cls, name):
+    # Hidden from type checkers, so that they report a name the service does not define
+    if not TYPE_CHECKING:
+
+        def __getattr__(self, name):
+            # Reached only once the ordinary lookup has failed, which for a service means
+            # either a name it does not define, or one it does whose procedure or property
+            # raised an AttributeError of its own. Python discards that error before calling
+            # this, so it cannot be reported here; what can be done is to not report a member
+            # that does exist as missing, which would point at the wrong thing entirely.
+            cls = type(self)
+            if hasattr(cls, name):
+                raise AttributeError(
+                    "'%s' object attribute '%s' raised AttributeError"
+                    % (cls.__name__, name)
+                )
             raise AttributeError(
-                "'%s' object attribute '%s' raised AttributeError"
-                % (cls.__name__, name)
+                "'%s' object has no attribute '%s'" % (cls.__name__, name)
             )
-        raise AttributeError(
-            "'%s' object has no attribute '%s'" % (cls.__name__, name)
-        )
 
     _classes = {
     }

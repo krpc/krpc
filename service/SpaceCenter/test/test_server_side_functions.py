@@ -111,10 +111,11 @@ class TestServerSideFunctions(krpctest.TestCase):
         self.assertTrue(vessel.control.lights)
 
     def test_a_compiled_function_takes_arguments(self):
-        Vessel = self.sc.Vessel  # pylint: disable=invalid-name
+        Vessel = self.sc.Vessel
 
+        # The function compiler reads the parameter type from the connection's class
         @self.conn.compile
-        def set_throttle(target: Vessel, throttle: float = 1.0) -> None:
+        def set_throttle(target: Vessel, throttle: float = 1.0) -> None:  # pyright: ignore[reportInvalidTypeForm]
             target.control.throttle = throttle
 
         self.conn.run(set_throttle, self.vessel, 0.5)
@@ -182,8 +183,9 @@ class TestServerSideFunctions(krpctest.TestCase):
                 for engine in vessel.parts.engines:
                     engine.toggle_mode()
                 return "switched"
-            except Exception as error:  # pylint: disable=broad-exception-caught
-                return "could not switch: " + error
+            except Exception as error:
+                # A server side function concatenates an exception as its message
+                return "could not switch: " + error  # pyright: ignore[reportOperatorIssue]
 
         self.assertEqual(
             "could not switch: The engine only has a single mode",
@@ -199,7 +201,7 @@ class TestServerSideFunctions(krpctest.TestCase):
         def caught_by_a_catch_all() -> float:
             try:
                 return sc.editor.delta_v_altitude
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception:
                 return -1.0
 
         self.assertEqual(-1.0, self.conn.run(caught_by_a_catch_all))

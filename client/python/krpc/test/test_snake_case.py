@@ -1,4 +1,5 @@
 import unittest
+
 from krpc.utils import snake_case as t
 
 

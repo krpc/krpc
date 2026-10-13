@@ -1,33 +1,34 @@
 from krpc.types import (
-    ValueType,
     ClassType,
-    EnumerationType,
-    StructType,
-    MessageType,
-    TupleType,
-    ListType,
-    SetType,
     DictionaryType,
+    EnumerationType,
+    ListType,
+    MessageType,
+    SetType,
+    StructType,
+    TupleType,
+    ValueType,
 )
 from krpc.utils import snake_case
+
+from ..lang.java import JavaLanguage
+from ..utils import lower_camel_case
 from .domain import Domain
 from .nodes import (
-    Procedure,
-    Property,
     Class,
     ClassMethod,
-    ClassStaticMethod,
     ClassProperty,
+    ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    Procedure,
+    Property,
     Struct,
     StructField,
 )
-from ..utils import lower_camel_case
-from ..lang.java import JavaLanguage
 
 
-class JavaDomain(Domain):
+class JavaDomain(Domain[JavaLanguage]):
     name = "java"
     prettyname = "Java"
     sphinxname = "java"
@@ -103,7 +104,7 @@ class JavaDomain(Domain):
         if isinstance(typ, SetType):
             return ":class:`java.util.Set<%s>`" % self._type(typ.value_type, True)
         if isinstance(typ, TupleType):
-            name = self.tuple_types[len(typ.value_types) - 1]
+            name = self.language.tuple_types[len(typ.value_types) - 1]
             return ":class:`org.javatuples.%s<%s>`" % (
                 name,
                 ",".join(self._type(typ, True) for typ in typ.value_types),

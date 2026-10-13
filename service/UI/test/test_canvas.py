@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestCanvas(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

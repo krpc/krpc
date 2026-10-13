@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestPartsResourceHarvester(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         # Always reload the save and relaunch so the drills are tested on a

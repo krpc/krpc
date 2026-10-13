@@ -1,19 +1,16 @@
 import math
 import struct
-
-# pylint: disable=no-name-in-module
-from krpc.schema.KRPC_pb2 import Type
-from krpc.types import ValueType
+from collections.abc import Collection
 
 # The extremes come from the python client, which krpctools already builds on. They describe
 # the protobuf types rather than anything about python, so every language's generator reads
 # them from here, and the python generator matches a default value against the very constant
 # it goes on to name.
 from krpc.limits import (
-    DOUBLE_MAX,
     DOUBLE_LOWEST,
-    FLOAT_MAX,
+    DOUBLE_MAX,
     FLOAT_LOWEST,
+    FLOAT_MAX,
     SINT32_MAX,
     SINT32_MIN,
     SINT64_MAX,
@@ -21,6 +18,8 @@ from krpc.limits import (
     UINT32_MAX,
     UINT64_MAX,
 )
+from krpc.schema.KRPC_pb2 import Type
+from krpc.types import ValueType
 
 # The finite extremes of the floating point types, by protobuf type code. They are named
 # "lowest" rather than "min" because C++ numeric_limits<T>::min() is the smallest positive
@@ -83,10 +82,13 @@ def float32_literal(value):
 
 
 class Language:
-
     # Language source for each special value, keyed by (protobuf type code, symbolic name).
     # A value with no entry is written as an ordinary literal.
     special_values = {}
+
+    # Set by a language with reserved words, or with values named differently
+    keywords: Collection[str]
+    value_map: dict[str, str]
 
     def __init__(self):
         self.module = None
@@ -100,10 +102,10 @@ class Language:
         """The name of a value of an enumeration, as the enumeration declares it"""
         return self.parse_name(name)
 
-    def parse_type(self, typ):  # pylint: disable=unused-argument
+    def parse_type(self, typ):
         raise NotImplementedError
 
-    def parse_default_value(self, value, typ):  # pylint: disable=unused-argument
+    def parse_default_value(self, value, typ) -> str | None:
         return None
 
     def parse_special_value(self, value, typ):

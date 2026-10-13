@@ -1,10 +1,10 @@
-import unittest
 import timeit
+import unittest
+
 import krpctest
 
 
 class TestPerformance(krpctest.TestCase):
-
     def test_performance(self):
         control = self.connect().space_center.active_vessel.control
         samples = 1000

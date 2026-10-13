@@ -1,16 +1,17 @@
 import base64
 import os
 import unittest
-import websocket
+
 import google.protobuf
-from google.protobuf.internal.decoder import _DecodeVarint, _DecodeSignedVarint
+import websocket
 from google.protobuf.internal import encoder as protobuf_encoder
-from google.protobuf.internal.wire_format import ZigZagEncode, ZigZagDecode
+from google.protobuf.internal.decoder import _DecodeSignedVarint, _DecodeVarint
+from google.protobuf.internal.wire_format import ZigZagDecode, ZigZagEncode
+
 import krpc.schema.KRPC_pb2 as KRPC
 
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
-# pylint: disable=invalid-name,protected-access
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()
 _pb_version = google.protobuf.__version__.split(".")
 if int(_pb_version[0]) >= 3 and int(_pb_version[1]) >= 4:
@@ -21,11 +22,9 @@ if int(_pb_version[0]) >= 3 and int(_pb_version[1]) >= 4:
 else:
     # protobuf v3.3.0 and below
     _SignedVarintEncoder = _pb_SignedVarintEncoder
-# pylint: enable=invalid-name,protected-access
 
 
 class WebSocketsTest(unittest.TestCase):
-
     @staticmethod
     def address():
         return "127.0.0.1"
@@ -104,7 +103,6 @@ class WebSocketsTest(unittest.TestCase):
 
 
 class TestConnection(WebSocketsTest):
-
     def test_named_client(self):
         self.connect(self.address(), self.rpc_port(), None, name="TheClientName")
         call = KRPC.ProcedureCall()
@@ -132,7 +130,6 @@ class TestConnection(WebSocketsTest):
 
 
 class TestRPCServer(WebSocketsTest):
-
     @classmethod
     def setUpClass(cls):
         cls.connect(cls.address(), cls.rpc_port(), None)
@@ -165,7 +162,6 @@ class TestRPCServer(WebSocketsTest):
 
 
 class TestStreamServer(WebSocketsTest):
-
     @classmethod
     def setUpClass(cls):
         cls.connect(

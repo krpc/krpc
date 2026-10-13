@@ -6,7 +6,6 @@ conn = krpc.connect(name="Angle of attack")
 vessel = conn.space_center.active_vessel
 
 while True:
-
     d = vessel.direction(vessel.orbit.body.reference_frame)
     v = vessel.velocity(vessel.orbit.body.reference_frame)
 

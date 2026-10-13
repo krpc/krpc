@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""Prints the checklist of remaining manual publishing and announcement steps.
-"""
+"""Prints the checklist of remaining manual publishing and announcement steps."""
 
 import lib
 
@@ -20,11 +19,11 @@ Announce the release:
 
 
 def main():
-    lib.banner(f'Remaining manual steps for {lib.TAG}')
+    lib.banner(f"Remaining manual steps for {lib.TAG}")
     print(STEPS.format(version=lib.VERSION))
     print()
-    print('Next, once the release is announced: tools/release/80-bump-version.py')
+    print("Next, once the release is announced: tools/release/80-bump-version.py")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lib.main(main)

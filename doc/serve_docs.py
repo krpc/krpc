@@ -227,6 +227,7 @@ def serve(port, open_browser=True):
 
 
 def main():
+    assert __doc__ is not None
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
         "--port", type=int, default=8080, help="port to serve on (default 8080)"

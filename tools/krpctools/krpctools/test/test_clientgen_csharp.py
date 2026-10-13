@@ -1,6 +1,7 @@
 import unittest
-from krpctools.test.clientgentest import ClientGenTestCase
+
 from krpctools.clientgen.csharp import CsharpGenerator
+from krpctools.test.clientgentest import ClientGenTestCase
 
 
 def nullable_class(name):

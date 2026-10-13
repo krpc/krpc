@@ -1,40 +1,33 @@
 from __future__ import annotations
-from typing import (
-    cast,
-    Callable,
-    Iterable,
-    List,
-    Mapping,
-    Optional,
-    Tuple,
-    Type,
-    TYPE_CHECKING,
-)
+
 import struct
-import google.protobuf
+from collections.abc import Callable, Iterable, Mapping
+from typing import (
+    TYPE_CHECKING,
+    cast,
+)
 
-# pylint: disable=import-error,no-name-in-module
+import google.protobuf.message
 from google.protobuf.internal import decoder as protobuf_decoder
-
-# pylint: disable=import-error,no-name-in-module
 from google.protobuf.internal import wire_format as protobuf_wire_format
-from krpc.error import EncodingError
+
 import krpc.platform
+import krpc.schema.KRPC_pb2 as KRPC
+from krpc.error import EncodingError
 from krpc.platform import hexlify
 from krpc.types import (
-    Types,
-    TypeBase,
-    ValueType,
     ClassType,
+    DictionaryType,
     EnumerationType,
+    ListType,
     MessageType,
+    SetType,
     StructType,
     TupleType,
-    ListType,
-    SetType,
-    DictionaryType,
+    TypeBase,
+    Types,
+    ValueType,
 )
-import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -43,13 +36,13 @@ if TYPE_CHECKING:
 # protobuf's varint reader and zigzag decoder are internal and carry no types, so they are
 # bound here with the types they do have. A call carrying a collection reaches them once
 # per value, so this also saves looking them up on their module that many times
-_pb_decode_varint: Callable[[bytes, int], Tuple[int, int]] = (
-    protobuf_decoder._DecodeVarint  # type: ignore[attr-defined]
+_pb_decode_varint: Callable[[bytes | bytearray, int], tuple[int, int]] = (
+    protobuf_decoder._DecodeVarint
 )
 _pb_zigzag_decode: Callable[[int], int] = protobuf_wire_format.ZigZagDecode
 
 
-def _decode_varint(data: bytes) -> Tuple[int, int]:
+def _decode_varint(data: bytes | bytearray) -> tuple[int, int]:
     """Decode the varint at the start of the data, returning its value and the
     number of bytes it occupies. Raises IndexError if the data does not hold a
     complete varint.
@@ -86,7 +79,7 @@ class Decoder:
         )
 
     @classmethod
-    def decode(cls, client: Optional[Client], data: bytes, typ: TypeBase) -> object:
+    def decode(cls, client: Client | None, data: bytes, typ: TypeBase) -> object:
         """Given a python type, and serialized data, decode the value.
 
         This decodes a value at a slot, where a null is carried by the is_null flag of the
@@ -145,7 +138,7 @@ class Decoder:
         return _decode_varint(data)[0]
 
     @classmethod
-    def decode_size_prefix(cls, data: bytes) -> Tuple[int, int]:
+    def decode_size_prefix(cls, data: bytes | bytearray) -> tuple[int, int]:
         """Decode the size prefix of a message, returning the size of the message
         and the number of bytes the prefix itself occupies. Raises IndexError if
         the data does not yet hold a complete prefix."""
@@ -153,7 +146,7 @@ class Decoder:
 
     @classmethod
     def decode_message(
-        cls, data: bytes, typ: Type[google.protobuf.message.Message]
+        cls, data: bytes, typ: type[google.protobuf.message.Message]
     ) -> google.protobuf.message.Message:
         message = typ()
         message.ParseFromString(data)
@@ -162,16 +155,16 @@ class Decoder:
     @classmethod
     def _decode_items(
         cls,
-        client: Optional[Client],
+        client: Client | None,
         items: Iterable[bytes],
         types: Iterable[TypeBase],
-    ) -> List[object]:
+    ) -> list[object]:
         """The decoded value of each item of a tuple or a structure"""
         return [cls._item_decoder(client, typ)(item) for item, typ in zip(items, types)]
 
     @classmethod
     def _item_decoder(
-        cls, client: Optional[Client], typ: TypeBase
+        cls, client: Client | None, typ: TypeBase
     ) -> Callable[[bytes], object]:
         """A function that decodes one value at a position of the given type"""
         decode = cls._value_decoder(client, typ)
@@ -189,7 +182,7 @@ class Decoder:
 
     @classmethod
     def _value_decoder(
-        cls, client: Optional[Client], typ: TypeBase
+        cls, client: Client | None, typ: TypeBase
     ) -> Callable[[bytes], object]:
         """A function that decodes one value of the given type.
 

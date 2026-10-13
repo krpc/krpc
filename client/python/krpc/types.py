@@ -4,18 +4,12 @@ import collections
 import copy
 import functools
 import weakref
+from collections.abc import Callable, Iterable, Mapping
 from enum import Enum
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
-    Dict,
-    Iterable,
-    List,
-    Mapping,
-    Optional,
-    Tuple,
-    Type,
+    TypeVar,
     cast,
 )
 
@@ -125,12 +119,11 @@ class Types:
 
     # The value types are held one attribute each, so that naming one costs an
     # attribute lookup on the hot path of every remote procedure call
-    # pylint: disable=too-many-instance-attributes
 
     def __init__(self) -> None:
         # Mapping from protobuf type strings to type objects
         self._types: dict[bytes, TypeBase] = {}
-        self._exception_types: dict[tuple[str, str], Type[Exception]] = {}
+        self._exception_types: dict[tuple[str, str], type[Exception]] = {}
         # Type objects keyed by the arguments they were asked for, rather than by
         # the serialized protobuf type that keys _types. The generated service
         # stubs name their parameter and return types on every call, so this is on
@@ -153,7 +146,7 @@ class Types:
             MessageType, self.as_type(_protobuf_type(KRPC.Type.EVENT))
         )
 
-    def _value_type(self, code: int) -> ValueType:
+    def _value_type(self, code: KRPC.Type.TypeCode) -> ValueType:
         return cast(ValueType, self.as_type(_protobuf_type(code)))
 
     def register_class_type(self, service: str, name: str, python_type: type) -> None:
@@ -231,9 +224,7 @@ class Types:
             )
         return nullable_type
 
-    def class_type(
-        self, service: str, name: str, doc: Optional[str] = None
-    ) -> ClassType:
+    def class_type(self, service: str, name: str, doc: str | None = None) -> ClassType:
         """Get a class type"""
         key = (KRPC.Type.CLASS, service, name)
         typ = self._type_cache.get(key)
@@ -243,7 +234,7 @@ class Types:
         return cast(ClassType, typ)
 
     def enumeration_type(
-        self, service: str, name: str, doc: Optional[str] = None
+        self, service: str, name: str, doc: str | None = None
     ) -> EnumerationType:
         """Get an enumeration type"""
         key = (KRPC.Type.ENUMERATION, service, name)
@@ -256,7 +247,7 @@ class Types:
         return cast(EnumerationType, typ)
 
     def struct_type(
-        self, service: str, name: str, doc: Optional[str] = None
+        self, service: str, name: str, doc: str | None = None
     ) -> StructType:
         """Get a structure type"""
         key = (KRPC.Type.STRUCT, service, name)
@@ -267,8 +258,8 @@ class Types:
         return cast(StructType, typ)
 
     def exception_type(
-        self, service: str, name: str, doc: Optional[str] = None
-    ) -> Type[Exception]:
+        self, service: str, name: str, doc: str | None = None
+    ) -> type[Exception]:
         """Get an exception type"""
         key = (service, name)
         if key not in self._exception_types:
@@ -360,33 +351,25 @@ class Types:
         if isinstance(typ, ClassType) and isinstance(value, ClassBase):
             value_type = type(value)
             if (
-                typ.python_type._service_name  # type: ignore[attr-defined]
-                == value_type._service_name  # type: ignore[attr-defined]
-                and typ.python_type._class_name  # type: ignore[attr-defined]
-                == value_type._class_name  # type: ignore[attr-defined]
+                typ.python_type._service_name == value_type._service_name  # pyright: ignore[reportAttributeAccessIssue]
+                and typ.python_type._class_name == value_type._class_name  # pyright: ignore[reportAttributeAccessIssue]
             ):
                 return typ.python_type(value._client, value._object_id)
         # Collection types
         try:
             # Coerce tuples to lists
-            if isinstance(value, collections.abc.Iterable) and isinstance(
-                typ, ListType
-            ):
+            if isinstance(value, Iterable) and isinstance(typ, ListType):
                 return typ.python_type(self.coerce_to(x, typ.value_type) for x in value)
             # Coerce lists (with appropriate number of elements) to tuples
-            if isinstance(value, collections.abc.Iterable) and isinstance(
-                typ, TupleType
-            ):
-                if len(value) != len(typ.value_types):  # type: ignore[arg-type]
+            if isinstance(value, Iterable) and isinstance(typ, TupleType):
+                if len(value) != len(typ.value_types):  # pyright: ignore[reportArgumentType]
                     raise ValueError
                 return typ.python_type(
                     [self.coerce_to(x, typ.value_types[i]) for i, x in enumerate(value)]
                 )
             # Coerce tuples and lists (with the right number of elements) to structures,
             # taking their elements as the fields in order
-            if isinstance(value, collections.abc.Iterable) and isinstance(
-                typ, StructType
-            ):
+            if isinstance(value, Iterable) and isinstance(typ, StructType):
                 values = list(value)
                 if len(values) != len(typ.field_types):
                     raise ValueError
@@ -421,9 +404,9 @@ class Types:
                 + " to type "
                 + str(typ)
             )
-        if typ.python_type == float:
-            return float(value)  # type: ignore[arg-type]
-        return int(value)  # type: ignore[call-overload]
+        if typ.python_type is float:
+            return float(value)  # pyright: ignore[reportArgumentType]
+        return int(value)  # pyright: ignore[reportArgumentType]
 
 
 class TypeBase:
@@ -444,7 +427,7 @@ class TypeBase:
         # Whether the position a value of this type sits in can hold null
         self.nullable = protobuf_type.nullable
         # The nullable form of this type, built on demand by _as_nullable
-        self._nullable_type: Optional[TypeBase] = None
+        self._nullable_type: TypeBase | None = None
         self._string = string
 
     def __str__(self) -> str:
@@ -472,7 +455,7 @@ class ValueType(TypeBase):
     def __init__(self, protobuf_type: KRPC.Type) -> None:
         if protobuf_type.code not in VALUE_TYPES:
             raise ValueError("Not a value type")
-        name = KRPC.Type.TypeCode.Name(protobuf_type.code)  # type: ignore[attr-defined]
+        name = KRPC.Type.TypeCode.Name(protobuf_type.code)
         super().__init__(protobuf_type, VALUE_TYPES[protobuf_type.code], name.lower())
 
 
@@ -480,7 +463,7 @@ class ClassType(TypeBase):
     """A class type, represented by a uint64 identifier"""
 
     def __init__(
-        self, protobuf_type: KRPC.Type, doc: Optional[str], typ: Optional[type] = None
+        self, protobuf_type: KRPC.Type, doc: str | None, typ: type | None = None
     ) -> None:
         if protobuf_type.code != KRPC.Type.CLASS:
             raise ValueError("Not a class type")
@@ -498,7 +481,7 @@ class EnumerationType(TypeBase):
     """An enumeration type, represented by an sint32 value"""
 
     def __init__(
-        self, protobuf_type: KRPC.Type, doc: Optional[str], typ: Optional[type] = None
+        self, protobuf_type: KRPC.Type, doc: str | None, typ: type | None = None
     ) -> None:
         if protobuf_type.code != KRPC.Type.ENUMERATION:
             raise ValueError("Not an enum type")
@@ -533,7 +516,7 @@ class StructType(TypeBase):
     """A structure type, whose value is the values of its fields"""
 
     def __init__(
-        self, protobuf_type: KRPC.Type, doc: Optional[str], typ: Optional[type] = None
+        self, protobuf_type: KRPC.Type, doc: str | None, typ: type | None = None
     ) -> None:
         if protobuf_type.code != KRPC.Type.STRUCT:
             raise ValueError("Not a struct type")
@@ -546,8 +529,8 @@ class StructType(TypeBase):
         self._doc = doc
         # The names and types of the fields, in the order their values are encoded in. Empty
         # until set_fields is called, as the field list is not carried by the type itself
-        self.field_names: List[str] = []
-        self.field_types: List[TypeBase] = []
+        self.field_names: list[str] = []
+        self.field_types: list[TypeBase] = []
         string = "Struct(%s.%s)" % (protobuf_type.service, protobuf_type.name)
         # When typ is None, set_fields must be called to set the python_type
         super().__init__(protobuf_type, cast(type, typ), string)
@@ -560,8 +543,8 @@ class StructType(TypeBase):
 
     def set_fields(
         self,
-        fields: Iterable[Tuple[str, TypeBase]],
-        python_type: Optional[type] = None,
+        fields: Iterable[tuple[str, TypeBase]],
+        python_type: type | None = None,
     ) -> None:
         """Set the fields of the structure, as pairs of a name and a type in the order the
         structure declares them. Creates a named tuple to represent a value of the
@@ -575,7 +558,7 @@ class StructType(TypeBase):
                 self._struct_name, self.field_names, self._doc
             )
         self.python_type = python_type
-        if self._nullable_type is not None:
+        if isinstance(self._nullable_type, StructType):
             self._nullable_type.set_fields(fields, python_type)
 
 
@@ -669,8 +652,8 @@ class DynamicType:
     def _add_method(
         cls,
         name: str,
-        func: Callable,  # type: ignore[type-arg]
-        doc: Optional[str] = None,
+        func: Callable,
+        doc: str | None = None,
     ) -> object:
         """Add a method"""
         func.__name__ = name
@@ -682,8 +665,8 @@ class DynamicType:
     def _add_class_method(
         cls,
         name: str,
-        func: Callable,  # type: ignore[type-arg]
-        doc: Optional[str] = None,
+        func: Callable,
+        doc: str | None = None,
     ) -> object:
         """Add a static method"""
         func.__name__ = name
@@ -696,9 +679,9 @@ class DynamicType:
     def _add_property(
         cls,
         name: str,
-        getter: Optional[Callable] = None,  # type: ignore[type-arg]
-        setter: Optional[Callable] = None,  # type: ignore[type-arg]
-        doc: Optional[str] = None,
+        getter: Callable | None = None,
+        setter: Callable | None = None,
+        doc: str | None = None,
     ) -> object:
         """Add a property"""
         if getter is None and setter is None:
@@ -746,15 +729,19 @@ class ClassBase(DynamicType):
 
 
 class DynamicClassBase(ClassBase):
+    # Set on each class created for a service
+    _service_name: str
+    _class_name: str
+
     def __repr__(self) -> str:
         return "<%s.%s remote object #%d>" % (
             self._service_name,
             self._class_name,
             self._object_id,
-        )  # type: ignore[attr-defined]
+        )
 
 
-def _create_class_type(service_name: str, class_name: str, doc: Optional[str]) -> type:
+def _create_class_type(service_name: str, class_name: str, doc: str | None) -> type:
     return type(
         str(class_name),
         (DynamicClassBase,),
@@ -763,29 +750,29 @@ def _create_class_type(service_name: str, class_name: str, doc: Optional[str]) -
 
 
 def _create_enum_type(
-    enum_name: str, values: Mapping[str, Mapping[str, object]], doc: Optional[str]
-) -> Enum:
+    enum_name: str, values: Mapping[str, Mapping[str, object]], doc: str | None
+) -> type[Enum]:
     typ = Enum(
         enum_name,
-        dict((name, x["value"]) for name, x in values.items()),  # type: ignore[misc]
+        dict((name, x["value"]) for name, x in values.items()),
     )
-    setattr(typ, "__doc__", doc)
+    typ.__doc__ = doc
     for name in values.keys():
-        setattr(getattr(typ, name), "__doc__", values[name]["doc"])
-    return typ  # type: ignore[return-value]
+        getattr(typ, name).__doc__ = values[name]["doc"]
+    return typ  # pyright: ignore[reportReturnType]
 
 
 def _create_struct_type(
-    struct_name: str, field_names: List[str], doc: Optional[str]
+    struct_name: str, field_names: list[str], doc: str | None
 ) -> type:
-    typ = collections.namedtuple(struct_name, field_names)  # type: ignore[misc]
-    setattr(typ, "__doc__", doc)
+    typ = collections.namedtuple(struct_name, field_names)
+    typ.__doc__ = doc
     return typ
 
 
 def _create_exception_type(
-    service_name: str, class_name: str, doc: Optional[str]
-) -> Type[Exception]:
+    service_name: str, class_name: str, doc: str | None
+) -> type[Exception]:
     if service_name == "KRPC" and class_name in EXCEPTION_TYPES:
         return EXCEPTION_TYPES[class_name]
     return type(
@@ -812,7 +799,7 @@ class DefaultArgument:
 # pre-generated stubs the class object is shared across every client, so binding a client to it must
 # not be done by writing _client onto the shared class (which multiple clients would overwrite for
 # each other). Each client gets its own subclass carrying its own _client instead.
-_wrapped_subclasses: "weakref.WeakKeyDictionary[object, Dict[type, type]]" = (
+_wrapped_subclasses: weakref.WeakKeyDictionary[object, dict[type, type]] = (
     weakref.WeakKeyDictionary()
 )
 
@@ -837,13 +824,13 @@ class WrappedClass:
         self._class_type = _wrapped_subclass(client, class_type)
         self.__doc__ = class_type.__doc__
 
-    def __call__(self, *args: object, **kwargs: object) -> object:
+    def __call__(self, *args: object, **kwargs: object) -> Any:
         return self._class_type(*args, **kwargs)
 
-    def __getattr__(self, name: str) -> object:
+    def __getattr__(self, name: str) -> Any:
         return getattr(self._class_type, name)
 
-    def __dir__(self) -> List[str]:
+    def __dir__(self) -> list[str]:
         return dir(self._class_type)
 
 
@@ -855,27 +842,28 @@ class StaticMethod:
     service is a per-client subclass (see WrappedClass) that already carries its own _client, so
     this only applies to static methods called through an instance."""
 
-    def __init__(self, func: Callable) -> None:  # type: ignore[type-arg]
+    def __init__(self, func: Callable) -> None:
         self._func = func
 
-    def __get__(  # type: ignore[type-arg]
-        self, obj: object, objtype: Optional[type] = None
-    ) -> Callable:
+    def __get__(self, obj: object, objtype: type | None = None) -> Callable:
         if objtype is None:
             objtype = type(obj)
         if obj is not None and not hasattr(objtype, "_client"):
-            objtype._client = obj._client  # type: ignore[attr-defined]
+            objtype._client = obj._client  # pyright: ignore[reportAttributeAccessIssue]
 
         @functools.wraps(self._func)
         def bound(*args: object, **kwargs: object) -> object:
             return self._func(objtype, *args, **kwargs)
 
-        bound.__self__ = objtype  # type: ignore[attr-defined]
+        bound.__self__ = objtype  # pyright: ignore[reportAttributeAccessIssue]
         return bound
 
 
+_DocEnumT = TypeVar("_DocEnumT", bound="DocEnum")
+
+
 class DocEnum(Enum):
-    def __new__(cls, value: int, doc: Optional[str] = None):  # type: ignore[no-untyped-def]
+    def __new__(cls: type[_DocEnumT], value: int, doc: str | None = None) -> _DocEnumT:
         self = object.__new__(cls)
         self._value_ = value
         if doc is not None:

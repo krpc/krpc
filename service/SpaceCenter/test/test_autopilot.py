@@ -11,7 +11,6 @@ the controller can legitimately invalidate the calibrated assertions, but retuni
 a deliberate recalibration pass rather than alongside the change that tripped them.
 """
 
-# pylint: disable=too-many-lines
 import math
 import time
 import unittest
@@ -21,16 +20,20 @@ from krpctest import diagnostics
 from krpctest.geometry import cross, dot, normalize, quaternion_vector_mult
 
 
-# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
-def _make_autopilot_test_class(
+def scale(v, factor: float) -> tuple[float, float, float]:
+    x, y, z = v
+    return (factor * x, factor * y, factor * z)
+
+
+def _make_autopilot_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
     rwhl=True,
-    rwhl_authority=1,
+    rwhl_authority: float = 1,
     rcs=True,
-    rcs_thrust_limit=1,
+    rcs_thrust_limit: float = 1,
     engine_tvc=False,
-    engine_thrust_limit=1,
+    engine_thrust_limit: float = 1,
     time_to_peak=None,
     max_angular_velocity=None,
     angle_error=2,
@@ -638,7 +641,11 @@ def _make_autopilot_test_class(
             perturbed = perturb is None
             while time.time() < deadline:
                 self.wait(0.1)
-                if not perturbed and time.time() - start >= perturb_after:
+                if (
+                    perturb is not None
+                    and not perturbed
+                    and time.time() - start >= perturb_after
+                ):
                     perturb()
                     perturbed = True
                     settled_since = None
@@ -675,7 +682,7 @@ def _make_autopilot_test_class(
             axis = self.perpendicular_axis(direction)
             self.set_direction(direction)
             self.wait_for_autopilot()
-            angular_velocity = tuple(self.nudge_rate * value for value in axis)
+            angular_velocity = scale(axis, self.nudge_rate)
             self.connect().debug.set_angular_velocity(
                 angular_velocity, self.vessel.surface_reference_frame, self.vessel
             )
@@ -762,7 +769,7 @@ def _make_autopilot_test_class(
             self.check_rotation(35, 35)
 
         def apply_nudge(self, axis, rate):
-            angular_velocity = tuple(rate * value for value in axis)
+            angular_velocity = scale(axis, rate)
             self.connect().debug.set_angular_velocity(
                 angular_velocity, self.vessel.surface_reference_frame, self.vessel
             )
@@ -863,7 +870,7 @@ def _make_autopilot_test_class(
             # a great circle path with minor deviation.
             self.cheat_orientation_to(0, 90)
             axis = self.perpendicular_axis(self.surface_direction())
-            omega = tuple(self.flip_seed_rate * value for value in axis)
+            omega = scale(axis, self.flip_seed_rate)
             self.set_rotation(0, 270)
             self.connect().debug.set_angular_velocity(
                 omega, self.vessel.surface_reference_frame, self.vessel
@@ -903,7 +910,7 @@ def _make_autopilot_test_class(
             # the controller must decelerate it and turn it back through that band.
             self.cheat_orientation_to(0, 90)
             axis = self.perpendicular_axis(self.surface_direction())
-            omega = tuple(self.flip_seed_rate * value for value in axis)
+            omega = scale(axis, self.flip_seed_rate)
             self.set_rotation(0, 225)
             self.connect().debug.set_angular_velocity(
                 omega, self.vessel.surface_reference_frame, self.vessel
@@ -944,7 +951,7 @@ def _make_autopilot_test_class(
             # within the near-antipode singularity window.
             self.cheat_orientation_to(0, 90 - 45)
             axis = self.perpendicular_axis(self.surface_direction())
-            omega = tuple(self.flip_seed_rate * value for value in axis)
+            omega = scale(axis, self.flip_seed_rate)
             self.set_rotation(0, 270)
             self.connect().debug.set_angular_velocity(
                 omega, self.vessel.surface_reference_frame, self.vessel
@@ -1632,11 +1639,10 @@ TestAutoPilotAttitudeFlexible = _make_autopilot_test_class(
 )
 
 
-# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
-def _make_autopilot_launch_test_class(
+def _make_autopilot_launch_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
-    throttle=1,
+    throttle: float = 1,
     pre_launch_sequence=False,
     hold_oscillation_amplitude=0.2,
     hold_attitude_error=0.75,
@@ -1883,7 +1889,6 @@ TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
 # tested here: on aircraft the autopilot's roll control excites a sustained roll
 # limit-cycle (a known limitation of the constant-torque model on aero-controlled craft),
 # so these focus on the pitch/heading hold that does converge cleanly.
-# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
 def _make_autopilot_flight_test_class(
     test_name,
     vessel_name,
@@ -2026,8 +2031,7 @@ TestAutoPilotFlightGull = _make_autopilot_flight_test_class(
 # high dynamic-pressure aero moments, keeping the angle of attack small and positive, without
 # tumbling or breaking up. Unpowered, as engines flame out in the thin air anyway. RCS is enabled
 # as a re-entry vehicle would use it, though the aero surfaces carry most of the authority.
-# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
-def _make_autopilot_reentry_test_class(
+def _make_autopilot_reentry_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
     altitude,
@@ -2205,7 +2209,7 @@ class TestAutoPilotSAS(krpctest.TestCase):
         for wheel in self.vessel.parts.reaction_wheels:
             wheel.active = False
 
-        self.ap.speed_mode = self.speed_mode.orbit
+        self.vessel.control.speed_mode = self.speed_mode.orbit
 
         self.check_sas_error(self.sas_mode.prograde, 0)
         self.check_sas_error(self.sas_mode.retrograde, 180)
@@ -2358,7 +2362,11 @@ class TestAutoPilotRemovedReferenceFrame(krpctest.TestCase):
         )
         length = math.sqrt(sum(x * x for x in across))
         self.ap.reference_frame = frame
-        self.ap.target_direction = tuple(x / length for x in across)
+        self.ap.target_direction = (
+            across[0] / length,
+            across[1] / length,
+            across[2] / length,
+        )
         self.ap.engaged = True
 
     def test_removing_the_frame_holds_the_loop(self):

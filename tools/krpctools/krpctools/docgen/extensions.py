@@ -8,7 +8,7 @@ class AppendExtension(jinja2.ext.Extension):
     def parse(self, parser):
         lineno = next(parser.stream).lineno
         args = [parser.parse_expression()]
-        body = parser.parse_statements(["name:endappend"], drop_needle=True)
+        body = parser.parse_statements(("name:endappend",), drop_needle=True)
         return jinja2.nodes.CallBlock(
             self.call_method("_append_support", args), [], [], body
         ).set_lineno(lineno)

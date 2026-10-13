@@ -1,7 +1,8 @@
 import itertools
 import unittest
-from krpc.expressionutils import build_ptype, common_ptype, promote, with_nullable
+
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.expressionutils import build_ptype, common_ptype, promote, with_nullable
 
 
 def _tuple(code: int) -> KRPC.Type:

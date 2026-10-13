@@ -1,5 +1,7 @@
 import unittest
+
 from krpc.types import Types
+
 from ..definitions import Definitions
 
 
@@ -29,7 +31,8 @@ class TestDefinitions(unittest.TestCase):
 
     def test_enumeration_values_are_registered(self):
         typ = self.definitions.types.enumeration_type("ServiceA", "Mode")
-        self.assertEqual(1, typ.python_type.Fast.value)
+        # The enumeration type is created at run time
+        self.assertEqual(1, typ.python_type.Fast.value)  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_class_is_registered(self):
         self.assertEqual(

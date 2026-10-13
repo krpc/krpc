@@ -1,6 +1,7 @@
 import struct
 import unittest
 import zlib
+
 import krpctest
 
 
@@ -38,7 +39,6 @@ def png(width, height):
 
 
 class TestImage(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

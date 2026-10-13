@@ -1,36 +1,38 @@
 from __future__ import annotations
-from typing import Iterable, List, Tuple
-import unittest
+
 import sys
+import unittest
+from collections.abc import Iterable
+
+from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.error import EncodingError
-from krpc.decoder import Decoder
-from krpc.types import Types, TypeBase
 from krpc.platform import hexlify, unhexlify
+from krpc.types import TypeBase, Types
 
 
 class TestEncodeDecode(unittest.TestCase):
     types = Types()
 
     def _run_test_encode_value(
-        self, typ: TypeBase, cases: Iterable[Tuple[object, str]]
+        self, typ: TypeBase, cases: Iterable[tuple[object, str]]
     ) -> None:
         for decoded, encoded in cases:
             data = Encoder.encode(decoded, typ)
             self.assertEqual(encoded, hexlify(data))
 
     def _run_test_decode_value(
-        self, typ: TypeBase, cases: Iterable[Tuple[object, str]]
+        self, typ: TypeBase, cases: Iterable[tuple[object, str]]
     ) -> None:
         for decoded, encoded in cases:
             value = Decoder.decode(None, unhexlify(encoded), typ)
-            if typ.python_type == float:
+            if typ.python_type is float:
                 self.assertEqual(str(decoded)[0:8], str(value)[0:8])
             else:
                 self.assertEqual(decoded, value)
 
     def test_double(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             (0.0, "0000000000000000"),
             (-1.0, "000000000000f0bf"),
             (3.14159265359, "ea2e4454fb210940"),
@@ -42,7 +44,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_decode_value(self.types.double_type, cases)
 
     def test_float(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             (3.14159265359, "db0f4940"),
             (-1.0, "000080bf"),
             (0.0, "00000000"),
@@ -54,7 +56,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_decode_value(self.types.float_type, cases)
 
     def test_sint32(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             (0, "00"),
             (1, "02"),
             (42, "54"),
@@ -67,7 +69,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_decode_value(self.types.sint32_type, cases)
 
     def test_sint64(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             (0, "00"),
             (1, "02"),
             (42, "54"),
@@ -98,7 +100,7 @@ class TestEncodeDecode(unittest.TestCase):
         self.assertRaises(EncodingError, Encoder.encode, -849, self.types.uint32_type)
 
     def test_uint64(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             (0, "00"),
             (1, "01"),
             (42, "2a"),
@@ -112,12 +114,12 @@ class TestEncodeDecode(unittest.TestCase):
         self.assertRaises(EncodingError, Encoder.encode, -849, self.types.uint64_type)
 
     def test_bool(self) -> None:
-        cases: List[Tuple[object, str]] = [(True, "01"), (False, "00")]
+        cases: list[tuple[object, str]] = [(True, "01"), (False, "00")]
         self._run_test_encode_value(self.types.bool_type, cases)
         self._run_test_decode_value(self.types.bool_type, cases)
 
     def test_string(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             ("", "00"),
             ("testing", "0774657374696e67"),
             (
@@ -134,7 +136,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_decode_value(self.types.string_type, cases)
 
     def test_bytes(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             (b"", "00"),
             (b"\xba\xda\x55", "03bada55"),
             (b"\xde\xad\xbe\xef", "04deadbeef"),
@@ -143,7 +145,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_decode_value(self.types.bytes_type, cases)
 
     def test_tuple(self) -> None:
-        cases: List[Tuple[object, str]] = [((1,), "0a0101")]
+        cases: list[tuple[object, str]] = [((1,), "0a0101")]
         self._run_test_encode_value(
             self.types.tuple_type(self.types.uint32_type), cases
         )
@@ -158,7 +160,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_decode_value(typ, cases)
 
     def test_tuple_with_a_nullable_item(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             ((1, "jeb"), "0a01010a0501036a6562"),
             ((1, None), "0a01010a0100"),
         ]
@@ -180,7 +182,7 @@ class TestEncodeDecode(unittest.TestCase):
         value = typ.python_type(count=1, name="jeb", flag=False)
         # A structure carries the values of its fields in order, the same encoding as a
         # tuple of those values
-        cases: List[Tuple[object, str]] = [(value, "0a01010a04036a65620a0100")]
+        cases: list[tuple[object, str]] = [(value, "0a01010a04036a65620a0100")]
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
@@ -194,7 +196,7 @@ class TestEncodeDecode(unittest.TestCase):
         )
         # The 01 ahead of the name is its presence bool, and a null field is that bool
         # alone
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             (typ.python_type(count=1, name="jeb"), "0a01010a0501036a6562"),
             (typ.python_type(count=1, name=None), "0a01010a0100"),
         ]
@@ -216,7 +218,7 @@ class TestEncodeDecode(unittest.TestCase):
         self.assertEqual(typ.python_type(count=1), value)
 
     def test_list(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             ([], ""),
             ([1], "0a0101"),
             ([1, 2, 3, 4], "0a01010a01020a01030a0104"),
@@ -228,7 +230,7 @@ class TestEncodeDecode(unittest.TestCase):
     def test_list_of_nullable_values(self) -> None:
         # A zero is a value like any other, and is told apart from a null by the presence
         # bool alone
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             ([], ""),
             ([None], "0a0100"),
             ([0], "0a020100"),
@@ -239,7 +241,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_decode_value(typ, cases)
 
     def test_set(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             (set(), ""),
             (set([1]), "0a0101"),
             (set([1, 2, 3, 4]), "0a01010a01020a01030a0104"),
@@ -249,7 +251,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_decode_value(typ, cases)
 
     def test_dictionary(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             ({}, ""),
             ({"": 0}, "0a060a0100120100"),
             (
@@ -263,7 +265,7 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_decode_value(typ, cases)
 
     def test_dictionary_of_nullable_values(self) -> None:
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             ({"": 0}, "0a070a010012020100"),
             ({"": None}, "0a060a0100120100"),
             (
@@ -282,7 +284,7 @@ class TestEncodeDecode(unittest.TestCase):
         # client reads what the type says at every position rather than naming the ones a
         # value can be null at
         set_type = self.types.set_type(self.types.nullable(self.types.uint32_type))
-        set_cases: List[Tuple[object, str]] = [
+        set_cases: list[tuple[object, str]] = [
             (set([None]), "0a0100"),
             (set([1]), "0a020101"),
         ]
@@ -291,7 +293,7 @@ class TestEncodeDecode(unittest.TestCase):
         dictionary_type = self.types.dictionary_type(
             self.types.nullable(self.types.string_type), self.types.uint32_type
         )
-        dictionary_cases: List[Tuple[object, str]] = [
+        dictionary_cases: list[tuple[object, str]] = [
             ({None: 1}, "0a060a0100120101"),
             ({"jeb": 1}, "0a0a0a0501036a6562120101"),
         ]
@@ -301,7 +303,7 @@ class TestEncodeDecode(unittest.TestCase):
     def test_nullable_collection_values(self) -> None:
         # A nullable position holding a collection carries the presence bool ahead of the
         # collection's own encoding
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             ([None], "0a0100"),
             ([[]], "0a0101"),
             ([[1]], "0a04010a0101"),
@@ -316,7 +318,7 @@ class TestEncodeDecode(unittest.TestCase):
         struct_type = self.types.struct_type("ServiceName", "NestedStructName")
         struct_type.set_fields([("count", self.types.uint32_type)])
         typ = self.types.list_type(self.types.nullable(struct_type))
-        cases: List[Tuple[object, str]] = [
+        cases: list[tuple[object, str]] = [
             ([None], "0a0100"),
             ([struct_type.python_type(count=1)], "0a04010a0101"),
         ]

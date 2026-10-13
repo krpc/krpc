@@ -4,7 +4,8 @@ import socket
 import tempfile
 import threading
 import unittest
-from typing import Any, List, Optional
+from typing import Any
+
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.connection import Connection
 
@@ -22,7 +23,7 @@ class EchoServer:
     def __init__(self, family: int) -> None:
         self._family = family
         self._listener = socket.socket(family, socket.SOCK_STREAM)
-        self._directory: Optional[str] = None
+        self._directory: str | None = None
         self._address: Any = None
 
     @property
@@ -90,7 +91,7 @@ class ConnectionTest(unittest.TestCase):
         conn.send(b"disconnect")
         self.assertEqual(b"disconnect", conn.receive(10))
         # Wait for the connection to close
-        while conn._socket.recv(1) != b"":  # type: ignore[union-attr]
+        while conn._socket.recv(1) != b"":
             pass
 
     def test_send_receive(self) -> None:
@@ -133,12 +134,12 @@ class ConnectionTest(unittest.TestCase):
         # of hanging the suite.
         conn = self.connect()
         self.server_close_connection(conn)
-        raised: List[BaseException] = []
+        raised: list[BaseException] = []
 
         def run() -> None:
             try:
                 conn.receive_message(KRPC.Response)
-            except socket.error as exn:
+            except OSError as exn:
                 raised.append(exn)
 
         thread = threading.Thread(target=run, daemon=True)

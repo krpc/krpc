@@ -2,30 +2,31 @@ import collections
 import hashlib
 import itertools
 
-# pylint: disable=no-name-in-module
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
-    ValueType,
     ClassType,
-    EnumerationType,
-    StructType,
-    MessageType,
-    TupleType,
-    ListType,
-    SetType,
     DictionaryType,
+    EnumerationType,
+    ListType,
+    MessageType,
+    SetType,
+    StructType,
+    TupleType,
+    ValueType,
 )
-from .generator import Generator
-from .docparser import DocParser
-from ..utils import lower_camel_case, upper_camel_case, as_type, is_nullable
+
 from ..lang.java import JavaLanguage
+from ..utils import as_type, is_nullable, lower_camel_case, upper_camel_case
+from .docparser import DocParser
+from .generator import Generator
 
 
-class JavaGenerator(Generator):
-
+class JavaGenerator(Generator[JavaLanguage]):
     language = JavaLanguage()
 
-    parse_plain_cref_member = staticmethod(lower_camel_case)
+    @staticmethod
+    def parse_plain_cref_member(name):
+        return lower_camel_case(name)
 
     def parse_type_specification(self, typ):
         if typ is None:
@@ -134,7 +135,7 @@ class JavaGenerator(Generator):
         context["properties"] = properties
 
         # Expand class properties into get and set methods
-        for class_name, class_info in context["classes"].items():
+        for class_info in context["classes"].values():
             class_properties = collections.OrderedDict()
             for name, info in class_info["properties"].items():
                 if info["getter"]:
@@ -301,7 +302,6 @@ class JavaGenerator(Generator):
 
 
 class JavaDocParser(DocParser):
-
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 

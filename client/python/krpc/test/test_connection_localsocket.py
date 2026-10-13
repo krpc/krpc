@@ -4,6 +4,7 @@ import socket
 import sys
 import unittest
 from unittest import mock
+
 from krpc import _default_path
 from krpc.connection import Connection, LocalConnection
 from krpc.test.connectiontest import ConnectionTest, EchoServer

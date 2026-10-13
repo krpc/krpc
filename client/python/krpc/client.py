@@ -1,37 +1,39 @@
 from __future__ import annotations
-from typing import cast, Any, Callable, Generator, Iterable, Iterator, Optional, Type
-from types import TracebackType
-from contextlib import contextmanager
+
 import reprlib
-import sys
 import threading
 import warnings
+from collections.abc import Callable, Iterable, Iterator
+from contextlib import contextmanager
+from types import TracebackType
+from typing import Any, cast
+
+import krpc.schema.KRPC_pb2 as KRPC
+import krpc.services
+import krpc.stream
+import krpc.streammanager
 from krpc import limits
 from krpc.connection import Connection
+from krpc.decoder import Decoder
 from krpc.definitions import CLASS, ENUMERATION, STRUCT, Definition, register_all
-from krpc.error import StreamError
+from krpc.encoder import Encoder
+from krpc.error import RPCError, StreamError
 from krpc.event import Event
 from krpc.functioncompiler import (
-    Parameters,
     NO_VALUE,
+    Parameters,
     compile_function_with_type,
 )
-from krpc.types import Types, TypeBase, DefaultArgument, EXCEPTION_TYPES
 from krpc.service import (
     create_service,
     extended_stub_classes,
     merge_service,
     service_definitions,
 )
-from krpc.streammanager import StreamManager
 from krpc.stream import Stream
-from krpc.encoder import Encoder
-from krpc.decoder import Decoder
+from krpc.streammanager import StreamManager
+from krpc.types import EXCEPTION_TYPES, DefaultArgument, TypeBase, Types
 from krpc.utils import snake_case
-from krpc.error import RPCError
-import krpc.streammanager
-import krpc.schema.KRPC_pb2 as KRPC
-import krpc.services
 
 
 def _client_class(
@@ -101,7 +103,7 @@ def _check_argument(value: object, ptype: KRPC.Type) -> None:
         for element, element_ptype in zip(cast(Iterable[object], value), ptype.types):
             _check_argument(element, element_ptype)
     elif ptype.code == KRPC.Type.DICTIONARY:
-        for key, element in cast(dict, value).items():  # type: ignore[type-arg]
+        for key, element in cast(dict, value).items():
             _check_argument(key, ptype.types[0])
             _check_argument(element, ptype.types[1])
 
@@ -131,8 +133,8 @@ def _stub_definitions(
     def register_struct(
         struct: KRPC.Struct, python_type: type
     ) -> Callable[[Types], None]:
-        field_names = python_type._fields  # type: ignore[attr-defined]
-        build_as: Optional[type] = python_type
+        field_names = python_type._fields
+        build_as: type | None = python_type
         if len(struct.fields) < len(field_names):
             # Fields are only ever appended to a structure, so a server that declares fewer
             # of them than the stubs is an older one. Its values cannot be built as the stub
@@ -140,7 +142,8 @@ def _stub_definitions(
             warnings.warn(
                 "Reading the struct %s.%s as a plain named tuple, as the server declares "
                 "fewer fields for it than this client was generated against"
-                % (name, struct.name)
+                % (name, struct.name),
+                stacklevel=2,
             )
             field_names = field_names[: len(struct.fields)]
             build_as = None
@@ -158,14 +161,14 @@ def _stub_definitions(
     # one client cannot go on it. The client's own subclass is what carries the members that
     # only the server's definition declares
     extended = extended_stub_classes(service_info, service)
-    classes = service._classes  # type: ignore[attr-defined]
+    classes = service._classes  # pyright: ignore[reportAttributeAccessIssue]
     for class_name, python_type in classes.items():
         if class_name in extended:
             python_type = _client_class(client, name, class_name, python_type)
         yield Definition(
             CLASS, name, class_name, [], register_class(class_name, python_type)
         )
-    enumerations = service._enumerations  # type: ignore[attr-defined]
+    enumerations = service._enumerations  # pyright: ignore[reportAttributeAccessIssue]
     for enum_name, python_type in enumerations.items():
         yield Definition(
             ENUMERATION,
@@ -177,7 +180,7 @@ def _stub_definitions(
     # The field types of a structure come from the service definition, so that the same code
     # decodes a structure whether its stubs were generated ahead of time or not. Only the
     # type a value is built as comes from the stubs
-    structs = service._structs  # type: ignore[attr-defined]
+    structs = service._structs  # pyright: ignore[reportAttributeAccessIssue]
     for struct in service_info.structs:
         python_type = structs.get(struct.name)
         if python_type is None:
@@ -191,7 +194,7 @@ def _stub_definitions(
         )
 
 
-class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attributes
+class Client(krpc.services.Client):
     """
     A kRPC client, through which all Remote Procedure Calls are made.
     Services provided by the server that the client connects
@@ -202,7 +205,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
     def __init__(
         self,
         rpc_connection: Connection,
-        stream_connection: Connection,
+        stream_connection: Connection | None,
         use_pregenerated_stubs: bool = True,
     ) -> None:
         super().__init__()
@@ -214,7 +217,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
         # The type a server side function returns, and the types of its
         # parameters, by expression object identifier, so that each is
         # introspected over the wire only once
-        self._expression_return_types: dict[int, Optional[KRPC.Type]] = {}
+        self._expression_return_types: dict[int, KRPC.Type | None] = {}
         self._expression_parameter_types: dict[int, list[KRPC.Type]] = {}
         # The parameters of a function compiled by compile, which bind a call's
         # arguments to them
@@ -301,9 +304,9 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
 
     def __exit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_value: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         self.close()
 
@@ -361,7 +364,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
         finally:
             stream.remove()
 
-    def compile(self, func: Callable) -> Any:  # type: ignore[type-arg]
+    def compile(self, func: Callable) -> Any:
         """Compile a Python function or lambda into a server side function, a
         KRPC.Expression object. Each run makes the function's remote procedure
         calls again, and uses its other values as they were when it was
@@ -381,7 +384,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
 
     def _function_and_type(
         self, function: Any, streamed: bool = False
-    ) -> tuple[Any, Optional[KRPC.Type], Optional[Parameters]]:
+    ) -> tuple[Any, KRPC.Type | None, Parameters | None]:
         """The server side function for a KRPC.Expression object or a Python
         function, the type of the values it evaluates to, and its parameters.
         The compiler tracks the type of a Python function, so the server is
@@ -478,7 +481,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
 
     def _expression_return_type(
         self, expression: Any, cache: bool = True
-    ) -> Optional[KRPC.Type]:
+    ) -> KRPC.Type | None:
         """Build the protocol buffer type message describing the type of the
         values a server side function evaluates to, by introspecting its
         return type on the server. None for an expression with no value."""
@@ -506,7 +509,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
 
     def _encode_arguments(
         self, parameter_types: list[KRPC.Type], args: list[object]
-    ) -> list[Optional[bytes]]:
+    ) -> list[bytes | None]:
         """Encode the arguments of a call to a server side function, one per
         parameter. A None is sent as a null argument."""
         if len(args) != len(parameter_types):
@@ -525,7 +528,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
 
     def _encode_argument(
         self, position: int, value: object, ptype: KRPC.Type
-    ) -> Optional[bytes]:
+    ) -> bytes | None:
         """Encode an argument of a call to a server side function, coerced to
         the type of its parameter as the arguments of a remote procedure call
         are. Raises TypeError naming the argument's position for a value the
@@ -538,7 +541,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
             value = self._types.coerce_to(value, typ)
             _check_argument(value, ptype)
             return Encoder.encode(value, typ)
-        except Exception as exc:  # pylint: disable=broad-exception-caught
+        except Exception as exc:
             raise TypeError(
                 "run() argument %d must be a %s, got %s"
                 % (position, typ, _ARGUMENT_REPR.repr(value))
@@ -550,7 +553,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
         a stream update message has finished being processed."""
         return self._stream_manager.update_condition
 
-    def wait_for_stream_update(self, timeout: Optional[float] = None) -> None:
+    def wait_for_stream_update(self, timeout: float | None = None) -> None:
         """Wait until the next stream update message or a timeout occurs.
         The condition variable must be locked before calling this method.
 
@@ -569,11 +572,13 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
 
     @staticmethod
     def get_call(
-        func: Callable, *args: object, **kwargs: object  # type: ignore[type-arg]
+        func: Callable,
+        *args: object,
+        **kwargs: object,
     ) -> KRPC.ProcedureCall:
         """Convert a remote procedure call to a KRPC.ProcedureCall message"""
         if func == getattr:
-            name = args[1]
+            name = cast(str, args[1])
             builder = getattr(args[0], "_build_call_" + name)
             args = tuple()
             kwargs = {}
@@ -581,26 +586,26 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
             raise StreamError("Cannot create a call for a property setter")
         else:
             builder = getattr(
-                func.__self__,  # type: ignore[attr-defined]
+                func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
                 "_build_call_" + func.__name__,
             )
         return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
 
     @staticmethod
     def _get_return_type(
-        func: Callable,  # type: ignore[type-arg] # pylint: disable=unused-argument
+        func: Callable,
         *args: object,
         **kwargs: object,
     ) -> TypeBase:
         """Get the return type for a remote procedure call"""
         if func == getattr:
-            name = args[1]
+            name = cast(str, args[1])
             return_type_fn = getattr(args[0], "_return_type_" + name)
         elif func == setattr:
             raise StreamError("Cannot get return type for a property setter")
         else:
             return_type_fn = getattr(
-                func.__self__,  # type: ignore[attr-defined]
+                func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
                 "_return_type_" + func.__name__,
             )
         return cast(TypeBase, return_type_fn())
@@ -611,7 +616,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
         procedure: str,
         args: Iterable[object],
         param_types: Iterable[TypeBase],
-        return_type: Optional[TypeBase],
+        return_type: TypeBase | None,
     ) -> object:
         """Execute an RPC"""
 
@@ -655,7 +660,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
         return value
 
     def _note_stream_id(
-        self, response: KRPC.Response, return_type: Optional[TypeBase]
+        self, response: KRPC.Response, return_type: TypeBase | None
     ) -> None:
         """Note the id of a stream or event the server returned. Called in the order the
         replies arrive, so the stream manager keeps the latest value and any ending sent
@@ -681,7 +686,7 @@ class Client(krpc.services.Client):  # pylint: disable=too-many-instance-attribu
         procedure: str,
         args: Iterable[object],
         param_types: Iterable[TypeBase],
-        return_type: Optional[TypeBase],  # pylint: disable=unused-argument
+        return_type: TypeBase | None,
     ) -> KRPC.ProcedureCall:
         """Build a KRPC.ProcedureCall object"""
 

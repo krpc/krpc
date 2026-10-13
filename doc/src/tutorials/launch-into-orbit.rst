@@ -99,7 +99,7 @@ close to the target apoapsis.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 33-63
+         :lines: 33-62
 
 Next, the program fine tunes the apoapsis using 25% thrust, then waits until the rocket has
 left Kerbin's atmosphere. Each wait is an event, which the server checks every physics tick. See
@@ -145,7 +145,7 @@ programs poll in a loop, as those clients have no events.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 65-77
+         :lines: 64-76
 
 It is now time to plan the circularization burn. First, we calculate the delta-v
 required to circularize the orbit using the `vis-viva equation
@@ -196,7 +196,7 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 79-96
+         :lines: 78-95
 
 Next, we need to rotate the craft and wait until the circularization burn. We
 orientate the ship along the y-axis of the maneuver node's reference frame
@@ -238,7 +238,7 @@ orientate the ship along the y-axis of the maneuver node's reference frame
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 98-108
+         :lines: 97-107
 
 Finally, the program waits for an event that fires half the burn time before apoapsis, then sets
 maximum throttle to start the burn.
@@ -283,6 +283,6 @@ executed:
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 110-
+         :lines: 109-
 
 The rocket should now be in a circular 150km orbit above Kerbin.

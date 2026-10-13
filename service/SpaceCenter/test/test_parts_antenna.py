@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestPartsAntenna(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -105,7 +105,6 @@ class TestPartsAntenna(krpctest.TestCase):
 
 
 class TestPartsAntennaBreak(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

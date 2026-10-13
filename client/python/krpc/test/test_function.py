@@ -1,5 +1,5 @@
-from typing import Any
 import unittest
+from typing import Any
 from unittest import mock
 
 import krpc.functioncompiler
@@ -223,7 +223,6 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         first = self.conn.add_event(function)
         second = self.conn.add_event(function)
         # Each add creates its own event, so removing one leaves the other
-        # pylint: disable=protected-access
         self.assertNotEqual(
             first.stream._stream.stream_id, second.stream._stream.stream_id
         )
@@ -240,7 +239,6 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         first = self.conn.add_stream(counter)
         second = self.conn.add_stream(counter)
         # Each add creates its own stream, so removing one leaves the other
-        # pylint: disable=protected-access
         self.assertIsNot(first._stream, second._stream)
         self.assertNotEqual(first._stream.stream_id, second._stream.stream_id)
         first.remove()
@@ -268,7 +266,6 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         def reset() -> None:
             service.reset_custom_exception_later()
 
-        # pylint: disable=protected-access
         cached = len(self.conn._expression_return_types)
         for _ in range(3):
             self.assertIsNone(self.conn.run(reset))
@@ -494,7 +491,6 @@ class TestFunction(ServerTestCase, unittest.TestCase):
 
         function = self.conn.compile(above)
         # Rejected before the return type is introspected
-        # pylint: disable=protected-access
         self.conn._expression_return_types.pop(function._object_id, None)
         with mock.patch(
             "krpc.client._type_message", side_effect=AssertionError("introspected")

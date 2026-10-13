@@ -1,4 +1,5 @@
 import unittest
+
 import krpctest
 
 
@@ -45,7 +46,6 @@ def add_map_markers(test, drawing, ref):
 
 
 class TestMapView(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -77,6 +77,7 @@ class TestMapView(krpctest.TestCase):
     def test_orbit(self):
         mun = self.conn.space_center.bodies["Mun"]
         for orbit in (self.vessel.orbit, mun.orbit):
+            assert orbit is not None
             path = self.drawing.add_orbit(orbit)
             path.end_arrow = True
             self.wait()
@@ -105,7 +106,6 @@ class TestMapView(krpctest.TestCase):
 
 
 class TestEditor(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -149,7 +149,6 @@ class TestEditor(krpctest.TestCase):
 
 
 class TestTrackingStation(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -173,11 +172,12 @@ class TestTrackingStation(krpctest.TestCase):
             self.assertRaises(self.destroyed, obj.remove)
 
     def test_orbit(self):
-        mun = self.conn.space_center.bodies["Mun"]
-        path = self.drawing.add_orbit(mun.orbit)
+        mun_orbit = self.conn.space_center.bodies["Mun"].orbit
+        assert mun_orbit is not None
+        path = self.drawing.add_orbit(mun_orbit)
         path.end_arrow = True
         self.wait()
-        self.assertEqual(mun.orbit, path.orbit)
+        self.assertEqual(mun_orbit, path.orbit)
         path.remove()
 
     def test_map_marker(self):

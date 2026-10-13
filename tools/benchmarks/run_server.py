@@ -58,6 +58,7 @@ def arguments():
     else. What is taken here is what has to be understood before pytest sees it, which is the
     path a result file is written to, since a run that names one has not named a script.
     """
+    assert __doc__ is not None
     parser = argparse.ArgumentParser(
         description=__doc__.splitlines()[0], allow_abbrev=False
     )

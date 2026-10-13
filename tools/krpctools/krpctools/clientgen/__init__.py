@@ -1,18 +1,19 @@
 import argparse
+import builtins
 import importlib
 import json
 import os
 import sys
-from io import open
 from importlib.resources import files
-from .csharp import CsharpGenerator
-from .cpp import CppGenerator
-from .java import JavaGenerator
-from .cnano import CnanoGenerator
-from .python import PythonGenerator
+
 from ..definitions import Definitions
-from ..version import __version__
 from ..servicedefs import servicedefs
+from ..version import __version__
+from .cnano import CnanoGenerator
+from .cpp import CppGenerator
+from .csharp import CsharpGenerator
+from .java import JavaGenerator
+from .python import PythonGenerator
 
 GENERATORS = {
     "csharp": CsharpGenerator,
@@ -63,7 +64,6 @@ def main():
     args = parser.parse_args()
 
     try:
-
         # Check and expand input paths
         inputs = []
         for path in args.input:
@@ -75,7 +75,7 @@ def main():
         # Get service defs
         if len(inputs) == 1 and inputs[0].endswith(".json"):
             # From JSON file
-            with open(inputs[0], "r", encoding="utf-8") as fp:
+            with builtins.open(inputs[0], encoding="utf-8") as fp:
                 defs = json.load(fp)
             if args.output_defs:
                 sys.stderr.write(
@@ -92,7 +92,7 @@ def main():
                 )
             defs = servicedefs(args.ksp, args.service, inputs)
             if args.output_defs:
-                with open(args.output_defs, "w", encoding="utf-8") as fp:
+                with builtins.open(args.output_defs, "w", encoding="utf-8") as fp:
                     fp.write(defs)
             defs = json.loads(defs)
 
@@ -148,8 +148,8 @@ def load_generator(path):
     sys.path.append(dirpath)
     module = importlib.import_module(modulepath)
     generator = module.generator
-    with open(module.tmpl, "r", encoding="utf-8") as fp:
-        macro_template = "".join(fp.readlines()).decode("utf-8")
+    with builtins.open(module.tmpl, encoding="utf-8") as fp:
+        macro_template = "".join(fp.readlines())
     return generator, macro_template
 
 

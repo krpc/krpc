@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestPartsExperimentDMagic(krpctest.TestCase):
-
     # Exercises kRPC's support for science experiments backed by DMagic's
     # DMModuleScienceAnimateGeneric, which subclasses ModuleScienceExperiment but stores its
     # results in its own IScienceDataContainer. The dmagicSensorTest part (a thermometer running

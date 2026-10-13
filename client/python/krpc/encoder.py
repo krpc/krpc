@@ -1,35 +1,35 @@
 from __future__ import annotations
-from typing import cast, Any, Callable, Collection, Iterable, List, Mapping
-from enum import Enum
+
 import struct
+from collections.abc import Callable, Collection, Iterable, Mapping
+from enum import Enum
+from typing import Any, cast
 
-# pylint: disable=import-error,no-name-in-module
-import google.protobuf
+import google.protobuf.message
 from google.protobuf.internal import encoder as protobuf_encoder
-
-# pylint: disable=import-error,no-name-in-module
 from google.protobuf.internal import wire_format as protobuf_wire_format
+
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import EncodingError
 from krpc.platform import bytelength
-import krpc.schema.KRPC_pb2 as KRPC
 from krpc.types import (
-    Types,
-    TypeBase,
-    ValueType,
     ClassType,
+    DictionaryType,
     EnumerationType,
+    ListType,
     MessageType,
+    SetType,
     StructType,
     TupleType,
-    ListType,
-    SetType,
-    DictionaryType,
+    TypeBase,
+    Types,
+    ValueType,
 )
 
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
-_pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
-_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
+_pb_VarintEncoder = protobuf_encoder._VarintEncoder()
+_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()
 
 # protobuf's zigzag encoder carries no types, so it is bound here with the type it does
 # have. A call carrying a collection reaches it once per value, so this also saves looking
@@ -64,7 +64,7 @@ class Encoder:
         if isinstance(typ, EnumerationType):
             return cls._encode_value(cast(Enum, x).value, cls._types.sint32_type)
         if isinstance(typ, ClassType):
-            object_id = x._object_id  # type: ignore[attr-defined]
+            object_id = x._object_id  # pyright: ignore[reportAttributeAccessIssue]
             return cls._encode_value(object_id, cls._types.uint64_type)
         if isinstance(typ, ListType):
             list_msg = KRPC.List()
@@ -76,12 +76,10 @@ class Encoder:
         if isinstance(typ, DictionaryType):
             dict_msg = KRPC.Dictionary()
             entries = []
-            dict_obj = cast(Mapping, x)  # type: ignore[type-arg]
+            dict_obj = cast(Mapping, x)
             encode_key = cls._item_encoder(typ.key_type)
             encode_value = cls._item_encoder(typ.value_type)
-            for key, value in sorted(
-                dict_obj.items(), key=lambda i: i[0]
-            ):  # type: ignore[no-any-return]
+            for key, value in sorted(dict_obj.items(), key=lambda i: i[0]):
                 entry = KRPC.DictionaryEntry()
                 entry.key = encode_key(key)
                 entry.value = encode_value(value)
@@ -128,13 +126,13 @@ class Encoder:
         length = len(data)
         if length < 128:
             return _SINGLE_BYTE_VARINTS[length] + data
-        size: bytes = protobuf_encoder._VarintBytes(length)  # type: ignore[attr-defined]
+        size: bytes = protobuf_encoder._VarintBytes(length)
         return size + data
 
     @classmethod
     def _encode_items(
         cls, values: Iterable[object], types: Iterable[TypeBase]
-    ) -> List[bytes]:
+    ) -> list[bytes]:
         """The encoded value of each item of a tuple or a structure.
 
         A tuple is encoded on the hot path of every remote procedure call. Extending the
@@ -198,7 +196,7 @@ class _ValueEncoder:
     def _encode_varint(cls, value: int) -> bytes:
         if value < 128:
             return _SINGLE_BYTE_VARINTS[value]
-        data: List[bytes] = []
+        data: list[bytes] = []
         _pb_VarintEncoder(data.append, value, True)
         return b"".join(data)
 
@@ -212,7 +210,7 @@ class _ValueEncoder:
         # A collection reaches this once per value it carries.
         if value < 16384:
             return bytes((value & 0x7F | 0x80, value >> 7))
-        data: List[bytes] = []
+        data: list[bytes] = []
         _pb_SignedVarintEncoder(data.append, value, True)
         return b"".join(data)
 

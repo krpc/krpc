@@ -1,4 +1,5 @@
 import unittest
+
 import krpctest
 
 
@@ -11,7 +12,9 @@ class TestServoGroup(krpctest.TestCase):
         cls.launch_vessel_from_vab("InfernalRobotics")
         cls.remove_other_vessels()
         cls.ir = cls.connect().infernal_robotics
-        cls.vessel = cls.connect().space_center.active_vessel
+        vessel = cls.connect().space_center.active_vessel
+        assert vessel is not None
+        cls.vessel = vessel
         # Group state such as speed factor and expanded flag lives in IR's controller, which
         # only populates once it is ready; until then the active vessel's groups are served by
         # the synthesized (non-active) path. Wait so those members are controller-backed.

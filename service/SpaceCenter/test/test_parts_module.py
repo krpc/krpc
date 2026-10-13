@@ -62,8 +62,8 @@ class TestPartsModule(krpctest.TestCase):
         for candidate in module.action_list:
             if candidate.name == "MakeReferenceToggle":
                 action = candidate
-        action.enabled = True
-        action.enabled = False
+        action.activated = True
+        action.activated = False
 
     def test_solar_panel(self):
         part = self.parts.with_name("solarPanels2")[0]

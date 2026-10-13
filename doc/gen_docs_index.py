@@ -53,9 +53,7 @@ def version_key(version):
     if pre == "":
         # Rank a release above its pre-releases and give it an empty pre-tuple.
         return (tuple(nums), 1, ())
-    pre_parts = tuple(
-        (0, int(p)) if _NUM.match(p) else (1, p) for p in pre.split(".")
-    )
+    pre_parts = tuple((0, int(p)) if _NUM.match(p) else (1, p) for p in pre.split("."))
     return (tuple(nums), 0, pre_parts)
 
 

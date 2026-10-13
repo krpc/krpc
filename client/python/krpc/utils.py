@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+
 import re
 
 _REGEX_MULTI_UPPERCASE = re.compile(r"([A-Z]+)([A-Z][a-z0-9])")
@@ -14,7 +14,7 @@ def snake_case(camel_case: str) -> str:
     return re.sub(_REGEX_MULTI_UPPERCASE, r"\1_\2", result).lower()
 
 
-def split_type_string(type_string: str) -> List[str]:
+def split_type_string(type_string: str) -> list[str]:
     parts = []
     rest: str | None = type_string
     while rest is not None:

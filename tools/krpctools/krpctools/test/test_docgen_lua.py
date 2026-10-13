@@ -1,6 +1,7 @@
 import unittest
-from krpctools.test.docgentest import DocGenTestCase
+
 from krpctools.docgen.lua import LuaDomain
+from krpctools.test.docgentest import DocGenTestCase
 
 
 class TestDocGenLua(DocGenTestCase, unittest.TestCase):

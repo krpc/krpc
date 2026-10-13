@@ -132,6 +132,7 @@ def parse_changes(text):
     def flush_sub():
         nonlocal sub_fragments
         if sub_fragments is not None:
+            assert top is not None
             top.children.append(_make_item(sub_fragments))
             sub_fragments = None
 
@@ -246,7 +247,7 @@ def main():
     components = []
     unreleased = set()
     for name, path in args.entry:
-        with open(path, "r", encoding="utf-8") as fp:
+        with open(path, encoding="utf-8") as fp:
             versions, marked = parse_changes(fp.read())
         components.append((name, versions))
         unreleased |= marked

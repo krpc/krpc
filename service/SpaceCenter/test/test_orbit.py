@@ -373,7 +373,9 @@ class TestClosestApproach(krpctest.TestCase):
     def test_target_body(self):
         # Approaching a celestial body: target_body is set, target_vessel is not,
         # while the approaching side is still this vessel
-        approach = self.orbit.next_closest_approach(self.sc.bodies["Mun"].orbit)
+        mun_orbit = self.sc.bodies["Mun"].orbit
+        assert mun_orbit is not None
+        approach = self.orbit.next_closest_approach(mun_orbit)
         self.assertEqual(approach.vessel, self.vessel)
         self.assertIsNone(approach.body)
         self.assertIsNone(approach.target_vessel)

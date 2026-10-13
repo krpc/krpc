@@ -1,4 +1,5 @@
 import unittest
+
 from krpc.platform import bytelength, hexlify, unhexlify
 
 

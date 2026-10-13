@@ -27,7 +27,6 @@ def _flatten_node(node, parse_cref):
 
 
 class DocParser:
-
     def parse(self, xml):
         if xml.strip() == "":
             return ""

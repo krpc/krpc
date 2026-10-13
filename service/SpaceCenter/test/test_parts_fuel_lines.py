@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestPartsFuelLines(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -52,10 +52,10 @@ class TestPartsFuelLines(krpctest.TestCase):
     def test_error_on_fuel_line_part(self):
         part = self.parts.with_name("fuelLine")[0]
         with self.assertRaises(RuntimeError) as cm:
-            getattr(part, "fuel_lines_to")
+            part.fuel_lines_to
         self.assertTrue("Part is a fuel line" in str(cm.exception))
         with self.assertRaises(RuntimeError) as cm:
-            getattr(part, "fuel_lines_from")
+            part.fuel_lines_from
         self.assertTrue("Part is a fuel line" in str(cm.exception))
 
 

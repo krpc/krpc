@@ -1,6 +1,7 @@
 import unittest
-from krpctools.test.docgentest import DocGenTestCase
+
 from krpctools.docgen.csharp import CsharpDomain
+from krpctools.test.docgentest import DocGenTestCase
 
 
 class TestDocGenCsharp(DocGenTestCase, unittest.TestCase):

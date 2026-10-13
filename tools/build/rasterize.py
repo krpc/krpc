@@ -31,9 +31,11 @@ def main():
 
         # Imported here rather than at the top of the file so that libvips, and
         # the fontconfig it loads, start up with the cache directory set.
-        import pyvips  # pylint: disable=import-outside-toplevel
+        import pyvips
 
-        pyvips.Image.new_from_file(options.svg).write_to_file(options.out)
+        image = pyvips.Image.new_from_file(options.svg)
+        assert isinstance(image, pyvips.Image)
+        image.write_to_file(options.out)
     return 0
 
 

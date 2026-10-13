@@ -10,11 +10,12 @@ import re
 import shutil
 import subprocess
 import sys
-import tomllib
 import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
+
+import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
 os.chdir(ROOT)
@@ -29,43 +30,47 @@ class ReleaseError(Exception):
 
 
 def _version():
-    match = re.search(r'^version\s*=\s*"(.+)"$',
-                      Path('config.bzl').read_text(), re.MULTILINE)
+    match = re.search(
+        r'^version\s*=\s*"(.+)"$', Path("config.bzl").read_text(), re.MULTILINE
+    )
     if match is None:
-        raise ReleaseError('no version found in config.bzl')
+        raise ReleaseError("no version found in config.bzl")
     return match.group(1)
 
 
 VERSION = _version()
-TAG = 'v' + VERSION
+TAG = "v" + VERSION
 
 
 # Colors, dropped when the output is not going somewhere that renders them, so
 # redirecting a release log to a file keeps it readable. NO_COLOR is the
 # conventional opt-out (https://no-color.org).
-if (sys.stdout.isatty() and not os.environ.get('NO_COLOR')
-        and os.environ.get('TERM', 'dumb') != 'dumb'):
-    RESET = '\033[0m'
-    RED = '\033[31m'
-    GREEN = '\033[32m'
-    YELLOW = '\033[33m'
-    BOLD = '\033[1m'
-    DIM = '\033[2m'
+if (
+    sys.stdout.isatty()
+    and not os.environ.get("NO_COLOR")
+    and os.environ.get("TERM", "dumb") != "dumb"
+):
+    RESET = "\033[0m"
+    RED = "\033[31m"
+    GREEN = "\033[32m"
+    YELLOW = "\033[33m"
+    BOLD = "\033[1m"
+    DIM = "\033[2m"
 else:
-    RESET = RED = GREEN = YELLOW = BOLD = DIM = ''
+    RESET = RED = GREEN = YELLOW = BOLD = DIM = ""
 
 
 def banner(message):
     print()
-    print(f'{BOLD}==> {message}{RESET}')
+    print(f"{BOLD}==> {message}{RESET}")
 
 
 def error(message):
-    print(f'{RED}error:{RESET} {message}', file=sys.stderr)
+    print(f"{RED}error:{RESET} {message}", file=sys.stderr)
 
 
 def warning(message):
-    print(f'{YELLOW}warning:{RESET} {message}', file=sys.stderr)
+    print(f"{YELLOW}warning:{RESET} {message}", file=sys.stderr)
 
 
 def confirm(question):
@@ -73,8 +78,8 @@ def confirm(question):
 
     Anything other than an explicit yes aborts the step.
     """
-    if input(f'{question} [y/N] ').strip().lower() != 'y':
-        raise ReleaseError('aborted')
+    if input(f"{question} [y/N] ").strip().lower() != "y":
+        raise ReleaseError("aborted")
 
 
 def run(*command, env=None, stdin=None, cwd=None):
@@ -84,43 +89,56 @@ def run(*command, env=None, stdin=None, cwd=None):
     run and with which arguments.
     """
     command = [str(argument) for argument in command]
-    print(f'{DIM}$ {" ".join(command)}{RESET}')
-    status = subprocess.run(command, env=env, input=stdin,
-                            text=stdin is not None, cwd=cwd)
+    print(f"{DIM}$ {' '.join(command)}{RESET}")
+    status = subprocess.run(
+        command,
+        env=env,
+        input=stdin,
+        text=stdin is not None,
+        cwd=cwd,
+        check=False,
+    )
     if status.returncode != 0:
-        raise ReleaseError(
-            f'{command[0]} failed with exit status {status.returncode}')
+        raise ReleaseError(f"{command[0]} failed with exit status {status.returncode}")
 
 
 def capture(*command, env=None, cwd=None):
     """Run a command and return its standard output, stripped."""
     command = [str(argument) for argument in command]
-    status = subprocess.run(command, capture_output=True, text=True, env=env,
-                            cwd=cwd)
+    status = subprocess.run(
+        command, capture_output=True, text=True, env=env, cwd=cwd, check=False
+    )
     if status.returncode != 0:
         raise ReleaseError(
-            f'{command[0]} failed with exit status {status.returncode}: '
-            f'{status.stderr.strip()}')
+            f"{command[0]} failed with exit status {status.returncode}: "
+            f"{status.stderr.strip()}"
+        )
     return status.stdout.strip()
 
 
 def succeeds(*command, env=None):
     """Whether a command exits zero, with its output discarded."""
-    return subprocess.run([str(argument) for argument in command], env=env,
-                          stdout=subprocess.DEVNULL,
-                          stderr=subprocess.DEVNULL).returncode == 0
+    return (
+        subprocess.run(
+            [str(argument) for argument in command],
+            env=env,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        ).returncode
+        == 0
+    )
 
 
 def require(*tools):
     for tool in tools:
         if shutil.which(tool) is None:
-            raise ReleaseError(
-                f"'{tool}' is required for this step but was not found")
+            raise ReleaseError(f"'{tool}' is required for this step but was not found")
 
 
 def require_clean_tree():
-    if capture('git', 'status', '--porcelain'):
-        raise ReleaseError('the working tree has uncommitted changes')
+    if capture("git", "status", "--porcelain"):
+        raise ReleaseError("the working tree has uncommitted changes")
 
 
 def changelogs():
@@ -130,10 +148,12 @@ def changelogs():
     the clients and krpctools. Components on their own version train (buildenv)
     and ones not shipped in the release notes (krpctest) are deliberately absent.
     """
-    return (['server/CHANGELOG.md', 'core/CHANGELOG.md']
-            + sorted(str(path) for path in Path('service').glob('*/CHANGELOG.md'))
-            + sorted(str(path) for path in Path('client').glob('*/CHANGELOG.md'))
-            + ['tools/krpctools/CHANGELOG.md'])
+    return (
+        ["server/CHANGELOG.md", "core/CHANGELOG.md"]
+        + sorted(str(path) for path in Path("service").glob("*/CHANGELOG.md"))
+        + sorted(str(path) for path in Path("client").glob("*/CHANGELOG.md"))
+        + ["tools/krpctools/CHANGELOG.md"]
+    )
 
 
 def strip_unreleased():
@@ -143,8 +163,8 @@ def strip_unreleased():
     While on main the in-development version's header reads
     ``## [vX.Y.Z] - unreleased``; releasing turns it into ``## [vX.Y.Z]``.
     """
-    header = f'## [v{VERSION}] - unreleased'
-    replacement = f'## [v{VERSION}]'
+    header = f"## [v{VERSION}] - unreleased"
+    replacement = f"## [v{VERSION}]"
     changed = []
     for path in changelogs():
         file = Path(path)
@@ -160,21 +180,19 @@ def strip_unreleased():
 # passes the value to its tool explicitly, overriding any account the tool is
 # already configured with. Overridable, so that anything exercising these
 # scripts can point at a file of its own rather than the real one.
-CREDENTIALS_FILE = Path(os.environ.get('CREDENTIALS_FILE',
-                                       'release-credentials.toml'))
-CREDENTIALS_TEMPLATE = Path(
-    'tools/release/release-credentials.toml.template')
+CREDENTIALS_FILE = Path(os.environ.get("CREDENTIALS_FILE", "release-credentials.toml"))
+CREDENTIALS_TEMPLATE = Path("tools/release/release-credentials.toml.template")
 
 # Every key the credentials file must define. Git is deliberately absent:
 # pushes to krpc/krpc and krpc-arduino use the normal development git setup.
 CREDENTIAL_KEYS = (
-    'GITHUB_TOKEN',
-    'PYPI_TOKEN_KRPC',
-    'PYPI_TOKEN_KRPCTOOLS',
-    'NUGET_API_KEY',
-    'LUAROCKS_API_KEY',
-    'AWS_ACCESS_KEY_ID',
-    'AWS_SECRET_ACCESS_KEY',
+    "GITHUB_TOKEN",
+    "PYPI_TOKEN_KRPC",
+    "PYPI_TOKEN_KRPCTOOLS",
+    "NUGET_API_KEY",
+    "LUAROCKS_API_KEY",
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
 )
 
 
@@ -187,22 +205,25 @@ def read_credentials_file():
     if not CREDENTIALS_FILE.is_file():
         return None
     if CREDENTIALS_FILE.stat().st_mode & 0o077:
-        warning(f'{CREDENTIALS_FILE} is readable by other users; '
-                f"run 'chmod 600 {CREDENTIALS_FILE}'")
+        warning(
+            f"{CREDENTIALS_FILE} is readable by other users; "
+            f"run 'chmod 600 {CREDENTIALS_FILE}'"
+        )
     try:
-        with CREDENTIALS_FILE.open('rb') as credentials_file:
+        with CREDENTIALS_FILE.open("rb") as credentials_file:
             credentials = tomllib.load(credentials_file)
     except tomllib.TOMLDecodeError as exception:
         raise ReleaseError(
-            f'{CREDENTIALS_FILE} is not valid TOML: {exception}. Every value '
-            f'must be quoted, as in GITHUB_TOKEN = "ghp_..."') from exception
+            f"{CREDENTIALS_FILE} is not valid TOML: {exception}. Every value "
+            f'must be quoted, as in GITHUB_TOKEN = "ghp_..."'
+        ) from exception
     # A value left unquoted parses as a number, a boolean or a table rather
     # than failing, so it would otherwise reach the tool as the wrong type
-    unquoted = sorted(key for key, value in credentials.items()
-                      if not isinstance(value, str))
+    unquoted = sorted(
+        key for key, value in credentials.items() if not isinstance(value, str)
+    )
     if unquoted:
-        raise ReleaseError(
-            f'{CREDENTIALS_FILE}: not quoted: {" ".join(unquoted)}')
+        raise ReleaseError(f"{CREDENTIALS_FILE}: not quoted: {' '.join(unquoted)}")
     return credentials
 
 
@@ -216,12 +237,12 @@ def load_credentials():
     credentials = read_credentials_file()
     if credentials is None:
         raise ReleaseError(
-            f'{CREDENTIALS_FILE} not found; copy {CREDENTIALS_TEMPLATE} to it '
-            f'and fill it in')
+            f"{CREDENTIALS_FILE} not found; copy {CREDENTIALS_TEMPLATE} to it "
+            f"and fill it in"
+        )
     missing = [key for key in CREDENTIAL_KEYS if not credentials.get(key)]
     if missing:
-        raise ReleaseError(
-            f'{CREDENTIALS_FILE} does not define: {" ".join(missing)}')
+        raise ReleaseError(f"{CREDENTIALS_FILE} does not define: {' '.join(missing)}")
     return credentials
 
 
@@ -232,23 +253,25 @@ def github_user(token):
     Raises for a token GitHub rejects, or if GitHub cannot be reached.
     """
     request = urllib.request.Request(
-        'https://api.github.com/user',
-        headers={'Authorization': f'Bearer {token}',
-                 'Accept': 'application/vnd.github+json'})
+        "https://api.github.com/user",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+        },
+    )
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
-            login = json.load(response)['login']
-            header = response.headers.get('X-OAuth-Scopes')
+            login = json.load(response)["login"]
+            header = response.headers.get("X-OAuth-Scopes")
     except urllib.error.HTTPError as exception:
         raise ReleaseError(
-            f'GitHub rejected the token ({exception.code} '
-            f'{exception.reason})') from exception
+            f"GitHub rejected the token ({exception.code} {exception.reason})"
+        ) from exception
     except urllib.error.URLError as exception:
-        raise ReleaseError(
-            f'could not reach GitHub: {exception.reason}') from exception
+        raise ReleaseError(f"could not reach GitHub: {exception.reason}") from exception
     if header is None:
         return login, None
-    return login, {scope.strip() for scope in header.split(',') if scope.strip()}
+    return login, {scope.strip() for scope in header.split(",") if scope.strip()}
 
 
 def luarocks_key_works(key):
@@ -256,15 +279,16 @@ def luarocks_key_works(key):
 
     Asks the endpoint luarocks itself uses to test a key before storing it.
     """
-    url = f'https://luarocks.org/api/1/{urllib.parse.quote(key, safe="")}/status'
+    url = f"https://luarocks.org/api/1/{urllib.parse.quote(key, safe='')}/status"
     try:
         with urllib.request.urlopen(url, timeout=30) as response:
-            return 'errors' not in json.load(response)
+            return "errors" not in json.load(response)
     except (urllib.error.HTTPError, json.JSONDecodeError):
         return False
     except urllib.error.URLError as exception:
         raise ReleaseError(
-            f'could not reach luarocks.org: {exception.reason}') from exception
+            f"could not reach luarocks.org: {exception.reason}"
+        ) from exception
 
 
 def aws_environment(credentials):
@@ -274,10 +298,10 @@ def aws_environment(credentials):
     the keys being passed here, so it is removed.
     """
     environment = dict(os.environ)
-    environment.pop('AWS_PROFILE', None)
-    environment.pop('AWS_DEFAULT_PROFILE', None)
-    environment['AWS_ACCESS_KEY_ID'] = credentials['AWS_ACCESS_KEY_ID']
-    environment['AWS_SECRET_ACCESS_KEY'] = credentials['AWS_SECRET_ACCESS_KEY']
+    environment.pop("AWS_PROFILE", None)
+    environment.pop("AWS_DEFAULT_PROFILE", None)
+    environment["AWS_ACCESS_KEY_ID"] = credentials["AWS_ACCESS_KEY_ID"]
+    environment["AWS_SECRET_ACCESS_KEY"] = credentials["AWS_SECRET_ACCESS_KEY"]
     return environment
 
 
@@ -289,11 +313,17 @@ def twine_upload(token, distribution):
     ~/.pypirc from supplying a different account, and --non-interactive turns a
     credential problem into an error rather than a password prompt.
     """
-    require('twine')
-    environment = dict(os.environ,
-                       TWINE_USERNAME='__token__', TWINE_PASSWORD=token)
-    run('twine', 'upload', '--config-file', '/dev/null', '--non-interactive',
-        distribution, env=environment)
+    require("twine")
+    environment = dict(os.environ, TWINE_USERNAME="__token__", TWINE_PASSWORD=token)
+    run(
+        "twine",
+        "upload",
+        "--config-file",
+        "/dev/null",
+        "--non-interactive",
+        distribution,
+        env=environment,
+    )
 
 
 def main(step):
@@ -304,5 +334,5 @@ def main(step):
         error(str(exception))
         sys.exit(1)
     except KeyboardInterrupt:
-        error('interrupted')
+        error("interrupted")
         sys.exit(130)

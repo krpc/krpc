@@ -6,7 +6,7 @@ load("//doc:check_documented.bzl", "check_documented_test")
 load("//doc:macros.bzl", "cc_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
 load("//tools/build:image.bzl", "png_images")
 load("//tools/build:pkg.bzl", "stage_files")
-load("//tools/build:python.bzl", "py_lint_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
 load("//tools/krpctools:docgen.bzl", "docgen_multiple")
 
@@ -251,7 +251,7 @@ test_suite(
     name = "test",
     tests = [
         ":check-documented",
-        ":check-scripts-mypy",
+        ":check-scripts-pyright",
         ":lint",
         ":spelling",
     ],  # ':linkcheck'
@@ -263,18 +263,16 @@ test_suite(
 # and BasicArduino.ino (which needs an Arduino toolchain) have no automated
 # check.
 py_test(
-    name = "check-scripts-mypy",
+    name = "check-scripts-pyright",
     size = "medium",
-    srcs = ["check_scripts_mypy.py"],
-    data = glob(["src/scripts/**/*.py"]),
-    # Without this, auto-generated __init__.py files in the runfiles tree make
-    # mypy resolve the example scripts as packages rooted at the runfiles
-    # directory, which is not a valid package name, and it aborts.
+    srcs = ["check_scripts_pyright.py"],
+    data = glob(["src/scripts/**/*.py"]) + ["//:pyrightconfig.json"],
+    # Generated __init__.py files would make the scripts directories packages
     legacy_create_init = False,
-    main = "check_scripts_mypy.py",
+    main = "check_scripts_pyright.py",
     deps = [
         "//client/python:krpc_lib",
-        "@pypi//mypy",
+        "@pypi//basedpyright",
     ],
 )
 
@@ -426,13 +424,29 @@ java_binary_multiple(
 test_suite(
     name = "lint",
     tests = [
-        ":lint-python",
+        ":pyright",
+        ":ruff",
     ],
 )
 
-py_lint_test(
-    name = "lint-python",
+py_ruff_test(
+    name = "ruff",
     size = "small",
-    srcs = glob(["src/scripts/**/*.py"]),
-    pylint_config = "src/scripts/pylint.rc",
+    srcs = glob([
+        "*.py",
+        "src/scripts/**/*.py",
+    ]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    python_version = "3.12",
+    deps = [
+        "//client/python:krpc_lib",
+        "@pypi//cogapp",
+        "@pypi//watchdog",
+        "@rules_python//python/runfiles",
+    ],
 )

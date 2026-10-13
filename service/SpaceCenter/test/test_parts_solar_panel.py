@@ -1,9 +1,9 @@
 import unittest
+
 import krpctest
 
 
 class TestPartsSolarPanel(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -87,7 +87,6 @@ class TestPartsSolarPanel(krpctest.TestCase):
 
 
 class TestPartsSolarPanelBreak(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()

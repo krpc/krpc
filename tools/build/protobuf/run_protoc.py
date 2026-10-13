@@ -28,7 +28,7 @@ def main():
     # for this script's own options.
     if "--" in argv:
         split = argv.index("--")
-        pre_args, protoc_args = argv[:split], argv[split + 1:]
+        pre_args, protoc_args = argv[:split], argv[split + 1 :]
     else:
         pre_args, protoc_args = argv, []
 
@@ -49,7 +49,7 @@ def main():
         src, dst = spec.split("=", 1)
         shutil.copy(src, dst)
 
-    result = subprocess.run([opts.protoc] + protoc_args)
+    result = subprocess.run([opts.protoc] + protoc_args, check=False)
     if result.returncode != 0:
         return result.returncode
 

@@ -1,5 +1,6 @@
 import unittest
-from typing import Dict, Iterable, List
+from collections.abc import Iterable
+
 from krpc.definitions import (
     ENUMERATION,
     STRUCT,
@@ -9,8 +10,8 @@ from krpc.definitions import (
     topological_order,
 )
 from krpc.encoder import Encoder
-from krpc.types import EnumerationType, Types
 from krpc.schema.KRPC_pb2 import Type
+from krpc.types import EnumerationType, Types
 
 
 def enumeration_type(service: str, name: str) -> Type:
@@ -46,7 +47,7 @@ def list_type(value_type: Type) -> Type:
 
 class TestRegisterAll(unittest.TestCase):
     def setUp(self) -> None:
-        self.registered: List[str] = []
+        self.registered: list[str] = []
         self.types = Types()
 
     def definition(
@@ -58,7 +59,7 @@ class TestRegisterAll(unittest.TestCase):
     ) -> Definition:
         """A definition that records the order in which it is registered"""
 
-        def register(types: Types) -> None:  # pylint: disable=unused-argument
+        def register(types: Types) -> None:
             self.registered.append(name)
 
         return Definition(kind, service, name, references, register)
@@ -192,11 +193,11 @@ class TestRegisterAll(unittest.TestCase):
 
 class TestTopologicalOrder(unittest.TestCase):
     @staticmethod
-    def order(graph: Dict[str, List[str]], nodes: Iterable[str]) -> List[str]:
+    def order(graph: dict[str, list[str]], nodes: Iterable[str]) -> list[str]:
         def key(node: str) -> str:
             return node
 
-        def dependencies(node: str) -> List[str]:
+        def dependencies(node: str) -> list[str]:
             return graph[node]
 
         return topological_order(nodes, key, dependencies)
@@ -235,7 +236,7 @@ class TestDecodeDefaultValue(unittest.TestCase):
     def test_decodes_an_enumeration_value(self) -> None:
         typ = self.enumeration()
         value = decode_default_value(None, self.encode(2), typ, self.location)
-        self.assertEqual(getattr(typ.python_type, "fast"), value)
+        self.assertEqual(typ.python_type["fast"], value)
 
     def test_enumeration_that_was_never_registered(self) -> None:
         with self.assertRaises(RuntimeError) as cm:

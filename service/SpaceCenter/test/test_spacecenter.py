@@ -1,7 +1,13 @@
+from __future__ import annotations
+
 import unittest
+from typing import TYPE_CHECKING
 
 import krpctest
 from krpctest.geometry import norm, normalize
+
+if TYPE_CHECKING:
+    from krpc.services.spacecenter import SpaceCenter, Vessel
 
 
 class TestSpaceCenter(krpctest.TestCase):
@@ -368,7 +374,12 @@ class TestSpaceCenter(krpctest.TestCase):
         self.assertEqual("liquidEngine2", part.name)  # LV-T45 "Swivel"
 
 
-class WarpTestBase:
+class WarpTestBase(krpctest.Mixin):
+    sc: SpaceCenter
+    vessel: Vessel | None
+    maximum_rails_warp_factor: int
+    landed: bool
+
     def test_no_warp(self):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(0, self.sc.rails_warp_factor)
@@ -483,7 +494,7 @@ class WarpTestBase:
         self.assertAlmostEqual(ut, self.sc.ut, delta=2)
 
 
-class TestWarpOnLaunchpad(krpctest.TestCase, WarpTestBase):
+class TestWarpOnLaunchpad(WarpTestBase, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -500,7 +511,7 @@ class TestWarpOnLaunchpad(krpctest.TestCase, WarpTestBase):
         self.assertAlmostEqual(ut, self.sc.ut, delta=2)
 
 
-class TestWarpInOrbit(krpctest.TestCase, WarpTestBase):
+class TestWarpInOrbit(WarpTestBase, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -513,7 +524,7 @@ class TestWarpInOrbit(krpctest.TestCase, WarpTestBase):
         cls.landed = False
 
 
-class TestWarpInSpace(krpctest.TestCase, WarpTestBase):
+class TestWarpInSpace(WarpTestBase, krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

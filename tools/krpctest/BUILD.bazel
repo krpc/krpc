@@ -1,6 +1,6 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("//:config.bzl", "python_version", "version")
-load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
 
 # The krpctest package as an importable python library, for use by other
 # python targets in this workspace (the sdist below is what is released)
@@ -90,11 +90,33 @@ py_test(
     deps = deps,
 )
 
-py_lint_test(
+test_suite(
     name = "lint",
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob([
+        "*.py",
+        "krpctest/**/*.py",
+    ]),
+)
+
+py_pyright_test(
+    name = "pyright",
     size = "medium",
-    pkg = ":krpctest",
-    pkg_name = "krpctest",
-    pylint_config = "pylint.rc",
-    deps = deps,
+    srcs = glob([
+        "*.py",
+        "krpctest/**/*.py",
+    ]),
+    deps = [
+        ":krpctest_lib",
+        "@pypi//protobuf",
+        "@pypi//pytest",
+    ],
 )

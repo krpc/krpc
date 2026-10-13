@@ -1,6 +1,7 @@
 import unittest
-from krpctools.test.clientgentest import ClientGenTestCase
+
 from krpctools.clientgen.cpp import CppGenerator
+from krpctools.test.clientgentest import ClientGenTestCase
 
 
 class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):

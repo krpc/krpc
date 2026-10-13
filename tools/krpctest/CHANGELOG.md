@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Add `krpctest.Mixin`, the base of a mixin of tests, which type checks as a `TestCase`
+  (#1134)
 - Add Ferram Aerospace Research to the managed third-party mods, requested with
   `mods = ["FAR"]` or `krpc-install --mods=FAR` (#1032)
 - Add `--skip-mod-install` to `krpc-install` and `krpc-run-ksp`, and the

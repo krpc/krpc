@@ -44,11 +44,11 @@ def _terminate(proc):
     try:
         proc.terminate()
         proc.wait(timeout=30)
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         try:
             proc.kill()
             proc.wait(timeout=10)
-        except Exception:  # pylint: disable=broad-except
+        except Exception:
             pass
     if proc.poll() is None:
         kill_ksp()
@@ -205,9 +205,7 @@ def main():
     if args.load_game is not None:
         _stage_blank_save(args.load_game, ksp_dir)
 
-    proc = subprocess.Popen(  # pylint: disable=consider-using-with
-        [get_ksp_executable(ksp_dir), *ksp_args], cwd=ksp_dir
-    )
+    proc = subprocess.Popen([get_ksp_executable(ksp_dir), *ksp_args], cwd=ksp_dir)
     try:
         _follow_log(os.path.join(ksp_dir, _KSP_LOG), "krpc", proc)
     except KeyboardInterrupt:

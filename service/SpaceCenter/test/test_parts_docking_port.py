@@ -1,10 +1,10 @@
 import unittest
+
 import krpctest
 from krpctest.geometry import norm
 
 
 class TestPartsDockingPort(krpctest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -177,7 +177,6 @@ class TestPartsDockingPortInFlight(krpctest.TestCase):
         # Do it twice - once to undock pre-attached ports,
         # once to undock ports docked in flight
         for _ in range(2):
-
             # Kill rotation
             vessel.control.sas = True
             self.wait(3)

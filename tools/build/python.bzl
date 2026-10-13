@@ -98,41 +98,37 @@ def py_test(name, src, pkg, tests = [], deps = [], **kwargs):
     )
 
 # buildifier: disable=function-docstring
-def py_lint_test(
-        name,
-        pkg = None,
-        pkg_name = None,
-        srcs = [],
-        deps = [],
-        black_exclude = None,
-        pylint_config = None,
-        **kwargs):
-    args = []
-    data = []
-    if black_exclude:
-        args.append("'--black-exclude=%s'" % black_exclude)
-    if pylint_config:
-        args.append("--pylint-rcfile=$(rootpath %s)" % pylint_config)
-        data.append(pylint_config)
-    if pkg:
-        args.extend([
-            "--sdist=$(rootpath %s)" % pkg,
-            "--pkg=%s" % pkg_name,
-        ])
-        data.append(pkg)
-    else:
-        args.extend(["$(rootpath %s)" % x for x in srcs])
-        data.extend(srcs)
-
+def py_ruff_test(name, srcs, config = Label("//:ruff.toml"), **kwargs):
+    ruff_whl = "@pypi//ruff:whl"
+    args = [
+        "--ruff-whl=$(rootpath %s)" % ruff_whl,
+        "--config=$(rootpath %s)" % config,
+    ]
+    args.extend(["$(rootpath %s)" % x for x in srcs])
     _native_py_test(
         name = name,
-        srcs = [Label("//tools/build/python:run_lint.py")],
-        main = Label("//tools/build/python:run_lint.py"),
+        srcs = [Label("//tools/build/python:run_ruff.py")],
+        main = Label("//tools/build/python:run_ruff.py"),
         args = args,
-        data = data,
-        deps = deps + [
-            "@pypi//black",
-            "@pypi//pylint",
-        ],
+        data = srcs + [ruff_whl, config],
+        **kwargs
+    )
+
+# buildifier: disable=function-docstring
+def py_pyright_test(name, srcs, deps = [], python_version = None, disable = [], config = Label("//:pyrightconfig.json"), **kwargs):
+    args = ["--config=$(rootpath %s)" % config]
+    if python_version:
+        args.append("--python-version=%s" % python_version)
+    args.extend(["--disable=%s" % x for x in disable])
+    args.extend(["$(rootpath %s)" % x for x in srcs])
+    _native_py_test(
+        name = name,
+        srcs = [Label("//tools/build/python:run_pyright.py")],
+        main = Label("//tools/build/python:run_pyright.py"),
+        args = args,
+        data = srcs + [config],
+        deps = deps + ["@pypi//basedpyright"],
+        # Generated __init__.py files would make a directory of scripts a package
+        legacy_create_init = False,
         **kwargs
     )

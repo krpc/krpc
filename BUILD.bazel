@@ -1,12 +1,15 @@
 load("@rules_python//python:defs.bzl", "py_test")
 load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min", "python_version", "version")
 load("//tools/build:pkg.bzl", "pkg_zip")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 exports_files([
     ".clang-format",
     ".clang-tidy",
     "COPYING",
     "COPYING.LESSER",
+    "pyrightconfig.json",
+    "ruff.toml",
 ])
 
 readme_text = """Documentation: https://krpc.github.io/krpc
@@ -214,6 +217,8 @@ test_suite(
     name = "test",
     tests = [
         "//:csproj-test",
+        "//:pyright-release",
+        "//:ruff-release",
         "//client/cnano:test",
         "//client/cpp:test",
         "//client/csharp:test",
@@ -232,6 +237,12 @@ test_suite(
         "//service/SpaceCenter:test",
         "//service/UI:test",
         "//tools/benchmarks:test",
+        "//tools/build:pyright",
+        "//tools/build:ruff",
+        "//tools/build/protobuf:pyright",
+        "//tools/build/protobuf:ruff",
+        "//tools/build/python:pyright",
+        "//tools/build/python:ruff",
         "//tools/krpctest:test",
         "//tools/krpctools:test",
     ],
@@ -254,10 +265,13 @@ alias(
 test_suite(
     name = "lint",
     tests = [
+        "//:pyright-release",
+        "//:ruff-release",
         "//client/cnano:lint",
         "//client/cpp:lint",
         "//client/java:lint",
         "//client/python:lint",
+        "//client/serialio:lint",
         "//client/websockets:lint",
         "//doc:lint",
         "//service/Debug:lint",
@@ -268,6 +282,12 @@ test_suite(
         "//service/SpaceCenter:lint",
         "//service/UI:lint",
         "//tools/benchmarks:lint",
+        "//tools/build:pyright",
+        "//tools/build:ruff",
+        "//tools/build/protobuf:pyright",
+        "//tools/build/protobuf:ruff",
+        "//tools/build/python:pyright",
+        "//tools/build/python:ruff",
         "//tools/krpctest:lint",
         "//tools/krpctools:lint",
     ],
@@ -298,4 +318,17 @@ filegroup(
         "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/ksp:KRPC.IO.Ports.dll",
     ],
+)
+
+py_ruff_test(
+    name = "ruff-release",
+    size = "small",
+    srcs = glob(["tools/release/*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright-release",
+    size = "medium",
+    srcs = glob(["tools/release/*.py"]),
+    python_version = "3.12",
 )
