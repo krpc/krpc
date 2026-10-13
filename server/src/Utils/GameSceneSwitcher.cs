@@ -11,6 +11,8 @@ namespace KRPC.Utils
     /// </summary>
     static class GameSceneSwitcher
     {
+        static Action pendingLoad;
+
         internal static void LoadScene (PublicGameScene scene)
         {
             var current = CallContext.GameScene;
@@ -19,7 +21,7 @@ namespace KRPC.Utils
                 if ((current & GameScene.SpaceCenter) != 0)
                     CloseOpenFacility (current);
                 else
-                    HighLogic.LoadScene (GameScenes.SPACECENTER);
+                    Defer (() => HighLogic.LoadScene (GameScenes.SPACECENTER));
                 break;
             case PublicGameScene.Flight:
                 if ((current & GameScene.Flight) != 0)
@@ -29,7 +31,7 @@ namespace KRPC.Utils
             case PublicGameScene.TrackingStation:
                 if ((current & GameScene.TrackingStation) != 0)
                     break;
-                HighLogic.LoadScene (GameScenes.TRACKSTATION);
+                Defer (() => HighLogic.LoadScene (GameScenes.TRACKSTATION));
                 break;
             case PublicGameScene.EditorVAB:
                 StartEditor (current, GameScene.EditorVAB, EditorFacility.VAB);
@@ -68,6 +70,50 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// Runs the scene load requested by the last call to <see cref="LoadScene" />.
+        /// Called from the addon's Update.
+        /// </summary>
+        internal static void Update ()
+        {
+            var load = pendingLoad;
+            pendingLoad = null;
+            if (load != null)
+                load ();
+        }
+
+        /// <summary>
+        /// Queues a scene load for the next Update, where the game's own buttons load
+        /// scenes. RPCs run in FixedUpdate. A load requested there is followed by
+        /// FlightGlobals.FixedUpdate in the same physics step, which sets FlightGlobals.ready
+        /// again. The flag then stays set in the next scene with no active vessel.
+        /// Leaving flight saves the game first.
+        /// </summary>
+        static void Defer (Action load)
+        {
+            if ((CallContext.GameScene & GameScene.Flight) != 0)
+                load = LeaveFlight (load);
+            pendingLoad = load;
+        }
+
+        /// <summary>
+        /// Saves the game before leaving flight, as the game's own leave buttons do.
+        /// When the game cannot be saved, e.g. while under acceleration, we leave
+        /// without saving, as the game's "Leave Anyway" option does.
+        /// </summary>
+        static Action LeaveFlight (Action load)
+        {
+            return () => {
+                var status = FlightGlobals.ActiveVessel == null ?
+                    ClearToSaveStatus.CLEAR : FlightGlobals.ClearToSave (false);
+                if (status == ClearToSaveStatus.CLEAR)
+                    GamePersistence.SaveGame ("persistent", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+                else
+                    Logger.WriteLine ("Leaving flight without saving, as the game cannot be saved (" + status + ")", Logger.Severity.Warning);
+                load ();
+            };
+        }
+
+        /// <summary>
         /// Opens the given editor. Moving between the two editors keeps the vessel that
         /// is being constructed, as the game's own switch button does.
         /// </summary>
@@ -76,7 +122,7 @@ namespace KRPC.Utils
             if ((current & editor) != 0)
                 return;
             if ((current & GameScene.Editor) == 0) {
-                EditorDriver.StartEditor (facility);
+                Defer (() => EditorDriver.StartEditor (facility));
                 return;
             }
             // Loading the editor scene while it is already the loaded scene leaves the
@@ -89,7 +135,7 @@ namespace KRPC.Utils
             if (driver == null || logic == null || driver.restartingEditor)
                 throw new InvalidOperationException (
                     "The editor is still starting up and cannot be switched yet");
-            logic.SwitchEditor ();
+            Defer (logic.SwitchEditor);
         }
 
         static void ResumeFlight ()
@@ -101,8 +147,10 @@ namespace KRPC.Utils
                 throw new InvalidOperationException ("No active vessel to resume");
             // Save and reload the game state before entering flight, as KSP
             // does when resuming a flight from the space center
-            GamePersistence.SaveGame ("persistent", HighLogic.SaveFolder, SaveMode.OVERWRITE);
-            FlightDriver.StartAndFocusVessel ("persistent", vesselIdx);
+            Defer (() => {
+                GamePersistence.SaveGame ("persistent", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+                FlightDriver.StartAndFocusVessel ("persistent", vesselIdx);
+            });
         }
 
         static void OpenFacility (GameScene current, GameScene facility, EventVoid spawnEvent, bool available)

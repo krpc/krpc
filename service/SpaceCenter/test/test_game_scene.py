@@ -120,5 +120,42 @@ class TestGameScene(krpctest.TestCase):
         self.set_scene(self.scenes.space_center)
 
 
+class TestGameSceneFromLoadedSave(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save(always_load=True)
+        cls.remove_other_vessels()
+
+    def test_flight_to_space_center_and_back(self):
+        krpc = self.connect().krpc
+        self.wait_until(lambda: self.connect().space_center.can_save)
+        krpc.game_scene = krpc.GameScene.space_center
+        self.wait_until(lambda: krpc.game_scene == krpc.GameScene.space_center)
+        # Leaving flight saved the game, so the removed vessels stay removed
+        self.assertEqual(1, self.connect().testing_tools.flight_state_vessel_count)
+        krpc.game_scene = krpc.GameScene.flight
+        self.wait_until(lambda: krpc.game_scene == krpc.GameScene.flight)
+        self.assertIsNotNone(self.connect().space_center.active_vessel)
+
+
+class TestGameSceneNotClearToSave(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save(always_load=True)
+        cls.remove_other_vessels()
+        cls.set_circular_orbit("Kerbin", 50000)
+        cls.wait(1)
+
+    def test_leave_flight_in_atmosphere(self):
+        krpc = self.connect().krpc
+        space_center = self.connect().space_center
+        self.assertFalse(space_center.can_save)
+        krpc.game_scene = krpc.GameScene.space_center
+        self.wait_until(lambda: krpc.game_scene == krpc.GameScene.space_center)
+        self.assertTrue(space_center.can_save)
+        # Leaving flight did not save the game, so the removed vessels are back
+        self.assertGreater(self.connect().testing_tools.flight_state_vessel_count, 1)
+
+
 if __name__ == "__main__":
     unittest.main()

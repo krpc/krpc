@@ -25,6 +25,7 @@
     game's contracts (#1102)
   - The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and
     setting `SpaceCenter.Alarm.EventOffset`, change when the alarm goes off (#1114)
+  - Add `SpaceCenter.CanSave`, whether the game can be saved (#1117)
 
 - Editor
   - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space plane

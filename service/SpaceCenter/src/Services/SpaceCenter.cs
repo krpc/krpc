@@ -595,6 +595,23 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the game can be saved.
+        /// </summary>
+        /// <remarks>
+        /// The game cannot be saved in some flight states, e.g. while under acceleration
+        /// or moving over the surface. Setting
+        /// <see cref="P:KRPC.Service.KRPC.KRPC.GameScene"/> to leave flight saves the
+        /// game only when this is true.
+        /// </remarks>
+        [KRPCProperty]
+        public static bool CanSave {
+            get {
+                return !HighLogic.LoadedSceneIsFlight || FlightGlobals.ActiveVessel == null ||
+                    FlightGlobals.ClearToSave (false) == ClearToSaveStatus.CLEAR;
+            }
+        }
+
+        /// <summary>
         /// Whether the current flight can be reverted to launch.
         /// </summary>
         [KRPCProcedure]
