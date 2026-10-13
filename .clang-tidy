@@ -11,6 +11,8 @@ Checks: >
   -bugprone-macro-parentheses,
   -performance-no-int-to-ptr,
 WarningsAsErrors: '*'
+CheckOptions:
+  bugprone-signed-bitwise.IgnorePositiveIntegerLiterals: true
 # Disabled checks and why:
 #  * bugprone-crtp-constructor-accessibility — Object<T>'s public constructor is
 #    deliberate (the encoder/decoder need access; see object.hpp).
@@ -22,6 +24,8 @@ WarningsAsErrors: '*'
 #    a plain lvalue and use it as `x.member`; parenthesising reads worse here.
 #  * performance-no-int-to-ptr — the cnano connection handle is stashed in
 #    nanopb's void* stream arg via the correct (void*)(intptr_t) idiom.
+# bugprone-signed-bitwise skips positive literals, so masks and shift counts
+# such as `x >> 32 & 0x7ff` stay as written.
 # Only diagnose our own hand-written sources, not third-party headers (asio,
 # protobuf, nanopb). The exclude drops generated code — the protobuf stubs
 # (*.pb.hpp) and the generated service stubs (include/krpc/services/, all under
