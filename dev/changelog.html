@@ -825,6 +825,7 @@
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">Control.PrecisionMode</span></code>, the precision control mode that the Caps Lock key toggles (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1082">#1082</a>)</p></li>
 <li><p>Fix control inputs being applied twice each tick to a vessel with a RemoteTech flight computer (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1093">#1093</a>)</p></li>
 <li><p>Apply <code class="docutils literal notranslate"><span class="pre">Control.Throttle</span></code> on a RemoteTech vessel regardless of signal delay and connection, matching the other control axes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1093">#1093</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">SpaceCenter.ActionGroupAction</span></code> is a structure, so <code class="docutils literal notranslate"><span class="pre">Control.GetActionGroupActions</span></code> sends every field of each action in one call (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1132">#1132</a>)</p></li>
 </ul>
 </li>
 <li><p>Parts</p>
@@ -882,6 +883,8 @@
 <li><p>Communications</p>
 <ul>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">CommLink</span></code> is identified by the two nodes it joins and reports the link between them as it is now. One whose nodes are gone raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">SpaceCenter.CommNode</span></code> is a structure, so <code class="docutils literal notranslate"><span class="pre">CommLink.Start</span></code> and <code class="docutils literal notranslate"><span class="pre">CommLink.End</span></code> send every field of a node in one call (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1132">#1132</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">CommNode.Vessel</span></code> returns <code class="docutils literal notranslate"><span class="pre">null</span></code> for a node that is not a vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1132">#1132</a>)</p></li>
 </ul>
 </li>
 </ul>

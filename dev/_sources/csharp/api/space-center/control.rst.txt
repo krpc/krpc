@@ -656,38 +656,30 @@ Control
 
 
 
-.. class:: ActionGroupAction
+.. struct:: ActionGroupAction
 
    An action, belonging to a part module, that is assigned to an action group.
    Obtained by calling :meth:`Control.GetActionGroupActions`.
 
-   .. property:: Part Part { get; }
+
+   .. property:: Part Part { get; set; }
 
       The part that the action acts on.
 
-      :Game Scenes: All
-
-   .. property:: Module Module { get; }
+   .. property:: Module Module { get; set; }
 
       The part module that the action belongs to. Returns ``null`` for a
       part-level action that is not associated with a module. This only occurs when
       the Extended Action Groups mod is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
-      :Game Scenes: All
-
-   .. property:: string Name { get; }
+   .. property:: string Name { get; set; }
 
       The human-readable name of the action, as shown in the action group editor.
 
-      :Game Scenes: All
-
-   .. property:: string Id { get; }
+   .. property:: string Id { get; set; }
 
       The non-localized identifier for the action.
-
-      :Game Scenes: All
-
 
 
 .. enum:: ControlState

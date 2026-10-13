@@ -729,37 +729,25 @@ Control
    An action, belonging to a part module, that is assigned to an action group.
    Obtained by calling :meth:`Control.getActionGroupActions(int)`.
 
-   .. method:: Part getPart()
 
+   .. method:: Part getPart()
 
       The part that the action acts on.
 
-   
-
    .. method:: Module getModule()
-
 
       The part module that the action belongs to. Returns ``null`` for a
       part-level action that is not associated with a module. This only occurs when
       the Extended Action Groups mod is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
-   
-
    .. method:: String getName()
-
 
       The human-readable name of the action, as shown in the action group editor.
 
-   
-
    .. method:: String getId()
 
-
       The non-localized identifier for the action.
-
-   
-
 
 
 .. type:: public enum ControlState

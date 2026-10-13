@@ -51,7 +51,7 @@ Communications
 
 .. class:: CommLink
 
-   Represents a communication node in the network. For example, a vessel or the KSC.
+   Represents a communication link between two nodes in the network.
 
    .. property:: CommLinkType Type { get; }
 
@@ -73,7 +73,7 @@ Communications
 
    .. property:: CommNode End { get; }
 
-      Start point of the link.
+      End point of the link.
 
       :Game Scenes: All
 
@@ -101,36 +101,27 @@ Communications
 
 
 
-.. class:: CommNode
+.. struct:: CommNode
 
    Represents a communication node in the network. For example, a vessel or the KSC.
 
-   .. property:: string Name { get; }
+
+   .. property:: string Name { get; set; }
 
       Name of the communication node.
 
-      :Game Scenes: All
-
-   .. property:: bool IsHome { get; }
+   .. property:: bool IsHome { get; set; }
 
       Whether the communication node is on Kerbin.
 
-      :Game Scenes: All
-
-   .. property:: bool IsControlPoint { get; }
+   .. property:: bool IsControlPoint { get; set; }
 
       Whether the communication node is a control point, for example a manned vessel.
 
-      :Game Scenes: All
-
-   .. property:: bool IsVessel { get; }
+   .. property:: bool IsVessel { get; set; }
 
       Whether the communication node is a vessel.
 
-      :Game Scenes: All
+   .. property:: Vessel Vessel { get; set; }
 
-   .. property:: Vessel Vessel { get; }
-
-      The vessel for this communication node.
-
-      :Game Scenes: All
+      The vessel for this communication node, or null if the node is not a vessel.

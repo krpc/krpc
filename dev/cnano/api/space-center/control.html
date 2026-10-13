@@ -1674,7 +1674,7 @@ Throws an exception if staging is locked.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_GetActionGroupActions">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Control_GetActionGroupActions</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">group</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_GetActionGroupActions" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Control_GetActionGroupActions</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_SpaceCenter_ActionGroupAction_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">group</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_GetActionGroupActions" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns a list of all the part actions that are assigned to the given action group.
 Each entry identifies the part, the part module, and the action’s name and identifier.
 Returns an empty list if no actions are assigned to the group.</p>
@@ -1829,30 +1829,30 @@ does. Does nothing if it is not holding one.</p>
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ActionGroupAction_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>An action, belonging to a part module, that is assigned to an action group.
 Obtained by calling <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_GetActionGroupActions()</span></code>.</p>
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.krpc_SpaceCenter_ActionGroupAction_Part">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ActionGroupAction_Part</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.krpc_SpaceCenter_ActionGroupAction_Part" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.part">
+<a class="reference internal" href="parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.part" title="Link to this definition">#</a><br /></dt>
 <dd><p>The part that the action acts on.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.krpc_SpaceCenter_ActionGroupAction_Module">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ActionGroupAction_Module</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="parts.html#c.krpc_SpaceCenter_Module_t" title="krpc_SpaceCenter_Module_t"><span class="n"><span class="pre">krpc_SpaceCenter_Module_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.krpc_SpaceCenter_ActionGroupAction_Module" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.module">
+<span class="n"><span class="pre">krpc_nullable_object_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">module</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.module" title="Link to this definition">#</a><br /></dt>
 <dd><p>The part module that the action belongs to. Returns <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> for a
 part-level action that is not associated with a module. This only occurs when
 the Extended Action Groups mod is installed, as it can assign actions defined
 directly on a part, rather than on one of its modules, to an action group.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.krpc_SpaceCenter_ActionGroupAction_Name">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ActionGroupAction_Name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.krpc_SpaceCenter_ActionGroupAction_Name" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.name">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.name" title="Link to this definition">#</a><br /></dt>
 <dd><p>The human-readable name of the action, as shown in the action group editor.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.krpc_SpaceCenter_ActionGroupAction_Id">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ActionGroupAction_Id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.krpc_SpaceCenter_ActionGroupAction_Id" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ActionGroupAction_t.id">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">id</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ActionGroupAction_t.id" title="Link to this definition">#</a><br /></dt>
 <dd><p>The non-localized identifier for the action.</p>
 </dd></dl>
 

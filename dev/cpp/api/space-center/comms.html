@@ -780,7 +780,7 @@ Obtained by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommLinkE">
 <span id="_CPPv3N4krpc8services11SpaceCenter8CommLinkE"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommLinkE"></span><span id="krpc::services::SpaceCenter::CommLink"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CommLink</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommLinkE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Represents a communication node in the network. For example, a vessel or the KSC.</p>
+<dd><p>Represents a communication link between two nodes in the network.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommLink4typeEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8CommLink4typeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommLink4typeEv"></span><span id="krpc::services::SpaceCenter::CommLink::type"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter12CommLinkTypeE" title="krpc::services::SpaceCenter::CommLinkType"><span class="n"><span class="pre">CommLinkType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink4typeEv" title="Link to this definition">#</a><br /></dt>
@@ -802,7 +802,7 @@ Obtained by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommLink3endEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8CommLink3endEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommLink3endEv"></span><span id="krpc::services::SpaceCenter::CommLink::end"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8CommNodeE" title="krpc::services::SpaceCenter::CommNode"><span class="n"><span class="pre">CommNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommLink3endEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Start point of the link.</p>
+<dd><p>End point of the link.</p>
 </dd></dl>
 
 </dd></dl>
@@ -832,38 +832,38 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8Comm
 
 </dd></dl>
 
-<dl class="cpp class">
+<dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNodeE">
-<span id="_CPPv3N4krpc8services11SpaceCenter8CommNodeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNodeE"></span><span id="krpc::services::SpaceCenter::CommNode"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CommNode</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNodeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommNodeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNodeE"></span><span id="krpc::services::SpaceCenter::CommNode"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CommNode</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNodeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Represents a communication node in the network. For example, a vessel or the KSC.</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode4nameEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode4nameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode4nameEv"></span><span id="krpc::services::SpaceCenter::CommNode::name"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode4nameEv" title="Link to this definition">#</a><br /></dt>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode4nameE">
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode4nameE"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode4nameE"></span><span id="krpc::services::SpaceCenter::CommNode::name__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode4nameE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Name of the communication node.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode7is_homeEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode7is_homeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode7is_homeEv"></span><span id="krpc::services::SpaceCenter::CommNode::is_home"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_home</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode7is_homeEv" title="Link to this definition">#</a><br /></dt>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode7is_homeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode7is_homeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode7is_homeE"></span><span id="krpc::services::SpaceCenter::CommNode::is_home__b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_home</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode7is_homeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the communication node is on Kerbin.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode16is_control_pointEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode16is_control_pointEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode16is_control_pointEv"></span><span id="krpc::services::SpaceCenter::CommNode::is_control_point"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_control_point</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode16is_control_pointEv" title="Link to this definition">#</a><br /></dt>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode16is_control_pointE">
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode16is_control_pointE"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode16is_control_pointE"></span><span id="krpc::services::SpaceCenter::CommNode::is_control_point__b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_control_point</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode16is_control_pointE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the communication node is a control point, for example a manned vessel.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode9is_vesselEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode9is_vesselEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode9is_vesselEv"></span><span id="krpc::services::SpaceCenter::CommNode::is_vessel"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_vessel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode9is_vesselEv" title="Link to this definition">#</a><br /></dt>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode9is_vesselE">
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode9is_vesselE"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode9is_vesselE"></span><span id="krpc::services::SpaceCenter::CommNode::is_vessel__b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_vessel</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode9is_vesselE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the communication node is a vessel.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode6vesselEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode6vesselEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode6vesselEv"></span><span id="krpc::services::SpaceCenter::CommNode::vessel"></span><a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vessel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode6vesselEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The vessel for this communication node.</p>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8CommNode6vesselE">
+<span id="_CPPv3N4krpc8services11SpaceCenter8CommNode6vesselE"></span><span id="_CPPv2N4krpc8services11SpaceCenter8CommNode6vesselE"></span><span id="krpc::services::SpaceCenter::CommNode::vessel__std::optional:Vessel:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vessel</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8CommNode6vesselE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vessel for this communication node, or null if the node is not a vessel.</p>
 </dd></dl>
 
 </dd></dl>

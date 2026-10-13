@@ -51,7 +51,7 @@ Communications
 
 .. type:: krpc_SpaceCenter_CommLink_t
 
-   Represents a communication node in the network. For example, a vessel or the KSC.
+   Represents a communication link between two nodes in the network.
 
    .. function:: krpc_error_t krpc_SpaceCenter_CommLink_Type(krpc_connection_t connection, krpc_SpaceCenter_CommLinkType_t * result)
 
@@ -73,7 +73,7 @@ Communications
 
    .. function:: krpc_error_t krpc_SpaceCenter_CommLink_End(krpc_connection_t connection, krpc_SpaceCenter_CommNode_t * result)
 
-      Start point of the link.
+      End point of the link.
 
    
 
@@ -105,30 +105,23 @@ Communications
 
    Represents a communication node in the network. For example, a vessel or the KSC.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CommNode_Name(krpc_connection_t connection, char * * result)
+
+   .. member:: char * name
 
       Name of the communication node.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_CommNode_IsHome(krpc_connection_t connection, bool * result)
+   .. member:: bool is_home
 
       Whether the communication node is on Kerbin.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_CommNode_IsControlPoint(krpc_connection_t connection, bool * result)
+   .. member:: bool is_control_point
 
       Whether the communication node is a control point, for example a manned vessel.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_CommNode_IsVessel(krpc_connection_t connection, bool * result)
+   .. member:: bool is_vessel
 
       Whether the communication node is a vessel.
 
-   
+   .. member:: krpc_nullable_object_t vessel
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CommNode_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
-
-      The vessel for this communication node.
+      The vessel for this communication node, or null if the node is not a vessel.

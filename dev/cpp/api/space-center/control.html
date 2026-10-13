@@ -1824,35 +1824,35 @@ does. Does nothing if it is not holding one.</p>
 
 </dd></dl>
 
-<dl class="cpp class">
+<dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17ActionGroupActionE">
-<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupActionE"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupActionE"></span><span id="krpc::services::SpaceCenter::ActionGroupAction"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ActionGroupAction</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupActionE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupActionE"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupActionE"></span><span id="krpc::services::SpaceCenter::ActionGroupAction"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ActionGroupAction</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupActionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>An action, belonging to a part module, that is assigned to an action group.
 Obtained by calling <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control24get_action_group_actionsE8uint32_t" title="krpc::services::SpaceCenter::Control::get_action_group_actions"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::get_action_group_actions()</span></code></a>.</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction4partEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupAction4partEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupAction4partEv"></span><span id="krpc::services::SpaceCenter::ActionGroupAction::part"></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction4partEv" title="Link to this definition">#</a><br /></dt>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction4partE">
+<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupAction4partE"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupAction4partE"></span><span id="krpc::services::SpaceCenter::ActionGroupAction::part__Part"></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction4partE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The part that the action acts on.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction6moduleEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupAction6moduleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupAction6moduleEv"></span><span id="krpc::services::SpaceCenter::ActionGroupAction::module"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter6ModuleE" title="krpc::services::SpaceCenter::Module"><span class="n"><span class="pre">Module</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">module</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction6moduleEv" title="Link to this definition">#</a><br /></dt>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction6moduleE">
+<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupAction6moduleE"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupAction6moduleE"></span><span id="krpc::services::SpaceCenter::ActionGroupAction::module__std::optional:Module:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter6ModuleE" title="krpc::services::SpaceCenter::Module"><span class="n"><span class="pre">Module</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">module</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction6moduleE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The part module that the action belongs to. Returns <code class="docutils literal notranslate"><span class="pre">NULL</span></code> for a
 part-level action that is not associated with a module. This only occurs when
 the Extended Action Groups mod is installed, as it can assign actions defined
 directly on a part, rather than on one of its modules, to an action group.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction4nameEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupAction4nameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupAction4nameEv"></span><span id="krpc::services::SpaceCenter::ActionGroupAction::name"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction4nameEv" title="Link to this definition">#</a><br /></dt>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction4nameE">
+<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupAction4nameE"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupAction4nameE"></span><span id="krpc::services::SpaceCenter::ActionGroupAction::name__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction4nameE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The human-readable name of the action, as shown in the action group editor.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction2idEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupAction2idEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupAction2idEv"></span><span id="krpc::services::SpaceCenter::ActionGroupAction::id"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction2idEv" title="Link to this definition">#</a><br /></dt>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction2idE">
+<span id="_CPPv3N4krpc8services11SpaceCenter17ActionGroupAction2idE"></span><span id="_CPPv2N4krpc8services11SpaceCenter17ActionGroupAction2idE"></span><span id="krpc::services::SpaceCenter::ActionGroupAction::id__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">id</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17ActionGroupAction2idE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The non-localized identifier for the action.</p>
 </dd></dl>
 

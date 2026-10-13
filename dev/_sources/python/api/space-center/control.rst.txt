@@ -739,13 +739,12 @@ Control
    An action, belonging to a part module, that is assigned to an action group.
    Obtained by calling :meth:`Control.get_action_group_actions`.
 
+
    .. attribute:: part
 
       The part that the action acts on.
 
-      :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
 
    .. attribute:: module
 
@@ -754,26 +753,19 @@ Control
       the Extended Action Groups mod is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
-      :Attribute: Read-only, cannot be set
       :rtype: :class:`Module` or None
-   
 
    .. attribute:: name
 
       The human-readable name of the action, as shown in the action group editor.
 
-      :Attribute: Read-only, cannot be set
       :rtype: str
-   
 
    .. attribute:: id
 
       The non-localized identifier for the action.
 
-      :Attribute: Read-only, cannot be set
       :rtype: str
-   
-
 
 
 .. class:: ControlState

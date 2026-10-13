@@ -229,6 +229,7 @@ SpaceCenter service
   * Add ``Control.PrecisionMode``, the precision control mode that the Caps Lock key toggles (:issue:`1082`)
   * Fix control inputs being applied twice each tick to a vessel with a RemoteTech flight computer (:issue:`1093`)
   * Apply ``Control.Throttle`` on a RemoteTech vessel regardless of signal delay and connection, matching the other control axes (:issue:`1093`)
+  * :breaking:`Breaking` ``SpaceCenter.ActionGroupAction`` is a structure, so ``Control.GetActionGroupActions`` sends every field of each action in one call (:issue:`1132`)
 
 * Parts
 
@@ -281,6 +282,8 @@ SpaceCenter service
 * Communications
 
   * A ``CommLink`` is identified by the two nodes it joins and reports the link between them as it is now. One whose nodes are gone raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
+  * :breaking:`Breaking` ``SpaceCenter.CommNode`` is a structure, so ``CommLink.Start`` and ``CommLink.End`` send every field of a node in one call (:issue:`1132`)
+  * :breaking:`Breaking` ``CommNode.Vessel`` returns ``null`` for a node that is not a vessel (:issue:`1132`)
 
 
 

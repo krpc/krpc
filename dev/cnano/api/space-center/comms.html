@@ -780,7 +780,7 @@ Obtained by calling <code class="xref c c-func docutils literal notranslate"><sp
 <dl class="c type">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommLink_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CommLink_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_CommLink_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Represents a communication node in the network. For example, a vessel or the KSC.</p>
+<dd><p>Represents a communication link between two nodes in the network.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommLink_t.krpc_SpaceCenter_CommLink_Type">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CommLink_Type</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CommLinkType_t" title="krpc_SpaceCenter_CommLinkType_t"><span class="n"><span class="pre">krpc_SpaceCenter_CommLinkType_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CommLink_t.krpc_SpaceCenter_CommLink_Type" title="Link to this definition">#</a><br /></dt>
@@ -802,7 +802,7 @@ Obtained by calling <code class="xref c c-func docutils literal notranslate"><sp
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommLink_t.krpc_SpaceCenter_CommLink_End">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CommLink_End</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CommNode_t" title="krpc_SpaceCenter_CommNode_t"><span class="n"><span class="pre">krpc_SpaceCenter_CommNode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CommLink_t.krpc_SpaceCenter_CommLink_End" title="Link to this definition">#</a><br /></dt>
-<dd><p>Start point of the link.</p>
+<dd><p>End point of the link.</p>
 </dd></dl>
 
 </dd></dl>
@@ -836,34 +836,34 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CommNode_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Represents a communication node in the network. For example, a vessel or the KSC.</p>
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_Name">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CommNode_Name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_Name" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.name">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.name" title="Link to this definition">#</a><br /></dt>
 <dd><p>Name of the communication node.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_IsHome">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CommNode_IsHome</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_IsHome" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.is_home">
+<span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_home</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.is_home" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the communication node is on Kerbin.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_IsControlPoint">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CommNode_IsControlPoint</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_IsControlPoint" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.is_control_point">
+<span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_control_point</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.is_control_point" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the communication node is a control point, for example a manned vessel.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_IsVessel">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CommNode_IsVessel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_IsVessel" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.is_vessel">
+<span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_vessel</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.is_vessel" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the communication node is a vessel.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_Vessel">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CommNode_Vessel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.krpc_SpaceCenter_CommNode_Vessel" title="Link to this definition">#</a><br /></dt>
-<dd><p>The vessel for this communication node.</p>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CommNode_t.vessel">
+<span class="n"><span class="pre">krpc_nullable_object_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vessel</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_CommNode_t.vessel" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vessel for this communication node, or null if the node is not a vessel.</p>
 </dd></dl>
 
 </dd></dl>

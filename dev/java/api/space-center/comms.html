@@ -780,7 +780,7 @@ Obtained by calling <a class="reference internal" href="vessel.html#krpc.client.
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CommLink">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">CommLink</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CommLink" title="Link to this definition">#</a></dt>
-<dd><p>Represents a communication node in the network. For example, a vessel or the KSC.</p>
+<dd><p>Represents a communication link between two nodes in the network.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CommLink.getType()">
  <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLinkType" title="krpc.client.services.SpaceCenter.CommLinkType"><span class="pre">CommLinkType</span></a> <span class="sig-name descname"><span class="pre">getType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CommLink.getType()" title="Link to this definition">#</a></dt>
@@ -802,7 +802,7 @@ Obtained by calling <a class="reference internal" href="vessel.html#krpc.client.
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CommLink.getEnd()">
  <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommNode" title="krpc.client.services.SpaceCenter.CommNode"><span class="pre">CommNode</span></a> <span class="sig-name descname"><span class="pre">getEnd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CommLink.getEnd()" title="Link to this definition">#</a></dt>
-<dd><p>Start point of the link.</p>
+<dd><p>End point of the link.</p>
 </dd></dl>
 
 </dd></dl>
@@ -863,7 +863,7 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.CommLi
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CommNode.getVessel()">
  <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CommNode.getVessel()" title="Link to this definition">#</a></dt>
-<dd><p>The vessel for this communication node.</p>
+<dd><p>The vessel for this communication node, or null if the node is not a vessel.</p>
 </dd></dl>
 
 </dd></dl>

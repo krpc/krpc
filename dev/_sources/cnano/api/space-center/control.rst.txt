@@ -584,7 +584,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_GetActionGroupActions(krpc_connection_t connection, krpc_list_object_t * result, uint32_t group)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_GetActionGroupActions(krpc_connection_t connection, krpc_list_SpaceCenter_ActionGroupAction_t * result, uint32_t group)
 
       Returns a list of all the part actions that are assigned to the given action group.
       Each entry identifies the part, the part module, and the action's name and identifier.
@@ -702,33 +702,25 @@ Control
    An action, belonging to a part module, that is assigned to an action group.
    Obtained by calling :func:`krpc_SpaceCenter_Control_GetActionGroupActions`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+   .. member:: krpc_SpaceCenter_Part_t part
 
       The part that the action acts on.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Module(krpc_connection_t connection, krpc_SpaceCenter_Module_t * result)
+   .. member:: krpc_nullable_object_t module
 
       The part module that the action belongs to. Returns ``nullptr`` for a
       part-level action that is not associated with a module. This only occurs when
       the Extended Action Groups mod is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Name(krpc_connection_t connection, char * * result)
+   .. member:: char * name
 
       The human-readable name of the action, as shown in the action group editor.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Id(krpc_connection_t connection, char * * result)
+   .. member:: char * id
 
       The non-localized identifier for the action.
-
-   
-
 
 
 .. type:: krpc_SpaceCenter_ControlState_t

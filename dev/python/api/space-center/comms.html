@@ -816,7 +816,7 @@ Obtained by calling <a class="reference internal" href="vessel.html#SpaceCenter.
 <dl class="py class">
 <dt class="sig sig-object py" id="SpaceCenter.CommLink">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CommLink</span></span><a class="headerlink" href="#SpaceCenter.CommLink" title="Link to this definition">#</a></dt>
-<dd><p>Represents a communication node in the network. For example, a vessel or the KSC.</p>
+<dd><p>Represents a communication link between two nodes in the network.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.CommLink.type">
 <span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#SpaceCenter.CommLink.type" title="Link to this definition">#</a></dt>
@@ -862,7 +862,7 @@ Obtained by calling <a class="reference internal" href="vessel.html#SpaceCenter.
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.CommLink.end">
 <span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#SpaceCenter.CommLink.end" title="Link to this definition">#</a></dt>
-<dd><p>Start point of the link.</p>
+<dd><p>End point of the link.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -909,11 +909,8 @@ See <a class="reference internal" href="#SpaceCenter.CommLink.type" title="Space
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#SpaceCenter.CommNode.name" title="Link to this definition">#</a></dt>
 <dd><p>Name of the communication node.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -923,11 +920,8 @@ See <a class="reference internal" href="#SpaceCenter.CommLink.type" title="Space
 <span class="sig-name descname"><span class="pre">is_home</span></span><a class="headerlink" href="#SpaceCenter.CommNode.is_home" title="Link to this definition">#</a></dt>
 <dd><p>Whether the communication node is on Kerbin.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -937,11 +931,8 @@ See <a class="reference internal" href="#SpaceCenter.CommLink.type" title="Space
 <span class="sig-name descname"><span class="pre">is_control_point</span></span><a class="headerlink" href="#SpaceCenter.CommNode.is_control_point" title="Link to this definition">#</a></dt>
 <dd><p>Whether the communication node is a control point, for example a manned vessel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -951,11 +942,8 @@ See <a class="reference internal" href="#SpaceCenter.CommLink.type" title="Space
 <span class="sig-name descname"><span class="pre">is_vessel</span></span><a class="headerlink" href="#SpaceCenter.CommNode.is_vessel" title="Link to this definition">#</a></dt>
 <dd><p>Whether the communication node is a vessel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -963,13 +951,10 @@ See <a class="reference internal" href="#SpaceCenter.CommLink.type" title="Space
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.CommNode.vessel">
 <span class="sig-name descname"><span class="pre">vessel</span></span><a class="headerlink" href="#SpaceCenter.CommNode.vessel" title="Link to this definition">#</a></dt>
-<dd><p>The vessel for this communication node.</p>
+<dd><p>The vessel for this communication node, or null if the node is not a vessel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vessel</span></code></a></p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vessel</span></code></a> or None</p>
 </dd>
 </dl>
 </dd></dl>
