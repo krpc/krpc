@@ -421,7 +421,38 @@ class TestClass(ClassBase):
 
 
 
-class TestService:
+# The classes, enumerations, structures and exceptions put on the service in
+# __init__, declared for type checkers
+if TYPE_CHECKING:
+    _DeprecatedClass = DeprecatedClass
+    _TestClass = TestClass
+    _DeprecatedEnum = DeprecatedEnum
+    _TestEnum = TestEnum
+    _DeprecatedStruct = DeprecatedStruct
+    _TestNestedNullableStruct = TestNestedNullableStruct
+    _TestStruct = TestStruct
+    _TestNestedStruct = TestNestedStruct
+    _TestNullableStruct = TestNullableStruct
+    _CustomException = CustomException
+    _DeprecatedException = DeprecatedException
+
+    class _TestServiceDefinitions:
+        DeprecatedClass: type[_DeprecatedClass]
+        TestClass: type[_TestClass]
+        DeprecatedEnum: type[_DeprecatedEnum]
+        TestEnum: type[_TestEnum]
+        DeprecatedStruct: type[_DeprecatedStruct]
+        TestNestedNullableStruct: type[_TestNestedNullableStruct]
+        TestStruct: type[_TestStruct]
+        TestNestedStruct: type[_TestNestedStruct]
+        TestNullableStruct: type[_TestNullableStruct]
+        CustomException: type[_CustomException]
+        DeprecatedException: type[_DeprecatedException]
+else:
+    _TestServiceDefinitions = object
+
+
+class TestService(_TestServiceDefinitions):
     """
     Service documentation string.
     """
@@ -439,21 +470,24 @@ class TestService:
         for name, class_type in self._classes.items():
             self.__dict__[name] = WrappedClass(client, class_type)
 
-    def __getattr__(self, name):
-        # Reached only once the ordinary lookup has failed, which for a service means
-        # either a name it does not define, or one it does whose procedure or property
-        # raised an AttributeError of its own. Python discards that error before calling
-        # this, so it cannot be reported here; what can be done is to not report a member
-        # that does exist as missing, which would point at the wrong thing entirely.
-        cls = type(self)
-        if hasattr(cls, name):
+    # Hidden from type checkers, so that they report a name the service does not define
+    if not TYPE_CHECKING:
+
+        def __getattr__(self, name):
+            # Reached only once the ordinary lookup has failed, which for a service means
+            # either a name it does not define, or one it does whose procedure or property
+            # raised an AttributeError of its own. Python discards that error before calling
+            # this, so it cannot be reported here; what can be done is to not report a member
+            # that does exist as missing, which would point at the wrong thing entirely.
+            cls = type(self)
+            if hasattr(cls, name):
+                raise AttributeError(
+                    "'%s' object attribute '%s' raised AttributeError"
+                    % (cls.__name__, name)
+                )
             raise AttributeError(
-                "'%s' object attribute '%s' raised AttributeError"
-                % (cls.__name__, name)
+                "'%s' object has no attribute '%s'" % (cls.__name__, name)
             )
-        raise AttributeError(
-            "'%s' object has no attribute '%s'" % (cls.__name__, name)
-        )
 
     _classes = {
         "DeprecatedClass": DeprecatedClass,
