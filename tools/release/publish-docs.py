@@ -245,7 +245,7 @@ def run_in(cwd, *command):
     """
     command = [str(argument) for argument in command]
     print(f"{lib.DIM}$ (cd {cwd}) {' '.join(command)}{lib.RESET}")
-    if subprocess.run(command, cwd=cwd).returncode != 0:
+    if subprocess.run(command, cwd=cwd, check=False).returncode != 0:
         raise lib.ReleaseError(f"{command[0]} failed")
 
 

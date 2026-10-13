@@ -1,5 +1,7 @@
 import unittest
+
 from krpc.types import Types
+
 from ..definitions import Definitions
 
 

@@ -8,14 +8,13 @@ import krpc.error
 import krpc.event
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.streammanager import StreamManager
-
 from krpc.test.servertestcase import ServerTestCase
 
 
 class TestEvent(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        super(TestEvent, cls).setUpClass()
+        super().setUpClass()
 
     def test_event(self) -> None:
         event = self.conn.test_service.on_timer(200)

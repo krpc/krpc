@@ -33,7 +33,6 @@ would leave the suite waiting for a reply that never comes.
 """
 
 import krpctest
-
 from tools.benchmarks import chunking
 from tools.benchmarks.report import Result
 

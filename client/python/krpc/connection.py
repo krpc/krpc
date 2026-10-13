@@ -1,11 +1,13 @@
 from __future__ import annotations
-from typing import Optional
-import socket
+
 import select
+import socket
+
 import google.protobuf
+
 from krpc import winsock
-from krpc.encoder import Encoder
 from krpc.decoder import Decoder
+from krpc.encoder import Encoder
 
 # Size of a socket read. Reads are made a block at a time and buffered, so that a message
 # costs one read and not one per byte of its size prefix plus one for its body.
@@ -13,9 +15,7 @@ _READ_SIZE = 8192
 
 
 class Connection:
-    def __init__(
-        self, address: str, port: int, timeout: Optional[float] = None
-    ) -> None:
+    def __init__(self, address: str, port: int, timeout: float | None = None) -> None:
         self._address = address
         self._port = port
         self._timeout = timeout
@@ -84,7 +84,7 @@ class Connection:
         Blocks until at least one byte has been read."""
         data = self._socket.recv(_READ_SIZE)
         if not data:
-            raise socket.error("Connection closed")
+            raise OSError("Connection closed")
         self._buffer += data
 
     def receive(self, length: int) -> bytes:
@@ -113,14 +113,14 @@ class Connection:
         try:
             ready = select.select([self._socket], [], [], timeout)
         except ValueError as exn:
-            raise socket.error("Connection closed") from exn
+            raise OSError("Connection closed") from exn
         if ready[0]:
             data = self._socket.recv(length)
             # A readable socket that yields nothing has reached end of file. Reporting it
             # as no data would be indistinguishable from nothing having arrived yet, and
             # callers retry that immediately and forever.
             if not data:
-                raise socket.error("Connection closed")
+                raise OSError("Connection closed")
             return data
         return b""
 

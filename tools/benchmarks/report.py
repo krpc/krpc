@@ -44,9 +44,7 @@ class Result:
     estimate of the cost and the spread says how far the machine got in the way of the rest.
     """
 
-    # pylint: disable=too-many-instance-attributes,too-many-arguments
-    # pylint: disable=too-many-positional-arguments
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         suite,
         scenario,
@@ -325,12 +323,10 @@ def _columns(scenario, suites, results):
 
 
 def _figure(result, measured):
-    # pylint: disable=unused-argument
     return "" if result is None else FIGURE % result.value
 
 
 def _rate(result, measured):
-    # pylint: disable=unused-argument
     value = None if result is None else per_second(result)
     return "" if value is None else "%d" % round(value)
 

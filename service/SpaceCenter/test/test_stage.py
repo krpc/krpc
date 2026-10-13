@@ -1,5 +1,4 @@
 import krpctest
-
 from service.SpaceCenter.test.resources_equivalence import assert_resources_equivalent
 
 

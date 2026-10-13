@@ -180,7 +180,7 @@ def running(executable, frame_pacing=True, transport=TCP):
                 command.append("--stream-path=%s" % os.path.join(directory, "stream"))
             if not frame_pacing:
                 command.append("--no-frame-pacing")
-            process = subprocess.Popen(  # pylint: disable=consider-using-with
+            process = subprocess.Popen(
                 command,
                 stdout=sink,
                 stderr=subprocess.STDOUT,
@@ -219,7 +219,7 @@ def _log():
     try:
         path = os.path.join(directory, "testserver.log")
         with open(path, "w", encoding="utf-8") as sink:
-            with open(path, "r", encoding="utf-8") as reader:
+            with open(path, encoding="utf-8") as reader:
                 yield sink, reader
     finally:
         shutil.rmtree(directory, ignore_errors=True)

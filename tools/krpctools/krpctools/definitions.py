@@ -7,8 +7,9 @@ from krpc.definitions import (
     register_all,
     topological_order,
 )
-from krpc.types import Types, TupleType, ListType, SetType, DictionaryType, StructType
-from .utils import as_type, as_protobuf_type
+from krpc.types import DictionaryType, ListType, SetType, StructType, TupleType, Types
+
+from .utils import as_protobuf_type, as_type
 
 
 class Definitions:

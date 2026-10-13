@@ -1,5 +1,6 @@
 import base64
 import unittest
+
 import krpctest
 
 # A 2x2 PNG, small enough to keep in the test rather than on disk.

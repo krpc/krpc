@@ -11,7 +11,6 @@ the controller can legitimately invalidate the calibrated assertions, but retuni
 a deliberate recalibration pass rather than alongside the change that tripped them.
 """
 
-# pylint: disable=too-many-lines
 import math
 import time
 import unittest
@@ -21,8 +20,7 @@ from krpctest import diagnostics
 from krpctest.geometry import cross, dot, normalize, quaternion_vector_mult
 
 
-# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
-def _make_autopilot_test_class(
+def _make_autopilot_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
     rwhl=True,
@@ -1632,8 +1630,7 @@ TestAutoPilotAttitudeFlexible = _make_autopilot_test_class(
 )
 
 
-# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
-def _make_autopilot_launch_test_class(
+def _make_autopilot_launch_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
     throttle=1,
@@ -1883,7 +1880,6 @@ TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
 # tested here: on aircraft the autopilot's roll control excites a sustained roll
 # limit-cycle (a known limitation of the constant-torque model on aero-controlled craft),
 # so these focus on the pitch/heading hold that does converge cleanly.
-# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
 def _make_autopilot_flight_test_class(
     test_name,
     vessel_name,
@@ -2026,8 +2022,7 @@ TestAutoPilotFlightGull = _make_autopilot_flight_test_class(
 # high dynamic-pressure aero moments, keeping the angle of attack small and positive, without
 # tumbling or breaking up. Unpowered, as engines flame out in the thin air anyway. RCS is enabled
 # as a re-entry vehicle would use it, though the aero surfaces carry most of the authority.
-# pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
-def _make_autopilot_reentry_test_class(
+def _make_autopilot_reentry_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
     altitude,

@@ -1,4 +1,3 @@
-# pylint: disable=too-many-lines
 import socket
 import sys
 import threading
@@ -7,12 +6,13 @@ import unittest
 from unittest import mock
 
 from google.protobuf.message import DecodeError
-import krpc.schema.KRPC_pb2 as KRPC
+
 import krpc.error
+import krpc.schema.KRPC_pb2 as KRPC
 import krpc.stream
+from krpc import streammanager
 from krpc.client import Client
 from krpc.error import StreamError
-from krpc import streammanager
 from krpc.streammanager import StreamManager
 from krpc.test.servertestcase import ServerTestCase
 
@@ -20,7 +20,7 @@ from krpc.test.servertestcase import ServerTestCase
 class TestStream(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        super(TestStream, cls).setUpClass()
+        super().setUpClass()
 
     @staticmethod
     def wait() -> None:
@@ -339,7 +339,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         removed = threading.Event()
         threads = []
 
-        def remove_stream(stream_id: int) -> None:  # pylint: disable=unused-argument
+        def remove_stream(stream_id: int) -> None:
             threads.append(threading.current_thread())
             removed.set()
 
@@ -518,7 +518,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
             x()
             waited: list[bool] = []
 
-            def callback(value: int) -> None:  # pylint: disable=unused-argument
+            def callback(value: int) -> None:
                 # The values queued during the first call are passed on the same thread
                 if threading.current_thread() is thread and not waited:
                     with x.condition:
@@ -883,7 +883,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         conn = self.connect()
         closed = threading.Event()
 
-        def callback(x: int) -> None:  # pylint: disable=unused-argument
+        def callback(x: int) -> None:
             conn.close()
             closed.set()
 
@@ -970,7 +970,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         x()
         closed = threading.Event()
 
-        def callback(value: int) -> None:  # pylint: disable=unused-argument
+        def callback(value: int) -> None:
             conn.close()
             closed.set()
 
@@ -989,7 +989,6 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
         # Remove the stream midway through the update, while its value is being decoded
         class RemovingDecoder:
-            # pylint: disable=unused-argument
             @staticmethod
             def decode(client: object, data: bytes, typ: object) -> str:
                 del manager._streams[1]
@@ -1006,7 +1005,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
             streammanager.Decoder = decoder  # type: ignore[misc]
 
         with self.assertRaises(StreamError):
-            stream.value  # pylint: disable=pointless-statement
+            stream.value
 
     def test_a_value_that_fails_to_decode_ends_only_its_stream(self) -> None:
         manager = StreamManager(None)
@@ -1021,7 +1020,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         good.result.value = b"\x2a"
         manager.update([bad, good])
         self.assertEqual(1, len(ended))
-        self.assertRaises(Exception, lambda: failing.value)
+        self.assertRaises(Exception, lambda: failing.value)  # noqa: B017
         self.assertEqual(42, working.value)
         self.assertNotIn(1, manager._streams)
 
@@ -1211,7 +1210,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         called = threading.Event()
         stop = threading.Event()
 
-        def failing_callback(x: int) -> None:  # pylint: disable=unused-argument
+        def failing_callback(x: int) -> None:
             called.set()
             raise RuntimeError("callback failed")
 
@@ -1236,7 +1235,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
         test_thread = threading.current_thread()
 
-        def failing_callback(x: int) -> None:  # pylint: disable=unused-argument
+        def failing_callback(x: int) -> None:
             # Raised on the update thread, as a first call on this thread propagates it
             if threading.current_thread() is not test_thread and not raised.is_set():
                 raised.set()
@@ -1342,7 +1341,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         entered = threading.Event()
         closed = threading.Event()
 
-        def callback(value: int) -> None:  # pylint: disable=unused-argument
+        def callback(value: int) -> None:
             if armed.is_set():
                 entered.set()
                 with y.condition:
@@ -1372,7 +1371,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         closed = threading.Event()
         threads = []
 
-        def end_callback(ending: Exception) -> None:  # pylint: disable=unused-argument
+        def end_callback(ending: Exception) -> None:
             threads.append(threading.current_thread())
             conn.close()
             closed.set()
@@ -1385,10 +1384,10 @@ class TestStream(ServerTestCase, unittest.TestCase):
         called1 = threading.Event()
         called2 = threading.Event()
 
-        def callback1(x: int) -> None:  # pylint: disable=unused-argument
+        def callback1(x: int) -> None:
             called1.set()
 
-        def callback2(x: int) -> None:  # pylint: disable=unused-argument
+        def callback2(x: int) -> None:
             called2.set()
 
         with self.conn.stream(

@@ -43,7 +43,7 @@ def report_linkcheck(out_dir):
     path = os.path.join(out_dir, LINKCHECK_REPORT)
     if not os.path.exists(path):
         return
-    with open(path, "r", encoding="utf-8") as report:
+    with open(path, encoding="utf-8") as report:
         messages = report.read()
     print("Link checker messages (%d lines):" % len(messages.splitlines()))
     sys.stdout.write(messages)
@@ -88,7 +88,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("config")
     options = parser.parse_args()
-    with open(options.config, "r", encoding="utf-8") as config_file:
+    with open(options.config, encoding="utf-8") as config_file:
         return run(json.load(config_file))
 
 

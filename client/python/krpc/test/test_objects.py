@@ -1,11 +1,12 @@
 import unittest
+
 from krpc.test.servertestcase import ServerTestCase
 
 
 class TestObjects(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        super(TestObjects, cls).setUpClass()
+        super().setUpClass()
 
     def test_equality(self) -> None:
         obj1 = self.conn.test_service.create_test_object("jeb")
@@ -21,9 +22,7 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj1a = self.conn.test_service.object_property
         self.assertEqual(obj1, obj1a)
 
-        # pylint: disable=unnecessary-dunder-call
         self.assertFalse(obj1.__eq__(None))
-        # pylint: disable=unnecessary-dunder-call
         self.assertTrue(obj1.__ne__(None))
 
     def test_hash(self) -> None:
@@ -47,16 +46,14 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         self.assertEqual([obj1, obj2, obj3], sorted([obj2, obj3, obj1]))
         self.assertTrue(obj1 < obj2)
         self.assertTrue(obj2 < obj3)
-        # pylint: disable=comparison-with-itself
-        self.assertTrue(obj1 <= obj1)
+        self.assertTrue(obj1 <= obj1)  # noqa: PLR0124
         self.assertTrue(obj1 <= obj2)
         self.assertTrue(obj2 <= obj3)
         self.assertTrue(obj2 > obj1)
         self.assertTrue(obj3 > obj2)
         self.assertTrue(obj2 >= obj1)
         self.assertTrue(obj3 >= obj2)
-        # pylint: disable=comparison-with-itself
-        self.assertTrue(obj1 >= obj1)
+        self.assertTrue(obj1 >= obj1)  # noqa: PLR0124
 
     def test_invalid_object_id(self) -> None:
         # A call naming an object identifier the server does not have fails as an

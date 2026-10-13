@@ -1,15 +1,15 @@
-# pylint: disable=no-name-in-module
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
-    ValueType,
     ClassType,
-    EnumerationType,
-    MessageType,
-    TupleType,
-    ListType,
-    SetType,
     DictionaryType,
+    EnumerationType,
+    ListType,
+    MessageType,
+    SetType,
+    TupleType,
+    ValueType,
 )
+
 from .language import Language
 
 

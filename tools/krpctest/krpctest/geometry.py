@@ -1,5 +1,5 @@
-import math
 import functools
+import math
 
 
 def rad2deg(rad):
@@ -111,6 +111,8 @@ class Vector:
 
     def __eq__(self, u):
         return all(x == y for x, y in zip(self.v, u))
+
+    __hash__ = None
 
     def __lt__(self, u):
         return all(x < y for x, y in zip(self.v, u))

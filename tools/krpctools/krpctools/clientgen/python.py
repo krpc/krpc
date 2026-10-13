@@ -1,22 +1,24 @@
 import collections
 import itertools
+
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.types import (
-    ValueType,
     ClassType,
+    DictionaryType,
     EnumerationType,
+    ListType,
     MessageType,
+    SetType,
     StructType,
     TupleType,
-    ListType,
-    SetType,
-    DictionaryType,
+    ValueType,
 )
-import krpc.schema.KRPC_pb2 as KRPC
 from krpc.utils import snake_case
-from .generator import Generator
-from .docparser import DocParser
+
 from ..lang.python import PythonLanguage
 from ..utils import as_type
+from .docparser import DocParser
+from .generator import Generator
 
 
 class StubLanguage(PythonLanguage):
@@ -230,7 +232,7 @@ class PythonGenerator(Generator):
                 rtype = info["procedure"]["return_type"]
                 if "service" in rtype and context["service_name"] != rtype["service"]:
                     dependencies.add(rtype["service"])
-            for i, pinfo in enumerate(info["parameters"]):
+            for i in range(len(info["parameters"])):
                 ptype = info["procedure"]["parameters"][i]["type"]
                 if "service" in ptype and context["service_name"] != ptype["service"]:
                     dependencies.add(ptype["service"])
@@ -249,7 +251,7 @@ class PythonGenerator(Generator):
                         and context["service_name"] != rtype["service"]
                     ):
                         dependencies.add(rtype["service"])
-                for i, pinfo in enumerate(info["parameters"]):
+                for i in range(len(info["parameters"])):
                     ptype = info["procedure"]["parameters"][i]["type"]
                     if (
                         "service" in ptype

@@ -1,5 +1,6 @@
-import unittest
 import timeit
+import unittest
+
 import krpctest
 
 

@@ -1,14 +1,16 @@
 from __future__ import annotations
-from typing import cast, Callable, Iterable, List, Optional, TYPE_CHECKING
+
 import sys
 import threading
 import weakref
-from krpc.stream import Stream
-from krpc.types import TypeBase
-from krpc.decoder import Decoder
-from krpc.error import ConnectionError, StreamError  # pylint: disable=redefined-builtin
-from krpc.connection import Connection
+from collections.abc import Callable, Iterable
+from typing import TYPE_CHECKING, cast
+
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.connection import Connection
+from krpc.decoder import Decoder
+from krpc.error import ConnectionError, StreamError
+from krpc.types import TypeBase
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -25,9 +27,9 @@ def _invoke_callback(fn: Callable[..., None], *args: object) -> None:
     Exception, such as KeyboardInterrupt, propagates."""
     try:
         fn(*args)
-    except Exception:  # pylint: disable=broad-except
+    except Exception:
         _report()
-    except BaseException:  # pylint: disable=broad-except
+    except BaseException:
         if not getattr(_thread_state, "update_thread", False):
             raise
         _report()
@@ -39,7 +41,7 @@ def _report() -> None:
     )
 
 
-class _Callback:  # pylint: disable=too-few-public-methods
+class _Callback:
     """A value callback, or an event callback that takes no arguments. The version is
     that of the last value passed to a value callback, or the firing count last passed
     to an event callback. The lock is held while the callback runs, so it runs on one
@@ -52,10 +54,10 @@ class _Callback:  # pylint: disable=too-few-public-methods
         self.version = 0
         self.lock = threading.RLock()
         self.adding = False
-        self.missed: List[tuple[int, object]] = []
+        self.missed: list[tuple[int, object]] = []
 
 
-class StreamImpl:  # pylint: disable=too-many-instance-attributes
+class StreamImpl:
     """The state shared by every handle of one stream. It is changed under the stream's
     condition, and then the update lock."""
 
@@ -68,17 +70,17 @@ class StreamImpl:  # pylint: disable=too-many-instance-attributes
         self._return_type = return_type
         self._update_lock = manager.update_lock
         self._updated = False
-        self._value: Optional[object] = None
+        self._value: object | None = None
         self._version = 0
         self._fired = 0
         # The highest firing count passed to an event callback
         self._callbacks_fired = 0
         # The firing count a replay to a late event callback is about to pass, or zero
         self._replaying = 0
-        self._ending: Optional[Exception] = None
+        self._ending: Exception | None = None
         self._condition = threading.Condition()
-        self._callbacks: List[_Callback] = []
-        self._end_callbacks: List[Callable[[Exception], None]] = []
+        self._callbacks: list[_Callback] = []
+        self._end_callbacks: list[Callable[[Exception], None]] = []
         self._rate = 0.0
 
     @property
@@ -141,7 +143,7 @@ class StreamImpl:  # pylint: disable=too-many-instance-attributes
             if value is True:
                 self._fired += 1
 
-    def end(self, ending: Exception) -> List[Callable[[Exception], None]]:
+    def end(self, ending: Exception) -> list[Callable[[Exception], None]]:
         """Ends the stream and wakes its waiters. Returns the end callbacks to call, with
         no lock held. Returns none if the stream had already ended."""
         with self._condition:
@@ -159,7 +161,7 @@ class StreamImpl:  # pylint: disable=too-many-instance-attributes
         return self._condition
 
     @property
-    def callbacks(self) -> List[_Callback]:
+    def callbacks(self) -> list[_Callback]:
         with self._update_lock:
             return self._callbacks
 
@@ -308,20 +310,20 @@ class StreamImpl:  # pylint: disable=too-many-instance-attributes
 
 def _call_end_callbacks(
     callbacks: Iterable[Callable[[Exception], None]], ending: Exception
-) -> Optional[BaseException]:
+) -> BaseException | None:
     """Call end callbacks. Returns the first exception that propagates from one, for the
     caller to raise once it has finished ending or removing streams."""
-    deferred: Optional[BaseException] = None
+    deferred: BaseException | None = None
     for fn in callbacks:
         try:
             _invoke_callback(fn, ending)
-        except BaseException as exn:  # pylint: disable=broad-except
+        except BaseException as exn:
             if deferred is None:
                 deferred = exn
     return deferred
 
 
-class StreamManager:  # pylint: disable=too-many-instance-attributes
+class StreamManager:
     def __init__(self, client: Client) -> None:
         self._client = client
         self._update_lock = threading.RLock()
@@ -330,7 +332,7 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
         self._callbacks: list[Callable[[], None]] = []
         self._closed = False
         # The error that closed the connection, if it failed
-        self._close_cause: Optional[Exception] = None
+        self._close_cause: Exception | None = None
         # Whether a thread is closing the connection
         self._close_requested = False
         # Streams out of the registry and not yet ended, with the ending for each. The
@@ -412,7 +414,7 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
         with self._update_lock:
             stream_id = stream.stream_id
             on_server = self._streams.get(stream_id) is stream
-            ending: Optional[Exception]
+            ending: Exception | None
             if on_server:
                 del self._streams[stream_id]
                 ending = StreamError("The stream has been removed")
@@ -439,17 +441,17 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
     def update_condition(self) -> threading.Condition:
         return self._condition
 
-    def wait_for_update(self, timeout: Optional[float] = None) -> None:
+    def wait_for_update(self, timeout: float | None = None) -> None:
         self._condition.wait(timeout=timeout)
 
     @property
-    def update_callbacks(self) -> List[Callable[[], None]]:
+    def update_callbacks(self) -> list[Callable[[], None]]:
         with self._update_lock:
             return self._callbacks
 
     def add_update_callback(
         self, callback: Callable[[], None]
-    ) -> List[Callable[[], None]]:
+    ) -> list[Callable[[], None]]:
         with self._update_lock:
             self._callbacks = self._callbacks[:]
             self._callbacks.append(callback)
@@ -457,7 +459,7 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
 
     def remove_update_callback(
         self, callback: Callable[[], None]
-    ) -> List[Callable[[], None]]:
+    ) -> list[Callable[[], None]]:
         with self._update_lock:
             self._callbacks = [x for x in self._callbacks if x != callback]
             return self._callbacks
@@ -470,18 +472,18 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
     def holds_a_condition(self) -> bool:
         """Whether this thread holds the update condition or the condition of a
         stream."""
-        if self._condition._is_owned():  # type: ignore[attr-defined] # pylint: disable=protected-access
+        if self._condition._is_owned():  # type: ignore[attr-defined]
             return True
         with self._update_lock:
             streams = list(self._registered)
         return any(
-            x.condition._is_owned()  # type: ignore[attr-defined] # pylint: disable=protected-access
+            x.condition._is_owned()  # type: ignore[attr-defined]
             for x in streams
         )
 
     def notify_closed(
-        self, on_update_thread: bool = False, cause: Optional[Exception] = None
-    ) -> Optional[BaseException]:
+        self, on_update_thread: bool = False, cause: Exception | None = None
+    ) -> BaseException | None:
         """End every stream, once the connection is closing and no further update is
         applied. Called by the closing thread and by the update thread. Returns the first
         exception that propagates from an end callback, for the caller to raise once it
@@ -491,7 +493,7 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
         until every stream has ended. A thread can hold one stream's condition while it
         waits on another, and ending the other releases the first. The update thread
         leaves the remaining streams to the closing thread."""
-        deferred: Optional[BaseException] = None
+        deferred: BaseException | None = None
         with self._update_lock:
             if not self._closed:
                 self._close_cause = cause
@@ -536,14 +538,12 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
         finally:
             self._condition.release()
 
-    def _try_end(
-        self, stream: StreamImpl, ending: Exception
-    ) -> Optional[BaseException]:
+    def _try_end(self, stream: StreamImpl, ending: Exception) -> BaseException | None:
         if stream.condition.acquire(timeout=0.01):
             return self._end(stream, ending)
         return None
 
-    def _end(self, stream: StreamImpl, ending: Exception) -> Optional[BaseException]:
+    def _end(self, stream: StreamImpl, ending: Exception) -> BaseException | None:
         """End a stream out of the registry, and release its condition. Returns the first
         exception that propagates from an end callback."""
         try:
@@ -590,7 +590,7 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
                         self._client, result.result.value, stream.return_type
                     )
                 ended = False
-            except Exception as exn:  # pylint: disable=broad-except
+            except Exception as exn:
                 # A value that fails to decode ends only its stream
                 value = exn
                 undecodable = True
@@ -641,7 +641,7 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
                 return
             try:
                 self._client.krpc.remove_stream(stream_id)
-            except Exception:  # pylint: disable=broad-except
+            except Exception:
                 pass
 
         threading.Thread(target=remove, daemon=True).start()
@@ -687,7 +687,7 @@ class StreamManager:  # pylint: disable=too-many-instance-attributes
             kept[:] = [result]
 
 
-def _closed_error(cause: Optional[Exception] = None) -> Exception:
+def _closed_error(cause: Exception | None = None) -> Exception:
     """The error that ends a stream once the connection closes. Its cause is the error
     that closed the connection, if it failed."""
     error = ConnectionError("Connection closed")
@@ -699,7 +699,7 @@ def update_thread(
     manager: StreamManager, connection: Connection, stop: threading.Event
 ) -> None:
     _thread_state.update_thread = True
-    cause: Optional[Exception] = None
+    cause: Exception | None = None
     try:
         cause = _read_updates(manager, connection, stop)
     finally:
@@ -709,7 +709,7 @@ def update_thread(
 
 def _read_updates(
     manager: StreamManager, connection: Connection, stop: threading.Event
-) -> Optional[Exception]:
+) -> Exception | None:
     """Read stream updates until the client stops the thread, or the connection fails.
     Returns the error that ended the connection, if it failed."""
     while True:
@@ -722,7 +722,7 @@ def _read_updates(
                 break
             except IndexError:
                 pass
-            except Exception as exn:  # pylint: disable=broad-except
+            except Exception as exn:
                 # The socket closing as the client shuts down, or failing
                 return exn
             if stop.is_set():
@@ -735,7 +735,7 @@ def _read_updates(
             update = cast(
                 KRPC.StreamUpdate, Decoder.decode_message(data, KRPC.StreamUpdate)
             )
-        except Exception as exn:  # pylint: disable=broad-except
+        except Exception as exn:
             # A message that cannot be read leaves the connection unusable
             connection.close()
             return exn

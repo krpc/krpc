@@ -1,21 +1,22 @@
 import unittest
 from enum import Enum
+
+from krpc.schema.KRPC_pb2 import ProcedureCall, Services, Status, Stream, Type
 from krpc.types import (
-    Types,
-    ValueType,
-    ClassType,
-    EnumerationType,
-    MessageType,
     ClassBase,
+    ClassType,
+    DictionaryType,
+    EnumerationType,
+    ListType,
+    MessageType,
+    SetType,
+    StaticMethod,
     StructType,
     TupleType,
-    ListType,
-    SetType,
-    DictionaryType,
-    StaticMethod,
+    Types,
+    ValueType,
     WrappedClass,
 )
-from krpc.schema.KRPC_pb2 import Type, ProcedureCall, Stream, Status, Services
 
 
 class TestTypes(unittest.TestCase):
@@ -435,7 +436,7 @@ class TestTypes(unittest.TestCase):
 
 class _MyClass(ClassBase):
     @StaticMethod
-    def my_static(cls, x: int) -> int:  # type: ignore[misc]  # pylint: disable=no-self-argument
+    def my_static(cls, x: int) -> int:  # type: ignore[misc]
         return cls._client(x)  # type: ignore[attr-defined]
 
 
@@ -452,7 +453,7 @@ class TestStaticMethod(unittest.TestCase):
 
     def test_call_via_class_with_client_set(self) -> None:
         _MyClass._client = lambda x: x * 2  # type: ignore[attr-defined]
-        self.assertEqual(6, _MyClass.my_static(3))  # type: ignore[call-arg]  # pylint: disable=no-value-for-parameter
+        self.assertEqual(6, _MyClass.my_static(3))  # type: ignore[call-arg]
 
     def test_call_via_instance_without_class_client(self) -> None:
         instance = self._make_instance(lambda x: x + 10)

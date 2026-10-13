@@ -1,30 +1,31 @@
 from krpc.types import (
-    ValueType,
     ClassType,
-    EnumerationType,
-    StructType,
-    MessageType,
-    TupleType,
-    ListType,
-    SetType,
     DictionaryType,
+    EnumerationType,
+    ListType,
+    MessageType,
+    SetType,
+    StructType,
+    TupleType,
+    ValueType,
 )
 from krpc.utils import snake_case
+
+from ..lang.java import JavaLanguage
+from ..utils import lower_camel_case
 from .domain import Domain
 from .nodes import (
-    Procedure,
-    Property,
     Class,
     ClassMethod,
-    ClassStaticMethod,
     ClassProperty,
+    ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    Procedure,
+    Property,
     Struct,
     StructField,
 )
-from ..utils import lower_camel_case
-from ..lang.java import JavaLanguage
 
 
 class JavaDomain(Domain):

@@ -1,35 +1,35 @@
 from __future__ import annotations
-from typing import cast, Any, Callable, Collection, Iterable, List, Mapping
-from enum import Enum
-import struct
 
-# pylint: disable=import-error,no-name-in-module
+import struct
+from collections.abc import Callable, Collection, Iterable, Mapping
+from enum import Enum
+from typing import Any, cast
+
 import google.protobuf
 from google.protobuf.internal import encoder as protobuf_encoder
-
-# pylint: disable=import-error,no-name-in-module
 from google.protobuf.internal import wire_format as protobuf_wire_format
+
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import EncodingError
 from krpc.platform import bytelength
-import krpc.schema.KRPC_pb2 as KRPC
 from krpc.types import (
-    Types,
-    TypeBase,
-    ValueType,
     ClassType,
+    DictionaryType,
     EnumerationType,
+    ListType,
     MessageType,
+    SetType,
     StructType,
     TupleType,
-    ListType,
-    SetType,
-    DictionaryType,
+    TypeBase,
+    Types,
+    ValueType,
 )
 
 # The following unpacks the internal protobuf decoders, whose signature
 # depends on the version of protobuf installed
-_pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
-_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
+_pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]
+_pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]
 
 # protobuf's zigzag encoder carries no types, so it is bound here with the type it does
 # have. A call carrying a collection reaches it once per value, so this also saves looking
@@ -132,7 +132,7 @@ class Encoder:
     @classmethod
     def _encode_items(
         cls, values: Iterable[object], types: Iterable[TypeBase]
-    ) -> List[bytes]:
+    ) -> list[bytes]:
         """The encoded value of each item of a tuple or a structure.
 
         A tuple is encoded on the hot path of every remote procedure call. Extending the
@@ -196,7 +196,7 @@ class _ValueEncoder:
     def _encode_varint(cls, value: int) -> bytes:
         if value < 128:
             return _SINGLE_BYTE_VARINTS[value]
-        data: List[bytes] = []
+        data: list[bytes] = []
         _pb_VarintEncoder(data.append, value, True)
         return b"".join(data)
 
@@ -210,7 +210,7 @@ class _ValueEncoder:
         # A collection reaches this once per value it carries.
         if value < 16384:
             return bytes((value & 0x7F | 0x80, value >> 7))
-        data: List[bytes] = []
+        data: list[bytes] = []
         _pb_SignedVarintEncoder(data.append, value, True)
         return b"".join(data)
 

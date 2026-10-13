@@ -1,29 +1,33 @@
 try:
-    from krpc.services.krpc import KRPC
-    from krpc.services.stdlib import StdLib
-    from krpc.services.testservice import TestService
-    from krpc.services.spacecenter import SpaceCenter
+    from krpc.services.debug import Debug
+    from krpc.services.dockingcamera import DockingCamera
     from krpc.services.drawing import Drawing
-    from krpc.services.ui import UI
     from krpc.services.infernalrobotics import InfernalRobotics
     from krpc.services.kerbalalarmclock import KerbalAlarmClock
-    from krpc.services.remotetech import RemoteTech
+    from krpc.services.krpc import KRPC
     from krpc.services.lidar import LiDAR
-    from krpc.services.dockingcamera import DockingCamera
-    from krpc.services.debug import Debug
-except ImportError as exn:
-    KRPC = lambda _: None
-    StdLib = lambda _: None
-    TestService = lambda _: None
-    SpaceCenter = lambda _: None
-    Drawing = lambda _: None
-    UI = lambda _: None
-    InfernalRobotics = lambda _: None
-    KerbalAlarmClock = lambda _: None
-    RemoteTech = lambda _: None
-    LiDAR = lambda _: None
-    DockingCamera = lambda _: None
-    Debug = lambda _: None
+    from krpc.services.remotetech import RemoteTech
+    from krpc.services.spacecenter import SpaceCenter
+    from krpc.services.stdlib import StdLib
+    from krpc.services.testservice import TestService
+    from krpc.services.ui import UI
+except ImportError:
+
+    def _unavailable(_: object) -> None:
+        return None
+
+    KRPC = _unavailable
+    StdLib = _unavailable
+    TestService = _unavailable
+    SpaceCenter = _unavailable
+    Drawing = _unavailable
+    UI = _unavailable
+    InfernalRobotics = _unavailable
+    KerbalAlarmClock = _unavailable
+    RemoteTech = _unavailable
+    LiDAR = _unavailable
+    DockingCamera = _unavailable
+    Debug = _unavailable
 
 
 class Client:

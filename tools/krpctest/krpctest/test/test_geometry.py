@@ -1,16 +1,17 @@
-import unittest
 import math
+import unittest
+
 import krpctest
 from krpctest.geometry import (
-    rad2deg,
+    cross,
+    dot,
     norm,
     normalize,
-    dot,
-    cross,
     quaternion_axis_angle,
-    quaternion_vector_mult,
-    quaternion_mult,
     quaternion_conjugate,
+    quaternion_mult,
+    quaternion_vector_mult,
+    rad2deg,
 )
 
 

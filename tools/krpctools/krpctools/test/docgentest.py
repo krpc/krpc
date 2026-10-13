@@ -1,9 +1,10 @@
 import json
 import tempfile
 from importlib.resources import files
+
 from ..definitions import Definitions
-from ..docgen.nodes import Service
 from ..docgen import process_file
+from ..docgen.nodes import Service
 
 
 class DocGenTestCase:

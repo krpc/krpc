@@ -147,8 +147,7 @@ def execute(client, endpoint):
     process = subprocess.run(
         [os.path.abspath(client)],
         env=environment,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         text=True,
         check=False,
     )

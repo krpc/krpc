@@ -1,9 +1,12 @@
 from __future__ import annotations
+
 import threading
 import time
-from typing import Any, Callable, Optional, TYPE_CHECKING
-from krpc.types import TypeBase
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
+
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.types import TypeBase
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -60,7 +63,7 @@ class Stream:
         """Condition variable that is notified when the stream updates."""
         return self._stream.condition
 
-    def wait(self, timeout: Optional[float] = None) -> bool:
+    def wait(self, timeout: float | None = None) -> bool:
         """Wait until the next stream update or a timeout occurs.
         The condition variable must be locked before calling this method.
 

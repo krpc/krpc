@@ -49,7 +49,7 @@ class TestCase(AssertionsMixin):
         raw = setup.__func__
 
         @classmethod
-        def setUpClass(cls, _raw=raw):  # pylint: disable=invalid-name
+        def setUpClass(cls, _raw=raw):
             cls.ensure_game(cls.mods, cls.expansions)
             _raw(cls)
 

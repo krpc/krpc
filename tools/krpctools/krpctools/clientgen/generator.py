@@ -1,5 +1,7 @@
 import collections
+
 import jinja2
+
 from krpc.attributes import Attributes
 from krpc.definitions import topological_order
 from krpc.types import (
@@ -10,13 +12,14 @@ from krpc.types import (
     TupleType,
 )
 from krpc.utils import snake_case
+
 from ..utils import (
-    lower_camel_case,
-    indent,
-    single_line,
     as_type,
     decode_default_value,
+    indent,
     is_nullable,
+    lower_camel_case,
+    single_line,
 )
 from .docparser import flatten_deprecation_reason
 

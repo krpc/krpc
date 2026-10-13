@@ -1,6 +1,7 @@
 import unittest
-from krpctools.test.docgentest import DocGenTestCase
+
 from krpctools.docgen.python import PythonDomain
+from krpctools.test.docgentest import DocGenTestCase
 
 
 class TestDocGenPython(DocGenTestCase, unittest.TestCase):

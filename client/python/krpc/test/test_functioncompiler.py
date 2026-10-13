@@ -1,12 +1,12 @@
 # One test per construct the compiler accepts, so the module is long
-# pylint: disable=too-many-lines
 
 import functools
 import linecache
 import math
 import time
 import unittest
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, cast
+from collections.abc import Callable
+from typing import Any, cast
 
 from krpc.error import FunctionCompilationError
 from krpc.test.servertestcase import ServerTestCase
@@ -48,8 +48,8 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         def shadows_a_global():
             for i in range(obj.int_property):
                 if i == 2:
-                    return SHADOWED  # pylint: disable=used-before-assignment
-                SHADOWED = i  # pylint: disable=redefined-outer-name,invalid-name
+                    return SHADOWED  # noqa: F823
+                SHADOWED = i  # noqa: F841
             return -1
 
         with self.assertRaises(FunctionCompilationError) as cm:
@@ -58,10 +58,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         with self.assertRaisesRegex(
             FunctionCompilationError, r"'y' is read before it is assigned \(line \d+\)$"
         ):
-            self.conn.compile(
-                # pylint: disable-next=used-before-assignment,undefined-variable
-                lambda: obj.int_property + y + (y := 1)
-            )
+            self.conn.compile(lambda: obj.int_property + y + (y := 1))  # noqa: F821
 
         def reads_the_global():
             value = SHADOWED
@@ -75,12 +72,12 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         def branch():
             if obj.int_property > 0:
                 value = 1
-            return value  # pylint: disable=possibly-used-before-assignment
+            return value
 
         def loop():
             for element in [obj.int_property]:
                 value = element
-            return value  # pylint: disable=undefined-loop-variable
+            return value
 
         def guarded():
             try:
@@ -121,7 +118,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             def add(k: int) -> None:
                 values.append(k + offset)
 
-            # pylint: disable-next=unnecessary-lambda-assignment
             double = lambda: offset * 2  # noqa: E731
             offset = obj.int_property
             values = [0]
@@ -141,7 +137,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return outer()
 
         def called_too_early() -> int:
-            # pylint: disable-next=unnecessary-lambda-assignment
             double = lambda: offset * 2  # noqa: E731
             result = double()
             offset = obj.int_property
@@ -240,8 +235,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(
             "value=inner",
             # The lambda is compiled from source, not called
-            # pylint: disable-next=unnecessary-lambda
-            self.evaluate(lambda: obj.object_property.get_value()),
+            self.evaluate(lambda: obj.object_property.get_value()),  # noqa: PLW0108
         )
 
     def test_object_equality(self) -> None:
@@ -339,7 +333,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         self.assertEqual(3, self.conn.run(condition))
 
-    def _make_objects(self, prefix: str) -> List[Any]:
+    def _make_objects(self, prefix: str) -> list[Any]:
         objs = [
             self.conn.test_service.create_test_object("%s%d" % (prefix, i))
             for i in range(3)
@@ -376,7 +370,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return sum(values)
 
         def passed() -> int:
-            def add(values: List[int]) -> int:
+            def add(values: list[int]) -> int:
                 return sum(values)
 
             return add(o.int_property for o in objs)
@@ -425,7 +419,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         )
         linecache.cache["<deep>"] = (len(source), None, [source], "<deep>")
         namespace = {}
-        exec(compile(source, "<deep>", "exec"), namespace)  # pylint: disable=exec-used
+        exec(compile(source, "<deep>", "exec"), namespace)
         with self.assertRaisesRegex(FunctionCompilationError, "too deeply nested"):
             self.conn.compile(namespace["make"](obj))
 
@@ -435,8 +429,8 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         other = self.conn.test_service.create_test_object("continued2")
         other.int_property = 2
         # fmt: off
-        difference = (
-            lambda: obj.int_property  # pylint: disable=unnecessary-lambda-assignment
+        difference = (  # noqa: E731
+            lambda: obj.int_property
             - other.int_property)
         self.assertEqual(3, self.conn.run(difference))
         self.assertEqual(6, self.conn.run(
@@ -595,7 +589,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         def helper() -> int:
             return service.counter("Compiler.helper")
 
-        class Holder:  # pylint: disable=too-few-public-methods
+        class Holder:
             @property
             def value(self) -> int:
                 return service.counter("Compiler.holder")
@@ -700,7 +694,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                     return value * value
                 value += 1
 
-        # pylint: disable-next=inconsistent-return-statements
         def breaks() -> int:
             while True:
                 if obj.int_property > 0:
@@ -765,8 +758,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         def local_lambda():
             value = 1
-            # pylint: disable-next=unnecessary-lambda-assignment
-            doubled = lambda: (value := obj.int_property * 2) + value
+            doubled = lambda: (value := obj.int_property * 2) + value  # noqa: E731
             return doubled(), value
 
         def key_lambda():
@@ -900,19 +892,19 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object("lookupraises")
 
         def missing_key():
-            values: Dict[str, int] = {}
+            values: dict[str, int] = {}
             if obj.int_property > 0:
                 values["k"] = 1
             return values["k"] is not None
 
         def missing_element():
-            values: List[int] = []
+            values: list[int] = []
             if obj.int_property > 0:
                 values.append(1)
             return values[0] is None
 
         def missing_tuple_element():
-            values: List[int] = []
+            values: list[int] = []
             if obj.int_property > 0:
                 values.append(1)
             return len((values[0], 1))
@@ -979,7 +971,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             FunctionCompilationError,
             r"an empty list cannot be given a set type; use set\(\) \(line \d+\)$",
         ):
-            # pylint: disable-next=use-implicit-booleaness-not-comparison
             self.conn.compile(lambda: [] == {obj.int_property})
 
     def test_operations_the_server_does_not_have_name_the_line(self) -> None:
@@ -988,7 +979,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         data = b"abc"
         float_keys = {1.5: 2}
 
-        class AlwaysEqual:  # pylint: disable=too-few-public-methods
+        class AlwaysEqual:  # noqa: PLW1641
             def __eq__(self, value: object) -> bool:
                 return True
 
@@ -996,7 +987,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 return 3
 
         always_equal = AlwaysEqual()
-        # pylint: disable=unsubscriptable-object,unsupported-membership-test
         for func, message in (
             (lambda: obj.int_property * 1.0 & 1, "&, | and ^ need integers or bools"),
             (lambda: obj.int_property[0], "cannot index a value of type int"),
@@ -1197,14 +1187,12 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         service = self.conn.test_service
         obj = service.create_test_object("nonecompared")
         obj.int_property = 1
-        # pylint: disable=singleton-comparison
         self.assertFalse(
-            self.conn.run(lambda: service.int32_to_string(obj.int_property) == None)
+            self.conn.run(lambda: service.int32_to_string(obj.int_property) == None)  # noqa: E711
         )
         self.assertTrue(
-            self.conn.run(lambda: service.echo_nullable_string(None) == None)
+            self.conn.run(lambda: service.echo_nullable_string(None) == None)  # noqa: E711
         )
-        # pylint: enable=singleton-comparison
         self.assertTrue(
             self.conn.run(lambda: None in [service.echo_nullable_string(None), "a"])
         )
@@ -1259,12 +1247,12 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             value = obj
             count = 0
             objects = [obj, service.echo_test_object(None)]
-            for value in service.echo_list_of_nullable_objects(objects):
+            for value in service.echo_list_of_nullable_objects(objects):  # noqa: B007
                 count += 1
-            return value  # pylint: disable=undefined-loop-variable
+            return value
 
         def optional():
-            name: Optional[str] = obj.get_value()
+            name: str | None = obj.get_value()
             name = service.echo_nullable_string(None)
             number: int | None = obj.int_property
             number = service.echo_nullable_int(None)
@@ -1304,7 +1292,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             s = None
             return s
 
-        def optional(x: Optional[int]):
+        def optional(x: int | None):
             x = None
             return x
 
@@ -1679,7 +1667,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         )
 
     def test_min_and_max_of_an_empty_collection(self) -> None:
-        # pylint: disable=consider-using-generator
         service = self.conn.test_service
         obj = service.create_test_object("minmaxempty")
         obj.int_property = 1
@@ -1733,10 +1720,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         for value in (-25, -15, -5, 5, 15, 25, 26):
             self.assertEqual(
                 round(value, -1),
-                self.conn.run(
-                    # pylint: disable-next=cell-var-from-loop
-                    lambda: round(obj.int_property * value // 5, -1)
-                ),
+                self.conn.run(lambda: round(obj.int_property * value // 5, -1)),  # noqa: B023
             )
         self.assertAlmostEqual(
             3.0, self.conn.run(lambda: math.log(obj.int_property * 1.6, 2))
@@ -1867,12 +1851,10 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             self.assertEqual(expected, self.conn.run(func))
         # A bound that is not an int is a compile error, as for a string
         ulong = self.conn.test_service.uint64_special_defaults
-        # pylint: disable=invalid-slice-index
         for func in (
             lambda: [o.int_property for o in objs][ulong(10)[0] :],
             lambda: [o.int_property for o in objs][1.5:],
         ):
-            # pylint: enable=invalid-slice-index
             with self.assertRaisesRegex(FunctionCompilationError, "bound of a slice"):
                 self.conn.compile(func)
 
@@ -1931,7 +1913,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(
             {"a": 6},
             self.conn.run(
-                lambda: {"a": x * o.int_property for x in factors for o in objs}
+                lambda: {"a": x * o.int_property for x in factors for o in objs}  # noqa: B035
             ),
         )
 
@@ -1987,7 +1969,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
                 return pick()
 
-            def pick():  # pylint: disable=function-redefined
+            def pick():
                 return 2
 
             return pick()
@@ -2020,7 +2002,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
             if obj.int_property > 0:
 
-                def pick() -> int:  # pylint: disable=function-redefined
+                def pick() -> int:
                     return 2
 
             return pick()
@@ -2038,7 +2020,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
                 obj.int_property = 8
 
-            def pick() -> int:  # pylint: disable=function-redefined
+            def pick() -> int:
                 return 2
 
             return pick()
@@ -2051,7 +2033,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         def program():
             base = obj.int_property
-            # pylint: disable-next=unnecessary-lambda-assignment
             offset = lambda: base + 1  # noqa: E731
             return offset() + offset()
 
@@ -2090,7 +2071,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_function_with_parameters(self) -> None:
         obj = self.conn.test_service.create_test_object("parameters")
         obj.int_property = 3
-        TestClass = self.conn.test_service.TestClass  # pylint: disable=invalid-name
+        TestClass = self.conn.test_service.TestClass
 
         def scaled(target: TestClass, factor: float, offset: int = 1) -> float:
             return target.int_property * factor + offset
@@ -2103,7 +2084,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(10.0, self.conn.run(scaled, obj, 3.0))
 
     def test_function_with_collection_and_nullable_parameters(self) -> None:
-        def summary(values: List[int], label: Optional[str] = None) -> str:
+        def summary(values: list[int], label: str | None = None) -> str:
             if label is None:
                 return str(len(values))
             return label + str(sum(values))
@@ -2139,15 +2120,14 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
     def test_collection_of_another_kind_for_a_parameter_or_variable(self) -> None:
         obj = self.conn.test_service.create_test_object("anotherkind")
-        # pylint: disable=dangerous-default-value
 
-        def list_from_a_dict(x: List[int] = {}) -> int:  # type: ignore[assignment]
+        def list_from_a_dict(x: list[int] = {}) -> int:  # type: ignore[assignment]  # noqa: B006
             return len(x)
 
-        def set_from_a_list(x: set[int] = []) -> int:  # type: ignore[assignment]
+        def set_from_a_list(x: set[int] = []) -> int:  # type: ignore[assignment]  # noqa: B006
             return len(x)
 
-        def list_from_a_set(x: List[int] = {1}) -> int:  # type: ignore[assignment]
+        def list_from_a_set(x: list[int] = {1}) -> int:  # type: ignore[assignment]  # noqa: B006
             return len(x)
 
         def reassigned():
@@ -2185,7 +2165,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         def too_large_default(x: int = 2**40) -> int:
             return x
 
-        def short_tuple_default(x: Tuple[int, int] = (1, 2, 3)) -> int:
+        def short_tuple_default(x: tuple[int, int] = (1, 2, 3)) -> int:
             return x[0]
 
         for func, message in (
@@ -2323,7 +2303,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 return obj.get_value()
             return None
 
-        def annotated() -> Optional[int]:
+        def annotated() -> int | None:
             if obj.int_property > 0:
                 return None
             return 1
@@ -2337,7 +2317,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertIsNone(self.conn.run(none_last))
         self.assertEqual(1, self.conn.run(annotated))
 
-        # pylint: disable-next=inconsistent-return-statements
         def bare_return():
             if obj.int_property > 0:
                 return
@@ -2445,16 +2424,16 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_cast_and_comparison_of_unrelated_types_name_the_line(self) -> None:
         service = self.conn.test_service
         obj = service.create_test_object("unrelatedcast")
-        Deprecated = service.DeprecatedClass  # pylint: disable=invalid-name
+        Deprecated = service.DeprecatedClass
         for func, message in (
             (lambda: cast(str, obj.int_property), "cannot cast a value of type int"),
-            (lambda: cast(List[str], [obj.int_property]), "cannot cast a value"),
+            (lambda: cast(list[str], [obj.int_property]), "cannot cast a value"),
             (
-                lambda: obj == cast(Optional[Deprecated], None),
+                lambda: obj == cast(Deprecated | None, None),
                 "cannot compare a value of type TestService",
             ),
             (
-                lambda: cast(Optional[Deprecated], None) in [obj],
+                lambda: cast(Deprecated | None, None) in [obj],
                 "cannot compare a value of type TestService",
             ),
         ):
@@ -2464,7 +2443,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 self.conn.compile(func)
         # A cast converts the numbers in a collection
         self.assertEqual(
-            [2.0], self.conn.run(lambda: cast(List[float], [obj.int_property + 2]))
+            [2.0], self.conn.run(lambda: cast(list[float], [obj.int_property + 2]))
         )
 
     def test_cast_none(self) -> None:
@@ -2473,10 +2452,10 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         def cast_none():
             if obj.int_property > 0:
                 return obj.get_value()
-            return cast(Optional[str], None)
+            return cast(str | None, None)
 
-        self.assertIsNone(self.conn.run(lambda: cast(Optional[str], None)))
-        self.assertEqual([None], self.conn.run(lambda: [cast(Optional[int], None)]))
+        self.assertIsNone(self.conn.run(lambda: cast(str | None, None)))
+        self.assertEqual([None], self.conn.run(lambda: [cast(int | None, None)]))
         self.assertIsNone(self.conn.run(cast_none))
         self.assertEqual(2.0, self.conn.run(lambda: cast(float, obj.int_property + 2)))
         # A cast narrows a float to an integer, truncating it toward zero
@@ -2496,7 +2475,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return best
 
         def annotated():
-            best: Optional[str] = None
+            best: str | None = None
             for item in objs:
                 best = item.get_value()
             return best
@@ -2666,8 +2645,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         missing = None
         unhashable = [1, 2]
         # The errors these test are ones the linter finds too
-        # pylint: disable=unhashable-member,unsupported-membership-test
-        # pylint: disable=invalid-sequence-index
         for func in (
             lambda: mixed[obj.int_property],
             lambda: table[obj.string_property],
@@ -2676,8 +2653,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             lambda: "a" in missing,
             lambda: [obj.int_property][1:2, 0],
         ):
-            # pylint: enable=unhashable-member,unsupported-membership-test
-            # pylint: enable=invalid-sequence-index
             with self.assertRaises(FunctionCompilationError):
                 self.conn.compile(func)
         with self.assertRaisesRegex(FunctionCompilationError, "only a lambda or a def"):
@@ -2688,8 +2663,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         with self.assertRaisesRegex(
             FunctionCompilationError, r"missing the argument 'value' \(line \d+\)"
         ):
-            # pylint: disable-next=no-value-for-parameter,unnecessary-lambda
-            self.conn.compile(lambda: service.float_to_string())
+            self.conn.compile(lambda: service.float_to_string())  # noqa: PLW0108
 
     def test_recursive_local_function(self) -> None:
         obj = self.conn.test_service.create_test_object("recursive")
@@ -2734,43 +2708,43 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_empty_collection_of_a_declared_type(self) -> None:
         obj = self.conn.test_service.create_test_object("emptydeclared")
 
-        def returned() -> List[int]:
+        def returned() -> list[int]:
             if obj.int_property > 100:
                 return [obj.int_property]
             return []
 
         def reassigned():
-            values: List[int] = [obj.int_property]
+            values: list[int] = [obj.int_property]
             values = []
             return values
 
         def passed():
-            def count(values: Dict[str, int]) -> int:
+            def count(values: dict[str, int]) -> int:
                 return len(values)
 
             return count({}) + obj.int_property * 0
 
-        self.assertEqual([], self.conn.run(lambda: cast(List[int], [])))
+        self.assertEqual([], self.conn.run(lambda: cast(list[int], [])))
         self.assertEqual([], self.conn.run(returned))
         self.assertEqual([], self.conn.run(reassigned))
         self.assertEqual(0, self.conn.run(passed))
 
     def test_empty_collection_of_another_kind_than_its_annotation(self) -> None:
         obj = self.conn.test_service.create_test_object("emptykind")
-        history: List[int] = []
+        history: list[int] = []
 
         def set_from_a_dict():
-            values: Set[int] = {}  # type: ignore[assignment]
+            values: set[int] = {}  # type: ignore[assignment]
             values.add(obj.int_property)
             return values
 
         def dict_from_a_list():
-            values: Dict[str, int] = []  # type: ignore[assignment]
+            values: dict[str, int] = []  # type: ignore[assignment]
             return values
 
         def state_set_from_a_list():
             nonlocal history
-            history = cast(Set[int], history)  # type: ignore[assignment]
+            history = cast(set[int], history)  # type: ignore[assignment]
             return obj.int_property in history
 
         for func, message in (
@@ -2939,7 +2913,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(6, self.conn.run(nested))
 
         def mismatched():
-            # pylint: disable-next=unbalanced-tuple-unpacking
             one, two, three = obj.int_property, 1
             return one + two + three
 
@@ -3108,13 +3081,14 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual("World", self.conn.run(lambda: text.string_property[7:]))
 
     def test_string_methods(self) -> None:
-        # pylint: disable=unnecessary-lambda
         text = self._text()
         self.assertEqual(
-            "HELLO, WORLD", self.conn.run(lambda: text.string_property.upper())
+            "HELLO, WORLD",
+            self.conn.run(lambda: text.string_property.upper()),  # noqa: PLW0108
         )
         self.assertEqual(
-            "hello, world", self.conn.run(lambda: text.string_property.lower())
+            "hello, world",
+            self.conn.run(lambda: text.string_property.lower()),  # noqa: PLW0108
         )
         self.assertEqual(
             "Hello, Mars",
@@ -3139,12 +3113,11 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertTrue(self.conn.run(lambda: "Mars" not in text.string_property))
 
     def test_string_trimming(self) -> None:
-        # pylint: disable=unnecessary-lambda
         text = self.conn.test_service
         text.string_property = "  pad  "
-        self.assertEqual("pad", self.conn.run(lambda: text.string_property.strip()))
-        self.assertEqual("pad  ", self.conn.run(lambda: text.string_property.lstrip()))
-        self.assertEqual("  pad", self.conn.run(lambda: text.string_property.rstrip()))
+        self.assertEqual("pad", self.conn.run(lambda: text.string_property.strip()))  # noqa: PLW0108
+        self.assertEqual("pad  ", self.conn.run(lambda: text.string_property.lstrip()))  # noqa: PLW0108
+        self.assertEqual("  pad", self.conn.run(lambda: text.string_property.rstrip()))  # noqa: PLW0108
 
     def test_raise(self) -> None:
         def failing() -> None:
@@ -3199,7 +3172,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 try:
                     values = [obj.int_property]
                     return str(values[obj.int_property - index])
-                except Exception as error:  # pylint: disable=broad-exception-caught
+                except Exception as error:
                     return "missing: " + error
 
             return lookup
@@ -3207,10 +3180,10 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual("3", self.conn.run(at(3)))
         self.assertTrue(self.conn.run(at(0)).startswith("missing: "))
 
-        def no_handler_value() -> int:  # pylint: disable=inconsistent-return-statements
+        def no_handler_value() -> int:
             try:
                 return obj.int_property
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception:
                 obj.int_property = 0
 
         with self.assertRaises(FunctionCompilationError):
@@ -3244,8 +3217,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         def fails() -> int:
             raise ValueError("always")
 
-        def fails_on_both_branches() -> List[str]:
-            # pylint: disable-next=no-else-raise
+        def fails_on_both_branches() -> list[str]:
             if obj.int_property > 0:
                 raise ValueError("positive")
             else:
@@ -3269,7 +3241,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object("finalbranches")
 
         def raises() -> int:
-            # pylint: disable-next=no-else-return
             if obj.int_property > 0:
                 return obj.int_property
             else:
@@ -3278,7 +3249,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         def tries() -> int:
             values = {1: 10}
-            # pylint: disable-next=no-else-return
             if obj.int_property > 0:
                 try:
                     return values[obj.int_property]
@@ -3353,8 +3323,8 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             except OSError:
                 result += "os "
             try:
-                raise Exception("general")  # pylint: disable=broad-exception-raised
-            except Exception:  # pylint: disable=broad-exception-caught
+                raise Exception("general")
+            except Exception:
                 result += "error"
             return result
 
@@ -3367,7 +3337,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         def guarded() -> str:
             try:
                 raise ValueError("inner")
-            except Exception as exn:  # pylint: disable=broad-exception-caught
+            except Exception as exn:
                 return "caught " + exn
             return "not reached"
 
@@ -3382,7 +3352,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             try:
                 if fail:
                     raise ValueError("inner")
-            except ValueError as x:
+            except ValueError as x:  # noqa: F811
                 if len(x) > 10:
                     return -1
             x = 2
@@ -3392,9 +3362,9 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             try:
                 if fail:
                     raise RuntimeError("inner")
-            except ValueError as x:  # pylint: disable=unused-variable
+            except ValueError:
                 pass
-            except RuntimeError as x:  # pylint: disable=unused-variable
+            except RuntimeError:
                 pass
             x = obj.int_property
             return x
@@ -3428,7 +3398,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                     result += "none,"
                 except ValueError as exn:
                     result += "value " + exn + ","
-                except Exception as exn:  # pylint: disable=broad-exception-caught
+                except Exception as exn:
                     result += "other " + exn + ","
             return result
 
@@ -3439,9 +3409,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             try:
                 raise ValueError("inner")
             except ValueError:
-                raise RuntimeError(  # pylint: disable=raise-missing-from
-                    "from the handler"
-                )
+                raise RuntimeError("from the handler")  # noqa: B904
             except RuntimeError:
                 return "wrong"
             return "not reached"
@@ -3458,7 +3426,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                     raise RuntimeError("inner")
                 finally:
                     result = "cleaned"
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception:
                 pass
             return result
 
@@ -3471,7 +3439,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             try:
                 obj.int_property = 1
             finally:
-                return 2  # pylint: disable=lost-exception,return-in-finally
+                return 2  # noqa: B012
 
         def breaks() -> None:
             while obj.int_property < 10:
@@ -3479,7 +3447,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                     obj.int_property += 1
                 finally:
                     if obj.int_property > 5:
-                        break  # pylint: disable=lost-exception,break-in-finally
+                        break  # noqa: B012
 
         def loops() -> int:
             total = 0
@@ -3516,10 +3484,10 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
     def test_unsupported_raise(self) -> None:
         def bare() -> None:
-            raise  # pylint: disable=misplaced-bare-raise
+            raise  # noqa: PLE0704
 
         def not_an_exception() -> None:
-            raise len("x")  # pylint: disable=raising-bad-type
+            raise len("x")
 
         for func in (bare, not_an_exception):
             with self.assertRaises(FunctionCompilationError):
@@ -3544,7 +3512,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         )
 
     def test_collections_that_cannot_be_used_in_order(self) -> None:
-        # pylint: disable=unsubscriptable-object,bad-reversed-sequence
         service = self.conn.test_service
         obj = service.create_test_object("unordered")
         for func, message in (
@@ -3576,7 +3543,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         service = self.conn.test_service
         obj = service.create_test_object("errorsnamed")
         longs = service.int64_special_defaults
-        # pylint: disable=unsubscriptable-object,undefined-variable
         for func, message in (
             (
                 lambda: [obj.int_property] + [obj.get_value()],
@@ -3642,7 +3608,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                 lambda: obj.get_value().count("a"),
                 "'count' is not supported on a value of type str",
             ),
-            (lambda: obj.int_property + unknown, "cannot resolve the name 'unknown'"),
+            (lambda: obj.int_property + unknown, "cannot resolve the name 'unknown'"),  # noqa: F821
         ):
             with self.assertRaisesRegex(
                 FunctionCompilationError, message + r".* \(line \d+\)$"
@@ -3657,7 +3623,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_index_from_the_end_out_of_range(self) -> None:
         obj = self.conn.test_service.create_test_object("indexfromend")
         with self.assertRaisesRegex(IndexError, "index -4 is out of range"):
-            self.conn.run(lambda: [obj.int_property, 1, 2][-4])
+            self.conn.run(lambda: [obj.int_property, 1, 2][-4])  # noqa: PLE0643
         with self.assertRaisesRegex(IndexError, "index -2 is out of range"):
             self.conn.run(lambda: str(obj.int_property)[-2])
 
@@ -4026,7 +3992,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         def last():
             value = None
-            for value in [o.int_property for o in objs]:
+            for value in [o.int_property for o in objs]:  # noqa: B007
                 pass
             return value
 
@@ -4038,9 +4004,9 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         def step():
             nonlocal last
-            for last in [o.int_property for o in objs]:
+            for last in [o.int_property for o in objs]:  # noqa: B007
                 pass
-            return last  # pylint: disable=undefined-loop-variable
+            return last
 
         self.assertEqual(3, self.conn.run(step))
 
@@ -4120,8 +4086,8 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
 
         def step():
             nonlocal history, last, total
-            history = cast(List[int], history)
-            last = cast(Optional[int], last)
+            history = cast(list[int], history)
+            last = cast(int | None, last)
             total = cast(float, total)
             history.append(obj.int_property)
             total += obj.int_property / 2
@@ -4226,24 +4192,24 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_annotations_of_tuples_and_service_types(self) -> None:
         objs = self._make_objects("annotations")
         test_service = self.conn.test_service
-        TestEnum = test_service.TestEnum  # pylint: disable=invalid-name
-        TestStruct = test_service.TestStruct  # pylint: disable=invalid-name
-        global SERVICE_CLASS  # pylint: disable=global-statement
+        TestEnum = test_service.TestEnum
+        TestStruct = test_service.TestStruct
+        global SERVICE_CLASS  # noqa: PLW0603
         SERVICE_CLASS = test_service.TestClass
 
-        def pairs() -> List[Any]:
+        def pairs() -> list[Any]:
             result: list[tuple[str, int]] = []
             for item in objs:
                 result.append((item.get_value(), item.int_property))
             return result
 
         def typing_names() -> int:
-            counts: Dict[str, List[int]] = {}
+            counts: dict[str, list[int]] = {}
             counts["a"] = [item.int_property for item in objs]
             return len(counts["a"])
 
-        def enums() -> List[Any]:
-            values: List[TestEnum] = []
+        def enums() -> list[Any]:
+            values: list[TestEnum] = []
             values.append(test_service.enum_echo(TestEnum.value_b))
             return values
 
@@ -4254,7 +4220,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
             return values[0].int_field
 
         def classes() -> str:
-            values: List[SERVICE_CLASS] = [objs[0]]
+            values: list[SERVICE_CLASS] = [objs[0]]
             return values[0].get_value()
 
         self.assertEqual(
@@ -4358,14 +4324,12 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
                     if caught == 0:
                         service.throw_custom_exception()
                     else:
-                        # pylint: disable-next=broad-exception-raised
                         raise Exception("plain")
-                # pylint: disable-next=broad-exception-caught
                 except (ValueError, Exception):
                     caught += 1
             try:
                 raise KeyError("key")
-            except (Exception,):  # pylint: disable=broad-exception-caught
+            except Exception:
                 caught += 1
             return caught
 
@@ -4374,7 +4338,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_except_runtime_error_does_not_catch_exception(self) -> None:
         def guarded():
             try:
-                raise Exception("plain")  # pylint: disable=broad-exception-raised
+                raise Exception("plain")
             except RuntimeError:
                 return "caught"
             return "not reached"
@@ -4575,8 +4539,7 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual("d", self.evaluate(lambda: obj.get_value()[-1]))
         self.assertEqual("a", self.evaluate(lambda: (obj.int_property, "a")[-1]))
         with self.assertRaises(FunctionCompilationError):
-            # pylint: disable-next=potential-index-error
-            self.conn.compile(lambda: (obj.int_property, "a")[2])
+            self.conn.compile(lambda: (obj.int_property, "a")[2])  # noqa: PLE0643
 
     def test_string_slice_is_clamped(self) -> None:
         obj = self.conn.test_service.create_test_object("clamp")
@@ -4589,7 +4552,6 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
         obj = self.conn.test_service.create_test_object("sign")
 
         def sign():
-            # pylint: disable-next=no-else-return
             if obj.int_property < 0:
                 return -1
             elif obj.int_property == 0:
@@ -4604,10 +4566,8 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_return_none(self) -> None:
         obj = self.conn.test_service.create_test_object("none")
 
-        # pylint: disable-next=useless-return
         def set_property():
             obj.int_property = 5
-            return None
 
         self.assertIsNone(self.conn.run(set_property))
         self.assertEqual(5, obj.int_property)

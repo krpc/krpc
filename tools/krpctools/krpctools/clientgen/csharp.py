@@ -1,14 +1,14 @@
-# pylint: disable=no-name-in-module
 from krpc.types import (
-    StructType,
+    DictionaryType,
     ListType,
     SetType,
-    DictionaryType,
+    StructType,
     TupleType,
 )
-from .generator import Generator
+
 from ..lang.csharp import CsharpLanguage
 from ..utils import as_type
+from .generator import Generator
 
 
 class CsharpGenerator(Generator):

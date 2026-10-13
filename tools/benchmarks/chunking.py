@@ -64,7 +64,6 @@ def chunks(
 
 def result(suite, scenario, case, taken, baseline=None, note="", context=False):
     """Turn the chunks of a case into the record the report is built from."""
-    # pylint: disable=too-many-arguments,too-many-positional-arguments
     exact = bool(taken[0]["exact_allocations"])
     collections = int(sum(chunk["collections"] for chunk in taken))
     return Result(

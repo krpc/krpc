@@ -1,6 +1,7 @@
 import unittest
-from krpctools.test.docgentest import DocGenTestCase
+
 from krpctools.docgen.java import JavaDomain
+from krpctools.test.docgentest import DocGenTestCase
 
 
 class TestDocGenJava(DocGenTestCase, unittest.TestCase):

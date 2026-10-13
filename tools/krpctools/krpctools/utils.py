@@ -1,9 +1,8 @@
 import array
 import base64
 import re
-from krpc import definitions
 
-# pylint: disable=no-name-in-module
+from krpc import definitions
 from krpc.schema.KRPC_pb2 import Type
 
 _CAMEL_CASE_REGEX = re.compile(r"([^A-Z]+|[A-Z][^A-Z]*)")

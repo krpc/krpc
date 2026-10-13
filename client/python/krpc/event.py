@@ -1,9 +1,12 @@
 from __future__ import annotations
-from typing import Callable, Optional, TYPE_CHECKING
+
 import threading
 import time
-from krpc.stream import Stream
+from collections.abc import Callable
+from typing import TYPE_CHECKING
+
 import krpc.schema.KRPC_pb2 as KRPC
+from krpc.stream import Stream
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -24,7 +27,7 @@ class Event:
         """The condition variable for the event"""
         return self._stream.condition
 
-    def wait(self, timeout: Optional[float] = None) -> bool:
+    def wait(self, timeout: float | None = None) -> bool:
         """Blocks until the event fires or a timeout occurs. Returns straight away if
         the event has fired since the last wait on this event object.
         The condition variable must be locked before calling this method.

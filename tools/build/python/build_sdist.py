@@ -54,6 +54,7 @@ def main():
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
+        check=False,
     )
     if result.returncode != 0:
         sys.stderr.write(result.stdout)

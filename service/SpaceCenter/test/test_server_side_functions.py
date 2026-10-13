@@ -111,7 +111,7 @@ class TestServerSideFunctions(krpctest.TestCase):
         self.assertTrue(vessel.control.lights)
 
     def test_a_compiled_function_takes_arguments(self):
-        Vessel = self.sc.Vessel  # pylint: disable=invalid-name
+        Vessel = self.sc.Vessel
 
         @self.conn.compile
         def set_throttle(target: Vessel, throttle: float = 1.0) -> None:
@@ -182,7 +182,7 @@ class TestServerSideFunctions(krpctest.TestCase):
                 for engine in vessel.parts.engines:
                     engine.toggle_mode()
                 return "switched"
-            except Exception as error:  # pylint: disable=broad-exception-caught
+            except Exception as error:
                 return "could not switch: " + error
 
         self.assertEqual(
@@ -199,7 +199,7 @@ class TestServerSideFunctions(krpctest.TestCase):
         def caught_by_a_catch_all() -> float:
             try:
                 return sc.editor.delta_v_altitude
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception:
                 return -1.0
 
         self.assertEqual(-1.0, self.conn.run(caught_by_a_catch_all))

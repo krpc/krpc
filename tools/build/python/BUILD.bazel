@@ -7,7 +7,6 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "run_pytest.py.tmpl",
-    "run_lint.py",
     "run_ruff.py",
 ])
 

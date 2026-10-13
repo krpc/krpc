@@ -197,15 +197,10 @@ class TestVessel(krpctest.TestCase):
             if candidate.crew_capacity == 0
         )
         self.assertEqual([], crewless_part.crew)
-        # pylint: disable=pointless-statement
         crew_member.courage
-        # pylint: disable=pointless-statement
         crew_member.stupidity
-        # pylint: disable=pointless-statement
         crew_member.experience
-        # pylint: disable=pointless-statement
         crew_member.badass
-        # pylint: disable=pointless-statement
         crew_member.veteran
 
 

@@ -1,23 +1,23 @@
 import collections
 
-# pylint: disable=no-name-in-module
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
-    ValueType,
     ClassType,
+    DictionaryType,
     EnumerationType,
+    ListType,
     MessageType,
+    SetType,
     StructType,
     TupleType,
-    ListType,
-    SetType,
-    DictionaryType,
+    ValueType,
 )
 from krpc.utils import snake_case
-from .generator import Generator
-from .docparser import DocParser
+
 from ..lang.cnano import CnanoLanguage
 from ..utils import as_type
+from .docparser import DocParser
+from .generator import Generator
 
 
 class CnanoGenerator(Generator):
@@ -247,7 +247,7 @@ class CnanoGenerator(Generator):
                     parameter["type"]["getptr"] = ""
         return parameters
 
-    def parse_default_value(self, value, typ):  # pylint: disable=unused-argument
+    def parse_default_value(self, value, typ):
         # No default arguments in C
         return None
 

@@ -1,5 +1,6 @@
 import socket
 import unittest
+
 from krpc.connection import Connection
 from krpc.test.connectiontest import ConnectionTest, EchoServer
 

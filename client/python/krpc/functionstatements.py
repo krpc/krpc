@@ -5,28 +5,26 @@ krpc.functioncompiler."""
 
 # One class compiles every kind of statement, and each kind reaches back into
 # the expression compiler
-# pylint: disable=too-many-lines
 
 from __future__ import annotations
+
 import ast
 import enum
+from collections.abc import Callable
 from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    NoReturn,
-    Optional,
-    Set,
-    Tuple,
     TYPE_CHECKING,
+    Any,
+    NoReturn,
     cast,
 )
 
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.definiteassignment import DefiniteAssignment
 from krpc.error import FunctionCompilationError
 from krpc.expressionutils import (
     Result as _Result,
+)
+from krpc.expressionutils import (
     build_ptype,
     common_ptype,
     is_no_more_nullable,
@@ -37,7 +35,6 @@ from krpc.expressionutils import (
     with_nullable,
 )
 from krpc.types import EXCEPTION_TYPES, ClassBase
-import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
     from krpc.functioncompiler import _Compiler
@@ -64,9 +61,7 @@ class Recompile(Exception):
 _JUMP_NAMES = {ast.Return: "return", ast.Break: "break", ast.Continue: "continue"}
 
 
-def _jump_out_of(
-    statements: List[ast.stmt], in_loop: bool = False
-) -> Optional[ast.stmt]:
+def _jump_out_of(statements: list[ast.stmt], in_loop: bool = False) -> ast.stmt | None:
     """The first return, break or continue that leaves the statements. A break
     or continue within a loop of the statements stays in it, and a local
     function's statements are its own."""
@@ -87,7 +82,7 @@ def _jump_out_of(
     return None
 
 
-def _breaks_out_of(statements: List[ast.stmt]) -> bool:
+def _breaks_out_of(statements: list[ast.stmt]) -> bool:
     """Whether a break in the statements leaves the loop they are the body of.
     A break in a nested loop leaves only that loop."""
     for statement in statements:
@@ -104,7 +99,7 @@ def _breaks_out_of(statements: List[ast.stmt]) -> bool:
     return False
 
 
-def _raises_on_every_path(statements: List[ast.stmt]) -> bool:
+def _raises_on_every_path(statements: list[ast.stmt]) -> bool:
     """Whether the statements end with a raise, an if and else whose branches
     both do, or a try whose body and every handler do, or whose finally
     clause does."""
@@ -129,7 +124,7 @@ def _hidden(name: str) -> str:
     return " " + name
 
 
-def _is_none_node(node: Optional[ast.AST]) -> bool:
+def _is_none_node(node: ast.AST | None) -> bool:
     return isinstance(node, ast.Constant) and node.value is None
 
 
@@ -141,7 +136,7 @@ def _is_plain(node: ast.expr) -> bool:
     return isinstance(node, (ast.Name, ast.Constant))
 
 
-def _type_name(node: ast.expr) -> Optional[str]:
+def _type_name(node: ast.expr) -> str | None:
     """The name an annotation gives a type, as in list or typing.List."""
     if isinstance(node, ast.Name):
         return node.id
@@ -173,24 +168,24 @@ _BUILTIN_EXCEPTIONS = {
 
 
 # The Python type and the literal of an empty collection, by its type code
-_EMPTY_COLLECTIONS: Dict[int, Tuple[type, str]] = {
+_EMPTY_COLLECTIONS: dict[int, tuple[type, str]] = {
     KRPC.Type.LIST: (list, "[]"),
     KRPC.Type.SET: (set, "set()"),
     KRPC.Type.DICTIONARY: (dict, "{}"),
 }
 
 
-class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
+class _StatementCompiler:
     """Compiles the statements of a function body, using the expression
     compiler for the expressions within them. Holds the per-function state:
     declared variables and the function's return type."""
 
     def __init__(self, compiler: _Compiler):
         self._compiler = compiler
-        self._scope: Dict[str, _Result] = {}
-        self._declared: List[Any] = []
-        self._return_ptype: Optional[KRPC.Type] = None
-        self._return_annotation: Optional[KRPC.Type] = None
+        self._scope: dict[str, _Result] = {}
+        self._declared: list[Any] = []
+        self._return_ptype: KRPC.Type | None = None
+        self._return_annotation: KRPC.Type | None = None
         self._saw_valued_return = False
         # Whether a return gives a value, so a return None gives a null
         self._returns_values = False
@@ -199,24 +194,24 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         # Whether a return None was compiled before the return type was known
         self._null_return = False
         # The names declared by an annotation, whose type is not widened
-        self._annotated: Set[str] = set()
+        self._annotated: set[str] = set()
         # The names of the state variables the function declares nonlocal
-        self._state: Set[str] = set()
+        self._state: set[str] = set()
         # The names of the function's parameters, whose type is not widened
-        self._parameters: Set[str] = set()
+        self._parameters: set[str] = set()
         # The assignments of None to variables whose type is not known yet
-        self._untyped: Dict[str, ast.AST] = {}
+        self._untyped: dict[str, ast.AST] = {}
         # Identifies the function body to the types its variables are widened to
         self._body: Any = None
         # The local functions compiled at their first call, as they read
         # variables assigned after their definition
-        self._deferred: Set[ast.AST] = set()
+        self._deferred: set[ast.AST] = set()
 
     def compile_body(
         self,
-        statements: List[ast.stmt],
-        returns: Optional[ast.expr] = None,
-        parameters: Optional[List[Any]] = None,
+        statements: list[ast.stmt],
+        returns: ast.expr | None = None,
+        parameters: list[Any] | None = None,
     ) -> _Result:
         """Compile a function body of statements into a server side function
         with the given parameters. A function with no parameters is invoked
@@ -235,14 +230,14 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         invoked = self._compiler._expr.invoke(function, {})
         return _Result(expression=invoked, ptype=return_ptype)
 
-    def _state_variables(self) -> Dict[str, _Result]:
+    def _state_variables(self) -> dict[str, _Result]:
         """The state variables for the names the function declares nonlocal,
         each starting with the value its closure cell holds. A statement
         name = cast(T, name) in the function's body gives a state variable the
         type T, so it can start as None or an empty collection."""
         compiler = self._compiler
         casts = self._state_casts()
-        state: Dict[str, _Result] = {}
+        state: dict[str, _Result] = {}
         for name in sorted(compiler._state_names):
             value = compiler._lookup(name, compiler._node)
             if name in casts:
@@ -280,13 +275,13 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             )
         return state
 
-    def _state_casts(self) -> Dict[str, Tuple[KRPC.Type, ast.stmt]]:
+    def _state_casts(self) -> dict[str, tuple[KRPC.Type, ast.stmt]]:
         """The types the statements name = cast(T, name) in the function's body
         give its state variables. Such a cast is a statement of the body itself,
         before any other use of the variable."""
         compiler = self._compiler
-        casts: Dict[str, Tuple[KRPC.Type, ast.stmt]] = {}
-        used: Set[str] = set()
+        casts: dict[str, tuple[KRPC.Type, ast.stmt]] = {}
+        used: set[str] = set()
         for statement in getattr(compiler._node, "body", []):
             name = self._state_cast(statement)
             if name is not None:
@@ -313,7 +308,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
                         )
         return casts
 
-    def _state_cast(self, statement: ast.AST) -> Optional[str]:
+    def _state_cast(self, statement: ast.AST) -> str | None:
         """The state variable a statement name = cast(T, name) gives a type, or
         None for any other statement."""
         compiler = self._compiler
@@ -361,16 +356,16 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
 
     def compile_function(
         self,
-        statements: List[ast.stmt],
-        parameters: List[Any],
-        returns: Optional[ast.expr] = None,
-        state: Optional[Dict[str, _Result]] = None,
+        statements: list[ast.stmt],
+        parameters: list[Any],
+        returns: ast.expr | None = None,
+        state: dict[str, _Result] | None = None,
     ) -> Any:
         """Compile statements into a server side function with the given
         parameters, each a (name, ptype, parameter expression) triple, return
         annotation and state variables. Returns the function expression and its
         return type."""
-        scope: Dict[str, _Result] = dict(state or {})
+        scope: dict[str, _Result] = dict(state or {})
         self._state = set(scope)
         self._parameters = {name for name, _, _ in parameters}
         for name, ptype, parameter in parameters:
@@ -379,7 +374,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         self._compiler._scopes.append(scope)
         previous = self._compiler._active_statements
         self._compiler._active_statements = self
-        self._declared: List[Any] = []
+        self._declared: list[Any] = []
         self._saw_valued_return = False
         self._null_return = False
         self._annotated = set()
@@ -453,15 +448,15 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
 
     def _compile_statements(
         self,
-        statements: List[ast.stmt],
+        statements: list[ast.stmt],
         top_level: bool = False,
         as_value: bool = False,
-    ) -> List[Any]:
+    ) -> list[Any]:
         """Compile a list of statements. When the list is the value of the
         function, or of a branch of the function's final if, its final return
         compiles to the value itself."""
         as_value = as_value or top_level
-        compiled: List[Any] = []
+        compiled: list[Any] = []
         for position, statement in enumerate(statements):
             # An error converting a value names the statement, unless it is
             # within an expression of the statement
@@ -493,9 +488,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             raise FunctionCompilationError("Cannot compile expression: " + message)
         return compiled
 
-    def _return_annotation_ptype(
-        self, returns: Optional[ast.expr]
-    ) -> Optional[KRPC.Type]:
+    def _return_annotation_ptype(self, returns: ast.expr | None) -> KRPC.Type | None:
         """The type a function's return annotation names. None for a function
         annotated as returning None, and for an annotation the compiler does
         not support, whose type is taken from the returns instead."""
@@ -506,7 +499,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         except FunctionCompilationError:
             return None
 
-    def _compile_statement(self, statement: ast.stmt, as_value: bool) -> List[Any]:
+    def _compile_statement(self, statement: ast.stmt, as_value: bool) -> list[Any]:
         """Compile a statement into the expressions it consists of. A final
         return of a function's value becomes the value."""
         compiler = self._compiler
@@ -541,7 +534,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             return [] if compiled_if is None else [compiled_if]
         if isinstance(statement, ast.Delete):
             return self._compile_delete(statement)
-        compilers: Dict[type, Callable[[Any], Any]] = {
+        compilers: dict[type, Callable[[Any], Any]] = {
             ast.While: self._compile_while,
             ast.For: self._compile_for,
             ast.Raise: self._compile_raise,
@@ -557,7 +550,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         return [compile_statement(statement)]
 
     @staticmethod
-    def _nested_statements(statement: ast.stmt) -> List[List[ast.stmt]]:
+    def _nested_statements(statement: ast.stmt) -> list[list[ast.stmt]]:
         if isinstance(statement, (ast.If, ast.While, ast.For)):
             return [statement.body, statement.orelse]
         if isinstance(statement, ast.Try):
@@ -567,10 +560,10 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         return []
 
     @staticmethod
-    def _has_valued_return(statements: List[ast.stmt]) -> bool:
+    def _has_valued_return(statements: list[ast.stmt]) -> bool:
         """Whether the function has a return with a value other than None,
         outside its local functions."""
-        pending: List[ast.AST] = list(statements)
+        pending: list[ast.AST] = list(statements)
         while pending:
             node = pending.pop()
             if isinstance(node, (ast.FunctionDef, ast.Lambda)):
@@ -591,7 +584,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             return False
         return self._returns_values or not _is_none_node(statement.value)
 
-    def _returns_a_value(self, statements: List[ast.stmt]) -> bool:
+    def _returns_a_value(self, statements: list[ast.stmt]) -> bool:
         """Whether the statements end by returning a value on every path, with a
         return statement, an if and else whose branches both do, a try whose
         body and every handler do, or a while True loop with no break. A raise
@@ -619,7 +612,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             )
         return False
 
-    def _branches_give_values(self, statements: List[ast.stmt]) -> bool:
+    def _branches_give_values(self, statements: list[ast.stmt]) -> bool:
         """Whether the statements end with a return of a value, or with an if
         and else whose branches both do or are a single raise. Such a final if
         compiles to a conditional value. Any other final if is a statement,
@@ -650,7 +643,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             self._value_block(statement.orelse),
         )
 
-    def _value_block(self, statements: List[ast.stmt]) -> Any:
+    def _value_block(self, statements: list[ast.stmt]) -> Any:
         compiled = self._compile_statements(statements, as_value=True)
         if len(compiled) == 1:
             return compiled[0]
@@ -715,8 +708,8 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             return result.expression
         return self._compiler._expr.return_(result.expression)
 
-    def _compile_assignment(self, statement: ast.stmt) -> List[Any]:
-        annotation: Optional[KRPC.Type] = None
+    def _compile_assignment(self, statement: ast.stmt) -> list[Any]:
+        annotation: KRPC.Type | None = None
         if isinstance(statement, ast.Assign):
             if len(statement.targets) != 1:
                 return self._compile_multiple_assignment(statement)
@@ -772,7 +765,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             value = self._compiler._compile(operator_node)
         if isinstance(target, ast.Name):
             return [self._assign_variable(statement, target.id, value, annotation)]
-        held: List[Any] = []
+        held: list[Any] = []
         if not isinstance(statement, ast.AugAssign):
             held, value = self._value_before_target(statement, target, value)
         if isinstance(target, ast.Attribute):
@@ -783,7 +776,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
 
     def _value_before_target(
         self, statement: ast.stmt, target: ast.expr, value: _Result
-    ) -> Tuple[List[Any], _Result]:
+    ) -> tuple[list[Any], _Result]:
         """Hold a computed value in a variable when the target of its assignment
         is computed too, as Python evaluates the value before the target. Returns
         the assignment to the variable, if any, and the value to assign."""
@@ -805,7 +798,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
 
     def _compile_list_extend(
         self, statement: ast.AugAssign, target: ast.expr
-    ) -> Optional[Any]:
+    ) -> Any | None:
         """Compile += on a list, which appends each value to the list in place, as
         list.extend does. The list is evaluated once, before the values. The
         values are read into a list first, which copies a list extended by
@@ -848,7 +841,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             ]
         )
 
-    def _compile_multiple_assignment(self, statement: ast.Assign) -> List[Any]:
+    def _compile_multiple_assignment(self, statement: ast.Assign) -> list[Any]:
         """Compile an assignment with several targets, such as a = b = 0.
         The value is evaluated once, into a hidden variable, and assigned to
         each target in turn, which takes the type of the value."""
@@ -875,7 +868,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             self._assign_variable(statement, name, value) for name in names
         ]
 
-    def _compile_unpacking(self, statement: ast.Assign, target: ast.expr) -> List[Any]:
+    def _compile_unpacking(self, statement: ast.Assign, target: ast.expr) -> list[Any]:
         """Compile an assignment that unpacks a tuple into several names, such as
         a, b = b, a. The whole value is evaluated before any name is assigned."""
         value = self._compiler._compile(statement.value)
@@ -894,7 +887,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
 
     def _unpack_constant(
         self, node: ast.stmt, target: ast.expr, value: object
-    ) -> List[tuple]:
+    ) -> list[tuple]:
         """The names a target binds to the parts of a value known when compiling."""
         if isinstance(target, ast.Name):
             return [(target.id, value)]
@@ -911,7 +904,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         raise self._compiler._error(node, "cannot unpack the value into this target")
 
     def _hidden_variable(
-        self, node: ast.stmt, name: str, ptype: Optional[KRPC.Type]
+        self, node: ast.stmt, name: str, ptype: KRPC.Type | None
     ) -> Any:
         """Declare a variable the function's own code cannot name."""
         variable = self._compiler._expr.variable(
@@ -921,8 +914,8 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         return variable
 
     def _assign_parts(
-        self, node: ast.stmt, variable: Any, names: List[tuple]
-    ) -> List[Any]:
+        self, node: ast.stmt, variable: Any, names: list[tuple]
+    ) -> list[Any]:
         """Assign each part of the tuple a variable holds to the name _unpack
         found for it."""
         return [
@@ -976,7 +969,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             )
             parameters.append((argument.arg, ptype, parameter))
 
-        def compile_() -> Tuple[Any, List[Tuple[str, KRPC.Type]], Any]:
+        def compile_() -> tuple[Any, list[tuple[str, KRPC.Type]], Any]:
             nested = _StatementCompiler(self._compiler)
             nested._deferred = self._deferred
             function, return_ptype = nested.compile_function(
@@ -1009,7 +1002,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
                 "function definition with annotated parameters",
             )
 
-        def compile_() -> Tuple[Any, List[Tuple[str, KRPC.Type]], Any]:
+        def compile_() -> tuple[Any, list[tuple[str, KRPC.Type]], Any]:
             body = compile_lambda_body(self._compiler, node)
             return self._compiler._expr.lambda_([], body.expression), [], body.ptype
 
@@ -1019,7 +1012,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         self,
         name: str,
         node: ast.AST,
-        compile_: Callable[[], Tuple[Any, List[Tuple[str, KRPC.Type]], Any]],
+        compile_: Callable[[], tuple[Any, list[tuple[str, KRPC.Type]], Any]],
     ) -> None:
         """Register a local function, compiled now, or at its first call when
         it reads a variable assigned after its definition."""
@@ -1046,7 +1039,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         node: ast.stmt,
         name: str,
         value: _Result,
-        annotation: Optional[KRPC.Type] = None,
+        annotation: KRPC.Type | None = None,
     ) -> Any:
         """Assign a value to a variable, declaring it on its first assignment.
         None when the variable has only been assigned None, and its type is not
@@ -1147,7 +1140,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         raise Recompile()
 
     def _assigned_expression(
-        self, node: ast.stmt, name: str, target: Optional[KRPC.Type], value: _Result
+        self, node: ast.stmt, name: str, target: KRPC.Type | None, value: _Result
     ) -> Any:
         """The expression assigned to a variable, converted to the variable's
         type. A variable takes its type from its annotation or its first value,
@@ -1179,7 +1172,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         return join_ptype(widened, ptype) or ptype
 
     def _widen_variable(
-        self, name: str, declared: KRPC.Type, value: Optional[KRPC.Type]
+        self, name: str, declared: KRPC.Type, value: KRPC.Type | None
     ) -> None:
         """Note the type a variable must be declared with to hold a value that
         can be None where the variable cannot. The function is compiled again,
@@ -1221,7 +1214,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
                 target.attr,
                 "setter",
             )
-            args: List[Optional[_Result]] = [base, value]
+            args: list[_Result | None] = [base, value]
         elif base.is_value and self._compiler._is_service_object(base.value):
             service, procedure = self._compiler._member(
                 node,
@@ -1245,7 +1238,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
 
     def _compile_subscript_augassign(
         self, statement: ast.AugAssign, target: ast.Subscript
-    ) -> Optional[Any]:
+    ) -> Any | None:
         """Compile an augmented assignment to an element, such as d[k()] += 1.
         The collection and the key are assigned to temporaries, so each is
         evaluated once, as Python does. None when the type of either is
@@ -1297,7 +1290,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
 
     def _compile_attribute_augassign(
         self, statement: ast.AugAssign, target: ast.Attribute
-    ) -> Optional[Any]:
+    ) -> Any | None:
         """Compile an augmented assignment to a property of a computed object,
         such as vessel.control.throttle += 0.1. The object is assigned to a
         temporary, so it is evaluated once, as Python does. None when the object
@@ -1406,7 +1399,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             collection.expression, self._compiler._index_expression(node, index)
         )
 
-    def _compile_if(self, statement: ast.If) -> Optional[Any]:
+    def _compile_if(self, statement: ast.If) -> Any | None:
         condition = self._compiler._compile_condition(statement.test)
         if condition.is_value:
             branch = statement.body if condition.value else statement.orelse
@@ -1504,7 +1497,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             self._compiler._expr.block(assignments + [body]),
         )
 
-    def _compile_delete(self, statement: ast.Delete) -> List[Any]:
+    def _compile_delete(self, statement: ast.Delete) -> list[Any]:
         """Compile a del statement, which removes an element of a list by position
         or a key of a dictionary."""
         compiled = []
@@ -1545,7 +1538,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
 
     def _exception_names(
         self, node: ast.AST, target: _Result, raising: bool = False
-    ) -> List[tuple]:
+    ) -> list[tuple]:
         """The service and name of each kRPC exception a Python exception type
         stands for, or a tuple of them. A raised builtin stands for one exception,
         and a caught one for every exception its subclasses stand for."""
@@ -1574,7 +1567,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
                     return names
         raise self._compiler._error(node, "not an exception type the server defines")
 
-    def _caught_names(self, value: type) -> List[tuple]:
+    def _caught_names(self, value: type) -> list[tuple]:
         """The kRPC exceptions an except clause naming a builtin catches. The Python
         client raises a service's own exception as a subclass of RuntimeError, so
         catching RuntimeError catches every exception the services declare, apart
@@ -1655,7 +1648,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         return body
 
     def _compile_handlers(
-        self, statement: ast.Try, names: List[List[tuple]], body: Any
+        self, statement: ast.Try, names: list[list[tuple]], body: Any
     ) -> Any:
         # Catches nest innermost first, so they are tried in the order written.
         # A catch only records which handler matched. The handlers run after the
@@ -1685,7 +1678,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         return expr.block([expr.assign(matched, expr.constant_int(0)), body, dispatch])
 
     def _handler_body(
-        self, handler: ast.ExceptHandler, shadowed: Optional[_Result]
+        self, handler: ast.ExceptHandler, shadowed: _Result | None
     ) -> Any:
         """Compile a handler's statements. Its as name is bound only within
         them, so the binding of the name it shadows is restored after."""
@@ -1698,7 +1691,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
                 else:
                     self._scope[handler.name] = shadowed
 
-    def _handler_names(self, handler: ast.ExceptHandler) -> List[tuple]:
+    def _handler_names(self, handler: ast.ExceptHandler) -> list[tuple]:
         """The kRPC exceptions a handler catches, or none for every exception."""
         if handler.type is None:
             return []
@@ -1710,9 +1703,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             return []
         return self._exception_names(handler, target)
 
-    def _bind_message(
-        self, handler: ast.ExceptHandler
-    ) -> Tuple[Any, Optional[_Result]]:
+    def _bind_message(self, handler: ast.ExceptHandler) -> tuple[Any, _Result | None]:
         """Declare the variable a handler's as name binds, and return it with
         the binding of the name it shadows. Only the message is bound, never
         the exception itself, so the name holds a string."""
@@ -1728,7 +1719,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         return message, shadowed
 
     def _compile_handler(
-        self, names: List[tuple], body: Any, message: Any, compiled: Any
+        self, names: list[tuple], body: Any, message: Any, compiled: Any
     ) -> Any:
         """Wrap the body in a catch for each of the handler's exceptions, or one
         for every exception when it names none. The catch binds the message
@@ -1741,7 +1732,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
             )
         return body
 
-    def _statement_block(self, statements: List[ast.stmt], scoped: bool = True) -> Any:
+    def _statement_block(self, statements: list[ast.stmt], scoped: bool = True) -> Any:
         """Compile a nested block of statements. Which of a branch's local
         function definitions runs is only known at run time, so a function a
         scoped block defines or redefines is not callable after it."""
@@ -1798,7 +1789,7 @@ class _StatementCompiler:  # pylint: disable=too-many-instance-attributes
         raise self._compiler._error(node, "the annotation must be a collection type")
 
 
-class _DeferredFunction:  # pylint: disable=too-few-public-methods
+class _DeferredFunction:
     """A local function compiled at its first call, with the scopes of its
     definition. It unpacks to the triple a compiled local function is: the
     function, its parameters' names and types, and its return type."""
@@ -1806,14 +1797,14 @@ class _DeferredFunction:  # pylint: disable=too-few-public-methods
     def __init__(
         self,
         compiler: _Compiler,
-        compile_: Callable[[], Tuple[Any, List[Tuple[str, KRPC.Type]], Any]],
+        compile_: Callable[[], tuple[Any, list[tuple[str, KRPC.Type]], Any]],
     ):
         self._compiler = compiler
         self._compile = compile_
         # The scopes are the function's own, which gain the variables declared
         # after the definition
         self._scopes = list(compiler._scopes)
-        self._compiled: Optional[Tuple[Any, List[Tuple[str, KRPC.Type]], Any]] = None
+        self._compiled: tuple[Any, list[tuple[str, KRPC.Type]], Any] | None = None
 
     def __iter__(self) -> Any:
         if self._compiled is None:
@@ -1907,7 +1898,7 @@ def _collection_annotation_ptype(
 
 def _remote_annotation_ptype(
     compiler: _Compiler, node: ast.expr, value: object
-) -> Optional[KRPC.Type]:
+) -> KRPC.Type | None:
     """The type of a class, enumeration or structure a service defines,
     named by an annotation."""
     value = unwrap_class(value)
@@ -1935,7 +1926,7 @@ def _annotation_value(compiler: _Compiler, node: ast.expr) -> object:
     return None
 
 
-def _optional_annotation(node: ast.expr) -> Optional[ast.expr]:
+def _optional_annotation(node: ast.expr) -> ast.expr | None:
     """The annotation an annotation of a value that can be None is written
     around, as Optional[T] or T | None. None for any other annotation."""
     if isinstance(node, ast.Subscript) and _type_name(node.value) == "Optional":

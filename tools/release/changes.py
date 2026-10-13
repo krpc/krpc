@@ -30,7 +30,7 @@ COMPONENTS = [
 
 def current_version():
     version = None
-    with open("config.bzl", "r") as config:
+    with open("config.bzl") as config:
         for line in config.readlines():
             m = re.search(r'^version\s*=\s*"(.+)"$', line)
             if m:
@@ -60,7 +60,7 @@ def render(version):
             changelist.append((name, nodes))
 
     out = []
-    with open("tools/release/github-changes.tmpl", "r") as tmpl:
+    with open("tools/release/github-changes.tmpl") as tmpl:
         out.append("".join(tmpl.readlines()).replace("%VERSION%", version))
     out.append("### Changes\n")
     for name, nodes in changelist:
@@ -83,7 +83,7 @@ def get_changes(path):
     top-level entry; a '  - ' bullet under it is a sub-item; other indented
     lines continue the current bullet's text."""
     changes = {}
-    with open(path, "r") as f:
+    with open(path) as f:
         version = None
         top = None  # current top-level node
         for line in f.readlines():

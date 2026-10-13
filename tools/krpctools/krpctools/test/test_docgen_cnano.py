@@ -1,6 +1,7 @@
 import unittest
-from krpctools.test.docgentest import DocGenTestCase
+
 from krpctools.docgen.cnano import CnanoDomain
+from krpctools.test.docgentest import DocGenTestCase
 
 
 class TestDocGenCnano(DocGenTestCase, unittest.TestCase):

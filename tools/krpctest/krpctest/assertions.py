@@ -12,7 +12,7 @@ import math
 import unittest
 
 
-class AssertionsMixin(unittest.TestCase):  # pylint: disable=too-many-public-methods
+class AssertionsMixin(unittest.TestCase):
     """Tolerance-based assertion helpers, mixed into ``TestCase``.
 
     Subclasses ``unittest.TestCase`` so ``assertAlmostEqual`` / ``assertNotAlmostEqual``

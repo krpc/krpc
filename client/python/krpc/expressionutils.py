@@ -3,12 +3,14 @@ expressions: an index of the procedures provided by the server, and helpers
 for working with protocol buffer type messages."""
 
 from __future__ import annotations
-from typing import Any, Dict, Optional, List, Sequence, Set, Tuple, TYPE_CHECKING
 
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Any
+
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.attributes import Attributes
 from krpc.service import _member_name
 from krpc.types import WrappedClass
-import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -55,7 +57,7 @@ class Result:
         value: object = None,
         is_value: bool = False,
         expression: Any = None,
-        ptype: Optional[KRPC.Type] = None,
+        ptype: KRPC.Type | None = None,
     ):
         self.value = value
         self.is_value = is_value
@@ -63,7 +65,7 @@ class Result:
         self.ptype = ptype
 
 
-def build_ptype(code: int, types: Optional[List[KRPC.Type]] = None) -> KRPC.Type:
+def build_ptype(code: int, types: list[KRPC.Type] | None = None) -> KRPC.Type:
     """Build a protocol buffer type message"""
     typ = KRPC.Type()
     typ.code = code  # type: ignore[assignment]
@@ -80,17 +82,17 @@ class Metadata:
     def __init__(self, client: Client):
         # (service, class name or None, Python member name, kind) -> procedure
         # where kind is 'getter', 'setter', 'method' or 'static'
-        self.members: Dict[
-            Tuple[str, Optional[str], str, str], Tuple[str, KRPC.Procedure]
+        self.members: dict[
+            tuple[str, str | None, str, str], tuple[str, KRPC.Procedure]
         ] = {}
         # (service, structure name) -> the names the structure declares its fields
         # with, in order. A field is named to the server by the name it is declared
         # with, which can differ from the pythonic name of a value's attribute
-        self.struct_fields: Dict[Tuple[str, str], List[str]] = {}
+        self.struct_fields: dict[tuple[str, str], list[str]] = {}
         # (service, exception name) of every exception the services declare
-        self.exceptions: List[Tuple[str, str]] = []
+        self.exceptions: list[tuple[str, str]] = []
         # (service, procedure name) -> procedure
-        self.procedures: Dict[Tuple[str, str], KRPC.Procedure] = {}
+        self.procedures: dict[tuple[str, str], KRPC.Procedure] = {}
         for service in client.krpc.get_services().services:
             self.exceptions.extend(
                 (service.name, exception.name) for exception in service.exceptions
@@ -102,7 +104,7 @@ class Metadata:
             for procedure in service.procedures:
                 name = procedure.name
                 self.procedures[(service.name, name)] = procedure
-                key: Optional[Tuple[str, Optional[str], str, str]] = None
+                key: tuple[str, str | None, str, str] | None = None
                 if Attributes.is_a_class_member(name):
                     class_name = Attributes.get_class_name(name)
                     member = _member_name(Attributes.get_class_member_name(name))
@@ -128,8 +130,8 @@ class Metadata:
 
 def remote_type(
     types: Any,
-    ptype: Optional[KRPC.Type],
-    cache: Optional[Dict[bytes, Any]] = None,
+    ptype: KRPC.Type | None,
+    cache: dict[bytes, Any] | None = None,
 ) -> Any:
     """Build a KRPC.Type remote object describing the given protocol buffer
     type, using the KRPC.Type factory methods. Raises ValueError for types
@@ -149,7 +151,7 @@ def remote_type(
     return remote
 
 
-def _build_remote_type(types: Any, ptype: KRPC.Type, cache: Dict[bytes, Any]) -> Any:
+def _build_remote_type(types: Any, ptype: KRPC.Type, cache: dict[bytes, Any]) -> Any:
     code = ptype.code
     if ptype.nullable:
         return types.nullable_type(
@@ -193,9 +195,7 @@ def _build_remote_type(types: Any, ptype: KRPC.Type, cache: Dict[bytes, Any]) ->
     raise ValueError("unsupported type")
 
 
-def promote(
-    left: Optional[KRPC.Type], right: Optional[KRPC.Type]
-) -> Optional[KRPC.Type]:
+def promote(left: KRPC.Type | None, right: KRPC.Type | None) -> KRPC.Type | None:
     """The type that operands of the given types are promoted to by the
     server's binary operators, following C#'s numeric promotion rules. An
     operator takes the value a nullable number or bool holds, so the result is
@@ -212,7 +212,7 @@ def promote(
     return None
 
 
-def common_numeric_code(codes: Set[int]) -> Optional[int]:
+def common_numeric_code(codes: set[int]) -> int | None:
     """The narrowest numeric type that every one of a set of numeric types
     widens to, or None when there is none. For two types it is C#'s binary
     numeric promotion."""
@@ -250,15 +250,13 @@ def same_shape(left: KRPC.Type, right: KRPC.Type) -> bool:
     )
 
 
-def join_ptype(
-    left: Optional[KRPC.Type], right: Optional[KRPC.Type]
-) -> Optional[KRPC.Type]:
+def join_ptype(left: KRPC.Type | None, right: KRPC.Type | None) -> KRPC.Type | None:
     """The type of a value that is one of two values, as the server joins the
     branches of a conditional."""
     return common_ptype([left, right])
 
 
-def common_ptype(ptypes: Sequence[Optional[KRPC.Type]]) -> Optional[KRPC.Type]:
+def common_ptype(ptypes: Sequence[KRPC.Type | None]) -> KRPC.Type | None:
     """The type the server gives a value that is one of several values, such as
     the values of a collection or the values a function returns. It depends only
     on which types are present: nullable wherever any is, the widest of a set of

@@ -8,7 +8,7 @@ from krpc.test.servertestcase import ServerTestCase
 class TestDocumentation(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        super(TestDocumentation, cls).setUpClass()
+        super().setUpClass()
 
     def check_doc(self, expected: str, obj: object) -> None:
         # Normalize with cleandoc, as pre-generated stubs indent multi-line docstrings

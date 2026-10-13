@@ -98,46 +98,6 @@ def py_test(name, src, pkg, tests = [], deps = [], **kwargs):
     )
 
 # buildifier: disable=function-docstring
-def py_lint_test(
-        name,
-        pkg = None,
-        pkg_name = None,
-        srcs = [],
-        deps = [],
-        black_exclude = None,
-        pylint_config = None,
-        **kwargs):
-    args = []
-    data = []
-    if black_exclude:
-        args.append("'--black-exclude=%s'" % black_exclude)
-    if pylint_config:
-        args.append("--pylint-rcfile=$(rootpath %s)" % pylint_config)
-        data.append(pylint_config)
-    if pkg:
-        args.extend([
-            "--sdist=$(rootpath %s)" % pkg,
-            "--pkg=%s" % pkg_name,
-        ])
-        data.append(pkg)
-    else:
-        args.extend(["$(rootpath %s)" % x for x in srcs])
-        data.extend(srcs)
-
-    _native_py_test(
-        name = name,
-        srcs = [Label("//tools/build/python:run_lint.py")],
-        main = Label("//tools/build/python:run_lint.py"),
-        args = args,
-        data = data,
-        deps = deps + [
-            "@pypi//black",
-            "@pypi//pylint",
-        ],
-        **kwargs
-    )
-
-# buildifier: disable=function-docstring
 def py_ruff_test(name, srcs, config = Label("//:ruff.toml"), **kwargs):
     ruff_whl = "@pypi//ruff:whl"
     args = [

@@ -1,11 +1,10 @@
-# pylint: disable=too-many-lines
 import math
 import os
-import unittest
 import socket
-import threading
+import unittest
 import warnings
-from typing import Callable
+from collections.abc import Callable
+
 import krpc
 import krpc.limits
 import krpc.schema.KRPC_pb2 as KRPC
@@ -16,7 +15,7 @@ from krpc.test.servertestcase import ServerTestCase
 class TestClient(ServerTestCase, unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        super(TestClient, cls).setUpClass()
+        super().setUpClass()
 
     def test_get_status(self) -> None:
         status = self.conn.krpc.get_status()
@@ -145,9 +144,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
             self.assert_warns_deprecation(
                 lambda: setattr(conn.test_service, "deprecated_property", "foo")
             )
-            self.assert_warns_deprecation(
-                lambda: getattr(conn.test_service, "deprecated_property")
-            )
+            self.assert_warns_deprecation(lambda: conn.test_service.deprecated_property)
         finally:
             conn.close()
 

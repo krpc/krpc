@@ -1,6 +1,6 @@
 import socket
 import unittest
-from typing import List
+
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.connection import Connection
 from krpc.encoder import Encoder
@@ -11,10 +11,10 @@ class ScriptedSocket:
     made to arrive in whatever pieces a test needs. An exhausted script reads as
     end of file, as a closed connection does."""
 
-    def __init__(self, chunks: List[bytes]) -> None:
+    def __init__(self, chunks: list[bytes]) -> None:
         self.chunks = list(chunks)
 
-    def recv(self, length: int) -> bytes:  # pylint: disable=unused-argument
+    def recv(self, length: int) -> bytes:
         if not self.chunks:
             return b""
         return self.chunks.pop(0)

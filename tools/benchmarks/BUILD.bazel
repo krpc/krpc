@@ -3,7 +3,7 @@ load("//:config.bzl", "assembly_version", "author")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:benchmark.bzl", "optimized_binary")
 load("//tools/build:csharp.bzl", "csharp_library")
-load("//tools/build:python.bzl", "py_lint_test", "py_ruff_test")
+load("//tools/build:python.bzl", "py_ruff_test")
 
 # The Benchmark service. A service like any other, loaded by whichever server it is installed
 # alongside: TestServer for a game-less measurement, and the game for the same measurement
@@ -281,19 +281,7 @@ test_suite(
 test_suite(
     name = "lint",
     tests = [
-        ":pylint",
-    ],
-)
-
-py_lint_test(
-    name = "pylint",
-    size = "medium",
-    srcs = glob(["*.py"]) + glob(["server/*.py"]),
-    pylint_config = "pylint.rc",
-    deps = [
-        "//client/python:krpc_lib",
-        "//tools/krpctest:krpctest_lib",
-        "@pypi//pytest",
+        ":ruff",
     ],
 )
 

@@ -1,6 +1,7 @@
 import unittest
-from krpctools.test.docgentest import DocGenTestCase
+
 from krpctools.docgen.cpp import CppDomain
+from krpctools.test.docgentest import DocGenTestCase
 
 
 class TestDocGenCpp(DocGenTestCase, unittest.TestCase):

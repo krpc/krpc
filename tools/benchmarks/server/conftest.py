@@ -20,7 +20,6 @@ def pytest_addoption(parser):
 
 
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
-    # pylint: disable=unused-argument
     if not RESULTS:
         return
     for line in table(RESULTS, SUITE):

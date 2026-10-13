@@ -1,9 +1,11 @@
 import collections
+
 from krpc.types import ClassType
 from krpc.utils import snake_case
-from .generator import Generator
-from .docparser import DocParser
+
 from ..lang.cpp import CppLanguage
+from .docparser import DocParser
+from .generator import Generator
 
 
 def _cpp_template_fix(typ):

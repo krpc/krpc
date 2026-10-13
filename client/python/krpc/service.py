@@ -1,22 +1,18 @@
 from __future__ import annotations
-from typing import (
-    cast,
-    Any,
-    Callable,
-    DefaultDict,
-    Dict,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Set,
-    Tuple,
-    TYPE_CHECKING,
-)
+
 import keyword
 import warnings
 from collections import defaultdict
+from collections.abc import Callable, Iterable, Iterator
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    cast,
+)
 from xml.etree import ElementTree
+
+import krpc.schema.KRPC_pb2 as KRPC
+from krpc.attributes import Attributes
 from krpc.definitions import (
     CLASS,
     ENUMERATION,
@@ -26,19 +22,17 @@ from krpc.definitions import (
     decode_default_value,
 )
 from krpc.types import (
-    Types,
-    TypeBase,
-    DynamicType,
-    DynamicClassBase,
     DefaultArgument,
+    DynamicClassBase,
+    DynamicType,
+    TypeBase,
+    Types,
     UnknownTypeError,
     WrappedClass,
     check_type_is_known,
     is_a_known_type,
 )
 from krpc.utils import snake_case
-from krpc.attributes import Attributes
-import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -63,7 +57,7 @@ def _signature(param_types: Iterable[TypeBase], return_type: TypeBase) -> str:
 def _as_literal(value: object, typ: TypeBase) -> str:
     if value is None:
         return "None"
-    if typ.python_type == str:
+    if typ.python_type is str:
         return "'" + cast(str, value) + "'"
     return str(value)
 
@@ -72,7 +66,7 @@ def _member_name(name: str) -> str:
     return _update_names(snake_case(name))[0]
 
 
-def _update_names(*names: str) -> List[str]:
+def _update_names(*names: str) -> list[str]:
     """Given a list of names, append underscores to reserved keywords
     without causing names to clash"""
     newnames = []
@@ -93,8 +87,8 @@ def _construct_func(
     param_names: Iterable[str],
     param_types: Iterable[TypeBase],
     param_required: Iterable[bool],
-    param_default: Iterable[Optional[object]],
-    return_type: Optional[TypeBase],
+    param_default: Iterable[object | None],
+    return_type: TypeBase | None,
 ) -> Callable:  # type: ignore[type-arg]
     """Build function to invoke a remote procedure"""
 
@@ -129,7 +123,7 @@ def _construct_func(
         "param_types": param_types,
         "return_type": return_type,
     }
-    fn = eval(code, context)  # pylint: disable=eval-used
+    fn = eval(code, context)
     return cast(Callable, fn)  # type: ignore[type-arg]
 
 
@@ -178,7 +172,7 @@ def _wrap_deprecated(
     return wrapper
 
 
-def _indent(lines: Iterable[str], level: int) -> List[str]:
+def _indent(lines: Iterable[str], level: int) -> list[str]:
     result = []
     for line in lines:
         if line:
@@ -319,7 +313,8 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
             if not all(is_a_known_type(field.type) for field in struct.fields):
                 warnings.warn(
                     "Skipping the struct %s.%s, as the type of one of its fields is not a "
-                    "type this client knows about" % (name, struct.name)
+                    "type this client knows about" % (name, struct.name),
+                    stacklevel=2,
                 )
                 return
             fields = [
@@ -364,7 +359,7 @@ def _skipping_unknown_types(
     try:
         build(*args)
     except UnknownTypeError as exn:
-        warnings.warn("Skipping %s: %s" % (what, exn))
+        warnings.warn("Skipping %s: %s" % (what, exn), stacklevel=2)
 
 
 def create_service(client: Client, service: KRPC.Service) -> object:
@@ -412,7 +407,7 @@ def create_service(client: Client, service: KRPC.Service) -> object:
             )
 
     # Add properties
-    properties: DefaultDict[str, List[Optional[KRPC.Procedure]]] = defaultdict(
+    properties: defaultdict[str, list[KRPC.Procedure | None]] = defaultdict(
         lambda: [None, None]
     )
     for procedure in service.procedures:
@@ -439,7 +434,7 @@ def create_service(client: Client, service: KRPC.Service) -> object:
 def _add_class_members(
     cls: ServiceBase,
     service: KRPC.Service,
-    skip: Optional[Callable[[str, str], bool]] = None,
+    skip: Callable[[str, str], bool] | None = None,
 ) -> None:
     """Attach the members that a service declares for its classes to the class types.
 
@@ -483,7 +478,7 @@ def _add_class_members(
             )
 
     # Add class properties
-    class_properties: DefaultDict[Tuple[str, str], List[Optional[KRPC.Procedure]]] = (
+    class_properties: defaultdict[tuple[str, str], list[KRPC.Procedure | None]] = (
         defaultdict(lambda: [None, None])
     )
     for procedure in service.procedures:
@@ -507,7 +502,7 @@ def _add_class_members(
 
 
 def _stub_is_missing(
-    classes: Dict[str, type], class_name: str, member_name: str
+    classes: dict[str, type], class_name: str, member_name: str
 ) -> bool:
     """Whether the stubs lack a member that a service declares for one of its classes.
 
@@ -518,14 +513,14 @@ def _stub_is_missing(
     )
 
 
-def extended_stub_classes(service: KRPC.Service, stub: object) -> Set[str]:
+def extended_stub_classes(service: KRPC.Service, stub: object) -> set[str]:
     """The classes of a service whose members the stubs do not all have.
 
     The stubs are generated from one version of a service. The server may declare more
     members for its classes, either because another mod adds them or because the server
     is newer."""
     classes = stub._classes  # type: ignore[attr-defined]
-    names: Set[str] = set()
+    names: set[str] = set()
     for procedure in service.procedures:
         if not Attributes.is_a_class_member(procedure.name):
             continue
@@ -604,18 +599,18 @@ class ServiceBase(DynamicType):
     @classmethod
     def _parse_procedure(
         cls, procedure: KRPC.Procedure
-    ) -> Tuple[
-        List[str],
-        List[TypeBase],
-        List[bool],
-        List[Optional[object]],
-        Optional[TypeBase],
+    ) -> tuple[
+        list[str],
+        list[TypeBase],
+        list[bool],
+        list[object | None],
+        TypeBase | None,
     ]:
         param_names = [snake_case(param.name) for param in procedure.parameters]
         param_types = [
             cls._client._types.as_type(param.type) for param in procedure.parameters
         ]
-        return_type: Optional[TypeBase] = None
+        return_type: TypeBase | None = None
         if not Types.is_none_type(procedure.return_type):
             return_type = cls._client._types.as_type(procedure.return_type)
         # Checked before anything is built from the types, so that a procedure naming a
@@ -625,7 +620,7 @@ class ServiceBase(DynamicType):
         if return_type is not None:
             check_type_is_known(return_type)
         param_required = [not param.has_default_value for param in procedure.parameters]
-        param_default: List[Optional[object]] = []
+        param_default: list[object | None] = []
         for param, typ in zip(procedure.parameters, param_types):
             if param.has_default_value and not param.default_value_is_null:
                 location = "%s.%s parameter %s" % (
@@ -685,8 +680,8 @@ class ServiceBase(DynamicType):
     def _add_service_property(
         cls,
         name: str,
-        getter: Optional[KRPC.Procedure] = None,
-        setter: Optional[KRPC.Procedure] = None,
+        getter: KRPC.Procedure | None = None,
+        setter: KRPC.Procedure | None = None,
     ) -> None:
         """Add a property"""
         member_name = _member_name(name)
@@ -859,8 +854,8 @@ class ServiceBase(DynamicType):
         cls,
         class_name: str,
         property_name: str,
-        getter: Optional[KRPC.Procedure] = None,
-        setter: Optional[KRPC.Procedure] = None,
+        getter: KRPC.Procedure | None = None,
+        setter: KRPC.Procedure | None = None,
     ) -> None:
         """Add a property to a class"""
         class_cls = cast(
@@ -878,8 +873,8 @@ class ServiceBase(DynamicType):
             doc = _deprecated_doc(doc or "", getter.deprecated_reason, cls._name)
         elif setter and setter.deprecated:
             doc = _deprecated_doc(doc or "", setter.deprecated_reason, cls._name)
-        getter_fn: Optional[Callable] = None  # type: ignore[type-arg]
-        setter_fn: Optional[Callable] = None  # type: ignore[type-arg]
+        getter_fn: Callable | None = None  # type: ignore[type-arg]
+        setter_fn: Callable | None = None  # type: ignore[type-arg]
         if getter:
             getter_name = getter.name
             param_names, param_types, _, _, return_type = cls._parse_procedure(getter)

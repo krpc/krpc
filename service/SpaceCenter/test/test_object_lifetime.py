@@ -252,7 +252,6 @@ class TestObjectLifetime(krpctest.TestCase):
         # client passing one to another out of band amounts to, which is the only way
         # this comes up; taking the class from this connection is what makes the calls
         # go out on it rather than on the other.
-        # pylint: disable=protected-access
         ours = self.space_center.ReferenceFrame(self.conn, theirs._object_id)
         vessel = self.space_center.active_vessel
         self.assertIsNotNone(vessel.position(ours))

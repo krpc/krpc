@@ -2,17 +2,18 @@
 path to the read has assigned it."""
 
 from __future__ import annotations
+
 import ast
-from typing import Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
     from krpc.functioncompiler import _Compiler
 
 
-def assigned_names(function: ast.AST) -> Set[str]:
+def assigned_names(function: ast.AST) -> set[str]:
     """The names a function assigns, which Python makes local to the whole body.
     A comprehension binds its own names, apart from an assignment expression."""
-    names: Set[str] = set()
+    names: set[str] = set()
 
     def visit(node: ast.AST) -> None:
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
@@ -42,9 +43,9 @@ def assigned_names(function: ast.AST) -> Set[str]:
     return names
 
 
-def nonlocal_names(function: ast.AST) -> Set[str]:
+def nonlocal_names(function: ast.AST) -> set[str]:
     """The names a function declares nonlocal, outside its local functions."""
-    names: Set[str] = set()
+    names: set[str] = set()
 
     def visit(node: ast.AST) -> None:
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
@@ -60,7 +61,7 @@ def nonlocal_names(function: ast.AST) -> Set[str]:
     return names
 
 
-def local_function_nonlocal(function: ast.AST) -> Optional[ast.Nonlocal]:
+def local_function_nonlocal(function: ast.AST) -> ast.Nonlocal | None:
     """A nonlocal statement in one of a function's local functions, or None."""
     for node in ast.walk(function):
         if node is not function and isinstance(node, ast.FunctionDef):
@@ -72,7 +73,7 @@ def local_function_nonlocal(function: ast.AST) -> Optional[ast.Nonlocal]:
 
 # The names definitely assigned at a point of a function, or None where the
 # point cannot be reached
-_Assigned = Optional[FrozenSet[str]]
+_Assigned = frozenset[str] | None
 
 
 def _merge(left: _Assigned, right: _Assigned) -> _Assigned:
@@ -99,32 +100,30 @@ class DefiniteAssignment:
     def __init__(
         self,
         compiler: _Compiler,
-        local_names: Set[str],
-        deferred: Optional[Set[ast.AST]] = None,
+        local_names: set[str],
+        deferred: set[ast.AST] | None = None,
     ):
         self._compiler = compiler
         self._locals = local_names
-        self.deferred: Set[ast.AST] = set() if deferred is None else deferred
+        self.deferred: set[ast.AST] = set() if deferred is None else deferred
         # The names assigned at each break out of the loops being checked
-        self._breaks: List[List[_Assigned]] = []
+        self._breaks: list[list[_Assigned]] = []
         # The names each local function needs assigned where it is called: the
         # variables it reads that are not assigned at its definition, and the
         # local functions it calls that need any
-        self._requires: Dict[str, FrozenSet[str]] = {}
+        self._requires: dict[str, frozenset[str]] = {}
 
-    def check(self, statements: List[ast.stmt], assigned: FrozenSet[str]) -> None:
+    def check(self, statements: list[ast.stmt], assigned: frozenset[str]) -> None:
         self._block(statements, assigned)
 
-    def _block(self, statements: List[ast.stmt], assigned: _Assigned) -> _Assigned:
+    def _block(self, statements: list[ast.stmt], assigned: _Assigned) -> _Assigned:
         for statement in statements:
             if assigned is None:
                 break
             assigned = self._statement(statement, assigned)
         return assigned
 
-    def _statement(  # pylint: disable=too-many-return-statements,too-many-branches
-        self, statement: ast.stmt, assigned: FrozenSet[str]
-    ) -> _Assigned:
+    def _statement(self, statement: ast.stmt, assigned: frozenset[str]) -> _Assigned:
         if isinstance(statement, ast.Expr):
             return self._expression(statement.value, assigned)
         if isinstance(statement, ast.Assign):
@@ -215,7 +214,7 @@ class DefiniteAssignment:
             return assigned
         return assigned
 
-    def _loop(self, body: List[ast.stmt], assigned: FrozenSet[str]) -> List[_Assigned]:
+    def _loop(self, body: list[ast.stmt], assigned: frozenset[str]) -> list[_Assigned]:
         """Check a loop body, and return the names assigned at each break."""
         self._breaks.append([])
         try:
@@ -224,7 +223,7 @@ class DefiniteAssignment:
             breaks = self._breaks.pop()
         return breaks
 
-    def _try(self, statement: ast.Try, assigned: FrozenSet[str]) -> _Assigned:
+    def _try(self, statement: ast.Try, assigned: frozenset[str]) -> _Assigned:
         # An exception can leave the body before any of its assignments, so a
         # handler starts with the names assigned before the try
         after = self._block(statement.body, assigned)
@@ -244,14 +243,14 @@ class DefiniteAssignment:
             return None
         return after | finished
 
-    def _local_function(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def _local_function(
         self,
         name: str,
         node: ast.AST,
-        body: List[ast.AST],
-        own: Set[str],
-        parameters: Set[str],
-        assigned: FrozenSet[str],
+        body: list[ast.AST],
+        own: set[str],
+        parameters: set[str],
+        assigned: frozenset[str],
     ) -> None:
         """Check a local function, a def or a lambda assigned to a name, whose
         own variables shadow the function's. It runs when it is called, so its
@@ -261,7 +260,7 @@ class DefiniteAssignment:
         if isinstance(node, ast.Lambda):
             nested._expression(cast(ast.expr, body[0]), frozenset(outer | parameters))
         else:
-            nested.check(cast(List[ast.stmt], body), frozenset(outer | parameters))
+            nested.check(cast(list[ast.stmt], body), frozenset(outer | parameters))
         reads = {
             child.id
             for statement in body
@@ -279,7 +278,7 @@ class DefiniteAssignment:
         if requires:
             self.deferred.add(node)
 
-    def _check_call(self, node: ast.Name, assigned: FrozenSet[str]) -> None:
+    def _check_call(self, node: ast.Name, assigned: frozenset[str]) -> None:
         """Check that the variables a local function reads, and those of the
         local functions it calls, are assigned where it is called."""
         pending = [node.id]
@@ -296,7 +295,7 @@ class DefiniteAssignment:
                     seen.add(name)
                     pending.append(name)
 
-    def _target(self, target: ast.expr, assigned: FrozenSet[str]) -> FrozenSet[str]:
+    def _target(self, target: ast.expr, assigned: frozenset[str]) -> frozenset[str]:
         """Check the reads an assignment target makes, and add the names it
         assigns."""
         if isinstance(target, ast.Name):
@@ -317,9 +316,7 @@ class DefiniteAssignment:
             return ast.copy_location(ast.Name(id=target.id, ctx=ast.Load()), target)
         return target
 
-    def _expression(  # pylint: disable=too-many-return-statements
-        self, node: ast.expr, assigned: FrozenSet[str]
-    ) -> FrozenSet[str]:
+    def _expression(self, node: ast.expr, assigned: frozenset[str]) -> frozenset[str]:
         """Check the reads an expression makes, in the order it makes them, and
         return the names assigned after it."""
         if isinstance(node, ast.Name):

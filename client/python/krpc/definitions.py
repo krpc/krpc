@@ -1,17 +1,12 @@
 from __future__ import annotations
-from collections.abc import Hashable
+
+from collections.abc import Callable, Hashable, Iterable, Iterator
 from typing import (
-    Callable,
-    Dict,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Set,
-    Tuple,
-    TypeVar,
     TYPE_CHECKING,
+    TypeVar,
 )
+
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.decoder import Decoder
 from krpc.types import (
     DictionaryType,
@@ -23,7 +18,6 @@ from krpc.types import (
     TypeBase,
     Types,
 )
-import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -42,7 +36,7 @@ _KIND_FROM_CODE = {
 }
 
 # The key a definition is identified by, and that a reference to one resolves against
-Key = Tuple[str, str, str]
+Key = tuple[str, str, str]
 
 Node = TypeVar("Node")
 NodeKey = TypeVar("NodeKey", bound=Hashable)
@@ -85,7 +79,7 @@ def register_all(types: Types, definitions: Iterable[Definition]) -> None:
 
     Raises a RuntimeError if a definition refers to something none of the given definitions
     define, or if they refer to each other in a cycle."""
-    index: Dict[Key, Definition] = {}
+    index: dict[Key, Definition] = {}
     for definition in definitions:
         if definition.key in index:
             raise RuntimeError("%s is defined more than once" % definition)
@@ -109,15 +103,15 @@ def topological_order(
     nodes: Iterable[Node],
     key: Callable[[Node], NodeKey],
     dependencies: Callable[[Node], Iterable[Node]],
-) -> List[Node]:
+) -> list[Node]:
     """Return the given nodes, and the nodes they depend on, ordered so that every node follows
     everything it depends on. Nodes that depend on nothing keep the order they were given in.
 
     Raises a RuntimeError if the dependencies contain a cycle."""
-    ordered: List[Node] = []
-    ordered_keys: Set[NodeKey] = set()
-    path: List[Node] = []
-    path_keys: Set[NodeKey] = set()
+    ordered: list[Node] = []
+    ordered_keys: set[NodeKey] = set()
+    path: list[Node] = []
+    path_keys: set[NodeKey] = set()
 
     def visit(node: Node) -> None:
         node_key = key(node)
@@ -142,7 +136,7 @@ def topological_order(
 
 
 def decode_default_value(
-    client: Optional[Client], value: bytes, typ: TypeBase, location: str
+    client: Client | None, value: bytes, typ: TypeBase, location: str
 ) -> object:
     """Decode the default value of a parameter from the encoded form a definition carries it in.
 

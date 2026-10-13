@@ -1,6 +1,7 @@
 import math
 import unittest
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from krpc.test.servertestcase import ServerTestCase
 
@@ -377,7 +378,7 @@ class TestExpressionTree(ServerTestCase, unittest.TestCase):
     tree structure produced by compiling python source, without depending
     on the values the trees evaluate to."""
 
-    maxDiff = None  # pylint: disable=invalid-name
+    maxDiff = None
 
     def dump(self, func: Callable[[], Any]) -> str:
         expression = self.conn.compile(func)

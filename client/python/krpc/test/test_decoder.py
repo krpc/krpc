@@ -1,7 +1,8 @@
 import unittest
+
 from krpc.decoder import Decoder
-from krpc.types import Types
 from krpc.platform import unhexlify
+from krpc.types import Types
 
 
 class TestDecoder(unittest.TestCase):
@@ -15,7 +16,7 @@ class TestDecoder(unittest.TestCase):
 
     def test_decode_value(self) -> None:
         value = Decoder.decode(None, unhexlify("ac02"), self.types.uint32_type)
-        self.assertEqual(int(300), value)
+        self.assertEqual(300, value)
 
     def test_decode_unicode_string(self) -> None:
         value = Decoder.decode(None, unhexlify("03e284a2"), self.types.string_type)

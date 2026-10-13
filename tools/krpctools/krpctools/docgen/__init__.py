@@ -1,25 +1,27 @@
 import argparse
-import glob
-import os
+import builtins
 import json
-from io import open
+import os
 import sys
 from importlib.resources import files
+
 import jinja2
+
 from krpc.utils import snake_case
+
 from ..definitions import Definitions
-from ..utils import lower_camel_case, indent, single_line
-from .utils import lookup_cref
+from ..utils import indent, lower_camel_case, single_line
+from ..version import __version__
 from .cnano import CnanoDomain
 from .cpp import CppDomain
 from .csharp import CsharpDomain
-from .java import JavaDomain
-from .lua import LuaDomain
-from .python import PythonDomain
-from .nodes import Service
 from .docgen import DocumentationGenerator
 from .extensions import AppendExtension
-from ..version import __version__
+from .java import JavaDomain
+from .lua import LuaDomain
+from .nodes import Service
+from .python import PythonDomain
+from .utils import lookup_cref
 
 
 def main():
@@ -81,13 +83,13 @@ def main():
 
     if not os.path.exists(args.order_file):
         raise RuntimeError("Ordering file '%s' does not exist" % args.order_file)
-    with open(args.order_file, "r", encoding="utf-8") as fp:
+    with builtins.open(args.order_file, encoding="utf-8") as fp:
         ordering = [x.strip() for x in fp.readlines()]
         ordering = {value: i for i, value in enumerate(ordering)}
 
     services_info = {}
     for path in args.definitions:
-        with open(path, "r", encoding="utf-8") as fp:
+        with builtins.open(path, encoding="utf-8") as fp:
             services_info.update(json.load(fp))
 
     if not services_info:
@@ -126,7 +128,7 @@ def main():
     output = os.path.abspath(os.path.expanduser(os.path.expandvars(args.output)))
     if not os.path.exists(os.path.dirname(output)):
         os.makedirs(os.path.dirname(output))
-    with open(output, "w", encoding="utf8") as fp:
+    with builtins.open(output, "w", encoding="utf8") as fp:
         fp.write(content)
 
     if args.documented:
@@ -135,7 +137,7 @@ def main():
         )
         if not os.path.exists(os.path.dirname(documented_path)):
             os.makedirs(os.path.dirname(documented_path))
-        with open(documented_path, "w", encoding="utf-8") as fp:
+        with builtins.open(documented_path, "w", encoding="utf-8") as fp:
             fp.write("\n".join(documented) + "\n")
 
 

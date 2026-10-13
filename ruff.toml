@@ -1,5 +1,39 @@
-# Formatting and lint rules for all python code in the repository. Generated
-# code is excluded per target, with the exclude attribute of py_ruff_test.
+# Formatting and lint rules for all python code in the repository
 
 target-version = "py310"
 line-length = 88
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP", "PLE", "PLW", "PLR"]
+ignore = [
+    # Line length is left to the formatter
+    "E501",
+    # Strings are formatted with % and str.format throughout
+    "UP031",
+    "UP032",
+    # Idioms used throughout: zip without strict, literal numbers in
+    # comparisons, and reassigning a loop variable
+    "B905",
+    "PLR2004",
+    "PLW2901",
+    # Covered by too-many-arguments
+    "PLR0917",
+]
+
+[lint.isort]
+known-first-party = ["krpc", "krpcserialio", "krpctest", "krpctools", "krpcwebsockets"]
+
+[lint.pylint]
+max-args = 10
+max-branches = 25
+max-returns = 25
+max-statements = 60
+
+[lint.per-file-ignores]
+# Package initializers import names to re-export them
+"__init__.py" = ["F401"]
+# Tests read a property for the exception it raises
+"**/test/*.py" = ["B018"]
+# Documentation examples keep their imports in one block, as the docs include
+# them by line number
+"doc/src/scripts/**" = ["I001"]

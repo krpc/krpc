@@ -10,11 +10,12 @@ import re
 import shutil
 import subprocess
 import sys
-import tomllib
 import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
+
+import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
 os.chdir(ROOT)
@@ -90,7 +91,12 @@ def run(*command, env=None, stdin=None, cwd=None):
     command = [str(argument) for argument in command]
     print(f"{DIM}$ {' '.join(command)}{RESET}")
     status = subprocess.run(
-        command, env=env, input=stdin, text=stdin is not None, cwd=cwd
+        command,
+        env=env,
+        input=stdin,
+        text=stdin is not None,
+        cwd=cwd,
+        check=False,
     )
     if status.returncode != 0:
         raise ReleaseError(f"{command[0]} failed with exit status {status.returncode}")
@@ -99,7 +105,9 @@ def run(*command, env=None, stdin=None, cwd=None):
 def capture(*command, env=None, cwd=None):
     """Run a command and return its standard output, stripped."""
     command = [str(argument) for argument in command]
-    status = subprocess.run(command, capture_output=True, text=True, env=env, cwd=cwd)
+    status = subprocess.run(
+        command, capture_output=True, text=True, env=env, cwd=cwd, check=False
+    )
     if status.returncode != 0:
         raise ReleaseError(
             f"{command[0]} failed with exit status {status.returncode}: "
@@ -116,6 +124,7 @@ def succeeds(*command, env=None):
             env=env,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
+            check=False,
         ).returncode
         == 0
     )

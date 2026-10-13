@@ -246,7 +246,7 @@ def main():
     components = []
     unreleased = set()
     for name, path in args.entry:
-        with open(path, "r", encoding="utf-8") as fp:
+        with open(path, encoding="utf-8") as fp:
             versions, marked = parse_changes(fp.read())
         components.append((name, versions))
         unreleased |= marked

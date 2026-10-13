@@ -1,6 +1,7 @@
 import unittest
-from krpctools.test.clientgentest import ClientGenTestCase
+
 from krpctools.clientgen.cnano import CnanoGenerator
+from krpctools.test.clientgentest import ClientGenTestCase
 
 
 def _list_of_class(name, class_name):

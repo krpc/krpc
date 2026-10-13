@@ -44,7 +44,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("config")
     options = parser.parse_args()
-    with open(options.config, "r", encoding="utf-8") as config_file:
+    with open(options.config, encoding="utf-8") as config_file:
         return run(json.load(config_file))
 
 

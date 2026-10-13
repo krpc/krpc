@@ -1,9 +1,9 @@
 import unittest
+
 from krpc.encoder import Encoder
 from krpc.error import EncodingError
-from krpc.types import Types
-from krpc.types import ClassBase
 from krpc.platform import hexlify
+from krpc.types import ClassBase, Types
 
 
 class TestEncoder(unittest.TestCase):

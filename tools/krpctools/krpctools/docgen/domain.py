@@ -44,7 +44,7 @@ class Domain:
     def ref(self, obj):
         return self.shorten_ref(obj.fullname, obj)
 
-    def shorten_ref(self, name, obj=None):  # pylint: disable=unused-argument
+    def shorten_ref(self, name, obj=None):
         name = name.split(".")
         if name[0] == self.module:
             del name[0]

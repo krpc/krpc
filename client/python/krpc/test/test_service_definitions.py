@@ -1,13 +1,14 @@
 import unittest
 import warnings
 from inspect import signature
-from typing import Dict, List, NamedTuple
+from typing import NamedTuple
+
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.client import _stub_definitions
 from krpc.definitions import register_all
 from krpc.encoder import Encoder
 from krpc.service import create_service, service_definitions
 from krpc.types import Types
-import krpc.schema.KRPC_pb2 as KRPC
 
 
 class FakeClient:
@@ -109,7 +110,7 @@ def unknown_type() -> KRPC.Type:
 
 class TestServiceDefinitions(unittest.TestCase):
     @staticmethod
-    def create_services(services: List[KRPC.Service]) -> FakeClient:
+    def create_services(services: list[KRPC.Service]) -> FakeClient:
         client = FakeClient()
         definitions = [
             definition
@@ -122,7 +123,7 @@ class TestServiceDefinitions(unittest.TestCase):
         return client
 
     def check_default(self, client: FakeClient, expected: str) -> None:
-        service = getattr(client, "ServiceA")
+        service = client.ServiceA
         default = signature(service.frob).parameters["mode"].default
         self.assertEqual(expected, str(default))
 
@@ -152,7 +153,7 @@ class TestServiceDefinitions(unittest.TestCase):
         service.enumerations.extend(enum_service("ServiceA").enumerations)
         self.check_default(self.create_services([service]), "Mode.fast")
 
-    def check_struct_is_skipped(self, services: List[KRPC.Service]) -> None:
+    def check_struct_is_skipped(self, services: list[KRPC.Service]) -> None:
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
             client = self.create_services(services)
@@ -161,7 +162,7 @@ class TestServiceDefinitions(unittest.TestCase):
         self.assertTrue(
             any("ServiceA.Frob" in message for message in messages), messages
         )
-        self.assertFalse(hasattr(getattr(client, "ServiceA"), "frob"))
+        self.assertFalse(hasattr(client.ServiceA, "frob"))
 
     def test_procedure_naming_a_skipped_struct_is_skipped(self) -> None:
         self.check_struct_is_skipped(
@@ -197,8 +198,8 @@ class TestServiceDefinitions(unittest.TestCase):
             appended: str
 
         class StubService:
-            _classes: Dict[str, type] = {}
-            _enumerations: Dict[str, type] = {}
+            _classes: dict[str, type] = {}
+            _enumerations: dict[str, type] = {}
             _structs = {"Thing": Thing}
 
         client = FakeClient()

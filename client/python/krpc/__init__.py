@@ -1,16 +1,17 @@
 from __future__ import annotations
+
 import getpass
 import os
 import sys
 import tempfile
-from typing import cast, Optional
-from krpc.connection import Connection, LocalConnection
-from krpc.client import Client
-from krpc.encoder import Encoder
-from krpc.error import ConnectionError  # pylint: disable=redefined-builtin
-from krpc.decoder import Decoder
-from krpc.schema.KRPC_pb2 import ConnectionRequest, ConnectionResponse
+from typing import cast
 
+from krpc.client import Client
+from krpc.connection import Connection, LocalConnection
+from krpc.decoder import Decoder
+from krpc.encoder import Encoder
+from krpc.error import ConnectionError
+from krpc.schema.KRPC_pb2 import ConnectionRequest, ConnectionResponse
 from krpc.version import __version__
 
 DEFAULT_ADDRESS = "127.0.0.1"
@@ -37,12 +38,12 @@ def _default_path(name: str) -> str:
 
 
 def connect(
-    name: Optional[str] = None,
+    name: str | None = None,
     address: str = DEFAULT_ADDRESS,
     rpc_port: int = DEFAULT_RPC_PORT,
     stream_port: int = DEFAULT_STREAM_PORT,
     use_pregenerated_stubs: bool = True,
-    timeout: Optional[float] = None,
+    timeout: float | None = None,
 ) -> Client:
     """
     Connect to a kRPC server on the specified IP address and port numbers.
@@ -60,9 +61,9 @@ def connect(
 
 
 def connect_local(
-    name: Optional[str] = None,
+    name: str | None = None,
     rpc_path: str = DEFAULT_RPC_PATH,
-    stream_path: Optional[str] = DEFAULT_STREAM_PATH,
+    stream_path: str | None = DEFAULT_STREAM_PATH,
     use_pregenerated_stubs: bool = True,
 ) -> Client:
     """
@@ -82,9 +83,9 @@ def connect_local(
 
 
 def _connect(
-    name: Optional[str],
+    name: str | None,
     rpc_connection: Connection,
-    stream_connection: Optional[Connection],
+    stream_connection: Connection | None,
     use_pregenerated_stubs: bool,
 ) -> Client:
     """Perform the connection handshake over already built connections. The handshake

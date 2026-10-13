@@ -7,6 +7,7 @@ directly and the resulting handle is then handed to a socket object, which carri
 """
 
 from __future__ import annotations
+
 import ctypes
 import socket
 import sys
