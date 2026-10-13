@@ -90,19 +90,19 @@ changeloggen(
 
 py_console_script_binary(
     name = "sphinx-build",
-    pkg = "@pypi//sphinx",
+    pkg = "@krpc_pypi//sphinx",
     script = "sphinx-build",
     visibility = ["//visibility:public"],
     deps = [
-        "@pypi//javalang",
-        "@pypi//javasphinx",
-        "@pypi//pydata_sphinx_theme",
-        "@pypi//pyenchant",
-        "@pypi//requests",
-        "@pypi//sphinx_csharp",
-        "@pypi//sphinx_tabs",
-        "@pypi//sphinxcontrib_luadomain",
-        "@pypi//sphinxcontrib_spelling",
+        "@krpc_pypi//javalang",
+        "@krpc_pypi//javasphinx",
+        "@krpc_pypi//pydata_sphinx_theme",
+        "@krpc_pypi//pyenchant",
+        "@krpc_pypi//requests",
+        "@krpc_pypi//sphinx_csharp",
+        "@krpc_pypi//sphinx_tabs",
+        "@krpc_pypi//sphinxcontrib_luadomain",
+        "@krpc_pypi//sphinxcontrib_spelling",
     ],
 )
 
@@ -114,18 +114,18 @@ py_binary(
     srcs = ["serve_docs.py"],
     main = "serve_docs.py",
     deps = [
-        "@pypi//javalang",
-        "@pypi//javasphinx",
-        "@pypi//pydata_sphinx_theme",
-        "@pypi//pyenchant",
-        "@pypi//requests",
-        "@pypi//sphinx",
-        "@pypi//sphinx_autobuild",
-        "@pypi//sphinx_csharp",
-        "@pypi//sphinx_tabs",
-        "@pypi//sphinxcontrib_luadomain",
-        "@pypi//sphinxcontrib_spelling",
-        "@pypi//watchdog",
+        "@krpc_pypi//javalang",
+        "@krpc_pypi//javasphinx",
+        "@krpc_pypi//pydata_sphinx_theme",
+        "@krpc_pypi//pyenchant",
+        "@krpc_pypi//requests",
+        "@krpc_pypi//sphinx",
+        "@krpc_pypi//sphinx_autobuild",
+        "@krpc_pypi//sphinx_csharp",
+        "@krpc_pypi//sphinx_tabs",
+        "@krpc_pypi//sphinxcontrib_luadomain",
+        "@krpc_pypi//sphinxcontrib_spelling",
+        "@krpc_pypi//watchdog",
     ],
 )
 
@@ -272,7 +272,7 @@ py_test(
     main = "check_scripts_pyright.py",
     deps = [
         "//client/python:krpc_lib",
-        "@pypi//basedpyright",
+        "@krpc_pypi//basedpyright",
     ],
 )
 
@@ -445,8 +445,8 @@ py_pyright_test(
     python_version = "3.12",
     deps = [
         "//client/python:krpc_lib",
-        "@pypi//cogapp",
-        "@pypi//watchdog",
+        "@krpc_pypi//cogapp",
+        "@krpc_pypi//watchdog",
         "@rules_python//python/runfiles",
     ],
 )

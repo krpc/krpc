@@ -42,7 +42,7 @@ py_library(
     data = [":schema-pyi"],
     imports = ["."],
     visibility = ["//visibility:public"],
-    deps = ["@pypi//protobuf"],
+    deps = ["@krpc_pypi//protobuf"],
 )
 
 genrule(
@@ -265,7 +265,7 @@ test_suite(
     ],
 )
 
-deps = ["@pypi//protobuf"]
+deps = ["@krpc_pypi//protobuf"]
 
 # What the client does regardless of the transport it talks over: encoding and decoding
 # values, the types they are carried as, and reassembling a message out of the blocks a

@@ -89,7 +89,7 @@ py_binary(
     deps = [
         ":benchmarks_lib",
         "//tools/krpctest:krpctest_lib",
-        "@pypi//pytest",
+        "@krpc_pypi//pytest",
     ],
 )
 
@@ -299,6 +299,6 @@ py_pyright_test(
     deps = [
         "//client/python:krpc_lib",
         "//tools/krpctest:krpctest_lib",
-        "@pypi//pytest",
+        "@krpc_pypi//pytest",
     ],
 )

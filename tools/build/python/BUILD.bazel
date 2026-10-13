@@ -18,7 +18,7 @@ py_binary(
 
 py_console_script_binary(
     name = "hatchling",
-    pkg = "@pypi//hatchling",
+    pkg = "@krpc_pypi//hatchling",
 )
 
 # Produces a :requirements.update run target that resolves requirements.in

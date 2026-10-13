@@ -25,11 +25,11 @@ RUN chmod 0644 /etc/bazel.bazelrc
 RUN mkdir -p /var/cache/bazel-repo && chmod -R a+rwX /var/cache/bazel-repo
 
 ENV BAZELISK_HOME=/usr/local/share/bazelisk
-# Warm up bazelisk (download + extract Bazel 9.1.1) and make it world-readable.
+# Warm up bazelisk (download + extract Bazel 9.3.0) and make it world-readable.
 # --ignore_all_rc_files: this runs with no workspace present, so /etc/bazel.bazelrc's
 # `--config=system-llvm` (defined in the repo-root .bazelrc, absent here) would
 # otherwise fail to resolve. The warmup only needs to extract Bazel.
-RUN USE_BAZEL_VERSION=9.1.1 bazel --ignore_all_rc_files version && \
+RUN USE_BAZEL_VERSION=9.3.0 bazel --ignore_all_rc_files version && \
     chmod -R a+rwX /usr/local/share/bazelisk
 
 # Install the .NET SDK for the build-csharp-sln CI job, which builds the

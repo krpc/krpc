@@ -14,8 +14,8 @@ py_binary(
     name = "rasterize",
     srcs = ["rasterize.py"],
     deps = [
-        "@pypi//pyvips",
-        "@pypi//pyvips_binary",
+        "@krpc_pypi//pyvips",
+        "@krpc_pypi//pyvips_binary",
     ],
 )
 
@@ -32,7 +32,7 @@ py_binary(
 py_binary(
     name = "run_cog_check",
     srcs = ["run_cog_check.py"],
-    deps = ["@pypi//cogapp"],
+    deps = ["@krpc_pypi//cogapp"],
 )
 
 py_binary(
@@ -52,8 +52,8 @@ py_pyright_test(
     srcs = glob(["*.py"]),
     python_version = "3.12",
     deps = [
-        "@pypi//cogapp",
-        "@pypi//pyvips",
+        "@krpc_pypi//cogapp",
+        "@krpc_pypi//pyvips",
         "@rules_python//python/runfiles",
     ],
 )

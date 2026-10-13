@@ -93,13 +93,13 @@ def py_test(name, src, pkg, tests = [], deps = [], **kwargs):
         srcs = [name + "_main.py"],
         main = name + "_main.py",
         data = [src],
-        deps = deps + ["@pypi//pytest"],
+        deps = deps + ["@krpc_pypi//pytest"],
         **kwargs
     )
 
 # buildifier: disable=function-docstring
 def py_ruff_test(name, srcs, config = Label("//:ruff.toml"), **kwargs):
-    ruff_whl = "@pypi//ruff:whl"
+    ruff_whl = "@krpc_pypi//ruff:whl"
     args = [
         "--ruff-whl=$(rootpath %s)" % ruff_whl,
         "--config=$(rootpath %s)" % config,
@@ -127,7 +127,7 @@ def py_pyright_test(name, srcs, deps = [], python_version = None, disable = [], 
         main = Label("//tools/build/python:run_pyright.py"),
         args = args,
         data = srcs + [config],
-        deps = deps + ["@pypi//basedpyright"],
+        deps = deps + ["@krpc_pypi//basedpyright"],
         # Generated __init__.py files would make a directory of scripts a package
         legacy_create_init = False,
         **kwargs
