@@ -549,6 +549,7 @@ namespace KRPC
         /// </summary>
         public void Update()
         {
+            GameSceneSwitcher.Update ();
             if (IsPaused && !config.Configuration.PauseServerWithGame)
                 FixedUpdate();
         }

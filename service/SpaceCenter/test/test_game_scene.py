@@ -120,5 +120,20 @@ class TestGameScene(krpctest.TestCase):
         self.set_scene(self.scenes.space_center)
 
 
+class TestGameSceneFromLoadedSave(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save(always_load=True)
+        cls.remove_other_vessels()
+
+    def test_flight_to_space_center_and_back(self):
+        krpc = self.connect().krpc
+        krpc.game_scene = krpc.GameScene.space_center
+        self.wait_until(lambda: krpc.game_scene == krpc.GameScene.space_center)
+        krpc.game_scene = krpc.GameScene.flight
+        self.wait_until(lambda: krpc.game_scene == krpc.GameScene.flight)
+        self.assertIsNotNone(self.connect().space_center.active_vessel)
+
+
 if __name__ == "__main__":
     unittest.main()
