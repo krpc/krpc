@@ -99,9 +99,9 @@ use_repo(pip, "krpc_pypi")
 
 http_archive(
     name = "com_google_googletest",
-    sha256 = "65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c",
-    strip_prefix = "googletest-1.17.0",
-    url = "https://github.com/google/googletest/archive/refs/tags/v1.17.0.tar.gz",
+    sha256 = "6e3191c1455468b3fc35a417fb565c1c5071aee1b7e7f85e30cf48a98d37d8b5",
+    strip_prefix = "googletest-1.18.0",
+    url = "https://github.com/google/googletest/archive/refs/tags/v1.18.0.tar.gz",
 )
 
 # ----------------------- KSP libraries --------------------------------------------------
@@ -178,9 +178,9 @@ http_archive(
 http_archive(
     name = "protoc_nanopb",
     build_file_content = "filegroup(name = 'plugin', srcs = glob(['generator/**']), visibility = ['//visibility:public'])",
-    sha256 = "951a9ab2385424a4cdf245d0c84f4c88c6ccbc65a0dade4b246d50c068f24128",
-    strip_prefix = "nanopb-0.4.9.1-linux-x86",
-    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.1-linux-x86.tar.gz",
+    sha256 = "7e05f5908f0dff5d91cb90d11ca487876de8ec274695887959b3903e4b307887",
+    strip_prefix = "nanopb-0.4.9.2-linux-x86",
+    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.2-linux-x86.tar.gz",
 )
 
 # The protoc plugin that generates the schema, and the runtime it generates for: the
@@ -327,9 +327,9 @@ cc_library(
     visibility = ['//visibility:public']
 )
 """,
-    sha256 = "5cf78ede456fd13b95fe692711f4f689be26c826f1f5541c7a1df3aa32bd9dbd",
-    strip_prefix = "asio-asio-1-38-0",
-    url = "https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-1-38-0.tar.gz",
+    sha256 = "9f2648fa483e58a6bf848d970ee0ea650ca19ed7769dfa520ed4f7b8d27af1db",
+    strip_prefix = "asio-asio-1-38-2",
+    url = "https://github.com/chriskohlhoff/asio/archive/refs/tags/asio-1-38-2.tar.gz",
 )
 
 http_archive(
@@ -372,9 +372,9 @@ cc_library(
     visibility = ['//visibility:public'],
 )
 """,
-    sha256 = "65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c",
-    strip_prefix = "googletest-1.17.0",
-    url = "https://github.com/google/googletest/archive/refs/tags/v1.17.0.tar.gz",
+    sha256 = "6e3191c1455468b3fc35a417fb565c1c5071aee1b7e7f85e30cf48a98d37d8b5",
+    strip_prefix = "googletest-1.18.0",
+    url = "https://github.com/google/googletest/archive/refs/tags/v1.18.0.tar.gz",
 )
 
 # ----------------------- C-nano dependencies --------------------------------------------
@@ -403,9 +403,9 @@ filegroup(
     visibility = ['//visibility:public']
 )
 """,
-    sha256 = "951a9ab2385424a4cdf245d0c84f4c88c6ccbc65a0dade4b246d50c068f24128",
-    strip_prefix = "nanopb-0.4.9.1-linux-x86",
-    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.1-linux-x86.tar.gz",
+    sha256 = "7e05f5908f0dff5d91cb90d11ca487876de8ec274695887959b3903e4b307887",
+    strip_prefix = "nanopb-0.4.9.2-linux-x86",
+    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.2-linux-x86.tar.gz",
 )
 
 # ----------------------- Java dependencies ----------------------------------------------

@@ -110,7 +110,7 @@ RUN mkdir /protobuf && \
 RUN pip3 install --break-system-packages protobuf
 
 # Install Nanopb
-ARG NANOPB_VERSION=0.4.9.1
+ARG NANOPB_VERSION=0.4.9.2
 RUN mkdir /nanopb && \
     cd /nanopb && \
     wget -O nanopb.tar.gz \
