@@ -4,13 +4,13 @@ package(default_visibility = ["//visibility:public"])
 
 # NuGet library DLLs, pinned as http_archives in MODULE.bazel. Targets built
 # for modern .NET (net8.0) use the plain-named imports; net472 builds of the
-# client use the net45/net462 assets below. The mod itself uses the assets in
-# //tools/build/ksp, which are pinned to versions compatible with KSP's
-# version of Unity.
+# client use the netstandard2.0/net462 assets below. The mod itself uses the
+# assets in //tools/build/ksp, which are pinned to versions compatible with
+# KSP's version of Unity.
 
 import_dll(
     name = "Google.Protobuf",
-    dll = "@csharp_protobuf//:lib/net5.0/Google.Protobuf.dll",
+    dll = "@csharp_protobuf//:lib/net8.0/Google.Protobuf.dll",
 )
 
 import_dll(
@@ -33,11 +33,11 @@ import_dll(
     dll = "@csharp_options//:lib/NDesk.Options.dll",
 )
 
-# net4x assets, for the net472 build of the client library
+# Assets for the net472 build of the client library
 
 import_dll(
-    name = "Google.Protobuf.net45",
-    dll = "@csharp_protobuf//:lib/net45/Google.Protobuf.dll",
+    name = "Google.Protobuf.netstandard2.0",
+    dll = "@csharp_protobuf//:lib/netstandard2.0/Google.Protobuf.dll",
 )
 
 import_dll(

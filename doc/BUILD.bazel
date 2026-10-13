@@ -380,7 +380,7 @@ csharp_library_multiple(
     ),
     deps = [
         "//client/csharp:KRPC.Client",
-        "//tools/build/dotnet:Google.Protobuf.net45",
+        "//tools/build/dotnet:Google.Protobuf.netstandard2.0",
     ],
 )
 

@@ -87,7 +87,7 @@ RUN apt-get update && \
     apt-get clean
 
 # Install Protobuf
-ARG PROTOBUF_VERSION=35.1
+ARG PROTOBUF_VERSION=36.2
 RUN mkdir /protobuf && \
     cd /protobuf && \
     wget -O protobuf.tar.gz \

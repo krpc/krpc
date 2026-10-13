@@ -6,7 +6,7 @@
     "com.google.errorprone:error_prone_annotations": -1035138750,
     "com.google.guava:guava": 1943808618,
     "com.google.j2objc:j2objc-annotations": 2003271689,
-    "com.google.protobuf:protobuf-java": -559925028,
+    "com.google.protobuf:protobuf-java": 130636446,
     "com.puppycrawl.tools:checkstyle": -1038068646,
     "junit:junit": -744267592,
     "org.hamcrest:hamcrest": 1547523135,
@@ -21,8 +21,8 @@
     "com.google.guava:guava": -2046459454,
     "com.google.guava:listenablefuture": 1079558157,
     "com.google.j2objc:j2objc-annotations": -404209759,
-    "com.google.protobuf:protobuf-java": 911577887,
-    "com.puppycrawl.tools:checkstyle": 43560544,
+    "com.google.protobuf:protobuf-java": -1812001120,
+    "com.puppycrawl.tools:checkstyle": 2086897963,
     "commons-beanutils:commons-beanutils": 852036681,
     "commons-codec:commons-codec": 1434473311,
     "commons-collections:commons-collections": 7509648,
@@ -36,11 +36,11 @@
     "org.apache.httpcomponents.client5:httpclient5": 34230941,
     "org.apache.httpcomponents.core5:httpcore5": 1776259474,
     "org.apache.httpcomponents.core5:httpcore5-h2": -483978976,
-    "org.apache.httpcomponents:httpclient": -695266744,
+    "org.apache.httpcomponents:httpclient": 1097322323,
     "org.apache.httpcomponents:httpcore": 922448651,
-    "org.apache.maven.doxia:doxia-core": -1343680775,
+    "org.apache.maven.doxia:doxia-core": -1816746291,
     "org.apache.maven.doxia:doxia-logging-api": 1448116252,
-    "org.apache.maven.doxia:doxia-module-xdoc": 1053259593,
+    "org.apache.maven.doxia:doxia-module-xdoc": 682464884,
     "org.apache.maven.doxia:doxia-sink-api": -1516873446,
     "org.apache.xbean:xbean-reflect": -780502532,
     "org.checkerframework:checker-qual": -1951095466,
@@ -108,9 +108,9 @@
     },
     "com.google.protobuf:protobuf-java": {
       "shasums": {
-        "jar": "a4345ba2aa009912ff6f90467fea2d104605256b72c50840d75f13256638a472"
+        "jar": "0773e72eaf375e1285df330575bfec5bda5da674d544d0e142a17f89c8f754da"
       },
-      "version": "4.35.1"
+      "version": "4.36.2"
     },
     "com.puppycrawl.tools:checkstyle": {
       "shasums": {
@@ -359,6 +359,7 @@
       "org.apache.httpcomponents.core5:httpcore5"
     ],
     "org.apache.httpcomponents:httpclient": [
+      "commons-codec:commons-codec",
       "commons-logging:commons-logging",
       "org.apache.httpcomponents:httpcore"
     ],

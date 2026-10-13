@@ -27,7 +27,7 @@ nuget_package(
     readme = "README.md",
     version = nuget_version,
     deps = {
-        "Google.Protobuf": "3.35.1",
+        "Google.Protobuf": "3.36.2",
     },
 )
 
@@ -60,7 +60,7 @@ srcs = glob(["src/**/*.cs"]) + [
 ]
 
 deps = [
-    "//tools/build/dotnet:Google.Protobuf.net45",
+    "//tools/build/dotnet:Google.Protobuf.netstandard2.0",
     "//tools/build/dotnet:System.Memory",
     "//tools/build/dotnet:System.Runtime.CompilerServices.Unsafe",
 ]

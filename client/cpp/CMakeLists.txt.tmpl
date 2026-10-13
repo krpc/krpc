@@ -34,7 +34,7 @@ if(KRPC_FETCH_PROTOBUF)
   endif()
   FetchContent_Declare(protobuf
     GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
-    GIT_TAG        v35.1
+    GIT_TAG        v36.2
     GIT_SHALLOW    TRUE)
   FetchContent_MakeAvailable(protobuf)
   include("${protobuf_SOURCE_DIR}/cmake/protobuf-generate.cmake")
