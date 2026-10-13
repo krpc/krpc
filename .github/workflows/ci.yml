@@ -30,14 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.11.0
+      image: ghcr.io/krpc/buildenv:3.12.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       # The recursive search skips the BUILD files of the external repositories,
       # named *.BUILD, so those are passed by name.
       - name: bazel
@@ -114,14 +114,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.11.0
+      image: ghcr.io/krpc/buildenv:3.12.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
@@ -189,7 +189,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/bazel-fetch-windows
       - name: build
@@ -205,14 +205,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.11.0
+      image: ghcr.io/krpc/buildenv:3.12.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
@@ -242,14 +242,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.11.0
+      image: ghcr.io/krpc/buildenv:3.12.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
@@ -265,14 +265,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.11.0
+      image: ghcr.io/krpc/buildenv:3.12.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
       - name: download-genfiles
@@ -296,7 +296,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/bazel-fetch-windows
       - name: download-genfiles
@@ -324,14 +324,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.11.0
+      image: ghcr.io/krpc/buildenv:3.12.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
@@ -349,7 +349,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.11.0
+      image: ghcr.io/krpc/buildenv:3.12.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -361,7 +361,7 @@ jobs:
       CMAKE_CXX_COMPILER_LAUNCHER: ccache
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
@@ -378,7 +378,7 @@ jobs:
           echo "cache key: ccache-$hash"
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-${{ steps.cache-key.outputs.hash }}
@@ -401,7 +401,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
@@ -435,7 +435,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
@@ -455,7 +455,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
@@ -474,14 +474,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.11.0
+      image: ghcr.io/krpc/buildenv:3.12.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
@@ -499,7 +499,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.11.0
+      image: ghcr.io/krpc/buildenv:3.12.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -511,7 +511,7 @@ jobs:
       CMAKE_CXX_COMPILER_LAUNCHER: ccache
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
@@ -528,7 +528,7 @@ jobs:
           echo "cache key: ccache-$hash"
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-${{ steps.cache-key.outputs.hash }}
@@ -543,7 +543,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
@@ -562,7 +562,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:
@@ -582,7 +582,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: download-artifact
         uses: actions/download-artifact@v8
         with:

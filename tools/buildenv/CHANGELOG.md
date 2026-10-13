@@ -1,3 +1,10 @@
+## [v3.12.0]
+- Update Bazel to 9.3.0
+- Update system LLVM to clang-23
+- Replace `dotnet-sdk-8.0` with `dotnet-sdk-10.0`
+- Update protobuf to 36.2 and nanopb to 0.4.9.2
+- Update buildifier to 10.1.0
+
 ## [v3.11.0]
 - Remove `luarocks` (the Lua client and its dependencies are built by Bazel)
 

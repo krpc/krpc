@@ -15,7 +15,7 @@ runs:
         echo "BAZEL_DOWNLOAD_CACHE=/var/cache/bazel-repo/content_addressable" >> "$GITHUB_ENV"
     - name: restore-bazel-cache
       id: bazel-cache
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       with:
         path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
         key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel', 'tools/build/python/requirements_lock.txt') }}
@@ -25,7 +25,7 @@ runs:
       run: bazel fetch //...
     - name: save-bazel-cache
       if: steps.bazel-cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@v6
       with:
         path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
         key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel', 'tools/build/python/requirements_lock.txt') }}

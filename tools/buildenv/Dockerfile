@@ -74,7 +74,7 @@ RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr
 # cache go again in the same layer rather than riding along in the image.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends golang && \
-    git clone https://github.com/bazelbuild/buildtools.git --depth 1 --branch v7.1.2 && \
+    git clone https://github.com/bazelbuild/buildtools.git --depth 1 --branch v10.1.0 && \
     (cd buildtools/buildifier; GOBIN=/usr/local/bin go install) && \
     apt-get purge -y golang golang-go golang-src && \
     apt-get autoremove -y && \
