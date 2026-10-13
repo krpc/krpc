@@ -37,6 +37,12 @@ cc_library(
         "@platforms//os:windows": ["/w"],
         "//conditions:default": ["-w"],
     }),
+    linkopts = select({
+        # The sockets are winsock's on Windows, which is a library of its own rather
+        # than part of the C runtime.
+        "@platforms//os:windows": ["ws2_32.lib"],
+        "//conditions:default": [],
+    }),
     local_defines = [
         "LUASOCKET_DEBUG",
         # The modules are linked into the interpreter rather than loaded from shared
@@ -47,14 +53,8 @@ cc_library(
         "@platforms//os:osx": ["UNIX_HAS_SUN_LEN"],
         "//conditions:default": [],
     }),
-    linkopts = select({
-        # The sockets are winsock's on Windows, which is a library of its own rather
-        # than part of the C runtime.
-        "@platforms//os:windows": ["ws2_32.lib"],
-        "//conditions:default": [],
-    }),
     visibility = ["//visibility:public"],
-    deps = ["@lua//:lua"],
+    deps = ["@lua"],
 )
 
 filegroup(

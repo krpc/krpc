@@ -18,5 +18,5 @@ cc_library(
     name = "pb",
     srcs = ["protobuf/pb.c"],
     visibility = ["//visibility:public"],
-    deps = ["@lua//:lua"],
+    deps = ["@lua"],
 )

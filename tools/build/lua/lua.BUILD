@@ -58,8 +58,8 @@ cc_library(
 cc_library(
     name = "interpreter",
     srcs = ["src/lua.c"],
-    alwayslink = True,
     copts = _NO_WARNINGS,
     visibility = ["//visibility:public"],
     deps = [":lua"],
+    alwayslink = True,
 )
