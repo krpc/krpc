@@ -1,6 +1,6 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("//:config.bzl", "python_version", "version")
-load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
+load("//tools/build:python.bzl", "py_lint_test", "py_ruff_test", "py_sdist", "py_test")
 
 exports_files(["CHANGELOG.md"])
 
@@ -137,4 +137,13 @@ py_lint_test(
     pkg_name = "krpctools",
     pylint_config = "pylint.rc",
     deps = deps,
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob([
+        "*.py",
+        "krpctools/**/*.py",
+    ]),
 )

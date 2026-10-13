@@ -1,12 +1,14 @@
 load("@rules_python//python:defs.bzl", "py_test")
 load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min", "python_version", "version")
 load("//tools/build:pkg.bzl", "pkg_zip")
+load("//tools/build:python.bzl", "py_ruff_test")
 
 exports_files([
     ".clang-format",
     ".clang-tidy",
     "COPYING",
     "COPYING.LESSER",
+    "ruff.toml",
 ])
 
 readme_text = """Documentation: https://krpc.github.io/krpc
@@ -298,4 +300,10 @@ filegroup(
         "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/ksp:KRPC.IO.Ports.dll",
     ],
+)
+
+py_ruff_test(
+    name = "ruff-release",
+    size = "small",
+    srcs = glob(["tools/release/*.py"]),
 )

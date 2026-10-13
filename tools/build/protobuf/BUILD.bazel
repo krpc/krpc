@@ -1,4 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary")
+load("//tools/build:python.bzl", "py_ruff_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -100,4 +101,10 @@ config_setting(
 config_setting(
     name = "s390x",
     constraint_values = ["@platforms//cpu:s390x"],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob(["*.py"]),
 )

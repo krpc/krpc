@@ -136,3 +136,20 @@ def py_lint_test(
         ],
         **kwargs
     )
+
+# buildifier: disable=function-docstring
+def py_ruff_test(name, srcs, config = Label("//:ruff.toml"), **kwargs):
+    ruff_whl = "@pypi//ruff:whl"
+    args = [
+        "--ruff-whl=$(rootpath %s)" % ruff_whl,
+        "--config=$(rootpath %s)" % config,
+    ]
+    args.extend(["$(rootpath %s)" % x for x in srcs])
+    _native_py_test(
+        name = name,
+        srcs = [Label("//tools/build/python:run_ruff.py")],
+        main = Label("//tools/build/python:run_ruff.py"),
+        args = args,
+        data = srcs + [ruff_whl, config],
+        **kwargs
+    )

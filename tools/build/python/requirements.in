@@ -20,6 +20,7 @@ hatchling
 mypy==2.3.0
 pylint==4.0.6
 pytest
+ruff==0.16.9
 
 # Rasterizing the SVG icons and diagrams. pyvips-binary carries libvips and the
 # librsvg that renders them, as wheels for every platform the build runs on, so

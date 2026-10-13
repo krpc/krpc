@@ -1,0 +1,5 @@
+# Formatting and lint rules for all python code in the repository. Generated
+# code is excluded per target, with the exclude attribute of py_ruff_test.
+
+target-version = "py310"
+line-length = 88
