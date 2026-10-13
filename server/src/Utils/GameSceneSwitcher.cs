@@ -86,10 +86,31 @@ namespace KRPC.Utils
         /// scenes. RPCs run in FixedUpdate. A load requested there is followed by
         /// FlightGlobals.FixedUpdate in the same physics step, which sets FlightGlobals.ready
         /// again. The flag then stays set in the next scene with no active vessel.
+        /// Leaving flight saves the game first.
         /// </summary>
         static void Defer (Action load)
         {
+            if ((CallContext.GameScene & GameScene.Flight) != 0)
+                load = LeaveFlight (load);
             pendingLoad = load;
+        }
+
+        /// <summary>
+        /// Saves the game before leaving flight, as the game's own leave buttons do.
+        /// When the game cannot be saved, e.g. while under acceleration, we leave
+        /// without saving, as the game's "Leave Anyway" option does.
+        /// </summary>
+        static Action LeaveFlight (Action load)
+        {
+            return () => {
+                var status = FlightGlobals.ActiveVessel == null ?
+                    ClearToSaveStatus.CLEAR : FlightGlobals.ClearToSave (false);
+                if (status == ClearToSaveStatus.CLEAR)
+                    GamePersistence.SaveGame ("persistent", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+                else
+                    Logger.WriteLine ("Leaving flight without saving, as the game cannot be saved (" + status + ")", Logger.Severity.Warning);
+                load ();
+            };
         }
 
         /// <summary>

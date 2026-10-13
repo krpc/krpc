@@ -162,7 +162,8 @@ namespace KRPC.Service.KRPC
         /// active vessel, and fails if there is none. Moving between
         /// <see cref="GameScene.EditorVAB"/> and <see cref="GameScene.EditorSPH"/>
         /// keeps the vessel that is being constructed, as the game's own switch
-        /// editor button does.
+        /// editor button does. Leaving flight saves the game first, unless the game
+        /// cannot be saved, e.g. while under acceleration.
         /// </summary>
         [KRPCProperty]
         public static GameScene GameScene {
