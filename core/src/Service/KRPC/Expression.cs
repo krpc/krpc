@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -1480,9 +1481,10 @@ namespace KRPC.Service.KRPC
         {
             var common = FindCommonNumericType (left.GetType (), right.GetType ());
             if (common != null)
-                return Convert.ChangeType (left, common).Equals (Convert.ChangeType (right, common));
+                return Convert.ChangeType (left, common, CultureInfo.InvariantCulture).Equals (
+                    Convert.ChangeType (right, common, CultureInfo.InvariantCulture));
             var unsigned = left is ulong ? (ulong)left : (ulong)right;
-            var signed = Convert.ToInt64 (left is ulong ? right : left);
+            var signed = Convert.ToInt64 (left is ulong ? right : left, CultureInfo.InvariantCulture);
             return signed >= 0 && (ulong)signed == unsigned;
         }
 
@@ -1553,7 +1555,7 @@ namespace KRPC.Service.KRPC
             // 16777216f. The values hashed together share a type, so that case does not arise.
             // Zero and negative zero are equal, as are all NaNs.
             if (IsNumericType (type)) {
-                var number = Convert.ToDouble (value);
+                var number = Convert.ToDouble (value, CultureInfo.InvariantCulture);
                 return number == 0 || double.IsNaN (number) ? 0 : number.GetHashCode ();
             }
             if (value is string)
@@ -1933,9 +1935,9 @@ namespace KRPC.Service.KRPC
                 return new Expression (op (left, right));
             var dividend = LinqExpression.Variable (type, "dividend");
             var divisor = LinqExpression.Variable (type, "divisor");
-            var minusOne = LinqExpression.Constant (Convert.ChangeType (-1, type), type);
+            var minusOne = LinqExpression.Constant (Convert.ChangeType (-1, type, CultureInfo.InvariantCulture), type);
             var wrapped = remainder
-                ? (LinqExpression)LinqExpression.Constant (Convert.ChangeType (0, type), type)
+                ? (LinqExpression)LinqExpression.Constant (Convert.ChangeType (0, type, CultureInfo.InvariantCulture), type)
                 : LinqExpression.Negate (dividend);
             return new Expression (LinqExpression.Block (
                 new [] { dividend, divisor },
@@ -1975,7 +1977,7 @@ namespace KRPC.Service.KRPC
             if (type == typeof (int) || type == typeof (long))
                 power = LinqExpression.Condition (
                     LinqExpression.LessThan (
-                        exponent, LinqExpression.Constant (Convert.ChangeType (0, type), type)),
+                        exponent, LinqExpression.Constant (Convert.ChangeType (0, type, CultureInfo.InvariantCulture), type)),
                     DoublePower (value, exponent, type), power);
             return new Expression (LinqExpression.Block (
                 new [] { value, exponent },

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -104,7 +105,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var internalVessel = internalPart.vessel;
                 switch (InternalSensor.sensorType) {
                 case ModuleEnviroSensor.SensorType.TEMP:
-                    return internalPart.temperature.ToString ("0.##") + " " +
+                    return internalPart.temperature.ToString ("0.##", CultureInfo.CurrentCulture) + " " +
                         Localizer.Format ("#autoLOC_7001406");
                 case ModuleEnviroSensor.SensorType.GRAV:
                     var orbit = internalVessel.orbit;
@@ -112,16 +113,16 @@ namespace KRPC.SpaceCenter.Services.Parts
                         var gravity = FlightGlobals.getGeeForceAtPosition (
                             internalPart.transform.position).magnitude;
                         return Localizer.Format (
-                            "#autoLOC_237120", new [] { gravity.ToString ("00.00") });
+                            "#autoLOC_237120", new [] { gravity.ToString ("00.00", CultureInfo.CurrentCulture) });
                     }
                     return Localizer.Format ("#autoLOC_6004058");
                 case ModuleEnviroSensor.SensorType.ACC:
-                    return internalVessel.geeForce.ToString ("00.0##") +
+                    return internalVessel.geeForce.ToString ("00.0##", CultureInfo.CurrentCulture) +
                         Localizer.Format ("#autoLOC_7001413");
                 case ModuleEnviroSensor.SensorType.PRES:
                     var pressure = internalVessel.staticPressurekPa;
                     if (pressure > 0.0001d)
-                        return pressure.ToString ("0.00##") + " " +
+                        return pressure.ToString ("0.00##", CultureInfo.CurrentCulture) + " " +
                             Localizer.Format ("#autoLOC_7001410");
                     if (pressure > 0d)
                         return Localizer.Format ("#autoLOC_6004059");

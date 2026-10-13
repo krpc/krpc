@@ -1,6 +1,7 @@
 #pragma warning disable 1591
 
 using System;
+using System.Globalization;
 using KRPC.UI;
 using UnityEngine;
 
@@ -539,7 +540,7 @@ namespace KRPC.SpaceCenter
         // one-column RLL cell without word-wrapping.
         static string FreqText (double freq)
         {
-            return double.IsNaN (freq) ? "—" : string.Format ("{0:F1}Hz", freq);
+            return double.IsNaN (freq) ? "—" : string.Format (CultureInfo.CurrentCulture, "{0:F1}Hz", freq);
         }
 
         // The axis is identified by the PCH/YAW/RLL column header, so the lamp shows only the level value.
@@ -685,12 +686,12 @@ namespace KRPC.SpaceCenter
         // sign never appears or disappears between frames.
         static string Rate (double value)
         {
-            return string.Format ("{0:+0.000;-0.000;+0.000}", Stable (value, 3));
+            return string.Format (CultureInfo.CurrentCulture, "{0:+0.000;-0.000;+0.000}", Stable (value, 3));
         }
 
         static string Gain (double value)
         {
-            return string.Format ("{0:0.0}", Stable (value, 1));
+            return string.Format (CultureInfo.CurrentCulture, "{0:0.0}", Stable (value, 1));
         }
 
         // A fraction from 0 to 1 (oscillation level, control-output envelope, hold-mitigation
@@ -699,7 +700,7 @@ namespace KRPC.SpaceCenter
         // value gains or loses a digit (e.g. 10% to 9%) even when the cell is center-aligned.
         static string Percent (double value)
         {
-            return ((int) Math.Round (value * 100.0)).ToString ().PadLeft (3, ' ') + "%";
+            return ((int) Math.Round (value * 100.0)).ToString (CultureInfo.CurrentCulture).PadLeft (3, ' ') + "%";
         }
 
         static string ToolName (int tool)
@@ -734,13 +735,13 @@ namespace KRPC.SpaceCenter
             if (float.IsNaN (value))
                 return Blank;
             return Math.Abs (Stable (value, 1)) >= 100.0
-                ? string.Format ("{0:F0}°", Stable (value, 0))
+                ? string.Format (CultureInfo.CurrentCulture, "{0:F0}°", Stable (value, 0))
                 : Deg (value);
         }
 
         static string Deg (float value)
         {
-            return string.Format ("{0:F1}°", Stable (value, 1));
+            return string.Format (CultureInfo.CurrentCulture, "{0:F1}°", Stable (value, 1));
         }
 
         public void OnDestroy ()

@@ -294,7 +294,7 @@ namespace KRPC.Service.KRPC
                              x.GetParameters ().Length == 3)
                     .MakeGenericMethod (element, element);
                 return LinqExpression.Call (
-                    aggregate, arg, LinqExpression.Constant (Convert.ChangeType (0, number), element), add);
+                    aggregate, arg, LinqExpression.Constant (Convert.ChangeType (0, number, CultureInfo.InvariantCulture), element), add);
             }
             LinqExpression source = arg;
             // The average of longs is taken over doubles, as Enumerable sums longs checked

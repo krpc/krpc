@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Reflection;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -154,7 +155,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active)
                     return 0;
-                return Convert.ToSingle (resFlowField.GetValue (InternalHarvester));
+                return Convert.ToSingle (resFlowField.GetValue (InternalHarvester), CultureInfo.InvariantCulture);
             }
         }
 

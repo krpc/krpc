@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 1591
 
+using System.Globalization;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.NameTag
@@ -27,7 +28,7 @@ namespace KRPC.SpaceCenter.NameTag
                 EditorFacility whichEditor = EditorLogic.fetch.ship.shipFacility;
                 if (!(Career.CanTagInEditor(whichEditor)))
                 {
-                    var formattedString = string.Format("The {0} requires an upgrade to assign name tags", whichEditor);
+                    var formattedString = string.Format(CultureInfo.CurrentCulture, "The {0} requires an upgrade to assign name tags", whichEditor);
                     ScreenMessages.PostScreenMessage(formattedString, 6, ScreenMessageStyle.UPPER_CENTER);
                     return;
                 }

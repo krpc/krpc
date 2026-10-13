@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -752,7 +753,7 @@ namespace KRPC.InfernalRobotics
 			// service maps it to the ServoMode enum.
 			public int Mode
 			{
-				get { return Convert.ToInt32(modeProperty.GetValue(actualServo, null)); }
+				get { return Convert.ToInt32(modeProperty.GetValue(actualServo, null), CultureInfo.InvariantCulture); }
 			}
 
 			public IList<float> PresetPositions
@@ -1290,11 +1291,11 @@ namespace KRPC.InfernalRobotics
 		{
 			var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 			var declaringType = MethodBase.GetCurrentMethod().DeclaringType;
-			message = string.Format (message, strParams);
+			message = string.Format (CultureInfo.InvariantCulture, message, strParams);
 
 			string strMessageLine = declaringType != null ?
-				string.Format ("{0},{2}-{3},{1}", DateTime.Now, message, assemblyName, declaringType.Name) :
-				string.Format ("{0},{2}-NO-DECLARE,{1}", DateTime.Now, message, assemblyName);
+				string.Format (CultureInfo.InvariantCulture, "{0},{2}-{3},{1}", DateTime.Now, message, assemblyName, declaringType.Name) :
+				string.Format (CultureInfo.InvariantCulture, "{0},{2}-NO-DECLARE,{1}", DateTime.Now, message, assemblyName);
 
 			UnityEngine.Debug.Log (strMessageLine);
 		}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using KRPC.Server;
@@ -146,9 +147,9 @@ namespace KRPC.UI
             comboOptionStyle = GUILayoutExtensions.ComboOptionStyle ();
 
             Errors = new List<string> ();
-            maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString ();
-            recvTimeout = config.Configuration.RecvTimeout.ToString ();
-            tickHoldTimeout = config.Configuration.TickHoldTimeout.ToString ();
+            maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString (CultureInfo.CurrentCulture);
+            recvTimeout = config.Configuration.RecvTimeout.ToString (CultureInfo.CurrentCulture);
+            tickHoldTimeout = config.Configuration.TickHoldTimeout.ToString (CultureInfo.CurrentCulture);
 
             if (core.Servers.Count == 1)
                 expandServers.Add (core.Servers [0].Id);

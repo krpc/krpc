@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -300,6 +301,7 @@ namespace KRPC.SpaceCenter.Services
             if (stageInfo == null)
                 throw new InvalidOperationException (
                     string.Format (
+                        CultureInfo.InvariantCulture,
                         "Delta-v information is not available for activation stage {0}.",
                         stageNumber));
             return stageInfo;

@@ -62,3 +62,17 @@ import_library(
     refs = ["@csharp_system_io_ports//:lib/net8.0/System.IO.Ports.dll"],
     version = "8.0.0",
 )
+
+# The .NET code analyzers, run on every C# target through //tools/build:csharp.bzl.
+# The rules they report are set in analyzers.globalconfig.
+import_library(
+    name = "NetAnalyzers",
+    analyzers_csharp = [
+        "@csharp_netanalyzers//:analyzers/dotnet/cs/Microsoft.CodeAnalysis.NetAnalyzers.dll",
+        "@csharp_netanalyzers//:analyzers/dotnet/cs/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll",
+    ],
+    library_name = "Microsoft.CodeAnalysis.NetAnalyzers",
+    version = "8.0.0",
+)
+
+exports_files(["analyzers.globalconfig"])

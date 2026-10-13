@@ -826,8 +826,10 @@ namespace KRPC.Client.Test
                 () => string.Join (none, new List<string> { testService.StringProperty.Trim ().Substring (0, 1), "b" })));
             Assert.AreEqual ("axb", Connection.Run (
                 () => testService.StringProperty.Trim (noCharacters)));
+#pragma warning disable CA1305
             Assert.Throws<FunctionCompilationException> (
                 () => Connection.Compile (() => string.Format (none, testService.StringProperty)));
+#pragma warning restore CA1305
         }
 
         [Test]
@@ -1633,13 +1635,13 @@ namespace KRPC.Client.Test
             obj.IntProperty = -1;
             Assert.IsFalse (Evaluate (
                 () => obj.IntProperty > 0 && testService.IncrementList (new List<int> { 1 }) [0] > empty [0]));
-            Assert.AreEqual (1, Evaluate (() => obj.IntProperty > 0 ? obj.IntProperty + int.Parse (bad) : 1));
+            Assert.AreEqual (1, Evaluate (() => obj.IntProperty > 0 ? obj.IntProperty + int.Parse (bad, CultureInfo.InvariantCulture) : 1));
             obj.IntProperty = 1;
             var exn = Assert.Throws<InvalidOperationException> (() => Evaluate (
                 () => obj.IntProperty > 0 && testService.IncrementList (new List<int> { 1 }) [0] > empty [0]));
             StringAssert.Contains ("Error evaluating client side sub-expression", exn.Message);
             exn = Assert.Throws<InvalidOperationException> (
-                () => Evaluate (() => obj.IntProperty > 0 ? obj.IntProperty + int.Parse (bad) : 1));
+                () => Evaluate (() => obj.IntProperty > 0 ? obj.IntProperty + int.Parse (bad, CultureInfo.InvariantCulture) : 1));
             StringAssert.Contains ("Error evaluating client side sub-expression", exn.Message);
         }
 
@@ -1740,10 +1742,12 @@ namespace KRPC.Client.Test
             StringAssert.Contains ("culture", exn.Message);
             Assert.Throws<FunctionCompilationException> (
                 () => Connection.Compile (() => "n=" + obj.IntProperty));
+#pragma warning disable CA1304, CA1305, CA1311
             Assert.Throws<FunctionCompilationException> (
                 () => Connection.Compile (() => obj.IntProperty.ToString ()));
             Assert.Throws<FunctionCompilationException> (
                 () => Connection.Compile (() => testService.StringProperty.ToUpper ()));
+#pragma warning restore CA1304, CA1305, CA1311
             Assert.Throws<FunctionCompilationException> (
                 () => Connection.Compile (() => testService.StringProperty.IndexOf ("a")));
             Assert.Throws<FunctionCompilationException> (
