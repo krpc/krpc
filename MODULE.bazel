@@ -76,7 +76,7 @@ maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
     artifacts = [
         "com.google.protobuf:protobuf-java:4.36.2",
-        "com.puppycrawl.tools:checkstyle:10.26.1",
+        "com.puppycrawl.tools:checkstyle:14.3.0",
         "junit:junit:4.13.2",
         "org.hamcrest:hamcrest:3.0",
         "org.javatuples:javatuples:1.2",
@@ -261,9 +261,9 @@ http_file(
 http_archive(
     name = "csharp_moq",
     build_file_content = "exports_files(['lib/net462/Moq.dll', 'lib/net6.0/Moq.dll'])",
-    sha256 = "fae01cffac6dce28fd627999ae167073ee2f520c7a729a59b164258b708643ca",
+    sha256 = "266d99204031191b849685facaa6bfaad28cb9a483f79e9b999f7a18855b9a6b",
     type = "zip",
-    url = "https://www.nuget.org/api/v2/package/Moq/4.20.72",
+    url = "https://www.nuget.org/api/v2/package/Moq/4.21.0",
 )
 
 http_archive(
@@ -462,9 +462,9 @@ http_archive(
 http_archive(
     name = "lua_luaunit",
     build_file = "//tools/build/lua:luaunit.BUILD",
-    sha256 = "0e8cbee70800c66efee1c54cbbdc4eabfebb134f241267cded13b1d6d7bc2cb6",
-    strip_prefix = "luaunit-LUAUNIT_V3_3",
-    url = "https://github.com/bluebird75/luaunit/archive/refs/tags/LUAUNIT_V3_3.tar.gz",
+    sha256 = "bd0085dc35c847afab0dbafc3669490ddc81b85623068ee0debe7667ffc03454",
+    strip_prefix = "luaunit-LUAUNIT_V3_5",
+    url = "https://github.com/bluebird75/luaunit/archive/refs/tags/LUAUNIT_V3_5.tar.gz",
 )
 
 # ----------------------- Module Manager -------------------------------------------------

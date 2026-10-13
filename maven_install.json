@@ -7,7 +7,7 @@
     "com.google.guava:guava": 1943808618,
     "com.google.j2objc:j2objc-annotations": 2003271689,
     "com.google.protobuf:protobuf-java": 130636446,
-    "com.puppycrawl.tools:checkstyle": -1038068646,
+    "com.puppycrawl.tools:checkstyle": -1716498070,
     "junit:junit": -744267592,
     "org.hamcrest:hamcrest": 1547523135,
     "org.javatuples:javatuples": -2040795969,
@@ -16,52 +16,35 @@
   "__RESOLVED_ARTIFACTS_HASH": {
     "com.google.code.findbugs:jsr305": 870839855,
     "com.google.code.gson:gson": -1575757252,
-    "com.google.errorprone:error_prone_annotations": 1014409728,
+    "com.google.errorprone:error_prone_annotations": 652227016,
     "com.google.guava:failureaccess": 1715931538,
-    "com.google.guava:guava": -2046459454,
+    "com.google.guava:guava": 311464563,
     "com.google.guava:listenablefuture": 1079558157,
-    "com.google.j2objc:j2objc-annotations": -404209759,
+    "com.google.j2objc:j2objc-annotations": -1008747351,
     "com.google.protobuf:protobuf-java": -1812001120,
-    "com.puppycrawl.tools:checkstyle": 2086897963,
+    "com.puppycrawl.tools:checkstyle": -1773896522,
     "commons-beanutils:commons-beanutils": 852036681,
-    "commons-codec:commons-codec": 1434473311,
     "commons-collections:commons-collections": 7509648,
-    "commons-logging:commons-logging": 1248790901,
+    "commons-logging:commons-logging": -2039356713,
     "info.picocli:picocli": 996750497,
     "junit:junit": -1256429642,
-    "net.sf.saxon:Saxon-HE": -2242253,
+    "net.sf.saxon:Saxon-HE": -560158028,
     "org.antlr:antlr4-runtime": 460090011,
-    "org.apache.commons:commons-lang3": -889837011,
-    "org.apache.commons:commons-text": -1636534692,
-    "org.apache.httpcomponents.client5:httpclient5": 34230941,
-    "org.apache.httpcomponents.core5:httpcore5": 1776259474,
-    "org.apache.httpcomponents.core5:httpcore5-h2": -483978976,
-    "org.apache.httpcomponents:httpclient": 1097322323,
-    "org.apache.httpcomponents:httpcore": 922448651,
-    "org.apache.maven.doxia:doxia-core": -1816746291,
-    "org.apache.maven.doxia:doxia-logging-api": 1448116252,
-    "org.apache.maven.doxia:doxia-module-xdoc": 682464884,
-    "org.apache.maven.doxia:doxia-sink-api": -1516873446,
-    "org.apache.xbean:xbean-reflect": -780502532,
-    "org.checkerframework:checker-qual": -1951095466,
-    "org.codehaus.plexus:plexus-classworlds": 830297444,
-    "org.codehaus.plexus:plexus-component-annotations": -599131582,
-    "org.codehaus.plexus:plexus-container-default": -836965060,
-    "org.codehaus.plexus:plexus-utils": -2106813517,
     "org.hamcrest:hamcrest": 1282317766,
     "org.hamcrest:hamcrest-core": 649657847,
     "org.javassist:javassist": -1946021694,
     "org.javatuples:javatuples": 1373607470,
-    "org.jspecify:jspecify": 117231129,
-    "org.reflections:reflections": -839697119,
-    "org.slf4j:slf4j-api": 2011707820,
-    "org.xmlresolver:xmlresolver": -1428417213,
-    "org.xmlresolver:xmlresolver:jar:data": 1720639872
+    "org.jspecify:jspecify": -109882726,
+    "org.reflections:reflections": -1307719966,
+    "org.slf4j:slf4j-api": -736053657,
+    "org.slf4j:slf4j-simple": -506243416,
+    "org.xmlresolver:xmlresolver": -2072175398,
+    "org.xmlresolver:xmlresolver:jar:data": 792867476
   },
   "conflict_resolution": {
-    "com.google.errorprone:error_prone_annotations:2.5.1": "com.google.errorprone:error_prone_annotations:2.36.0",
-    "com.google.guava:guava:32.0.1-jre": "com.google.guava:guava:33.4.8-jre",
-    "com.google.j2objc:j2objc-annotations:2.8": "com.google.j2objc:j2objc-annotations:3.0.0"
+    "com.google.errorprone:error_prone_annotations:2.5.1": "com.google.errorprone:error_prone_annotations:2.50.0",
+    "com.google.guava:guava:32.0.1-jre": "com.google.guava:guava:33.7.1-jre",
+    "com.google.j2objc:j2objc-annotations:2.8": "com.google.j2objc:j2objc-annotations:3.1"
   },
   "artifacts": {
     "com.google.code.findbugs:jsr305": {
@@ -78,9 +61,9 @@
     },
     "com.google.errorprone:error_prone_annotations": {
       "shasums": {
-        "jar": "77440e270b0bc9a249903c5a076c36a722c4886ca4f42675f2903a1c53ed61a5"
+        "jar": "4667724877f1d37a689202da191e23efa7657c62eef93ccdac406eccfe5cdd0a"
       },
-      "version": "2.36.0"
+      "version": "2.50.0"
     },
     "com.google.guava:failureaccess": {
       "shasums": {
@@ -90,9 +73,9 @@
     },
     "com.google.guava:guava": {
       "shasums": {
-        "jar": "f3d7f57f67fd622f4d468dfdd692b3a5e3909246c28017ac3263405f0fe617ed"
+        "jar": "796d8e28ac64e83a47c4c5935a8fecc4682650a04bbdead738ef0f5a3a0e6c46"
       },
-      "version": "33.4.8-jre"
+      "version": "33.7.1-jre"
     },
     "com.google.guava:listenablefuture": {
       "shasums": {
@@ -102,9 +85,9 @@
     },
     "com.google.j2objc:j2objc-annotations": {
       "shasums": {
-        "jar": "88241573467ddca44ffd4d74aa04c2bbfd11bf7c17e0c342c94c9de7a70a7c64"
+        "jar": "84d3a150518485f8140ea99b8a985656749629f6433c92b80c75b36aba3b099b"
       },
-      "version": "3.0.0"
+      "version": "3.1"
     },
     "com.google.protobuf:protobuf-java": {
       "shasums": {
@@ -114,21 +97,15 @@
     },
     "com.puppycrawl.tools:checkstyle": {
       "shasums": {
-        "jar": "231f1fab0e44e87118ab26c6624e99a8d5148793411aab9e21428552fc1e91b7"
+        "jar": "131555de8f1621b3058249c782982f201adca22372cdecc96b8b1f5435d91796"
       },
-      "version": "10.26.1"
+      "version": "14.3.0"
     },
     "commons-beanutils:commons-beanutils": {
       "shasums": {
         "jar": "9e44ba68ec9a3f21286fa2a8bbb003b735c0f69101bb43144b79f4f8aaa74709"
       },
       "version": "1.11.0"
-    },
-    "commons-codec:commons-codec": {
-      "shasums": {
-        "jar": "b3e9f6d63a790109bf0d056611fbed1cf69055826defeb9894a71369d246ed63"
-      },
-      "version": "1.15"
     },
     "commons-collections:commons-collections": {
       "shasums": {
@@ -138,9 +115,9 @@
     },
     "commons-logging:commons-logging": {
       "shasums": {
-        "jar": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636"
+        "jar": "d175dbd751dd782a63bde28c7a039520e971f25e84b79c19b8435edc3603e0dc"
       },
-      "version": "1.2"
+      "version": "1.4.0"
     },
     "info.picocli:picocli": {
       "shasums": {
@@ -156,117 +133,15 @@
     },
     "net.sf.saxon:Saxon-HE": {
       "shasums": {
-        "jar": "98c3a91e6e5aaf9b3e2b37601e04b214a6e67098493cdd8232fcb705fddcb674"
+        "jar": "8f3a9216a537367132293eacbba9df062eace8f8b16a184af59e2e4839d4cd41"
       },
-      "version": "12.5"
+      "version": "12.9"
     },
     "org.antlr:antlr4-runtime": {
       "shasums": {
         "jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7"
       },
       "version": "4.13.2"
-    },
-    "org.apache.commons:commons-lang3": {
-      "shasums": {
-        "jar": "dac807f65b07698ff39b1b07bfef3d87ae3fd46d91bbf8a2bc02b2a831616f68"
-      },
-      "version": "3.8.1"
-    },
-    "org.apache.commons:commons-text": {
-      "shasums": {
-        "jar": "8185b3a5311092d83ed1f184c2d093b3105d726bbd76867c32b3511542bb99a8"
-      },
-      "version": "1.3"
-    },
-    "org.apache.httpcomponents.client5:httpclient5": {
-      "shasums": {
-        "jar": "28c759254f4e35319e078bb6ffea75676608dc12cb243b24fb3c8732522977fe"
-      },
-      "version": "5.1.3"
-    },
-    "org.apache.httpcomponents.core5:httpcore5": {
-      "shasums": {
-        "jar": "f2bf2f2c7772169c9e30699719667ad30f9b46c4e9d7841907deb2d12d9923fe"
-      },
-      "version": "5.1.3"
-    },
-    "org.apache.httpcomponents.core5:httpcore5-h2": {
-      "shasums": {
-        "jar": "d0e78ba15aa8ebe77982b660ac4b09a95d6e035dbdbea762577dc1c8e2935807"
-      },
-      "version": "5.1.3"
-    },
-    "org.apache.httpcomponents:httpclient": {
-      "shasums": {
-        "jar": "6fe9026a566c6a5001608cf3fc32196641f6c1e5e1986d1037ccdbd5f31ef743"
-      },
-      "version": "4.5.13"
-    },
-    "org.apache.httpcomponents:httpcore": {
-      "shasums": {
-        "jar": "f956209e450cb1d0c51776dfbd23e53e9dd8db9a1298ed62b70bf0944ba63b28"
-      },
-      "version": "4.4.14"
-    },
-    "org.apache.maven.doxia:doxia-core": {
-      "shasums": {
-        "jar": "5e49cd827bebbcea5829d3b3883d17ad1ce15ebd6394aeb50ad50d7dfd939fcd"
-      },
-      "version": "1.12.0"
-    },
-    "org.apache.maven.doxia:doxia-logging-api": {
-      "shasums": {
-        "jar": "985306162c0a9f4c309d46109447f30f02bf6fc9bc16a3e039d59e1dabd0192f"
-      },
-      "version": "1.12.0"
-    },
-    "org.apache.maven.doxia:doxia-module-xdoc": {
-      "shasums": {
-        "jar": "e8731ba00a4edd34b20eff9e4a729c2045c62cb796c3e491692607de4476ab01"
-      },
-      "version": "1.12.0"
-    },
-    "org.apache.maven.doxia:doxia-sink-api": {
-      "shasums": {
-        "jar": "5dca6aaaa9e70d8a0766e143ddcf9db09de5fde0fbcc78cb635d74e764dfcca5"
-      },
-      "version": "1.12.0"
-    },
-    "org.apache.xbean:xbean-reflect": {
-      "shasums": {
-        "jar": "104e5e9bb5a669f86722f32281960700f7ec8e3209ef51b23eb9b6d23d1629cb"
-      },
-      "version": "3.7"
-    },
-    "org.checkerframework:checker-qual": {
-      "shasums": {
-        "jar": "367edbf2fe9f606c1fdb5a8ba6e1c9c27625993e1ff954e3868de70bcc6416b7"
-      },
-      "version": "3.49.3"
-    },
-    "org.codehaus.plexus:plexus-classworlds": {
-      "shasums": {
-        "jar": "52f77c5ec49f787c9c417ebed5d6efd9922f44a202f217376e4f94c0d74f3549"
-      },
-      "version": "2.6.0"
-    },
-    "org.codehaus.plexus:plexus-component-annotations": {
-      "shasums": {
-        "jar": "bde3617ce9b5bcf9584126046080043af6a4b3baea40a3b153f02e7bbc32acac"
-      },
-      "version": "2.1.0"
-    },
-    "org.codehaus.plexus:plexus-container-default": {
-      "shasums": {
-        "jar": "6dceb1246b188153bdcb6f962d543d51ddb672cca07cad94a78fbabc9edf0a39"
-      },
-      "version": "2.1.0"
-    },
-    "org.codehaus.plexus:plexus-utils": {
-      "shasums": {
-        "jar": "76d174792540e2775af94d03d10fb2d3c776e2cd0ac0ebf427d3e570072bb9ce"
-      },
-      "version": "3.3.0"
     },
     "org.hamcrest:hamcrest": {
       "shasums": {
@@ -294,9 +169,9 @@
     },
     "org.jspecify:jspecify": {
       "shasums": {
-        "jar": "1fad6e6be7557781e4d33729d49ae1cdc8fdda6fe477bb0cc68ce351eafdfbab"
+        "jar": "070d75f261fe4c5b8202508366715f7f2d4660f88c8ef7e6d3575e48c9683b66"
       },
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     "org.reflections:reflections": {
       "shasums": {
@@ -306,16 +181,22 @@
     },
     "org.slf4j:slf4j-api": {
       "shasums": {
-        "jar": "3624f8474c1af46d75f98bc097d7864a323c81b3808aa43689a6e1c601c027be"
+        "jar": "7e1446499b359675d8aabe6af2de86b85e72ae8a2a932c0b40d0e5ba57097439"
       },
-      "version": "1.7.32"
+      "version": "2.0.20"
+    },
+    "org.slf4j:slf4j-simple": {
+      "shasums": {
+        "jar": "8e701404786a4f87219d39d4853c86dfe4e86ae99376a39749df6c08e75022e0"
+      },
+      "version": "2.0.20"
     },
     "org.xmlresolver:xmlresolver": {
       "shasums": {
-        "data": "173904bdbd783ba0fac92c5bcc05da5d09f0ce7eed24346666ea0a239461f9b4",
-        "jar": "efc92bd7ed32b3e57095e0b3e872051ccfbbdcc980831ef33e89e38161a85222"
+        "data": "b0c487ad2f3e558be8d829c916d2458d10aca6a5bafa7a4d0524b70845e48a5c",
+        "jar": "1fe4d5b92f708dcdb82dbce12919e0171e6b5ca62c6dca6220483625098feb5f"
       },
-      "version": "5.2.2"
+      "version": "5.3.3"
     }
   },
   "dependencies": {
@@ -329,13 +210,13 @@
     "com.puppycrawl.tools:checkstyle": [
       "com.google.guava:guava",
       "commons-beanutils:commons-beanutils",
+      "commons-logging:commons-logging",
       "info.picocli:picocli",
       "net.sf.saxon:Saxon-HE",
       "org.antlr:antlr4-runtime",
-      "org.apache.maven.doxia:doxia-core",
-      "org.apache.maven.doxia:doxia-module-xdoc",
-      "org.checkerframework:checker-qual",
-      "org.reflections:reflections"
+      "org.reflections:reflections",
+      "org.slf4j:slf4j-api",
+      "org.slf4j:slf4j-simple"
     ],
     "commons-beanutils:commons-beanutils": [
       "commons-collections:commons-collections"
@@ -347,62 +228,13 @@
       "org.xmlresolver:xmlresolver",
       "org.xmlresolver:xmlresolver:jar:data"
     ],
-    "org.apache.commons:commons-text": [
-      "org.apache.commons:commons-lang3"
-    ],
-    "org.apache.httpcomponents.client5:httpclient5": [
-      "commons-codec:commons-codec",
-      "org.apache.httpcomponents.core5:httpcore5",
-      "org.apache.httpcomponents.core5:httpcore5-h2"
-    ],
-    "org.apache.httpcomponents.core5:httpcore5-h2": [
-      "org.apache.httpcomponents.core5:httpcore5"
-    ],
-    "org.apache.httpcomponents:httpclient": [
-      "commons-codec:commons-codec",
-      "commons-logging:commons-logging",
-      "org.apache.httpcomponents:httpcore"
-    ],
-    "org.apache.maven.doxia:doxia-core": [
-      "org.apache.commons:commons-lang3",
-      "org.apache.commons:commons-text",
-      "org.apache.httpcomponents:httpclient",
-      "org.apache.httpcomponents:httpcore",
-      "org.apache.maven.doxia:doxia-logging-api",
-      "org.apache.maven.doxia:doxia-sink-api",
-      "org.codehaus.plexus:plexus-component-annotations",
-      "org.codehaus.plexus:plexus-container-default",
-      "org.codehaus.plexus:plexus-utils"
-    ],
-    "org.apache.maven.doxia:doxia-logging-api": [
-      "org.codehaus.plexus:plexus-container-default"
-    ],
-    "org.apache.maven.doxia:doxia-module-xdoc": [
-      "org.apache.maven.doxia:doxia-core",
-      "org.apache.maven.doxia:doxia-sink-api",
-      "org.codehaus.plexus:plexus-component-annotations",
-      "org.codehaus.plexus:plexus-utils"
-    ],
-    "org.apache.maven.doxia:doxia-sink-api": [
-      "org.apache.maven.doxia:doxia-logging-api"
-    ],
-    "org.codehaus.plexus:plexus-container-default": [
-      "org.apache.xbean:xbean-reflect",
-      "org.codehaus.plexus:plexus-classworlds",
-      "org.codehaus.plexus:plexus-utils"
-    ],
     "org.reflections:reflections": [
       "com.google.code.findbugs:jsr305",
       "org.javassist:javassist",
       "org.slf4j:slf4j-api"
     ],
-    "org.xmlresolver:xmlresolver": [
-      "org.apache.httpcomponents.client5:httpclient5",
-      "org.apache.httpcomponents.core5:httpcore5"
-    ],
-    "org.xmlresolver:xmlresolver:jar:data": [
-      "org.apache.httpcomponents.client5:httpclient5",
-      "org.apache.httpcomponents.core5:httpcore5"
+    "org.slf4j:slf4j-simple": [
+      "org.slf4j:slf4j-api"
     ]
   },
   "packages": {
@@ -472,6 +304,7 @@
       "com.puppycrawl.tools.checkstyle.checks.javadoc.utils",
       "com.puppycrawl.tools.checkstyle.checks.metrics",
       "com.puppycrawl.tools.checkstyle.checks.modifier",
+      "com.puppycrawl.tools.checkstyle.checks.modules",
       "com.puppycrawl.tools.checkstyle.checks.naming",
       "com.puppycrawl.tools.checkstyle.checks.regexp",
       "com.puppycrawl.tools.checkstyle.checks.sizes",
@@ -482,6 +315,7 @@
       "com.puppycrawl.tools.checkstyle.grammar.java",
       "com.puppycrawl.tools.checkstyle.grammar.javadoc",
       "com.puppycrawl.tools.checkstyle.gui",
+      "com.puppycrawl.tools.checkstyle.internal.annotation",
       "com.puppycrawl.tools.checkstyle.meta",
       "com.puppycrawl.tools.checkstyle.site",
       "com.puppycrawl.tools.checkstyle.utils",
@@ -494,15 +328,6 @@
       "org.apache.commons.beanutils.expression",
       "org.apache.commons.beanutils.locale",
       "org.apache.commons.beanutils.locale.converters"
-    ],
-    "commons-codec:commons-codec": [
-      "org.apache.commons.codec",
-      "org.apache.commons.codec.binary",
-      "org.apache.commons.codec.cli",
-      "org.apache.commons.codec.digest",
-      "org.apache.commons.codec.language",
-      "org.apache.commons.codec.language.bm",
-      "org.apache.commons.codec.net"
     ],
     "commons-collections:commons-collections": [
       "org.apache.commons.collections",
@@ -520,7 +345,8 @@
     ],
     "commons-logging:commons-logging": [
       "org.apache.commons.logging",
-      "org.apache.commons.logging.impl"
+      "org.apache.commons.logging.impl",
+      "org.apache.commons.logging.jakarta"
     ],
     "info.picocli:picocli": [
       "picocli"
@@ -629,267 +455,6 @@
       "org.antlr.v4.runtime.tree.pattern",
       "org.antlr.v4.runtime.tree.xpath"
     ],
-    "org.apache.commons:commons-lang3": [
-      "org.apache.commons.lang3",
-      "org.apache.commons.lang3.arch",
-      "org.apache.commons.lang3.builder",
-      "org.apache.commons.lang3.concurrent",
-      "org.apache.commons.lang3.event",
-      "org.apache.commons.lang3.exception",
-      "org.apache.commons.lang3.math",
-      "org.apache.commons.lang3.mutable",
-      "org.apache.commons.lang3.reflect",
-      "org.apache.commons.lang3.text",
-      "org.apache.commons.lang3.text.translate",
-      "org.apache.commons.lang3.time",
-      "org.apache.commons.lang3.tuple"
-    ],
-    "org.apache.commons:commons-text": [
-      "org.apache.commons.text",
-      "org.apache.commons.text.diff",
-      "org.apache.commons.text.lookup",
-      "org.apache.commons.text.matcher",
-      "org.apache.commons.text.similarity",
-      "org.apache.commons.text.translate"
-    ],
-    "org.apache.httpcomponents.client5:httpclient5": [
-      "org.apache.hc.client5.http",
-      "org.apache.hc.client5.http.async",
-      "org.apache.hc.client5.http.async.methods",
-      "org.apache.hc.client5.http.auth",
-      "org.apache.hc.client5.http.classic",
-      "org.apache.hc.client5.http.classic.methods",
-      "org.apache.hc.client5.http.config",
-      "org.apache.hc.client5.http.cookie",
-      "org.apache.hc.client5.http.entity",
-      "org.apache.hc.client5.http.entity.mime",
-      "org.apache.hc.client5.http.impl",
-      "org.apache.hc.client5.http.impl.async",
-      "org.apache.hc.client5.http.impl.auth",
-      "org.apache.hc.client5.http.impl.classic",
-      "org.apache.hc.client5.http.impl.cookie",
-      "org.apache.hc.client5.http.impl.io",
-      "org.apache.hc.client5.http.impl.nio",
-      "org.apache.hc.client5.http.impl.routing",
-      "org.apache.hc.client5.http.io",
-      "org.apache.hc.client5.http.nio",
-      "org.apache.hc.client5.http.protocol",
-      "org.apache.hc.client5.http.psl",
-      "org.apache.hc.client5.http.routing",
-      "org.apache.hc.client5.http.socket",
-      "org.apache.hc.client5.http.ssl",
-      "org.apache.hc.client5.http.utils"
-    ],
-    "org.apache.httpcomponents.core5:httpcore5": [
-      "org.apache.hc.core5.annotation",
-      "org.apache.hc.core5.concurrent",
-      "org.apache.hc.core5.function",
-      "org.apache.hc.core5.http",
-      "org.apache.hc.core5.http.config",
-      "org.apache.hc.core5.http.impl",
-      "org.apache.hc.core5.http.impl.bootstrap",
-      "org.apache.hc.core5.http.impl.io",
-      "org.apache.hc.core5.http.impl.nio",
-      "org.apache.hc.core5.http.io",
-      "org.apache.hc.core5.http.io.entity",
-      "org.apache.hc.core5.http.io.ssl",
-      "org.apache.hc.core5.http.io.support",
-      "org.apache.hc.core5.http.message",
-      "org.apache.hc.core5.http.nio",
-      "org.apache.hc.core5.http.nio.command",
-      "org.apache.hc.core5.http.nio.entity",
-      "org.apache.hc.core5.http.nio.ssl",
-      "org.apache.hc.core5.http.nio.support",
-      "org.apache.hc.core5.http.nio.support.classic",
-      "org.apache.hc.core5.http.protocol",
-      "org.apache.hc.core5.http.ssl",
-      "org.apache.hc.core5.http.support",
-      "org.apache.hc.core5.io",
-      "org.apache.hc.core5.net",
-      "org.apache.hc.core5.pool",
-      "org.apache.hc.core5.reactor",
-      "org.apache.hc.core5.reactor.ssl",
-      "org.apache.hc.core5.ssl",
-      "org.apache.hc.core5.util"
-    ],
-    "org.apache.httpcomponents.core5:httpcore5-h2": [
-      "org.apache.hc.core5.http2",
-      "org.apache.hc.core5.http2.config",
-      "org.apache.hc.core5.http2.frame",
-      "org.apache.hc.core5.http2.hpack",
-      "org.apache.hc.core5.http2.impl",
-      "org.apache.hc.core5.http2.impl.io",
-      "org.apache.hc.core5.http2.impl.nio",
-      "org.apache.hc.core5.http2.impl.nio.bootstrap",
-      "org.apache.hc.core5.http2.nio",
-      "org.apache.hc.core5.http2.nio.command",
-      "org.apache.hc.core5.http2.nio.pool",
-      "org.apache.hc.core5.http2.nio.support",
-      "org.apache.hc.core5.http2.protocol",
-      "org.apache.hc.core5.http2.ssl"
-    ],
-    "org.apache.httpcomponents:httpclient": [
-      "org.apache.http.auth",
-      "org.apache.http.auth.params",
-      "org.apache.http.client",
-      "org.apache.http.client.config",
-      "org.apache.http.client.entity",
-      "org.apache.http.client.methods",
-      "org.apache.http.client.params",
-      "org.apache.http.client.protocol",
-      "org.apache.http.client.utils",
-      "org.apache.http.conn",
-      "org.apache.http.conn.params",
-      "org.apache.http.conn.routing",
-      "org.apache.http.conn.scheme",
-      "org.apache.http.conn.socket",
-      "org.apache.http.conn.ssl",
-      "org.apache.http.conn.util",
-      "org.apache.http.cookie",
-      "org.apache.http.cookie.params",
-      "org.apache.http.impl.auth",
-      "org.apache.http.impl.client",
-      "org.apache.http.impl.conn",
-      "org.apache.http.impl.conn.tsccm",
-      "org.apache.http.impl.cookie",
-      "org.apache.http.impl.execchain"
-    ],
-    "org.apache.httpcomponents:httpcore": [
-      "org.apache.http",
-      "org.apache.http.annotation",
-      "org.apache.http.concurrent",
-      "org.apache.http.config",
-      "org.apache.http.entity",
-      "org.apache.http.impl",
-      "org.apache.http.impl.bootstrap",
-      "org.apache.http.impl.entity",
-      "org.apache.http.impl.io",
-      "org.apache.http.impl.pool",
-      "org.apache.http.io",
-      "org.apache.http.message",
-      "org.apache.http.params",
-      "org.apache.http.pool",
-      "org.apache.http.protocol",
-      "org.apache.http.ssl",
-      "org.apache.http.util"
-    ],
-    "org.apache.maven.doxia:doxia-core": [
-      "org.apache.maven.doxia",
-      "org.apache.maven.doxia.document",
-      "org.apache.maven.doxia.document.io.xpp3",
-      "org.apache.maven.doxia.index",
-      "org.apache.maven.doxia.macro",
-      "org.apache.maven.doxia.macro.manager",
-      "org.apache.maven.doxia.macro.snippet",
-      "org.apache.maven.doxia.macro.toc",
-      "org.apache.maven.doxia.markup",
-      "org.apache.maven.doxia.parser",
-      "org.apache.maven.doxia.parser.manager",
-      "org.apache.maven.doxia.parser.module",
-      "org.apache.maven.doxia.sink.impl",
-      "org.apache.maven.doxia.util"
-    ],
-    "org.apache.maven.doxia:doxia-logging-api": [
-      "org.apache.maven.doxia.logging"
-    ],
-    "org.apache.maven.doxia:doxia-module-xdoc": [
-      "org.apache.maven.doxia.module.xdoc"
-    ],
-    "org.apache.maven.doxia:doxia-sink-api": [
-      "org.apache.maven.doxia.sink",
-      "org.codehaus.doxia.sink"
-    ],
-    "org.apache.xbean:xbean-reflect": [
-      "org.apache.xbean.propertyeditor",
-      "org.apache.xbean.recipe"
-    ],
-    "org.checkerframework:checker-qual": [
-      "org.checkerframework.checker.builder.qual",
-      "org.checkerframework.checker.calledmethods.qual",
-      "org.checkerframework.checker.compilermsgs.qual",
-      "org.checkerframework.checker.fenum.qual",
-      "org.checkerframework.checker.formatter.qual",
-      "org.checkerframework.checker.guieffect.qual",
-      "org.checkerframework.checker.i18n.qual",
-      "org.checkerframework.checker.i18nformatter.qual",
-      "org.checkerframework.checker.index.qual",
-      "org.checkerframework.checker.initialization.qual",
-      "org.checkerframework.checker.interning.qual",
-      "org.checkerframework.checker.lock.qual",
-      "org.checkerframework.checker.mustcall.qual",
-      "org.checkerframework.checker.nonempty.qual",
-      "org.checkerframework.checker.nullness.qual",
-      "org.checkerframework.checker.optional.qual",
-      "org.checkerframework.checker.propkey.qual",
-      "org.checkerframework.checker.regex.qual",
-      "org.checkerframework.checker.signature.qual",
-      "org.checkerframework.checker.signedness.qual",
-      "org.checkerframework.checker.sqlquotes.qual",
-      "org.checkerframework.checker.tainting.qual",
-      "org.checkerframework.checker.units.qual",
-      "org.checkerframework.common.aliasing.qual",
-      "org.checkerframework.common.initializedfields.qual",
-      "org.checkerframework.common.reflection.qual",
-      "org.checkerframework.common.returnsreceiver.qual",
-      "org.checkerframework.common.subtyping.qual",
-      "org.checkerframework.common.util.count.report.qual",
-      "org.checkerframework.common.value.qual",
-      "org.checkerframework.dataflow.qual",
-      "org.checkerframework.framework.qual"
-    ],
-    "org.codehaus.plexus:plexus-classworlds": [
-      "org.codehaus.classworlds",
-      "org.codehaus.plexus.classworlds",
-      "org.codehaus.plexus.classworlds.launcher",
-      "org.codehaus.plexus.classworlds.realm",
-      "org.codehaus.plexus.classworlds.strategy"
-    ],
-    "org.codehaus.plexus:plexus-component-annotations": [
-      "org.codehaus.plexus.component.annotations"
-    ],
-    "org.codehaus.plexus:plexus-container-default": [
-      "org.codehaus.plexus",
-      "org.codehaus.plexus.component",
-      "org.codehaus.plexus.component.builder",
-      "org.codehaus.plexus.component.collections",
-      "org.codehaus.plexus.component.composition",
-      "org.codehaus.plexus.component.configurator",
-      "org.codehaus.plexus.component.configurator.converters",
-      "org.codehaus.plexus.component.configurator.converters.basic",
-      "org.codehaus.plexus.component.configurator.converters.composite",
-      "org.codehaus.plexus.component.configurator.converters.lookup",
-      "org.codehaus.plexus.component.configurator.converters.special",
-      "org.codehaus.plexus.component.configurator.expression",
-      "org.codehaus.plexus.component.discovery",
-      "org.codehaus.plexus.component.factory",
-      "org.codehaus.plexus.component.factory.java",
-      "org.codehaus.plexus.component.manager",
-      "org.codehaus.plexus.component.repository",
-      "org.codehaus.plexus.component.repository.exception",
-      "org.codehaus.plexus.component.repository.io",
-      "org.codehaus.plexus.configuration",
-      "org.codehaus.plexus.configuration.io",
-      "org.codehaus.plexus.configuration.source",
-      "org.codehaus.plexus.configuration.xml",
-      "org.codehaus.plexus.container.initialization",
-      "org.codehaus.plexus.context",
-      "org.codehaus.plexus.lifecycle",
-      "org.codehaus.plexus.lifecycle.phase",
-      "org.codehaus.plexus.logging",
-      "org.codehaus.plexus.logging.console",
-      "org.codehaus.plexus.personality.plexus.lifecycle.phase"
-    ],
-    "org.codehaus.plexus:plexus-utils": [
-      "org.codehaus.plexus.util",
-      "org.codehaus.plexus.util.cli",
-      "org.codehaus.plexus.util.cli.shell",
-      "org.codehaus.plexus.util.dag",
-      "org.codehaus.plexus.util.introspection",
-      "org.codehaus.plexus.util.io",
-      "org.codehaus.plexus.util.reflection",
-      "org.codehaus.plexus.util.xml",
-      "org.codehaus.plexus.util.xml.pull"
-    ],
     "org.hamcrest:hamcrest": [
       "org.hamcrest",
       "org.hamcrest.beans",
@@ -947,6 +512,9 @@
       "org.slf4j.helpers",
       "org.slf4j.spi"
     ],
+    "org.slf4j:slf4j-simple": [
+      "org.slf4j.simple"
+    ],
     "org.xmlresolver:xmlresolver": [
       "org.xmlresolver",
       "org.xmlresolver.cache",
@@ -972,30 +540,12 @@
       "com.google.protobuf:protobuf-java",
       "com.puppycrawl.tools:checkstyle",
       "commons-beanutils:commons-beanutils",
-      "commons-codec:commons-codec",
       "commons-collections:commons-collections",
       "commons-logging:commons-logging",
       "info.picocli:picocli",
       "junit:junit",
       "net.sf.saxon:Saxon-HE",
       "org.antlr:antlr4-runtime",
-      "org.apache.commons:commons-lang3",
-      "org.apache.commons:commons-text",
-      "org.apache.httpcomponents.client5:httpclient5",
-      "org.apache.httpcomponents.core5:httpcore5",
-      "org.apache.httpcomponents.core5:httpcore5-h2",
-      "org.apache.httpcomponents:httpclient",
-      "org.apache.httpcomponents:httpcore",
-      "org.apache.maven.doxia:doxia-core",
-      "org.apache.maven.doxia:doxia-logging-api",
-      "org.apache.maven.doxia:doxia-module-xdoc",
-      "org.apache.maven.doxia:doxia-sink-api",
-      "org.apache.xbean:xbean-reflect",
-      "org.checkerframework:checker-qual",
-      "org.codehaus.plexus:plexus-classworlds",
-      "org.codehaus.plexus:plexus-component-annotations",
-      "org.codehaus.plexus:plexus-container-default",
-      "org.codehaus.plexus:plexus-utils",
       "org.hamcrest:hamcrest",
       "org.hamcrest:hamcrest-core",
       "org.javassist:javassist",
@@ -1003,6 +553,7 @@
       "org.jspecify:jspecify",
       "org.reflections:reflections",
       "org.slf4j:slf4j-api",
+      "org.slf4j:slf4j-simple",
       "org.xmlresolver:xmlresolver",
       "org.xmlresolver:xmlresolver:jar:data"
     ]
@@ -1011,6 +562,11 @@
     "net.sf.saxon:Saxon-HE": {
       "javax.xml.transform.TransformerFactory": [
         "net.sf.saxon.TransformerFactoryImpl"
+      ]
+    },
+    "org.slf4j:slf4j-simple": {
+      "org.slf4j.spi.SLF4JServiceProvider": [
+        "org.slf4j.simple.SimpleServiceProvider"
       ]
     }
   },
