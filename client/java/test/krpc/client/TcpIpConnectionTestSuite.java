@@ -7,7 +7,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({TcpIpConnectionTest.class})
 public class TcpIpConnectionTestSuite {
-  /** Entry point for running the test suite directly.
+  /**
+   * Entry point for running the test suite directly.
    *
    * @param args Command line arguments.
    */

@@ -7,7 +7,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({LocalSocketConnectionTest.class})
 public class LocalSocketConnectionTestSuite {
-  /** Entry point for running the test suite directly.
+  /**
+   * Entry point for running the test suite directly.
    *
    * @param args Command line arguments.
    */
