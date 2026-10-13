@@ -125,21 +125,6 @@ service_definitions(
     visibility = ["//visibility:public"],
 )
 
-csharp_binary(
-    name = "TestServer.Debug",
-    srcs = exe_srcs,
-    defines = ["CODE_ANALYSIS"],
-    nowarn = [
-        "CS1591",
-        "CS1701",
-    ],
-    target_frameworks = ["net8.0"],
-    treat_warnings_as_errors = True,
-    visibility = ["//visibility:public"],
-    warning_level = 4,
-    deps = exe_deps,
-)
-
 # Sources for //:csproj-test, which checks them against the .csproj file lists.
 filegroup(
     name = "csproj-srcs",

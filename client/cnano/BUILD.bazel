@@ -480,7 +480,4 @@ protobuf_nanopb(
     source = "src/krpc.pb.c",
 )
 
-exports_files([
-    "CHANGELOG.md",
-    "src/krpc.options",
-])
+exports_files(["CHANGELOG.md"])

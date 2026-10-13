@@ -9,5 +9,5 @@ cc_library(
         "src/lfs.h",
     ],
     visibility = ["//visibility:public"],
-    deps = ["@lua//:lua"],
+    deps = ["@lua"],
 )

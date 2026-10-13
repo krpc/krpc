@@ -185,7 +185,6 @@ by running `bazel build <target>` These targets are available:
    * `//service/DockingCamera`
  * Protobuf definitions:
    * `//protobuf:csharp`
-   * `//protobuf:cpp`
    * `//protobuf:java`
    * `//protobuf:lua`
    * `//protobuf:python`
