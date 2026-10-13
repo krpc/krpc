@@ -49,14 +49,14 @@ genrule(
     name = "schema-py",
     srcs = ["//protobuf:python"],
     outs = ["krpc/schema/KRPC_pb2.py"],
-    cmd = "for f in $(locations //protobuf:python); do case $$f in *KRPC_pb2.py) cp $$f $@;; esac; done",
+    cmd = "for f in $(execpaths //protobuf:python); do case $$f in *KRPC_pb2.py) cp $$f $@;; esac; done",
 )
 
 genrule(
     name = "schema-pyi",
     srcs = ["//protobuf:python"],
     outs = ["krpc/schema/KRPC_pb2.pyi"],
-    cmd = "for f in $(locations //protobuf:python); do case $$f in *KRPC_pb2.pyi) cp $$f $@;; esac; done",
+    cmd = "for f in $(execpaths //protobuf:python); do case $$f in *KRPC_pb2.pyi) cp $$f $@;; esac; done",
 )
 
 genrule(
