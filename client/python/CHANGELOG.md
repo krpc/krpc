@@ -1,4 +1,5 @@
 ## [v0.7.0] - unreleased
+- Require protobuf 7.36.2 or later (#1139)
 - Fix type checkers skipping the code after a name the service defines, such as
   `conn.space_center.ReferenceFrame` (#1134)
 - Fix type checkers typing a stream value as `object` (#1134)

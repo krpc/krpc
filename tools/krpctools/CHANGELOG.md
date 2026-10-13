@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Run `krpc-servicedefs` and `TestServer` on the .NET 10 runtime, in place of
+  .NET 8 (#1139)
 - Generate python stubs that declare a service's classes, enumerations, structures and
   exceptions for type checkers (#1134)
 - Fix `krpc-clientgen` failing to load a generator from a file (#1134)

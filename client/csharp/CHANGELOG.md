@@ -1,4 +1,5 @@
 ## [v0.7.0] - unreleased
+- Update to Google.Protobuf 3.36.2 (#1139)
 - **Breaking:** Start a stream when it is added, removing `Stream.Start` and `Event.Start`
   (#1122)
 - Wait for a stream's first value in `Stream.Get` (#1122)

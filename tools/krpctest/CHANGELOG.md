@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Install the maintained fork of KerbalAlarmClock, with its ClickThroughBlocker, ToolbarControl
+  and Harmony dependencies (#1139)
 - Add `krpctest.Mixin`, the base of a mixin of tests, which type checks as a `TestCase`
   (#1134)
 - Add Ferram Aerospace Research to the managed third-party mods, requested with

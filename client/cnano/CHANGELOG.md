@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Update to protobuf v36.2 (#1139)
+- Update to nanopb 0.4.9.2 (#1139)
 - **Breaking:** Renumber the `KRPC` service's procedures, so a program built against an
   earlier version must be rebuilt (#1124)
 - Support a nullable structure field, list element, tuple item and dictionary value, each
