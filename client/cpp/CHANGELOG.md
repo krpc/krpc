@@ -1,4 +1,8 @@
 ## [v0.7.0] - unreleased
+- Add `krpc::run`, which runs a server side function within a single physics tick,
+  passing it any arguments, and returns its value (#1129)
+- Add `krpc::add_stream`, which streams the value of a server side function (#1129)
+- Add `krpc::add_event`, which creates an event from a server side function (#1129)
 - **Breaking:** Remove `Client::freeze_streams` and `Client::thaw_streams`. Calls made while
   holding the tick with `KRPC::hold_tick` give values from one physics tick (#1118)
 - **Breaking:** Start a stream when it is added, removing `Stream::start` and `Event::start`

@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <mutex>  // NOLINT(build/c++11)
+#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -16,6 +17,10 @@
 #include "krpc/stream_impl.hpp"
 
 namespace krpc {
+
+namespace function_stream_detail {
+struct function_streams;
+}  // namespace function_stream_detail
 
 template <typename T>
 class Stream {
@@ -77,14 +82,19 @@ class Stream {
 
  private:
   friend class Event;
+  friend struct function_stream_detail::function_streams;
+  /** A stream whose value is an error when null, for a template type that cannot hold a null. */
+  Stream(Client* client, uint64_t id, bool null_is_an_error);
   std::shared_ptr<StreamImpl> impl;
   // Declared after impl, so that it releases the mutex before the stream can be destroyed
   mutable std::unique_lock<RecursiveMutex> lock;
+  bool null_is_an_error = false;
   /** Release the lock, unlocking the mutex only if this thread holds it. */
   void drop_lock();
   std::unique_lock<RecursiveMutex> make_lock() const;
   void check_exists() const;
-  static T decode_value(const std::string& data, bool is_null, Client* client);
+  static T decode_value(const std::string& data, bool is_null, bool null_is_an_error,
+                        Client* client);
 };
 
 template <typename T>
@@ -99,11 +109,18 @@ inline Stream<T>::Stream(Client* client, uint64_t id)
     : impl(client->get_stream(id)), lock(make_lock()) {}
 
 template <typename T>
-inline Stream<T>::Stream(const Stream<T>& other) : impl(other.impl), lock(make_lock()) {}
+inline Stream<T>::Stream(Client* client, uint64_t id, bool null_is_an_error)
+    : impl(client->get_stream(id)), lock(make_lock()), null_is_an_error(null_is_an_error) {}
+
+template <typename T>
+inline Stream<T>::Stream(const Stream<T>& other)
+    : impl(other.impl), lock(make_lock()), null_is_an_error(other.null_is_an_error) {}
 
 template <typename T>
 inline Stream<T>::Stream(Stream<T>&& other) noexcept
-    : impl(std::move(other.impl)), lock(std::move(other.lock)) {}
+    : impl(std::move(other.impl)),
+      lock(std::move(other.lock)),
+      null_is_an_error(other.null_is_an_error) {}
 
 template <typename T>
 inline Stream<T>::~Stream() {
@@ -117,6 +134,7 @@ inline Stream<T>& Stream<T>::operator=(const Stream<T>& other) {
   drop_lock();
   impl = other.impl;
   lock = make_lock();
+  null_is_an_error = other.null_is_an_error;
   return *this;
 }
 
@@ -127,6 +145,7 @@ inline Stream<T>& Stream<T>::operator=(Stream<T>&& other) noexcept {
   drop_lock();
   lock = std::move(other.lock);
   impl = std::move(other.impl);
+  null_is_an_error = other.null_is_an_error;
   return *this;
 }
 
@@ -163,18 +182,25 @@ inline T Stream<T>::operator()() {
   }
   bool is_null = false;
   auto data = impl->get_data(&is_null);
-  return decode_value(data, is_null, impl->get_client());
+  return decode_value(data, is_null, null_is_an_error, impl->get_client());
 }
 
 template <typename T>
-inline T Stream<T>::decode_value(const std::string& data, bool is_null, Client* client) {
+inline T Stream<T>::decode_value(const std::string& data, bool is_null, bool null_is_an_error,
+                                 Client* client) {
   // A null value is signaled out-of-band by is_null, and leaves the value default
   // constructed, which for a nullable stream is an empty optional.
   T value{};
+  if (is_null) {
+    if (null_is_an_error)
+      throw std::runtime_error(
+          "The function produced a null value; use a std::optional for the result");
+    return value;
+  }
   // Unqualified, so that argument dependent lookup finds the overload for a type a
   // service defines at the point this template is used
   using decoder::decode;
-  if (!is_null) decode(value, data, client);
+  decode(value, data, client);
   return value;
 }
 
@@ -215,11 +241,11 @@ template <typename T>
 inline int Stream<T>::add_callback(const Callback& callback) {
   check_exists();
   // Captures no handle, as the handle can be moved or destroyed while the callback is added
-  auto callback_wrapper = [client = impl->get_client(), callback](const std::string& data,
-                                                                  bool is_null) {
+  auto callback_wrapper = [client = impl->get_client(), null_is_an_error = null_is_an_error,
+                           callback](const std::string& data, bool is_null) {
     T value{};
     try {
-      value = decode_value(data, is_null, client);
+      value = decode_value(data, is_null, null_is_an_error, client);
     } catch (const std::exception& exn) {
       throw CallbackDecodeError(exn.what());
     }

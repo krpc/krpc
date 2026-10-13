@@ -20,6 +20,9 @@ namespace krpc {
 class Connection;
 class StreamManager;
 class StreamImpl;
+namespace function_stream_detail {
+struct function_type_cache;
+}  // namespace function_stream_detail
 
 class Client {
  public:
@@ -63,6 +66,7 @@ class Client {
  private:
   friend class StreamManager;
   friend class StreamImpl;
+  friend struct function_stream_detail::function_type_cache;
   void throw_exception(const schema::Error& error) const;
   /** Send a request, whose first call returns what returns says, or whose calls are looked up
       in the server's list of services if returns is null. */
@@ -74,6 +78,15 @@ class Client {
   void note_removed_streams(const schema::Request& request);
   static void add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args);
   StreamManager& streams() const;
+
+  /** The return type of a server side function, if stored. A code of NONE is no value. */
+  bool get_function_return_type(uint64_t id, schema::Type* type) const;
+  /** Store the return type of a server side function. */
+  void set_function_return_type(uint64_t id, const schema::Type& type);
+  /** The parameter types of a server side function, if stored. */
+  bool get_function_parameter_types(uint64_t id, std::vector<schema::Type>* types) const;
+  /** Store the parameter types of a server side function. */
+  void set_function_parameter_types(uint64_t id, const std::vector<schema::Type>& types);
 
  public:
   /** Throw a StreamError if the client has no connection to the stream server. */
@@ -134,6 +147,10 @@ class Client {
   // on both the calling thread and the stream update thread. Held by shared pointer as the
   // client is copyable and a mutex is not.
   std::shared_ptr<std::mutex> exception_throwers_lock;
+  std::map<uint64_t, schema::Type> function_return_types;
+  std::map<uint64_t, std::vector<schema::Type>> function_parameter_types;
+  // Guards function_return_types and function_parameter_types
+  std::shared_ptr<std::mutex> function_types_lock;
   // Declared last, so that it is destroyed first. Ending the streams calls end callbacks,
   // which can use the rest of the client.
   std::shared_ptr<StreamManager> stream_manager;
