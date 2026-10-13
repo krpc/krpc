@@ -1,12 +1,13 @@
 load("@rules_python//python:defs.bzl", "py_binary")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
-load("//tools/build:python.bzl", "py_ruff_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "run_pytest.py.tmpl",
+    "run_pyright.py",
     "run_ruff.py",
 ])
 
@@ -34,4 +35,11 @@ py_ruff_test(
     name = "ruff",
     size = "small",
     srcs = glob(["*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    python_version = "3.12",
 )

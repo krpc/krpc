@@ -113,3 +113,22 @@ def py_ruff_test(name, srcs, config = Label("//:ruff.toml"), **kwargs):
         data = srcs + [ruff_whl, config],
         **kwargs
     )
+
+# buildifier: disable=function-docstring
+def py_pyright_test(name, srcs, deps = [], python_version = None, disable = [], config = Label("//:pyrightconfig.json"), **kwargs):
+    args = ["--config=$(rootpath %s)" % config]
+    if python_version:
+        args.append("--python-version=%s" % python_version)
+    args.extend(["--disable=%s" % x for x in disable])
+    args.extend(["$(rootpath %s)" % x for x in srcs])
+    _native_py_test(
+        name = name,
+        srcs = [Label("//tools/build/python:run_pyright.py")],
+        main = Label("//tools/build/python:run_pyright.py"),
+        args = args,
+        data = srcs + [config],
+        deps = deps + ["@pypi//basedpyright"],
+        # Generated __init__.py files would make a directory of scripts a package
+        legacy_create_init = False,
+        **kwargs
+    )

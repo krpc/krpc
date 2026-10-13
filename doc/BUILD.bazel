@@ -6,7 +6,7 @@ load("//doc:check_documented.bzl", "check_documented_test")
 load("//doc:macros.bzl", "cc_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
 load("//tools/build:image.bzl", "png_images")
 load("//tools/build:pkg.bzl", "stage_files")
-load("//tools/build:python.bzl", "py_ruff_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
 load("//tools/krpctools:docgen.bzl", "docgen_multiple")
 
@@ -437,4 +437,17 @@ py_ruff_test(
         "*.py",
         "src/scripts/**/*.py",
     ]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    python_version = "3.12",
+    deps = [
+        "//client/python:krpc_lib",
+        "@pypi//cogapp",
+        "@pypi//watchdog",
+        "@rules_python//python/runfiles",
+    ],
 )

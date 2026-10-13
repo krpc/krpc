@@ -2,7 +2,7 @@ load("//:config.bzl", "assembly_version", "author")
 load("//service:build.bzl", "service_deps")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
-load("//tools/build:python.bzl", "py_ruff_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
 exports_files(["CHANGELOG.md"])
@@ -75,6 +75,16 @@ py_ruff_test(
     name = "ruff",
     size = "small",
     srcs = glob(["test/*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["test/*.py"]),
+    deps = [
+        "//client/python:krpc_lib",
+        "//tools/krpctest:krpctest_lib",
+    ],
 )
 
 # Sources for //:csproj-test, which checks them against the .csproj file lists.

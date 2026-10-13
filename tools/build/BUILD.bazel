@@ -1,5 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary")
-load(":python.bzl", "py_ruff_test")
+load(":python.bzl", "py_pyright_test", "py_ruff_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -44,4 +44,12 @@ py_ruff_test(
     name = "ruff",
     size = "small",
     srcs = glob(["*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob(["*.py"]),
+    python_version = "3.12",
+    deps = ["@rules_python//python/runfiles"],
 )

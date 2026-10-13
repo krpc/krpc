@@ -1,13 +1,14 @@
 load("@rules_python//python:defs.bzl", "py_test")
 load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min", "python_version", "version")
 load("//tools/build:pkg.bzl", "pkg_zip")
-load("//tools/build:python.bzl", "py_ruff_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 exports_files([
     ".clang-format",
     ".clang-tidy",
     "COPYING",
     "COPYING.LESSER",
+    "pyrightconfig.json",
     "ruff.toml",
 ])
 
@@ -315,4 +316,11 @@ py_ruff_test(
     name = "ruff-release",
     size = "small",
     srcs = glob(["tools/release/*.py"]),
+)
+
+py_pyright_test(
+    name = "pyright-release",
+    size = "medium",
+    srcs = glob(["tools/release/*.py"]),
+    python_version = "3.12",
 )

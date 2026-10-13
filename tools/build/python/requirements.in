@@ -14,6 +14,7 @@ requests==2.34.2
 websocket-client==1.9.0
 
 # Build and test tooling
+basedpyright==1.40.1
 cogapp==3.6.0
 hatchling
 mypy==2.3.0
