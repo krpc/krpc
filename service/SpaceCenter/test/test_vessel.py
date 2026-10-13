@@ -88,13 +88,19 @@ class TestVessel(krpctest.TestCase):
         )
 
     def test_available_torque(self):
+        # 5000 from the reaction wheels plus the RCS share
         self.vessel.control.rcs = True
-        self.assertAlmostEqual(
-            (19288, 17438, 19288), self.vessel.available_torque[0], delta=5
-        )
-        self.assertAlmostEqual(
-            (-19288, -17443, -19288), self.vessel.available_torque[1], delta=5
-        )
+        self.wait()
+        try:
+            self.assertAlmostEqual(
+                (11376, 11259, 11376), self.vessel.available_torque[0], delta=5
+            )
+            self.assertAlmostEqual(
+                (-11376, -11271, -11376), self.vessel.available_torque[1], delta=5
+            )
+        finally:
+            self.vessel.control.rcs = False
+            self.wait()
 
     def test_available_reaction_wheel_torque(self):
         self.assertAlmostEqual(
@@ -103,26 +109,31 @@ class TestVessel(krpctest.TestCase):
         self.assertAlmostEqual(
             (-5000, -5000, -5000), self.vessel.available_reaction_wheel_torque[1]
         )
-        for rw in self.vessel.parts.reaction_wheels:
-            rw.active = False
-        self.assertAlmostEqual(
-            ((0, 0, 0), (0, 0, 0)), self.vessel.available_reaction_wheel_torque
-        )
-        for rw in self.vessel.parts.reaction_wheels:
-            rw.active = True
+        try:
+            for rw in self.vessel.parts.reaction_wheels:
+                rw.active = False
+            self.assertAlmostEqual(
+                ((0, 0, 0), (0, 0, 0)), self.vessel.available_reaction_wheel_torque
+            )
+        finally:
+            for rw in self.vessel.parts.reaction_wheels:
+                rw.active = True
 
     def test_available_rcs_torque(self):
         self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_rcs_torque)
+        # Eight RV-105 blocks of four 1 kN nozzles, about 0.8 m from the center of mass
         self.vessel.control.rcs = True
         self.wait()
-        self.assertAlmostEqual(
-            (14288, 12439, 14288), self.vessel.available_rcs_torque[0], delta=5
-        )
-        self.assertAlmostEqual(
-            (-14288, -12439, -14288), self.vessel.available_rcs_torque[1], delta=5
-        )
-        self.vessel.control.rcs = False
-        self.wait()
+        try:
+            self.assertAlmostEqual(
+                (6376, 6259, 6376), self.vessel.available_rcs_torque[0], delta=5
+            )
+            self.assertAlmostEqual(
+                (-6376, -6271, -6376), self.vessel.available_rcs_torque[1], delta=5
+            )
+        finally:
+            self.vessel.control.rcs = False
+            self.wait()
         self.assertAlmostEqual(((0, 0, 0), (0, 0, 0)), self.vessel.available_rcs_torque)
 
     def test_available_engine_torque(self):
@@ -140,38 +151,42 @@ class TestVessel(krpctest.TestCase):
         # available_*_torque divided componentwise by the moment of inertia.
         self.vessel.control.rcs = True
         self.wait()
-        moi = self.vessel.moment_of_inertia
-        prefixes = [
-            "available",
-            "available_reaction_wheel",
-            "available_rcs",
-            "available_engine",
-            "available_control_surface",
-            "available_other",
-        ]
-        for prefix in prefixes:
-            accel = getattr(self.vessel, prefix + "_angular_acceleration")
-            torque = getattr(self.vessel, prefix + "_torque")
-            for i in range(2):
-                for j in range(3):
-                    inertia = moi[j]
-                    expected = torque[i][j] / inertia if inertia != 0 else 0
-                    self.assertAlmostEqual(expected, accel[i][j], delta=1e-2)
-        self.vessel.control.rcs = False
-        self.wait()
+        try:
+            moi = self.vessel.moment_of_inertia
+            prefixes = [
+                "available",
+                "available_reaction_wheel",
+                "available_rcs",
+                "available_engine",
+                "available_control_surface",
+                "available_other",
+            ]
+            for prefix in prefixes:
+                accel = getattr(self.vessel, prefix + "_angular_acceleration")
+                torque = getattr(self.vessel, prefix + "_torque")
+                for i in range(2):
+                    for j in range(3):
+                        inertia = moi[j]
+                        expected = torque[i][j] / inertia if inertia != 0 else 0
+                        self.assertAlmostEqual(expected, accel[i][j], delta=1e-2)
+        finally:
+            self.vessel.control.rcs = False
+            self.wait()
 
     def test_available_rcs_acceleration(self):
         # available_rcs_acceleration should equal available_rcs_force / mass.
         self.vessel.control.rcs = True
         self.wait()
-        mass = self.vessel.mass
-        force = self.vessel.available_rcs_force
-        accel = self.vessel.available_rcs_acceleration
-        for i in range(2):
-            for j in range(3):
-                self.assertAlmostEqual(force[i][j] / mass, accel[i][j], delta=1e-2)
-        self.vessel.control.rcs = False
-        self.wait()
+        try:
+            mass = self.vessel.mass
+            force = self.vessel.available_rcs_force
+            accel = self.vessel.available_rcs_acceleration
+            for i in range(2):
+                for j in range(3):
+                    self.assertAlmostEqual(force[i][j] / mass, accel[i][j], delta=1e-2)
+        finally:
+            self.vessel.control.rcs = False
+            self.wait()
 
     def test_bounding_box(self):
         box = self.vessel.bounding_box(self.vessel.reference_frame)

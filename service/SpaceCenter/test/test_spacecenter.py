@@ -380,6 +380,14 @@ class WarpTestBase(krpctest.Mixin):
     maximum_rails_warp_factor: int
     landed: bool
 
+    def wait_for_warp_rate(self, rate):
+        # The game eases the warp rate to a new target over a second of game time
+        self.wait_until(
+            lambda: self.sc.warp_rate == rate,
+            timeout=10,
+            message="the warp rate to reach %g" % rate,
+        )
+
     def test_no_warp(self):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(0, self.sc.rails_warp_factor)
@@ -403,8 +411,7 @@ class WarpTestBase(krpctest.Mixin):
         self.assertEqual(1, self.sc.warp_rate)
         for factor in range(1, self.maximum_rails_warp_factor + 1):
             self.sc.rails_warp_factor = factor
-            self.wait(2)
-            self.assertEqual(rates[factor], self.sc.warp_rate)
+            self.wait_for_warp_rate(rates[factor])
             self.assertEqual(self.sc.WarpMode.rails, self.sc.warp_mode)
             self.assertEqual(factor, self.sc.rails_warp_factor)
             self.assertEqual(0, self.sc.physics_warp_factor)
@@ -419,11 +426,10 @@ class WarpTestBase(krpctest.Mixin):
         self.assertEqual(self.maximum_rails_warp_factor, self.sc.rails_warp_factor)
 
         self.sc.rails_warp_factor = 0
-        self.wait(1)
+        self.wait_for_warp_rate(1)
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(0, self.sc.rails_warp_factor)
         self.assertEqual(0, self.sc.physics_warp_factor)
-        self.assertEqual(1, self.sc.warp_rate)
 
         self.sc.rails_warp_factor = -1
         self.wait(0.5)
@@ -452,8 +458,7 @@ class WarpTestBase(krpctest.Mixin):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         for factor in range(1, 4):
             self.sc.physics_warp_factor = factor
-            self.wait(2)
-            self.assertEqual(rates[factor], self.sc.warp_rate)
+            self.wait_for_warp_rate(rates[factor])
             self.assertEqual(self.sc.WarpMode.physics, self.sc.warp_mode)
             self.assertEqual(0, self.sc.rails_warp_factor)
             self.assertEqual(factor, self.sc.physics_warp_factor)
@@ -468,24 +473,21 @@ class WarpTestBase(krpctest.Mixin):
         self.assertEqual(3, self.sc.physics_warp_factor)
 
         self.sc.physics_warp_factor = 0
-        self.wait(0.5)
+        self.wait_for_warp_rate(1)
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(0, self.sc.rails_warp_factor)
         self.assertEqual(0, self.sc.physics_warp_factor)
-        self.assertEqual(1, self.sc.warp_rate)
 
     def test_switch_mode(self):
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.sc.rails_warp_factor = 2
-        self.wait(2)
+        self.wait_for_warp_rate(10)
         self.assertEqual(self.sc.WarpMode.rails, self.sc.warp_mode)
-        self.assertEqual(10, self.sc.warp_rate)
         self.sc.physics_warp_factor = 2
-        self.wait(2)
+        self.wait_for_warp_rate(3)
         self.assertEqual(self.sc.WarpMode.physics, self.sc.warp_mode)
-        self.assertEqual(3, self.sc.warp_rate)
         self.sc.rails_warp_factor = 0
-        self.wait(2)
+        self.wait_for_warp_rate(1)
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
 
     def test_warp_to(self):
