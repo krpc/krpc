@@ -1113,7 +1113,8 @@ Vessel
       Send the crew member outside on EVA, through the hatch of the part it is in, and
       return the vessel it becomes. The game switches to that vessel, which can then be
       walked around and flown using its :attr:`SpaceCenter.Vessel.control`, and brought back
-      in with :meth:`SpaceCenter.Control.board`.
+      in with :meth:`SpaceCenter.Control.board`. The kerbal climbs out onto the ladder by the
+      hatch, if there is one.
 
       :rtype: :class:`SpaceCenter.Vessel`
 

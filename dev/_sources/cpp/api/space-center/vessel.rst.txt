@@ -1117,7 +1117,8 @@ Vessel
       Send the crew member outside on EVA, through the hatch of the part it is in, and
       return the vessel it becomes. The game switches to that vessel, which can then be
       walked around and flown using its :func:`Vessel::control`, and brought back
-      in with :func:`Control::board`.
+      in with :func:`Control::board`. The kerbal climbs out onto the ladder by the
+      hatch, if there is one.
 
 
       :Game Scenes: Flight
