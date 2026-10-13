@@ -144,7 +144,6 @@ csharp_nunit_test(
     size = "small",
     srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"],
     out = "KRPC.Core.Test",
-    defines = ["CODE_ANALYSIS"],
     # CS1701: Google.Protobuf/Newtonsoft.Json/Moq reference net5/6-era framework
     # assemblies; unification handles this at runtime (MSBuild suppresses this
     # warning by default). Matches KRPC.Core.net8 above.
