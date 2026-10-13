@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -702,8 +703,8 @@ namespace KRPC.KerbalAlarmClock
         /// <param name="strParams">Objects to feed into a String.format</param>
         internal static void LogFormatted(String Message, params Object[] strParams)
         {
-            Message = String.Format(Message, strParams);
-            String strMessageLine = String.Format("{0},{2}-{3},{1}",
+            Message = String.Format(CultureInfo.InvariantCulture, Message, strParams);
+            String strMessageLine = String.Format(CultureInfo.InvariantCulture, "{0},{2}-{3},{1}",
                 DateTime.Now, Message, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name,
                 System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
             UnityEngine.Debug.Log(strMessageLine);

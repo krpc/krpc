@@ -1,3 +1,4 @@
+using System.Globalization;
 using KRPC.Service.Attributes;
 
 namespace KRPC.Test.Service
@@ -11,7 +12,7 @@ namespace KRPC.Test.Service
         [KRPCMethod]
         public string AMethod (int x)
         {
-            return x.ToString ();
+            return x.ToString (CultureInfo.InvariantCulture);
         }
 
         [KRPCProperty]

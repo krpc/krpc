@@ -51,7 +51,7 @@ namespace TestServer
         [KRPCProcedure]
         public static int StringToInt32 (string value)
         {
-            return Convert.ToInt32 (value);
+            return Convert.ToInt32 (value, CultureInfo.InvariantCulture);
         }
 
         [KRPCProcedure]

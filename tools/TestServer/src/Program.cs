@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net;
 using System.Threading;
 using System.Reflection;
@@ -126,7 +127,7 @@ namespace TestServer
             if (showVersion) {
                 var assembly = Assembly.GetEntryAssembly ();
                 var info = FileVersionInfo.GetVersionInfo (assembly.Location);
-                var version = string.Format ("{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
+                var version = string.Format (CultureInfo.InvariantCulture, "{0}.{1}.{2}", info.FileMajorPart, info.FileMinorPart, info.FileBuildPart);
                 Console.WriteLine ("TestServer.exe version " + version);
                 return;
             }

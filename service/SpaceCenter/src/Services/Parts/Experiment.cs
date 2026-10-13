@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using KRPC.Service;
@@ -257,7 +258,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var situation = ScienceUtil.GetExperimentSituation (vessel);
                 var rndExperiment = ResearchAndDevelopment.GetExperiment (id);
                 var biome = rndExperiment.BiomeIsRelevantWhile (situation) ? Biome : string.Empty;
-                var subjectId = string.Format ("{0}@{1}{2}{3}", id, bodyName, situation, biome);
+                var subjectId = string.Format (CultureInfo.InvariantCulture, "{0}@{1}{2}{3}", id, bodyName, situation, biome);
                 var subject = ResearchAndDevelopment.GetSubjectByID (subjectId);
                 subject = subject ?? new global::ScienceSubject (rndExperiment, situation, vessel.mainBody, biome);
                 return new ScienceSubject (subject);

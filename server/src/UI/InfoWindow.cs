@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -118,23 +119,23 @@ namespace KRPC.UI
 
             GUILayout.Label (rpcInfoText, labelStyle);
             Configuration config = Configuration.Instance;
-            DrawInfo (rpcsExecutedText, core.RPCsExecuted.ToString ());
+            DrawInfo (rpcsExecutedText, core.RPCsExecuted.ToString (CultureInfo.CurrentCulture));
             DrawInfo (rpcRateText, Math.Round (core.RPCRate) + " RPC/s");
             DrawInfo (rpcExecutionMode, config.OneRPCPerUpdate ? singleRPCModeText : (config.AdaptiveRateControl ? adaptiveModeText : staticModeText));
             DrawInfo (maxTimePerUpdateText, config.OneRPCPerUpdate ? notApplicableText : config.MaxTimePerUpdate + " us");
             DrawInfo (rpcReceiveModeText, config.BlockingRecv ? blockingModeText : nonBlockingModeText);
             DrawInfo (recvTimeoutText, config.BlockingRecv ? config.RecvTimeout + " us" : notApplicableText);
-            DrawInfo (timePerRPCUpdateText, string.Format ("{0:F5} s", core.TimePerRPCUpdate));
-            DrawInfo (pollTimePerRPCUpdateText, string.Format ("{0:F5} s", core.PollTimePerRPCUpdate));
-            DrawInfo (execTimePerRPCUpdateText, string.Format ("{0:F5} s", core.ExecTimePerRPCUpdate));
+            DrawInfo (timePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.TimePerRPCUpdate));
+            DrawInfo (pollTimePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.PollTimePerRPCUpdate));
+            DrawInfo (execTimePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.ExecTimePerRPCUpdate));
 
             GUILayoutExtensions.Separator (separatorStyle);
 
             GUILayout.Label (streamInfoText, labelStyle);
-            DrawInfo (streamingRPCsText, core.StreamRPCs.ToString ());
-            DrawInfo (streamingRPCsExecutedText, core.StreamRPCsExecuted.ToString ());
+            DrawInfo (streamingRPCsText, core.StreamRPCs.ToString (CultureInfo.CurrentCulture));
+            DrawInfo (streamingRPCsExecutedText, core.StreamRPCsExecuted.ToString (CultureInfo.CurrentCulture));
             DrawInfo (streamingRPCRateText, Math.Round (core.StreamRPCRate) + " RPC/s");
-            DrawInfo (timePerStreamUpdateText, string.Format ("{0:F5} s", core.TimePerStreamUpdate));
+            DrawInfo (timePerStreamUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.TimePerStreamUpdate));
 
             GUILayoutExtensions.Separator (separatorStyle);
 

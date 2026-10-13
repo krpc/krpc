@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -163,7 +164,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool BoolValue {
             get {
                 CheckType (FieldType.Boolean);
-                return Convert.ToBoolean (InternalField.GetValue (Module.InternalModule));
+                return Convert.ToBoolean (InternalField.GetValue (Module.InternalModule), CultureInfo.InvariantCulture);
             }
             set { Assign (value); }
         }
@@ -179,7 +180,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public int IntValue {
             get {
                 CheckType (FieldType.Integer);
-                return Convert.ToInt32 (InternalField.GetValue (Module.InternalModule));
+                return Convert.ToInt32 (InternalField.GetValue (Module.InternalModule), CultureInfo.InvariantCulture);
             }
             set { Assign (value); }
         }
@@ -195,7 +196,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float FloatValue {
             get {
                 CheckType (FieldType.Float);
-                return Convert.ToSingle (InternalField.GetValue (Module.InternalModule));
+                return Convert.ToSingle (InternalField.GetValue (Module.InternalModule), CultureInfo.InvariantCulture);
             }
             set { Assign (value); }
         }
@@ -211,7 +212,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public double DoubleValue {
             get {
                 CheckType (FieldType.Double);
-                return Convert.ToDouble (InternalField.GetValue (Module.InternalModule));
+                return Convert.ToDouble (InternalField.GetValue (Module.InternalModule), CultureInfo.InvariantCulture);
             }
             set { Assign (value); }
         }
