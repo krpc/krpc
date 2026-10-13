@@ -107,7 +107,21 @@ namespace KRPC.SpaceCenter
         /// </summary>
         const float stoppedRotationRate = 0.05f;
 
+        /// <summary>
+        /// The actions queued by <see cref="RunInUpdate"/>.
+        /// </summary>
+        static readonly Queue<Action> pendingUpdate = new Queue<Action> ();
+
         static bool loggedUnavailable;
+
+        /// <summary>
+        /// Run an action from the next <c>Update</c>, where the game runs its own buttons,
+        /// instead of from the physics step that RPCs run in.
+        /// </summary>
+        internal static void RunInUpdate (Action action)
+        {
+            pendingUpdate.Enqueue (action);
+        }
 
         /// <summary>
         /// Wake the addon.
@@ -127,8 +141,18 @@ namespace KRPC.SpaceCenter
             Clear ();
         }
 
+        /// <summary>
+        /// Run the actions queued by <see cref="RunInUpdate"/>.
+        /// </summary>
+        public void Update ()
+        {
+            while (pendingUpdate.Count > 0)
+                pendingUpdate.Dequeue () ();
+        }
+
         static void Clear ()
         {
+            pendingUpdate.Clear ();
             hooked.Clear ();
             rotating.Clear ();
             walkedMovementMode.Clear ();

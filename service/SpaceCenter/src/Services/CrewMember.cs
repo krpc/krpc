@@ -223,7 +223,8 @@ namespace KRPC.SpaceCenter.Services
         /// Send the crew member outside on EVA, through the hatch of the part it is in, and
         /// return the vessel it becomes. The game switches to that vessel, which can then be
         /// walked around and flown using its <see cref="Vessel.Control"/>, and brought back
-        /// in with <see cref="Control.Board"/>.
+        /// in with <see cref="Control.Board"/>. The kerbal climbs out onto the ladder by the
+        /// hatch, if there is one.
         /// </summary>
         /// <remarks>
         /// Throws an exception if EVA is disabled for the game, if the crew member is not in
@@ -241,25 +242,68 @@ namespace KRPC.SpaceCenter.Services
                 throw new InvalidOperationException ("The crew member is not in a loaded vessel");
             if (part.vessel.isEVA)
                 throw new InvalidOperationException ("The crew member is already on EVA");
-            var eva = FlightEVA.fetch.spawnEVA (crewMember, part, part.airlock, true);
-            if (eva == null)
+            // A kerbal spawned during the physics step, where RPCs run, can leave the hatch
+            // at tens of meters per second and be thrown off the ladder. We spawn it from
+            // Update, as the game's EVA button does
+            var spawn = new EVASpawn ();
+            EVAAddon.RunInUpdate (() => {
+                if (part != null && part.vessel != null && part.vessel.loaded)
+                    spawn.Kerbal = FlightEVA.fetch.spawnEVA (crewMember, part, part.airlock, true);
+                spawn.Done = true;
+            });
+            return WaitForSpawn (spawn, crewMember.name, part.partInfo.title, 0);
+        }
+
+        sealed class EVASpawn
+        {
+            public bool Done;
+            public KerbalEVA Kerbal;
+        }
+
+        static Vessel WaitForSpawn (EVASpawn spawn, string name, string title, int tick)
+        {
+            if (!spawn.Done) {
+                if (tick > 500)
+                    throw new InvalidOperationException ("The kerbal failed to leave the vessel");
+                throw new YieldException<Func<Vessel>> (() => WaitForSpawn (spawn, name, title, tick + 1));
+            }
+            if (spawn.Kerbal == null)
                 throw new InvalidOperationException (
-                    "Failed to send " + crewMember.name + " on EVA; every hatch out of " +
-                    part.partInfo.title + " may be obstructed");
-            return WaitForEVA (eva, 0);
+                    "Failed to send " + name + " on EVA; every hatch out of " + title +
+                    " may be obstructed");
+            return WaitForEVA (spawn.Kerbal, 0);
         }
 
         static Vessel WaitForEVA (KerbalEVA eva, int tick)
         {
             // The game brings the kerbal into being over the following frames and then
-            // switches to it, so wait for the vessel to be flyable
+            // switches to it, so wait for the vessel to be flyable and its state machine
+            // to have started
             if (eva == null || eva.vessel == null)
                 throw new InvalidOperationException ("The kerbal was destroyed while leaving the vessel");
-            if (FlightGlobals.ActiveVessel == eva.vessel && eva.vessel.loaded && !eva.vessel.packed)
-                return new Vessel (eva.vessel);
+            if (FlightGlobals.ActiveVessel == eva.vessel && eva.vessel.loaded && !eva.vessel.packed &&
+                eva.fsm.Started)
+                return WaitForLadder (eva, 0);
             if (tick > 500)
                 throw new InvalidOperationException ("The kerbal failed to leave the vessel");
             throw new YieldException<Func<Vessel>> (() => WaitForEVA (eva, tick + 1));
+        }
+
+        static Vessel WaitForLadder (KerbalEVA eva, int tick)
+        {
+            // The game starts the kerbal on the ladder by the hatch only if the ladder's
+            // trigger has registered it by then, which can take a few ticks longer. When
+            // it has not, we take hold of the ladder once it has, or give up after 25
+            // ticks for a hatch with no ladder
+            if (eva == null || eva.vessel == null)
+                throw new InvalidOperationException ("The kerbal was destroyed while leaving the vessel");
+            if (!eva.autoGrabLadderOnStart || eva.OnALadder || tick > 25)
+                return new Vessel (eva.vessel);
+            if (eva.LadderInReach () && eva.fsm.CurrentState.IsValid (eva.On_ladderGrabStart)) {
+                eva.fsm.RunEvent (eva.On_ladderGrabStart);
+                return new Vessel (eva.vessel);
+            }
+            throw new YieldException<Func<Vessel>> (() => WaitForLadder (eva, tick + 1));
         }
 
         /// <summary>
