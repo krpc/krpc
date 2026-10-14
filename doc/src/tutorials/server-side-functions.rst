@@ -47,22 +47,18 @@ This event fires when the vessel's altitude exceeds 1000 meters:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         event = conn.add_event(lambda: flight.mean_altitude > 1000)
-         with event.condition:
-             event.wait()
-             print("Altitude reached 1000m")
+      .. literalinclude:: /scripts/tutorials/server-side-functions/AltitudeEvent.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var evnt = connection.AddEvent (() => flight.MeanAltitude > 1000);
-         lock (evnt.Condition) {
-             evnt.Wait ();
-             Console.WriteLine ("Altitude reached 1000m");
-         }
+      .. literalinclude:: /scripts/tutorials/server-side-functions/AltitudeEvent.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The client compiles the lambda into a server side function. The mean altitude call becomes an
 embedded RPC, re-invoked on each check. ``1000`` becomes a constant.
@@ -85,18 +81,18 @@ For example:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         threshold = 50000
-         event = conn.add_event(lambda: vessel.orbit.apoapsis_altitude > threshold * 2)
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CapturedValue.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var threshold = 50000;
-         var evnt = connection.AddEvent (
-             () => vessel.Orbit.ApoapsisAltitude > threshold * 2);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CapturedValue.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The client computes ``threshold * 2`` when it creates the event, so the function compares the
 apoapsis with the constant 100000. To use a new value of ``threshold``, compile a new function
@@ -115,19 +111,18 @@ computation on each stream update:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         # The vessel's altitude, in kilometers, computed on the server
-         stream = conn.add_stream(lambda: flight.mean_altitude / 1000)
-         print("Altitude:", stream(), "km")
+      .. literalinclude:: /scripts/tutorials/server-side-functions/AltitudeStream.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         // The vessel's altitude, in kilometers, computed on the server
-         var stream = connection.AddStream (() => flight.MeanAltitude / 1000);
-         Console.WriteLine ("Altitude: " + stream.Get () + " km");
+      .. literalinclude:: /scripts/tutorials/server-side-functions/AltitudeStream.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 A function can produce a collection. This streams the thrust of every engine on the vessel,
 read in a single physics tick per update:
@@ -136,24 +131,18 @@ read in a single physics tick per update:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         engines = vessel.parts.engines
-         stream = conn.add_stream(
-             lambda: [engine.thrust for engine in engines]
-         )
-         for thrust in stream():
-             print(thrust)
+      .. literalinclude:: /scripts/tutorials/server-side-functions/EngineThrusts.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var engines = vessel.Parts.Engines;
-         var stream = connection.AddStream (
-             () => engines.Select (engine => engine.Thrust).ToList ());
-         foreach (var thrust in stream.Get ())
-             Console.WriteLine (thrust);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/EngineThrusts.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 Here ``engines`` is a captured variable, so the list of engines is fixed when the function is
 compiled. The server re-reads only their thrusts. Read the engine list inside the function to
@@ -172,25 +161,18 @@ engines that staging reveals:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         event = conn.add_event(
-             lambda: any(not engine.has_fuel for engine in vessel.parts.engines)
-         )
-         with event.condition:
-             event.wait()
-             print("An engine has run out of fuel")
+      .. literalinclude:: /scripts/tutorials/server-side-functions/OutOfFuelEvent.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var evnt = connection.AddEvent (
-             () => vessel.Parts.Engines.Any (engine => !engine.HasFuel));
-         lock (evnt.Condition) {
-             evnt.Wait ();
-             Console.WriteLine ("An engine has run out of fuel");
-         }
+      .. literalinclude:: /scripts/tutorials/server-side-functions/OutOfFuelEvent.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 Statements, Loops and Local Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -202,23 +184,18 @@ liquid fuel left:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         def fuel_fraction():
-             resources = vessel.resources
-             amount = resources.amount("LiquidFuel")
-             capacity = resources.max("LiquidFuel")
-             return amount / capacity
-
-         stream = conn.add_stream(fuel_fraction)
+      .. literalinclude:: /scripts/tutorials/server-side-functions/FuelFraction.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         // A C# lambda holds a single expression
-         var stream = connection.AddStream (
-             () => vessel.Resources.Amount ("LiquidFuel") / vessel.Resources.Max ("LiquidFuel"));
+      .. literalinclude:: /scripts/tutorials/server-side-functions/FuelFraction.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 A compiled function supports these statements:
 
@@ -238,33 +215,18 @@ with a type annotation:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         def burn_ratings():
-             ratings: list[str] = []
-             for engine in vessel.parts.engines:
-                 if not engine.active:
-                     continue
-                 if engine.thrust > 0.9 * engine.available_thrust:
-                     ratings.append("full")
-                 else:
-                     ratings.append("partial")
-             return ratings
-
-         print(conn.run(burn_ratings))
+      .. literalinclude:: /scripts/tutorials/server-side-functions/BurnRatings.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         // A C# lambda holds a single expression, so LINQ operators replace the loop
-         var ratings = connection.Run (
-             () => vessel.Parts.Engines
-                 .Where (engine => engine.Active)
-                 .Select (engine =>
-                     engine.Thrust > 0.9 * engine.AvailableThrust ? "full" : "partial")
-                 .ToList ());
-         Console.WriteLine (string.Join (", ", ratings));
+      .. literalinclude:: /scripts/tutorials/server-side-functions/BurnRatings.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 A counter that starts as an integer and later holds a fraction takes an annotation too, such as
 ``total: float = 0``.
@@ -280,24 +242,18 @@ once, with every step in the same physics tick:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         def deploy():
-             for parachute in vessel.parts.parachutes:
-                 if not parachute.deployed:
-                     parachute.deploy()
-
-         conn.run(deploy)
+      .. literalinclude:: /scripts/tutorials/server-side-functions/RunOnce.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         // A single side-effecting call, run on the server
-         connection.Run (() => vessel.Control.ToggleActionGroup (1));
-
-         // Compute and return a value in one tick
-         var altitude = connection.Run (() => flight.MeanAltitude / 1000);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/RunOnce.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The game holds still between the steps, and the whole function costs one round trip. A function
 that returns no value gives the client's null value, or runs through a ``void`` overload where
@@ -320,26 +276,18 @@ serves many inputs. This computes how long a burn takes, for several changes in 
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         @conn.compile
-         def burn_time(delta_v: float) -> float:
-             exhaust_velocity = vessel.specific_impulse * 9.82
-             final_mass = vessel.mass / math.exp(delta_v / exhaust_velocity)
-             return (vessel.mass - final_mass) * exhaust_velocity / vessel.available_thrust
-
-         for delta_v in (100.0, 250.0, 400.0):
-             print(conn.run(burn_time, delta_v))
+      .. literalinclude:: /scripts/tutorials/server-side-functions/BurnTime.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var burnTime = connection.Compile ((double deltaV) =>
-             (vessel.Mass - vessel.Mass / Math.Exp (deltaV / (vessel.SpecificImpulse * 9.82)))
-                 * vessel.SpecificImpulse * 9.82 / vessel.AvailableThrust);
-         foreach (var deltaV in new [] { 100.0, 250.0, 400.0 })
-             Console.WriteLine (connection.Run<double> (burnTime, deltaV));
+      .. literalinclude:: /scripts/tutorials/server-side-functions/BurnTime.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 In Python, the function is a ``def`` with a type annotation on each parameter. Its arguments bind
 as Python binds them, with defaults and keyword arguments. In C#, the function is a lambda with
@@ -352,21 +300,10 @@ A function can keep a value from one evaluation to the next, such as a running t
 Python, declare a captured variable ``nonlocal``. This stream counts the stream updates in
 which the engines are firing:
 
-.. code-block:: python
-
-   def firing_counter():
-       updates = 0
-
-       @conn.compile
-       def count():
-           nonlocal updates
-           if vessel.thrust > 0:
-               updates += 1
-           return updates
-
-       return count
-
-   stream = conn.add_stream(firing_counter())
+.. literalinclude:: /scripts/tutorials/server-side-functions/FiringCounter.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 The variable starts with the value it holds when the function is compiled, and takes its type
 from that value. To give it another type, such as a list that starts empty, start the function
@@ -389,15 +326,18 @@ them from the type of the value. This streams the vessel's name in upper case:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         stream = conn.add_stream(lambda: vessel.name.upper())
+      .. literalinclude:: /scripts/tutorials/server-side-functions/UpperCaseName.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var stream = connection.AddStream (() => vessel.Name.ToUpperInvariant ());
+      .. literalinclude:: /scripts/tutorials/server-side-functions/UpperCaseName.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The compilers translate the language's string operations, such as length, indexing,
 searching, splitting and case conversion. The expression API names them
@@ -427,22 +367,18 @@ on the stream or event evaluating the function:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         def check_fuel():
-             if vessel.resources.amount("LiquidFuel") < 100:
-                 raise RuntimeError("not enough fuel")
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CheckFuel.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         // A C# lambda cannot throw, so the expression API builds the statement
-         // around a compiled condition
-         var checkFuel = Expression.IfThen (connection,
-             connection.Compile (() => vessel.Resources.Amount ("LiquidFuel") < 100),
-             Expression.Throw (connection, "KRPC", "InvalidOperationException",
-                 Expression.ConstantString (connection, "not enough fuel")));
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CheckFuel.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 A function raises the exceptions services declare, so your program catches a typed exception.
 A service's own exception classes map onto themselves.
@@ -458,48 +394,18 @@ A function can also handle an exception, with the language's try statement:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         def switch_modes() -> str:
-             try:
-                 for engine in vessel.parts.engines:
-                     engine.toggle_mode()
-                 return "switched"
-             except Exception as error:
-                 return "could not switch: " + error
+      .. literalinclude:: /scripts/tutorials/server-side-functions/SwitchModes.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         // A C# lambda cannot hold a loop or a handler, so the expression API builds them
-         var engine = Expression.Variable (connection, "engine",
-             Type.ClassType (connection, "SpaceCenter", "Engine"));
-         var result = Expression.Variable (connection, "result", Type.String (connection));
-         var error = Expression.Variable (connection, "error", Type.String (connection));
-         var toggleMode = Connection.GetCall (
-             (System.Linq.Expressions.Expression<Action>)
-             (() => vessel.Parts.Engines [0].ToggleMode ()));
-         var switchModes = Expression.BlockWithVariables (connection,
-             new List<Expression> { engine, result, error },
-             new List<Expression> {
-                 Expression.TryCatchAll (connection,
-                     Expression.Block (connection, new List<Expression> {
-                         Expression.ForEach (connection, engine,
-                             connection.Compile (() => vessel.Parts.Engines),
-                             Expression.CallWithArguments (connection, toggleMode,
-                                 new Dictionary<int, Expression> { { 0, engine } })),
-                         Expression.Assign (connection, result,
-                             Expression.ConstantString (connection, "switched"))
-                     }),
-                     error,
-                     Expression.Assign (connection, result,
-                         Expression.StringConcat (connection, new List<Expression> {
-                             Expression.ConstantString (connection, "could not switch: "),
-                             error
-                         }))),
-                 result
-             });
+      .. literalinclude:: /scripts/tutorials/server-side-functions/SwitchModes.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 These rules apply to handlers:
 
@@ -528,27 +434,18 @@ angle between the vessel's facing direction and its velocity relative to the sur
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         stdlib = conn.std_lib
-         frame = vessel.orbit.body.reference_frame
-         stream = conn.add_stream(
-             lambda: stdlib.radians_to_degrees(
-                 stdlib.vector_angle(
-                     vessel.direction(frame), vessel.velocity(frame)
-                 )
-             )
-         )
+      .. literalinclude:: /scripts/tutorials/server-side-functions/SurfaceAngle.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var stdlib = connection.StdLib ();
-         var frame = vessel.Orbit.Body.ReferenceFrame;
-         var stream = connection.AddStream (
-             () => stdlib.RadiansToDegrees (stdlib.VectorAngle (
-                 vessel.Direction (frame), vessel.Velocity (frame))));
+      .. literalinclude:: /scripts/tutorials/server-side-functions/SurfaceAngle.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 The service covers:
 
@@ -581,16 +478,18 @@ game's log, ``KSP.log``. This logs the vessel's mass from the server:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         conn.run(lambda: print("Mass:", vessel.mass, "kg"))
+      .. literalinclude:: /scripts/tutorials/server-side-functions/PrintMass.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         connection.Run (
-             () => Console.WriteLine (FormattableString.Invariant ($"Mass: {vessel.Mass} kg")));
+      .. literalinclude:: /scripts/tutorials/server-side-functions/PrintMass.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 A print in an event or stream function writes a line on every stream update.
 
@@ -684,22 +583,18 @@ other assignment to a variable or the other branch of a conditional:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         def heaviest_engine():
-             best = None
-             for engine in vessel.parts.engines:
-                 if best is None or engine.part.mass > best.part.mass:
-                     best = engine
-             return best
+      .. literalinclude:: /scripts/tutorials/server-side-functions/HeaviestEngine.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var heaviest = connection.Run (
-             () => vessel.Parts.Engines.Count == 0 ? null
-                 : vessel.Parts.Engines.OrderBy (engine => engine.Part.Mass).Last ());
+      .. literalinclude:: /scripts/tutorials/server-side-functions/HeaviestEngine.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 Elsewhere, give a null its type with a type annotation or a cast. The expression API has
 :meth:`Expression.constant_null`.
@@ -725,19 +620,18 @@ different values, give it parameters, as in :ref:`server-side-functions-argument
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         step = conn.compile(lambda: vessel.control.toggle_action_group(1))
-         while True:
-             conn.run(step)
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CompiledStep.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var step = connection.Compile (() => vessel.Control.ToggleActionGroup (1));
-         while (true)
-             connection.Run (step);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CompiledStep.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 Compiling a function also compiles it to native code on the server. A lambda passed straight to
 ``Run`` is compiled there on every call, on the game's main thread, so a large one can make the game
@@ -830,40 +724,34 @@ This truncates the altitude to a whole number of meters:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         # Truncate the altitude to a whole number of meters
-         expr = expression.cast(
-             expression.call(mean_altitude), types.int()
-         )
+      .. literalinclude:: /scripts/tutorials/server-side-functions/TruncateAltitude.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         // Truncate the altitude to a whole number of meters
-         var expr = Expression.Cast (connection,
-             Expression.Call (connection, meanAltitude),
-             Type.Int (connection));
+      .. literalinclude:: /scripts/tutorials/server-side-functions/TruncateAltitude.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
    .. group-tab:: C++
 
-      .. code-block:: cpp
-
-         // Truncate the altitude to a whole number of meters
-         auto expr = Expr::cast(conn,
-           Expr::call(conn, mean_altitude),
-           KType::int_(conn));
+      .. literalinclude:: /scripts/tutorials/server-side-functions/TruncateAltitude.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
    .. group-tab:: Java
 
-      .. code-block:: java
-
-         // Truncate the altitude to a whole number of meters
-         Expression expr = Expression.cast(
-             connection,
-             Expression.call(connection, meanAltitude),
-             Type.int_(connection));
+      .. literalinclude:: /scripts/tutorials/server-side-functions/TruncateAltitude.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 Expressions are statically typed, with the types of the server's procedures. Numbers of
 different types convert to a common type, so an integer multiplies a double directly.
@@ -982,33 +870,34 @@ and build one. :meth:`Expression.get_field` reads a field by name:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         # The Name field of a structure a call returns
-         expr = expression.get_field(expression.call(site_info), "Name")
+      .. literalinclude:: /scripts/tutorials/server-side-functions/StructureField.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         // The Name field of a structure a call returns
-         var expr = Expression.GetField (connection,
-             Expression.Call (connection, siteInfo), "Name");
+      .. literalinclude:: /scripts/tutorials/server-side-functions/StructureField.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
    .. group-tab:: C++
 
-      .. code-block:: cpp
-
-         // The Name field of a structure a call returns
-         auto expr = Expr::get_field(conn, Expr::call(conn, site_info), "Name");
+      .. literalinclude:: /scripts/tutorials/server-side-functions/StructureField.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
    .. group-tab:: Java
 
-      .. code-block:: java
-
-         // The Name field of a structure a call returns
-         Expression expr = Expression.getField(
-             connection, Expression.call(connection, siteInfo), "Name");
+      .. literalinclude:: /scripts/tutorials/server-side-functions/StructureField.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 :meth:`Expression.create_struct` builds a structure from its type and its field values, in the
 order the structure declares them. A field's name is the one the service declares, as shown in
@@ -1060,44 +949,34 @@ particular vessel:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         target = conn.get_call(getattr, conn.space_center, "target_vessel")
-         expr = expression.equal(
-             expression.call(target),
-             expression.constant_object(some_vessel._object_id),
-         )
-         event = conn.add_event(expr)
+      .. literalinclude:: /scripts/tutorials/server-side-functions/TargetEvent.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var target = Connection.GetCall (() => spaceCenter.TargetVessel);
-         var expr = Expression.Equal (connection,
-             Expression.Call (connection, target),
-             Expression.ConstantObject (connection, someVessel.id));
-         var evnt = connection.AddEvent (expr);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/TargetEvent.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
    .. group-tab:: C++
 
-      .. code-block:: cpp
-
-         auto target = sc.target_vessel_call();
-         auto expr = Expr::equal(conn,
-           Expr::call(conn, target),
-           Expr::constant_object(conn, some_vessel._id));
-         auto event = krpc::add_event(expr);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/TargetEvent.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
    .. group-tab:: Java
 
-      .. code-block:: java
-
-         ProcedureCall target = connection.getCall(SpaceCenter.class, "getTargetVessel");
-         Expression expr = Expression.equal(connection,
-             Expression.call(connection, target),
-             Expression.constantObject(connection, someVessel.id));
-         Event event = connection.addEvent(expr);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/TargetEvent.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 An object is identified by its identifier in the communication protocol, which each client holds
 on its remote objects. In Python it is the internal attribute ``_object_id``. The compilers embed
@@ -1113,58 +992,34 @@ fuel check from :ref:`Exceptions <server-side-functions-exceptions>`:
 
    .. group-tab:: Python
 
-      .. code-block:: python
-
-         amount = conn.get_call(vessel.resources.amount, "LiquidFuel")
-         expr = expression.if_then(
-             expression.less_than(
-                 expression.call(amount), expression.constant_double(100)
-             ),
-             expression.throw(
-                 "KRPC", "InvalidOperationException",
-                 expression.constant_string("not enough fuel"),
-             ),
-         )
-         conn.run(expr)
+      .. literalinclude:: /scripts/tutorials/server-side-functions/ThrowException.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. code-block:: csharp
-
-         var amount = Connection.GetCall (() => vessel.Resources.Amount ("LiquidFuel"));
-         var expr = Expression.IfThen (connection,
-             Expression.LessThan (connection,
-                 Expression.Call (connection, amount),
-                 Expression.ConstantDouble (connection, 100)),
-             Expression.Throw (connection, "KRPC", "InvalidOperationException",
-                 Expression.ConstantString (connection, "not enough fuel")));
-         connection.Run (expr);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/ThrowException.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
    .. group-tab:: C++
 
-      .. code-block:: cpp
-
-         auto amount = vessel.resources().amount_call("LiquidFuel");
-         auto expr = Expr::if_then(conn,
-           Expr::less_than(conn,
-             Expr::call(conn, amount), Expr::constant_double(conn, 100)),
-           Expr::throw_(conn, "KRPC", "InvalidOperationException",
-             Expr::constant_string(conn, "not enough fuel")));
-         krpc::run(expr);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/ThrowException.cpp
+         :language: cpp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
    .. group-tab:: Java
 
-      .. code-block:: java
-
-         ProcedureCall amount = connection.getCall(
-             vessel.getResources(), "amount", "LiquidFuel");
-         Expression expr = Expression.ifThen(connection,
-             Expression.lessThan(connection,
-                 Expression.call(connection, amount),
-                 Expression.constantDouble(connection, 100)),
-             Expression.throw_(connection, "KRPC", "InvalidOperationException",
-                 Expression.constantString(connection, "not enough fuel")));
-         connection.run(expr);
+      .. literalinclude:: /scripts/tutorials/server-side-functions/ThrowException.java
+         :language: java
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
 :meth:`Expression.try_catch`, :meth:`Expression.try_catch_all` and :meth:`Expression.try_finally`
 handle exceptions.

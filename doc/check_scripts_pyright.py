@@ -27,7 +27,10 @@ CONFIG = "pyrightconfig.json"
 #   service from extending.rst, which has no generated stub.
 # - DockingGuidance.py imports numpy, which the test does not install, and
 #   passes 1 to curses' window.keypad, which typeshed declares as taking a bool.
+# - SwitchModes.py adds a handler's exception to a string. In a server side
+#   function the handler binds the exception's message, which is a string.
 ALLOWED = {
+    ("tutorials/server-side-functions/SwitchModes.py", "reportOperatorIssue"),
     ("extending/ServiceAPIExample.py", "reportAttributeAccessIssue"),
     ("tutorials/docking-guidance/DockingGuidance.py", "reportMissingImports"),
     ("tutorials/docking-guidance/DockingGuidance.py", "reportArgumentType"),
