@@ -12,11 +12,9 @@ class TestPartsPart(krpctest.TestCase):
         if active_vessel is None or active_vessel.name != "Parts":
             cls.launch_vessel_from_vab("Parts")
             cls.remove_other_vessels()
-            # TODO: wait needed to allow dynamic
-            # pressure calculations to settle
-            cls.wait(3)
         cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
+        cls.wait_for_rest(cls.vessel.parts.root)
         cls.parts = cls.vessel.parts
         cls.far_available = cls.sc.far_available
 
