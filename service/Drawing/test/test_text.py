@@ -67,7 +67,7 @@ class TestText(krpctest.TestCase):
     def test_face_camera(self):
         text = self.add_text()
         text.face_camera = True
-        self.wait()
+        self.wait_for_frame()
         self.assertTrue(text.face_camera)
         text.remove()
 

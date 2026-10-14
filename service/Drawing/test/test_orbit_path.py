@@ -31,7 +31,7 @@ class TestOrbitPath(krpctest.TestCase):
         self.assertFalse(path.start_arrow)
         self.assertFalse(path.end_arrow)
         path.end_arrow = True
-        self.wait()
+        self.wait_for_frame()
         path.remove()
         self.assertRaises(self.destroyed, path.remove)
 
@@ -41,11 +41,11 @@ class TestOrbitPath(krpctest.TestCase):
         self.assertFalse(path.whole_orbit)
         path.end_true_anomaly = -1
         path.end_arrow = True
-        self.wait()
+        self.wait_for_frame()
         self.assertAlmostEqual(1, path.start_true_anomaly)
         self.assertAlmostEqual(-1, path.end_true_anomaly)
         path.whole_orbit = True
-        self.wait()
+        self.wait_for_frame()
         self.assertTrue(path.whole_orbit)
         path.remove()
 
@@ -54,10 +54,10 @@ class TestOrbitPath(krpctest.TestCase):
         path = self.drawing.add_orbit(self.space_center.active_vessel.orbit)
         path.start_true_anomaly = 1e12
         path.end_true_anomaly = 0
-        self.wait()
+        self.wait_for_frame()
         path.start_true_anomaly = 0
         path.end_true_anomaly = 1e12
-        self.wait()
+        self.wait_for_frame()
         self.assertAlmostEqual(1e12, path.end_true_anomaly)
         path.remove()
 
@@ -66,25 +66,25 @@ class TestOrbitPath(krpctest.TestCase):
         path = self.drawing.add_orbit(orbit)
         path.start_arrow = True
         path.end_arrow = True
-        self.wait()
+        self.wait_for_frame()
         # A segment beyond the asymptotes is clamped to the part of the orbit inside the
         # sphere of influence
         path.start_true_anomaly = -math.pi
         path.end_true_anomaly = math.pi
-        self.wait()
+        self.wait_for_frame()
         path.remove()
         orbit.remove()
 
     def test_removed_orbit(self):
         orbit = self.create_orbit(2000000, 0.2)
         path = self.drawing.add_orbit(orbit)
-        self.wait()
+        self.wait_for_frame()
         orbit.remove()
-        self.wait()
+        self.wait_for_frame()
         # The path stays, and can be given another orbit
         self.assertTrue(path.visible)
         path.orbit = self.space_center.active_vessel.orbit
-        self.wait()
+        self.wait_for_frame()
         path.remove()
 
 

@@ -33,7 +33,7 @@ class TestBox(krpctest.TestCase):
         box.color = (0, 1, 0)
         box.thickness = 0.5
         box.visible = True
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual((0, 5, 0), box.center)
         self.assertEqual((3, 10, 3), box.size)
         self.assertAlmostEqual((0, 0.7071068, 0, 0.7071068), box.rotation)

@@ -29,7 +29,7 @@ class TestPolyline(krpctest.TestCase):
     def test_vertices(self):
         polyline = self.drawing.add_polyline(self.vertices, self.ref)
         polyline.end_arrow = True
-        self.wait()
+        self.wait_for_frame()
         # A polyline can change its number of vertices
         vertices: list[tuple[float, float, float]] = [
             (0, 0, 0),
@@ -39,12 +39,12 @@ class TestPolyline(krpctest.TestCase):
             (0, 0, 5),
         ]
         polyline.vertices = vertices
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual(vertices, polyline.vertices)
         polyline.vertices = [(0, 0, 0)]
-        self.wait()
+        self.wait_for_frame()
         polyline.vertices = []
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual([], polyline.vertices)
         polyline.remove()
 

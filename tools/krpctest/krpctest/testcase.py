@@ -367,6 +367,12 @@ class TestCase(AssertionsMixin):
         cls.wait_until(at_rest, message="the vessel to come to rest")
 
     @classmethod
+    def wait_for_frame(cls):
+        """Sleep for long enough that the game draws a frame at 10 fps or more, so its
+        rendering code runs on the state set before the call."""
+        cls.wait()
+
+    @classmethod
     def wait_until(cls, predicate, timeout=30, message=None, interval=0.1):
         """Repeatedly call wait() until predicate() returns a truthy value, and
         return that value. Fail the test if timeout seconds elapse first.

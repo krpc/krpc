@@ -32,7 +32,7 @@ class TestMapMarker(krpctest.TestCase):
         marker.caption = "Top"
         marker.color = (1, 0, 0)
         marker.visible = True
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual((0, 10, 0), marker.position)
         self.assertEqual(self.icons.apoapsis, marker.icon)
         self.assertEqual("Top", marker.caption)
@@ -44,7 +44,7 @@ class TestMapMarker(krpctest.TestCase):
         marker = self.drawing.add_map_marker((0, 0, 0), self.ref)
         for icon in self.icons:
             marker.icon = icon
-            self.wait()
+            self.wait_for_frame()
             self.assertEqual(icon, marker.icon)
         marker.remove()
 

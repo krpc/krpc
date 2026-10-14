@@ -25,7 +25,7 @@ class TestAxes(krpctest.TestCase):
             self.assertEqual(self.ref, line.reference_frame)
             self.assertTrue(line.end_arrow)
             self.assertFalse(line.start_arrow)
-        self.wait()
+        self.wait_for_frame()
         # Each axis is a line of its own
         x.remove()
         self.assertRaises(self.destroyed, x.remove)
