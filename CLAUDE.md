@@ -31,7 +31,7 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
    `bazel test //...` does not work.
  * `bazel build //...` — **the second gate**: `//:test` does not build every target. Its log must
    be clean, build progress messages only, with no warnings or other output.
- * `//:lint` — Python, C++, C, Java, doc lint.
+ * `//:lint` — Python, C++, C, Java, Lua (luacheck, `.luacheckrc`), doc lint.
  * `//core:test`, `//client/python:test`, … — one package, when iterating.
  * `//doc:spelling` — American-English gate; `//doc:check-documented` — every RPC documented.
  * `//:csproj-test` — `.csproj` file-list check.
@@ -155,8 +155,9 @@ way writing here goes wrong.
  * Examples live in `doc/src/scripts/<page>/`, where `<page>` is the path of the page that
    includes them (or of its template under `doc/api`). They are pulled in with
    `.. literalinclude::` inside a `.. tabs::` block, one tab per client language. The build
-   compiles the C, C++, C# and Java examples, and type-checks the Python ones. A
-   `.. code-block::` is for shell commands and for short inline fragments in the client guides.
+   compiles the C, C++, C# and Java examples, type-checks the Python ones and lints the Lua
+   ones. A `.. code-block::` is for shell commands and for short inline fragments in the client
+   guides.
  * A fragment is a complete program whose shown part sits between `[docs]` and `[/docs]`
    comments, included with `:start-after: [docs]`, `:end-before: [/docs]` and `:dedent:`.
  * A downloadable script carries no markers. Part of one is included by its own text with

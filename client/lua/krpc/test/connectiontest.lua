@@ -2,7 +2,6 @@ local luaunit = require 'luaunit'
 local class = require 'pl.class'
 local socket = require 'socket'
 local encoder = require 'krpc.encoder'
-local schema = require 'krpc.schema.KRPC'
 
 -- A stand-in for a kRPC server, which sends back whatever it is sent. These tests are
 -- about how a transport moves bytes, so nothing above the transport has to be understood
@@ -75,13 +74,10 @@ function ConnectionTest:test_send_receive_in_pieces()
 end
 
 function ConnectionTest:test_send_receive_message()
-  local response = schema.Response()
-  local result = response.results:add()
-  result.value = 'foo'
-  local data = encoder.encode_message_with_size(response)
+  local data = encoder.encode_message_with_size('Response', { results = { { value = 'foo' } } })
   self.conn:send(data)
   self.server:echo(#data)
-  local received = self.conn:receive_message(schema.Response)
+  local received = self.conn:receive_message('Response')
   luaunit.assertEquals(received.results[1].value, 'foo')
 end
 

@@ -187,19 +187,6 @@ http_archive(
     url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.2-linux-x86.tar.gz",
 )
 
-# The protoc plugin that generates the schema, and the runtime it generates for: the
-# same release supplies both, so the lua client's dependency on it is this repository
-# too (see //tools/build/lua).
-http_archive(
-    name = "protoc_lua",
-    build_file = "//tools/build/lua:protobuf_lua.BUILD",
-    patch_args = ["-p1"],
-    patches = ["//tools/build/lua:protobuf_lua_endian.patch"],
-    sha256 = "28f4daa026effb81cebfdf580b0fc5732e520c0f4ade53e940052d89cddf4264",
-    strip_prefix = "protobuf-lua-1.1.2",
-    url = "https://github.com/djungelorm/protobuf-lua/archive/v1.1.2.tar.gz",
-)
-
 # ----------------------- C# dependencies ------------------------------------------------
 
 http_archive(
@@ -428,19 +415,27 @@ filegroup(
 http_archive(
     name = "lua",
     build_file = "//tools/build/lua:lua.BUILD",
-    sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333",
-    strip_prefix = "lua-5.1.5",
-    url = "https://www.lua.org/ftp/lua-5.1.5.tar.gz",
+    sha256 = "2335b6c582a52654f94612bf10d2f4672805d05329aa6568b1d8cd9e5c6fb8e6",
+    strip_prefix = "lua-5.4.9",
+    url = "https://www.lua.org/ftp/lua-5.4.9.tar.gz",
 )
 
 http_archive(
+    name = "lua_protobuf",
+    build_file = "//tools/build/lua:lua_protobuf.BUILD",
+    sha256 = "54feb9c48e13304e50a4177976b66c1ad395364c500bf00cbf9e3cb59c36ed91",
+    strip_prefix = "lua-protobuf-0.5.3",
+    url = "https://github.com/starwing/lua-protobuf/archive/refs/tags/0.5.3.tar.gz",
+)
+
+# The head of lunarmodules/luasocket#469, which builds socket.unix on Windows for the
+# connect_local tests. Return to a release tag once one includes it.
+http_archive(
     name = "lua_luasocket",
     build_file = "//tools/build/lua:luasocket.BUILD",
-    patch_args = ["-p1"],
-    patches = ["//tools/build/lua:luasocket_windows_unix.patch"],
-    sha256 = "bf033aeb9e62bcaa8d007df68c119c966418e8c9ef7e4f2d7e96bddeca9cca6e",
-    strip_prefix = "luasocket-3.1.0",
-    url = "https://github.com/lunarmodules/luasocket/archive/refs/tags/v3.1.0.tar.gz",
+    sha256 = "378d06cf2ff2189ded8fd8959ee95554ba1a0756dbcea2073a215e44bde8cbf4",
+    strip_prefix = "luasocket-078012420563926b089c15b5cee118a50205d5c6",
+    url = "https://github.com/lunarmodules/luasocket/archive/078012420563926b089c15b5cee118a50205d5c6.tar.gz",
 )
 
 http_archive(
@@ -465,6 +460,22 @@ http_archive(
     sha256 = "bd0085dc35c847afab0dbafc3669490ddc81b85623068ee0debe7667ffc03454",
     strip_prefix = "luaunit-LUAUNIT_V3_5",
     url = "https://github.com/bluebird75/luaunit/archive/refs/tags/LUAUNIT_V3_5.tar.gz",
+)
+
+http_archive(
+    name = "lua_luacheck",
+    build_file = "//tools/build/lua:luacheck.BUILD",
+    sha256 = "8efe62a7da4fdb32c0c22ec1f7c9306cbc397d7d40493c29988221a059636e25",
+    strip_prefix = "luacheck-1.2.0",
+    url = "https://github.com/lunarmodules/luacheck/archive/refs/tags/v1.2.0.tar.gz",
+)
+
+http_archive(
+    name = "lua_argparse",
+    build_file = "//tools/build/lua:argparse.BUILD",
+    sha256 = "d344e49404c3e7b3e7fa4fe6741c106f25909d9b24923cb08dcceda1f9754809",
+    strip_prefix = "argparse-0.7.1",
+    url = "https://github.com/luarocks/argparse/archive/refs/tags/0.7.1.tar.gz",
 )
 
 # ----------------------- Module Manager -------------------------------------------------

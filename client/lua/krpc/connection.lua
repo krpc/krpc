@@ -58,24 +58,27 @@ function Connection:receive(length)
   if length == 0 then
     return ''
   end
-  data, err = self._socket:receive(length)
+  local data, err = self._socket:receive(length)
   if data == nil then
     error('Socket error: ' .. err)
   end
   return data
 end
 
-function Connection:send_message(message)
-  -- Send a protobuf message.
-  data = encoder.encode_message_with_size(message)
+function Connection:send_message(type_name, message)
+  -- Send a protobuf message of the named type.
+  local data = encoder.encode_message_with_size(type_name, message)
   self:send(data)
 end
 
-function Connection:receive_message(typ)
-  -- Receive a protobuf message. Its size arrives in front of it as a varint, whose length is
-  -- only known once its last byte has arrived, so it is read a byte at a time. Reading the
-  -- size here saves a protected call per byte, which handing the bytes so far to a decoder
-  -- that raises until the whole of it has arrived would cost.
+function Connection:receive_message(type_name)
+  -- Receive a protobuf message of the named type
+  return decoder.decode_message(self:receive_message_data(), type_name)
+end
+
+function Connection:receive_message_data()
+  -- Receive the bytes of a protobuf message. Its size arrives in front of it as a varint, read
+  -- a byte at a time, as its length is only known once its last byte has arrived.
   local size = 0
   local shift = 1
   -- A message size is a 32 bit value, so five bytes carry the whole of it. A varint that has
@@ -84,7 +87,7 @@ function Connection:receive_message(typ)
     local byte = self:receive(1):byte()
     size = size + (byte % 128) * shift
     if byte < 128 then
-      return decoder.decode_message(self:receive(size), typ)
+      return self:receive(size)
     end
     shift = shift * 128
   end

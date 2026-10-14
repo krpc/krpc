@@ -1,6 +1,5 @@
 local class = require 'pl.class'
 local krpc = require 'krpc.init'
-local platform = require 'krpc.platform'
 
 ServerTest = class()
 

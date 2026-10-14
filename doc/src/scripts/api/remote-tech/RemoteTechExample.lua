@@ -1,5 +1,4 @@
 local krpc = require 'krpc'
-local math = require 'math'
 local conn = krpc.connect('RemoteTech Example')
 local vessel = conn.space_center.active_vessel
 

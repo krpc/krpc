@@ -17,15 +17,10 @@ Source and issue tracker: https://github.com/krpc/krpc]],
   license = "GNU LGPL v3"
 }
 dependencies = {
-  "lua >= 5.1, < 5.3",
+  "lua >= 5.1, < 5.5",
   "luasocket >= 3.0",
-  "protobuf",
-  "penlight",
-  platforms = {
-    -- luasocket builds its socket.unix module everywhere but Windows, and
-    -- krpc.connect_local opens its socket through that module.
-    windows = { "luasocket-unix-windows >= 3.1.0" }
-  }
+  "lua-protobuf >= 0.5.3",
+  "penlight"
 }
 build = {
   type = "builtin",

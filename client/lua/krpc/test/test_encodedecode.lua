@@ -5,6 +5,8 @@ local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
+local compat = require 'krpc.compat'
+local limits = require 'krpc.limits'
 local platform = require 'krpc.platform'
 local Types = require 'krpc.types'
 
@@ -14,8 +16,8 @@ local types = Types()
 
 local function _run_test_encode_value(typ, cases)
   for _, case in ipairs(cases) do
-    decoded = case[1]
-    encoded = case[2]
+    local decoded = case[1]
+    local encoded = case[2]
     local data = encoder.encode(decoded, typ)
     luaunit.assertEquals(platform.hexlify(data), encoded)
   end
@@ -23,8 +25,8 @@ end
 
 local function _run_test_decode_value(typ, cases)
   for _, case in ipairs(cases) do
-    decoded = case[1]
-    encoded = case[2]
+    local decoded = case[1]
+    local encoded = case[2]
     local value = decoder.decode(platform.unhexlify(encoded), typ)
     if typ.protobuf_type.code == Types.FLOAT or typ.protobuf_type.code == Types.DOUBLE then
       luaunit.assertEquals(tostring(decoded):sub(1,8), tostring(value):sub(1,8))
@@ -93,7 +95,7 @@ function TestEncodeDecode:test_uint32()
     {1, '01'},
     {42, '2a'},
     {300, 'ac02'},
-    {math.huge, 'ffffffffffffffff7f'}
+    {4294967295, 'ffffffff0f'}
   }
   _run_test_encode_value(types:uint32_type(), cases)
   _run_test_decode_value(types:uint32_type(), cases)
@@ -112,9 +114,79 @@ function TestEncodeDecode:test_uint64()
   }
   _run_test_encode_value(types:uint64_type(), cases)
   _run_test_decode_value(types:uint64_type(), cases)
+end
 
-  luaunit.assertError(encoder.encode, -1, types:uint64_type())
-  luaunit.assertError(encoder.encode, -849, types:uint64_type())
+-- Values a 64-bit integer type holds exactly and a double does not. tostring shows an integer
+-- without a fractional part or an exponent, so comparing it checks the value is an integer.
+local function _run_test_64_bit_values(typ, cases)
+  for _, case in ipairs(cases) do
+    luaunit.assertEquals(platform.hexlify(encoder.encode(case[1], typ)), case[2])
+    luaunit.assertEquals(tostring(decoder.decode(platform.unhexlify(case[2]), typ)),
+                         tostring(case[1]))
+  end
+end
+
+function TestEncodeDecode:test_sint64_extremes()
+  luaunit.skipIf(not compat.native_integers, 'numbers have no integer type')
+  _run_test_64_bit_values(types:sint64_type(), {
+    {compat.maxinteger, 'feffffffffffffffff01'},
+    {compat.mininteger, 'ffffffffffffffffff01'},
+    {compat.maxinteger - 1, 'fcffffffffffffffff01'},
+  })
+end
+
+-- A uint64 above 2^63 - 1 wraps to a negative integer, and encodes as its bits
+function TestEncodeDecode:test_uint64_extremes()
+  luaunit.skipIf(not compat.native_integers, 'numbers have no integer type')
+  _run_test_64_bit_values(types:uint64_type(), {
+    {compat.maxinteger, 'ffffffffffffffff7f'},
+    {compat.mininteger, '80808080808080808001'},
+    {-1, 'ffffffffffffffffff01'},
+  })
+end
+
+-- Without an integer type, the 64-bit maxima round up to 2^63 and 2^64, and a uint64 above
+-- 2^63 - 1 is a double
+function TestEncodeDecode:test_64_bit_values_without_integers()
+  luaunit.skipIf(compat.native_integers, 'numbers have an integer type')
+  _run_test_64_bit_values(types:sint64_type(), {
+    {limits.SINT64_MAX, 'feffffffffffffffff01'},
+    {limits.SINT64_MIN, 'ffffffffffffffffff01'},
+  })
+  _run_test_64_bit_values(types:uint64_type(), {
+    {limits.UINT64_MAX, 'ffffffffffffffffff01'},
+    {9223372036854775808, '80808080808080808001'},
+    {18446744073709549568, '80f0ffffffffffffff01'},
+  })
+end
+
+-- A number with an integer value is encoded as that integer, and any other is rejected
+function TestEncodeDecode:test_integer_types_take_integer_values()
+  luaunit.skipIf(not compat.native_integers, 'numbers have no integer type')
+  for _, typ in ipairs({types:sint32_type(), types:sint64_type(),
+                        types:uint32_type(), types:uint64_type()}) do
+    luaunit.assertEquals(encoder.encode(42.0, typ), encoder.encode(42, typ))
+    luaunit.assertErrorMsgContains('Value must be an integer, got 4.2', encoder.encode, 4.2, typ)
+    luaunit.assertErrorMsgContains('Value must be an integer, got inf',
+                                   encoder.encode, math.huge, typ)
+  end
+end
+
+-- Without an integer type, math.huge stands for the largest value of an unsigned type
+function TestEncodeDecode:test_unsigned_huge()
+  luaunit.skipIf(compat.native_integers, 'numbers have an integer type')
+  for _, typ in ipairs({types:uint32_type(), types:uint64_type()}) do
+    _run_test_encode_value(typ, {{math.huge, 'ffffffffffffffff7f'}})
+    _run_test_decode_value(typ, {{math.huge, 'ffffffffffffffff7f'}})
+  end
+end
+
+function TestEncodeDecode:test_negative_unsigned_values()
+  luaunit.assertError(encoder.encode, -1, types:uint32_type())
+  if not compat.native_integers then
+    luaunit.assertError(encoder.encode, -1, types:uint64_type())
+    luaunit.assertError(encoder.encode, -849, types:uint64_type())
+  end
 end
 
 function TestEncodeDecode:test_bool()
@@ -150,10 +222,10 @@ end
 
 function TestEncodeDecode:test_tuple()
   local cases = {{List{1}, '0a0101'}}
-  typ = types:tuple_type({types:uint32_type()})
+  local typ = types:tuple_type({types:uint32_type()})
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
-  local cases = {{List{1,'jeb',false}, '0a01010a04036a65620a0100'}}
+  cases = {{List{1,'jeb',false}, '0a01010a04036a65620a0100'}}
   typ = types:tuple_type({types:uint32_type(), types:string_type(), types:bool_type()})
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
@@ -164,13 +236,13 @@ function TestEncodeDecode:test_tuple_with_a_nullable_item()
     {List{1, 'jeb'}, '0a01010a0501036a6562'},
     {List{1, Types.none}, '0a01010a0100'}
   }
-  typ = types:tuple_type({types:uint32_type(), types:nullable(types:string_type())})
+  local typ = types:tuple_type({types:uint32_type(), types:nullable(types:string_type())})
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
 
 function TestEncodeDecode:test_struct_with_nullable_fields()
-  typ = types:struct_type('ServiceName', 'NullableStructName')
+  local typ = types:struct_type('ServiceName', 'NullableStructName')
   typ:set_fields({{'count', types:uint32_type()},
                   {'name', types:nullable(types:string_type())}})
   -- The 01 ahead of the name is its presence bool, and a null field is that bool alone
@@ -188,7 +260,7 @@ function TestEncodeDecode:test_list()
     {List{1}, '0a0101'},
     {List{1,2,3,4}, '0a01010a01020a01030a0104'}
   }
-  typ = types:list_type(types:uint32_type())
+  local typ = types:list_type(types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -202,7 +274,7 @@ function TestEncodeDecode:test_list_of_nullable_values()
     {List{0}, '0a020100'},
     {List{1, Types.none, 3}, '0a0201010a01000a020103'}
   }
-  typ = types:list_type(types:nullable(types:uint32_type()))
+  local typ = types:list_type(types:nullable(types:uint32_type()))
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -213,7 +285,7 @@ function TestEncodeDecode:test_set()
     {Set{1}, '0a0101'},
     {Set{1,2,3,4}, '0a01010a01020a01030a0104'}
   }
-  typ = types:set_type(types:uint32_type())
+  local typ = types:set_type(types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -226,7 +298,7 @@ function TestEncodeDecode:test_dictionary()
     {x, '0a060a0100120100'},
     {Map{foo = 42, bar = 365, baz = 3}, '0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a'}
   }
-  typ = types:dictionary_type(types:string_type(), types:uint32_type())
+  local typ = types:dictionary_type(types:string_type(), types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -241,7 +313,7 @@ function TestEncodeDecode:test_dictionary_of_nullable_values()
     {null, '0a060a0100120100'},
     {Map{foo = 42, bar = Types.none}, '0a090a04036261721201000a0a0a0403666f6f1202012a'}
   }
-  typ = types:dictionary_type(types:string_type(), types:nullable(types:uint32_type()))
+  local typ = types:dictionary_type(types:string_type(), types:nullable(types:uint32_type()))
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -277,7 +349,7 @@ function TestEncodeDecode:test_nullable_collection_values()
     {List{List{}}, '0a0101'},
     {List{List{1}}, '0a04010a0101'}
   }
-  typ = types:list_type(types:nullable(types:list_type(types:uint32_type())))
+  local typ = types:list_type(types:nullable(types:list_type(types:uint32_type())))
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -289,7 +361,7 @@ function TestEncodeDecode:test_nullable_struct_values()
     {List{Types.none}, '0a0100'},
     {List{struct_type.lua_type(1)}, '0a04010a0101'}
   }
-  typ = types:list_type(types:nullable(struct_type))
+  local typ = types:list_type(types:nullable(struct_type))
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -297,14 +369,14 @@ end
 function TestEncodeDecode:test_null_at_a_position_that_cannot_hold_one()
   -- Types.none carries the object id 0, so a class-typed position takes it for a value
   -- unless the encoder rejects it
-  typ = types:list_type(types:class_type('ServiceName', 'ClassName'))
+  local typ = types:list_type(types:class_type('ServiceName', 'ClassName'))
   luaunit.assertError(encoder.encode, List{Types.none}, typ)
   luaunit.assertError(encoder.encode, List{Types.none}, types:list_type(types:uint32_type()))
 end
 
 function TestEncodeDecode:test_nullable_value_without_a_presence_bool()
   -- A list holding one item of zero length
-  typ = types:list_type(types:nullable(types:uint32_type()))
+  local typ = types:list_type(types:nullable(types:uint32_type()))
   luaunit.assertError(decoder.decode, platform.unhexlify('0a00'), typ)
 end
 

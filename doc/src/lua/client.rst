@@ -12,8 +12,8 @@ written in Lua. It can be `installed using LuaRocks
 Installing
 ----------
 
-The Lua client and all of its dependencies can be installed using luarocks with
-a single command:
+The client runs on Lua 5.1 to 5.4 and LuaJIT. It and all of its dependencies can be installed
+using luarocks with a single command:
 
 .. code-block:: bash
 
@@ -91,11 +91,13 @@ Reference
    just as :func:`krpc.connect` does, and the connection behaves identically
    thereafter.
 
-   Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and
-   Windows Server 2019 or later. This needs luasocket's ``socket.unix`` module,
-   which luasocket builds itself everywhere but Windows; there it comes from the
-   ``luasocket-unix-windows`` rock, which ``luarocks install krpc`` pulls in. A
-   luasocket built by hand needs that module built with it.
+   This needs luasocket's ``socket.unix`` module, which luasocket builds on Linux
+   and macOS.
+
+   .. note::
+
+      luasocket does not yet build ``socket.unix`` on Windows. Connect with
+      :func:`krpc.connect` there instead.
 
    :param string name: A descriptive name for the connection. This is passed to
                        the server and appears, for example, in the client
@@ -149,18 +151,20 @@ Numeric Limits
 --------------
 
 The ``krpc.limits`` module names the extremes of the numeric types kRPC carries over the wire.
-Lua gained ``math.maxinteger`` and ``math.mininteger`` in 5.3, and this client targets 5.1 and
-5.2. A service can declare one of these limits as a parameter's default value, and it is then
+A service can declare one of these limits as a parameter's default value, and it is then
 documented as the constant here.
 
 The minimum of an unsigned type is ``0``, so it has no constant.
 
+From Lua 5.3 on, a 64-bit value is an exact integer. Lua has no unsigned integer type. A
+``uint64`` above :math:`2^{63} - 1` wraps to a negative integer, so
+:data:`krpc.limits.UINT64_MAX` is ``-1``. ``math.ult`` compares two such values.
+
 .. note::
 
-   Every Lua 5.1 and 5.2 number is a double, which holds each of these exactly except the two
-   64-bit integer maxima: :data:`krpc.limits.SINT64_MAX` and :data:`krpc.limits.UINT64_MAX`
-   round up to :math:`2^{63}` and :math:`2^{64}`. This is a property of the number type rather
-   than of the constants, and applies equally to a 64-bit integer arriving from the server.
+   In Lua 5.1, 5.2 and LuaJIT every number is a double, which holds an integer exactly up to
+   :math:`2^{53}`. :data:`krpc.limits.SINT64_MAX` and :data:`krpc.limits.UINT64_MAX` round up
+   to :math:`2^{63}` and :math:`2^{64}`, as does a 64-bit value arriving from the server.
 
 .. data:: limits.DOUBLE_MAX
           limits.DOUBLE_LOWEST

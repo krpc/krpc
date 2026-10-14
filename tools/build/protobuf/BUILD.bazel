@@ -11,19 +11,14 @@ py_binary(
     srcs = ["run_protoc.py"],
 )
 
+# Wraps a descriptor set as the lua module the lua client loads its schema from
+py_binary(
+    name = "lua_descriptor",
+    srcs = ["lua_descriptor.py"],
+)
+
 # protoc plugins for languages without built-in protoc support, run on the
 # hermetic python toolchain with the protobuf package from the pip hub
-
-py_binary(
-    name = "protoc-gen-lua",
-    srcs = ["protoc_gen_lua.py"],
-    data = ["@protoc_lua//:plugin"],
-    main = "protoc_gen_lua.py",
-    deps = [
-        "@krpc_pypi//protobuf",
-        "@rules_python//python/runfiles",
-    ],
-)
 
 py_binary(
     name = "protoc-gen-nanopb",

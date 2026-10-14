@@ -43,7 +43,7 @@ class LuaDomain(Domain[LuaLanguage]):
         if isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
         if isinstance(typ, MessageType):
-            return ":class:`krpc.schema.KRPC.%s`" % typ.python_type.__name__
+            return ":class:`krpc.schema.%s`" % typ.python_type.__name__
         if isinstance(typ, ClassType):
             return ":class:`%s`" % self.type(typ)
         if isinstance(typ, EnumerationType):

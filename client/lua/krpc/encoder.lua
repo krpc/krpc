@@ -1,21 +1,13 @@
-local pb = require 'protobuf.pb'
+local buffer = require 'pb.buffer'
 local tablex = require 'pl.tablex'
-local schema = require 'krpc.schema.KRPC'
+local compat = require 'krpc.compat'
+local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
 
 local encoder = {}
 
--- The buffer the routines below leave their bytes in. They are handed to a writer, and one
--- writer shared by all of them costs nothing per value, where a closure made for the value
--- would be allocated and thrown away for every one encoded.
-local _written
-local function _write(data)
-  _written = data
-end
-
--- The pb.struct_pack format codes for a single precision and a double precision number.
-local FLOAT_FORMAT = string.byte('f')
-local DOUBLE_FORMAT = string.byte('d')
+-- Called with a format and no buffer, pack returns the bytes it writes
+local _pack = buffer.pack
 
 -- The encoding of every varint that fits in one byte, which is most of the values a call
 -- carries: an index, a count, a small identifier or a boolean.
@@ -24,6 +16,9 @@ for value = 0, 127 do
   _small_varints[value] = string.char(value)
 end
 
+local _tointeger = compat.tointeger
+
+-- Encode an unsigned value. Without an integer type, math.huge stands for the largest value.
 local function _encode_varint(x)
   local small = _small_varints[x]
   if small then
@@ -34,19 +29,47 @@ local function _encode_varint(x)
   elseif x == math.huge then
     return '\255\255\255\255\255\255\255\255\127'
   else
-    pb.varint_encoder(_write, x)
-    return _written
+    return _pack('v', x)
   end
 end
 
+-- Without an integer type, pack reads a double as an int64, which holds neither 2^63 nor 2^64.
+-- SINT64_MAX and UINT64_MAX round up to these, so we write the encoding of each maximum.
+local _TWO_TO_63 = 9223372036854775808
+local _TWO_TO_64 = 18446744073709551616
+local _SINT64_MAX_ENCODED = _pack('v', -2)
+local _UINT64_MAX_ENCODED = _pack('v', -1)
+
+local function _encode_sint64(x)
+  x = _tointeger(x)
+  if x == _TWO_TO_63 and not compat.native_integers then
+    return _SINT64_MAX_ENCODED
+  end
+  return _pack('J', x)
+end
+
+-- Encode a uint64. A value above 2^63 - 1 is encoded as the bits of the negative int64 it
+-- wraps to.
+local function _encode_uint64(x)
+  x = _tointeger(x)
+  if compat.native_integers then
+    if x < 0 then
+      return _pack('v', x)
+    end
+  elseif x == _TWO_TO_64 then
+    return _UINT64_MAX_ENCODED
+  elseif x >= _TWO_TO_63 and x < _TWO_TO_64 then
+    return _pack('v', x - _TWO_TO_64)
+  end
+  return _encode_varint(x)
+end
+
 local function _encode_float(value)
-  pb.struct_pack(_write, FLOAT_FORMAT, value)
-  return _written
+  return _pack('f', value)
 end
 
 local function _encode_double(value)
-  pb.struct_pack(_write, DOUBLE_FORMAT, value)
-  return _written
+  return _pack('F', value)
 end
 
 -- The encoder for each value type, by type code. Encoding a value starts here, and a table
@@ -54,14 +77,14 @@ end
 local _value_encoders = {
   [Types.DOUBLE] = _encode_double,
   [Types.FLOAT] = _encode_float,
-  [Types.SINT32] = function(x) return _encode_varint(pb.zig_zag_encode32(x)) end,
-  [Types.SINT64] = function(x) return _encode_varint(pb.zig_zag_encode64(x)) end,
-  [Types.UINT32] = _encode_varint,
-  [Types.UINT64] = _encode_varint,
+  [Types.SINT32] = function(x) return _pack('j', _tointeger(x)) end,
+  [Types.SINT64] = _encode_sint64,
+  [Types.UINT32] = function(x) return _encode_varint(_tointeger(x)) end,
+  [Types.UINT64] = _encode_uint64,
   [Types.BOOL] = function(x) return _encode_varint(x and 1 or 0) end,
   [Types.STRING] = function(x) return _encode_varint(x:len()) .. x end,
   [Types.BYTES] = function(x) return _encode_varint(x:len()) .. x end,
-  [Types.ENUMERATION] = function(x) return _encode_varint(pb.zig_zag_encode32(x.value)) end,
+  [Types.ENUMERATION] = function(x) return _pack('j', x.value) end,
   [Types.CLASS] = function(x) return _encode_varint(x._object_id) end,
 }
 
@@ -82,9 +105,8 @@ local _value_encoders = {
 --   DictionaryEntry.key       1, length delimited
 --   DictionaryEntry.value     2, length delimited
 --
--- test_encoder reads back what is written with these through the protocol buffer message layer
--- and checks it arrived intact, so a field renumbered in the schema without these following, or
--- a tag written wrongly, fails there.
+-- These must match krpc.proto, which test_encoder checks by decoding what is written with them
+-- as messages.
 local _REQUEST_CALLS = '\10'
 local _CALL_SERVICE = '\10'
 local _CALL_PROCEDURE = '\18'
@@ -107,7 +129,7 @@ end
 -- nullable position carries a presence bool before its value, and holds nothing else when that
 -- bool is false.
 local function _encode_item(x, typ)
-  local absent = x == nil or x == Types.none
+  local absent = x == nil or rawequal(x, Types.none)
   if not typ.nullable then
     -- A position that cannot hold null takes a value of its type and nothing else
     if absent then
@@ -179,14 +201,14 @@ function encoder.encode(x, typ)
     end
     return _concat(parts)
   elseif typ:is_a(Types.MessageType) then
-    return x:SerializeToString()
+    return protobuf.encode(typ.message_type, x)
   end
   error('Cannot encode object of type ' .. tostring(typ))
 end
 
-function encoder.encode_message_with_size(message)
-  -- Encode a message prefixed by its size
-  local data = message:SerializeToString()
+function encoder.encode_message_with_size(type_name, message)
+  -- Encode a message of the named type, prefixed by its size
+  local data = protobuf.encode(type_name, message)
   local delimiter = _encode_varint(data:len())
   return delimiter .. data
 end
@@ -194,17 +216,15 @@ end
 --- Encode the request carrying one procedure call, prefixed by its size, ready to send.
 --
 -- The arguments are the already encoded value of each, in order, with Types.none where a call
--- passes nothing. Written here and not built as a protocol buffer message: the message layer
--- allocates a table of fields and a pair of listeners for each of the three messages a call
--- needs, then walks all of them twice, once to size them and once to write them. That costs an
--- order of magnitude more than the bytes it produces.
+-- passes nothing. Written here and not encoded from tables of the three messages a call needs,
+-- which would be built for every call.
 function encoder.encode_request(service, procedure, arguments)
   local parts = { _delimited(_CALL_SERVICE, service), _delimited(_CALL_PROCEDURE, procedure) }
   local count = 2
   for i = 1, #arguments do
     local value = arguments[i]
     local argument
-    if value == Types.none then
+    if rawequal(value, Types.none) then
       argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _ARGUMENT_IS_NULL .. '\1'
     else
       argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _delimited(_ARGUMENT_VALUE, value)

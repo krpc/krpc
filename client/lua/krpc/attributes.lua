@@ -69,7 +69,7 @@ end
 function Attributes.get_class_name(name)
   -- Return the name of the class that a method or property accessor is part of.
   if Attributes.is_a_class_member(name) then
-    i, _ = name:find('_')
+    local i, _ = name:find('_')
     return name:sub(1, i-1)
   end
   error('Procedure attributes are not a class method or property accessor')
@@ -79,7 +79,7 @@ function Attributes.get_class_member_name(name)
   -- Return the name of a class member.
   if Attributes.is_a_class_member(name) then
     name = name:reverse()
-    i, _ = name:find('_')
+    local i, _ = name:find('_')
     return name:sub(1, i-1):reverse()
   end
   error('Procedure attributes are not a class method')

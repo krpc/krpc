@@ -1,6 +1,7 @@
 local luaunit = require 'luaunit'
 local class = require 'pl.class'
 local krpc = require 'krpc.init'
+local compat = require 'krpc.compat'
 local limits = require 'krpc.limits'
 
 -- The constants are checked against values derived a different way, so a typo in one of them
@@ -35,10 +36,19 @@ function TestLimits:test_unsigned_integer_extremes()
   luaunit.assertEquals(limits.UINT32_MAX, limits.SINT32_MAX * 2 + 1)
 end
 
--- Every Lua 5.1 and 5.2 number is a double, so the two 64-bit integer maxima are not
--- representable and round up to the next power of two. Asserted rather than merely documented,
--- so that moving the client to Lua 5.3, where integers are exact, has to revisit this.
+-- From Lua 5.3 on, the 64-bit extremes are exact integers, and the uint64 maximum is the value
+-- with every bit set. tostring shows an integer without a fractional part or an exponent.
+function TestLimits:test_64_bit_extremes_are_integers()
+  luaunit.skipIf(not compat.native_integers, 'numbers have no integer type')
+  luaunit.assertEquals('9223372036854775807', tostring(limits.SINT64_MAX))
+  luaunit.assertEquals('-9223372036854775808', tostring(limits.SINT64_MIN))
+  luaunit.assertEquals('-1', tostring(limits.UINT64_MAX))
+end
+
+-- In Lua 5.1 and 5.2 every number is a double, so the two 64-bit integer maxima are not
+-- representable and round up to the next power of two
 function TestLimits:test_64_bit_maxima_round_to_the_nearest_double()
+  luaunit.skipIf(compat.native_integers, 'numbers have an integer type')
   luaunit.assertEquals(2^63, limits.SINT64_MAX)
   luaunit.assertEquals(2^64, limits.UINT64_MAX)
 end

@@ -3,7 +3,7 @@ local class = require 'pl.class'
 local encoder = require 'krpc.encoder'
 local platform = require 'krpc.platform'
 local Types = require 'krpc.types'
-local schema = require 'krpc.schema.KRPC'
+local protobuf = require 'krpc.protobuf'
 local List = require 'pl.List'
 local Map = require 'pl.Map'
 local Set = require 'pl.Set'
@@ -13,11 +13,9 @@ local TestEncoder = class()
 local types = Types()
 
 function TestEncoder:test_encode_message()
-  local call = schema.ProcedureCall()
-  call.service = 'ServiceName'
-  call.procedure = 'ProcedureName'
-  data = encoder.encode(call, types:procedure_call_type())
-  expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
+  local call = { service = 'ServiceName', procedure = 'ProcedureName' }
+  local data = encoder.encode(call, types:procedure_call_type())
+  local expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
   luaunit.assertEquals(platform.hexlify(data), expected)
 end
 
@@ -32,10 +30,8 @@ function TestEncoder:test_encode_unicode_string()
 end
 
 function TestEncoder:test_encode_message_with_size()
-  local call = schema.ProcedureCall()
-  call.service = 'ServiceName'
-  call.procedure = 'ProcedureName'
-  local data = encoder.encode_message_with_size(call, types:procedure_call_type())
+  local call = { service = 'ServiceName', procedure = 'ProcedureName' }
+  local data = encoder.encode_message_with_size('ProcedureCall', call)
   local expected = '1c'..'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
   luaunit.assertEquals(expected, platform.hexlify(data))
 end
@@ -60,14 +56,10 @@ local function without_size_prefix(data)
 end
 
 -- encode_request writes the field numbers and wire types of Request, ProcedureCall and Argument
--- itself rather than going through the protocol buffer message layer, so this reads what it
--- wrote back through that layer and checks the call arrived intact. A tag written wrongly, a
--- length counted wrongly, or a field renumbered in the schema all show up here.
---
--- The comparison is on what the message carries rather than on its bytes, because the message
--- layer writes the fields of a message in the order a hash table happens to hold them, so the
--- bytes it produces for the same call differ from these and from each other.
-function TestEncoder:test_encode_request_round_trips_through_message_layer()
+-- itself, so this decodes what it wrote as a Request message and checks the call arrived
+-- intact. A tag written wrongly, a length counted wrongly, or a field renumbered in the schema
+-- all show up here.
+function TestEncoder:test_encode_request_decodes_as_a_message()
   local long_name = string.rep('a', 200)
   local long_value = string.rep('\7', 300)
   local cases = {
@@ -91,9 +83,8 @@ function TestEncoder:test_encode_request_round_trips_through_message_layer()
   }
   for _, case in ipairs(cases) do
     local service, procedure, arguments = case[1], case[2], case[3]
-    local request = schema.Request()
-    request:ParseFromString(
-      without_size_prefix(encoder.encode_request(service, procedure, arguments)))
+    local request = protobuf.decode(
+      'Request', without_size_prefix(encoder.encode_request(service, procedure, arguments)))
     luaunit.assertEquals(1, #request.calls)
     local call = request.calls[1]
     luaunit.assertEquals(service, call.service)
@@ -102,48 +93,45 @@ function TestEncoder:test_encode_request_round_trips_through_message_layer()
     for i = 1, #arguments do
       local argument = call.arguments[i]
       luaunit.assertEquals(i-1, argument.position)
-      -- HasField answers with the value a field holds, and so with nil where it holds none
+      -- A field the argument leaves out decodes to its zero value
       if arguments[i] == Types.none then
         luaunit.assertEquals(true, argument.is_null)
-        luaunit.assertNil(argument:HasField('value'))
+        luaunit.assertEquals('', argument.value)
       else
         luaunit.assertEquals(arguments[i], argument.value)
-        luaunit.assertNil(argument:HasField('is_null'))
+        luaunit.assertEquals(false, argument.is_null)
       end
     end
   end
 end
 
 -- A list, a set, a tuple and a dictionary are written the same way the request is, so they are
--- read back through the message layer for the same reason.
-function TestEncoder:test_encode_collections_round_trip_through_message_layer()
+-- decoded as messages for the same reason.
+function TestEncoder:test_encode_collections_decode_as_messages()
   local long = string.rep('x', 300)
 
   local list_type = types:list_type(types:string_type())
   local values = List{'one', 'two', long}
-  local list_message = schema.List()
-  list_message:ParseFromString(encoder.encode(values, list_type))
+  local list_message = protobuf.decode('List', encoder.encode(values, list_type))
   luaunit.assertEquals(3, #list_message.items)
   for i, item in ipairs(list_message.items) do
     luaunit.assertEquals(encoder.encode(values[i], types:string_type()), item)
   end
 
   local set_type = types:set_type(types:uint32_type())
-  local set_message = schema.Set()
-  set_message:ParseFromString(encoder.encode(Set{7}, set_type))
+  local set_message = protobuf.decode('Set', encoder.encode(Set{7}, set_type))
   luaunit.assertEquals(1, #set_message.items)
   luaunit.assertEquals(encoder.encode(7, types:uint32_type()), set_message.items[1])
 
   local tuple_type = types:tuple_type(List{types:uint32_type(), types:string_type()})
-  local tuple_message = schema.Tuple()
-  tuple_message:ParseFromString(encoder.encode(List{7, long}, tuple_type))
+  local tuple_message = protobuf.decode('Tuple', encoder.encode(List{7, long}, tuple_type))
   luaunit.assertEquals(2, #tuple_message.items)
   luaunit.assertEquals(encoder.encode(7, types:uint32_type()), tuple_message.items[1])
   luaunit.assertEquals(encoder.encode(long, types:string_type()), tuple_message.items[2])
 
   local dictionary_type = types:dictionary_type(types:string_type(), types:uint32_type())
-  local dictionary_message = schema.Dictionary()
-  dictionary_message:ParseFromString(encoder.encode(Map{a = 1, b = 2}, dictionary_type))
+  local dictionary_message = protobuf.decode(
+    'Dictionary', encoder.encode(Map{a = 1, b = 2}, dictionary_type))
   luaunit.assertEquals(2, #dictionary_message.entries)
   luaunit.assertEquals(encoder.encode('a', types:string_type()),
                        dictionary_message.entries[1].key)

@@ -1,7 +1,7 @@
 local luaunit = require 'luaunit'
 local class = require 'pl.class'
 local List = require 'pl.List'
-local schema = require 'krpc.schema.KRPC'
+local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
 local encoder = require 'krpc.encoder'
 local service = require 'krpc.service'
@@ -19,89 +19,72 @@ function FakeClient:_invoke()
   error('not connected to a server')
 end
 
+--- A service, as the client receives it: the given table encoded and decoded again as a
+--- Service message, which fills in the fields it leaves out
+local function as_received(svc)
+  return protobuf.decode('Service', protobuf.encode('Service', svc))
+end
+
 --- A service defining an enumeration and nothing else
 local function enum_service(name)
-  local svc = schema.Service()
-  svc.name = name
-  local enum = svc.enumerations:add()
-  enum.name = 'Mode'
-  for _,case in ipairs({{'Slow', 1}, {'Fast', 2}}) do
-    local value = enum.values:add()
-    value.name = case[1]
-    value.value = case[2]
-  end
-  return svc
+  return as_received({
+    name = name,
+    enumerations = { {
+      name = 'Mode',
+      values = { { name = 'Slow', value = 1 }, { name = 'Fast', value = 2 } }
+    } }
+  })
 end
 
 --- A service with a procedure whose parameter defaults to a member of another service's
 --- enumeration, either directly or through a list
 local function default_service(name, enum_service_name, in_a_list)
   local types = Types()
-  local svc = schema.Service()
-  svc.name = name
-  local procedure = svc.procedures:add()
-  procedure.name = 'Frob'
-  local parameter = procedure.parameters:add()
-  parameter.name = 'mode'
+  local enum_type = { code = Types.ENUMERATION, service = enum_service_name, name = 'Mode' }
+  local typ = enum_type
   local encoded = encoder.encode(2, types:sint32_type())
   if in_a_list then
-    parameter.type.code = Types.LIST
-    local value_type = parameter.type.types:add()
-    value_type.code = Types.ENUMERATION
-    value_type.service = enum_service_name
-    value_type.name = 'Mode'
-    local items = schema.List()
-    items.items:append(encoded)
-    encoded = items:SerializeToString()
-  else
-    parameter.type.code = Types.ENUMERATION
-    parameter.type.service = enum_service_name
-    parameter.type.name = 'Mode'
+    typ = { code = Types.LIST, types = { enum_type } }
+    encoded = protobuf.encode('List', { items = { encoded } })
   end
-  parameter.has_default_value = true
-  parameter.default_value = encoded
-  return svc
+  return as_received({
+    name = name,
+    procedures = { {
+      name = 'Frob',
+      parameters = { { name = 'mode', type = typ, has_default_value = true, default_value = encoded } }
+    } }
+  })
 end
 
 -- A type code from a later version of the protocol than this client knows about
 local UNKNOWN_TYPE_CODE = 9999
 
---- A service defining a structure with a single field, whose type the given function sets
-local function struct_service(name, set_field_type)
-  local svc = schema.Service()
-  svc.name = name
-  local struct = svc.structs:add()
-  struct.name = 'Thing'
-  local field = struct.fields:add()
-  field.name = 'Value'
-  set_field_type(field.type)
-  return svc
+--- A service defining a structure with a single field of the given type
+local function struct_service(name, field_type)
+  return as_received({
+    name = name,
+    structs = { { name = 'Thing', fields = { { name = 'Value', type = field_type } } } }
+  })
 end
 
 --- A service with a procedure taking a parameter of another service's structure
 local function struct_using_service(name, struct_service_name)
-  local svc = schema.Service()
-  svc.name = name
-  local procedure = svc.procedures:add()
-  procedure.name = 'Frob'
-  local parameter = procedure.parameters:add()
-  parameter.name = 'thing'
-  parameter.type.code = Types.STRUCT
-  parameter.type.service = struct_service_name
-  parameter.type.name = 'Thing'
-  return svc
+  return as_received({
+    name = name,
+    procedures = { {
+      name = 'Frob',
+      parameters = { {
+        name = 'thing',
+        type = { code = Types.STRUCT, service = struct_service_name, name = 'Thing' }
+      } }
+    } }
+  })
 end
 
-local function unknown_field_type(typ)
-  typ.code = UNKNOWN_TYPE_CODE
-end
+local unknown_field_type = { code = UNKNOWN_TYPE_CODE }
 
 local function struct_field_type(service_name)
-  return function (typ)
-    typ.code = Types.STRUCT
-    typ.service = service_name
-    typ.name = 'Thing'
-  end
+  return { code = Types.STRUCT, service = service_name, name = 'Thing' }
 end
 
 local function create_services(svcs)

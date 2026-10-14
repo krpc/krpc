@@ -4,7 +4,6 @@ local List = require 'pl.List'
 local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local Types = require 'krpc.types'
-local schema = require 'krpc.schema.KRPC'
 
 local TestTypes = class()
 
@@ -17,14 +16,13 @@ end
 
 function TestTypes:test_none_type()
   local types = Types()
-  local none_type = schema.Type()
-  none_type.code = Types.NONE
+  local none_type = { code = Types.NONE, service = '', name = '', types = {}, nullable = false }
   luaunit.assertError(types.as_type, none_type)
 end
 
 function TestTypes:test_value_types()
   local types = Types()
-  cases = List{
+  local cases = List{
     { types:double_type(), Types.DOUBLE, 'number' },
     { types:float_type(), Types.FLOAT, 'number' },
     { types:sint32_type(), Types.SINT32, 'number' },
@@ -76,7 +74,7 @@ end
 
 function TestTypes:test_message_types()
   local types = Types()
-  cases = List{
+  local cases = List{
     { types:procedure_call_type(), Types.PROCEDURE_CALL },
     { types:stream_type(), Types.STREAM },
     { types:services_type(), Types.SERVICES },
@@ -341,6 +339,19 @@ function TestTypes:test_struct_comparison()
   luaunit.assertTrue(one <= same)
   luaunit.assertTrue(one >= same)
   luaunit.assertFalse(two < one)
+end
+
+function TestTypes:test_struct_and_class_compare_unequal_to_other_values()
+  local types = Types()
+  local struct_type = types:struct_type('ServiceName', 'EqualityStruct')
+  struct_type:set_fields({{'count', types:uint32_type()}})
+  local class_type = types:class_type('ServiceName', 'EqualityClass')
+  for _, value in ipairs({struct_type.lua_type(1), class_type.lua_type(1)}) do
+    luaunit.assertFalse(Types.none == value)
+    luaunit.assertFalse(value == Types.none)
+    luaunit.assertFalse({} == value)
+    luaunit.assertFalse(value == {})
+  end
 end
 
 function TestTypes:test_struct_ordering_of_a_field_that_orders_neither_way()
