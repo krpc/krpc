@@ -355,15 +355,6 @@ class TestClosestApproach(krpctest.TestCase):
         # than their initial separation
         self.assertGreater(approach.distance, 0)
         self.assertLess(approach.distance, 100000)
-        # Agrees with the deprecated scalar helpers
-        self.assertAlmostEqual(
-            approach.ut, self.orbit.time_of_closest_approach(self.target), delta=1
-        )
-        self.assertAlmostEqual(
-            approach.distance,
-            self.orbit.distance_at_closest_approach(self.target),
-            delta=1,
-        )
         # Both endpoints are vessels, not celestial bodies
         self.assertEqual(approach.vessel, self.vessel)
         self.assertIsNone(approach.body)

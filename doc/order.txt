@@ -645,9 +645,6 @@ SpaceCenter.Orbit.TimeToSOIChange
 SpaceCenter.Orbit.NextOrbit
 SpaceCenter.Orbit.NextClosestApproach
 SpaceCenter.Orbit.ClosestApproaches
-SpaceCenter.Orbit.TimeOfClosestApproach
-SpaceCenter.Orbit.DistanceAtClosestApproach
-SpaceCenter.Orbit.ListClosestApproaches
 SpaceCenter.ClosestApproach
 SpaceCenter.ClosestApproach.UT
 SpaceCenter.ClosestApproach.TimeTo
