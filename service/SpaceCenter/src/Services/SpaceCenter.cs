@@ -739,18 +739,30 @@ namespace KRPC.SpaceCenter.Services
             get { return PhysicsGlobals.BuoyancyScalar; }
         }
 
-        // The warp RPCs are gated to the flight scene because they are defined in terms
-        // of the active vessel: the rails-warp altitude limits, the physics-warp fallback
-        // and CanRailsWarpAt all read its state. KSP can also warp on rails in the space
-        // center and tracking station scenes; exposing that would need a vessel-independent
-        // API surface.
+        // KSP warps on rails in the space center and tracking station as well as in flight.
+        // The altitude limits, the throttle and physics warp only apply in flight.
+        const GameScene WarpScenes = GameScene.Flight | GameScene.SpaceCenter | GameScene.TrackingStation;
+
+        static bool InFlight {
+            get { return (CallContext.GameScene & GameScene.Flight) != 0; }
+        }
+
+        // TimeWarp.fetch is null until TimeWarp.Awake runs in the new scene
+        static TimeWarp TimeWarpInstance {
+            get {
+                var instance = TimeWarp.fetch;
+                if (instance == null)
+                    throw new InvalidOperationException ("Time warp is not available");
+                return instance;
+            }
+        }
 
         /// <summary>
         /// The current time warp mode. Returns <see cref="WarpMode.None"/> if time
         /// warp is not active, <see cref="WarpMode.Rails"/> if regular "on-rails" time warp
         /// is active, or <see cref="WarpMode.Physics"/> if physical time warp is active.
         /// </summary>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        [KRPCProperty (GameScene = WarpScenes)]
         public static WarpMode WarpMode {
             get {
                 if (TimeWarp.CurrentRateIndex == 0)
@@ -767,7 +779,7 @@ namespace KRPC.SpaceCenter.Services
         /// time is passing 10x faster than normal. Returns 1 if time warp is not
         /// active.
         /// </summary>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        [KRPCProperty (GameScene = WarpScenes)]
         public static float WarpRate {
             get { return TimeWarp.CurrentRate; }
         }
@@ -779,7 +791,7 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="RailsWarpFactor"/>, and in physics time warp, this is equal to
         /// <see cref="PhysicsWarpFactor"/>.
         /// </summary>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        [KRPCProperty (GameScene = WarpScenes)]
         public static float WarpFactor {
             get { return TimeWarp.CurrentRateIndex; }
         }
@@ -794,12 +806,16 @@ namespace KRPC.SpaceCenter.Services
         /// planet. See <a href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">
         /// the KSP wiki</a> for details.
         /// </summary>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        /// <remarks>
+        /// Outside the flight scene, every factor can be set.
+        /// </remarks>
+        [KRPCProperty (GameScene = WarpScenes)]
         public static int RailsWarpFactor {
             get { return WarpMode == WarpMode.Rails ? TimeWarp.CurrentRateIndex : 0; }
             set {
                 // Set throttle to 0 when attempting to warp; can't warp when throttled up
-                FlightInputHandler.state.mainThrottle = 0;
+                if (InFlight)
+                    FlightInputHandler.state.mainThrottle = 0;
                 SetWarpFactor (TimeWarp.Modes.HIGH, value.Clamp (0, MaximumRailsWarpFactor));
             }
         }
@@ -821,22 +837,27 @@ namespace KRPC.SpaceCenter.Services
         /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
         /// for details.
         /// </summary>
+        /// <remarks>
+        /// Outside the flight scene, every valid factor can be used.
+        /// </remarks>
         /// <param name="factor">The warp factor to check.</param>
-        [KRPCProcedure (GameScene = GameScene.Flight)]
+        [KRPCProcedure (GameScene = WarpScenes)]
         public static bool CanRailsWarpAt (int factor = 1)
         {
             if (factor == 0)
                 return true;
             // Not a valid factor
-            if (factor < 0 || factor >= TimeWarp.fetch.warpRates.Length)
+            if (factor < 0 || factor >= TimeWarpInstance.warpRates.Length)
                 return false;
+            if (!InFlight)
+                return true;
             // Landed
             var vessel = ActiveVessel.InternalVessel;
             if (vessel.LandedOrSplashed)
                 return true;
             // Below altitude limit
             var altitude = vessel.mainBody.GetAltitude (vessel.CoM);
-            var altitudeLimit = TimeWarp.fetch.GetAltitudeLimit (factor, vessel.mainBody);
+            var altitudeLimit = TimeWarpInstance.GetAltitudeLimit (factor, vessel.mainBody);
             if (altitude < altitudeLimit)
                 return false;
             // Throttle is non-zero
@@ -851,10 +872,13 @@ namespace KRPC.SpaceCenter.Services
         /// <a href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
         /// for details.
         /// </summary>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        /// <remarks>
+        /// Outside the flight scene, this is the highest factor.
+        /// </remarks>
+        [KRPCProperty (GameScene = WarpScenes)]
         public static int MaximumRailsWarpFactor {
             get {
-                for (int i = TimeWarp.fetch.warpRates.Length - 1; i > 1; i--) {
+                for (int i = TimeWarpInstance.warpRates.Length - 1; i > 0; i--) {
                     if (CanRailsWarpAt (i))
                         return i;
                 }
@@ -871,14 +895,26 @@ namespace KRPC.SpaceCenter.Services
         /// rate is limited by <paramref name="maxRailsRate"/>, and when using physical
         /// time warp, the warp rate is limited by <paramref name="maxPhysicsRate"/>.
         /// </summary>
+        /// <remarks>
+        /// Outside the flight scene, only regular "on-rails" time warp is used.
+        /// Throws an exception if the game scene changes during the time warp.
+        /// </remarks>
         /// <param name="ut">The universal time to warp to, in seconds.</param>
         /// <param name="maxRailsRate">The maximum warp rate in regular "on-rails" time warp.
         /// </param>
         /// <param name="maxPhysicsRate">The maximum warp rate in physical time warp.</param>
         /// <returns>When the time warp is complete.</returns>
-        [KRPCProcedure (GameScene = GameScene.Flight)]
+        [KRPCProcedure (GameScene = WarpScenes)]
         public static void WarpTo (double ut, float maxRailsRate = 100000, float maxPhysicsRate = 2)
         {
+            ContinueWarpTo (ut, maxRailsRate, maxPhysicsRate, CallContext.GameScene & WarpScenes);
+        }
+
+        static void ContinueWarpTo (double ut, float maxRailsRate, float maxPhysicsRate, GameScene scene)
+        {
+            // The server checks the game scene of the first call only
+            if ((CallContext.GameScene & WarpScenes) != scene)
+                throw new InvalidOperationException ("The game scene changed during the time warp");
             float rate = Mathf.Clamp ((float)(ut - Planetarium.GetUniversalTime ()), 1f, maxRailsRate);
 
             if (CanRailsWarpAt ())
@@ -887,7 +923,7 @@ namespace KRPC.SpaceCenter.Services
                 PhysicsWarpAtRate (Mathf.Min (rate, Math.Min (maxRailsRate, maxPhysicsRate)));
 
             if (Planetarium.GetUniversalTime () < ut)
-                throw new YieldException<Action> (() => WarpTo(ut, maxRailsRate, maxPhysicsRate));
+                throw new YieldException<Action> (() => ContinueWarpTo (ut, maxRailsRate, maxPhysicsRate, scene));
             if (TimeWarp.CurrentRateIndex > 0)
                 SetWarpFactor (TimeWarp.Modes.HIGH, 0);
         }
@@ -895,7 +931,7 @@ namespace KRPC.SpaceCenter.Services
         static void SetWarpMode (TimeWarp.Modes mode)
         {
             if (TimeWarp.WarpMode != mode) {
-                TimeWarp.fetch.Mode = mode;
+                TimeWarpInstance.Mode = mode;
                 TimeWarp.SetRate (0, true);
             }
         }
@@ -912,10 +948,10 @@ namespace KRPC.SpaceCenter.Services
         static void RailsWarpAtRate (float rate)
         {
             SetWarpMode (TimeWarp.Modes.HIGH);
-            if (rate < TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex])
+            if (rate < TimeWarpInstance.warpRates [TimeWarp.CurrentRateIndex])
                 DecreaseRailsWarp ();
-            else if (TimeWarp.CurrentRateIndex + 1 < TimeWarp.fetch.warpRates.Length &&
-                     rate >= TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex + 1])
+            else if (TimeWarp.CurrentRateIndex + 1 < TimeWarpInstance.warpRates.Length &&
+                     rate >= TimeWarpInstance.warpRates [TimeWarp.CurrentRateIndex + 1])
                 IncreaseRailsWarp ();
         }
 
@@ -941,7 +977,7 @@ namespace KRPC.SpaceCenter.Services
             if (TimeWarp.CurrentRateIndex >= MaximumRailsWarpFactor)
                 return;
             // Check that the previous rate update has taken effect
-            float currentRate = TimeWarp.fetch.warpRates [TimeWarp.CurrentRateIndex];
+            float currentRate = TimeWarpInstance.warpRates [TimeWarp.CurrentRateIndex];
             if (Math.Abs (currentRate - TimeWarp.CurrentRate) > 0.01)
                 return;
             // Increase the rate
@@ -954,10 +990,10 @@ namespace KRPC.SpaceCenter.Services
         static void PhysicsWarpAtRate (float rate)
         {
             SetWarpMode (TimeWarp.Modes.LOW);
-            if (rate < TimeWarp.fetch.physicsWarpRates [TimeWarp.CurrentRateIndex])
+            if (rate < TimeWarpInstance.physicsWarpRates [TimeWarp.CurrentRateIndex])
                 DecreasePhysicsWarp ();
-            else if (TimeWarp.CurrentRateIndex + 1 < TimeWarp.fetch.physicsWarpRates.Length &&
-                     rate >= TimeWarp.fetch.physicsWarpRates [TimeWarp.CurrentRateIndex + 1])
+            else if (TimeWarp.CurrentRateIndex + 1 < TimeWarpInstance.physicsWarpRates.Length &&
+                     rate >= TimeWarpInstance.physicsWarpRates [TimeWarp.CurrentRateIndex + 1])
                 IncreasePhysicsWarp ();
         }
 
@@ -980,10 +1016,10 @@ namespace KRPC.SpaceCenter.Services
             if (TimeWarp.WarpMode != TimeWarp.Modes.LOW)
                 throw new InvalidOperationException ("Not in physical time warp");
             // Check if we're already warping at the maximum rate
-            if (TimeWarp.CurrentRateIndex + 1 >= TimeWarp.fetch.physicsWarpRates.Length)
+            if (TimeWarp.CurrentRateIndex + 1 >= TimeWarpInstance.physicsWarpRates.Length)
                 return;
             // Check that the previous rate update has taken effect
-            var currentRate = TimeWarp.fetch.physicsWarpRates [TimeWarp.CurrentRateIndex];
+            var currentRate = TimeWarpInstance.physicsWarpRates [TimeWarp.CurrentRateIndex];
             if (Math.Abs (currentRate - TimeWarp.CurrentRate) > 0.01)
                 return;
             // Increase the rate
