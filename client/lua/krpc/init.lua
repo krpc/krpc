@@ -1,8 +1,6 @@
 local Client = require 'krpc.client'
 local Connection = require 'krpc.connection'
 local LocalConnection = require 'krpc.localconnection'
-local encoder = require 'krpc.encoder'
-local decoder = require 'krpc.decoder'
 local limits = require 'krpc.limits'
 local schema = require 'krpc.schema.KRPC'
 
@@ -56,7 +54,6 @@ local function connect_using(rpc_connection, name)
   if response.status and response.status ~= schema.CONNECTIONRESPONSE_STATUS_OK_ENUM.number then
     error('Failed to connect: ' .. response.message)
   end
-  local client_identifier = response.client_identifier
 
   return Client(rpc_connection)
 end

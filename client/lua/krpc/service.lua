@@ -54,7 +54,7 @@ local function update_param_names(names)
 end
 
 local function _construct_func(invoke, service_name, procedure_name, prefix_param_names, param_names,
-                               param_types, param_required, param_default, return_type)
+                               param_types, _param_required, _param_default, return_type)
   prefix_param_names = prefix_param_names or List{}
   param_names = param_names or List{}
   prefix_param_names = update_param_names(prefix_param_names)
@@ -182,7 +182,7 @@ function ServiceBase:_add_service_property(name, getter, setter)
     local param_names, param_types, _,_,_ = self:_parse_procedure(setter)
     setter = _construct_func(self._invoke, self._name, setter_name, List{'self'}, param_names, param_types, List{true}, List{nil}, nil)
   end
-  local name = service.to_snake_case(name)
+  name = service.to_snake_case(name)
   return self:_add_property(name, getter, setter)
 end
 
@@ -214,7 +214,7 @@ function ServiceBase:_add_service_class_property(class_name, property_name, gett
   local class_cls = self._client._types:class_type(self._name, class_name).lua_type
   if getter then
     local getter_name = getter.name
-    local param_names, param_types, param_required, param_default, return_type = self:_parse_procedure(getter)
+    local param_names, param_types, _, _, return_type = self:_parse_procedure(getter)
     -- Rename this to self if it doesn't cause a name clash
     --if 'self' not in param_names:
     --  param_names[0] = 'self'
@@ -222,10 +222,10 @@ function ServiceBase:_add_service_class_property(class_name, property_name, gett
     --local build_request = ...
   end
   if setter then
-    local param_names, param_types, param_required, param_default, return_type = self:_parse_procedure(setter)
+    local param_names, param_types = self:_parse_procedure(setter)
     setter = _construct_func(self._invoke, self._name, setter.name, nil, param_names, param_types, List{true,true}, List{Types.none, Types.none}, nil)
   end
-  local property_name = service.to_snake_case(property_name)
+  property_name = service.to_snake_case(property_name)
   return class_cls:_add_property(property_name, getter, setter)
 end
 
@@ -244,33 +244,33 @@ local function _skipping_unknown_types(what, build)
 end
 
 --- Create a new service type
-function service.create_service(client, service)
+function service.create_service(client, svc)
   local cls = class(ServiceBase)
   cls._client = client
-  cls._name = service.name
+  cls._name = svc.name
   cls._invoke = bind1(client._invoke, client)
 
-  -- Add class types to service
-  for _,cls2 in ipairs(service.classes) do
+  -- Add class types to svc
+  for _,cls2 in ipairs(svc.classes) do
     cls:_add_service_class(cls2)
   end
 
-  -- Add enumeration types to service
-  for _,enum in ipairs(service.enumerations) do
+  -- Add enumeration types to svc
+  for _,enum in ipairs(svc.enumerations) do
     cls:_add_service_enumeration(enum)
   end
 
-  -- Add structure types to service
-  for _,struct in ipairs(service.structs) do
-    if client._types:struct_type(service.name, struct.name).lua_type ~= nil then
+  -- Add structure types to svc
+  for _,struct in ipairs(svc.structs) do
+    if client._types:struct_type(svc.name, struct.name).lua_type ~= nil then
       cls:_add_service_struct(struct)
     end
   end
 
   -- Add procedures
-  for _,procedure in ipairs(service.procedures) do
+  for _,procedure in ipairs(svc.procedures) do
     if Attributes.is_a_procedure(procedure.name) then
-      _skipping_unknown_types(service.name .. '.' .. procedure.name, function ()
+      _skipping_unknown_types(svc.name .. '.' .. procedure.name, function ()
         cls:_add_service_procedure(procedure)
       end)
     end
@@ -278,7 +278,7 @@ function service.create_service(client, service)
 
   -- Add properties
   local properties = {}
-  for _,procedure in ipairs(service.procedures) do
+  for _,procedure in ipairs(svc.procedures) do
     if Attributes.is_a_property_accessor(procedure.name) then
       local name = Attributes.get_property_name(procedure.name)
       if not properties[name] then
@@ -292,36 +292,36 @@ function service.create_service(client, service)
     end
   end
   for name, procedures in pairs(properties) do
-    _skipping_unknown_types(service.name .. '.' .. name, function ()
+    _skipping_unknown_types(svc.name .. '.' .. name, function ()
       cls:_add_service_property(name, procedures['get'], procedures['set'])
     end)
   end
 
   -- Add class methods
-  for _,procedure in ipairs(service.procedures) do
+  for _,procedure in ipairs(svc.procedures) do
     if Attributes.is_a_class_method(procedure.name) then
       local class_name = Attributes.get_class_name(procedure.name)
       local method_name = Attributes.get_class_member_name(procedure.name)
-      _skipping_unknown_types(service.name .. '.' .. class_name .. '.' .. method_name, function ()
+      _skipping_unknown_types(svc.name .. '.' .. class_name .. '.' .. method_name, function ()
         cls:_add_service_class_method(class_name, method_name, procedure)
       end)
     end
   end
 
   -- Add static class methods
-  for _,procedure in ipairs(service.procedures) do
+  for _,procedure in ipairs(svc.procedures) do
     if Attributes.is_a_class_static_method(procedure.name) then
       local class_name = Attributes.get_class_name(procedure.name)
       local method_name = Attributes.get_class_member_name(procedure.name)
-      _skipping_unknown_types(service.name .. '.' .. class_name .. '.' .. method_name, function ()
+      _skipping_unknown_types(svc.name .. '.' .. class_name .. '.' .. method_name, function ()
         cls:_add_service_class_static_method(class_name, method_name, procedure)
       end)
     end
   end
 
   -- Add class properties
-  local properties = {}
-  for _,procedure in ipairs(service.procedures) do
+  properties = {}
+  for _,procedure in ipairs(svc.procedures) do
     if Attributes.is_a_class_property_accessor(procedure.name) then
       local class_name = Attributes.get_class_name(procedure.name)
       local property_name = Attributes.get_class_member_name(procedure.name)
@@ -338,7 +338,7 @@ function service.create_service(client, service)
   end
   for key, procedures in pairs(properties) do
     local class_name, _, property_name = stringx.partition(key, '.')
-    _skipping_unknown_types(service.name .. '.' .. key, function ()
+    _skipping_unknown_types(svc.name .. '.' .. key, function ()
       cls:_add_service_class_property(class_name, property_name, procedures['get'], procedures['set'])
     end)
   end

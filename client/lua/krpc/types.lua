@@ -5,7 +5,6 @@ local Map = require 'pl.Map'
 local seq = require 'pl.seq'
 local stringx = require 'pl.stringx'
 local schema = require 'krpc.schema.KRPC'
-local Attributes = require 'krpc.attributes'
 
 local Types = class()
 
@@ -34,7 +33,7 @@ Types.STREAM = schema.TYPE_TYPECODE_STREAM_ENUM.number
 Types.SERVICES = schema.TYPE_TYPECODE_SERVICES_ENUM.number
 Types.STATUS = schema.TYPE_TYPECODE_STATUS_ENUM.number
 
-VALUE_TYPES = Map{}
+local VALUE_TYPES = Map{}
 VALUE_TYPES:set(Types.DOUBLE, 'number')
 VALUE_TYPES:set(Types.FLOAT, 'number')
 VALUE_TYPES:set(Types.SINT32, 'number')
@@ -45,7 +44,7 @@ VALUE_TYPES:set(Types.BOOL, 'boolean')
 VALUE_TYPES:set(Types.STRING, 'string')
 VALUE_TYPES:set(Types.BYTES, 'string')
 
-MESSAGE_TYPES = Map{}
+local MESSAGE_TYPES = Map{}
 MESSAGE_TYPES:set(Types.EVENT, schema.Event)
 MESSAGE_TYPES:set(Types.PROCEDURE_CALL, schema.ProcedureCall)
 MESSAGE_TYPES:set(Types.STREAM, schema.Stream)
@@ -55,7 +54,7 @@ MESSAGE_TYPES:set(Types.STATUS, schema.Status)
 -- Every type code a type object can be built for. A definition from a newer server may name a
 -- type code that is not among them, which is what makes a definition partly unusable rather
 -- than malformed
-KNOWN_TYPE_CODES = Set{
+local KNOWN_TYPE_CODES = Set{
   Types.CLASS, Types.ENUMERATION, Types.STRUCT,
   Types.TUPLE, Types.LIST, Types.SET, Types.DICTIONARY
 }
@@ -70,7 +69,7 @@ end
 --- skipped rather than failing the whole service, so the error has to be recognizable.
 Types.UNKNOWN_TYPE_ERROR = 'Unknown type'
 
-CODE_TO_STRING = Map{}
+local CODE_TO_STRING = Map{}
 CODE_TO_STRING:set(Types.DOUBLE, 'double')
 CODE_TO_STRING:set(Types.FLOAT, 'float')
 CODE_TO_STRING:set(Types.SINT32, 'sint32')
@@ -90,7 +89,10 @@ function Types:_init()
   self._types = Map{}
 end
 
-function _protobuf_type(code, service, name, types)
+-- Declared ahead of _protobuf_type, which calls it
+local _set_protobuf_type
+
+local function _protobuf_type(code, service, name, types)
   local protobuf_type = schema.Type()
   protobuf_type.code = code
   if service ~= nil then
@@ -368,7 +370,7 @@ local function _create_struct_type(service_name, struct_name, field_names)
   return cls
 end
 
-local function _create_enum_type(service_name, class_name, values)
+local function _create_enum_type(_service_name, _class_name, values)
   local cls = class(Types.Enum)
   for k, v in pairs(values) do
     cls[k] = cls(v)
@@ -577,7 +579,7 @@ function Types.DictionaryType:_init(protobuf_type, types)
   end
   self.key_type = types:as_type(protobuf_type.types[1])
   self.value_type = types:as_type(protobuf_type.types[2])
-  type_string = 'Dict(' .. self.key_type._string .. ',' .. self.value_type._string .. ')'
+  local type_string = 'Dict(' .. self.key_type._string .. ',' .. self.value_type._string .. ')'
   self:super(protobuf_type, Map, type_string)
 end
 
@@ -694,7 +696,8 @@ function Types.StructBase:__lt(other)
 end
 
 function Types.StructBase:__le(other)
-  return not (other < self)
+  -- Both sides are structures, which compare with __lt
+  return not (other < self) -- luacheck: ignore 581
 end
 
 function Types.StructBase:__tostring()

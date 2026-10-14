@@ -1,6 +1,5 @@
 local pb = require 'protobuf.pb'
 local tablex = require 'pl.tablex'
-local schema = require 'krpc.schema.KRPC'
 local Types = require 'krpc.types'
 
 local encoder = {}

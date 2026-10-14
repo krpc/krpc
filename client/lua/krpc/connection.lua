@@ -58,7 +58,7 @@ function Connection:receive(length)
   if length == 0 then
     return ''
   end
-  data, err = self._socket:receive(length)
+  local data, err = self._socket:receive(length)
   if data == nil then
     error('Socket error: ' .. err)
   end
@@ -67,7 +67,7 @@ end
 
 function Connection:send_message(message)
   -- Send a protobuf message.
-  data = encoder.encode_message_with_size(message)
+  local data = encoder.encode_message_with_size(message)
   self:send(data)
 end
 

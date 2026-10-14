@@ -14,8 +14,8 @@ local types = Types()
 
 local function _run_test_encode_value(typ, cases)
   for _, case in ipairs(cases) do
-    decoded = case[1]
-    encoded = case[2]
+    local decoded = case[1]
+    local encoded = case[2]
     local data = encoder.encode(decoded, typ)
     luaunit.assertEquals(platform.hexlify(data), encoded)
   end
@@ -23,8 +23,8 @@ end
 
 local function _run_test_decode_value(typ, cases)
   for _, case in ipairs(cases) do
-    decoded = case[1]
-    encoded = case[2]
+    local decoded = case[1]
+    local encoded = case[2]
     local value = decoder.decode(platform.unhexlify(encoded), typ)
     if typ.protobuf_type.code == Types.FLOAT or typ.protobuf_type.code == Types.DOUBLE then
       luaunit.assertEquals(tostring(decoded):sub(1,8), tostring(value):sub(1,8))
@@ -150,10 +150,10 @@ end
 
 function TestEncodeDecode:test_tuple()
   local cases = {{List{1}, '0a0101'}}
-  typ = types:tuple_type({types:uint32_type()})
+  local typ = types:tuple_type({types:uint32_type()})
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
-  local cases = {{List{1,'jeb',false}, '0a01010a04036a65620a0100'}}
+  cases = {{List{1,'jeb',false}, '0a01010a04036a65620a0100'}}
   typ = types:tuple_type({types:uint32_type(), types:string_type(), types:bool_type()})
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
@@ -164,13 +164,13 @@ function TestEncodeDecode:test_tuple_with_a_nullable_item()
     {List{1, 'jeb'}, '0a01010a0501036a6562'},
     {List{1, Types.none}, '0a01010a0100'}
   }
-  typ = types:tuple_type({types:uint32_type(), types:nullable(types:string_type())})
+  local typ = types:tuple_type({types:uint32_type(), types:nullable(types:string_type())})
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
 
 function TestEncodeDecode:test_struct_with_nullable_fields()
-  typ = types:struct_type('ServiceName', 'NullableStructName')
+  local typ = types:struct_type('ServiceName', 'NullableStructName')
   typ:set_fields({{'count', types:uint32_type()},
                   {'name', types:nullable(types:string_type())}})
   -- The 01 ahead of the name is its presence bool, and a null field is that bool alone
@@ -188,7 +188,7 @@ function TestEncodeDecode:test_list()
     {List{1}, '0a0101'},
     {List{1,2,3,4}, '0a01010a01020a01030a0104'}
   }
-  typ = types:list_type(types:uint32_type())
+  local typ = types:list_type(types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -202,7 +202,7 @@ function TestEncodeDecode:test_list_of_nullable_values()
     {List{0}, '0a020100'},
     {List{1, Types.none, 3}, '0a0201010a01000a020103'}
   }
-  typ = types:list_type(types:nullable(types:uint32_type()))
+  local typ = types:list_type(types:nullable(types:uint32_type()))
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -213,7 +213,7 @@ function TestEncodeDecode:test_set()
     {Set{1}, '0a0101'},
     {Set{1,2,3,4}, '0a01010a01020a01030a0104'}
   }
-  typ = types:set_type(types:uint32_type())
+  local typ = types:set_type(types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -226,7 +226,7 @@ function TestEncodeDecode:test_dictionary()
     {x, '0a060a0100120100'},
     {Map{foo = 42, bar = 365, baz = 3}, '0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a'}
   }
-  typ = types:dictionary_type(types:string_type(), types:uint32_type())
+  local typ = types:dictionary_type(types:string_type(), types:uint32_type())
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -241,7 +241,7 @@ function TestEncodeDecode:test_dictionary_of_nullable_values()
     {null, '0a060a0100120100'},
     {Map{foo = 42, bar = Types.none}, '0a090a04036261721201000a0a0a0403666f6f1202012a'}
   }
-  typ = types:dictionary_type(types:string_type(), types:nullable(types:uint32_type()))
+  local typ = types:dictionary_type(types:string_type(), types:nullable(types:uint32_type()))
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -277,7 +277,7 @@ function TestEncodeDecode:test_nullable_collection_values()
     {List{List{}}, '0a0101'},
     {List{List{1}}, '0a04010a0101'}
   }
-  typ = types:list_type(types:nullable(types:list_type(types:uint32_type())))
+  local typ = types:list_type(types:nullable(types:list_type(types:uint32_type())))
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -289,7 +289,7 @@ function TestEncodeDecode:test_nullable_struct_values()
     {List{Types.none}, '0a0100'},
     {List{struct_type.lua_type(1)}, '0a04010a0101'}
   }
-  typ = types:list_type(types:nullable(struct_type))
+  local typ = types:list_type(types:nullable(struct_type))
   _run_test_encode_value(typ, cases)
   _run_test_decode_value(typ, cases)
 end
@@ -297,14 +297,14 @@ end
 function TestEncodeDecode:test_null_at_a_position_that_cannot_hold_one()
   -- Types.none carries the object id 0, so a class-typed position takes it for a value
   -- unless the encoder rejects it
-  typ = types:list_type(types:class_type('ServiceName', 'ClassName'))
+  local typ = types:list_type(types:class_type('ServiceName', 'ClassName'))
   luaunit.assertError(encoder.encode, List{Types.none}, typ)
   luaunit.assertError(encoder.encode, List{Types.none}, types:list_type(types:uint32_type()))
 end
 
 function TestEncodeDecode:test_nullable_value_without_a_presence_bool()
   -- A list holding one item of zero length
-  typ = types:list_type(types:nullable(types:uint32_type()))
+  local typ = types:list_type(types:nullable(types:uint32_type()))
   luaunit.assertError(decoder.decode, platform.unhexlify('0a00'), typ)
 end
 

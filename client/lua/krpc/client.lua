@@ -1,15 +1,13 @@
 local class = require 'pl.class'
-local Map = require 'pl.Map'
 local List = require 'pl.List'
 local schema = require 'krpc.schema.KRPC'
 local Types = require 'krpc.types'
-local Attributes = require 'krpc.attributes'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
-local service = require 'krpc.service'
-local to_snake_case = service.to_snake_case
-local create_service = service.create_service
-local register_definitions = service.register_definitions
+local Service = require 'krpc.service'
+local to_snake_case = Service.to_snake_case
+local create_service = Service.create_service
+local register_definitions = Service.register_definitions
 
 local Client = class()
 

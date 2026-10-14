@@ -24,7 +24,7 @@ end
 
 function TestTypes:test_value_types()
   local types = Types()
-  cases = List{
+  local cases = List{
     { types:double_type(), Types.DOUBLE, 'number' },
     { types:float_type(), Types.FLOAT, 'number' },
     { types:sint32_type(), Types.SINT32, 'number' },
@@ -76,7 +76,7 @@ end
 
 function TestTypes:test_message_types()
   local types = Types()
-  cases = List{
+  local cases = List{
     { types:procedure_call_type(), Types.PROCEDURE_CALL },
     { types:stream_type(), Types.STREAM },
     { types:services_type(), Types.SERVICES },

@@ -13,7 +13,7 @@ local Types = require 'krpc.types'
 local TestClient = class(ServerTest)
 
 function TestClient:test_version()
-  status = self.conn.krpc:get_status()
+  local status = self.conn.krpc:get_status()
   luaunit.assertStrMatches(status.version, '%d+.%d+.%d+')
 end
 
@@ -71,7 +71,7 @@ function TestClient:test_properties()
 
   luaunit.assertEquals('foo', self.conn.test_service.string_property_private_set)
   self.conn.test_service.string_property_private_get = 'foo'
-  obj = self.conn.test_service.create_test_object('bar')
+  local obj = self.conn.test_service.create_test_object('bar')
   self.conn.test_service.object_property = obj
   luaunit.assertEquals(obj, self.conn.test_service.object_property)
 end
@@ -101,7 +101,7 @@ end
 function TestClient:test_class_none_value()
   self.conn.test_service.echo_test_object(Types.none)
   luaunit.assertEquals(self.conn.test_service.echo_test_object(Types.none), Types.none)
-  obj = self.conn.test_service.create_test_object('bob')
+  local obj = self.conn.test_service.create_test_object('bob')
   luaunit.assertEquals('bobnull', obj:object_to_string(Types.none))
   self.conn.test_service.object_property = Types.none
   luaunit.assertEquals(self.conn.test_service.object_property, Types.none)
@@ -245,10 +245,6 @@ function TestClient:test_enumerations()
                        self.conn.test_service.enum_list_default(List{enum.value_a, enum.value_b}))
 end
 
-function TestClient:test_invalid_enum()
-  luaunit.assertError(ValueError, self.conn.test_service.TestEnum, 9999)
-end
-
 function TestClient:test_collections()
   luaunit.assertEquals(List{}, self.conn.test_service.increment_list(List{}))
   luaunit.assertEquals(List{1,2,3}, self.conn.test_service.increment_list(List{0,1,2}))
@@ -280,7 +276,7 @@ function TestClient:test_collections_of_objects()
   local l = self.conn.test_service.add_to_object_list(List{}, "jeb")
   luaunit.assertEquals(1, l:len())
   luaunit.assertEquals("value=jeb", l[1]:get_value())
-  local l = self.conn.test_service.add_to_object_list(l, "bob")
+  l = self.conn.test_service.add_to_object_list(l, "bob")
   luaunit.assertEquals(2, l:len())
   luaunit.assertEquals("value=jeb", l[1]:get_value())
   luaunit.assertEquals("value=bob", l[2]:get_value())

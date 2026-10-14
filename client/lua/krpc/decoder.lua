@@ -2,9 +2,7 @@ local pb = require 'protobuf.pb'
 local List = require 'pl.List'
 local Set = require 'pl.Set'
 local Map = require 'pl.Map'
-local tablex = require 'pl.tablex'
 local platform = require 'krpc.platform'
-local schema = require 'krpc.schema.KRPC'
 local Types = require 'krpc.types'
 
 local decoder = {}

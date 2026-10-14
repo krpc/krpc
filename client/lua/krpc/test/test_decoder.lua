@@ -12,7 +12,6 @@ local TestDecoder = class()
 local types = Types()
 
 function TestDecoder:test_decode_message()
-  local typ = schema.ProcedureCall
   local message = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
   local call = decoder.decode(platform.unhexlify(message), types:procedure_call_type())
   luaunit.assertEquals('ServiceName', call.service)

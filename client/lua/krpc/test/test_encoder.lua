@@ -16,8 +16,8 @@ function TestEncoder:test_encode_message()
   local call = schema.ProcedureCall()
   call.service = 'ServiceName'
   call.procedure = 'ProcedureName'
-  data = encoder.encode(call, types:procedure_call_type())
-  expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
+  local data = encoder.encode(call, types:procedure_call_type())
+  local expected = '0a0b536572766963654e616d65120d50726f6365647572654e616d65'
   luaunit.assertEquals(platform.hexlify(data), expected)
 end
 
