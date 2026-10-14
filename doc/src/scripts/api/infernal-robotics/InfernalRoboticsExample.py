@@ -1,5 +1,6 @@
 import sys
 import time
+
 import krpc
 
 conn = krpc.connect(name="InfernalRobotics Example")

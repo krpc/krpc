@@ -1,8 +1,10 @@
 import getpass
 import os
 import socket
-from google.protobuf.internal.encoder import _VarintEncoder
+
 from google.protobuf.internal.decoder import _DecodeVarint
+from google.protobuf.internal.encoder import _VarintEncoder
+
 from krpc.schema import KRPC_pb2 as KRPC
 
 

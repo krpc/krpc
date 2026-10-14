@@ -160,7 +160,7 @@ python code using the Protocol Buffer compiler. The ``send_message`` and ``recv_
 functions used to send/receive messages from the server.
 
 .. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
-   :lines: 64-
+   :start-at: call = KRPC.ProcedureCall()
 
 .. _communication-protocol-protobuf-encoding:
 

@@ -34,6 +34,3 @@ max-statements = 60
 "__init__.py" = ["F401"]
 # Tests read a property for the exception it raises
 "**/test/*.py" = ["B018"]
-# Documentation examples keep their imports in one block, as the docs include
-# them by line number
-"doc/src/scripts/**" = ["I001"]

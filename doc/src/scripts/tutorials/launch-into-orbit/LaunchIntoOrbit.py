@@ -1,5 +1,6 @@
 import math
 import time
+
 import krpc
 
 turn_start_altitude = 250

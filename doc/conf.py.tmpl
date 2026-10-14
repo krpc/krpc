@@ -343,3 +343,22 @@ def setup(app):
         directives = dict(CSharpDomain.directives, struct=CSharpStruct)
 
     app.add_domain(KRPCCSharpDomain, override=True)
+
+    # A literalinclude that ends before the next section of a script, or starts
+    # after the previous one, keeps the blank line between them. Blank lines at
+    # either end of a code block are trimmed.
+    from docutils import nodes
+
+    def trim_blank_lines(app, doctree):
+        for block in doctree.findall(nodes.literal_block):
+            lines = block.rawsource.split('\n')
+            while lines and not lines[0].strip():
+                lines.pop(0)
+            while lines and not lines[-1].strip():
+                lines.pop()
+            text = '\n'.join(lines)
+            if text != block.rawsource and block.rawsource == block.astext():
+                block.rawsource = text
+                block[:] = [nodes.Text(text)]
+
+    app.connect('doctree-read', trim_blank_lines)

@@ -1,5 +1,6 @@
 import math
 import time
+
 import krpc
 
 conn = krpc.connect(name="Pitch/Heading/Roll")

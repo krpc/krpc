@@ -1,7 +1,9 @@
 import curses
 import time
+
 import numpy as np
 import numpy.linalg as la
+
 import krpc
 
 # Set up curses
