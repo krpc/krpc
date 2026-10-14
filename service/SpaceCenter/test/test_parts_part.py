@@ -789,6 +789,17 @@ class TestPartsPart(krpctest.TestCase):
         self.assertAlmostEqual((-0.495, -1.122, -0.569), box[0], places=2)
         self.assertAlmostEqual((0.495, 0.232, 0.679), box[1], places=2)
 
+    def test_tag(self):
+        part = self.parts.root
+        self.assertEqual("", part.tag)
+        self.addCleanup(setattr, part, "tag", "")
+        part.tag = "pod"
+        self.assertEqual("pod", part.tag)
+        self.assertEqual([part], self.parts.with_tag("pod"))
+        part.tag = ""
+        self.assertEqual("", part.tag)
+        self.assertEqual([], self.parts.with_tag("pod"))
+
     def test_highlighting(self):
         part = self.parts.with_name("Rockomax64.BW")[0]
         init_color = part.highlight_color
