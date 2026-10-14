@@ -26,13 +26,13 @@ object (of type :class:`krpc.client.Client`) through which you can interact with
 following example connects to a server running on the local machine, queries its version and prints
 it out:
 
-.. literalinclude:: /scripts/client/python/Connecting1.py
+.. literalinclude:: /scripts/python/client/Connecting1.py
 
 This function also accepts arguments that specify what address and port numbers to connect to, and
 an optional descriptive name for the connection which is displayed in the kRPC window in the
 game. For example:
 
-.. literalinclude:: /scripts/client/python/Connecting2.py
+.. literalinclude:: /scripts/python/client/Connecting2.py
 
 Calling Remote Procedures
 -------------------------
@@ -46,7 +46,7 @@ The following example demonstrates how to invoke remote procedures using the Pyt
 :attr:`SpaceCenter.active_vessel` to get an object representing the active vessel (of type
 :class:`SpaceCenter.Vessel`). It sets the name of the vessel and then prints out its altitude:
 
-.. literalinclude:: /scripts/client/python/RemoteProcedures.py
+.. literalinclude:: /scripts/python/client/RemoteProcedures.py
 
 Many procedures return an object identifying something in the game, such as a vessel or
 a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
@@ -75,7 +75,7 @@ lambda to :meth:`krpc.client.Client.run` to compile it into a server side functi
 return its value. Every value it reads comes from the same physics tick. For example, the following
 reads the vessel's altitude and speed together:
 
-.. literalinclude:: /scripts/client/python/RunFunction.py
+.. literalinclude:: /scripts/python/client/RunFunction.py
 
 Use ``run`` for a function with effects, such as setting a property. An event or a function stream
 evaluates its function on every update, repeating the effects.
@@ -92,7 +92,7 @@ A common use case for kRPC is to continuously extract data from the game. The na
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly
 prints the position of the active vessel:
 
-.. literalinclude:: /scripts/client/python/Streaming1.py
+.. literalinclude:: /scripts/python/client/Streaming1.py
 
 This approach requires significant communication overhead as request/response messages are
 repeatedly sent between the client and server. kRPC provides a more efficient mechanism to achieve
@@ -105,7 +105,7 @@ closed.
 
 The following example does the same thing as above using streams:
 
-.. literalinclude:: /scripts/client/python/Streaming2.py
+.. literalinclude:: /scripts/python/client/Streaming2.py
 
 It calls :meth:`krpc.client.Client.add_stream` once at the start of the program to create the
 stream, and then repeatedly prints the position returned by the stream. The stream is automatically
@@ -114,13 +114,13 @@ closed when the client disconnects.
 Streams can also be created using the ``with`` statement, which ensures that the stream is closed
 after leaving the block:
 
-.. literalinclude:: /scripts/client/python/Streaming3.py
+.. literalinclude:: /scripts/python/client/Streaming3.py
 
 A stream can be created for any procedure that returns a value. This includes both method calls and
 attribute accesses. The examples above demonstrated how to stream method calls. Attributes can be
 streamed as follows:
 
-.. literalinclude:: /scripts/client/python/Streaming4.py
+.. literalinclude:: /scripts/python/client/Streaming4.py
 
 A stream can be created for any function call (except property setters). The most recent value of a
 stream can be obtained by calling :func:`krpc.stream.Stream.__call__`. A stream can be stopped and
@@ -150,7 +150,7 @@ stream changes.
 The following example waits until the abort button is pressed in game, by waiting for the value of
 ``vessel.control.abort`` to change to true:
 
-.. literalinclude:: /scripts/client/python/ConditionVariables1.py
+.. literalinclude:: /scripts/python/client/ConditionVariables1.py
 
 This code creates a stream, acquires a lock on the streams condition variable (using a ``with``
 statement) and then repeatedly checks the value of ``abort``. It leaves the loop when it changes to
@@ -163,7 +163,7 @@ whilst waiting.
 The example code above uses a ``with`` statement to acquire the lock on the condition variable. This
 can also be done explicitly using ``acquire`` and ``release``:
 
-.. literalinclude:: /scripts/client/python/ConditionVariables2.py
+.. literalinclude:: /scripts/python/client/ConditionVariables2.py
 
 Callbacks
 ~~~~~~~~~
@@ -175,7 +175,7 @@ should return nothing.
 For example the following program registers two callbacks that are invoked when the value of
 ``vessel.conrol.abort`` changes:
 
-.. literalinclude:: /scripts/client/python/Callbacks.py
+.. literalinclude:: /scripts/python/client/Callbacks.py
 
 A callback added to a stream that already has a value is called with that value straight away.
 
@@ -190,7 +190,7 @@ Stream Endings
 
 The following example streams the temperature of a part until the part is destroyed:
 
-.. literalinclude:: /scripts/client/python/StreamEnd.py
+.. literalinclude:: /scripts/python/client/StreamEnd.py
 
 Once a stream ends, calling the stream or waiting on it raises the exception that ended it. A stream
 ends when its procedure raises an exception, when the server removes it, when you remove it, or when
@@ -216,7 +216,7 @@ computed on the server. The server evaluates the function on each stream update,
 tick. The value can be any type the server can send, including collections and objects. For example,
 the following streams the vessel's altitude in kilometers:
 
-.. literalinclude:: /scripts/client/python/CompiledFunctionStream.py
+.. literalinclude:: /scripts/python/client/CompiledFunctionStream.py
 
 Each call to ``add_stream`` creates a separate stream, which evaluates the function again on each
 update.
@@ -253,11 +253,11 @@ event object, so no firing is missed between two calls. Several firings between 
 You can also create a custom event from a Python function or lambda. The following creates an event
 that triggers when ``mean_altitude > 1000``:
 
-.. literalinclude:: /scripts/client/python/CompiledEvent.py
+.. literalinclude:: /scripts/python/client/CompiledEvent.py
 
 The same event can be built by hand from ``KRPC.Expression`` nodes, with the expression API:
 
-.. literalinclude:: /scripts/client/python/Event.py
+.. literalinclude:: /scripts/python/client/Event.py
 
 .. _python-client-compiling-functions:
 
@@ -269,7 +269,7 @@ side function. :meth:`krpc.client.Client.add_event`, :meth:`krpc.client.Client.a
 :meth:`krpc.client.Client.run` take the result, and run it without compiling it again. The following
 compiles a function once, and runs it every second:
 
-.. literalinclude:: /scripts/client/python/CompiledFunction.py
+.. literalinclude:: /scripts/python/client/CompiledFunction.py
 
 Given a Python function or lambda, ``add_event``, ``add_stream`` and ``run`` compile it again on
 every call, so its captured variables take their current values. A compiled function keeps the
@@ -357,7 +357,7 @@ the same result on the server:
 A Python function can also contain statements, which run on the server. This one shuts down
 the engines that have run out of fuel, and returns how many it shut down:
 
-.. literalinclude:: /scripts/client/python/CompiledStatements.py
+.. literalinclude:: /scripts/python/client/CompiledStatements.py
 
 A function body can contain:
 

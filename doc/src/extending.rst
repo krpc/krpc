@@ -32,12 +32,12 @@ game, looking for classes, methods and properties with these attributes.
 The following example implements a service that can control the throttle and staging of the active
 vessel. To add this to the server, compile the code and place the DLL in your GameData directory.
 
-.. literalinclude:: /scripts/ServiceAPIExample.lib.cs
+.. literalinclude:: /scripts/extending/ServiceAPIExample.lib.cs
    :language: csharp
 
 The following example shows how this service can then be used from a python client:
 
-.. literalinclude:: /scripts/ServiceAPIExample.py
+.. literalinclude:: /scripts/extending/ServiceAPIExample.py
    :language: python
 
 Some of the client libraries automatically pick up changes to the functionality provided by the

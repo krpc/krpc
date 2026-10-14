@@ -30,7 +30,7 @@ via this object. When constructed without any arguments, it will connect to the 
 default port numbers. You can specify different connection settings, and also a descriptive name for
 the connection, as follows:
 
-.. literalinclude:: /scripts/client/csharp/Connecting.cs
+.. literalinclude:: /scripts/csharp/client/Connecting.cs
 
 The :type:`Connection` object needs to be disposed of correctly when finished with, so that the
 network connection it manages can be released. This can be done with a ``using`` block (as in the
@@ -51,7 +51,7 @@ instantiates the ``SpaceCenter`` service and calls
 active vessel (of type :type:`KRPC.Client.Services.SpaceCenter.Vessel`). It sets the name of the
 vessel and then prints out its altitude:
 
-.. literalinclude:: /scripts/client/csharp/RemoteProcedures.cs
+.. literalinclude:: /scripts/csharp/client/RemoteProcedures.cs
 
 Many procedures return an object identifying something in the game, such as a vessel or
 a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
@@ -65,7 +65,7 @@ A server side function is code that runs inside the game, on the server. Pass a 
 Every value it reads comes from the same physics tick. For example, the following reads the vessel's
 altitude and speed together:
 
-.. literalinclude:: /scripts/client/csharp/RunFunction.cs
+.. literalinclude:: /scripts/csharp/client/RunFunction.cs
 
 Use ``Run`` for a function with effects, such as a call of ``ActivateNextStage``. An event or a
 function stream evaluates its function on every update, repeating the effects.
@@ -82,7 +82,7 @@ A common use case for kRPC is to continuously extract data from the game. The na
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly
 prints the position of the active vessel:
 
-.. literalinclude:: /scripts/client/csharp/Streaming1.cs
+.. literalinclude:: /scripts/csharp/client/Streaming1.cs
 
 This approach requires significant communication overhead as request/response messages are
 repeatedly sent between the client and server. kRPC provides a more efficient mechanism to achieve
@@ -95,7 +95,7 @@ closed.
 
 The following example does the same thing as above using streams:
 
-.. literalinclude:: /scripts/client/csharp/Streaming2.cs
+.. literalinclude:: /scripts/csharp/client/Streaming2.cs
 
 It calls :meth:`Connection.AddStream` once at the start of the program to create the stream, and
 then repeatedly prints the position returned by the stream. The stream is automatically closed when
@@ -137,7 +137,7 @@ stream changes.
 The following example waits until the abort button is pressed in game, by waiting for the value of
 :prop:`KRPC.Client.Services.SpaceCenter.Control.Abort` to change to true:
 
-.. literalinclude:: /scripts/client/csharp/ConditionVariables.cs
+.. literalinclude:: /scripts/csharp/client/ConditionVariables.cs
 
 This code creates a stream, acquires a lock on the streams condition variable (by using a ``lock``
 statement) and then repeatedly checks the value of ``Abort``. It leaves the loop when it changes to
@@ -157,7 +157,7 @@ should return nothing.
 For example the following program registers two callbacks that are invoked when the value of
 :prop:`KRPC.Client.Services.SpaceCenter.Control.Abort` changes:
 
-.. literalinclude:: /scripts/client/csharp/Callbacks.cs
+.. literalinclude:: /scripts/csharp/client/Callbacks.cs
 
 A callback added to a stream that already has a value is called with that value straight away.
 
@@ -172,7 +172,7 @@ Stream Endings
 
 The following example streams the temperature of a part until the part is destroyed:
 
-.. literalinclude:: /scripts/client/csharp/StreamEnd.cs
+.. literalinclude:: /scripts/csharp/client/StreamEnd.cs
 
 Once a stream ends, calling ``Get`` or ``Wait`` on the stream throws the exception that ended it. A
 stream ends when its procedure throws an exception, when the server removes it, when you remove it,
@@ -198,7 +198,7 @@ server. The server evaluates the function on each stream update, within one phys
 can be any type the server can send, including collections and objects. For example, the following
 streams the vessel's altitude in kilometers:
 
-.. literalinclude:: /scripts/client/csharp/CompiledFunctionStream.cs
+.. literalinclude:: /scripts/csharp/client/CompiledFunctionStream.cs
 
 Given a function built with the expression API, :meth:`Connection.AddStream` takes the type of
 its value as a type parameter. The type must be able to hold the value, or ``AddStream`` throws an
@@ -240,13 +240,13 @@ event object, so no firing is missed between two calls. Several firings between 
 You can also create a custom event from a lambda expression. The following creates an event that
 triggers when ``MeanAltitude > 1000``:
 
-.. literalinclude:: /scripts/client/csharp/CompiledEvent.cs
+.. literalinclude:: /scripts/csharp/client/CompiledEvent.cs
 
 You can also build the event's function with the :ref:`expression API <server-side-functions-api>`,
 and pass it to :meth:`Connection.AddEvent`. :meth:`Connection.GetCall` gives the call of a
 procedure, for ``Expression.Call``. The following builds the same event:
 
-.. literalinclude:: /scripts/client/csharp/Event.cs
+.. literalinclude:: /scripts/csharp/client/Event.cs
 
 .. _csharp-client-compiling-lambdas:
 
@@ -258,7 +258,7 @@ Pass a lambda expression to :meth:`Connection.Compile` to compile it into a serv
 result, and run it without compiling it again. The following compiles a function once, and runs it
 every second:
 
-.. literalinclude:: /scripts/client/csharp/CompiledFunction.cs
+.. literalinclude:: /scripts/csharp/client/CompiledFunction.cs
 
 Given a lambda, ``AddEvent`` and ``Run`` translate it on every call, and so does ``AddStream``
 unless it streams a single call. The lambda's captured variables take their current values. A

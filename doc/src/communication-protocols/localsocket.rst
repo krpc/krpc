@@ -102,5 +102,5 @@ It is written for the POSIX socket API, so it runs on Linux and macOS. The proto
 Windows, where the address family is reached through winsock, as Python's socket module does not
 expose it.
 
-.. literalinclude:: /scripts/communication-protocol-localsocket.py
+.. literalinclude:: /scripts/communication-protocols/localsocket/RPC.py
    :language: python

@@ -641,19 +641,19 @@ running, catch the exception in the function:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/client/python/NotLoadedEvent.py
+      .. literalinclude:: /scripts/tutorials/server-side-functions/NotLoadedEvent.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/client/csharp/NotLoadedEvent.cs
+      .. literalinclude:: /scripts/tutorials/server-side-functions/NotLoadedEvent.cs
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/client/cpp/NotLoadedEvent.cpp
+      .. literalinclude:: /scripts/tutorials/server-side-functions/NotLoadedEvent.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/client/java/NotLoadedEvent.java
+      .. literalinclude:: /scripts/tutorials/server-side-functions/NotLoadedEvent.java
 
 The event's handler gives ``False``, so the event does not fire. A stream's handler can give a
 last good value, kept in a state variable. With the expression API, :meth:`Expression.try_catch`
@@ -795,19 +795,19 @@ and a comparison:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/client/python/Event.py
+      .. literalinclude:: /scripts/python/client/Event.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/client/csharp/Event.cs
+      .. literalinclude:: /scripts/csharp/client/Event.cs
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/client/cpp/Event.cpp
+      .. literalinclude:: /scripts/cpp/client/Event.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/client/java/CustomEvent.java
+      .. literalinclude:: /scripts/java/client/CustomEvent.java
 
 Two kinds of object appear here:
 
@@ -890,19 +890,19 @@ A function whose value can be sent to a client can be streamed:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/client/python/FunctionStream.py
+      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStream.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/client/csharp/FunctionStream.cs
+      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStream.cs
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/client/cpp/FunctionStream.cpp
+      .. literalinclude:: /scripts/cpp/client/FunctionStream.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/client/java/FunctionStream.java
+      .. literalinclude:: /scripts/java/client/FunctionStream.java
 
 Some clients take the type of the stream's values as a type argument, and others read the
 function's return type from the server. A function stream behaves like any other stream, and its
@@ -918,19 +918,19 @@ the procedure, so any engine can supply it:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/client/python/CollectionEvent.py
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CollectionEvent.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/client/csharp/CollectionEvent.cs
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CollectionEvent.cs
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/client/cpp/CollectionEvent.cpp
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CollectionEvent.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/client/java/CollectionEvent.java
+      .. literalinclude:: /scripts/tutorials/server-side-functions/CollectionEvent.java
 
 A function passed to a collection operation is built from two pieces:
 
@@ -1027,19 +1027,19 @@ This builds and runs ``total = 0; for x in [1, 2, 3]: total += x``, which return
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/client/python/FunctionStatements.py
+      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStatements.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/client/csharp/FunctionStatements.cs
+      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStatements.cs
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/client/cpp/FunctionStatements.cpp
+      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStatements.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/client/java/FunctionStatements.java
+      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStatements.java
 
 Statements are ordinary expression nodes. :meth:`Expression.block_with_variables` sequences
 statements and declares local variables, and its value is the value of its last statement.

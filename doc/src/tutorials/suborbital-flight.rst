@@ -23,12 +23,12 @@ The tutorial uses the two stage rocket pictured below. :download:`Download the c
 The tutorial includes source code for the main client languages kRPC supports. Download the
 whole program in your chosen language:
 
-:download:`C</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c>`,
-:download:`C#</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs>`,
-:download:`C++</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp>`,
-:download:`Java</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java>`,
-:download:`Lua</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua>`,
-:download:`Python</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py>`
+:download:`C</scripts/tutorials/suborbital-flight/SubOrbitalFlight.c>`,
+:download:`C#</scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs>`,
+:download:`C++</scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp>`,
+:download:`Java</scripts/tutorials/suborbital-flight/SubOrbitalFlight.java>`,
+:download:`Lua</scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua>`,
+:download:`Python</scripts/tutorials/suborbital-flight/SubOrbitalFlight.py>`
 
 .. image:: /images/tutorials/SubOrbitalFlight.png
    :align: center
@@ -43,37 +43,37 @@ server window in the game:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 13-15
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 9
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 10-11
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 15-16
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 1-3
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 4
 
@@ -84,37 +84,37 @@ this object:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 17-24
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 11
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 13
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 18
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 5
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 6
 
@@ -126,37 +126,37 @@ take effect:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 26-29
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 13-16
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 15-18
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 20-23
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 7-10
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 8-11
 
@@ -169,37 +169,37 @@ We launch by activating the first stage, which is the same as pressing the space
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 31-32
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 18-19
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 20-21
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 25-26
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 12-13
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 13-14
 
@@ -210,37 +210,37 @@ that fires when less than 0.1 units of solid fuel are left, then activate the ne
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 34-44
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 21-28
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 23-35
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 28-40
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 15-19
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 16-20
 
@@ -263,37 +263,37 @@ at an altitude of 10 km:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 46-53
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 30-36
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 37-45
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 42-53
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 21-23
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 22-25
 
@@ -307,37 +307,37 @@ takes the new target:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 55-56
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 38-39
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 47-48
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 55-56
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 25-26
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 27-28
 
@@ -348,37 +348,37 @@ jettison the launch stage and turn off the autopilot:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 58-71
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 41-52
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 50-64
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 58-75
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 28-35
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 30-38
 
@@ -395,37 +395,37 @@ skip ahead to just before this happens, and the script carries on working:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 73-80
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 54-61
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 66-75
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 77-89
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 37-40
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 40-44
 
@@ -436,37 +436,37 @@ vertical speed reaches zero when it lands:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 82-99
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 63-67
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 77-81
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 91-95
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 42-
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 46-49
 

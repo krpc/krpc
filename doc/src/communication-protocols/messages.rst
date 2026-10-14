@@ -159,7 +159,7 @@ The ``krpc.schema.KRPC`` package contains the various Protocol Buffer message fo
 python code using the Protocol Buffer compiler. The ``send_message`` and ``recv_message`` are helper
 functions used to send/receive messages from the server.
 
-.. literalinclude:: /scripts/communication-protocol-rpc.py
+.. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
    :lines: 64-
 
 .. _communication-protocol-protobuf-encoding:

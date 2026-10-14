@@ -102,5 +102,5 @@ Example
 This script reports whether the active vessel floats, and how far its center of buoyancy
 sits from its center of mass:
 
-.. literalinclude:: /scripts/tutorials/BuoyancyTrim.py
+.. literalinclude:: /scripts/tutorials/buoyancy/BuoyancyTrim.py
    :language: python

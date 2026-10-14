@@ -22,15 +22,15 @@ import sys
 SCRIPTS_DIR = os.path.join("doc", "src", "scripts")
 CONFIG = "pyrightconfig.json"
 
-# (file basename, pyright rule) pairs that are expected and harmless:
+# (path under doc/src/scripts, pyright rule) pairs that are expected and harmless:
 # - ServiceAPIExample.py calls conn.launch_control, the fictional example
 #   service from extending.rst, which has no generated stub.
 # - DockingGuidance.py imports numpy, which the test does not install, and
 #   passes 1 to curses' window.keypad, which typeshed declares as taking a bool.
 ALLOWED = {
-    ("ServiceAPIExample.py", "reportAttributeAccessIssue"),
-    ("DockingGuidance.py", "reportMissingImports"),
-    ("DockingGuidance.py", "reportArgumentType"),
+    ("extending/ServiceAPIExample.py", "reportAttributeAccessIssue"),
+    ("tutorials/docking-guidance/DockingGuidance.py", "reportMissingImports"),
+    ("tutorials/docking-guidance/DockingGuidance.py", "reportArgumentType"),
 }
 
 OPTIONAL_ARG = re.compile(
@@ -85,7 +85,9 @@ def main():
         message = diagnostic["message"]
         if rule == "reportOptionalMemberAccess" or OPTIONAL_ARG.search(message):
             continue
-        name = os.path.basename(diagnostic["file"])
+        # The path is in the runfiles or, through a symlink, the source tree
+        path = diagnostic["file"].replace(os.sep, "/")
+        name = path.split("doc/src/scripts/", 1)[-1]
         if (name, rule) in ALLOWED:
             continue
         line = diagnostic["range"]["start"]["line"] + 1

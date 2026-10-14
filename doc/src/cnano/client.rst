@@ -228,7 +228,7 @@ POSIX Systems
 On POSIX systems (such as Linux) the following example program connects to the server, queries it
 for its version and prints it out:
 
-.. literalinclude:: /scripts/client/cnano/Basic.c
+.. literalinclude:: /scripts/cnano/client/Basic.c
 
 The :func:`krpc_connect` function is used to open a connection to a server. It takes as its first
 argument a connection object into which the connection information is written. This is passed to
@@ -241,7 +241,7 @@ Arduino
 The following example demonstrates how to connect to the server from an Arduino, through its serial
 port interface:
 
-.. literalinclude:: /scripts/client/cnano/BasicArduino.ino
+.. literalinclude:: /scripts/cnano/client/BasicArduino.ino
    :language: c
 
 Calling Remote Procedures
@@ -256,7 +256,7 @@ The following example demonstrates how to invoke remote procedures using the Cna
 :func:`krpc_SpaceCenter_ActiveVessel` to get a handle to the active vessel (of type
 :type:`krpc_SpaceCenter_Vessel_t`). It sets the name of the vessel and then prints out its altitude:
 
-.. literalinclude:: /scripts/client/cnano/RemoteProcedures.c
+.. literalinclude:: /scripts/cnano/client/RemoteProcedures.c
 
 Many procedures return an object identifying something in the game, such as a vessel or
 a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object

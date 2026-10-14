@@ -119,10 +119,10 @@ format:
 * ``recv_message`` receives the size of the message, decodes it, receives the message data, and
   decodes it.
 
-.. literalinclude:: /scripts/communication-protocol-rpc.py
+.. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
    :language: python
 
 The following example demonstrates how to set up and receive data from the server over a stream:
 
-.. literalinclude:: /scripts/communication-protocol-stream.py
+.. literalinclude:: /scripts/communication-protocols/tcpip/Stream.py
    :language: python

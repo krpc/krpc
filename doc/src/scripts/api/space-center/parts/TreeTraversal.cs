@@ -4,7 +4,7 @@ using System.Net;
 using KRPC.Client;
 using KRPC.Client.Services.SpaceCenter;
 
-class AttachmentModes
+class TreeTraversal
 {
     public static void Main ()
     {

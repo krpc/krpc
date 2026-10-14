@@ -149,5 +149,5 @@ The following Python code connects to a server on serial port ``/dev/ttyUSB0`` u
 "Jeb". It then invokes the ``KRPC.GetStatus`` RPC, receives and decodes the result, and prints out
 the server version number from the response.
 
-.. literalinclude:: /scripts/communication-protocol-serialio.py
+.. literalinclude:: /scripts/communication-protocols/serialio/RPC.py
    :language: python
