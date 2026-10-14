@@ -2,7 +2,7 @@ local Client = require 'krpc.client'
 local Connection = require 'krpc.connection'
 local LocalConnection = require 'krpc.localconnection'
 local limits = require 'krpc.limits'
-local schema = require 'krpc.schema.KRPC'
+local protobuf = require 'krpc.protobuf'
 
 local krpc = {}
 
@@ -44,14 +44,12 @@ local function connect_using(rpc_connection, name)
   name = name or ''
 
   rpc_connection:connect()
-  local request = schema.ConnectionRequest()
-  request.type = schema.CONNECTIONREQUEST_TYPE_RPC_ENUM.number
-  request.client_name = name
-  rpc_connection:send_message(request)
-  local response = rpc_connection:receive_message(schema.ConnectionResponse)
-  -- A successful (OK) status is the protobuf default, so it is omitted from the message and
-  -- response.status reads as nil; the guard ensures only a present, non-OK status is an error.
-  if response.status and response.status ~= schema.CONNECTIONRESPONSE_STATUS_OK_ENUM.number then
+  rpc_connection:send_message('ConnectionRequest', {
+    type = protobuf.enum('ConnectionRequest.Type', 'RPC'),
+    client_name = name
+  })
+  local response = rpc_connection:receive_message('ConnectionResponse')
+  if response.status ~= protobuf.enum('ConnectionResponse.Status', 'OK') then
     error('Failed to connect: ' .. response.message)
   end
 

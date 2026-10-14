@@ -4,7 +4,6 @@ local List = require 'pl.List'
 local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local Types = require 'krpc.types'
-local schema = require 'krpc.schema.KRPC'
 
 local TestTypes = class()
 
@@ -17,8 +16,7 @@ end
 
 function TestTypes:test_none_type()
   local types = Types()
-  local none_type = schema.Type()
-  none_type.code = Types.NONE
+  local none_type = { code = Types.NONE, service = '', name = '', types = {}, nullable = false }
   luaunit.assertError(types.as_type, none_type)
 end
 

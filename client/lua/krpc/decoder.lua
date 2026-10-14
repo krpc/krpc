@@ -1,17 +1,22 @@
-local pb = require 'protobuf.pb'
 local List = require 'pl.List'
 local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local platform = require 'krpc.platform'
+local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
 
 local decoder = {}
 
 decoder.OK_MESSAGE = '\79\75'
 
+-- Returns nil for data with no bytes, which we read as the zero value, as a protobuf field left
+-- out reads. Raises an error for data cut short.
+local _unpack = protobuf.unpack
+local _decode_message = protobuf.decode_inside_call
+
 local function _decode_varint(data)
   -- A varint that fits in one byte is most of the values a call carries, and reading it needs
-  -- neither the C decoder nor the position it hands back alongside the value.
+  -- no call into the C decoder
   local byte = data:byte(1)
   if byte and byte < 128 then
     return byte
@@ -19,25 +24,23 @@ local function _decode_varint(data)
   if data == '\255\255\255\255\255\255\255\255\127' then
     return math.huge
   end
-  local value = pb.varint_decoder(data, 0)
-  return value
+  return _unpack(data, 'v') or 0
 end
 
--- The pb.struct_unpack format codes for a single precision and a double precision number.
-local FLOAT_FORMAT = string.byte('f')
-local DOUBLE_FORMAT = string.byte('d')
-
 local function _decode_float(data)
-  return pb.struct_unpack(FLOAT_FORMAT, data, 0)
+  return _unpack(data, 'f') or 0.0
 end
 
 local function _decode_double(data)
-  return pb.struct_unpack(DOUBLE_FORMAT, data, 0)
+  return _unpack(data, 'F') or 0.0
 end
 
 local function _decode_string(data)
-  local size, position = pb.varint_decoder(data, 0)
-  return data:sub(position+1, position+size+1)
+  return _unpack(data, 's') or ''
+end
+
+local function _decode_signed(data)
+  return _unpack(data, 'j') or 0
 end
 
 -- The decoder for each value type, by type code. Decoding a value starts here, and a table
@@ -45,15 +48,15 @@ end
 local _value_decoders = {
   [Types.DOUBLE] = _decode_double,
   [Types.FLOAT] = _decode_float,
-  [Types.SINT32] = function(data) return pb.zig_zag_decode32(_decode_varint(data)) end,
-  [Types.SINT64] = function(data) return pb.zig_zag_decode64(_decode_varint(data)) end,
+  [Types.SINT32] = _decode_signed,
+  [Types.SINT64] = function(data) return _unpack(data, 'J') or 0 end,
   [Types.UINT32] = _decode_varint,
   [Types.UINT64] = _decode_varint,
   [Types.BOOL] = function(data) return _decode_varint(data) ~= 0 end,
   [Types.STRING] = _decode_string,
   [Types.BYTES] = _decode_string,
   [Types.ENUMERATION] = function(data, typ)
-    return typ.lua_type(pb.zig_zag_decode32(_decode_varint(data)))
+    return typ.lua_type(_decode_signed(data))
   end,
   [Types.CLASS] = function(data, typ) return typ.lua_type(_decode_varint(data)) end,
 }
@@ -72,30 +75,30 @@ end
 -- The tag every value of a collection is carried under: field number 1, length delimited, for
 -- the items of a Tuple, a List and a Set and for the entries of a Dictionary. A DictionaryEntry
 -- carries its key under the same tag and its value under field number 2. See the same list in
--- the encoder, which writes them, and test_decoder, which reads collections written by the
--- protocol buffer message layer back through these.
+-- the encoder, which writes them, and test_decoder, which reads collections encoded as messages
+-- back through these.
 local _ITEMS = 10
 local _ENTRY_KEY = 10
 local _ENTRY_VALUE = 18
 
 --- Read the values a collection carries, each a length delimited field under the given tag.
 --
--- Read here and not by parsing a message, for the reason the encoder writes them here: the
--- protocol buffer library is written in lua, and parsing a message of a hundred values into a
--- container that type checks each one costs far more than reading the bytes does.
+-- Read here and not by decoding a message, for the reason the encoder writes them here.
 local function _decode_items(data, tag)
   local items = {}
   local count = 0
-  local position = 0
+  -- The position of the next tag, counted from 1
+  local position = 1
   local length = data:len()
-  while position < length do
-    if data:byte(position+1) ~= tag then
+  while position <= length do
+    if data:byte(position) ~= tag then
       error('Unexpected field in an encoded collection')
     end
-    local size, after = pb.varint_decoder(data, position+1)
-    items[count+1] = data:sub(after+1, after+size)
     count = count + 1
-    position = after + size
+    items[count], position = _unpack(data, '*s@', position + 1)
+    if position == nil then
+      error('Truncated encoded collection')
+    end
   end
   return items, count
 end
@@ -109,30 +112,34 @@ local function _decode_entry(data)
   -- string, is left out of the entry entirely and reads back empty
   local key = ''
   local value = ''
-  local position = 0
+  local position = 1
   local length = data:len()
-  while position < length do
-    local tag = data:byte(position+1)
-    local size, after = pb.varint_decoder(data, position+1)
-    local field = data:sub(after+1, after+size)
-    if tag == _ENTRY_KEY then
+  while position <= length do
+    local tag = data:byte(position)
+    local field
+    field, position = _unpack(data, '*s@', position + 1)
+    if position == nil then
+      error('Truncated encoded dictionary entry')
+    elseif tag == _ENTRY_KEY then
       key = field
     elseif tag == _ENTRY_VALUE then
       value = field
     else
       error('Unexpected field in an encoded dictionary entry')
     end
-    position = after + size
   end
   return key, value
 end
+
+-- Declared ahead of _decode_item, which calls it
+local _decode
 
 -- Decode one value at a position inside another value, which the given type describes. A
 -- nullable position carries a presence bool before its value, and holds nothing else when that
 -- bool is false.
 local function _decode_item(data, typ)
   if not typ.nullable then
-    return decoder.decode(data, typ)
+    return _decode(data, typ)
   end
   -- The presence bool is one byte, as a bool value always is
   if data:len() == 0 then
@@ -141,13 +148,13 @@ local function _decode_item(data, typ)
   if not _value_decoders[Types.BOOL](data:sub(1, 1)) then
     return Types.none
   end
-  return decoder.decode(data:sub(2), typ)
+  return _decode(data:sub(2), typ)
 end
 
 -- Decode a value at a slot, where a null is carried by the is_null flag of the message around
 -- it. A value at a position inside another value carries its own presence bool, which
 -- _decode_item reads.
-function decoder.decode(data, typ)
+function _decode(data, typ)
   local code = typ.code
   local decode_value = _value_decoders[code]
   if decode_value then
@@ -201,20 +208,41 @@ function decoder.decode(data, typ)
     end
     return typ.lua_type(unpack(values))
   elseif typ:is_a(Types.MessageType) then
-    return decoder.decode_message(data, typ.lua_type)
+    return _decode_message(typ.message_type, data)
   end
   error('Cannot decode type ' .. tostring(typ))
 end
 
-function decoder.decode_message(data, typ)
-  local message = typ()
-  message:ParseFromString(data)
-  return message
+--- Decode a value of the given type, with the client's protobuf state swapped in once for the
+--- whole of it
+function decoder.decode(data, typ)
+  return protobuf.call(_decode, data, typ)
+end
+
+-- The Response message, and the value of its one result when the given type is not nil and
+-- the result carries a value
+local function _decode_response(data, typ)
+  local response = _decode_message('Response', data)
+  local result = response.results[1]
+  if typ == nil or response.error ~= nil or result.error ~= nil or result.is_null then
+    return response
+  end
+  return response, _decode(result.value, typ)
+end
+
+--- Decode a Response message and the value of its result, with the client's protobuf state
+--- swapped in once for both
+function decoder.decode_response(data, typ)
+  return protobuf.call(_decode_response, data, typ)
+end
+
+--- Decode a message of the named type in the krpc.schema package
+function decoder.decode_message(data, type_name)
+  return protobuf.decode(type_name, data)
 end
 
 function decoder.decode_size(data)
-  local size, _ = pb.varint_decoder(data, 0)
-  return size
+  return protobuf.call(_decode_varint, data)
 end
 
 return decoder

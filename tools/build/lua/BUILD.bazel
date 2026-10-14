@@ -10,14 +10,13 @@ luasocket_version = "3.1.0"
 
 exports_files([
     "lua.BUILD",
+    "lua_protobuf.BUILD",
     "luafilesystem.BUILD",
     "luasocket-unix-windows.rockspec.tmpl",
     "luasocket.BUILD",
     "luasocket_windows_unix.patch",
     "luaunit.BUILD",
     "penlight.BUILD",
-    "protobuf_lua.BUILD",
-    "protobuf_lua_endian.patch",
     "run_lua.py.tmpl",
 ])
 
@@ -34,7 +33,7 @@ cc_binary(
         "@lua//:interpreter",
         "@lua_luafilesystem//:lfs",
         "@lua_luasocket//:luasocket",
-        "@protoc_lua//:pb",
+        "@lua_protobuf//:pb",
     ],
 )
 
@@ -57,12 +56,6 @@ lua_library(
     name = "penlight",
     srcs = ["@lua_penlight//:lua_srcs"],
     path_map = {"lua/": ""},
-    visibility = ["//visibility:public"],
-)
-
-lua_library(
-    name = "protobuf",
-    srcs = ["@protoc_lua//:lua_srcs"],
     visibility = ["//visibility:public"],
 )
 

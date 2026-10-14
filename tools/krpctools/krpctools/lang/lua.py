@@ -56,7 +56,8 @@ class LuaLanguage(Language):
         if isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type.code]
         if isinstance(typ, MessageType):
-            return "krpc.schema.KRPC.%s" % typ.python_type.__name__
+            # A table, named by the protobuf message type it holds
+            return "krpc.schema.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
         if isinstance(typ, ListType):

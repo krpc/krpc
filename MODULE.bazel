@@ -187,19 +187,6 @@ http_archive(
     url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.2-linux-x86.tar.gz",
 )
 
-# The protoc plugin that generates the schema, and the runtime it generates for: the
-# same release supplies both, so the lua client's dependency on it is this repository
-# too (see //tools/build/lua).
-http_archive(
-    name = "protoc_lua",
-    build_file = "//tools/build/lua:protobuf_lua.BUILD",
-    patch_args = ["-p1"],
-    patches = ["//tools/build/lua:protobuf_lua_endian.patch"],
-    sha256 = "28f4daa026effb81cebfdf580b0fc5732e520c0f4ade53e940052d89cddf4264",
-    strip_prefix = "protobuf-lua-1.1.2",
-    url = "https://github.com/djungelorm/protobuf-lua/archive/v1.1.2.tar.gz",
-)
-
 # ----------------------- C# dependencies ------------------------------------------------
 
 http_archive(
@@ -431,6 +418,14 @@ http_archive(
     sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333",
     strip_prefix = "lua-5.1.5",
     url = "https://www.lua.org/ftp/lua-5.1.5.tar.gz",
+)
+
+http_archive(
+    name = "lua_protobuf",
+    build_file = "//tools/build/lua:lua_protobuf.BUILD",
+    sha256 = "54feb9c48e13304e50a4177976b66c1ad395364c500bf00cbf9e3cb59c36ed91",
+    strip_prefix = "lua-protobuf-0.5.3",
+    url = "https://github.com/starwing/lua-protobuf/archive/refs/tags/0.5.3.tar.gz",
 )
 
 http_archive(

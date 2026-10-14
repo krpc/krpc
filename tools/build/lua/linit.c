@@ -22,7 +22,9 @@
 
 int luaopen_lfs(lua_State *L);
 int luaopen_mime_core(lua_State *L);
-int luaopen_protobuf_pb(lua_State *L);
+int luaopen_pb(lua_State *L);
+int luaopen_pb_buffer(lua_State *L);
+int luaopen_pb_slice(lua_State *L);
 int luaopen_socket_core(lua_State *L);
 int luaopen_socket_unix(lua_State *L);
 
@@ -41,7 +43,9 @@ static const luaL_Reg lualibs[] = {
 static const luaL_Reg preloadedlibs[] = {
   {"lfs", luaopen_lfs},
   {"mime.core", luaopen_mime_core},
-  {"protobuf.pb", luaopen_protobuf_pb},
+  {"pb", luaopen_pb},
+  {"pb.buffer", luaopen_pb_buffer},
+  {"pb.slice", luaopen_pb_slice},
   {"socket.core", luaopen_socket_core},
   {"socket.unix", luaopen_socket_unix},
   {NULL, NULL}

@@ -84,7 +84,7 @@ function ServiceBase:_parse_procedure(procedure)
   local param_names = seq.copy(seq.map(function (x) return service.to_snake_case(x.name) end, procedure.parameters))
   local param_types = seq.copy(seq.map(function (x) return self._client._types:as_type(x.type) end, procedure.parameters))
   local return_type = nil
-  if procedure:HasField('return_type') then
+  if procedure.return_type ~= nil then
     return_type = self._client._types:as_type(procedure.return_type)
   end
   -- Checked before anything is built from the types, so that a procedure naming a structure

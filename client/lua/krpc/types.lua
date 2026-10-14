@@ -4,34 +4,37 @@ local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local seq = require 'pl.seq'
 local stringx = require 'pl.stringx'
-local schema = require 'krpc.schema.KRPC'
+local protobuf = require 'krpc.protobuf'
 
 local Types = class()
 
--- Note: make copies of the type code values here,
---       as accessing the generated protobuf code is rather verbose
-Types.NONE = schema.TYPE_TYPECODE_NONE_ENUM.number
-Types.DOUBLE = schema.TYPE_TYPECODE_DOUBLE_ENUM.number
-Types.FLOAT = schema.TYPE_TYPECODE_FLOAT_ENUM.number
-Types.SINT32 = schema.TYPE_TYPECODE_SINT32_ENUM.number
-Types.SINT64 = schema.TYPE_TYPECODE_SINT64_ENUM.number
-Types.UINT32 = schema.TYPE_TYPECODE_UINT32_ENUM.number
-Types.UINT64 = schema.TYPE_TYPECODE_UINT64_ENUM.number
-Types.BOOL = schema.TYPE_TYPECODE_BOOL_ENUM.number
-Types.STRING = schema.TYPE_TYPECODE_STRING_ENUM.number
-Types.BYTES = schema.TYPE_TYPECODE_BYTES_ENUM.number
-Types.CLASS = schema.TYPE_TYPECODE_CLASS_ENUM.number
-Types.ENUMERATION = schema.TYPE_TYPECODE_ENUMERATION_ENUM.number
-Types.STRUCT = schema.TYPE_TYPECODE_STRUCT_ENUM.number
-Types.TUPLE = schema.TYPE_TYPECODE_TUPLE_ENUM.number
-Types.LIST = schema.TYPE_TYPECODE_LIST_ENUM.number
-Types.SET = schema.TYPE_TYPECODE_SET_ENUM.number
-Types.DICTIONARY = schema.TYPE_TYPECODE_DICTIONARY_ENUM.number
-Types.EVENT = schema.TYPE_TYPECODE_EVENT_ENUM.number
-Types.PROCEDURE_CALL = schema.TYPE_TYPECODE_PROCEDURE_CALL_ENUM.number
-Types.STREAM = schema.TYPE_TYPECODE_STREAM_ENUM.number
-Types.SERVICES = schema.TYPE_TYPECODE_SERVICES_ENUM.number
-Types.STATUS = schema.TYPE_TYPECODE_STATUS_ENUM.number
+-- The type codes, copied out of the schema once
+local function _type_code(name)
+  return protobuf.enum('Type.TypeCode', name)
+end
+
+Types.NONE = _type_code('NONE')
+Types.DOUBLE = _type_code('DOUBLE')
+Types.FLOAT = _type_code('FLOAT')
+Types.SINT32 = _type_code('SINT32')
+Types.SINT64 = _type_code('SINT64')
+Types.UINT32 = _type_code('UINT32')
+Types.UINT64 = _type_code('UINT64')
+Types.BOOL = _type_code('BOOL')
+Types.STRING = _type_code('STRING')
+Types.BYTES = _type_code('BYTES')
+Types.CLASS = _type_code('CLASS')
+Types.ENUMERATION = _type_code('ENUMERATION')
+Types.STRUCT = _type_code('STRUCT')
+Types.TUPLE = _type_code('TUPLE')
+Types.LIST = _type_code('LIST')
+Types.SET = _type_code('SET')
+Types.DICTIONARY = _type_code('DICTIONARY')
+Types.EVENT = _type_code('EVENT')
+Types.PROCEDURE_CALL = _type_code('PROCEDURE_CALL')
+Types.STREAM = _type_code('STREAM')
+Types.SERVICES = _type_code('SERVICES')
+Types.STATUS = _type_code('STATUS')
 
 local VALUE_TYPES = Map{}
 VALUE_TYPES:set(Types.DOUBLE, 'number')
@@ -44,12 +47,13 @@ VALUE_TYPES:set(Types.BOOL, 'boolean')
 VALUE_TYPES:set(Types.STRING, 'string')
 VALUE_TYPES:set(Types.BYTES, 'string')
 
+-- The name of the message each message type code is carried as, in the krpc.schema package
 local MESSAGE_TYPES = Map{}
-MESSAGE_TYPES:set(Types.EVENT, schema.Event)
-MESSAGE_TYPES:set(Types.PROCEDURE_CALL, schema.ProcedureCall)
-MESSAGE_TYPES:set(Types.STREAM, schema.Stream)
-MESSAGE_TYPES:set(Types.SERVICES, schema.Services)
-MESSAGE_TYPES:set(Types.STATUS, schema.Status)
+MESSAGE_TYPES:set(Types.EVENT, 'Event')
+MESSAGE_TYPES:set(Types.PROCEDURE_CALL, 'ProcedureCall')
+MESSAGE_TYPES:set(Types.STREAM, 'Stream')
+MESSAGE_TYPES:set(Types.SERVICES, 'Services')
+MESSAGE_TYPES:set(Types.STATUS, 'Status')
 
 -- Every type code a type object can be built for. A definition from a newer server may name a
 -- type code that is not among them, which is what makes a definition partly unusable rather
@@ -90,49 +94,36 @@ function Types:_init()
 end
 
 -- Declared ahead of _protobuf_type, which calls it
-local _set_protobuf_type
+local _copy_protobuf_type
 
+-- A protocol buffer type, as the table a decoded krpc.schema.Type message is: every scalar
+-- field set, to its zero value if nothing else
 local function _protobuf_type(code, service, name, types)
-  local protobuf_type = schema.Type()
-  protobuf_type.code = code
-  if service ~= nil then
-    protobuf_type.service = service
-  end
-  if name ~= nil then
-    protobuf_type.name = name
-  end
+  local protobuf_type = { code = code, service = service or '', name = name or '',
+                          types = {}, nullable = false }
   if types ~= nil then
-    for _, typ in ipairs(types) do
-      local newtyp = protobuf_type.types:add()
-      _set_protobuf_type(typ, newtyp)
+    for i, typ in ipairs(types) do
+      protobuf_type.types[i] = _copy_protobuf_type(typ)
     end
   end
   return protobuf_type
 end
 
-function _set_protobuf_type(src, dst)
-  dst.code = src.code
-  dst.service = src.service
-  dst.name = src.name
-  dst.nullable = src.nullable
-  for _, typ in ipairs(src.types) do
-    local newtyp = dst.types:add()
-    _set_protobuf_type(typ, newtyp)
-  end
+function _copy_protobuf_type(src)
+  local copy = _protobuf_type(src.code, src.service, src.name, src.types)
+  copy.nullable = src.nullable == true
+  return copy
 end
 
 -- A copy of the given protocol buffer type, marked as the given nullability
 local function _nullable_protobuf_type(protobuf_type, nullable)
-  local result = schema.Type()
-  _set_protobuf_type(protobuf_type, result)
+  local result = _copy_protobuf_type(protobuf_type)
   result.nullable = nullable
   return result
 end
 
 -- The key a type is cached under, built from the type code, the names, whether the position
--- holding it can be null and the types nested inside it in turn. It is built here rather than
--- by serializing the message, as the protobuf library writes the fields of a message in the
--- order its own table happens to hold them, which is not the same order every time.
+-- holding it can be null and the types nested inside it in turn
 local function _type_key(protobuf_type)
   local parts = { protobuf_type.code, protobuf_type.service, protobuf_type.name,
                   protobuf_type.nullable and 'null' or '' }
@@ -391,9 +382,8 @@ Types.TypeBase = class()
 
 function Types.TypeBase:_init(protobuf_type, lua_type, type_string)
   self.protobuf_type = protobuf_type
-  -- A copy of the type code as a plain field. It says everything the encoding needs to know
-  -- about a type, and is read once for every value encoded or decoded, where reading it off the
-  -- protobuf message goes through that message's field lookup every time.
+  -- The type code, which says everything the encoding needs to know about a type, and is read
+  -- once for every value encoded or decoded
   self.code = protobuf_type.code
   -- Whether the position a value of this type sits in can hold null
   self.nullable = protobuf_type.nullable
@@ -589,7 +579,9 @@ function Types.MessageType:_init(protobuf_type)
   if not MESSAGE_TYPES:get(protobuf_type.code) then
     error('Not a message type')
   end
-  self:super(protobuf_type, MESSAGE_TYPES:get(protobuf_type.code), CODE_TO_STRING:get(protobuf_type.code))
+  -- A message is a table, of the named type in the krpc.schema package
+  self.message_type = MESSAGE_TYPES:get(protobuf_type.code)
+  self:super(protobuf_type, 'table', CODE_TO_STRING:get(protobuf_type.code))
 end
 
 --- Whether a type object can be built for the given protocol buffer type. It cannot when the

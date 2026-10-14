@@ -2,7 +2,7 @@ local luaunit = require 'luaunit'
 local class = require 'pl.class'
 local decoder = require 'krpc.decoder'
 local platform = require 'krpc.platform'
-local schema = require 'krpc.schema.KRPC'
+local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
 local encoder = require 'krpc.encoder'
 local List = require 'pl.List'
@@ -34,67 +34,83 @@ function TestDecoder:test_decode_size()
   luaunit.assertEquals(28, size)
 end
 
--- A collection is read by the tags its values are carried under rather than by parsing a
--- message, so this hands it collections the protocol buffer message layer wrote and checks the
--- values come back. A tag read wrongly, or a field renumbered in the schema, fails here.
-function TestDecoder:test_decode_collections_written_by_message_layer()
+-- A collection is read by the tags its values are carried under, which must match krpc.proto.
+-- This hands it collections encoded as messages and checks the values come back.
+function TestDecoder:test_decode_collections_encoded_as_messages()
   local long = string.rep('x', 300)
 
-  local list_message = schema.List()
-  for _, value in ipairs({'one', 'two', long}) do
-    list_message.items:append(encoder.encode(value, types:string_type()))
+  local list_message = { items = {} }
+  for i, value in ipairs({'one', 'two', long}) do
+    list_message.items[i] = encoder.encode(value, types:string_type())
   end
-  local values = decoder.decode(list_message:SerializeToString(),
+  local values = decoder.decode(protobuf.encode('List', list_message),
                                 types:list_type(types:string_type()))
   luaunit.assertEquals(3, #values)
   luaunit.assertEquals('one', values[1])
   luaunit.assertEquals('two', values[2])
   luaunit.assertEquals(long, values[3])
 
-  local empty = decoder.decode(schema.List():SerializeToString(),
+  local empty = decoder.decode(protobuf.encode('List', {}),
                                types:list_type(types:string_type()))
   luaunit.assertEquals(0, #empty)
 
-  local set_message = schema.Set()
-  set_message.items:append(encoder.encode(7, types:uint32_type()))
-  set_message.items:append(encoder.encode(300, types:uint32_type()))
-  local set = decoder.decode(set_message:SerializeToString(),
+  local set_message = { items = {
+    encoder.encode(7, types:uint32_type()),
+    encoder.encode(300, types:uint32_type())
+  } }
+  local set = decoder.decode(protobuf.encode('Set', set_message),
                              types:set_type(types:uint32_type()))
   luaunit.assertEquals(true, set[7])
   luaunit.assertEquals(true, set[300])
 
-  local tuple_message = schema.Tuple()
-  tuple_message.items:append(encoder.encode(7, types:uint32_type()))
-  tuple_message.items:append(encoder.encode(long, types:string_type()))
+  local tuple_message = { items = {
+    encoder.encode(7, types:uint32_type()),
+    encoder.encode(long, types:string_type())
+  } }
   local tuple = decoder.decode(
-    tuple_message:SerializeToString(),
+    protobuf.encode('Tuple', tuple_message),
     types:tuple_type(List{types:uint32_type(), types:string_type()}))
   luaunit.assertEquals(2, #tuple)
   luaunit.assertEquals(7, tuple[1])
   luaunit.assertEquals(long, tuple[2])
 
-  local dictionary_message = schema.Dictionary()
-  local entry = dictionary_message.entries:add()
-  entry.key = encoder.encode('a', types:string_type())
-  entry.value = encoder.encode(1, types:uint32_type())
-  entry = dictionary_message.entries:add()
-  entry.key = encoder.encode('b', types:string_type())
-  entry.value = encoder.encode(300, types:uint32_type())
+  local dictionary_message = { entries = {
+    { key = encoder.encode('a', types:string_type()), value = encoder.encode(1, types:uint32_type()) },
+    { key = encoder.encode('b', types:string_type()), value = encoder.encode(300, types:uint32_type()) }
+  } }
   local dictionary = decoder.decode(
-    dictionary_message:SerializeToString(),
+    protobuf.encode('Dictionary', dictionary_message),
     types:dictionary_type(types:string_type(), types:uint32_type()))
   luaunit.assertEquals(1, dictionary['a'])
   luaunit.assertEquals(300, dictionary['b'])
 
   -- A value that encodes to nothing, an empty list here, is left out of the entry entirely
-  local empty_valued = schema.Dictionary()
-  entry = empty_valued.entries:add()
-  entry.key = encoder.encode('a', types:string_type())
-  entry.value = ''
+  local empty_valued = { entries = {
+    { key = encoder.encode('a', types:string_type()), value = '' }
+  } }
   local with_empty = decoder.decode(
-    empty_valued:SerializeToString(),
+    protobuf.encode('Dictionary', empty_valued),
     types:dictionary_type(types:string_type(), types:list_type(types:uint32_type())))
   luaunit.assertEquals(0, #with_empty['a'])
+end
+
+-- Data with no bytes reads as the zero value, as a protobuf field left out does
+function TestDecoder:test_decode_empty_value()
+  luaunit.assertEquals(0, decoder.decode('', types:uint32_type()))
+  luaunit.assertEquals(0, decoder.decode('', types:sint64_type()))
+  luaunit.assertEquals(0, decoder.decode('', types:double_type()))
+  luaunit.assertEquals('', decoder.decode('', types:string_type()))
+  luaunit.assertEquals(0, #decoder.decode('', types:list_type(types:uint32_type())))
+end
+
+function TestDecoder:test_decode_truncated_value()
+  local list_type = types:list_type(types:uint32_type())
+  luaunit.assertErrorMsgContains('Truncated encoded collection', decoder.decode, '\10', list_type)
+  luaunit.assertError(decoder.decode, '\10\5ab', list_type)
+  luaunit.assertError(decoder.decode, '\255', types:uint32_type())
+  local dictionary_type = types:dictionary_type(types:string_type(), types:uint32_type())
+  luaunit.assertErrorMsgContains('Truncated encoded dictionary entry', decoder.decode,
+                                 '\10\1\10', dictionary_type)
 end
 
 function TestDecoder:test_decode_class()

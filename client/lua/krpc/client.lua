@@ -1,6 +1,5 @@
 local class = require 'pl.class'
 local List = require 'pl.List'
-local schema = require 'krpc.schema.KRPC'
 local Types = require 'krpc.types'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
@@ -45,25 +44,25 @@ function Client:_invoke(service, procedure, args, param_types, return_type)
 
   -- Send the request, which is already the bytes to send
   self._rpc_connection:send(request)
-  local response = self._rpc_connection:receive_message(schema.Response)
+  local response, value = decoder.decode_response(self._rpc_connection:receive_message_data(), return_type)
 
   -- Check for an error response
-  if response:HasField('error') then
+  if response.error ~= nil then
     error(self:_error_message(response.error))
   end
 
   local result = response.results[1]
-  if result:HasField('error') then
+  if result.error ~= nil then
     error(self:_error_message(result.error))
   end
 
-  -- Decode the response and return the (optional) result
+  -- Return the (optional) result
   if return_type then
     -- A null result is signaled out-of-band by is_null; the value field is unset
     if result.is_null then
       return Types.none
     end
-    return decoder.decode(result.value, return_type)
+    return value
   end
   return nil
 end
@@ -103,10 +102,10 @@ end
 --- Construct an error description from a KRPC.Error object
 function Client:_error_message(err)
    local msg = err.description
-  if err:HasField('service') and err:HasField('name') then
+  if err.service ~= '' and err.name ~= '' then
     msg = err.service .. '.' .. err.name .. ': ' .. msg
   end
-  if err:HasField('stack_trace') then
+  if err.stack_trace ~= '' then
     msg = msg .. '\nServer stack trace:\n' .. err.stack_trace
   end
   return msg

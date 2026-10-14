@@ -1,20 +1,12 @@
-local pb = require 'protobuf.pb'
+local buffer = require 'pb.buffer'
 local tablex = require 'pl.tablex'
+local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
 
 local encoder = {}
 
--- The buffer the routines below leave their bytes in. They are handed to a writer, and one
--- writer shared by all of them costs nothing per value, where a closure made for the value
--- would be allocated and thrown away for every one encoded.
-local _written
-local function _write(data)
-  _written = data
-end
-
--- The pb.struct_pack format codes for a single precision and a double precision number.
-local FLOAT_FORMAT = string.byte('f')
-local DOUBLE_FORMAT = string.byte('d')
+-- Called with a format and no buffer, pack returns the bytes it writes
+local _pack = buffer.pack
 
 -- The encoding of every varint that fits in one byte, which is most of the values a call
 -- carries: an index, a count, a small identifier or a boolean.
@@ -33,19 +25,16 @@ local function _encode_varint(x)
   elseif x == math.huge then
     return '\255\255\255\255\255\255\255\255\127'
   else
-    pb.varint_encoder(_write, x)
-    return _written
+    return _pack('v', x)
   end
 end
 
 local function _encode_float(value)
-  pb.struct_pack(_write, FLOAT_FORMAT, value)
-  return _written
+  return _pack('f', value)
 end
 
 local function _encode_double(value)
-  pb.struct_pack(_write, DOUBLE_FORMAT, value)
-  return _written
+  return _pack('F', value)
 end
 
 -- The encoder for each value type, by type code. Encoding a value starts here, and a table
@@ -53,14 +42,14 @@ end
 local _value_encoders = {
   [Types.DOUBLE] = _encode_double,
   [Types.FLOAT] = _encode_float,
-  [Types.SINT32] = function(x) return _encode_varint(pb.zig_zag_encode32(x)) end,
-  [Types.SINT64] = function(x) return _encode_varint(pb.zig_zag_encode64(x)) end,
+  [Types.SINT32] = function(x) return _pack('j', x) end,
+  [Types.SINT64] = function(x) return _pack('J', x) end,
   [Types.UINT32] = _encode_varint,
   [Types.UINT64] = _encode_varint,
   [Types.BOOL] = function(x) return _encode_varint(x and 1 or 0) end,
   [Types.STRING] = function(x) return _encode_varint(x:len()) .. x end,
   [Types.BYTES] = function(x) return _encode_varint(x:len()) .. x end,
-  [Types.ENUMERATION] = function(x) return _encode_varint(pb.zig_zag_encode32(x.value)) end,
+  [Types.ENUMERATION] = function(x) return _pack('j', x.value) end,
   [Types.CLASS] = function(x) return _encode_varint(x._object_id) end,
 }
 
@@ -81,9 +70,8 @@ local _value_encoders = {
 --   DictionaryEntry.key       1, length delimited
 --   DictionaryEntry.value     2, length delimited
 --
--- test_encoder reads back what is written with these through the protocol buffer message layer
--- and checks it arrived intact, so a field renumbered in the schema without these following, or
--- a tag written wrongly, fails there.
+-- These must match krpc.proto, which test_encoder checks by decoding what is written with them
+-- as messages.
 local _REQUEST_CALLS = '\10'
 local _CALL_SERVICE = '\10'
 local _CALL_PROCEDURE = '\18'
@@ -178,14 +166,14 @@ function encoder.encode(x, typ)
     end
     return _concat(parts)
   elseif typ:is_a(Types.MessageType) then
-    return x:SerializeToString()
+    return protobuf.encode(typ.message_type, x)
   end
   error('Cannot encode object of type ' .. tostring(typ))
 end
 
-function encoder.encode_message_with_size(message)
-  -- Encode a message prefixed by its size
-  local data = message:SerializeToString()
+function encoder.encode_message_with_size(type_name, message)
+  -- Encode a message of the named type, prefixed by its size
+  local data = protobuf.encode(type_name, message)
   local delimiter = _encode_varint(data:len())
   return delimiter .. data
 end
@@ -193,10 +181,8 @@ end
 --- Encode the request carrying one procedure call, prefixed by its size, ready to send.
 --
 -- The arguments are the already encoded value of each, in order, with Types.none where a call
--- passes nothing. Written here and not built as a protocol buffer message: the message layer
--- allocates a table of fields and a pair of listeners for each of the three messages a call
--- needs, then walks all of them twice, once to size them and once to write them. That costs an
--- order of magnitude more than the bytes it produces.
+-- passes nothing. Written here and not encoded from tables of the three messages a call needs,
+-- which would be built for every call.
 function encoder.encode_request(service, procedure, arguments)
   local parts = { _delimited(_CALL_SERVICE, service), _delimited(_CALL_PROCEDURE, procedure) }
   local count = 2
