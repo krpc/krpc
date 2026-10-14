@@ -8,31 +8,31 @@
 
 # Runtime dependencies
 jinja2==3.1.6
-protobuf==7.35.1
+protobuf==7.36.2
 pyserial==3.5
 requests==2.34.2
-websocket-client==1.9.0
+websocket-client==1.9.2
 
 # Build and test tooling
-basedpyright==1.40.1
+basedpyright==1.40.2
 cogapp==3.6.0
 hatchling
 pytest
-ruff==0.16.9
+ruff==0.17.0
 
 # Rasterizing the SVG icons and diagrams. pyvips-binary carries libvips and the
 # librsvg that renders them, as wheels for every platform the build runs on, so
 # no system install is involved.
-pyvips==3.1.1
-pyvips-binary==8.18.5
+pyvips==3.2.0
+pyvips-binary==8.18.7
 
 # Sphinx and extensions for the documentation
-pydata-sphinx-theme==0.20.0
+pydata-sphinx-theme==0.23.0
 pyenchant==3.3.0
 sphinx==9.1.0
 sphinx-csharp==0.1.8
 sphinx-tabs==3.5.0
-sphinxcontrib-luadomain==1.1.2
+sphinxcontrib-luadomain==1.2.0
 sphinxcontrib-spelling==8.0.2
 
 # Live-serving the documentation website (bazel run //doc:serve)

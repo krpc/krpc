@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({EncoderTest.class, EncoderTestSuite.class})
 public class UnitTestSuite {
-  /** Entry point for running the test suite directly.
+  /**
+   * Entry point for running the test suite directly.
    *
    * @param args Command line arguments.
    */

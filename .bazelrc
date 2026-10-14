@@ -25,6 +25,22 @@ build:windows --cxxopt=/permissive- --host_cxxopt=/permissive-
 build:linux --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused-command-line-argument
 build:macos --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused-command-line-argument
 
+# The clang driver searches the host GCC installs, and warns when the newest one
+# has no libstdc++ headers. The build uses libc++, so the choice does not matter.
+build:linux --copt=-Wno-gcc-install-dir-libstdcxx --host_copt=-Wno-gcc-install-dir-libstdcxx
+build:linux --linkopt=-Wno-gcc-install-dir-libstdcxx --host_linkopt=-Wno-gcc-install-dir-libstdcxx
+
+# Silence warnings in third-party C/C++ sources, such as protobuf and abseil
+# using APIs and attributes that newer clang releases deprecate.
+build:linux --per_file_copt=external/.*@-w --host_per_file_copt=external/.*@-w
+build:macos --per_file_copt=external/.*@-w --host_per_file_copt=external/.*@-w
+
+# The LLVM toolchain turns on clang's thread-safety analysis, and libc++ annotates
+# std::lock_guard for it. The C++ client's RecursiveMutex carries no capability
+# annotations, so each lock adopted after a try_lock reads as not held.
+build:linux --copt=-Wno-thread-safety-analysis --host_copt=-Wno-thread-safety-analysis
+build:macos --copt=-Wno-thread-safety-analysis --host_copt=-Wno-thread-safety-analysis
+
 # Build and run java against the JDK bazel downloads, so the toolchain does not depend
 # on what is installed. The language version is the oldest release the client can be built
 # for, and so the oldest one it runs on: unix domain sockets arrived in Java 16, and 17 is
@@ -42,6 +58,10 @@ build --tool_java_language_version=17
 # one, which leaves no system python in the build at all -- and none to find on
 # a Windows runner, which has no python3 on PATH to start with.
 common --@rules_python//python/config_settings:bootstrap_impl=script
+
+# Python packages carry their own __init__.py files, so rules_python does not
+# create them. This covers the py targets in other modules too.
+common --incompatible_default_to_explicit_init_py
 
 # Pin the locale for build actions and tests. Several tools change behaviour with
 # it: the code generators read and write UTF-8 sources, C and Lua case folding and

@@ -20,7 +20,7 @@ py_binary(
     data = ["@protoc_lua//:plugin"],
     main = "protoc_gen_lua.py",
     deps = [
-        "@pypi//protobuf",
+        "@krpc_pypi//protobuf",
         "@rules_python//python/runfiles",
     ],
 )
@@ -31,7 +31,7 @@ py_binary(
     data = ["@protoc_nanopb//:plugin"],
     main = "protoc_gen_nanopb.py",
     deps = [
-        "@pypi//protobuf",
+        "@krpc_pypi//protobuf",
         "@rules_python//python/runfiles",
     ],
 )

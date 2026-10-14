@@ -17,7 +17,8 @@ def _clang_tidy_impl(ctx):
     tidy = ctx.files._clang_tidy[0]
     config = ctx.file.config
 
-    flags = list(ctx.attr.copts)
+    # See the gcc-install-dir copt in .bazelrc
+    flags = ["-Wno-gcc-install-dir-libstdcxx"] + ctx.attr.copts
     flags += ["-I" + d for d in cc.includes.to_list()]
     flags += ["-iquote" + d for d in cc.quote_includes.to_list()]
     flags += ["-isystem" + d for d in cc.system_includes.to_list()]

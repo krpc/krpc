@@ -29,13 +29,18 @@ from krpctest.version import __version__
 
 # Managed third-party mods: name accepted by --mods -> list of components it installs, each a
 # (Bazel target under //tools/mods, GameData subdir it installs as) pair. Most mods are a
-# single component; RealChute and AGExt also pull in the shared ClickThroughBlocker /
-# ToolbarControl / Harmony dependencies, whose assemblies their plugins hard-depend on, and
-# FAR pulls in ModularFlightIntegrator and KSPBurst.
+# single component; KerbalAlarmClock, RealChute and AGExt also pull in the shared
+# ClickThroughBlocker / ToolbarControl / Harmony dependencies, whose assemblies their plugins
+# hard-depend on, and FAR pulls in ModularFlightIntegrator and KSPBurst.
 MODS = {
     "RemoteTech": [("remotetech", "RemoteTech")],
     "InfernalRobotics": [("infernal_robotics", "MagicSmokeIndustries")],
-    "KerbalAlarmClock": [("kerbal_alarm_clock", "TriggerTech")],
+    "KerbalAlarmClock": [
+        ("kerbal_alarm_clock", "TriggerTech"),
+        ("harmony", "000_Harmony"),
+        ("clickthroughblocker", "000_ClickThroughBlocker"),
+        ("toolbarcontrol", "001_ToolbarControl"),
+    ],
     "RealChute": [
         ("realchute", "RealChute"),
         ("harmony", "000_Harmony"),
@@ -61,6 +66,7 @@ MODS = {
         ("realfuels_stock", "RealFuels-Stock"),
         ("solver_engines", "SolverEngines"),
         ("routils", "ROUtils"),
+        ("serializationfix", "000_SerializationFix"),
         ("kspcommunityfixes", "KSPCommunityFixes"),
         ("harmony", "000_Harmony"),
         ("community_resource_pack", "CommunityResourcePack"),

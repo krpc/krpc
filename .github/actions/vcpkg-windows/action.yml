@@ -21,7 +21,7 @@ runs:
         Write-Host "cache key: vcpkg-$hash"
         echo "hash=$hash" >> $env:GITHUB_OUTPUT
     - name: cache-vcpkg
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: C:\vcpkg-binary-cache
         key: vcpkg-${{ steps.cache-key.outputs.hash }}

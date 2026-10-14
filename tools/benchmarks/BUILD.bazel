@@ -22,20 +22,20 @@ csharp_library(
     ],
 )
 
-# net8.0 build of the same service, for TestServer, matching //core:KRPC.Core.net8.
+# net10.0 build of the same service, for TestServer, matching //core:KRPC.Core.net10.
 csharp_library(
-    name = "KRPC.Benchmark.net8",
+    name = "KRPC.Benchmark.net10",
     srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
     out = "KRPC.Benchmark",
     # CS1701: Google.Protobuf's net5.0 build references net5-era framework assemblies;
     # unification handles this at runtime (MSBuild suppresses this warning by default)
     nowarn = ["CS1701"],
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
     warning_level = 4,
     deps = [
-        "//core:KRPC.Core.net8",
+        "//core:KRPC.Core.net10",
         "//tools/build/dotnet:Google.Protobuf",
     ],
 )
@@ -89,7 +89,7 @@ py_binary(
     deps = [
         ":benchmarks_lib",
         "//tools/krpctest:krpctest_lib",
-        "@pypi//pytest",
+        "@krpc_pypi//pytest",
     ],
 )
 
@@ -299,6 +299,6 @@ py_pyright_test(
     deps = [
         "//client/python:krpc_lib",
         "//tools/krpctest:krpctest_lib",
-        "@pypi//pytest",
+        "@krpc_pypi//pytest",
     ],
 )

@@ -64,11 +64,11 @@ csharp_library(
     deps = deps,
 )
 
-# net8.0 build of KRPC.Core, for TestServer and the unit tests. This is a
+# net10.0 build of KRPC.Core, for TestServer and the unit tests. This is a
 # separate target rather than a multi-targeted KRPC.Core so that the default
 # build flavor staged into the mod release archive stays net472.
 csharp_library(
-    name = "KRPC.Core.net8",
+    name = "KRPC.Core.net10",
     srcs = glob(["src/**/*.cs"]) + [
         ":AssemblyInfo",
         "//protobuf:csharp",
@@ -88,7 +88,7 @@ csharp_library(
     # assemblies; unification handles this at runtime (MSBuild suppresses
     # this warning by default)
     nowarn = ["CS1701"],
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
     warning_level = 4,
@@ -106,13 +106,13 @@ service_definitions(
     visibility = ["//visibility:public"],
 )
 
-# The XML documentation file of the net8.0 build, for packaging beside
+# The XML documentation file of the net10.0 build, for packaging beside
 # KRPC.Core.dll in published tools: the server and the ServiceDefinitions tool
 # read API documentation from the XML file next to the assembly at runtime.
 genrule(
-    name = "KRPC.Core.net8-xmldoc",
-    srcs = [":KRPC.Core.net8"],
-    outs = ["xmldoc-net8/KRPC.Core.xml"],
+    name = "KRPC.Core.net10-xmldoc",
+    srcs = [":KRPC.Core.net10"],
+    outs = ["xmldoc-net10/KRPC.Core.xml"],
     cmd = 'for f in $(SRCS); do case "$$f" in *.xml) cp "$$f" "$@";; esac; done',
     visibility = [
         "//tools/TestServer:__pkg__",
@@ -146,16 +146,16 @@ csharp_nunit_test(
     out = "KRPC.Core.Test",
     # CS1701: Google.Protobuf/Newtonsoft.Json/Moq reference net5/6-era framework
     # assemblies; unification handles this at runtime (MSBuild suppresses this
-    # warning by default). Matches KRPC.Core.net8 above.
+    # warning by default). Matches KRPC.Core.net10 above.
     nowarn = [
         "CS1591",
         "CS1685",
         "CS1701",
     ],
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     visibility = ["//:__pkg__"],
     deps = [
-        ":KRPC.Core.net8",
+        ":KRPC.Core.net10",
         "//tools/build/dotnet:Castle.Core",
         "//tools/build/dotnet:Google.Protobuf",
         "//tools/build/dotnet:Moq",

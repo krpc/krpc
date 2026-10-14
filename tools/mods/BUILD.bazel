@@ -10,9 +10,11 @@
 #   RemoteTech        -> GameData/RemoteTech
 #   InfernalRobotics  -> GameData/MagicSmokeIndustries
 #   KerbalAlarmClock  -> GameData/TriggerTech
-#   RealChute         -> GameData/RealChute
 #                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
 #                          GameData/001_ToolbarControl (deps)
+#   RealChute         -> GameData/RealChute
+#                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
+#                          GameData/001_ToolbarControl (deps, shared with KerbalAlarmClock)
 #   DMagic            -> GameData/DMagicScienceAnimate
 #   AGExt             -> GameData/Diazo
 #                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
@@ -22,7 +24,7 @@
 #                        + GameData/ModularFlightIntegrator, GameData/000_KSPBurst (deps),
 #                          GameData/000_Harmony (dep, shared with RealChute and AGExt)
 #   RealFuels         -> GameData/RealFuels, GameData/RealFuels-Stock
-#                        + GameData/SolverEngines, GameData/ROUtils,
+#                        + GameData/SolverEngines, GameData/ROUtils, GameData/000_SerializationFix,
 #                          GameData/CommunityResourcePack, GameData/KSPCommunityFixes (deps),
 #                          GameData/000_Harmony (dep, shared with RealChute, AGExt and FAR)
 # tools/krpctest mirrors this registry on the Python side.
@@ -51,9 +53,9 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-# Runtime dependencies shared by RealChute and AGExt. Installed only alongside a mod that needs
-# them (their plugins will not load without ClickThroughBlocker + ToolbarControl, and
-# ClickThroughBlocker references Harmony), never requested on their own.
+# Runtime dependencies shared by KerbalAlarmClock, RealChute and AGExt. Installed only
+# alongside a mod that needs them (their plugins will not load without ClickThroughBlocker +
+# ToolbarControl, and ClickThroughBlocker references Harmony), never requested on their own.
 filegroup(
     name = "harmony",
     srcs = ["@harmony//:gamedata"],
@@ -149,6 +151,12 @@ filegroup(
 filegroup(
     name = "routils",
     srcs = ["@routils//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "serializationfix",
+    srcs = ["@serializationfix//:gamedata"],
     visibility = ["//visibility:public"],
 )
 

@@ -3,14 +3,14 @@ load("@rules_dotnet//dotnet:defs.bzl", "import_dll", "import_library")
 package(default_visibility = ["//visibility:public"])
 
 # NuGet library DLLs, pinned as http_archives in MODULE.bazel. Targets built
-# for modern .NET (net8.0) use the plain-named imports; net472 builds of the
-# client use the net45/net462 assets below. The mod itself uses the assets in
-# //tools/build/ksp, which are pinned to versions compatible with KSP's
-# version of Unity.
+# for modern .NET (net10.0) use the plain-named imports; net472 builds of the
+# client use the netstandard2.0/net462 assets below. The mod itself uses the
+# assets in //tools/build/ksp, which are pinned to versions compatible with
+# KSP's version of Unity.
 
 import_dll(
     name = "Google.Protobuf",
-    dll = "@csharp_protobuf//:lib/net5.0/Google.Protobuf.dll",
+    dll = "@csharp_protobuf//:lib/net8.0/Google.Protobuf.dll",
 )
 
 import_dll(
@@ -33,11 +33,11 @@ import_dll(
     dll = "@csharp_options//:lib/NDesk.Options.dll",
 )
 
-# net4x assets, for the net472 build of the client library
+# Assets for the net472 build of the client library
 
 import_dll(
-    name = "Google.Protobuf.net45",
-    dll = "@csharp_protobuf//:lib/net45/Google.Protobuf.dll",
+    name = "Google.Protobuf.netstandard2.0",
+    dll = "@csharp_protobuf//:lib/netstandard2.0/Google.Protobuf.dll",
 )
 
 import_dll(
@@ -57,10 +57,10 @@ import_dll(
 import_library(
     name = "System.IO.Ports",
     library_name = "System.IO.Ports",
-    libs = ["@csharp_system_io_ports//:runtimes/unix/lib/net8.0/System.IO.Ports.dll"],
+    libs = ["@csharp_system_io_ports//:runtimes/unix/lib/net10.0/System.IO.Ports.dll"],
     native = ["@csharp_system_io_ports_native_linux_x64//:runtimes/linux-x64/native/libSystem.IO.Ports.Native.so"],
-    refs = ["@csharp_system_io_ports//:lib/net8.0/System.IO.Ports.dll"],
-    version = "8.0.0",
+    refs = ["@csharp_system_io_ports//:lib/net10.0/System.IO.Ports.dll"],
+    version = "10.0.12",
 )
 
 # The .NET code analyzers, run on every C# target through //tools/build:csharp.bzl.
@@ -72,7 +72,7 @@ import_library(
         "@csharp_netanalyzers//:analyzers/dotnet/cs/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll",
     ],
     library_name = "Microsoft.CodeAnalysis.NetAnalyzers",
-    version = "8.0.0",
+    version = "10.0.401",
 )
 
 exports_files(["analyzers.globalconfig"])

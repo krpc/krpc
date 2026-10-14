@@ -1,4 +1,5 @@
 ## [v0.7.0] - unreleased
+- Update to protobuf-java 4.36.2 (#1139)
 - **Breaking:** Throw `NullPointerException` for a null where a value is required, reported by
   any service, in place of `RPCException` (#1124)
 - **Breaking:** Throw `NoSuchElementException` for a missing key, and `IndexOutOfBoundsException`

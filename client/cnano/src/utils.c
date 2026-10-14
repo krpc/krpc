@@ -18,7 +18,7 @@ void krpc_float64_to_float32(void* float64, void* float32) {
     expValue = 128;
     man = 0;
   }
-  exp = (expValue + 127) << 23;
+  exp = (uint64_t)(expValue + 127) << 23;
   *(uint32_t*)float32 = sign | exp | man;
 }
 

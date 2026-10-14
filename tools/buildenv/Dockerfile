@@ -25,11 +25,11 @@ RUN chmod 0644 /etc/bazel.bazelrc
 RUN mkdir -p /var/cache/bazel-repo && chmod -R a+rwX /var/cache/bazel-repo
 
 ENV BAZELISK_HOME=/usr/local/share/bazelisk
-# Warm up bazelisk (download + extract Bazel 9.1.1) and make it world-readable.
+# Warm up bazelisk (download + extract Bazel 9.3.0) and make it world-readable.
 # --ignore_all_rc_files: this runs with no workspace present, so /etc/bazel.bazelrc's
 # `--config=system-llvm` (defined in the repo-root .bazelrc, absent here) would
 # otherwise fail to resolve. The warmup only needs to extract Bazel.
-RUN USE_BAZEL_VERSION=9.1.1 bazel --ignore_all_rc_files version && \
+RUN USE_BAZEL_VERSION=9.3.0 bazel --ignore_all_rc_files version && \
     chmod -R a+rwX /usr/local/share/bazelisk
 
 # Install the .NET SDK for the build-csharp-sln CI job, which builds the
@@ -37,7 +37,7 @@ RUN USE_BAZEL_VERSION=9.1.1 bazel --ignore_all_rc_files version && \
 # build uses rules_dotnet's own hermetic SDK/runtime, resolved through the test
 # runfiles, not this one.
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends dotnet-sdk-8.0 && \
+    apt-get install -y --no-install-recommends dotnet-sdk-10.0 && \
     apt-get clean
 
 # Install latex
@@ -55,18 +55,18 @@ RUN apt-get update && \
     gcc g++ ccache cmake socat graphviz unzip && \
     apt-get clean
 
-# Install system LLVM (clang-20) from apt.llvm.org for CI's C/C++ client build and
+# Install system LLVM (clang-23) from apt.llvm.org for CI's C/C++ client build and
 # lint. CI builds with `--config=system-llvm` (see .bazelrc + tools/build/llvm),
-# which uses this system toolchain via toolchains_llvm's path mode. Pinned to 20
-# to match the default hermetic clang 20.x, so clang-format/clang-tidy do not skew
-# between dev and CI. Installs a self-contained toolchain at /usr/lib/llvm-20.
+# which uses this system toolchain via toolchains_llvm's path mode. Pinned to 23
+# to match the default hermetic clang 23.x, so clang-format/clang-tidy do not skew
+# between dev and CI. Installs a self-contained toolchain at /usr/lib/llvm-23.
 RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/llvm.gpg] http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main" \
+    echo "deb [signed-by=/usr/share/keyrings/llvm.gpg] http://apt.llvm.org/noble/ llvm-toolchain-noble-23 main" \
       > /etc/apt/sources.list.d/llvm.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-    clang-20 clang-tidy-20 clang-format-20 lld-20 llvm-20 \
-    libc++-20-dev libc++abi-20-dev libclang-rt-20-dev libunwind-20-dev && \
+    clang-23 clang-tidy-23 clang-format-23 lld-23 llvm-23 \
+    libc++-23-dev libc++abi-23-dev libclang-rt-23-dev libunwind-23-dev && \
     apt-get clean
 
 # Install buildifier. Go is needed only to compile it -- the binary that comes
@@ -74,7 +74,7 @@ RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr
 # cache go again in the same layer rather than riding along in the image.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends golang && \
-    git clone https://github.com/bazelbuild/buildtools.git --depth 1 --branch v7.1.2 && \
+    git clone https://github.com/bazelbuild/buildtools.git --depth 1 --branch v10.1.0 && \
     (cd buildtools/buildifier; GOBIN=/usr/local/bin go install) && \
     apt-get purge -y golang golang-go golang-src && \
     apt-get autoremove -y && \
@@ -87,7 +87,7 @@ RUN apt-get update && \
     apt-get clean
 
 # Install Protobuf
-ARG PROTOBUF_VERSION=35.1
+ARG PROTOBUF_VERSION=36.2
 RUN mkdir /protobuf && \
     cd /protobuf && \
     wget -O protobuf.tar.gz \
@@ -110,7 +110,7 @@ RUN mkdir /protobuf && \
 RUN pip3 install --break-system-packages protobuf
 
 # Install Nanopb
-ARG NANOPB_VERSION=0.4.9.1
+ARG NANOPB_VERSION=0.4.9.2
 RUN mkdir /nanopb && \
     cd /nanopb && \
     wget -O nanopb.tar.gz \

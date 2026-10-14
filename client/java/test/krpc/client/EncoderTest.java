@@ -103,7 +103,6 @@ public class EncoderTest {
     assertEquals(new TestService.TestClass(null, 300), value);
   }
 
-
   // Check that the value encodes to the given data, and that the data decodes back to it
   private static void checkValue(Object value, String data, Type type) {
     assertEquals(data, hexlify(Encoder.encode(value, type)));

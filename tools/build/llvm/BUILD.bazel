@@ -36,7 +36,7 @@ config_setting(
 
 # clang-tidy / clang-format for the lint rules in //tools/build:cpp.bzl. Hermetic
 # mode uses the downloaded toolchain's Bazel targets; system mode execs the
-# apt.llvm.org clang-20 binaries via wrapper scripts (path-mode toolchains_llvm
+# apt.llvm.org clang-23 binaries via wrapper scripts (path-mode toolchains_llvm
 # provides the compiler but no Bazel target for these tools). Switching these --
 # not just the compiler toolchain -- is what keeps the ~2 GB hermetic archive from
 # being fetched in system mode.
@@ -76,7 +76,7 @@ filegroup(
 )
 
 # libc++ headers passed to clang-tidy. Hermetic supplies them via the toolchain's
-# :include; system clang-tidy resolves its own libc++ (/usr/lib/llvm-20/include/
+# :include; system clang-tidy resolves its own libc++ (/usr/lib/llvm-23/include/
 # c++/v1) from `-stdlib=libc++`, so no extra inputs are needed.
 alias(
     name = "include",

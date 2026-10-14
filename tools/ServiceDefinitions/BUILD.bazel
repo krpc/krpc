@@ -10,25 +10,25 @@ csharp_binary(
         "CS1591",
         "CS1701",
     ],
-    target_frameworks = ["net8.0"],
+    target_frameworks = ["net10.0"],
     treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
     warning_level = 4,
     deps = [
-        "//core:KRPC.Core.net8",
+        "//core:KRPC.Core.net10",
         "//tools/build/dotnet:NDesk.Options",
         "//tools/build/dotnet:Newtonsoft.Json",
     ],
 )
 
 # Published (framework-dependent) layout of the tool, bundled into the
-# krpctools python package; requires the .NET 8 runtime to be installed.
+# krpctools python package; requires the .NET 10 runtime to be installed.
 publish_binary(
     name = "publish",
     binary = ":ServiceDefinitions",
     runtime_identifier = "linux-x64",
     self_contained = False,
-    target_framework = "net8.0",
+    target_framework = "net10.0",
     visibility = ["//tools/krpctools:__pkg__"],
 )
 

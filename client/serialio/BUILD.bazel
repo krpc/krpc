@@ -38,8 +38,8 @@ client_test(
 
 deps = [
     "//client/python:krpc_lib",
-    "@pypi//protobuf",
-    "@pypi//pyserial",
+    "@krpc_pypi//protobuf",
+    "@krpc_pypi//pyserial",
 ]
 
 py_test(

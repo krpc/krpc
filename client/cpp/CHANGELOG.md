@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Update to protobuf v36.2 (#1139)
+- Update to ASIO 1.38.2 (#1139)
 - Add `krpc::run`, which runs a server side function within a single physics tick,
   passing it any arguments, and returns its value (#1129)
 - Add `krpc::add_stream`, which streams the value of a server side function (#1129)
