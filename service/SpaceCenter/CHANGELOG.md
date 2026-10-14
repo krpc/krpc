@@ -26,6 +26,8 @@
   - The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and
     setting `SpaceCenter.Alarm.EventOffset`, change when the alarm goes off (#1114)
   - Add `SpaceCenter.CanSave`, whether the game can be saved (#1117)
+  - **Breaking:** Remove `SpaceCenter.LoadSpaceCenter`, replaced by setting `KRPC.GameScene`
+    (#1140)
 
 - Editor
   - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space plane
@@ -81,6 +83,9 @@
   - Add `Vessel.RecalculateDeltaV`, which recalculates the figures and waits for them, and
     `Vessel.DeltaVReady`, which reports whether they are current (#1076)
   - Document that the `Stage` mass figures include all later stages (#1112)
+  - **Breaking:** Remove `Parts.InStage`, `Parts.InDecoupleStage` and
+    `Vessel.ResourcesInDecoupleStage`, replaced by `Vessel.StageAt` and `Vessel.DecoupleStageAt`
+    (#1140)
 
 - Autopilot
   - Setting `AutoPilot.TargetDirection` keeps the target roll, rather than clearing it (#1054)
@@ -132,6 +137,9 @@
     `Orbit.SpeedAtTrueAnomaly` and `Orbit.SpeedAtRadius` (#1087)
   - Add `Orbit.Altitude`, `Orbit.MeanMotion`, `Orbit.SemiLatusRectum` and
     `Orbit.SpecificAngularMomentum` (#1087)
+  - **Breaking:** Remove `Orbit.TimeOfClosestApproach`, `Orbit.DistanceAtClosestApproach` and
+    `Orbit.ListClosestApproaches`, replaced by `Orbit.NextClosestApproach` and
+    `Orbit.ClosestApproaches` (#1140)
 
 - Maneuver nodes
   - Using a maneuver node that has been removed raises `KRPC.ObjectDestroyedException`.
@@ -261,6 +269,8 @@
     multiplier that was in force when the object was read (#1051)
   - Make `ModuleRef` public, for a mod that exposes a part module as a class of its own
     service (#1077)
+  - **Breaking:** Remove the string-dictionary `Module` field, event and action members,
+    replaced by `Module.FieldList`, `Module.EventList` and `Module.ActionList` (#1140)
 
 - Resources
   - Add `ResourceTransfer.Cancel` to stop a transfer before it finishes (#1028)
