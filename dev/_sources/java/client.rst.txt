@@ -18,7 +18,7 @@ The kRPC client library depends on the `protobuf
 
 The following example program connects to the server, queries it for its version and prints it out:
 
-.. literalinclude:: /scripts/client/java/Basic.java
+.. literalinclude:: /scripts/java/client/Basic.java
 
 To compile this program using javac on the command line, save the source as ``Example.java`` and run
 the following:
@@ -37,7 +37,7 @@ interaction with the server is done via this object. When constructed without an
 connect to the local machine on the default port numbers. You can specify different connection
 settings, and also a descriptive name for the connection, as follows:
 
-.. literalinclude:: /scripts/client/java/Connecting.java
+.. literalinclude:: /scripts/java/client/Connecting.java
 
 Calling Remote Procedures
 -------------------------
@@ -54,7 +54,7 @@ instantiates the ``SpaceCenter`` service and calls
 the active vessel (of type :type:`krpc.client.services.SpaceCenter.Vessel`). It sets the name of the
 vessel and then prints out its altitude:
 
-.. literalinclude:: /scripts/client/java/RemoteProcedures.java
+.. literalinclude:: /scripts/java/client/RemoteProcedures.java
 
 Many procedures return an object identifying something in the game, such as a vessel or
 a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
@@ -67,7 +67,7 @@ A server side function is code that runs inside the game, on the server. :meth:`
 evaluates one once and returns its value. Every value it reads comes from the same physics tick. For
 example, the following reads the vessel's altitude and speed together:
 
-.. literalinclude:: /scripts/client/java/RunFunction.java
+.. literalinclude:: /scripts/java/client/RunFunction.java
 
 Use ``run`` for a function with effects, such as setting a property. An event or a function stream
 evaluates its function on every update, repeating the effects.
@@ -84,7 +84,7 @@ A common use case for kRPC is to continuously extract data from the game. The na
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly
 prints the position of the active vessel:
 
-.. literalinclude:: /scripts/client/java/Streaming1.java
+.. literalinclude:: /scripts/java/client/Streaming1.java
 
 This approach requires significant communication overhead as request/response messages are
 repeatedly sent between the client and server. kRPC provides a more efficient mechanism to achieve
@@ -97,7 +97,7 @@ closed.
 
 The following example does the same thing as above using streams:
 
-.. literalinclude:: /scripts/client/java/Streaming2.java
+.. literalinclude:: /scripts/java/client/Streaming2.java
 
 It calls :meth:`Connection.addStream` once at the start of the program to create the stream, and
 then repeatedly prints the position returned by the stream. The stream is automatically closed when
@@ -132,7 +132,7 @@ when the stream ends. You can wait on it to block the current thread until one o
 The following example waits until the abort button is pressed in game, by waiting for the value of
 :meth:`krpc.client.services.SpaceCenter.Control.getAbort()` to change to true:
 
-.. literalinclude:: /scripts/client/java/ConditionVariables.java
+.. literalinclude:: /scripts/java/client/ConditionVariables.java
 
 This code creates a stream, acquires a lock on the streams condition variable (by using a
 ``synchronized`` block) and then repeatedly checks the value of ``getAbort``. It leaves the loop
@@ -152,7 +152,7 @@ should return nothing.
 For example the following program registers two callbacks that are invoked when the value of
 :meth:`krpc.client.services.SpaceCenter.Control.getAbort()` changes:
 
-.. literalinclude:: /scripts/client/java/Callbacks.java
+.. literalinclude:: /scripts/java/client/Callbacks.java
 
 A callback added to a stream that already has a value is called with that value straight away.
 
@@ -167,7 +167,7 @@ Stream Endings
 
 The following example streams the temperature of a part until the part is destroyed:
 
-.. literalinclude:: /scripts/client/java/StreamEnd.java
+.. literalinclude:: /scripts/java/client/StreamEnd.java
 
 Once a stream ends, getting its value or waiting on it throws the exception that ended it. A stream
 ends when its procedure throws an exception, when the server removes it, when you remove it, or when
@@ -193,7 +193,7 @@ evaluates the function on each stream update, within one physics tick. The value
 the server can send, including collections and objects. For example, the following streams the
 vessel's altitude in kilometers:
 
-.. literalinclude:: /scripts/client/java/FunctionStream.java
+.. literalinclude:: /scripts/java/client/FunctionStream.java
 
 The type parameter must be able to hold the function's value. Otherwise the assignment of a value
 throws a ``ClassCastException``.
@@ -218,7 +218,7 @@ same event object, so no firing is missed between two calls. Several firings bet
 You can also create a custom event from a server side function. The following builds the function
 ``MeanAltitude > 1000``, and creates an event that triggers when the function returns true:
 
-.. literalinclude:: /scripts/client/java/CustomEvent.java
+.. literalinclude:: /scripts/java/client/CustomEvent.java
 
 Client API Reference
 --------------------

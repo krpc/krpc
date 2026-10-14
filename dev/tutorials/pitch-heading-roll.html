@@ -625,7 +625,7 @@ once per second.</p>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Vector3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Tuple</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="p">;</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">AngleOfAttack</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PitchHeadingRoll</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">Vector3</span><span class="w"> </span><span class="nf">CrossProduct</span><span class="w"> </span><span class="p">(</span><span class="n">Vector3</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">Vector3</span><span class="w"> </span><span class="n">v</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
@@ -1103,6 +1103,7 @@ once per second.</p>
 </div>
 </div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Pitch/Heading/Roll"</span><span class="p">)</span>

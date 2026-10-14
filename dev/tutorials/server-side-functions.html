@@ -715,9 +715,7 @@ computation on each stream update:</p>
 read in a single physics tick per update:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-3-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button></div><div aria-labelledby="tab-3-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-3-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engines</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span>
-<span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span>
-    <span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">engines</span><span class="p">]</span>
-<span class="p">)</span>
+<span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">engines</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">thrust</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">thrust</span><span class="p">)</span>
 </pre></div>
@@ -771,6 +769,7 @@ liquid fuel left:</p>
     <span class="n">capacity</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">amount</span> <span class="o">/</span> <span class="n">capacity</span>
 
+
 <span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">fuel_fraction</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -804,6 +803,7 @@ with a type annotation:</p>
             <span class="n">ratings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"partial"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ratings</span>
 
+
 <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">burn_ratings</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -831,6 +831,7 @@ once, with every step in the same physics tick:</p>
     <span class="k">for</span> <span class="n">parachute</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">parachutes</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">parachute</span><span class="o">.</span><span class="n">deployed</span><span class="p">:</span>
             <span class="n">parachute</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
 
 <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">deploy</span><span class="p">)</span>
 </pre></div>
@@ -862,6 +863,7 @@ serves many inputs. This computes how long a burn takes, for several changes in 
     <span class="n">exhaust_velocity</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">specific_impulse</span> <span class="o">*</span> <span class="mf">9.82</span>
     <span class="n">final_mass</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">mass</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">delta_v</span> <span class="o">/</span> <span class="n">exhaust_velocity</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">mass</span> <span class="o">-</span> <span class="n">final_mass</span><span class="p">)</span> <span class="o">*</span> <span class="n">exhaust_velocity</span> <span class="o">/</span> <span class="n">vessel</span><span class="o">.</span><span class="n">available_thrust</span>
+
 
 <span class="k">for</span> <span class="n">delta_v</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">burn_time</span><span class="p">,</span> <span class="n">delta_v</span><span class="p">))</span>
@@ -895,6 +897,7 @@ which the engines are firing:</p>
         <span class="k">return</span> <span class="n">updates</span>
 
     <span class="k">return</span> <span class="n">count</span>
+
 
 <span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">firing_counter</span><span class="p">())</span>
 </pre></div>
@@ -1032,9 +1035,7 @@ angle between the vessel’s facing direction and its velocity relative to the s
 <span class="n">frame</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span>
 <span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span>
     <span class="k">lambda</span><span class="p">:</span> <span class="n">stdlib</span><span class="o">.</span><span class="n">radians_to_degrees</span><span class="p">(</span>
-        <span class="n">stdlib</span><span class="o">.</span><span class="n">vector_angle</span><span class="p">(</span>
-            <span class="n">vessel</span><span class="o">.</span><span class="n">direction</span><span class="p">(</span><span class="n">frame</span><span class="p">),</span> <span class="n">vessel</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">stdlib</span><span class="o">.</span><span class="n">vector_angle</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">direction</span><span class="p">(</span><span class="n">frame</span><span class="p">),</span> <span class="n">vessel</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">frame</span><span class="p">))</span>
     <span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
@@ -1500,9 +1501,7 @@ Building a function costs one RPC per node, paid once.</p>
 <p>This truncates the altitude to a whole number of meters:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-18-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-18-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-18-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-18-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-18-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-18-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-18-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-18-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-18-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-18-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Truncate the altitude to a whole number of meters</span>
-<span class="n">expr</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span>
-    <span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">mean_altitude</span><span class="p">),</span> <span class="n">types</span><span class="o">.</span><span class="n">int</span><span class="p">()</span>
-<span class="p">)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">mean_altitude</span><span class="p">),</span> <span class="n">types</span><span class="o">.</span><span class="n">int</span><span class="p">())</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-18-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-18-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Truncate the altitude to a whole number of meters</span>
@@ -1543,6 +1542,7 @@ operand only when the first does not decide the result.</p>
 <p>A function whose value can be sent to a client can be streamed:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-19-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-19-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-19-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-19-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-19-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-19-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-19-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-19-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-19-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-19-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
@@ -2062,11 +2062,10 @@ fuel check from <a class="reference internal" href="#server-side-functions-excep
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-24-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-24-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-24-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-24-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-24-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-24-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-24-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-24-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-24-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-24-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">amount</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="s2">"LiquidFuel"</span><span class="p">)</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">if_then</span><span class="p">(</span>
-    <span class="n">expression</span><span class="o">.</span><span class="n">less_than</span><span class="p">(</span>
-        <span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">amount</span><span class="p">),</span> <span class="n">expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-    <span class="p">),</span>
+    <span class="n">expression</span><span class="o">.</span><span class="n">less_than</span><span class="p">(</span><span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">amount</span><span class="p">),</span> <span class="n">expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span>
     <span class="n">expression</span><span class="o">.</span><span class="n">throw</span><span class="p">(</span>
-        <span class="s2">"KRPC"</span><span class="p">,</span> <span class="s2">"InvalidOperationException"</span><span class="p">,</span>
+        <span class="s2">"KRPC"</span><span class="p">,</span>
+        <span class="s2">"InvalidOperationException"</span><span class="p">,</span>
         <span class="n">expression</span><span class="o">.</span><span class="n">constant_string</span><span class="p">(</span><span class="s2">"not enough fuel"</span><span class="p">),</span>
     <span class="p">),</span>
 <span class="p">)</span>

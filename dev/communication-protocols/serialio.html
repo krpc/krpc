@@ -667,6 +667,7 @@ populated. The <code class="docutils literal notranslate"><span class="pre">Conn
 <span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">client_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">client_identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+
 <span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">RPC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="na">STREAM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -739,8 +740,9 @@ rate, or configure a higher baud rate.</p>
 “Jeb”. It then invokes the <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC, receives and decodes the result, and prints out
 the server version number from the response.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">serial</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.encoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_VarintEncoder</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_DecodeVarint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.encoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_VarintEncoder</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">krpc.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">KRPC_pb2</span> <span class="k">as</span> <span class="n">KRPC</span>
 
 

@@ -5664,7 +5664,7 @@ returns ``None``.
 The following Python example uses these attributes to perform a
 depth-first traversal over all of the parts in a vessel:
 
-.. literalinclude:: /scripts/services/space-center/TreeTraversal.py
+.. literalinclude:: /scripts/api/space-center/parts/TreeTraversal.py
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -5711,7 +5711,7 @@ consider to be *axially* attached to nothing.
 The following Python example does a depth-first traversal as before,
 but also prints out the attachment mode used by the part:
 
-.. literalinclude:: /scripts/services/space-center/AttachmentModes.py
+.. literalinclude:: /scripts/api/space-center/parts/AttachmentModes.py
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::

@@ -627,7 +627,7 @@ parts are rebuilt the same way whenever it comes back into range.</p>
 <p>An object obtained beforehand goes on working, and reads the state of the loaded game. So you
 can hold onto a vessel or a part across a quickload:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-<span class="n">parachute</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s1">'parachuteSingle'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parachute</span>
+<span class="n">parachute</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="s2">"parachuteSingle"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parachute</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">quickload</span><span class="p">()</span>
 <span class="c1"># reads the parachute of the loaded game</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">parachute</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
@@ -642,7 +642,7 @@ library defines:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">part</span><span class="o">.</span><span class="n">temperature</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">ObjectDestroyedException</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'that part is gone'</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"that part is gone"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> API reference for each client language documents it alongside the other

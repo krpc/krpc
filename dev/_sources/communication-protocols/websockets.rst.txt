@@ -60,10 +60,10 @@ the name "Jeb". Next, it connects to the stream server on port 50001. It then in
 ``KRPC.GetStatus`` RPC, receives and decodes the result and prints out the server version number
 from the response.
 
-.. literalinclude:: /scripts/communication-protocol-rpc.js
+.. literalinclude:: /scripts/communication-protocols/websockets/RPC.js
    :language: javascript
 
 The following example demonstrates how to set up and receive data from the server over a stream:
 
-.. literalinclude:: /scripts/communication-protocol-stream.js
+.. literalinclude:: /scripts/communication-protocols/websockets/Stream.js
    :language: javascript

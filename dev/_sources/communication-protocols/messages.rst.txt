@@ -37,25 +37,10 @@ Anatomy of a Request
 A request is sent to the server using a ``Request`` Protocol Buffer message with the following
 format:
 
-.. code-block:: protobuf
-
-   message Request {
-     repeated ProcedureCall calls = 1;
-   }
-
-   message ProcedureCall {
-     string service = 1;
-     string procedure = 2;
-     uint32 service_id = 4;
-     uint32 procedure_id = 5;
-     repeated Argument arguments = 3;
-   }
-
-   message Argument {
-     uint32 position = 1;
-     bytes value = 2;
-     bool is_null = 3;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Request {
+   :end-before: message Response {
 
 A request message contains one or more procedure calls. This allows efficient batching of multiple
 calls in a single message, if desired.
@@ -101,25 +86,10 @@ Anatomy of a Response
 A response is sent to the client using a ``Response`` Protocol Buffer message with the following
 format:
 
-.. code-block:: protobuf
-
-   message Response {
-     Error error = 1;
-     repeated ProcedureResult results = 2;
-   }
-
-   message ProcedureResult {
-     Error error = 1;
-     bytes value = 2;
-     bool is_null = 3;
-   }
-
-   message Error {
-     string service = 1;
-     string name = 2;
-     string description = 3;
-     string stack_trace = 4;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Response {
+   :end-before: // Messages for receiving stream updates
 
 A response message contains one or more results, corresponding to the procedure calls made in the
 associated request message.
@@ -159,8 +129,8 @@ The ``krpc.schema.KRPC`` package contains the various Protocol Buffer message fo
 python code using the Protocol Buffer compiler. The ``send_message`` and ``recv_message`` are helper
 functions used to send/receive messages from the server.
 
-.. literalinclude:: /scripts/communication-protocol-rpc.py
-   :lines: 64-
+.. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
+   :start-at: call = KRPC.ProcedureCall()
 
 .. _communication-protocol-protobuf-encoding:
 
@@ -228,22 +198,19 @@ Anatomy of a Stream Update
 Stream updates are sent to the client using a ``StreamUpdate`` Protocol Buffer message with the
 following format:
 
-.. code-block:: protobuf
-
-   message StreamUpdate {
-     repeated StreamResult results = 1;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message StreamUpdate {
+   :end-before: message StreamResult {
 
 This contains a list of ``StreamResult`` messages, one for each stream that exists on the server for
 that client, and whose return value changed since the last update was sent. It has the following
 format:
 
-.. code-block:: protobuf
-
-   message StreamResult {
-     uint64 id = 1;
-     ProcedureResult result = 2;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message StreamResult {
+   :end-before: // Messages for receiving information about the server
 
 The fields are:
 
@@ -272,11 +239,10 @@ the event is created, and its first result says whether it has fired.
 
 The format for an ``Event`` message is simply the following:
 
-.. code-block:: protobuf
-
-   message Event {
-     Stream stream = 1;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Event {
+   :end-before: message Status {
 
 .. _communication-protocol-krpc-service:
 
@@ -292,29 +258,10 @@ GetStatus
 The ``GetStatus`` procedure returns status information about the server. It
 returns a Protocol Buffer message with the format:
 
-.. code-block:: protobuf
-
-   message Status {
-     string version = 1;
-     uint64 bytes_read = 2;
-     uint64 bytes_written = 3;
-     float bytes_read_rate = 4;
-     float bytes_written_rate = 5;
-     uint64 rpcs_executed = 6;
-     float rpc_rate = 7;
-     bool one_rpc_per_update = 8;
-     uint32 max_time_per_update = 9;
-     bool adaptive_rate_control = 10;
-     bool blocking_recv = 11;
-     uint32 recv_timeout = 12;
-     float time_per_rpc_update = 13;
-     float poll_time_per_rpc_update = 14;
-     float exec_time_per_rpc_update = 15;
-     uint32 stream_rpcs = 16;
-     uint64 stream_rpcs_executed = 17;
-     float stream_rpc_rate = 18;
-     float time_per_stream_update = 19;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Status {
+   :end-before: // Multiplexed request messages
 
 The ``version`` field contains the version string of the server. The remaining
 fields contain performance information about the server.
@@ -327,11 +274,10 @@ GetServices
 The ``GetServices`` procedure returns a Protocol Buffer message containing information about all of
 the services and procedures provided by the server. The format of the message is:
 
-.. code-block:: protobuf
-
-   message Services {
-     repeated Service services = 1;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Services {
+   :end-before: message Service {
 
 This contains a single field, which is a list of ``Service`` messages with information about each
 service provided by the server. The content of these ``Service`` messages are :ref:`documented below
@@ -413,19 +359,10 @@ The :ref:`GetServices procedure <communication-protocol-get-services>` returns i
 of the services provided by the server. Details about a service are given by a ``Service`` message,
 with the format:
 
-.. code-block:: protobuf
-
-   message Service {
-     string name = 1;
-     repeated Procedure procedures = 2;
-     repeated Class classes = 3;
-     repeated Enumeration enumerations = 4;
-     repeated Exception exceptions = 5;
-     string documentation = 6;
-     bool deprecated = 7;
-     string deprecated_reason = 8;
-     repeated Struct structs = 9;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Service {
+   :end-before: message Procedure {
 
 The fields are:
 
@@ -460,25 +397,16 @@ Procedures
 
 Details about a procedure are given by a ``Procedure`` message, with the format:
 
-.. code-block:: protobuf
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Procedure {
+   :end-at: string deprecated_reason = 8;
+   :append: }
 
-   message Procedure {
-     string name = 1;
-     repeated Parameter parameters = 2;
-     Type return_type = 3;
-     repeated GameScene game_scenes = 6;
-     string documentation = 5;
-     bool deprecated = 7;
-     string deprecated_reason = 8;
-   }
-
-   message Parameter {
-     string name = 1;
-     Type type = 2;
-     bool has_default_value = 5;
-     bytes default_value = 3;
-     bool default_value_is_null = 6;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Parameter {
+   :end-before: message Class {
 
 The fields are:
 
@@ -546,14 +474,10 @@ Classes
 
 Details about each :csharp:attr:`KRPCClass` are specified in a ``Class`` message, with the format:
 
-.. code-block:: protobuf
-
-   message Class {
-     string name = 1;
-     string documentation = 2;
-     bool deprecated = 3;
-     string deprecated_reason = 4;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Class {
+   :end-before: message Enumeration {
 
 The fields are:
 
@@ -572,23 +496,10 @@ Enumerations
 Details about each :csharp:attr:`KRPCEnum` are specified in an ``Enumeration`` message, with the
 format:
 
-.. code-block:: protobuf
-
-   message Enumeration {
-     string name = 1;
-     repeated EnumerationValue values = 2;
-     string documentation = 3;
-     bool deprecated = 4;
-     string deprecated_reason = 5;
-   }
-
-   message EnumerationValue {
-     string name = 1;
-     int32 value = 2;
-     string documentation = 3;
-     bool deprecated = 4;
-     string deprecated_reason = 5;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Enumeration {
+   :end-before: message Exception {
 
 The fields are:
 
@@ -626,23 +537,10 @@ A structure is a compound value with named fields, whose value on the wire is th
 fields sent inline. A class sends an identifier for an object held on the server instead. Details
 about each :csharp:attr:`KRPCStruct` are specified in a ``Struct`` message, with the format:
 
-.. code-block:: protobuf
-
-   message Struct {
-     string name = 1;
-     repeated StructField fields = 2;
-     string documentation = 3;
-     bool deprecated = 4;
-     string deprecated_reason = 5;
-   }
-
-   message StructField {
-     string name = 1;
-     Type type = 2;
-     string documentation = 3;
-     bool deprecated = 4;
-     string deprecated_reason = 5;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Struct {
+   :end-before: message Type {
 
 The fields are:
 
@@ -704,14 +602,10 @@ Exceptions
 Details about each :csharp:attr:`KRPCException` are specified in an ``Exception`` message, with the
 format:
 
-.. code-block:: protobuf
-
-   message Exception {
-     string name = 1;
-     string documentation = 2;
-     bool deprecated = 3;
-     string deprecated_reason = 4;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Exception {
+   :end-before: message Struct {
 
 The fields are:
 
@@ -752,48 +646,10 @@ Type
 The ``GetServices`` procedure returns type information about parameters, return values and others as
 ``Type`` messages. The format of these messages is as follows:
 
-.. code-block:: protobuf
-
-   message Type {
-     TypeCode code = 1;
-     string service = 2;
-     string name = 3;
-     repeated Type types = 4;
-     bool nullable = 5;
-
-     enum TypeCode {
-       NONE = 0;
-
-       // Values
-       DOUBLE = 1;
-       FLOAT = 2;
-       SINT32 = 3;
-       SINT64 = 4;
-       UINT32 = 5;
-       UINT64 = 6;
-       BOOL = 7;
-       STRING = 8;
-       BYTES = 9;
-
-       // Objects
-       CLASS = 100;
-       ENUMERATION = 101;
-       STRUCT = 102;
-
-       // Messages
-       EVENT = 200;
-       PROCEDURE_CALL = 201;
-       STREAM = 202;
-       STATUS = 203;
-       SERVICES = 204;
-
-       // Collections
-       TUPLE = 300;
-       LIST = 301;
-       SET = 302;
-       DICTIONARY = 303;
-     };
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Type {
+   :end-before: // Collection data structures
 
 The ``code`` field specifies the type. ``NONE`` is used as the return type for procedures that do
 not return a value.
@@ -834,20 +690,11 @@ from. These are returned as a repeated field containing ``GameScene`` enumeratio
 procedure is available in all game scenes, this field is empty. The enumeration is defined as
 follows:
 
-.. code-block:: protobuf
-
-   enum GameScene {
-     SPACE_CENTER = 0;
-     FLIGHT = 1;
-     TRACKING_STATION = 2;
-     EDITOR_VAB = 3;
-     EDITOR_SPH = 4;
-     MISSION_BUILDER = 5;
-     ASTRONAUT_COMPLEX = 6;
-     MISSION_CONTROL = 7;
-     RESEARCH_AND_DEVELOPMENT = 8;
-     ADMINISTRATION = 9;
-   };
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: enum GameScene {
+   :end-at: };
+   :dedent:
 
 The astronaut complex, mission control, research and development and administration scenes are
 facilities that open within the space center scene.

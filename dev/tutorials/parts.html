@@ -769,6 +769,7 @@ in the same physics tick, with a single call:</p>
     <span class="k">for</span> <span class="n">parachute</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">parachutes</span><span class="p">:</span>
         <span class="n">parachute</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
 
+
 <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">deploy_parachutes</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1110,6 +1111,7 @@ reads them all in the same tick, with a single call:</p>
         <span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">engine</span><span class="o">.</span><span class="n">specific_impulse</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">engines</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">thrust</span> <span class="o">/</span> <span class="n">fuel_consumption</span>
+
 
 <span class="n">isp</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">combined_isp</span><span class="p">)</span>
 </pre></div>

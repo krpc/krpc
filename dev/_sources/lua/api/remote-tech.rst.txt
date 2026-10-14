@@ -20,6 +20,6 @@ Example
 The following example sets the target of a dish on the active vessel then prints
 out the signal delay to the active vessel.
 
-.. literalinclude:: /scripts/services/RemoteTechExample.lua
+.. literalinclude:: /scripts/api/remote-tech/RemoteTechExample.lua
 
 .. _RemoteTech: https://forum.kerbalspaceprogram.com/index.php?/topic/139167-13-remotetech-v188-2017-09-03/

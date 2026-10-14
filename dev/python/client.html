@@ -985,6 +985,7 @@ computed on the server. The server evaluates the function on each stream update,
 tick. The value can be any type the server can send, including collections and objects. For example,
 the following streams the vessel’s altitude in kilometers:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
@@ -1008,6 +1009,7 @@ unloads. To keep a function running through a load, catch the exception in the f
         <span class="k">return</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">/</span> <span class="mi">1000</span>
     <span class="k">except</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">ObjectNotLoadedException</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">0.0</span>
+
 
 <span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">altitude_km</span><span class="p">)</span>
 </pre></div>
@@ -1073,6 +1075,7 @@ side function. <a class="reference internal" href="#krpc.client.Client.add_event
 <a class="reference internal" href="#krpc.client.Client.run" title="krpc.client.Client.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.client.Client.run()</span></code></a> take the result, and run it without compiling it again. The following
 compiles a function once, and runs it every second:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
@@ -1100,6 +1103,7 @@ also compiles the function on the server, so its first run is as fast as later o
 <span class="k">def</span><span class="w"> </span><span class="nf">altitude_km</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">/</span> <span class="mi">1000</span>
 
+
 <span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">altitude_km</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1108,6 +1112,7 @@ with defaults and keyword arguments as in Python:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@conn</span><span class="o">.</span><span class="n">compile</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">altitude_above</span><span class="p">(</span><span class="n">height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">-</span> <span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="n">scale</span>
+
 
 <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">altitude_above</span><span class="p">,</span> <span class="mi">70000</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">altitude_above</span><span class="p">,</span> <span class="mi">70000</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>

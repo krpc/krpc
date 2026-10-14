@@ -674,7 +674,7 @@ the soonest one it can, and is the only call the loop needs to open with.</p>
 <p>Holding a vessel’s pitch with a proportional controller, one iteration per tick:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'pitch hold'</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"pitch hold"</span><span class="p">)</span>
 <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
 <span class="n">target_pitch</span> <span class="o">=</span> <span class="mi">45</span>
 
@@ -710,6 +710,7 @@ tick. One function reads the state, computes the control and writes it, all in t
 <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">():</span>
     <span class="n">error</span> <span class="o">=</span> <span class="n">target_pitch</span> <span class="o">-</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">pitch</span>
     <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">error</span><span class="p">))</span>
+
 
 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>

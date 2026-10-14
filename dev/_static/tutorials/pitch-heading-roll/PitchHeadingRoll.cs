@@ -3,7 +3,7 @@ using KRPC.Client;
 using KRPC.Client.Services.SpaceCenter;
 using Vector3 = System.Tuple<double, double, double>;
 
-class AngleOfAttack
+class PitchHeadingRoll
 {
     static Vector3 CrossProduct (Vector3 u, Vector3 v)
     {

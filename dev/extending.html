@@ -711,7 +711,7 @@ an exception.</p>
 <li><p>Declare a service called <code class="docutils literal notranslate"><span class="pre">EVA</span></code>:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">EVA</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -719,7 +719,7 @@ an exception.</p>
 <li><p>Declare a service called <code class="docutils literal notranslate"><span class="pre">MyEVAService</span></code> (different to the name of the class):</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService (Name = "MyEVAService")]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">EVA</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -728,7 +728,7 @@ an exception.</p>
 scene:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService (GameScene = GameScene.Flight)]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FlightTools</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -769,15 +769,16 @@ and an optional description, and returns a <code class="docutils literal notrans
 <span class="w">    </span><span class="na">[KRPCProcedure]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">Flag</span><span class="w"> </span><span class="nf">PlantFlag</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="p">...</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">NotImplementedException</span><span class="w"> </span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>This can be called from a python client as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="n">flag</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">eva</span><span class="o">.</span><span class="n">plant_flag</span><span class="p">(</span><span class="s1">'Landing Site'</span><span class="p">,</span> <span class="s1">'One small step for Kerbal-kind'</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">eva</span><span class="o">.</span><span class="n">plant_flag</span><span class="p">(</span><span class="s2">"Landing Site"</span><span class="p">,</span> <span class="s2">"One small step for Kerbal-kind"</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -823,7 +824,7 @@ its <code class="docutils literal notranslate"><span class="pre">Service</span><
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">EVA</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">[KRPCClass]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Flag</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="p">...</span>
+<span class="w">        </span><span class="c1">// ...</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -832,7 +833,7 @@ its <code class="docutils literal notranslate"><span class="pre">Service</span><
 <li><p>Declare a class called <code class="docutils literal notranslate"><span class="pre">Flag</span></code>, without nesting the class definition in a service class:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCClass (Service = "EVA")]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Flag</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -875,7 +876,7 @@ to true. A parameter that may be <code class="docutils literal notranslate"><spa
 <span class="w">    </span><span class="na">[KRPCMethod]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Remove</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="p">...</span>
+<span class="w">        </span><span class="c1">// ...</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -931,13 +932,14 @@ is not nullable fails with an error. See <a class="reference internal" href="#se
 <span class="w">    </span><span class="na">[KRPCProperty]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">Flag</span><span class="w"> </span><span class="n">LastFlag</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NotImplementedException</span><span class="w"> </span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>This property can be accessed from a python client as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 <span class="n">flag</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">eva</span><span class="o">.</span><span class="n">last_flag</span>
 </pre></div>
@@ -996,6 +998,7 @@ service if it has its <code class="docutils literal notranslate"><span class="pr
 </div>
 <p>This can be used from a python client as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 <span class="n">state</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">eva</span><span class="o">.</span><span class="n">FlagState</span><span class="o">.</span><span class="n">lowered</span>
 </pre></div>
@@ -1048,8 +1051,8 @@ mutable state, or whose members are expensive enough to read one at a time.</p>
 <p><strong>Examples</strong></p>
 <ul>
 <li><p>Declare a structure with three fields:</p>
-<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCStruct]</span>
-<span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">LaunchSiteInfo</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCStruct (Service = "EVA")]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">LandingSite</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">[KRPCProperty]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
@@ -1063,14 +1066,15 @@ mutable state, or whose members are expensive enough to read one at a time.</p>
 </div>
 <p>This can be used from a python client as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
 <span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="n">site</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">launch_sites</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">eva</span><span class="o">.</span><span class="n">landing_site</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">site</span><span class="o">.</span><span class="n">latitude</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
 <li><p>Declare a structure with two nullable fields:</p>
-<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCStruct]</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCStruct (Service = "Comms")]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">CommNodeInfo</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">[KRPCProperty]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
@@ -1151,7 +1155,7 @@ syntax. kRPC will detect the default values and use them.</p>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">HireKerbals</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="na">[KRPCDefaultValue (typeof(DefaultKerbals))]</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">names</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1161,7 +1165,7 @@ syntax. kRPC will detect the default values and use them.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCProcedure]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">HireKerbal</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Jeb"</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1197,7 +1201,7 @@ is assigned a default value of <code class="docutils literal notranslate"><span 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">DestroyVessel</span><span class="w"> </span><span class="p">([</span><span class="n">KRPCNullable</span><span class="p">]</span><span class="w"> </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// vessel may be null</span>
-<span class="w">        </span><span class="p">...</span>
+<span class="w">        </span><span class="c1">// ...</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -1210,10 +1214,18 @@ is assigned a default value of <code class="docutils literal notranslate"><span 
 value itself. Each step names a position of the type the step before it reached, outermost first:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">static</span><span class="w"> </span><span class="n">KRPC</span><span class="p">.</span><span class="n">Service</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">Position</span><span class="p">;</span>
 
-<span class="na">[KRPCNullable (Element)]</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">crew</span><span class="w">                       </span><span class="c1">// the vessels may be null</span>
-<span class="na">[KRPCNullable (Value)]</span><span class="w"> </span><span class="n">IDictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">byName</span><span class="w">         </span><span class="c1">// the values may be null</span>
-<span class="na">[KRPCNullable (Item2)]</span><span class="w"> </span><span class="n">Tuple</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">named</span><span class="w">                </span><span class="c1">// the second item may be null</span>
-<span class="na">[KRPCNullable (Element, Element)]</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">byStage</span><span class="w">    </span><span class="c1">// the vessels may be null</span>
+<span class="na">[KRPCService]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Fleet</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">[KRPCProcedure]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Assign</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="na">[KRPCNullable (Element)]</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">crew</span><span class="p">,</span><span class="w"> </span><span class="c1">// the vessels may be null</span>
+<span class="w">        </span><span class="na">[KRPCNullable (Value)]</span><span class="w"> </span><span class="n">IDictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">byName</span><span class="p">,</span><span class="w"> </span><span class="c1">// the values may be null</span>
+<span class="w">        </span><span class="na">[KRPCNullable (Item2)]</span><span class="w"> </span><span class="n">Tuple</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vessel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">named</span><span class="p">,</span><span class="w"> </span><span class="c1">// the second item may be null</span>
+<span class="w">        </span><span class="na">[KRPCNullable (Element, Element)]</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Vessel</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">byStage</span><span class="p">)</span><span class="w"> </span><span class="c1">// the vessels may be null</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Without the <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">static</span></code> each position is written <code class="docutils literal notranslate"><span class="pre">Position.Element</span></code>, as <code class="docutils literal notranslate"><span class="pre">GameScene</span></code>
@@ -1553,7 +1565,7 @@ the same game scenes as the containing service.</p></li>
 <a class="reference internal" href="#value-KRPC.Service.GameScene.Flight" title="KRPC.Service.GameScene.Flight value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Flight</span></code></a> game scene:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService (GameScene = GameScene.Flight)]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MyService</span><span class="w"> </span><span class="p">{</span>
-<span class="w">   </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1563,7 +1575,7 @@ the same game scenes as the containing service.</p></li>
 scenes:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService (GameScene = (GameScene.Flight | GameScene.Editor))]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MyService</span><span class="w"> </span><span class="p">{</span>
-<span class="w">   </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1573,14 +1585,14 @@ scenes:</p>
 overrides this and is available in all game scenes:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService (GameScene = GameScene.Flight)]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MyService</span><span class="w"> </span><span class="p">{</span>
-<span class="w">   </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 
-<span class="w">   </span><span class="na">[KRPCProcedure (GameScene = GameScene.All)]</span>
-<span class="w">   </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">MyProcedure</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="p">...</span>
-<span class="w">   </span><span class="p">}</span>
+<span class="w">    </span><span class="na">[KRPCProcedure (GameScene = GameScene.All)]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">MyProcedure</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">NotImplementedException</span><span class="w"> </span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">   </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1595,7 +1607,7 @@ enumerations. For example:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCProcedure]</span>
 <span class="na">[Obsolete ("Use &lt;see cref='Flag.Remove'/&gt; instead.")]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RemoveFlag</span><span class="p">(</span><span class="n">Flag</span><span class="w"> </span><span class="n">flag</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1618,7 +1630,7 @@ method, and joins the service that owns the type being extended:</p>
 <span class="w">    </span><span class="na">[KRPCMethod]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">IList</span><span class="o">&lt;</span><span class="n">Part</span><span class="o">&gt;</span><span class="w"> </span><span class="n">WithFailure</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="n">Parts</span><span class="w"> </span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">failure</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="p">...</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">NotImplementedException</span><span class="w"> </span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -1634,13 +1646,13 @@ own gives a read-only or a write-only property.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCProperty]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">GetFailed</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="n">Parts</span><span class="w"> </span><span class="n">parts</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">NotImplementedException</span><span class="w"> </span><span class="p">();</span>
 <span class="p">}</span>
 
 <span class="na">[KRPCProperty]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetFailed</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="n">Parts</span><span class="w"> </span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>

@@ -21,6 +21,6 @@ The following example gets the control group named "MyGroup", prints out the
 names and positions of all of the servos in the group, then moves all of the
 servos to the right for 1 second.
 
-.. literalinclude:: /scripts/services/InfernalRoboticsExample.py
+.. literalinclude:: /scripts/api/infernal-robotics/InfernalRoboticsExample.py
 
 .. _Infernal Robotics Next: https://forum.kerbalspaceprogram.com/index.php?/topic/170898-wip-infernal-robotics-next/
