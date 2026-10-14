@@ -134,6 +134,8 @@ class TestPartsPart(krpctest.TestCase):
         self.assertTrue(part.massless)
         self.assertAlmostEqual(0, part.mass, places=4)
         self.assertAlmostEqual(0, part.dry_mass, places=4)
+        self.assertEqual((0, 0, 0), part.moment_of_inertia)
+        self.assertEqual([0] * 9, part.inertia_tensor)
         self.assertEqual(7, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)

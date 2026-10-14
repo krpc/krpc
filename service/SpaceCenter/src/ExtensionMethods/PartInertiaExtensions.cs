@@ -48,6 +48,20 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Inertia tensor of the part's rigidbody about its center of mass, in
+        /// tonne.m^2, in the axes the given rotation takes the part's axes to.
+        /// </summary>
+        public static Matrix4x4 RigidbodyInertiaTensor (this Part part, Quaternion rotation)
+        {
+            Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
+            // From the principal axes of the rigidbody's tensor
+            Quaternion rot = rotation * part.rb.inertiaTensorRotation;
+            Matrix4x4 rotMatrix = Matrix4x4.TRS (Vector3.zero, rot, Vector3.one);
+            Matrix4x4 invMatrix = Matrix4x4.TRS (Vector3.zero, Quaternion.Inverse (rot), Vector3.one);
+            return rotMatrix * partTensor * invMatrix;
+        }
+
+        /// <summary>
         /// Inertia tensor of the part about its center of mass, in the part's
         /// axes, in tonne.m^2. Worked out from the colliders: each is treated as
         /// a solid of uniform density, and the part's mass is shared between them
