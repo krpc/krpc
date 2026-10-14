@@ -392,6 +392,7 @@ csharp_library_multiple(
     srcs = glob(["src/scripts/**/*.lib.cs"]),
     deps = [
         "//core:KRPC.Core",
+        "//service/SpaceCenter:KRPC.SpaceCenter",
         "//tools/build/ksp:Assembly-CSharp",
         "//tools/build/ksp:Assembly-CSharp-firstpass",
         "//tools/build/ksp:Google.Protobuf",
