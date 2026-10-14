@@ -38,14 +38,12 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v7
-      # The recursive search skips the BUILD files of the external repositories,
-      # named *.BUILD, so those are passed by name.
-      - name: bazel
-        run: buildifier -mode check -lint warn -r . $(find . -name '*.BUILD')
       - name: setup
         uses: ./.github/actions/build-setup
         with:
           long-version: "false"
+      - name: bazel
+        run: bazel test //:buildifier
       # Whether the lock file matches requirements.in, resolved against PyPI
       - name: python-requirements
         run: bazel test //tools/build/python:requirements.test

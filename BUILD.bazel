@@ -186,6 +186,29 @@ pkg_zip(
     },
 )
 
+# Formatting and lint of the Bazel files, across the whole source tree. The test
+# reads the tree in place, so it runs unsandboxed and is never cached.
+py_test(
+    name = "buildifier",
+    size = "small",
+    srcs = ["//tools/build:run_buildifier.py"],
+    args = [
+        "--buildifier=$(rlocationpath @buildifier_prebuilt//:buildifier)",
+        "--workspace=$(rlocationpath MODULE.bazel)",
+    ],
+    data = [
+        "MODULE.bazel",
+        "@buildifier_prebuilt//:buildifier",
+    ],
+    main = "run_buildifier.py",
+    tags = [
+        "external",
+        "no-cache",
+        "no-sandbox",
+    ],
+    deps = ["@rules_python//python/runfiles"],
+)
+
 # The Bazel build globs its C# sources, so it cannot see a source file that is
 # missing from a .csproj -- only a `dotnet build` of KRPC.sln can. This checks the
 # .csproj file lists directly, so the divergence is caught without a .NET SDK.
@@ -217,6 +240,7 @@ py_test(
 test_suite(
     name = "test",
     tests = [
+        "//:buildifier",
         "//:csproj-test",
         "//:pyright-release",
         "//:ruff-release",
@@ -266,6 +290,7 @@ alias(
 test_suite(
     name = "lint",
     tests = [
+        "//:buildifier",
         "//:pyright-release",
         "//:ruff-release",
         "//client/cnano:lint",
