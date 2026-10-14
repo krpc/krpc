@@ -47,9 +47,12 @@ stage_files(
         ":java-api",
         ":lua-api",
         ":python-api",
+        "//protobuf:krpc.proto",
     ],
     path_map = {
         "doc/src/": "",
+        # The protocol pages include their message definitions from the schema
+        "protobuf/krpc.proto": "communication-protocols/krpc.proto",
     },
 )
 
@@ -389,6 +392,7 @@ csharp_library_multiple(
     srcs = glob(["src/scripts/**/*.lib.cs"]),
     deps = [
         "//core:KRPC.Core",
+        "//service/SpaceCenter:KRPC.SpaceCenter",
         "//tools/build/ksp:Assembly-CSharp",
         "//tools/build/ksp:Assembly-CSharp-firstpass",
         "//tools/build/ksp:Google.Protobuf",

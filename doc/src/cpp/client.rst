@@ -68,7 +68,7 @@ Getting Started
 
 The following example program connects to the server, queries it for its version and prints it out:
 
-.. literalinclude:: /scripts/client/cpp/Basic.cpp
+.. literalinclude:: /scripts/cpp/client/Basic.cpp
 
 A kRPC program needs to be compiled with C++17 support enabled, and linked against ``libkrpc``,
 ``libprotobuf-lite`` and ``libz``.
@@ -95,7 +95,7 @@ object (of type :class:`krpc::Client`) through which you can interact with the s
 without any arguments, it will connect to the local machine on the default port numbers. You can
 specify different connection settings, and also a descriptive name for the connection, as follows:
 
-.. literalinclude:: /scripts/client/cpp/Connecting.cpp
+.. literalinclude:: /scripts/cpp/client/Connecting.cpp
 
 Calling Remote Procedures
 -------------------------
@@ -114,7 +114,7 @@ get an object representing the active vessel (of type
 :class:`krpc::services::SpaceCenter::Vessel`). It sets the name of the vessel and then prints out
 its altitude:
 
-.. literalinclude:: /scripts/client/cpp/RemoteProcedures.cpp
+.. literalinclude:: /scripts/cpp/client/RemoteProcedures.cpp
 
 Many procedures return an object identifying something in the game, such as a vessel or
 a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
@@ -127,7 +127,7 @@ A server side function is code that runs inside the game, on the server. :func:`
 one once and returns its value. Every value it reads comes from the same physics tick. For example,
 the following reads the vessel's altitude and speed together:
 
-.. literalinclude:: /scripts/client/cpp/RunFunction.cpp
+.. literalinclude:: /scripts/cpp/client/RunFunction.cpp
 
 Use ``run`` for a function with effects, such as setting a property. An event or a function stream
 evaluates its function on every update, repeating the effects.
@@ -149,7 +149,7 @@ A common use case for kRPC is to continuously extract data from the game. The na
 this would be to repeatedly call a remote procedure, such as in the following which repeatedly
 prints the position of the active vessel:
 
-.. literalinclude:: /scripts/client/cpp/Streaming1.cpp
+.. literalinclude:: /scripts/cpp/client/Streaming1.cpp
 
 This approach requires significant communication overhead as request/response messages are
 repeatedly sent between the client and server. kRPC provides a more efficient mechanism to achieve
@@ -162,7 +162,7 @@ closed.
 
 The following example does the same thing as above using streams:
 
-.. literalinclude:: /scripts/client/cpp/Streaming2.cpp
+.. literalinclude:: /scripts/cpp/client/Streaming2.cpp
 
 It calls ``position_stream`` once at the start of the program to create the stream, and then
 repeatedly prints the position returned by the stream. The stream is automatically closed when the
@@ -203,7 +203,7 @@ the value of the stream changes.
 The following example waits until the abort button is pressed in game, by waiting for the value of
 :func:`krpc::services::SpaceCenter::Control::abort` to change to true:
 
-.. literalinclude:: /scripts/client/cpp/ConditionVariables.cpp
+.. literalinclude:: /scripts/cpp/client/ConditionVariables.cpp
 
 This code creates a stream, acquires a lock on the streams condition variable (by calling
 ``acquire``) and then repeatedly checks the value of ``abort``. It leaves the loop when it changes
@@ -223,7 +223,7 @@ should return nothing.
 For example the following program registers two callbacks that are invoked when the value of
 :func:`krpc::services::SpaceCenter::Control::abort` changes:
 
-.. literalinclude:: /scripts/client/cpp/Callbacks.cpp
+.. literalinclude:: /scripts/cpp/client/Callbacks.cpp
 
 A callback added to a stream that already has a value is called with that value straight away.
 
@@ -238,7 +238,7 @@ Stream Endings
 
 The following example streams the temperature of a part until the part is destroyed:
 
-.. literalinclude:: /scripts/client/cpp/StreamEnd.cpp
+.. literalinclude:: /scripts/cpp/client/StreamEnd.cpp
 
 Once a stream ends, reading the stream or waiting on it throws the exception that ended it. A stream
 ends when its procedure throws an exception, when the server removes it, when you remove it, or when
@@ -266,7 +266,7 @@ the function on each stream update, within one physics tick. The value can be an
 can send, including collections and objects. For example, the following streams the vessel's
 altitude in kilometers:
 
-.. literalinclude:: /scripts/client/cpp/FunctionStream.cpp
+.. literalinclude:: /scripts/cpp/client/FunctionStream.cpp
 
 The template type must describe the function's value, or :func:`krpc::add_stream` throws
 ``std::invalid_argument``. A nested position that can hold null, such as a list element, needs a
@@ -293,7 +293,7 @@ event object, so no firing is missed between two calls. Several firings between 
 You can also create a custom event from a server side function. The following builds the function
 ``mean_altitude > 1000``, and creates an event that triggers when the function returns true:
 
-.. literalinclude:: /scripts/client/cpp/Event.cpp
+.. literalinclude:: /scripts/cpp/client/Event.cpp
 
 Client API Reference
 --------------------

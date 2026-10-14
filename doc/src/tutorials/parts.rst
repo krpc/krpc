@@ -99,13 +99,10 @@ The script deploys the parachutes one call at a time, and the game can advance b
 calls. In Python, a :ref:`server side function <tutorial-server-side-functions>` deploys them all
 in the same physics tick, with a single call:
 
-.. code-block:: python
-
-   def deploy_parachutes():
-       for parachute in vessel.parts.parachutes:
-           parachute.deploy()
-
-   conn.run(deploy_parachutes)
+.. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 'Control From Here' for Docking Ports
 -------------------------------------
@@ -192,27 +189,18 @@ reads them all in the same tick, with a single call:
 
    .. tab:: C#
 
-      .. code-block:: csharp
-
-         var isp = connection.Run (() =>
-             vessel.Parts.Engines.Where (e => e.Active && e.HasFuel)
-                 .Select (e => e.Thrust).Sum () /
-             vessel.Parts.Engines.Where (e => e.Active && e.HasFuel)
-                 .Select (e => e.Thrust / e.SpecificImpulse).Sum ());
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.cs
+         :language: csharp
+         :start-after: [docs]
+         :end-before: [/docs]
+         :dedent:
 
    .. tab:: Python
 
-      .. code-block:: python
-
-         def combined_isp():
-             engines = [e for e in vessel.parts.engines if e.active and e.has_fuel]
-             thrust = sum(engine.thrust for engine in engines)
-             fuel_consumption = sum(
-                 engine.thrust / engine.specific_impulse for engine in engines
-             )
-             return thrust / fuel_consumption
-
-         isp = conn.run(combined_isp)
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
 .. seealso:: The combined specific impulse of each stage is also available
    directly from the staging API, as :attr:`Stage.specific_impulse` on the

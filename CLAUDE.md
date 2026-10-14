@@ -152,8 +152,15 @@ way writing here goes wrong.
  * **Lead with the example.** The unit of explanation is one or two sentences of setup ending in a
    colon, then the code, then any explanation of it. A section that explains a feature without
    showing it is the wrong shape.
- * Examples live in `doc/src/scripts/` and are pulled in with `.. literalinclude::` inside a
-   `.. tabs::` block, one tab per client language. An inline `.. code-block::` is for a fragment.
+ * Examples live in `doc/src/scripts/<page>/`, where `<page>` is the path of the page that
+   includes them (or of its template under `doc/api`). They are pulled in with
+   `.. literalinclude::` inside a `.. tabs::` block, one tab per client language. The build
+   compiles the C, C++, C# and Java examples, and type-checks the Python ones. A
+   `.. code-block::` is for shell commands and for short inline fragments in the client guides.
+ * A fragment is a complete program whose shown part sits between `[docs]` and `[/docs]`
+   comments, included with `:start-after: [docs]`, `:end-before: [/docs]` and `:dedent:`.
+ * A downloadable script carries no markers. Part of one is included by its own text with
+   `:start-at:`/`:end-at:`. Never select lines with `:lines:`.
  * **Address the reader**: "you" in the client guides, "we" when walking through a script. Do not
    write about an abstract "a client" or "a program".
  * Reuse the stock forms already in the docs.

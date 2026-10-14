@@ -22,16 +22,22 @@ import sys
 SCRIPTS_DIR = os.path.join("doc", "src", "scripts")
 CONFIG = "pyrightconfig.json"
 
-# (file basename, pyright rule) pairs that are expected and harmless:
-# - ServiceAPIExample.py calls conn.launch_control, the fictional example
-#   service from extending.rst, which has no generated stub.
+# (path under doc/src/scripts, pyright rule) pairs that are expected and harmless:
 # - DockingGuidance.py imports numpy, which the test does not install, and
 #   passes 1 to curses' window.keypad, which typeshed declares as taking a bool.
+# - SwitchModes.py adds a handler's exception to a string. In a server side
+#   function the handler binds the exception's message, which is a string.
 ALLOWED = {
-    ("ServiceAPIExample.py", "reportAttributeAccessIssue"),
-    ("DockingGuidance.py", "reportMissingImports"),
-    ("DockingGuidance.py", "reportArgumentType"),
+    ("tutorials/server-side-functions/SwitchModes.py", "reportOperatorIssue"),
+    ("tutorials/docking-guidance/DockingGuidance.py", "reportMissingImports"),
+    ("tutorials/docking-guidance/DockingGuidance.py", "reportArgumentType"),
 }
+
+# The extending examples call launch_control and eva, the fictional services
+# from extending.rst, which have no generated stubs
+FICTIONAL_SERVICE = re.compile(
+    r'^Cannot access attribute "(launch_control|eva)" for class "Client"'
+)
 
 OPTIONAL_ARG = re.compile(
     r'Argument of type "([\w.]+) \| None" cannot be assigned to parameter '
@@ -85,8 +91,16 @@ def main():
         message = diagnostic["message"]
         if rule == "reportOptionalMemberAccess" or OPTIONAL_ARG.search(message):
             continue
-        name = os.path.basename(diagnostic["file"])
+        # The path is in the runfiles or, through a symlink, the source tree
+        path = diagnostic["file"].replace(os.sep, "/")
+        name = path.split("doc/src/scripts/", 1)[-1]
         if (name, rule) in ALLOWED:
+            continue
+        if (
+            name.startswith("extending/")
+            and rule == "reportAttributeAccessIssue"
+            and FICTIONAL_SERVICE.search(message)
+        ):
             continue
         line = diagnostic["range"]["start"]["line"] + 1
         failures.append("%s:%d: %s (%s)" % (name, line, message, rule))

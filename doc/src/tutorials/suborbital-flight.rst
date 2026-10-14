@@ -23,12 +23,12 @@ The tutorial uses the two stage rocket pictured below. :download:`Download the c
 The tutorial includes source code for the main client languages kRPC supports. Download the
 whole program in your chosen language:
 
-:download:`C</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c>`,
-:download:`C#</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs>`,
-:download:`C++</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp>`,
-:download:`Java</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java>`,
-:download:`Lua</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua>`,
-:download:`Python</scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py>`
+:download:`C</scripts/tutorials/suborbital-flight/SubOrbitalFlight.c>`,
+:download:`C#</scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs>`,
+:download:`C++</scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp>`,
+:download:`Java</scripts/tutorials/suborbital-flight/SubOrbitalFlight.java>`,
+:download:`Lua</scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua>`,
+:download:`Python</scripts/tutorials/suborbital-flight/SubOrbitalFlight.py>`
 
 .. image:: /images/tutorials/SubOrbitalFlight.png
    :align: center
@@ -43,39 +43,44 @@ server window in the game:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 13-15
+         :start-at: krpc_connection_t conn;
+         :end-at: krpc_connect(conn, "Sub-orbital flight");
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 9
+         :start-at: var conn = new Connection ("Sub-orbital flight");
+         :end-at: var conn = new Connection ("Sub-orbital flight");
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 10-11
+         :start-at: krpc::Client conn = krpc::connect("Sub-orbital flight");
+         :end-at: krpc::services::SpaceCenter space_center(&conn);
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 15-16
+         :start-at: Connection connection = Connection.newInstance("Sub-orbital flight");
+         :end-at: SpaceCenter spaceCenter = SpaceCenter.newInstance(connection);
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 1-3
+         :end-at: local conn = krpc.connect('Sub-orbital flight')
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 4
+         :start-at: conn = krpc.connect(name="Sub-orbital flight")
+         :end-at: conn = krpc.connect(name="Sub-orbital flight")
 
 Next we get an object representing the active vessel. We send instructions to the rocket through
 this object:
@@ -84,39 +89,45 @@ this object:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 17-24
+         :start-at: krpc_SpaceCenter_Vessel_t vessel;
+         :end-at: krpc_SpaceCenter_Vessel_Control(conn, &control, vessel);
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 11
+         :start-at: var vessel = conn.SpaceCenter ().ActiveVessel;
+         :end-at: var vessel = conn.SpaceCenter ().ActiveVessel;
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 13
+         :start-at: auto vessel = space_center.active_vessel().value();
+         :end-at: auto vessel = space_center.active_vessel().value();
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 18
+         :start-at: SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();
+         :end-at: SpaceCenter.Vessel vessel = spaceCenter.getActiveVessel();
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 5
+         :start-at: local vessel = conn.space_center.active_vessel
+         :end-at: local vessel = conn.space_center.active_vessel
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 6
+         :start-at: vessel = conn.space_center.active_vessel
+         :end-at: vessel = conn.space_center.active_vessel
 
 Then we prepare the rocket for launch. This sets the throttle to maximum, and has the autopilot
 hold a pitch and heading of 90°, pointing straight up. It then waits a second for the settings to
@@ -126,39 +137,45 @@ take effect:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 26-29
+         :start-at: krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 90, 90);
+         :end-at: sleep(1);
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 13-16
+         :start-at: vessel.AutoPilot.TargetPitchAndHeading (90, 90);
+         :end-at: System.Threading.Thread.Sleep (1000);
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 15-18
+         :start-at: vessel.auto_pilot().target_pitch_and_heading(90, 90);
+         :end-at: std::this_thread::sleep_for(std::chrono::seconds(1));
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 20-23
+         :start-at: vessel.getAutoPilot().targetPitchAndHeading(90, 90);
+         :end-at: Thread.sleep(1000);
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 7-10
+         :start-at: vessel.auto_pilot:target_pitch_and_heading(90, 90)
+         :end-at: platform.sleep(1)
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 8-11
+         :start-at: vessel.auto_pilot.target_pitch_and_heading(90, 90)
+         :end-at: time.sleep(1)
 
 Part Two: Lift-off!
 -------------------
@@ -169,39 +186,45 @@ We launch by activating the first stage, which is the same as pressing the space
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 31-32
+         :start-at: printf("Launch!\n");
+         :end-at: krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 18-19
+         :start-at: Console.WriteLine ("Launch!");
+         :end-at: vessel.Control.ActivateNextStage ();
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 20-21
+         :start-at: std::cout << "Launch!" << std::endl;
+         :end-at: vessel.control().activate_next_stage();
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 25-26
+         :start-at: System.out.println("Launch!");
+         :end-at: vessel.getControl().activateNextStage();
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 12-13
+         :start-at: print('Launch!')
+         :end-at: vessel.control:activate_next_stage()
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 13-14
+         :start-at: print("Launch!")
+         :end-at: vessel.control.activate_next_stage()
 
 The solid fuel boosters soon run out, and the rocket has to jettison them. We wait for an event
 that fires when less than 0.1 units of solid fuel are left, then activate the next stage:
@@ -210,39 +233,45 @@ that fires when less than 0.1 units of solid fuel are left, then activate the ne
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 34-44
+         :start-at: krpc_SpaceCenter_Resources_t resources;
+         :end-at: krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 21-28
+         :start-after: vessel.Control.ActivateNextStage ();
+         :end-at: vessel.Control.ActivateNextStage ();
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 23-35
+         :start-at: typedef krpc::services::KRPC::Expression Expr;
+         :end-at: vessel.control().activate_next_stage();
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 28-40
+         :start-after: vessel.getControl().activateNextStage();
+         :end-at: vessel.getControl().activateNextStage();
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 15-19
+         :start-at: while vessel.resources:amount('SolidFuel') > 0.1 do
+         :end-at: vessel.control:activate_next_stage()
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 16-20
+         :start-at: event = conn.add_event(lambda: vessel.resources.amount("SolidFuel") < 0.1)
+         :end-at: vessel.control.activate_next_stage()
 
 ``vessel.resources`` returns a :class:`Resources` object, which gives the amounts of the
 resources in the rocket. The event is a :ref:`server side function <tutorial-server-side-functions>`
@@ -263,39 +292,45 @@ at an altitude of 10 km:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 46-53
+         :start-at: krpc_SpaceCenter_Flight_t flight;
+         :end-before: printf("Gravity turn\n");
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 30-36
+         :start-at: var flight = vessel.Flight ();
+         :end-before: Console.WriteLine ("Gravity turn");
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 37-45
+         :start-at: auto flight = vessel.flight();
+         :end-before: std::cout << "Gravity turn" << std::endl;
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 42-53
+         :start-at: Flight flight = vessel.flight(null);
+         :end-before: System.out.println("Gravity turn");
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 21-23
+         :start-at: while vessel:flight().mean_altitude < 10000 do
+         :end-before: print('Gravity turn')
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 22-25
+         :start-at: flight = vessel.flight()
+         :end-before: print("Gravity turn")
 
 ``vessel.flight()`` returns a :class:`Flight` object, which gives information about the rocket in
 flight, such as its altitude, direction and velocity.
@@ -307,39 +342,45 @@ takes the new target:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 55-56
+         :start-at: printf("Gravity turn\n");
+         :end-at: krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(conn, auto_pilot, 60, 90);
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 38-39
+         :start-at: Console.WriteLine ("Gravity turn");
+         :end-at: vessel.AutoPilot.TargetPitchAndHeading (60, 90);
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 47-48
+         :start-at: std::cout << "Gravity turn" << std::endl;
+         :end-at: vessel.auto_pilot().target_pitch_and_heading(60, 90);
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 55-56
+         :start-at: System.out.println("Gravity turn");
+         :end-at: vessel.getAutoPilot().targetPitchAndHeading(60, 90);
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 25-26
+         :start-at: print('Gravity turn')
+         :end-at: vessel.auto_pilot:target_pitch_and_heading(60, 90)
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 27-28
+         :start-at: print("Gravity turn")
+         :end-at: vessel.auto_pilot.target_pitch_and_heading(60, 90)
 
 Next we wait for an event that fires when the apoapsis reaches 100 km. Then we cut the throttle,
 jettison the launch stage and turn off the autopilot:
@@ -348,39 +389,45 @@ jettison the launch stage and turn off the autopilot:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 58-71
+         :start-at: krpc_SpaceCenter_Orbit_t orbit;
+         :end-at: krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, false);
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 41-52
+         :start-after: vessel.AutoPilot.TargetPitchAndHeading (60, 90);
+         :end-at: vessel.AutoPilot.Engaged = false;
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 50-64
+         :start-after: vessel.auto_pilot().target_pitch_and_heading(60, 90);
+         :end-at: vessel.auto_pilot().set_engaged(false);
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 58-75
+         :start-after: vessel.getAutoPilot().targetPitchAndHeading(60, 90);
+         :end-at: vessel.getAutoPilot().setEngaged(false);
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 28-35
+         :start-at: while vessel.orbit.apoapsis_altitude < 100000 do
+         :end-at: vessel.auto_pilot.engaged = false
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 30-38
+         :start-at: event = conn.add_event(lambda: vessel.orbit.apoapsis_altitude > 100000)
+         :end-at: vessel.auto_pilot.engaged = False
 
 ``vessel.orbit`` returns an :class:`Orbit` object, which describes the orbit of the rocket.
 
@@ -395,39 +442,45 @@ skip ahead to just before this happens, and the script carries on working:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 73-80
+         :start-after: krpc_SpaceCenter_AutoPilot_set_Engaged(conn, auto_pilot, false);
+         :end-at: krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 54-61
+         :start-after: vessel.AutoPilot.Engaged = false;
+         :end-at: vessel.Control.ActivateNextStage ();
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 66-75
+         :start-after: vessel.auto_pilot().set_engaged(false);
+         :end-at: vessel.control().activate_next_stage();
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 77-89
+         :start-after: vessel.getAutoPilot().setEngaged(false);
+         :end-at: vessel.getControl().activateNextStage();
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 37-40
+         :start-at: while vessel:flight().surface_altitude > 1000 do
+         :end-at: vessel.control:activate_next_stage()
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 40-44
+         :start-at: event = conn.add_event(lambda: flight.surface_altitude < 1000)
+         :end-at: vessel.control.activate_next_stage()
 
 The parachutes are now deployed. This prints the altitude of the capsule once a second, until its
 vertical speed reaches zero when it lands:
@@ -436,39 +489,43 @@ vertical speed reaches zero when it lands:
 
    .. group-tab:: C
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
-         :lines: 82-99
+         :start-at: krpc_SpaceCenter_CelestialBody_t body;
+         :end-at: printf("Landed!\n");
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cs
          :language: csharp
-         :lines: 63-67
+         :start-at: while (vessel.Flight (vessel.Orbit.Body.ReferenceFrame).VerticalSpeed < -0.1) {
+         :end-at: Console.WriteLine ("Landed!");
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.cpp
          :language: cpp
-         :lines: 77-81
+         :start-at: while (vessel.flight(vessel.orbit().body().reference_frame()).vertical_speed() < -0.1) {
+         :end-at: std::cout << "Landed!" << std::endl;
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.java
          :language: java
-         :lines: 91-95
+         :start-at: while (vessel.flight(vessel.getOrbit().getBody().getReferenceFrame()).getVerticalSpeed() < -0.1) {
+         :end-at: System.out.println("Landed!");
 
    .. group-tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.lua
          :language: lua
-         :lines: 42-
+         :start-at: while vessel:flight(vessel.orbit.body.reference_frame).vertical_speed < -0.1 do
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
+      .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 46-49
+         :start-at: while vessel.flight(vessel.orbit.body.reference_frame).vertical_speed < -0.1:
 
 This calls ``vessel.flight()`` again, now with a :class:`ReferenceFrame`. We want the vertical
 speed relative to the surface of Kerbin, so the flight object has to give values in a frame fixed

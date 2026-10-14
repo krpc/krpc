@@ -4,7 +4,7 @@ using System.Net;
 using KRPC.Client;
 using KRPC.Client.Services.SpaceCenter;
 
-class NavballDirections
+class OrbitalDirections
 {
     public static void Main ()
     {

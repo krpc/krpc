@@ -16,13 +16,10 @@ parts are rebuilt the same way whenever it comes back into range.
 An object obtained beforehand goes on working, and reads the state of the loaded game. So you
 can hold onto a vessel or a part across a quickload:
 
-.. code-block:: python
-
-   vessel = conn.space_center.active_vessel
-   parachute = vessel.parts.with_name('parachuteSingle')[0].parachute
-   conn.space_center.quickload()
-   # reads the parachute of the loaded game
-   print(parachute.state)
+.. literalinclude:: /scripts/tutorials/object-lifetime/Quickload.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 Destroyed Objects
 -----------------
@@ -31,12 +28,10 @@ Once what an object identifies is destroyed, every member of it that reads the g
 ``KRPC.ObjectDestroyedException``. Catch it as you would any other exception the client
 library defines:
 
-.. code-block:: python
-
-   try:
-       print(part.temperature)
-   except conn.krpc.ObjectDestroyedException:
-       print('that part is gone')
+.. literalinclude:: /scripts/tutorials/object-lifetime/DestroyedPart.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 The ``KRPC`` API reference for each client language documents it alongside the other
 exceptions the server raises.

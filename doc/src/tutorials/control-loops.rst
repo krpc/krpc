@@ -33,15 +33,10 @@ Holding a Tick
 on. Every call made in between is executed before the game advances. A whole read, compute and
 write then happens in the state of one tick:
 
-.. code-block:: python
-
-   while True:
-       conn.krpc.hold_tick()
-       try:
-           pitch = vessel.flight().pitch
-           vessel.control.pitch = control_law(pitch)
-       finally:
-           conn.krpc.release_tick()
+.. literalinclude:: /scripts/tutorials/control-loops/HoldTick.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 Release the tick even when the code in between fails, as the ``finally`` above does. The game
 stays on the held tick until the hold is released or times out.
@@ -57,15 +52,10 @@ which ones.
 ``next_tick`` closes that gap. It releases the tick being held and holds the one immediately
 after it, in a single call. The game then runs no tick the loop has not held:
 
-.. code-block:: python
-
-   try:
-       while True:
-           conn.krpc.next_tick()
-           pitch = vessel.flight().pitch
-           vessel.control.pitch = control_law(pitch)
-   finally:
-       conn.krpc.release_tick()
+.. literalinclude:: /scripts/tutorials/control-loops/NextTick.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 The call returns once the next tick is held. The loop therefore runs at one iteration per
 physics tick, and the game advances one tick per call. With no tick held, ``next_tick`` holds
@@ -76,23 +66,10 @@ A Worked Example
 
 Holding a vessel's pitch with a proportional controller, one iteration per tick:
 
-.. code-block:: python
-
-   import krpc
-
-   conn = krpc.connect(name='pitch hold')
-   vessel = conn.space_center.active_vessel
-   target_pitch = 45
-
-   try:
-       for _ in range(500):
-           conn.krpc.next_tick()
-           flight = vessel.flight()
-           error = target_pitch - flight.pitch
-           vessel.control.pitch = max(-1, min(1, 0.05 * error))
-   finally:
-       conn.krpc.release_tick()
-       vessel.control.pitch = 0
+.. literalinclude:: /scripts/tutorials/control-loops/PitchHold.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 Every iteration reads the pitch of one tick and writes a command that acts on that same tick.
 The 500 iterations cover 500 consecutive ticks, ten seconds of game time.
@@ -116,15 +93,10 @@ Server Side Functions
 A :ref:`server side function <tutorial-server-side-functions>` runs on the server, within a single
 tick. One function reads the state, computes the control and writes it, all in that tick:
 
-.. code-block:: python
-
-   @conn.compile
-   def step():
-       error = target_pitch - vessel.flight().pitch
-       vessel.control.pitch = max(-1, min(1, 0.05 * error))
-
-   while True:
-       conn.run(step)
+.. literalinclude:: /scripts/tutorials/control-loops/CompiledStep.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 Each iteration is one call, and runs in whichever tick the call lands on. The game can run ticks
 between the iterations, so a loop that has to act on every tick still uses ``next_tick``.
