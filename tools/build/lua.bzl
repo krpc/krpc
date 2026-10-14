@@ -83,7 +83,7 @@ _main = rule(
     },
 )
 
-def _lua_program(build, name, main, deps, script_args = [], **kwargs):
+def _lua_program(build, name, main, deps, script_args = [], data = [], **kwargs):
     """A python program running a lua script against the module trees in deps."""
     generated = name + "_main.py"
     _main(
@@ -96,7 +96,7 @@ def _lua_program(build, name, main, deps, script_args = [], **kwargs):
     build(
         name = name,
         srcs = [generated],
-        data = deps + [main, Label("//tools/build/lua:lua")],
+        data = deps + data + [main, Label("//tools/build/lua:lua")],
         main = generated,
         **kwargs
     )
@@ -117,3 +117,15 @@ def lua_test(name, main, deps, **kwargs):
 def lua_binary(name, main, deps, **kwargs):
     # As lua_test, but runs the given script instead of a test suite.
     _lua_program(py_binary, name, main, deps, **kwargs)
+
+def lua_luacheck_test(name, srcs, config = Label("//:.luacheckrc"), **kwargs):
+    """Lints lua sources with luacheck, under the repository's configuration."""
+    _lua_program(
+        py_test,
+        name,
+        Label("@lua_luacheck//:bin/luacheck.lua"),
+        [Label("//tools/build/lua:luacheck")],
+        data = srcs + [config],
+        args = ["--config", "$(rootpath %s)" % config] + ["$(rootpath %s)" % src for src in srcs],
+        **kwargs
+    )

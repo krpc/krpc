@@ -5,6 +5,7 @@ load("//doc:changelog.bzl", "changeloggen")
 load("//doc:check_documented.bzl", "check_documented_test")
 load("//doc:macros.bzl", "cc_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
 load("//tools/build:image.bzl", "png_images")
+load("//tools/build:lua.bzl", "lua_luacheck_test")
 load("//tools/build:pkg.bzl", "stage_files")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
@@ -262,9 +263,9 @@ test_suite(
 
 # Type-check the Python example scripts against the typed client generated from
 # this tree, so the examples cannot silently drift from the API. The C, C++, C#
-# and Java examples are compile-checked by :compile-scripts; the Lua examples
-# and BasicArduino.ino (which needs an Arduino toolchain) have no automated
-# check.
+# and Java examples are compile-checked by :compile-scripts, and :luacheck lints
+# the Lua ones. The JavaScript examples and BasicArduino.ino have no automated
+# check, as the build has no toolchain for them.
 py_test(
     name = "check-scripts-pyright",
     size = "medium",
@@ -428,9 +429,15 @@ java_binary_multiple(
 test_suite(
     name = "lint",
     tests = [
+        ":luacheck",
         ":pyright",
         ":ruff",
     ],
+)
+
+lua_luacheck_test(
+    name = "luacheck",
+    srcs = glob(["src/scripts/**/*.lua"]),
 )
 
 py_ruff_test(

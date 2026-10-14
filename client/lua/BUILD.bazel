@@ -1,7 +1,7 @@
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("//:config.bzl", "lua_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:lua.bzl", "lua_binary", "lua_library", "lua_test")
+load("//tools/build:lua.bzl", "lua_binary", "lua_library", "lua_luacheck_test", "lua_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 
 exports_files(["CHANGELOG.md"])
@@ -139,4 +139,9 @@ lua_test(
     main = "krpc/test/client.lua",
     tags = ["requires-network"],
     deps = lua_deps,
+)
+
+lua_luacheck_test(
+    name = "lint",
+    srcs = glob(["**/*.lua"]),
 )

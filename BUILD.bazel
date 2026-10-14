@@ -6,6 +6,7 @@ load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 exports_files([
     ".clang-format",
     ".clang-tidy",
+    ".luacheckrc",
     "COPYING",
     "COPYING.LESSER",
     "pyrightconfig.json",
@@ -270,6 +271,7 @@ test_suite(
         "//client/cnano:lint",
         "//client/cpp:lint",
         "//client/java:lint",
+        "//client/lua:lint",
         "//client/python:lint",
         "//client/serialio:lint",
         "//client/websockets:lint",

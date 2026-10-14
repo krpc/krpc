@@ -3,8 +3,7 @@
 Runs pyright over every doc/src/scripts/**/*.py with the krpc package built
 from this tree on its search path, so an example that calls a renamed or
 removed member, or passes the wrong arguments, fails this test instead of
-silently rotting. The inline code blocks in the .rst files and the Lua
-examples are not covered.
+silently rotting. The inline code blocks in the .rst files are not covered.
 
 The examples deliberately skip None-guards (e.g. on SpaceCenter.active_vessel)
 for brevity, so reportOptionalMemberAccess errors are filtered out. pyright

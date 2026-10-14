@@ -467,6 +467,22 @@ http_archive(
     url = "https://github.com/bluebird75/luaunit/archive/refs/tags/LUAUNIT_V3_5.tar.gz",
 )
 
+http_archive(
+    name = "lua_luacheck",
+    build_file = "//tools/build/lua:luacheck.BUILD",
+    sha256 = "8efe62a7da4fdb32c0c22ec1f7c9306cbc397d7d40493c29988221a059636e25",
+    strip_prefix = "luacheck-1.2.0",
+    url = "https://github.com/lunarmodules/luacheck/archive/refs/tags/v1.2.0.tar.gz",
+)
+
+http_archive(
+    name = "lua_argparse",
+    build_file = "//tools/build/lua:argparse.BUILD",
+    sha256 = "d344e49404c3e7b3e7fa4fe6741c106f25909d9b24923cb08dcceda1f9754809",
+    strip_prefix = "argparse-0.7.1",
+    url = "https://github.com/luarocks/argparse/archive/refs/tags/0.7.1.tar.gz",
+)
+
 # ----------------------- Module Manager -------------------------------------------------
 
 http_file(

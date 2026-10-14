@@ -1,5 +1,4 @@
 local krpc = require 'krpc'
-local math = require 'math'
 local conn = krpc.connect()
 local vessel = conn.space_center.active_vessel
 
@@ -15,12 +14,12 @@ for _,engine in ipairs(active_engines) do
     print('   ' .. engine.part.title .. ' in stage ' .. engine.part.stage)
 end
 
-thrust = 0
-fuel_consumption = 0
+local thrust = 0
+local fuel_consumption = 0
 for _,engine in ipairs(active_engines) do
     thrust = thrust + engine.thrust
     fuel_consumption = fuel_consumption + engine.thrust / engine.specific_impulse
 end
-isp = thrust / fuel_consumption
+local isp = thrust / fuel_consumption
 
 print(string.format('Combined vacuum Isp = %.1f seconds', isp))

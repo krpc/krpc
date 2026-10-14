@@ -72,6 +72,16 @@ lua_library(
     visibility = ["//visibility:public"],
 )
 
+lua_library(
+    name = "luacheck",
+    srcs = [
+        "@lua_argparse//:lua_srcs",
+        "@lua_luacheck//:lua_srcs",
+    ],
+    path_map = {"src/": ""},
+    visibility = ["//visibility:public"],
+)
+
 # socket.unix on its own, as a rock a Windows user can install: luasocket builds the
 # module only on unix, macOS and Haiku, and Windows has had the address family since
 # Windows 10. The rock is built from the same release and the same patch as the
