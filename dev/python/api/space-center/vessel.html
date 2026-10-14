@@ -1059,37 +1059,6 @@ about resources stored in the vessel.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.Vessel.resources_in_decouple_stage">
-<span class="sig-name descname"><span class="pre">resources_in_decouple_stage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">cumulative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Vessel.resources_in_decouple_stage" title="Link to this definition">#</a></dt>
-<dd><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Deprecated. Use <a class="reference internal" href="stage.html#SpaceCenter.Stage.resources" title="SpaceCenter.Stage.resources"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Stage.resources()</span></code></a> from the object returned by <a class="reference internal" href="#SpaceCenter.Vessel.decouple_stage_at" title="SpaceCenter.Vessel.decouple_stage_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vessel.decouple_stage_at()</span></code></a> instead.</p>
-</div>
-<p>Returns a <a class="reference internal" href="#SpaceCenter.Vessel.resources" title="SpaceCenter.Vessel.resources"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.resources</span></code></a> object, that can used to get
-information about resources stored in a given <em>stage</em>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>stage</strong> (<em>int</em>) – Get resources for parts that are decoupled in this stage.</p></li>
-<li><p><strong>cumulative</strong> (<em>bool</em>) – When <code class="docutils literal notranslate"><span class="pre">False</span></code>, returns the resources for parts decoupled in just the given stage. When <code class="docutils literal notranslate"><span class="pre">True</span></code> returns the resources decoupled in the given stage and all subsequent stages combined.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="resources.html#SpaceCenter.Resources" title="SpaceCenter.Resources"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resources</span></code></a></p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Deprecated. Use <a class="reference internal" href="#SpaceCenter.Vessel.decouple_stage_at" title="SpaceCenter.Vessel.decouple_stage_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vessel.decouple_stage_at()</span></code></a>
-and <a class="reference internal" href="stage.html#SpaceCenter.Stage.resources" title="SpaceCenter.Stage.resources"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Stage.resources()</span></code></a> instead. For details on
-stage numbering, see the discussion on <a class="reference internal" href="parts.html#python-api-parts-staging"><span class="std std-ref">Staging</span></a>.</p>
-</div>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Vessel.stages">
 <span class="sig-name descname"><span class="pre">stages</span></span><a class="headerlink" href="#SpaceCenter.Vessel.stages" title="Link to this definition">#</a></dt>

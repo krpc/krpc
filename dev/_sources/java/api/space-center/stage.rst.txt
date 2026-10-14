@@ -40,13 +40,10 @@ Stage
 
       Returns a :meth:`Stage.resources(boolean)` object for this stage.
 
-      :param boolean cumulative: When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to ``true`` so decouple-stage calls match the legacy ``Vessel.ResourcesInDecoupleStage`` RPC.
+      :param boolean cumulative: When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached.
    
 
       .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
-                The default ``cumulative=true`` matches the legacy
-                :meth:`Vessel.resourcesInDecoupleStage(int, boolean)` RPC.
-                For decouple stages, grouping is the same as that deprecated method.
                 For activation stages, unstaged resource containers (for example fuel tanks)
                 are grouped with the first higher activation stage before they detach, matching
                 the C# ``Resources()`` documentation.

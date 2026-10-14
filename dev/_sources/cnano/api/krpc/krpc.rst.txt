@@ -212,17 +212,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_CurrentGameScene(krpc_connection_t connection, krpc_KRPC_GameScene_t * result)
-
-   .. warning:: Deprecated. Use :func:`krpc_KRPC_GameScene` instead.
-
-   Get the current game scene.
-
-   
-
-
-
-
 .. function:: krpc_error_t krpc_KRPC_Paused(krpc_connection_t connection, bool * result)
 .. function:: void krpc_KRPC_set_Paused(bool value)
 

@@ -10,7 +10,7 @@ Resources
 
    Represents the collection of resources stored in a vessel, stage or part.
    Created by calling :meth:`Vessel.getResources()`,
-   :meth:`Vessel.resourcesInDecoupleStage(int, boolean)`, :meth:`EditorVessel.getResources()`
+   :meth:`Stage.resources(boolean)`, :meth:`EditorVessel.getResources()`
    or :meth:`Part.getResources()`.
 
    .. method:: java.util.List<Resource> getAll()

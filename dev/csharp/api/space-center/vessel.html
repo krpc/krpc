@@ -1002,34 +1002,6 @@ about resources stored in the vessel.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Vessel.ResourcesInDecoupleStage">
-<a class="reference internal" href="resources.html#class-KRPC.Client.Services.SpaceCenter.Resources" title="KRPC.Client.Services.SpaceCenter.Resources class"><span class="pre">Resources</span></a> <span class="sig-name descname"><span class="pre">ResourcesInDecoupleStage</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">stage</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <em><span class="pre">cumulative</span></em><em> <span class="pre">=</span> <span class="pre">true</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Vessel.ResourcesInDecoupleStage" title="Link to this definition">#</a></dt>
-<dd><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Deprecated. Use <a class="reference internal" href="stage.html#method-KRPC.Client.Services.SpaceCenter.Stage.Resources" title="KRPC.Client.Services.SpaceCenter.Stage.Resources method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stage.Resources</span></code></a> from the object returned by <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Vessel.DecoupleStageAt" title="KRPC.Client.Services.SpaceCenter.Vessel.DecoupleStageAt method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Vessel.DecoupleStageAt</span></code></a> instead.</p>
-</div>
-<p>Returns a <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Resources" title="KRPC.Client.Services.SpaceCenter.Vessel.Resources property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.Resources</span></code></a> object, that can used to get
-information about resources stored in a given <em>stage</em>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>stage</strong> – Get resources for parts that are decoupled in this stage.</p></li>
-<li><p><strong>cumulative</strong> – When <code class="docutils literal notranslate"><span class="pre">false</span></code>, returns the resources for parts decoupled in just the given stage. When <code class="docutils literal notranslate"><span class="pre">true</span></code> returns the resources decoupled in the given stage and all subsequent stages combined.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Deprecated. Use <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Vessel.DecoupleStageAt" title="KRPC.Client.Services.SpaceCenter.Vessel.DecoupleStageAt method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Vessel.DecoupleStageAt</span></code></a>
-and <a class="reference internal" href="stage.html#method-KRPC.Client.Services.SpaceCenter.Stage.Resources" title="KRPC.Client.Services.SpaceCenter.Stage.Resources method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stage.Resources</span></code></a> instead. For details on
-stage numbering, see the discussion on <a class="reference internal" href="parts.html#csharp-api-parts-staging"><span class="std std-ref">Staging</span></a>.</p>
-</div>
-</dd></dl>
-
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Vessel.Stages">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="stage.html#class-KRPC.Client.Services.SpaceCenter.Stage" title="KRPC.Client.Services.SpaceCenter.Stage class"><span class="pre">Stage</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Stages</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Stages" title="Link to this definition">#</a></dt>

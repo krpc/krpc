@@ -219,21 +219,6 @@ Vessel
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Resources`
 
-   .. method:: resources_in_decouple_stage(stage, [cumulative = true])
-
-      .. warning:: Deprecated. Use :meth:`SpaceCenter.Stage.resources` from the object returned by :meth:`SpaceCenter.Vessel.decouple_stage_at` instead.
-
-      Returns a :attr:`SpaceCenter.Vessel.resources` object, that can used to get
-      information about resources stored in a given *stage*.
-
-      :param number stage: Get resources for parts that are decoupled in this stage.
-      :param boolean cumulative: When ``False``, returns the resources for parts decoupled in just the given stage. When ``True`` returns the resources decoupled in the given stage and all subsequent stages combined.
-      :rtype: :class:`SpaceCenter.Resources`
-
-      .. note:: Deprecated. Use :meth:`SpaceCenter.Vessel.decouple_stage_at`
-                and :meth:`SpaceCenter.Stage.resources` instead. For details on
-                stage numbering, see the discussion on :rst:ref:`lua-api-parts-staging`.
-
    .. attribute:: stages: List
 
       Activation (burn) stages for this vessel, in ascending stage order. This does

@@ -214,25 +214,6 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_ResourcesInDecoupleStage(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result, int32_t stage, bool cumulative)
-
-      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Stage_Resources` from the object returned by :func:`krpc_SpaceCenter_Vessel_DecoupleStageAt` instead.
-
-      Returns a :func:`krpc_SpaceCenter_Vessel_Resources` object, that can used to get
-      information about resources stored in a given *stage*.
-
-      :Parameters:
-
-       * **stage** -- Get resources for parts that are decoupled in this stage.
-       * **cumulative** -- When ``false``, returns the resources for parts decoupled in just the given stage. When ``true`` returns the resources decoupled in the given stage and all subsequent stages combined.
-
-      :Game Scenes: Flight
-
-
-      .. note:: Deprecated. Use :func:`krpc_SpaceCenter_Vessel_DecoupleStageAt`
-                and :func:`krpc_SpaceCenter_Stage_Resources` instead. For details on
-                stage numbering, see the discussion on :rst:ref:`cnano-api-parts-staging`.
-
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Stages(krpc_connection_t connection, krpc_list_object_t * result)
 
       Activation (burn) stages for this vessel, in ascending stage order. This does

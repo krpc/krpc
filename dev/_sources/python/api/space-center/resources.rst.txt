@@ -10,7 +10,7 @@ Resources
 
    Represents the collection of resources stored in a vessel, stage or part.
    Created by calling :attr:`Vessel.resources`,
-   :meth:`Vessel.resources_in_decouple_stage`, :attr:`EditorVessel.resources`
+   :meth:`Stage.resources`, :attr:`EditorVessel.resources`
    or :attr:`Part.resources`.
 
    .. attribute:: all

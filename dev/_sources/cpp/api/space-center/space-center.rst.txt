@@ -502,15 +502,6 @@ SpaceCenter
 
    
 
-   .. function:: void load_space_center()
-
-      .. warning:: Deprecated. Set :func:`KRPC::game_scene` instead.
-
-      Switch to the space center view.
-
-
-   
-
    .. function:: MapFilterType map_filter()
    .. function:: void set_map_filter(MapFilterType value)
 

@@ -467,14 +467,6 @@ SpaceCenter
       :param String name:
    
 
-   .. method:: void loadSpaceCenter()
-
-      .. warning:: Deprecated. Set :meth:`KRPC.getGameScene()` instead.
-
-      Switch to the space center view.
-
-   
-
    .. method:: MapFilterType getMapFilter()
 
    .. method:: void setMapFilter(MapFilterType value)

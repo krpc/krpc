@@ -948,34 +948,6 @@ about resources stored in the vessel.</p>
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.resourcesInDecoupleStage(int, boolean)">
- <a class="reference internal" href="resources.html#krpc.client.services.SpaceCenter.Resources" title="krpc.client.services.SpaceCenter.Resources"><span class="pre">Resources</span></a> <span class="sig-name descname"><span class="pre">resourcesInDecoupleStage</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">stage</span></em>, <span class="pre">boolean</span><em> <span class="pre">cumulative</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.resourcesInDecoupleStage(int, boolean)" title="Link to this definition">#</a></dt>
-<dd><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Deprecated. Use <a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage.resources(boolean)" title="krpc.client.services.SpaceCenter.Stage.resources(boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stage.resources(boolean)</span></code></a> from the object returned by <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.decoupleStageAt(int)" title="krpc.client.services.SpaceCenter.Vessel.decoupleStageAt(int)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.decoupleStageAt(int)</span></code></a> instead.</p>
-</div>
-<p>Returns a <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getResources()" title="krpc.client.services.SpaceCenter.Vessel.getResources()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getResources()</span></code></a> object, that can used to get
-information about resources stored in a given <em>stage</em>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>stage</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – Get resources for parts that are decoupled in this stage.</p></li>
-<li><p><strong>cumulative</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – When <code class="docutils literal notranslate"><span class="pre">false</span></code>, returns the resources for parts decoupled in just the given stage. When <code class="docutils literal notranslate"><span class="pre">true</span></code> returns the resources decoupled in the given stage and all subsequent stages combined.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Deprecated. Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.decoupleStageAt(int)" title="krpc.client.services.SpaceCenter.Vessel.decoupleStageAt(int)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.decoupleStageAt(int)</span></code></a>
-and <a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage.resources(boolean)" title="krpc.client.services.SpaceCenter.Stage.resources(boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stage.resources(boolean)</span></code></a> instead. For details on
-stage numbering, see the discussion on <a class="reference internal" href="parts.html#java-api-parts-staging"><span class="std std-ref">Staging</span></a>.</p>
-</div>
-</dd></dl>
-
-<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getStages()">
  <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="stage.html#krpc.client.services.SpaceCenter.Stage" title="krpc.client.services.SpaceCenter.Stage"><span class="pre">Stage</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getStages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getStages()" title="Link to this definition">#</a></dt>
 <dd><p>Activation (burn) stages for this vessel, in ascending stage order. This does

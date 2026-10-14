@@ -657,18 +657,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. function:: krpc_error_t krpc_SpaceCenter_LoadSpaceCenter(krpc_connection_t connection)
-
-   .. warning:: Deprecated. Set :func:`krpc_KRPC_GameScene` instead.
-
-   Switch to the space center view.
-
-
-   
-
-
-
-
 .. function:: krpc_error_t krpc_SpaceCenter_MapFilter(krpc_connection_t connection, krpc_SpaceCenter_MapFilterType_t * result)
 .. function:: void krpc_SpaceCenter_set_MapFilter(krpc_SpaceCenter_MapFilterType_t value)
 

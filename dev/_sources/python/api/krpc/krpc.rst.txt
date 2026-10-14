@@ -207,19 +207,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. attribute:: current_game_scene
-
-   .. warning:: Deprecated. Use :attr:`game_scene` instead.
-
-   Get the current game scene.
-
-   :Attribute: Read-only, cannot be set
-   :rtype: :class:`GameScene`
-   
-
-
-
-
 .. attribute:: paused
 
    Whether the game is paused.

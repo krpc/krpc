@@ -16,6 +16,7 @@ Core
 ^^^^
 
 * Add ``KRPC.GameStateLoads``, the number of game states that have finished loading (:issue:`1121`)
+* :breaking:`Breaking` Remove ``KRPC.CurrentGameScene``, replaced by ``KRPC.GameScene`` (:issue:`1140`)
 * Extend ``KRPC.Expression`` to build server side functions, which the server evaluates (:issue:`503`, :issue:`517`, :issue:`521`, :issue:`1124`)
 * Allow a function to call a procedure that returns no value (:issue:`1124`)
 * Add ``KRPC.Expression.CallWithArguments``, which computes the arguments of a call (:issue:`1124`)
@@ -123,6 +124,7 @@ SpaceCenter service
   * Setting ``SpaceCenter.ActiveVessel`` from the space center or tracking station keeps the game's contracts (:issue:`1102`)
   * The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and setting ``SpaceCenter.Alarm.EventOffset``, change when the alarm goes off (:issue:`1114`)
   * Add ``SpaceCenter.CanSave``, whether the game can be saved (:issue:`1117`)
+  * :breaking:`Breaking` Remove ``SpaceCenter.LoadSpaceCenter``, replaced by setting ``KRPC.GameScene`` (:issue:`1140`)
 
 * Editor
 
@@ -155,6 +157,7 @@ SpaceCenter service
   * The delta-v figures on ``Vessel`` and ``Stage`` ask the game to calculate them, so they are available in flight without opening the game's own delta-v app first (:issue:`1076`)
   * Add ``Vessel.RecalculateDeltaV``, which recalculates the figures and waits for them, and ``Vessel.DeltaVReady``, which reports whether they are current (:issue:`1076`)
   * Document that the ``Stage`` mass figures include all later stages (:issue:`1112`)
+  * :breaking:`Breaking` Remove ``Parts.InStage``, ``Parts.InDecoupleStage`` and ``Vessel.ResourcesInDecoupleStage``, replaced by ``Vessel.StageAt`` and ``Vessel.DecoupleStageAt`` (:issue:`1140`)
 
 * Autopilot
 
@@ -184,6 +187,7 @@ SpaceCenter service
   * ``Orbit.PositionAt`` takes an optional reference frame, defaulting to the non-rotating reference frame of the body being orbited (:issue:`1087`)
   * Add ``Orbit.PositionAtTrueAnomaly``, ``Orbit.VelocityAtTrueAnomaly``, ``Orbit.SpeedAtTrueAnomaly`` and ``Orbit.SpeedAtRadius`` (:issue:`1087`)
   * Add ``Orbit.Altitude``, ``Orbit.MeanMotion``, ``Orbit.SemiLatusRectum`` and ``Orbit.SpecificAngularMomentum`` (:issue:`1087`)
+  * :breaking:`Breaking` Remove ``Orbit.TimeOfClosestApproach``, ``Orbit.DistanceAtClosestApproach`` and ``Orbit.ListClosestApproaches``, replaced by ``Orbit.NextClosestApproach`` and ``Orbit.ClosestApproaches`` (:issue:`1140`)
 
 * Maneuver nodes
 
@@ -262,6 +266,7 @@ SpaceCenter service
   * Fix ``Experiment.ScienceSubject`` adding a new object for every read (:issue:`771`)
   * Fix ``ScienceSubject.Science`` and ``ScienceSubject.ScienceCap`` scaling by the science gain multiplier that was in force when the object was read (:issue:`1051`)
   * Make ``ModuleRef`` public, for a mod that exposes a part module as a class of its own service (:issue:`1077`)
+  * :breaking:`Breaking` Remove the string-dictionary ``Module`` field, event and action members, replaced by ``Module.FieldList``, ``Module.EventList`` and ``Module.ActionList`` (:issue:`1140`)
 
 * Resources
 

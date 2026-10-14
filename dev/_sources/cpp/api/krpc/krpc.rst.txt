@@ -182,14 +182,6 @@ KRPC
 
    
 
-   .. function:: GameScene current_game_scene()
-
-      .. warning:: Deprecated. Use :func:`game_scene` instead.
-
-      Get the current game scene.
-
-   
-
    .. function:: bool paused()
    .. function:: void set_paused(bool value)
 

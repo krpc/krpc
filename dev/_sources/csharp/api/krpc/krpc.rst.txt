@@ -181,14 +181,6 @@ KRPC
 
       :Game Scenes: All
 
-   .. property:: GameScene CurrentGameScene { get; }
-
-      .. warning:: Deprecated. Use :prop:`KRPC.GameScene <KRPC.KRPC.GameScene>` instead.
-
-      Get the current game scene.
-
-      :Game Scenes: All
-
    .. property:: bool Paused { get; set; }
 
       Whether the game is paused.

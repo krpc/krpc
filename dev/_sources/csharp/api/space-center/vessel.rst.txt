@@ -213,25 +213,6 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: Resources ResourcesInDecoupleStage(int stage, bool cumulative = true)
-
-      .. warning:: Deprecated. Use :meth:`Stage.Resources` from the object returned by :meth:`Vessel.DecoupleStageAt` instead.
-
-      Returns a :prop:`Vessel.Resources` object, that can used to get
-      information about resources stored in a given *stage*.
-
-      :parameters:
-
-       * **stage** -- Get resources for parts that are decoupled in this stage.
-       * **cumulative** -- When ``false``, returns the resources for parts decoupled in just the given stage. When ``true`` returns the resources decoupled in the given stage and all subsequent stages combined.
-
-      :Game Scenes: Flight
-
-
-      .. note:: Deprecated. Use :meth:`Vessel.DecoupleStageAt`
-                and :meth:`Stage.Resources` instead. For details on
-                stage numbering, see the discussion on :rst:ref:`csharp-api-parts-staging`.
-
    .. property:: System.Collections.Generic.IList<Stage> Stages { get; }
 
       Activation (burn) stages for this vessel, in ascending stage order. This does

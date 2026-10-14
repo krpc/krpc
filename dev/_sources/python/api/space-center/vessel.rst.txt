@@ -241,23 +241,6 @@ Vessel
       :rtype: :class:`Resources`
       :Game Scenes: Flight
 
-   .. method:: resources_in_decouple_stage(stage, [cumulative = True])
-
-      .. warning:: Deprecated. Use :meth:`Stage.resources` from the object returned by :meth:`Vessel.decouple_stage_at` instead.
-
-      Returns a :attr:`Vessel.resources` object, that can used to get
-      information about resources stored in a given *stage*.
-
-      :param int stage: Get resources for parts that are decoupled in this stage.
-      :param bool cumulative: When ``False``, returns the resources for parts decoupled in just the given stage. When ``True`` returns the resources decoupled in the given stage and all subsequent stages combined.
-      :rtype: :class:`Resources`
-      :Game Scenes: Flight
-
-
-      .. note:: Deprecated. Use :meth:`Vessel.decouple_stage_at`
-                and :meth:`Stage.resources` instead. For details on
-                stage numbering, see the discussion on :rst:ref:`python-api-parts-staging`.
-
    .. attribute:: stages
 
       Activation (burn) stages for this vessel, in ascending stage order. This does

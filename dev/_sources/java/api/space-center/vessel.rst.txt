@@ -226,22 +226,6 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: Resources resourcesInDecoupleStage(int stage, boolean cumulative)
-
-      .. warning:: Deprecated. Use :meth:`Stage.resources(boolean)` from the object returned by :meth:`Vessel.decoupleStageAt(int)` instead.
-
-      Returns a :meth:`Vessel.getResources()` object, that can used to get
-      information about resources stored in a given *stage*.
-
-      :param int stage: Get resources for parts that are decoupled in this stage.
-      :param boolean cumulative: When ``false``, returns the resources for parts decoupled in just the given stage. When ``true`` returns the resources decoupled in the given stage and all subsequent stages combined.
-      :Game Scenes: Flight
-
-
-      .. note:: Deprecated. Use :meth:`Vessel.decoupleStageAt(int)`
-                and :meth:`Stage.resources(boolean)` instead. For details on
-                stage numbering, see the discussion on :rst:ref:`java-api-parts-staging`.
-
    .. method:: java.util.List<Stage> getStages()
 
 

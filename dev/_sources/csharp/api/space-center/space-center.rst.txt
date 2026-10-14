@@ -495,15 +495,6 @@ SpaceCenter
 
       :Game Scenes: All
 
-   .. method:: void LoadSpaceCenter()
-
-      .. warning:: Deprecated. Set :prop:`KRPC.GameScene <KRPC.KRPC.GameScene>` instead.
-
-      Switch to the space center view.
-
-
-      :Game Scenes: All
-
    .. property:: MapFilterType MapFilter { get; set; }
 
       The visible objects in map mode.

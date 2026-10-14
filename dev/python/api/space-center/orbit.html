@@ -1751,69 +1751,6 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.Orbit.time_of_closest_approach">
-<span class="sig-name descname"><span class="pre">time_of_closest_approach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Orbit.time_of_closest_approach" title="Link to this definition">#</a></dt>
-<dd><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Deprecated. Use <a class="reference internal" href="#SpaceCenter.Orbit.next_closest_approach" title="SpaceCenter.Orbit.next_closest_approach"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Orbit.next_closest_approach()</span></code></a> and read <a class="reference internal" href="closest-approach.html#SpaceCenter.ClosestApproach.ut" title="SpaceCenter.ClosestApproach.ut"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ClosestApproach.ut</span></code></a> instead.</p>
-</div>
-<p>Estimates and returns the time at closest approach to a target orbit.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>target</strong> (<a class="reference internal" href="#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><em>Orbit</em></a>) – Target orbit.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The universal time at closest approach, in seconds.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.Orbit.distance_at_closest_approach">
-<span class="sig-name descname"><span class="pre">distance_at_closest_approach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Orbit.distance_at_closest_approach" title="Link to this definition">#</a></dt>
-<dd><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Deprecated. Use <a class="reference internal" href="#SpaceCenter.Orbit.next_closest_approach" title="SpaceCenter.Orbit.next_closest_approach"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Orbit.next_closest_approach()</span></code></a> and read <a class="reference internal" href="closest-approach.html#SpaceCenter.ClosestApproach.distance" title="SpaceCenter.ClosestApproach.distance"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ClosestApproach.distance</span></code></a> instead.</p>
-</div>
-<p>Estimates and returns the distance at closest approach to a target orbit, in meters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>target</strong> (<a class="reference internal" href="#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><em>Orbit</em></a>) – Target orbit.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.Orbit.list_closest_approaches">
-<span class="sig-name descname"><span class="pre">list_closest_approaches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orbits</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Orbit.list_closest_approaches" title="Link to this definition">#</a></dt>
-<dd><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Deprecated. Use <a class="reference internal" href="#SpaceCenter.Orbit.closest_approaches" title="SpaceCenter.Orbit.closest_approaches"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Orbit.closest_approaches()</span></code></a> instead.</p>
-</div>
-<p>Returns the times at closest approach and corresponding distances, to a target orbit.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<a class="reference internal" href="#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><em>Orbit</em></a>) – Target orbit.</p></li>
-<li><p><strong>orbits</strong> (<em>int</em>) – The number of future orbits to search.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of two lists. The first is a list of times at closest approach, as universal times in seconds. The second is a list of corresponding distances at closest approach, in meters.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list(list(float))</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>

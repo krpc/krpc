@@ -163,15 +163,6 @@ KRPC
 
    
 
-   .. method:: GameScene getCurrentGameScene()
-
-
-      .. warning:: Deprecated. Use :meth:`getGameScene()` instead.
-
-      Get the current game scene.
-
-   
-
    .. method:: boolean getPaused()
 
    .. method:: void setPaused(boolean value)

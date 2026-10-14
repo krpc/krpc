@@ -656,17 +656,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: load_space_center()
-
-   .. warning:: Deprecated. Set :attr:`KRPC.game_scene` instead.
-
-   Switch to the space center view.
-
-   
-
-
-
-
 .. attribute:: map_filter
 
    The visible objects in map mode.

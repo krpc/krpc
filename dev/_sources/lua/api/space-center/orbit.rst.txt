@@ -613,33 +613,3 @@ Orbit
       :param SpaceCenter.Orbit target: Target orbit.
       :param number orbits: The number of future orbits to search.
       :rtype: List
-
-   .. method:: time_of_closest_approach(target)
-
-      .. warning:: Deprecated. Use :meth:`SpaceCenter.Orbit.next_closest_approach` and read :attr:`SpaceCenter.ClosestApproach.ut` instead.
-
-      Estimates and returns the time at closest approach to a target orbit.
-
-      :param SpaceCenter.Orbit target: Target orbit.
-      :returns: The universal time at closest approach, in seconds.
-      :rtype: number
-
-   .. method:: distance_at_closest_approach(target)
-
-      .. warning:: Deprecated. Use :meth:`SpaceCenter.Orbit.next_closest_approach` and read :attr:`SpaceCenter.ClosestApproach.distance` instead.
-
-      Estimates and returns the distance at closest approach to a target orbit, in meters.
-
-      :param SpaceCenter.Orbit target: Target orbit.
-      :rtype: number
-
-   .. method:: list_closest_approaches(target, orbits)
-
-      .. warning:: Deprecated. Use :meth:`SpaceCenter.Orbit.closest_approaches` instead.
-
-      Returns the times at closest approach and corresponding distances, to a target orbit.
-
-      :param SpaceCenter.Orbit target: Target orbit.
-      :param number orbits: The number of future orbits to search.
-      :returns: A list of two lists. The first is a list of times at closest approach, as universal times in seconds. The second is a list of corresponding distances at closest approach, in meters.
-      :rtype: List

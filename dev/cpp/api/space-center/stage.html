@@ -737,16 +737,13 @@ are converted from kilonewtons and tonnes).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cumulative</strong> – When <code class="docutils literal notranslate"><span class="pre">false</span></code>, only resources assigned to this stage. When <code class="docutils literal notranslate"><span class="pre">true</span></code>, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code> so decouple-stage calls match the legacy <code class="docutils literal notranslate"><span class="pre">Vessel.ResourcesInDecoupleStage</span></code> RPC.</p></li>
+<li><p><strong>cumulative</strong> – When <code class="docutils literal notranslate"><span class="pre">false</span></code>, only resources assigned to this stage. When <code class="docutils literal notranslate"><span class="pre">true</span></code>, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached.</p></li>
 </ul>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is an RPC method: call <code class="docutils literal notranslate"><span class="pre">resources()</span></code> (optional <code class="docutils literal notranslate"><span class="pre">cumulative</span></code> argument).
-The default <code class="docutils literal notranslate"><span class="pre">cumulative=true</span></code> matches the legacy
-<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel27resources_in_decouple_stageE7int32_tb" title="krpc::services::SpaceCenter::Vessel::resources_in_decouple_stage"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::resources_in_decouple_stage()</span></code></a> RPC.
-For decouple stages, grouping is the same as that deprecated method.
 For activation stages, unstaged resource containers (for example fuel tanks)
 are grouped with the first higher activation stage before they detach, matching
 the C# <code class="docutils literal notranslate"><span class="pre">Resources()</span></code> documentation.</p>
