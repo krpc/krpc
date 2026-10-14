@@ -1,3 +1,6 @@
+## [v3.13.0]
+- Remove `buildifier` (the Bazel build fetches its own)
+
 ## [v3.12.0]
 - Update Bazel to 9.3.0
 - Update system LLVM to clang-23
