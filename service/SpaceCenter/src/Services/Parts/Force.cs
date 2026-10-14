@@ -10,7 +10,7 @@ using Tuple3 = System.Tuple<double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.AddForce"/>.
+    /// Obtained by calling <c>Debug.AddForce</c>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public sealed class Force : IGameObjectState
