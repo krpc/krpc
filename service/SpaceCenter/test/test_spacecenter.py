@@ -374,11 +374,10 @@ class TestSpaceCenter(krpctest.TestCase):
         self.assertEqual("liquidEngine2", part.name)  # LV-T45 "Swivel"
 
 
-class WarpTestBase(krpctest.Mixin):
+class RailsWarpTestBase(krpctest.Mixin):
     sc: SpaceCenter
-    vessel: Vessel | None
     maximum_rails_warp_factor: int
-    landed: bool
+    rails_rates = [1, 5, 10, 50, 100, 1000, 10000, 100000]
 
     def wait_for_warp_rate(self, rate):
         # The game eases the warp rate to a new target over a second of game time
@@ -387,12 +386,6 @@ class WarpTestBase(krpctest.Mixin):
             timeout=10,
             message="the warp rate to reach %g" % rate,
         )
-
-    def test_no_warp(self):
-        self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
-        self.assertEqual(0, self.sc.rails_warp_factor)
-        self.assertEqual(0, self.sc.physics_warp_factor)
-        self.assertEqual(1, self.sc.warp_rate)
 
     def test_can_rails_warp_at(self):
         for factor in range(0, self.maximum_rails_warp_factor + 1):
@@ -405,24 +398,43 @@ class WarpTestBase(krpctest.Mixin):
             self.maximum_rails_warp_factor, self.sc.maximum_rails_warp_factor
         )
 
+    def test_warp_to(self):
+        ut = self.sc.ut + (30 * 60)  # 30 minutes in future
+        self.sc.warp_to(ut)
+        self.assertAlmostEqual(ut, self.sc.ut, delta=2)
+
+
+class WarpTestBase(RailsWarpTestBase):
+    vessel: Vessel | None
+    landed: bool
+
+    def test_no_warp(self):
+        self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
+        self.assertEqual(0, self.sc.rails_warp_factor)
+        self.assertEqual(0, self.sc.physics_warp_factor)
+        self.assertEqual(1, self.sc.warp_rate)
+
     def test_rails_warp(self):
-        rates = [1, 5, 10, 50, 100, 1000, 10000, 100000]
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
         self.assertEqual(1, self.sc.warp_rate)
         for factor in range(1, self.maximum_rails_warp_factor + 1):
             self.sc.rails_warp_factor = factor
-            self.wait_for_warp_rate(rates[factor])
+            self.wait_for_warp_rate(self.rails_rates[factor])
             self.assertEqual(self.sc.WarpMode.rails, self.sc.warp_mode)
             self.assertEqual(factor, self.sc.rails_warp_factor)
             self.assertEqual(0, self.sc.physics_warp_factor)
 
         self.sc.rails_warp_factor = 8
         self.wait(1)
-        self.assertEqual(rates[self.maximum_rails_warp_factor], self.sc.warp_rate)
+        self.assertEqual(
+            self.rails_rates[self.maximum_rails_warp_factor], self.sc.warp_rate
+        )
         self.assertEqual(self.maximum_rails_warp_factor, self.sc.rails_warp_factor)
         self.sc.rails_warp_factor = 42
         self.wait(0.5)
-        self.assertEqual(rates[self.maximum_rails_warp_factor], self.sc.warp_rate)
+        self.assertEqual(
+            self.rails_rates[self.maximum_rails_warp_factor], self.sc.warp_rate
+        )
         self.assertEqual(self.maximum_rails_warp_factor, self.sc.rails_warp_factor)
 
         self.sc.rails_warp_factor = 0
@@ -490,11 +502,6 @@ class WarpTestBase(krpctest.Mixin):
         self.wait_for_warp_rate(1)
         self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
 
-    def test_warp_to(self):
-        ut = self.sc.ut + (30 * 60)  # 30 minutes in future
-        self.sc.warp_to(ut)
-        self.assertAlmostEqual(ut, self.sc.ut, delta=2)
-
 
 class TestWarpOnLaunchpad(WarpTestBase, krpctest.TestCase):
     @classmethod
@@ -537,6 +544,50 @@ class TestWarpInSpace(WarpTestBase, krpctest.TestCase):
         cls.vessel = cls.sc.active_vessel
         cls.maximum_rails_warp_factor = 7
         cls.landed = False
+
+
+class WarpOutsideFlightTestBase(RailsWarpTestBase):
+    scene_name: str
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        conn = cls.connect()
+        cls._set_game_scene(getattr(conn.krpc.GameScene, cls.scene_name))
+        cls.sc = conn.space_center
+        cls.maximum_rails_warp_factor = 7
+
+    def test_no_warp(self):
+        self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
+        self.assertEqual(0, self.sc.rails_warp_factor)
+        self.assertEqual(0, self.sc.warp_factor)
+        self.assertEqual(1, self.sc.warp_rate)
+
+    def test_rails_warp(self):
+        for factor in range(1, self.maximum_rails_warp_factor + 1):
+            self.sc.rails_warp_factor = factor
+            self.wait_for_warp_rate(self.rails_rates[factor])
+            self.assertEqual(self.sc.WarpMode.rails, self.sc.warp_mode)
+            self.assertEqual(factor, self.sc.rails_warp_factor)
+            self.assertEqual(factor, self.sc.warp_factor)
+        self.sc.rails_warp_factor = 42
+        self.wait(0.5)
+        self.assertEqual(self.maximum_rails_warp_factor, self.sc.rails_warp_factor)
+        self.sc.rails_warp_factor = 0
+        self.wait_for_warp_rate(1)
+        self.assertEqual(self.sc.WarpMode.none, self.sc.warp_mode)
+
+    def test_physics_warp_is_flight_only(self):
+        self.assertRaises(RuntimeError, getattr, self.sc, "physics_warp_factor")
+        self.assertRaises(RuntimeError, setattr, self.sc, "physics_warp_factor", 1)
+
+
+class TestWarpInSpaceCenter(WarpOutsideFlightTestBase, krpctest.TestCase):
+    scene_name = "space_center"
+
+
+class TestWarpInTrackingStation(WarpOutsideFlightTestBase, krpctest.TestCase):
+    scene_name = "tracking_station"
 
 
 class TestRevertToLaunch(krpctest.TestCase):

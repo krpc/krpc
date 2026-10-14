@@ -28,6 +28,12 @@
   - Add `SpaceCenter.CanSave`, whether the game can be saved (#1117)
   - **Breaking:** Remove `SpaceCenter.LoadSpaceCenter`, replaced by setting `KRPC.GameScene`
     (#1140)
+  - Allow the time warp RPCs in the space center and tracking station, apart from
+    `SpaceCenter.PhysicsWarpFactor` (#1145)
+  - `SpaceCenter.WarpTo` throws an exception if the game scene changes during the time
+    warp (#1145)
+  - Fix `SpaceCenter.MaximumRailsWarpFactor` returning 0 when only warp factor 1 is
+    allowed (#1145)
 
 - Editor
   - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space plane
