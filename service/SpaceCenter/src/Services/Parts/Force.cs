@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -9,7 +10,7 @@ using Tuple3 = System.Tuple<double, double, double>;
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
-    /// Obtained by calling <see cref="Part.AddForce"/>.
+    /// Obtained by calling <c>Debug.AddForce</c>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public sealed class Force : IGameObjectState
@@ -21,12 +22,38 @@ namespace KRPC.SpaceCenter.Services.Parts
         // stands for, so this marks it as gone
         bool removed;
 
-        internal Force (Part part, Tuple3 forceVector, Tuple3 forcePosition, ReferenceFrame referenceFrame)
+        Force (Part part, Tuple3 forceVector, Tuple3 forcePosition, ReferenceFrame referenceFrame)
         {
+            if (part == null)
+                throw new ArgumentNullException (nameof (part));
+            if (forceVector == null)
+                throw new ArgumentNullException (nameof (forceVector));
+            if (forcePosition == null)
+                throw new ArgumentNullException (nameof (forcePosition));
+            if (referenceFrame == null)
+                throw new ArgumentNullException (nameof (referenceFrame));
             Part = part;
             force = forceVector.ToVector ();
             position = forcePosition.ToVector ();
             frame = referenceFrame;
+        }
+
+        /// <summary>
+        /// Apply a constant force to a part, until it is removed or its client disconnects.
+        /// </summary>
+        public static Force Add (Part part, Tuple3 forceVector, Tuple3 forcePosition, ReferenceFrame referenceFrame)
+        {
+            var obj = new Force (part, forceVector, forcePosition, referenceFrame);
+            PartForcesAddon.Add (obj);
+            return obj;
+        }
+
+        /// <summary>
+        /// Apply a force to a part for a single physics update.
+        /// </summary>
+        public static void AddInstantaneous (Part part, Tuple3 forceVector, Tuple3 forcePosition, ReferenceFrame referenceFrame)
+        {
+            PartForcesAddon.AddInstantaneous (new Force (part, forceVector, forcePosition, referenceFrame));
         }
 
         /// <summary>
@@ -82,7 +109,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
             get { CheckExists (); return frame; }
-            set { CheckExists (); frame = value; }
+            set {
+                CheckExists ();
+                if (value == null)
+                    throw new ArgumentNullException (nameof (value));
+                frame = value;
+            }
         }
 
         /// <summary>

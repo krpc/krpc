@@ -133,7 +133,9 @@ class TestObjectLifetime(krpctest.TestCase):
         # A force is applied by the game's own update rather than by a client call, so
         # there is nobody to raise an error at when its part goes; it is dropped instead.
         part = self.a_part("longAntenna")
-        force = part.add_force((1, 2, 3), (0, 0, 0), part.reference_frame)
+        force = self.conn.debug.add_force(
+            part, (1, 2, 3), (0, 0, 0), part.reference_frame
+        )
         self.assertEqual((1, 2, 3), force.force_vector)
         before = self.conn.testing_tools.object_store_size
         self.conn.testing_tools.destroy_part(part)
@@ -336,7 +338,9 @@ class TestObjectLifetime(krpctest.TestCase):
         # The command pod, which nothing here destroys: the tests run in name order and
         # the thermometer and the strut have both been destroyed by this point.
         part = self.a_part("mk1-3pod")
-        force = part.add_force((1, 2, 3), (0, 0, 0), part.reference_frame)
+        force = self.conn.debug.add_force(
+            part, (1, 2, 3), (0, 0, 0), part.reference_frame
+        )
         self.assertEqual((1, 2, 3), force.force_vector)
         before = self.conn.testing_tools.object_store_size
         force.remove()

@@ -11,7 +11,8 @@ namespace KRPC.Debug
     /// <summary>
     /// Provides functionality to modify the state of the simulation directly, in ways
     /// the game normally does not allow: teleporting a vessel, setting its attitude,
-    /// refilling its tanks and enabling the game's cheat options.
+    /// applying forces to its parts, refilling its tanks and enabling the game's cheat
+    /// options.
     /// </summary>
     /// <remarks>
     /// Everything in this service is cheating. It has the same effect on a save as the
@@ -334,6 +335,46 @@ namespace KRPC.Debug
             SetWorldAngularVelocity (
                 target.InternalVessel,
                 (Vector3)frame.AngularVelocityToWorldSpace (commanded));
+        }
+
+        /// <summary>
+        /// Exert a constant force on a part, acting at the given position.
+        /// </summary>
+        /// <returns>An object that can be used to remove or modify the force.</returns>
+        /// <param name="part">The part to apply the force to.</param>
+        /// <param name="force">A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</param>
+        /// <param name="position">The position at which the force acts, as a vector.</param>
+        /// <param name="referenceFrame">The reference frame that the
+        /// force and position are in.</param>
+        /// <remarks>
+        /// The force is removed when the client that added it disconnects.
+        /// </remarks>
+        [KRPCProcedure (GameScene = GameScene.Flight)]
+        public static SpaceCenter.Services.Parts.Force AddForce (
+            SpaceCenter.Services.Parts.Part part, Tuple3 force, Tuple3 position,
+            SpaceCenter.Services.ReferenceFrame referenceFrame)
+        {
+            return SpaceCenter.Services.Parts.Force.Add (part, force, position, referenceFrame);
+        }
+
+        /// <summary>
+        /// Exert an instantaneous force on a part, acting at the given position.
+        /// </summary>
+        /// <param name="part">The part to apply the force to.</param>
+        /// <param name="force">A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</param>
+        /// <param name="position">The position at which the force acts, as a vector.</param>
+        /// <param name="referenceFrame">The reference frame that the
+        /// force and position are in.</param>
+        /// <remarks>The force is applied instantaneously in a single physics update.</remarks>
+        [KRPCProcedure (GameScene = GameScene.Flight)]
+        public static void InstantaneousForce (
+            SpaceCenter.Services.Parts.Part part, Tuple3 force, Tuple3 position,
+            SpaceCenter.Services.ReferenceFrame referenceFrame)
+        {
+            SpaceCenter.Services.Parts.Force.AddInstantaneous (
+                part, force, position, referenceFrame);
         }
 
         /// <summary>

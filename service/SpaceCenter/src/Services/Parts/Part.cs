@@ -1262,12 +1262,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <remarks>
         /// The force is removed when the client that added it disconnects.
         /// </remarks>
+        [Obsolete ("Use <c>Debug.AddForce</c> instead.")]
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Force AddForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
         {
-            var obj = new Force (this, force, position, referenceFrame);
-            PartForcesAddon.Add (obj);
-            return obj;
+            return Force.Add (this, force, position, referenceFrame);
         }
 
         /// <summary>
@@ -1279,10 +1278,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <param name="referenceFrame">The reference frame that the
         /// force and position are in.</param>
         /// <remarks>The force is applied instantaneously in a single physics update.</remarks>
+        [Obsolete ("Use <c>Debug.InstantaneousForce</c> instead.")]
         [KRPCMethod (GameScene = GameScene.Flight)]
         public void InstantaneousForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
         {
-            PartForcesAddon.AddInstantaneous (new Force (this, force, position, referenceFrame));
+            Force.AddInstantaneous (this, force, position, referenceFrame);
         }
 
         /// <summary>

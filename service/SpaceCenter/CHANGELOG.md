@@ -244,6 +244,8 @@
     destroyed (#1051)
   - `Force.Remove` leaves the object gone, so using one afterwards raises
     `KRPC.ObjectDestroyedException` (#1051)
+  - **Deprecated:** `Part.AddForce` and `Part.InstantaneousForce`, superseded by
+    `Debug.AddForce` and `Debug.InstantaneousForce` (#1146)
   - `Part.BoundingBox` and `Vessel.BoundingBox` measure only the meshes of a part's own model,
     leaving out physicsless child parts and objects another mod has attached (#1024)
   - Computing a bounding box no longer duplicates the meshes of every part it measures (#1024)
