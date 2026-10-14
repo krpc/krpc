@@ -30,7 +30,7 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (6, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (171, service.Procedures.Count);
+            Assert.AreEqual (170, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (2, service.Enumerations.Count);
 
@@ -97,17 +97,12 @@ namespace KRPC.Test.Service.KRPC
                     MessageAssert.HasReturnType (proc, typeof(uint));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
-                } else if (proc.Name == "get_CurrentGameScene") {
-                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.KRPC.GameScene));
-                    MessageAssert.HasNoParameters (proc);
-                    MessageAssert.HasDocumentation (proc);
-                    MessageAssert.IsDeprecated (proc, "Use <see cref=\"M:KRPC.GameScene\" /> instead.");
                 } else {
                     foundProcedures--;
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (15, foundProcedures);
+            Assert.AreEqual (14, foundProcedures);
 
             bool foundEnumeration = false;
             foreach (var enumeration in service.Enumerations) {

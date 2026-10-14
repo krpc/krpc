@@ -1160,16 +1160,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Switch to the space center view.
-        /// </summary>
-        [KRPCProcedure]
-        [Obsolete ("Set <see cref='P:KRPC.Service.KRPC.KRPC.GameScene'/> instead.")]
-        public static void LoadSpaceCenter()
-        {
-            HighLogic.LoadScene(GameScenes.SPACECENTER);
-        }
-
-        /// <summary>
         /// The visible objects in map mode.
         /// </summary>
         [KRPCProperty(GameScene = GameScene.All)]

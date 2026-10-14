@@ -14,11 +14,6 @@ Vessel
           for examples of getting :rst:ref:`the orbital and surface speeds of a
           vessel <tutorial-reference-frames-vessel-speed>`.
 {% endappend %}
-{% append services['SpaceCenter'].classes['Vessel'].members['ResourcesInDecoupleStage'] %}
-.. note:: Deprecated. Use {{ see('M:SpaceCenter.Vessel.DecoupleStageAt') }}
-          and {{ see('M:SpaceCenter.Stage.Resources') }} instead. For details on
-          stage numbering, see the discussion on :rst:ref:`{{ domain.name }}-api-parts-staging`.
-{% endappend %}
 {% append services['SpaceCenter'].classes['Vessel'].members['Stages'] %}
 .. note:: Lists activation stages only (``decouple`` is ``false``). See also
           :rst:ref:`{{ domain.name }}-api-parts-staging`.

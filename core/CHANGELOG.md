@@ -1,5 +1,6 @@
 ## [v0.7.0] - unreleased
 - Add `KRPC.GameStateLoads`, the number of game states that have finished loading (#1121)
+- **Breaking:** Remove `KRPC.CurrentGameScene`, replaced by `KRPC.GameScene` (#1140)
 - Extend `KRPC.Expression` to build server side functions, which the server evaluates
   (#503, #517, #521, #1124)
 - Allow a function to call a procedure that returns no value (#1124)

@@ -55,9 +55,7 @@ API documentation:
    :attr:`Module.field_list`, :attr:`Module.event_list` and
    :attr:`Module.action_list`. These return :class:`PartField`,
    :class:`PartEvent` and :class:`PartAction` objects that can be read, set and
-   triggered. They replace the module's string-dictionary members (such as
-   ``Module.fields``, ``Module.get_field`` and ``Module.set_action``) that older
-   scripts and forum posts use, which are deprecated.
+   triggered.
 
 Deploying all Parachutes
 ------------------------

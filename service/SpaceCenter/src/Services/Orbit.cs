@@ -1039,62 +1039,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Estimates and returns the time at closest approach to a target orbit.
-        /// </summary>
-        /// <returns>The universal time at closest approach, in seconds.</returns>
-        /// <param name="target">Target orbit.</param>
-        [Obsolete ("Use <see cref='NextClosestApproach'/> and read <see cref='ClosestApproach.UT'/> instead.")]
-        [KRPCMethod]
-        public double TimeOfClosestApproach (Orbit target)
-        {
-            double distance;
-            return CalcClosestAproach(this, target, Planetarium.GetUniversalTime(), out distance);
-        }
-
-        /// <summary>
-        /// Estimates and returns the distance at closest approach to a target orbit, in meters.
-        /// </summary>
-        /// <param name="target">Target orbit.</param>
-        [Obsolete ("Use <see cref='NextClosestApproach'/> and read <see cref='ClosestApproach.Distance'/> instead.")]
-        [KRPCMethod]
-        public double DistanceAtClosestApproach (Orbit target)
-        {
-            double distance;
-            CalcClosestAproach(this, target, Planetarium.GetUniversalTime(), out distance);
-            return distance;
-        }
-
-        /// <summary>
-        /// Returns the times at closest approach and corresponding distances, to a target orbit.
-        /// </summary>
-        /// <returns>
-        /// A list of two lists.
-        /// The first is a list of times at closest approach, as universal times in seconds.
-        /// The second is a list of corresponding distances at closest approach, in meters.
-        /// </returns>
-        /// <param name="target">Target orbit.</param>
-        /// <param name="orbits">The number of future orbits to search.</param>
-        [Obsolete ("Use <see cref='ClosestApproaches'/> instead.")]
-        [KRPCMethod]
-        public IList<IList<double>> ListClosestApproaches(Orbit target, int orbits)
-        {
-            var times = new List<double>();
-            var distances = new List<double>();
-            double distance;
-            double orbitstart = Planetarium.GetUniversalTime();
-            double period = InternalOrbit.period;
-            for (int i = 0; i < orbits; i++) {
-                times.Add(CalcClosestAproach(this, target, orbitstart, out distance));
-                distances.Add(distance);
-                orbitstart += period;
-            }
-            var combined = new List<IList<double>>();
-            combined.Add(times);
-            combined.Add(distances);
-            return combined;
-        }
-
-        /// <summary>
         /// Helper function to calculate the closest approach distance and time to a target orbit
         /// in a given orbital period.
         /// </summary>

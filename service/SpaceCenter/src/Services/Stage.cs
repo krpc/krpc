@@ -151,9 +151,7 @@ namespace KRPC.SpaceCenter.Services
         /// When <c>false</c>, only resources assigned to this stage. 
         /// When <c>true</c>, resources for this stage and all later activation or decouple stage 
         /// numbers are included. On activation stages, unstaged resource containers (for example 
-        /// fuel tanks) are grouped with the first higher activation stage before they are detached. 
-        /// Defaults to <c>true</c> so decouple-stage calls match the legacy 
-        /// <c>Vessel.ResourcesInDecoupleStage</c> RPC.
+        /// fuel tanks) are grouped with the first higher activation stage before they are detached.
         /// </param>
         [KRPCMethod]
         public Resources Resources (bool cumulative = true)

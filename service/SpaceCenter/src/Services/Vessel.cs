@@ -399,21 +399,6 @@ namespace KRPC.SpaceCenter.Services
             get { return new Resources (InternalVessel); }
         }
 
-        /// <summary>
-        /// Returns a <see cref="Resources"/> object, that can used to get
-        /// information about resources stored in a given <paramref name="stage"/>.
-        /// </summary>
-        /// <param name="stage">Get resources for parts that are decoupled in this stage.</param>
-        /// <param name="cumulative">When <c>false</c>, returns the resources for parts
-        /// decoupled in just the given stage. When <c>true</c> returns the resources decoupled in
-        /// the given stage and all subsequent stages combined.</param>
-        [Obsolete ("Use <see cref=\"Stage.Resources\" /> from the object returned by <see cref=\"DecoupleStageAt\" /> instead.")]
-        [KRPCMethod (GameScene = GameScene.Flight)]
-        public Resources ResourcesInDecoupleStage (int stage, bool cumulative = true)
-        {
-            return new Resources (InternalVessel, stage, cumulative);
-        }
-
         List<int> DecoupleStageNumbers ()
         {
             return InternalVessel.Parts
@@ -426,8 +411,8 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Stage indices valid for decouple-stage queries (resources, parts).
         /// Includes the -1 stage (parts that are never decoupled and remain on the
-        /// vessel) and zero-value stages with no decoupling parts, matching legacy
-        /// <see cref="ResourcesInDecoupleStage"/> iteration over raw stage numbers.
+        /// vessel), and every stage number up to the highest, including stages with
+        /// no decoupling parts.
         /// </summary>
         List<int> RawDecoupleStageNumbers ()
         {

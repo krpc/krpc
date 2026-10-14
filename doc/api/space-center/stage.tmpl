@@ -14,9 +14,6 @@ Stage
 {% endappend %}
 {% append services['SpaceCenter'].classes['Stage'].members['Resources'] %}
 .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
-          The default ``cumulative=true`` matches the legacy
-          {{ see('M:SpaceCenter.Vessel.ResourcesInDecoupleStage') }} RPC.
-          For decouple stages, grouping is the same as that deprecated method.
           For activation stages, unstaged resource containers (for example fuel tanks)
           are grouped with the first higher activation stage before they detach, matching
           the C# ``Resources()`` documentation.

@@ -17,8 +17,7 @@ class TestPartsModule(krpctest.TestCase):
     @staticmethod
     def _visible_event(module, gui_name):
         """Return the event with the given gui name that is currently shown in
-        the part's right-click menu (visible and active), or None. Replaces the
-        deprecated Module.has_event/trigger_event lookups."""
+        the part's right-click menu (visible and active), or None."""
         return next(
             (
                 event

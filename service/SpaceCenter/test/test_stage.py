@@ -1,5 +1,4 @@
 import krpctest
-from service.SpaceCenter.test.resources_equivalence import assert_resources_equivalent
 
 
 class TestStage(krpctest.TestCase):
@@ -93,17 +92,6 @@ class TestStage(krpctest.TestCase):
         self.assertIsNotNone(stage)
         dec_stage = self.vessel.decouple_stage_at(0)
         self.assertIsNotNone(dec_stage)
-
-    def test_legacy_deprecation_compatibility(self):
-        # Default migration path: legacy omits cumulative (defaults to True)
-        legacy_default = self.vessel.resources_in_decouple_stage(0)
-        new_default = self.vessel.decouple_stage_at(0).resources()
-        assert_resources_equivalent(self, legacy_default, new_default)
-
-        # Explicit non-cumulative path
-        legacy = self.vessel.resources_in_decouple_stage(0, False)
-        new_way = self.vessel.decouple_stage_at(0).resources(False)
-        assert_resources_equivalent(self, legacy, new_way)
 
 
 class TestStageRevertToLaunch(krpctest.TestCase):
