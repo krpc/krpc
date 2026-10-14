@@ -1194,26 +1194,18 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Computes the inertia tensor of the part in the parts reference frame.
-        /// In flight this is the rigidbody's tensor. In the editor the rigidbody is
-        /// an unconfigured placeholder, so the tensor is worked out from the colliders.
+        /// In flight this is the rigidbody's tensor, and zero for a part without one.
+        /// In the editor the rigidbody is an unconfigured placeholder, so the tensor
+        /// is worked out from the colliders.
         /// </summary>
         Matrix4x4 ComputeInertiaTensor ()
         {
             var part = InternalPart;
-            if (part.HasPhysicsBody ()) {
-                Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
-
-                // translate: inertiaTensor frame to part frame
-                Quaternion rot = part.rb.inertiaTensorRotation;
-                Quaternion inv = Quaternion.Inverse (rot);
-
-                Matrix4x4 rotMatrix = Matrix4x4.TRS (Vector3.zero, rot, Vector3.one);
-                Matrix4x4 invMatrix = Matrix4x4.TRS (Vector3.zero, inv, Vector3.one);
-
-                var inertiaTensor = rotMatrix * partTensor * invMatrix;
-                return inertiaTensor.MultiplyScalar (1000f);
-            }
-            return part.ColliderInertiaTensor ().MultiplyScalar (1000f);
+            if (part.HasPhysicsBody ())
+                return part.RigidbodyInertiaTensor (Quaternion.identity).MultiplyScalar (1000f);
+            if (HighLogic.LoadedSceneIsEditor)
+                return part.ColliderInertiaTensor ().MultiplyScalar (1000f);
+            return Matrix4x4.zero;
         }
 
         /// <summary>

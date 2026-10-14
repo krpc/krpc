@@ -793,18 +793,9 @@ namespace KRPC.SpaceCenter.Services
 
             foreach (var part in vessel.parts) {
                 if (part.rb != null) {
-                    Matrix4x4 partTensor = part.rb.inertiaTensor.ToDiagonalMatrix ();
-
-                    // translate: inertiaTensor frame to part frame, part frame to world frame,
-                    // world frame to vessel frame
-                    Quaternion rot = Quaternion.Inverse (vesselTransform.rotation) * part.transform.rotation * part.rb.inertiaTensorRotation;
-                    Quaternion inv = Quaternion.Inverse (rot);
-
-                    Matrix4x4 rotMatrix = Matrix4x4.TRS (Vector3.zero, rot, Vector3.one);
-                    Matrix4x4 invMatrix = Matrix4x4.TRS (Vector3.zero, inv, Vector3.one);
-
-                    // add the part inertiaTensor to the ship inertiaTensor
-                    inertiaTensor = inertiaTensor.Add (rotMatrix * partTensor * invMatrix);
+                    // add the part inertiaTensor, from the part frame to the vessel frame
+                    Quaternion rot = Quaternion.Inverse (vesselTransform.rotation) * part.transform.rotation;
+                    inertiaTensor = inertiaTensor.Add (part.RigidbodyInertiaTensor (rot));
 
                     Vector3 position = vesselTransform.InverseTransformDirection (part.rb.position - CoM);
 

@@ -92,6 +92,13 @@ class TestEditorParts(krpctest.TestCase):
         self.assertGreater(len(part.modules), 0)
         self.assertIsNotNone(part.config)
 
+    def test_physicsless_part_inertia(self):
+        # A physicsless part's mass counts toward its parent, leaving it no inertia
+        part = self.parts.with_name("longAntenna")[0]
+        self.assertTrue(part.massless)
+        self.assertEqual((0, 0, 0), part.moment_of_inertia)
+        self.assertEqual([0] * 9, part.inertia_tensor)
+
     def test_flight_only_part_members_raise(self):
         part = self.parts.root
         for name in (
