@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter.Services
     /// <summary>
     /// Represents the collection of resources stored in a vessel, stage or part.
     /// Created by calling <see cref="Vessel.Resources"/>,
-    /// <see cref="Vessel.ResourcesInDecoupleStage"/>, <see cref="EditorVessel.Resources"/>
+    /// <see cref="Stage.Resources"/>, <see cref="EditorVessel.Resources"/>
     /// or <see cref="Parts.Part.Resources"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight | GameScene.Editor)]

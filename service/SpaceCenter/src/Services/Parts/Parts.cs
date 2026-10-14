@@ -187,28 +187,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// A list of all parts that are activated in the given <paramref name="stage"/>.
-        /// </summary>
-        /// <param name="stage"></param>
-        [KRPCMethod]
-        [Obsolete ("Use <see cref=\"Stage.Parts\" /> from the object returned by <see cref=\"Vessel.StageAt\" /> instead.")]
-        public IList<Part> InStage (int stage)
-        {
-            return All.Where (part => part.Stage == stage).ToList ();
-        }
-
-        /// <summary>
-        /// A list of all parts that are decoupled in the given <paramref name="stage"/>.
-        /// </summary>
-        /// <param name="stage"></param>
-        [KRPCMethod]
-        [Obsolete ("Use <see cref=\"Stage.Parts\" /> from the object returned by <see cref=\"Vessel.DecoupleStageAt\" /> instead.")]
-        public IList<Part> InDecoupleStage (int stage)
-        {
-            return All.Where (part => part.DecoupleStage == stage).ToList ();
-        }
-
-        /// <summary>
         /// A list of modules (combined across all parts in the vessel) whose
         /// <see cref="Module.Name"/> is <paramref name="moduleName"/>.
         /// </summary>

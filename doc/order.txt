@@ -373,7 +373,6 @@ SpaceCenter.Vessel.CrewCapacity
 SpaceCenter.Vessel.CrewCount
 SpaceCenter.Vessel.Crew
 SpaceCenter.Vessel.Resources
-SpaceCenter.Vessel.ResourcesInDecoupleStage
 SpaceCenter.Vessel.Stages
 SpaceCenter.Vessel.StageAt
 SpaceCenter.Vessel.DecoupleStages
@@ -878,8 +877,6 @@ SpaceCenter.Parts.WithName
 SpaceCenter.Parts.WithTitle
 SpaceCenter.Parts.WithTag
 SpaceCenter.Parts.WithModule
-SpaceCenter.Parts.InStage
-SpaceCenter.Parts.InDecoupleStage
 SpaceCenter.Parts.ModulesWithName
 SpaceCenter.Parts.Antennas
 SpaceCenter.Parts.CargoBays

@@ -142,9 +142,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
 
     def test_per_stage_amounts(self):
         for stage in range(-1, self.num_stages):
-            resources = self.vessel.resources_in_decouple_stage(
-                stage=stage, cumulative=False
-            )
+            resources = self.vessel.decouple_stage_at(stage).resources(cumulative=False)
             self.assertEqual(self.expected_names[stage], set(resources.names))
             for name in resources.names:
                 self.assertTrue(resources.has_resource(name))
@@ -155,20 +153,11 @@ class TestResources(krpctest.TestCase, ResourcesTest):
                     self.expected[stage][name][1], resources.max(name), delta=1
                 )
 
-    def test_decouple_stage_resources_migration_default(self):
-        for stage in range(self.num_stages):
-            legacy = self.vessel.resources_in_decouple_stage(stage=stage)
-            migrated = self.vessel.decouple_stage_at(stage).resources()
-            assert_resources_equivalent(self, legacy, migrated)
-
     def test_decouple_stage_at_zero_value_stage_iteration(self):
         """Raw stage 0 may have no decoupling parts; DecoupleStageAt must not throw."""
         stage_obj = self.vessel.decouple_stage_at(0)
         self.assertEqual(0, stage_obj.number)
         self.assertIsInstance(stage_obj.parts, list)
-        legacy = self.vessel.resources_in_decouple_stage(stage=0, cumulative=False)
-        migrated = stage_obj.resources(cumulative=False)
-        assert_resources_equivalent(self, legacy, migrated)
 
     def test_decouple_stage_at_iterates_all_raw_stage_numbers(self):
         for stage in range(self.num_stages):
@@ -177,7 +166,7 @@ class TestResources(krpctest.TestCase, ResourcesTest):
 
     def test_per_stage_amounts_cumulative(self):
         for stage in range(self.num_stages):
-            resources = self.vessel.resources_in_decouple_stage(stage=stage)
+            resources = self.vessel.decouple_stage_at(stage).resources()
             self.assertEqual(
                 self.expected_names_cumulative[stage], set(resources.names)
             )
