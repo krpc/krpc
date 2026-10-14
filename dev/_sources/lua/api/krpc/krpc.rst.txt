@@ -54,7 +54,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    Returns some information about the server, such as the version.
 
-   :rtype: :class:`krpc.schema.KRPC.Status`
+   :rtype: :class:`krpc.schema.Status`
 
 
 
@@ -64,7 +64,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
    Returns information on all services, procedures, classes, properties etc. provided by the server.
    Can be used by client libraries to automatically create functionality such as stubs.
 
-   :rtype: :class:`krpc.schema.KRPC.Services`
+   :rtype: :class:`krpc.schema.Services`
 
 
 
@@ -74,7 +74,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
    Add a stream of the value a server side function computes on each update.
 
    :param KRPC.Expression function:
-   :rtype: :class:`krpc.schema.KRPC.Stream`
+   :rtype: :class:`krpc.schema.Stream`
 
    .. note::
 

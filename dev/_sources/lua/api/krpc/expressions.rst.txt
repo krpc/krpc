@@ -153,7 +153,7 @@ assembled and run.
 
       An RPC call.
 
-      :param krpc.schema.KRPC.ProcedureCall call: The procedure call.
+      :param krpc.schema.ProcedureCall call: The procedure call.
       :rtype: :class:`KRPC.Expression`
 
       .. note::
@@ -167,7 +167,7 @@ assembled and run.
 
       An RPC call, where some or all of the arguments are computed by expressions.
 
-      :param krpc.schema.KRPC.ProcedureCall call: The RPC to call.
+      :param krpc.schema.ProcedureCall call: The RPC to call.
       :param Map args: Expressions computing the call's arguments, by position.
       :rtype: :class:`KRPC.Expression`
 

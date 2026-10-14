@@ -5,7 +5,8 @@ local vessel = conn.space_center.active_vessel
 local root = vessel.parts.root
 local stack = {{root, 0}}
 while #stack > 0 do
-  local part,depth = unpack(table.remove(stack))
+  local item = table.remove(stack)
+  local part,depth = item[1],item[2]
   local attach_mode
   if part.axially_attached then
     attach_mode = 'axial'

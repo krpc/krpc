@@ -1045,7 +1045,6 @@ active and fueled engines on a rocket. See here for a description of the maths:
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-3-3-4" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-4" name="3-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">math</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'math'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
 
@@ -1061,13 +1060,13 @@ active and fueled engines on a rocket. See here for a description of the maths:
 <span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="s1">'   '</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">part</span><span class="p">.</span><span class="py">title</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="s1">' in stage '</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">part</span><span class="p">.</span><span class="py">stage</span><span class="p">)</span>
 <span class="kr">end</span>
 
-<span class="nv">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
-<span class="nv">fuel_consumption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">fuel_consumption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
 <span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">engine</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">active_engines</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
 <span class="w">    </span><span class="nv">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">thrust</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">thrust</span>
 <span class="w">    </span><span class="nv">fuel_consumption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">fuel_consumption</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">specific_impulse</span>
 <span class="kr">end</span>
-<span class="nv">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">fuel_consumption</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">fuel_consumption</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">'Combined vacuum Isp = %.1f seconds'</span><span class="p">,</span><span class="w"> </span><span class="nv">isp</span><span class="p">))</span>
 </pre></div>

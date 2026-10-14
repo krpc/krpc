@@ -5,28 +5,28 @@ local List = require 'pl.List'
 local conn = krpc.connect('Pitch/Heading/Roll')
 local vessel = conn.space_center.active_vessel
 
-function cross_product(u, v)
+local function cross_product(u, v)
     return List{u[2]*v[3] - u[3]*v[2],
                 u[3]*v[1] - u[1]*v[3],
                 u[1]*v[2] - u[2]*v[1]}
 end
 
-function dot_product(u, v)
+local function dot_product(u, v)
     return u[1]*v[1] + u[2]*v[2] + u[3]*v[3]
 end
 
-function magnitude(v)
+local function magnitude(v)
     return math.sqrt(dot_product(v, v))
 end
 
-function angle_between_vectors(u, v)
+local function angle_between_vectors(u, v)
     -- Compute the angle between vector u and v
-    dp = dot_product(u, v)
+    local dp = dot_product(u, v)
     if dp == 0 then
         return 0
     end
-    um = magnitude(u)
-    vm = magnitude(v)
+    local um = magnitude(u)
+    local vm = magnitude(v)
     return math.acos(dp / (um*vm)) * (180. / math.pi)
 end
 

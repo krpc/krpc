@@ -10,8 +10,8 @@ local target_altitude = 150000
 local conn = krpc.connect('Launch into orbit')
 local vessel = conn.space_center.active_vessel
 
-flight = vessel:flight()
-stage_2_resources = vessel:decouple_stage_at(2):resources(false)
+local flight = vessel:flight()
+local stage_2_resources = vessel:decouple_stage_at(2):resources(false)
 
 -- Pre-launch setup
 vessel.control.sas = false
@@ -39,8 +39,8 @@ while true do
 
     -- Gravity turn
     if flight.mean_altitude > turn_start_altitude and flight.mean_altitude < turn_end_altitude then
-        frac = (flight.mean_altitude - turn_start_altitude) / (turn_end_altitude - turn_start_altitude)
-        new_turn_angle = frac * 90
+        local frac = (flight.mean_altitude - turn_start_altitude) / (turn_end_altitude - turn_start_altitude)
+        local new_turn_angle = frac * 90
         if math.abs(new_turn_angle - turn_angle) > 0.5 then
             turn_angle = new_turn_angle
             vessel.auto_pilot:target_pitch_and_heading(90-turn_angle, 90)

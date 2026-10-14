@@ -707,8 +707,8 @@ written in Lua. It can be <a class="reference external" href="https://luarocks.o
 <a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>.</p>
 <section id="installing">
 <h2>Installing<a class="headerlink" href="#installing" title="Link to this heading">#</a></h2>
-<p>The Lua client and all of its dependencies can be installed using luarocks with
-a single command:</p>
+<p>The client runs on Lua 5.1 to 5.4 and LuaJIT. It and all of its dependencies can be installed
+using luarocks with a single command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>luarocks<span class="w"> </span>install<span class="w"> </span>krpc
 </pre></div>
 </div>
@@ -786,11 +786,13 @@ notation. Defaults to ‘127.0.0.1’.</p></li>
 unix domain socket rather than TCP/IP. It returns a <a class="reference internal" href="#krpc.Client" title="krpc.Client"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Client</span></code></a> object,
 just as <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> does, and the connection behaves identically
 thereafter.</p>
-<p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and
-Windows Server 2019 or later. This needs luasocket’s <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> module,
-which luasocket builds itself everywhere but Windows; there it comes from the
-<code class="docutils literal notranslate"><span class="pre">luasocket-unix-windows</span></code> rock, which <code class="docutils literal notranslate"><span class="pre">luarocks</span> <span class="pre">install</span> <span class="pre">krpc</span></code> pulls in. A
-luasocket built by hand needs that module built with it.</p>
+<p>This needs luasocket’s <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> module, which luasocket builds on Linux
+and macOS.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>luasocket does not yet build <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> on Windows. Connect with
+<a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> there instead.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -869,16 +871,17 @@ over the network:</p>
 <section id="numeric-limits">
 <h2>Numeric Limits<a class="headerlink" href="#numeric-limits" title="Link to this heading">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types kRPC carries over the wire.
-Lua gained <code class="docutils literal notranslate"><span class="pre">math.maxinteger</span></code> and <code class="docutils literal notranslate"><span class="pre">math.mininteger</span></code> in 5.3, and this client targets 5.1 and
-5.2. A service can declare one of these limits as a parameter’s default value, and it is then
+A service can declare one of these limits as a parameter’s default value, and it is then
 documented as the constant here.</p>
 <p>The minimum of an unsigned type is <code class="docutils literal notranslate"><span class="pre">0</span></code>, so it has no constant.</p>
+<p>From Lua 5.3 on, a 64-bit value is an exact integer. Lua has no unsigned integer type. A
+<code class="docutils literal notranslate"><span class="pre">uint64</span></code> above <span class="math notranslate nohighlight">\(2^{63} - 1\)</span> wraps to a negative integer, so
+<a class="reference internal" href="#krpc.limits.UINT64_MAX" title="krpc.limits.UINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.UINT64_MAX</span></code></a> is <code class="docutils literal notranslate"><span class="pre">-1</span></code>. <code class="docutils literal notranslate"><span class="pre">math.ult</span></code> compares two such values.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Every Lua 5.1 and 5.2 number is a double, which holds each of these exactly except the two
-64-bit integer maxima: <a class="reference internal" href="#krpc.limits.SINT64_MAX" title="krpc.limits.SINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.SINT64_MAX</span></code></a> and <a class="reference internal" href="#krpc.limits.UINT64_MAX" title="krpc.limits.UINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.UINT64_MAX</span></code></a>
-round up to <span class="math notranslate nohighlight">\(2^{63}\)</span> and <span class="math notranslate nohighlight">\(2^{64}\)</span>. This is a property of the number type rather
-than of the constants, and applies equally to a 64-bit integer arriving from the server.</p>
+<p>In Lua 5.1, 5.2 and LuaJIT every number is a double, which holds an integer exactly up to
+<span class="math notranslate nohighlight">\(2^{53}\)</span>. <a class="reference internal" href="#krpc.limits.SINT64_MAX" title="krpc.limits.SINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.SINT64_MAX</span></code></a> and <a class="reference internal" href="#krpc.limits.UINT64_MAX" title="krpc.limits.UINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.UINT64_MAX</span></code></a> round up
+to <span class="math notranslate nohighlight">\(2^{63}\)</span> and <span class="math notranslate nohighlight">\(2^{64}\)</span>, as does a 64-bit value arriving from the server.</p>
 </div>
 <dl class="lua data">
 <dt class="sig sig-object lua" id="krpc.limits.DOUBLE_MAX">

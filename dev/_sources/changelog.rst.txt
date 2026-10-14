@@ -530,12 +530,16 @@ Lua client
 * Support structure types, built from their field values in order and giving them named access (:issue:`1066`)
 * A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (:issue:`1066`)
 * :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
-* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket. On Windows this needs the ``luasocket-unix-windows`` rock, now a dependency (:issue:`1065`)
+* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket, on Linux and macOS (:issue:`1065`)
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration from a service that had not been loaded yet (:issue:`1044`)
 * Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` (:issue:`1045`)
 * Reduce the cost of a remote procedure call, writing and reading messages as bytes rather than as protocol buffer messages (:issue:`1056`)
 * Require luasocket 3.0 or later (:issue:`1060`)
 * Fix a type occasionally being built a second time, leaving an enumeration or class type in a service unusable (:issue:`1068`)
+* Fix the client assigning global variables, such as ``data`` and ``typ``, which clashed with a script's own (:issue:`1142`)
+* Support Lua 5.3 and 5.4, where 64-bit values decode to exact integers (:issue:`1142`)
+* Depend on ``lua-protobuf`` in place of ``protobuf`` (:issue:`1142`)
+* :breaking:`Breaking` Return messages, such as the server status, as plain tables (:issue:`1142`)
 
 
 Python client
