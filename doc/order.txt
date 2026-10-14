@@ -25,7 +25,6 @@ KRPC.GameScene.AstronautComplex
 KRPC.GameScene.MissionControl
 KRPC.GameScene.ResearchAndDevelopment
 KRPC.GameScene.Administration
-KRPC.CurrentGameScene
 KRPC.Paused
 KRPC.GameStateLoads
 KRPC.Expression

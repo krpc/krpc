@@ -201,15 +201,6 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Get the current game scene.
-        /// </summary>
-        [KRPCProperty]
-        [Obsolete ("Use <see cref='GameScene'/> instead.")]
-        public static GameScene CurrentGameScene {
-            get { return GameScene; }
-        }
-
-        /// <summary>
         /// Whether the game is paused.
         /// </summary>
         [KRPCProperty]
