@@ -717,8 +717,12 @@
       </ul></li>
       <li><a href="python/client.html#krpc.client.Client.add_event">add_event() (krpc.client.Client method)</a>
 </li>
-      <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.add_force">add_force() (Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.add_force">[1]</a>
+      <li><a href="lua/api/debug/debug.html#Debug.add_force">add_force() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.add_force">[1]</a>
+
+      <ul>
+        <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.add_force">(Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.add_force">[1]</a>
 </li>
+      </ul></li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.add_function_stream">add_function_stream() (in module KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.add_function_stream">[1]</a>
 </li>
       <li><a href="lua/api/ui/panel.html#UI.Panel.add_grid_layout">add_grid_layout() (Panel method)</a>, <a href="python/api/ui/panel.html#UI.Panel.add_grid_layout">[1]</a>
@@ -852,6 +856,8 @@
       <li><a href="java/client.html#krpc.client.Connection.addEvent(KRPC.Expression)">addEvent(KRPC.Expression) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.addForce(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)">addForce(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.addForce(SpaceCenter.Part, org.javatuples.Triplet, org.javatuples.Triplet, SpaceCenter.ReferenceFrame)">addForce(SpaceCenter.Part, org.javatuples.Triplet, org.javatuples.Triplet, SpaceCenter.ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.addFunctionStream(Expression)">addFunctionStream(Expression) (Java method)</a>
 </li>
@@ -1039,10 +1045,10 @@
       </ul></li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.ascending_node">AlarmType.ascending_node (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.ascending_node">[1]</a>
 </li>
-      <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">AlarmType.closest (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">[1]</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">AlarmType.closest (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.closest">[1]</a>
+</li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract">AlarmType.contract (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract">[1]</a>
 </li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract_auto">AlarmType.contract_auto (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.contract_auto">[1]</a>
@@ -5970,10 +5976,10 @@
 </li>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.expanded">InfernalRobotics.InfernalRobotics.ServoGroup.expanded (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.forward_key">InfernalRobotics.InfernalRobotics.ServoGroup.forward_key (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.ik_active">InfernalRobotics.InfernalRobotics.ServoGroup.ik_active (attribute)</a>
 </li>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.moving_direction">InfernalRobotics.InfernalRobotics.ServoGroup.moving_direction (attribute)</a>
@@ -6038,9 +6044,15 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverter.inputs(int)">inputs(int) (Java method)</a>
 </li>
-      <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.instantaneous_force">instantaneous_force() (Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.instantaneous_force">[1]</a>
+      <li><a href="lua/api/debug/debug.html#Debug.instantaneous_force">instantaneous_force() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.instantaneous_force">[1]</a>
+
+      <ul>
+        <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.instantaneous_force">(Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.instantaneous_force">[1]</a>
 </li>
+      </ul></li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.instantaneousForce(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)">instantaneousForce(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.instantaneousForce(SpaceCenter.Part, org.javatuples.Triplet, org.javatuples.Triplet, SpaceCenter.ReferenceFrame)">instantaneousForce(SpaceCenter.Part, org.javatuples.Triplet, org.javatuples.Triplet, SpaceCenter.ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Type.int">int() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.int">[1]</a>
 </li>
@@ -6454,6 +6466,8 @@
 </li>
       <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5DebugE">krpc::services::Debug (C++ class)</a>
 </li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug9add_forceEN11SpaceCenter4PartENSt5tupleIdddEENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameE">krpc::services::Debug::add_force (C++ function)</a>
+</li>
       <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug19allow_part_clippingEv">krpc::services::Debug::allow_part_clipping (C++ function)</a>
 </li>
       <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug14apply_rotationEdNSt5tupleIdddEENSt8optionalIN11SpaceCenter6VesselEEE">krpc::services::Debug::apply_rotation (C++ function)</a>
@@ -6481,6 +6495,8 @@
       <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug20infinite_electricityEv">krpc::services::Debug::infinite_electricity (C++ function)</a>
 </li>
       <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug19infinite_propellantEv">krpc::services::Debug::infinite_propellant (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug19instantaneous_forceEN11SpaceCenter4PartENSt5tupleIdddEENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameE">krpc::services::Debug::instantaneous_force (C++ function)</a>
 </li>
       <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug21max_kerbal_experienceEv">krpc::services::Debug::max_kerbal_experience (C++ function)</a>
 </li>
@@ -12346,6 +12362,8 @@
 </li>
       <li><a href="cnano/client.html#c.krpc_connect">krpc_connect (C function)</a>
 </li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_AddForce">krpc_Debug_AddForce (C function)</a>
+</li>
       <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_AllowPartClipping">krpc_Debug_AllowPartClipping (C function)</a>
 </li>
       <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_ApplyRotation">krpc_Debug_ApplyRotation (C function)</a>
@@ -12371,6 +12389,8 @@
       <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_InfiniteElectricity">krpc_Debug_InfiniteElectricity (C function)</a>
 </li>
       <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_InfinitePropellant">krpc_Debug_InfinitePropellant (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_InstantaneousForce">krpc_Debug_InstantaneousForce (C function)</a>
 </li>
       <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_MaxKerbalExperience">krpc_Debug_MaxKerbalExperience (C function)</a>
 </li>

@@ -706,7 +706,8 @@
 <h1>Debug<a class="headerlink" href="#debug" title="Link to this heading">#</a></h1>
 <p id="module-Debug">Provides functionality to modify the state of the simulation directly, in ways
 the game normally does not allow: teleporting a vessel, setting its attitude,
-refilling its tanks and enabling the game’s cheat options.</p>
+applying forces to its parts, refilling its tanks and enabling the game’s cheat
+options.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Everything in this service is cheating. It has the same effect on a save as the
@@ -912,6 +913,52 @@ zero vector to stop the vessel rotating.</p>
 <p class="admonition-title">Note</p>
 <p>The whole vessel is put into a rigid rotation about its center of mass, so it spins in
 place rather than shearing apart or translating.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Debug.add_force">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">part</span></em>, <em class="sig-param"><span class="pre">force</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.add_force" title="Link to this definition">#</a></dt>
+<dd><p>Exert a constant force on a part, acting at the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<span><a class="reference internal" href="../space-center/parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></span>) – The part to apply the force to.</p></li>
+<li><p><strong>force</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p></li>
+<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position at which the force acts, as a vector.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the force and position are in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object that can be used to remove or modify the force.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../space-center/parts.html#SpaceCenter.Force" title="SpaceCenter.Force"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Force</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The force is removed when the client that added it disconnects.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Debug.instantaneous_force">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">instantaneous_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">part</span></em>, <em class="sig-param"><span class="pre">force</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.instantaneous_force" title="Link to this definition">#</a></dt>
+<dd><p>Exert an instantaneous force on a part, acting at the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<span><a class="reference internal" href="../space-center/parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></span>) – The part to apply the force to.</p></li>
+<li><p><strong>force</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p></li>
+<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position at which the force acts, as a vector.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the force and position are in.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The force is applied instantaneously in a single physics update.</p>
 </div>
 </dd></dl>
 

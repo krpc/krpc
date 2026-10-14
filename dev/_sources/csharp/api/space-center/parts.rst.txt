@@ -1173,6 +1173,8 @@ Part
 
    .. method:: Force AddForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
+      .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
+
       Exert a constant force on the part, acting at the given position.
 
       :parameters:
@@ -1190,6 +1192,8 @@ Part
          The force is removed when the client that added it disconnects.
 
    .. method:: void InstantaneousForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
 
       Exert an instantaneous force on the part, acting at the given position.
 
@@ -1291,7 +1295,7 @@ Part
 
 .. class:: Force
 
-   Obtained by calling :meth:`Part.AddForce`.
+   Obtained by calling ``Debug.AddForce``.
 
    .. property:: Part Part { get; }
 

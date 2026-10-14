@@ -254,6 +254,7 @@ SpaceCenter service
   * ``Decoupler.IsOmniDecoupler`` reports what the part is configured as for every decoupler, including radial ones. It was false for all of them (:issue:`1048`)
   * A force added with ``Part.AddForce`` stops being applied, and is freed, once its part is destroyed (:issue:`1051`)
   * ``Force.Remove`` leaves the object gone, so using one afterwards raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
+  * :deprecated:`Deprecated` ``Part.AddForce`` and ``Part.InstantaneousForce``, superseded by ``Debug.AddForce`` and ``Debug.InstantaneousForce`` (:issue:`1146`)
   * ``Part.BoundingBox`` and ``Vessel.BoundingBox`` measure only the meshes of a part's own model, leaving out physicsless child parts and objects another mod has attached (:issue:`1024`)
   * Computing a bounding box no longer duplicates the meshes of every part it measures (:issue:`1024`)
   * Add support for [RealFuels](https://forum.kerbalspaceprogram.com/index.php?/topic/58236-\*), reported by ``SpaceCenter.RealFuelsAvailable``. On an engine it manages, ``Engine.Ignitions``, ``Engine.IgnitionResources``, ``Engine.HasUllage``, ``Engine.PropellantStability``, ``Engine.PropellantReliability``, ``Engine.PressureFed`` and ``Engine.HasFeedPressure`` are available; on a tank, ``Part.HighlyPressurized`` and ``Part.BoiloffRate`` (:issue:`1039`)
@@ -386,7 +387,7 @@ DockingCamera service
 Debug service
 ^^^^^^^^^^^^^
 
-* Initial version. Provides RPCs to modify the state of the simulation directly: teleporting a vessel, setting its position, velocity and attitude, filling its resource tanks, and the game's debug menu cheats (:issue:`1033`)
+* Initial version. Provides RPCs to modify the state of the simulation directly: teleporting a vessel, setting its position, velocity and attitude, applying forces to its parts, filling its resource tanks, and the game's debug menu cheats (:issue:`1033`)
 
 
 C-nano client

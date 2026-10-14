@@ -131,10 +131,10 @@ Objects in Other Services
 
 The same rules hold for every service.
 
-A line or a marker from the ``Drawing`` service, a panel or a button from ``UI``, and a force
-from ``Part.AddForce`` are destroyed by their own removal, by the service's ``Clear``, or by a
-scene change. The server also removes what a client created when that client disconnects. A
-force is destroyed with the part it is applied to, and stops acting on it.
+A line or a marker from the ``Drawing`` service and a panel or a button from ``UI`` are
+destroyed by their own removal, by the service's ``Clear``, or by a scene change. A force from
+``Debug.AddForce`` is destroyed by its removal, by a scene change, or with the part it is applied
+to. The server also removes what a client created when that client disconnects.
 
 An object for something carried by a part lives as long as that part. A RemoteTech antenna, an
 Infernal Robotics servo, a LaserDist laser and a docking camera are destroyed once their part

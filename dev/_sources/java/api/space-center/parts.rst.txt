@@ -1231,6 +1231,8 @@ Part
 
    .. method:: Force addForce(org.javatuples.Triplet<Double,Double,Double> force, org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
 
+      .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
+
       Exert a constant force on the part, acting at the given position.
 
       :param org.javatuples.Triplet<Double,Double,Double> force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
@@ -1245,6 +1247,8 @@ Part
          The force is removed when the client that added it disconnects.
 
    .. method:: void instantaneousForce(org.javatuples.Triplet<Double,Double,Double> force, org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
+
+      .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
 
       Exert an instantaneous force on the part, acting at the given position.
 
@@ -1347,7 +1351,7 @@ Part
 
 .. type:: public class Force
 
-   Obtained by calling :meth:`Part.addForce(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, ReferenceFrame)`.
+   Obtained by calling ``Debug.AddForce``.
 
    .. method:: Part getPart()
 

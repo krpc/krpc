@@ -2938,7 +2938,11 @@ reference frame for the docking port, returned by
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.Part.add_force">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">add_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">force</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.add_force" title="Link to this definition">#</a></dt>
-<dd><p>Exert a constant force on the part, acting at the given position.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <code class="docutils literal notranslate"><span class="pre">Debug.AddForce</span></code> instead.</p>
+</div>
+<p>Exert a constant force on the part, acting at the given position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2963,7 +2967,11 @@ reference frame for the docking port, returned by
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.Part.instantaneous_force">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">instantaneous_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">force</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Part.instantaneous_force" title="Link to this definition">#</a></dt>
-<dd><p>Exert an instantaneous force on the part, acting at the given position.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <code class="docutils literal notranslate"><span class="pre">Debug.InstantaneousForce</span></code> instead.</p>
+</div>
+<p>Exert an instantaneous force on the part, acting at the given position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3112,7 +3120,7 @@ if the part is not a RealFuels fuel tank (see <a class="reference internal" href
 <dl class="lua class">
 <dt class="sig sig-object lua" id="SpaceCenter.Force">
 <span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">SpaceCenter.</span></span><span class="sig-name descname"><span class="pre">Force</span></span><a class="headerlink" href="#SpaceCenter.Force" title="Link to this definition">#</a></dt>
-<dd><p>Obtained by calling <a class="reference internal" href="#SpaceCenter.Part.add_force" title="SpaceCenter.Part.add_force"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Part.add_force()</span></code></a>.</p>
+<dd><p>Obtained by calling <code class="docutils literal notranslate"><span class="pre">Debug.AddForce</span></code>.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Force.part">
 <span class="sig-name descname"><span class="pre">part</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Part</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Force.part" title="Link to this definition">#</a></dt>

@@ -706,7 +706,8 @@
 <h1>Debug<a class="headerlink" href="#debug" title="Link to this heading">#</a></h1>
 <p>Provides functionality to modify the state of the simulation directly, in ways
 the game normally does not allow: teleporting a vessel, setting its attitude,
-refilling its tanks and enabling the game’s cheat options.</p>
+applying forces to its parts, refilling its tanks and enabling the game’s cheat
+options.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Everything in this service is cheating. It has the same effect on a save as the
@@ -942,6 +943,55 @@ zero vector to stop the vessel rotating.</p>
 <p class="admonition-title">Note</p>
 <p>The whole vessel is put into a rigid rotation about its center of mass, so it spins in
 place rather than shearing apart or translating.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Debug_AddForce">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Debug_AddForce</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Force_t" title="krpc_SpaceCenter_Force_t"><span class="n"><span class="pre">krpc_SpaceCenter_Force_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">part</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">force</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Debug_AddForce" title="Link to this definition">#</a><br /></dt>
+<dd><p>Exert a constant force on a part, acting at the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> – The part to apply the force to.</p></li>
+<li><p><strong>force</strong> – A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p></li>
+<li><p><strong>position</strong> – The position at which the force acts, as a vector.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the force and position are in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object that can be used to remove or modify the force.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The force is removed when the client that added it disconnects.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_Debug_InstantaneousForce">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_Debug_InstantaneousForce</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">part</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">force</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <a class="reference internal" href="../space-center/reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_Debug_InstantaneousForce" title="Link to this definition">#</a><br /></dt>
+<dd><p>Exert an instantaneous force on a part, acting at the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> – The part to apply the force to.</p></li>
+<li><p><strong>force</strong> – A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p></li>
+<li><p><strong>position</strong> – The position at which the force acts, as a vector.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the force and position are in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The force is applied instantaneously in a single physics update.</p>
 </div>
 </dd></dl>
 

@@ -726,10 +726,10 @@ these again on returning to the editor.</p>
 <section id="objects-in-other-services">
 <h2>Objects in Other Services<a class="headerlink" href="#objects-in-other-services" title="Link to this heading">#</a></h2>
 <p>The same rules hold for every service.</p>
-<p>A line or a marker from the <code class="docutils literal notranslate"><span class="pre">Drawing</span></code> service, a panel or a button from <code class="docutils literal notranslate"><span class="pre">UI</span></code>, and a force
-from <code class="docutils literal notranslate"><span class="pre">Part.AddForce</span></code> are destroyed by their own removal, by the service’s <code class="docutils literal notranslate"><span class="pre">Clear</span></code>, or by a
-scene change. The server also removes what a client created when that client disconnects. A
-force is destroyed with the part it is applied to, and stops acting on it.</p>
+<p>A line or a marker from the <code class="docutils literal notranslate"><span class="pre">Drawing</span></code> service and a panel or a button from <code class="docutils literal notranslate"><span class="pre">UI</span></code> are
+destroyed by their own removal, by the service’s <code class="docutils literal notranslate"><span class="pre">Clear</span></code>, or by a scene change. A force from
+<code class="docutils literal notranslate"><span class="pre">Debug.AddForce</span></code> is destroyed by its removal, by a scene change, or with the part it is applied
+to. The server also removes what a client created when that client disconnects.</p>
 <p>An object for something carried by a part lives as long as that part. A RemoteTech antenna, an
 Infernal Robotics servo, a LaserDist laser and a docking camera are destroyed once their part
 is destroyed, or once the part loses the module that provides them.</p>

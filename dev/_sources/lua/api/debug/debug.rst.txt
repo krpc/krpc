@@ -10,7 +10,8 @@ Debug
 
 Provides functionality to modify the state of the simulation directly, in ways
 the game normally does not allow: teleporting a vessel, setting its attitude,
-refilling its tanks and enabling the game's cheat options.
+applying forces to its parts, refilling its tanks and enabling the game's cheat
+options.
 
 .. note::
 
@@ -178,6 +179,40 @@ refilling its tanks and enabling the game's cheat options.
 
       The whole vessel is put into a rigid rotation about its center of mass, so it spins in
       place rather than shearing apart or translating.
+
+
+
+
+.. staticmethod:: add_force(part, force, position, reference_frame)
+
+   Exert a constant force on a part, acting at the given position.
+
+   :param SpaceCenter.Part part: The part to apply the force to.
+   :param Tuple force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   :param Tuple position: The position at which the force acts, as a vector.
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the force and position are in.
+   :returns: An object that can be used to remove or modify the force.
+   :rtype: :class:`SpaceCenter.Force`
+
+   .. note::
+
+      The force is removed when the client that added it disconnects.
+
+
+
+
+.. staticmethod:: instantaneous_force(part, force, position, reference_frame)
+
+   Exert an instantaneous force on a part, acting at the given position.
+
+   :param SpaceCenter.Part part: The part to apply the force to.
+   :param Tuple force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   :param Tuple position: The position at which the force acts, as a vector.
+   :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the force and position are in.
+
+   .. note::
+
+      The force is applied instantaneously in a single physics update.
 
 
 

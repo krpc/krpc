@@ -1209,6 +1209,8 @@ Part
 
    .. method:: add_force(force, position, reference_frame)
 
+      .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
+
       Exert a constant force on the part, acting at the given position.
 
       :param Tuple force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
@@ -1222,6 +1224,8 @@ Part
          The force is removed when the client that added it disconnects.
 
    .. method:: instantaneous_force(force, position, reference_frame)
+
+      .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
 
       Exert an instantaneous force on the part, acting at the given position.
 
@@ -1323,7 +1327,7 @@ Part
 
 .. class:: Force
 
-   Obtained by calling :meth:`SpaceCenter.Part.add_force`.
+   Obtained by calling ``Debug.AddForce``.
 
    .. attribute:: part: SpaceCenter.Part
 

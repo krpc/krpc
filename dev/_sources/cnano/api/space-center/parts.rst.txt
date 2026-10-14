@@ -1164,6 +1164,8 @@ Part
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_AddForce(krpc_connection_t connection, krpc_SpaceCenter_Force_t * result, const krpc_tuple_double_double_double_t * force, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
+      .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
+
       Exert a constant force on the part, acting at the given position.
 
       :Parameters:
@@ -1181,6 +1183,8 @@ Part
          The force is removed when the client that added it disconnects.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_InstantaneousForce(krpc_connection_t connection, const krpc_tuple_double_double_double_t * force, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
 
       Exert an instantaneous force on the part, acting at the given position.
 
@@ -1282,7 +1286,7 @@ Part
 
 .. type:: krpc_SpaceCenter_Force_t
 
-   Obtained by calling :func:`krpc_SpaceCenter_Part_AddForce`.
+   Obtained by calling ``Debug.AddForce``.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Force_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
 

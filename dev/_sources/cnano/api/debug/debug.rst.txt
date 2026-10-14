@@ -8,7 +8,8 @@ Debug
 
 Provides functionality to modify the state of the simulation directly, in ways
 the game normally does not allow: teleporting a vessel, setting its attitude,
-refilling its tanks and enabling the game's cheat options.
+applying forces to its parts, refilling its tanks and enabling the game's cheat
+options.
 
 .. note::
 
@@ -226,6 +227,49 @@ refilling its tanks and enabling the game's cheat options.
 
       The whole vessel is put into a rigid rotation about its center of mass, so it spins in
       place rather than shearing apart or translating.
+
+
+
+
+.. function:: krpc_error_t krpc_Debug_AddForce(krpc_connection_t connection, krpc_SpaceCenter_Force_t * result, krpc_SpaceCenter_Part_t part, const krpc_tuple_double_double_double_t * force, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+   Exert a constant force on a part, acting at the given position.
+
+   :Parameters:
+
+    * **part** -- The part to apply the force to.
+    * **force** -- A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+    * **position** -- The position at which the force acts, as a vector.
+    * **referenceFrame** -- The reference frame that the force and position are in.
+
+   :returns: An object that can be used to remove or modify the force.
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The force is removed when the client that added it disconnects.
+
+
+
+
+.. function:: krpc_error_t krpc_Debug_InstantaneousForce(krpc_connection_t connection, krpc_SpaceCenter_Part_t part, const krpc_tuple_double_double_double_t * force, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+   Exert an instantaneous force on a part, acting at the given position.
+
+   :Parameters:
+
+    * **part** -- The part to apply the force to.
+    * **force** -- A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+    * **position** -- The position at which the force acts, as a vector.
+    * **referenceFrame** -- The reference frame that the force and position are in.
+
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The force is applied instantaneously in a single physics update.
 
 
 

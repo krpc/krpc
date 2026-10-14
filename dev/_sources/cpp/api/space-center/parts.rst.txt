@@ -1164,6 +1164,8 @@ Part
 
    .. function:: Force add_force(std::tuple<double, double, double> force, std::tuple<double, double, double> position, ReferenceFrame reference_frame)
 
+      .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
+
       Exert a constant force on the part, acting at the given position.
 
       :Parameters:
@@ -1181,6 +1183,8 @@ Part
          The force is removed when the client that added it disconnects.
 
    .. function:: void instantaneous_force(std::tuple<double, double, double> force, std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+
+      .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
 
       Exert an instantaneous force on the part, acting at the given position.
 
@@ -1283,7 +1287,7 @@ Part
 
 .. class:: Force
 
-   Obtained by calling :func:`Part::add_force`.
+   Obtained by calling ``Debug.AddForce``.
 
    .. function:: Part part()
 
