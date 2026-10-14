@@ -7,7 +7,7 @@
   instead of failing to connect (#1066)
 - **Breaking:** Support `Types.none` for any nullable type (#1017)
 - Add `krpc.connect_local`, which connects to a server on the same machine over a unix domain
-  socket. On Windows this needs the `luasocket-unix-windows` rock, now a dependency (#1065)
+  socket, on Linux and macOS (#1065)
 - Fix a service failing to load when one of its procedures defaults to a member of an
   enumeration from a service that had not been loaded yet (#1044)
 - Add `krpc.limits`, naming the extremes of the numeric types kRPC carries over the wire, such
@@ -17,6 +17,11 @@
 - Require luasocket 3.0 or later (#1060)
 - Fix a type occasionally being built a second time, leaving an enumeration or class type in a
   service unusable (#1068)
+- Fix the client assigning global variables, such as `data` and `typ`, which clashed with a
+  script's own (#1142)
+- Support Lua 5.3 and 5.4, where 64-bit values decode to exact integers (#1142)
+- Depend on `lua-protobuf` in place of `protobuf` (#1142)
+- **Breaking:** Return messages, such as the server status, as plain tables (#1142)
 
 ## [v0.6.0]
 - Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor` (#850)
