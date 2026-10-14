@@ -73,7 +73,7 @@ function Client:_build_request(service, procedure, args, param_types)
 
   for i,value in ipairs(args) do
     local typ = param_types[i]
-    if value == Types.none then
+    if rawequal(value, Types.none) then
       -- A null argument is signaled out-of-band by is_null; the value field is left unset
       arguments[i] = Types.none
     else

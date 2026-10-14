@@ -341,6 +341,19 @@ function TestTypes:test_struct_comparison()
   luaunit.assertFalse(two < one)
 end
 
+function TestTypes:test_struct_and_class_compare_unequal_to_other_values()
+  local types = Types()
+  local struct_type = types:struct_type('ServiceName', 'EqualityStruct')
+  struct_type:set_fields({{'count', types:uint32_type()}})
+  local class_type = types:class_type('ServiceName', 'EqualityClass')
+  for _, value in ipairs({struct_type.lua_type(1), class_type.lua_type(1)}) do
+    luaunit.assertFalse(Types.none == value)
+    luaunit.assertFalse(value == Types.none)
+    luaunit.assertFalse({} == value)
+    luaunit.assertFalse(value == {})
+  end
+end
+
 function TestTypes:test_struct_ordering_of_a_field_that_orders_neither_way()
   local types = Types()
   local typ = types:struct_type('ServiceName', 'NanStruct')

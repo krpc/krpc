@@ -5,6 +5,8 @@ local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
+local compat = require 'krpc.compat'
+local limits = require 'krpc.limits'
 local platform = require 'krpc.platform'
 local Types = require 'krpc.types'
 
@@ -93,7 +95,7 @@ function TestEncodeDecode:test_uint32()
     {1, '01'},
     {42, '2a'},
     {300, 'ac02'},
-    {math.huge, 'ffffffffffffffff7f'}
+    {4294967295, 'ffffffff0f'}
   }
   _run_test_encode_value(types:uint32_type(), cases)
   _run_test_decode_value(types:uint32_type(), cases)
@@ -112,9 +114,79 @@ function TestEncodeDecode:test_uint64()
   }
   _run_test_encode_value(types:uint64_type(), cases)
   _run_test_decode_value(types:uint64_type(), cases)
+end
 
-  luaunit.assertError(encoder.encode, -1, types:uint64_type())
-  luaunit.assertError(encoder.encode, -849, types:uint64_type())
+-- Values a 64-bit integer type holds exactly and a double does not. tostring shows an integer
+-- without a fractional part or an exponent, so comparing it checks the value is an integer.
+local function _run_test_64_bit_values(typ, cases)
+  for _, case in ipairs(cases) do
+    luaunit.assertEquals(platform.hexlify(encoder.encode(case[1], typ)), case[2])
+    luaunit.assertEquals(tostring(decoder.decode(platform.unhexlify(case[2]), typ)),
+                         tostring(case[1]))
+  end
+end
+
+function TestEncodeDecode:test_sint64_extremes()
+  luaunit.skipIf(not compat.native_integers, 'numbers have no integer type')
+  _run_test_64_bit_values(types:sint64_type(), {
+    {compat.maxinteger, 'feffffffffffffffff01'},
+    {compat.mininteger, 'ffffffffffffffffff01'},
+    {compat.maxinteger - 1, 'fcffffffffffffffff01'},
+  })
+end
+
+-- A uint64 above 2^63 - 1 wraps to a negative integer, and encodes as its bits
+function TestEncodeDecode:test_uint64_extremes()
+  luaunit.skipIf(not compat.native_integers, 'numbers have no integer type')
+  _run_test_64_bit_values(types:uint64_type(), {
+    {compat.maxinteger, 'ffffffffffffffff7f'},
+    {compat.mininteger, '80808080808080808001'},
+    {-1, 'ffffffffffffffffff01'},
+  })
+end
+
+-- Without an integer type, the 64-bit maxima round up to 2^63 and 2^64, and a uint64 above
+-- 2^63 - 1 is a double
+function TestEncodeDecode:test_64_bit_values_without_integers()
+  luaunit.skipIf(compat.native_integers, 'numbers have an integer type')
+  _run_test_64_bit_values(types:sint64_type(), {
+    {limits.SINT64_MAX, 'feffffffffffffffff01'},
+    {limits.SINT64_MIN, 'ffffffffffffffffff01'},
+  })
+  _run_test_64_bit_values(types:uint64_type(), {
+    {limits.UINT64_MAX, 'ffffffffffffffffff01'},
+    {9223372036854775808, '80808080808080808001'},
+    {18446744073709549568, '80f0ffffffffffffff01'},
+  })
+end
+
+-- A number with an integer value is encoded as that integer, and any other is rejected
+function TestEncodeDecode:test_integer_types_take_integer_values()
+  luaunit.skipIf(not compat.native_integers, 'numbers have no integer type')
+  for _, typ in ipairs({types:sint32_type(), types:sint64_type(),
+                        types:uint32_type(), types:uint64_type()}) do
+    luaunit.assertEquals(encoder.encode(42.0, typ), encoder.encode(42, typ))
+    luaunit.assertErrorMsgContains('Value must be an integer, got 4.2', encoder.encode, 4.2, typ)
+    luaunit.assertErrorMsgContains('Value must be an integer, got inf',
+                                   encoder.encode, math.huge, typ)
+  end
+end
+
+-- Without an integer type, math.huge stands for the largest value of an unsigned type
+function TestEncodeDecode:test_unsigned_huge()
+  luaunit.skipIf(compat.native_integers, 'numbers have an integer type')
+  for _, typ in ipairs({types:uint32_type(), types:uint64_type()}) do
+    _run_test_encode_value(typ, {{math.huge, 'ffffffffffffffff7f'}})
+    _run_test_decode_value(typ, {{math.huge, 'ffffffffffffffff7f'}})
+  end
+end
+
+function TestEncodeDecode:test_negative_unsigned_values()
+  luaunit.assertError(encoder.encode, -1, types:uint32_type())
+  if not compat.native_integers then
+    luaunit.assertError(encoder.encode, -1, types:uint64_type())
+    luaunit.assertError(encoder.encode, -849, types:uint64_type())
+  end
 end
 
 function TestEncodeDecode:test_bool()

@@ -1,6 +1,8 @@
 local List = require 'pl.List'
 local Set = require 'pl.Set'
 local Map = require 'pl.Map'
+local utils = require 'pl.utils'
+local compat = require 'krpc.compat'
 local platform = require 'krpc.platform'
 local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
@@ -14,6 +16,9 @@ decoder.OK_MESSAGE = '\79\75'
 local _unpack = protobuf.unpack
 local _decode_message = protobuf.decode_inside_call
 
+-- Without an integer type, the encoder writes math.huge as 2^63 - 1, which reads back as it
+local _huge = not compat.native_integers and math.huge or nil
+
 local function _decode_varint(data)
   -- A varint that fits in one byte is most of the values a call carries, and reading it needs
   -- no call into the C decoder
@@ -21,8 +26,8 @@ local function _decode_varint(data)
   if byte and byte < 128 then
     return byte
   end
-  if data == '\255\255\255\255\255\255\255\255\127' then
-    return math.huge
+  if _huge and data == '\255\255\255\255\255\255\255\255\127' then
+    return _huge
   end
   return _unpack(data, 'v') or 0
 end
@@ -43,6 +48,16 @@ local function _decode_signed(data)
   return _unpack(data, 'j') or 0
 end
 
+-- Decode a uint64. Without an integer type, the decoder reads a value above 2^63 - 1 as a
+-- negative one, and adding 2^64 gives back the nearest double.
+local function _decode_uint64(data)
+  local value = _decode_varint(data)
+  if value < 0 and not compat.native_integers then
+    value = value + 18446744073709551616
+  end
+  return value
+end
+
 -- The decoder for each value type, by type code. Decoding a value starts here, and a table
 -- resolves it in one lookup, where testing a type's class walks its ancestry every time.
 local _value_decoders = {
@@ -51,7 +66,7 @@ local _value_decoders = {
   [Types.SINT32] = _decode_signed,
   [Types.SINT64] = function(data) return _unpack(data, 'J') or 0 end,
   [Types.UINT32] = _decode_varint,
-  [Types.UINT64] = _decode_varint,
+  [Types.UINT64] = _decode_uint64,
   [Types.BOOL] = function(data) return _decode_varint(data) ~= 0 end,
   [Types.STRING] = _decode_string,
   [Types.BYTES] = _decode_string,
@@ -206,7 +221,7 @@ function _decode(data, typ)
     for i = 1, #field_types do
       values[i] = _decode_item(items[i], field_types[i])
     end
-    return typ.lua_type(unpack(values))
+    return typ.lua_type(utils.unpack(values))
   elseif typ:is_a(Types.MessageType) then
     return _decode_message(typ.message_type, data)
   end

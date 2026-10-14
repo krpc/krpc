@@ -415,9 +415,9 @@ filegroup(
 http_archive(
     name = "lua",
     build_file = "//tools/build/lua:lua.BUILD",
-    sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333",
-    strip_prefix = "lua-5.1.5",
-    url = "https://www.lua.org/ftp/lua-5.1.5.tar.gz",
+    sha256 = "2335b6c582a52654f94612bf10d2f4672805d05329aa6568b1d8cd9e5c6fb8e6",
+    strip_prefix = "lua-5.4.9",
+    url = "https://www.lua.org/ftp/lua-5.4.9.tar.gz",
 )
 
 http_archive(

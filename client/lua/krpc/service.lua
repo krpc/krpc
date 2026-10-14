@@ -5,6 +5,7 @@ local bind1 = require 'pl.func'.bind1
 local List = require 'pl.List'
 local Set = require 'pl.Set'
 local Map = require 'pl.Map'
+local compat = require 'pl.compat'
 local Types = require 'krpc.types'
 local Attributes = require 'krpc.attributes'
 local decoder = require 'krpc.decoder'
@@ -34,7 +35,7 @@ end
 
 local KEYWORDS = Set{
   'and', 'break', 'do', 'else', 'elseif', 'end', 'false', 'for', 'function', 'if', 'in',
-  'local', 'nil', 'not', 'or', 'repeat', 'return', 'then', 'true', 'until', 'while'
+  'local', 'nil', 'not', 'or', 'repeat', 'return', 'then', 'true', 'until', 'while', 'goto'
 }
 
 -- Given a list of parameter names, append underscores to reserved keywords
@@ -73,7 +74,7 @@ local function _construct_func(invoke, service_name, procedure_name, prefix_para
   local func = 'return function (' .. stringx.join(',', prefix_param_names..param_names) .. ') ' .. body .. ' end'
   local wrapper =
     'return function (invoke,service_name,procedure_name,param_types,return_type,Map) ' .. func .. ' end'
-  local callable = assert(loadstring(wrapper, '_construct_func('..service_name..','..procedure_name..')'))()
+  local callable = assert(compat.load(wrapper, '_construct_func('..service_name..','..procedure_name..')'))()
   return callable(invoke,service_name,procedure_name,param_types,return_type,Map)
 end
 

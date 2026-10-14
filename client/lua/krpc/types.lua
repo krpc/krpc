@@ -4,6 +4,7 @@ local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local seq = require 'pl.seq'
 local stringx = require 'pl.stringx'
+local utils = require 'pl.utils'
 local protobuf = require 'krpc.protobuf'
 
 local Types = class()
@@ -298,7 +299,7 @@ function Types:coerce_to(value, typ)
   -- Coerce a value to the specified type (specified by a type object).
   --        Raises an error if the coercion is not possible.
   -- A null stands at a position that can hold one, whatever the type there is
-  if typ.nullable and value == Types.none then
+  if typ.nullable and rawequal(value, Types.none) then
     return Types.none
   end
   if type(value) == typ.lua_type then
@@ -313,7 +314,7 @@ function Types:coerce_to(value, typ)
   end
   -- Collection types
   -- Coerce tuples to lists
-  if type(value) == 'table' and value ~= Types.none and typ:is_a(Types.ListType) then
+  if type(value) == 'table' and not rawequal(value, Types.none) and typ:is_a(Types.ListType) then
     local result = typ.lua_type()
     for _, x in ipairs(value) do
       result:append(self:coerce_to(x, typ.value_type))
@@ -321,7 +322,8 @@ function Types:coerce_to(value, typ)
     return result
   end
   -- Coerce lists (with appropriate number of elements) to tuples
-  if type(value) == 'table' and value ~= Types.none and typ:is_a(Types.TupleType) and #(value) == #(typ.value_types) then
+  if type(value) == 'table' and not rawequal(value, Types.none) and typ:is_a(Types.TupleType) and
+     #(value) == #(typ.value_types) then
     local result = typ.lua_type()
     for i, x in ipairs(value) do
       result:append(self:coerce_to(x, typ.value_types[i]))
@@ -330,12 +332,13 @@ function Types:coerce_to(value, typ)
   end
   -- Coerce lists (with one element per field) to structs, taking their elements as the
   -- fields in order
-  if type(value) == 'table' and value ~= Types.none and typ:is_a(Types.StructType) and #(value) == #(typ.field_types) then
+  if type(value) == 'table' and not rawequal(value, Types.none) and typ:is_a(Types.StructType) and
+     #(value) == #(typ.field_types) then
     local values = {}
     for i, x in ipairs(value) do
       values[i] = self:coerce_to(x, typ.field_types[i])
     end
-    return typ.lua_type(unpack(values))
+    return typ.lua_type(utils.unpack(values))
   end
   error('Failed to coerce value ' .. tostring(value) .. ' of type ' .. type(value) .. ' to type ' .. tostring(typ))
 end
@@ -660,7 +663,12 @@ function Types.StructBase:_init(...)
   end
 end
 
+-- From Lua 5.3 on, the comparison calls the metamethod of either operand, so either may be a
+-- value of another kind
 function Types.StructBase:__eq(other)
+  if not (Types.StructBase:class_of(self) and Types.StructBase:class_of(other)) then
+    return false
+  end
   for _, name in ipairs(self._field_names) do
     if self[name] ~= other[name] then
       return false
@@ -706,7 +714,11 @@ function Types.ClassBase:_init(object_id)
   self._object_id = object_id
 end
 
+-- Either operand may be a value of another kind, as for a structure
 function Types.ClassBase:__eq(other)
+  if not (Types.ClassBase:class_of(self) and Types.ClassBase:class_of(other)) then
+    return false
+  end
   return self._object_id == other._object_id
 end
 

@@ -15,10 +15,14 @@
 #define linit_c
 #define LUA_LIB
 
+#include "lprefix.h"
+
+#include <stddef.h>
+
 #include "lua.h"
 
-#include "lauxlib.h"
 #include "lualib.h"
+#include "lauxlib.h"
 
 int luaopen_lfs(lua_State *L);
 int luaopen_mime_core(lua_State *L);
@@ -28,14 +32,16 @@ int luaopen_pb_slice(lua_State *L);
 int luaopen_socket_core(lua_State *L);
 int luaopen_socket_unix(lua_State *L);
 
-static const luaL_Reg lualibs[] = {
-  {"", luaopen_base},
+static const luaL_Reg loadedlibs[] = {
+  {LUA_GNAME, luaopen_base},
   {LUA_LOADLIBNAME, luaopen_package},
+  {LUA_COLIBNAME, luaopen_coroutine},
   {LUA_TABLIBNAME, luaopen_table},
   {LUA_IOLIBNAME, luaopen_io},
   {LUA_OSLIBNAME, luaopen_os},
   {LUA_STRLIBNAME, luaopen_string},
   {LUA_MATHLIBNAME, luaopen_math},
+  {LUA_UTF8LIBNAME, luaopen_utf8},
   {LUA_DBLIBNAME, luaopen_debug},
   {NULL, NULL}
 };
@@ -53,17 +59,15 @@ static const luaL_Reg preloadedlibs[] = {
 
 LUALIB_API void luaL_openlibs (lua_State *L) {
   const luaL_Reg *lib;
-  for (lib = lualibs; lib->func; lib++) {
-    lua_pushcfunction(L, lib->func);
-    lua_pushstring(L, lib->name);
-    lua_call(L, 1, 0);
+  for (lib = loadedlibs; lib->func; lib++) {
+    luaL_requiref(L, lib->name, lib->func, 1);
+    lua_pop(L, 1);
   }
   /* package.preload, which luaopen_package has just created */
-  lua_getfield(L, LUA_GLOBALSINDEX, LUA_LOADLIBNAME);
-  lua_getfield(L, -1, "preload");
+  luaL_getsubtable(L, LUA_REGISTRYINDEX, LUA_PRELOAD_TABLE);
   for (lib = preloadedlibs; lib->func; lib++) {
     lua_pushcfunction(L, lib->func);
     lua_setfield(L, -2, lib->name);
   }
-  lua_pop(L, 2);
+  lua_pop(L, 1);
 }

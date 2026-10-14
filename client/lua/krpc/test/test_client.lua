@@ -8,6 +8,7 @@ local List = require 'pl.List'
 local Map = require 'pl.Map'
 local Set = require 'pl.Set'
 local krpc = require 'krpc.init'
+local compat = require 'krpc.compat'
 local Types = require 'krpc.types'
 
 local TestClient = class(ServerTest)
@@ -39,6 +40,13 @@ function TestClient:test_value_parameters()
   luaunit.assertEquals('False', self.conn.test_service.bool_to_string(false))
   luaunit.assertEquals(12345, self.conn.test_service.string_to_int32('12345'))
   luaunit.assertEquals('deadbeef', self.conn.test_service.bytes_to_hex_string('\222\173\190\239'))
+end
+
+-- From Lua 5.3 on, a 64-bit integer reaches the server exactly
+function TestClient:test_64_bit_extremes()
+  luaunit.skipIf(not compat.native_integers, 'numbers have no integer type')
+  luaunit.assertEquals('9223372036854775807', self.conn.test_service.int64_to_string(krpc.limits.SINT64_MAX))
+  luaunit.assertEquals('-9223372036854775808', self.conn.test_service.int64_to_string(krpc.limits.SINT64_MIN))
 end
 
 function TestClient:test_multiple_value_parameters()

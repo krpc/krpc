@@ -1,5 +1,6 @@
 local buffer = require 'pb.buffer'
 local tablex = require 'pl.tablex'
+local compat = require 'krpc.compat'
 local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
 
@@ -15,6 +16,9 @@ for value = 0, 127 do
   _small_varints[value] = string.char(value)
 end
 
+local _tointeger = compat.tointeger
+
+-- Encode an unsigned value. Without an integer type, math.huge stands for the largest value.
 local function _encode_varint(x)
   local small = _small_varints[x]
   if small then
@@ -27,6 +31,37 @@ local function _encode_varint(x)
   else
     return _pack('v', x)
   end
+end
+
+-- Without an integer type, pack reads a double as an int64, which holds neither 2^63 nor 2^64.
+-- SINT64_MAX and UINT64_MAX round up to these, so we write the encoding of each maximum.
+local _TWO_TO_63 = 9223372036854775808
+local _TWO_TO_64 = 18446744073709551616
+local _SINT64_MAX_ENCODED = _pack('v', -2)
+local _UINT64_MAX_ENCODED = _pack('v', -1)
+
+local function _encode_sint64(x)
+  x = _tointeger(x)
+  if x == _TWO_TO_63 and not compat.native_integers then
+    return _SINT64_MAX_ENCODED
+  end
+  return _pack('J', x)
+end
+
+-- Encode a uint64. A value above 2^63 - 1 is encoded as the bits of the negative int64 it
+-- wraps to.
+local function _encode_uint64(x)
+  x = _tointeger(x)
+  if compat.native_integers then
+    if x < 0 then
+      return _pack('v', x)
+    end
+  elseif x == _TWO_TO_64 then
+    return _UINT64_MAX_ENCODED
+  elseif x >= _TWO_TO_63 and x < _TWO_TO_64 then
+    return _pack('v', x - _TWO_TO_64)
+  end
+  return _encode_varint(x)
 end
 
 local function _encode_float(value)
@@ -42,10 +77,10 @@ end
 local _value_encoders = {
   [Types.DOUBLE] = _encode_double,
   [Types.FLOAT] = _encode_float,
-  [Types.SINT32] = function(x) return _pack('j', x) end,
-  [Types.SINT64] = function(x) return _pack('J', x) end,
-  [Types.UINT32] = _encode_varint,
-  [Types.UINT64] = _encode_varint,
+  [Types.SINT32] = function(x) return _pack('j', _tointeger(x)) end,
+  [Types.SINT64] = _encode_sint64,
+  [Types.UINT32] = function(x) return _encode_varint(_tointeger(x)) end,
+  [Types.UINT64] = _encode_uint64,
   [Types.BOOL] = function(x) return _encode_varint(x and 1 or 0) end,
   [Types.STRING] = function(x) return _encode_varint(x:len()) .. x end,
   [Types.BYTES] = function(x) return _encode_varint(x:len()) .. x end,
@@ -94,7 +129,7 @@ end
 -- nullable position carries a presence bool before its value, and holds nothing else when that
 -- bool is false.
 local function _encode_item(x, typ)
-  local absent = x == nil or x == Types.none
+  local absent = x == nil or rawequal(x, Types.none)
   if not typ.nullable then
     -- A position that cannot hold null takes a value of its type and nothing else
     if absent then
@@ -189,7 +224,7 @@ function encoder.encode_request(service, procedure, arguments)
   for i = 1, #arguments do
     local value = arguments[i]
     local argument
-    if value == Types.none then
+    if rawequal(value, Types.none) then
       argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _ARGUMENT_IS_NULL .. '\1'
     else
       argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _delimited(_ARGUMENT_VALUE, value)

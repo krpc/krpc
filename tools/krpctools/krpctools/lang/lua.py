@@ -31,8 +31,8 @@ class LuaLanguage(Language):
     }
 
     # Lua builds NaN by dividing zero by zero and has math.huge for the infinities, but
-    # names no finite extreme of its own: math.maxinteger and math.mininteger arrive in
-    # Lua 5.3 and the client targets 5.1 and 5.2. Those come from krpc.limits.
+    # names no finite extreme that every version the client runs on has: math.maxinteger
+    # and math.mininteger arrive in Lua 5.3. Those come from krpc.limits.
     special_values = {
         (Type.DOUBLE, "nan"): "0/0",
         (Type.DOUBLE, "inf"): "math.huge",

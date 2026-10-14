@@ -1,4 +1,4 @@
-"""Lua 5.1.5, built from the distribution's sources.
+"""Lua 5.4.9, built from the distribution's sources.
 
 The C modules the client needs are linked into the interpreter rather than loaded from
 shared objects, so the core is built without the dynamic loader and //tools/build/lua
@@ -26,7 +26,6 @@ cc_library(
             # below; the bytecode compiler is not wanted at all.
             "src/lua.c",
             "src/luac.c",
-            "src/print.c",
         ],
     ),
     hdrs = glob(["src/*.h"]),
