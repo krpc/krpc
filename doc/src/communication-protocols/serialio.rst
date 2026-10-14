@@ -4,8 +4,14 @@ Protocol Buffers over Serial IO
 This communication protocol allows microcontrollers and other devices that communicate over a serial
 port to interact with a kRPC server, for example an Arduino.
 
-.. note:: If a client library is available for your language, you do not need to implement this
-          protocol.
+.. note::
+
+   If a client library is available for your language, you do not need to implement this protocol.
+
+.. note::
+
+   The serial IO protocol carries RPCs only. Streams and events are not available, and the stream
+   procedures, such as ``KRPC.AddStream`` and ``KRPC.RemoveStream``, return an error.
 
 Configuring the Server
 ----------------------
@@ -46,11 +52,13 @@ from the server after the handshake are wrapped in a ``MultiplexedResponse`` mes
    :end-at: StreamUpdate stream_update = 2;
    :append: }
 
+The server leaves the ``stream_update`` field of a ``MultiplexedResponse`` unset.
+
 Connecting to the Server
 ------------------------
 
-There is a single serial port connection for both RPC calls and stream updates. To establish a
-connection, a client must do the following:
+There is a single serial port connection for RPC calls. To establish a connection, a client must
+do the following:
 
 1. Open a connection to the serial port.
 
@@ -80,15 +88,6 @@ connection, a client must do the following:
    its first bytes are received. If it does not arrive in time, the server responds with the
    ``TIMEOUT`` status.
 
-Receiving Stream Updates
-------------------------
-
-Clients can receive :ref:`communication-protocol-streams` over the same serial port connection used
-for RPC calls. Stream updates arrive as ``MultiplexedResponse`` messages with the ``stream_update``
-field populated. After sending an RPC request, the client should inspect each received
-``MultiplexedResponse`` to determine whether it contains a ``response`` (the result of an RPC call)
-or a ``stream_update`` (a stream result).
-
 Invoking Remote Procedures
 --------------------------
 
@@ -111,14 +110,13 @@ in each direction, and the two directions behave differently when their buffer f
   server stops reading from the port until the game catches up. The data is kept, and the port
   carries it more slowly.
 
-* Data written by the game is buffered until the port has sent it. When this buffer fills, which
-  means the game has been producing data faster than the port can send for a sustained period,
-  the server drops the connection and stops. It can be started again from the in-game
-  configuration window. The easiest way to hit this limit is to request streams whose updates add
-  up to more than the port's data rate, as an update to a stream is sent every game update.
+* Data written by the game is buffered until the port has sent it. The game writes only responses,
+  so this buffer fills when a client sends requests faster than it reads their responses. The
+  server then drops the connection and stops. It can be started again from the in-game
+  configuration window.
 
-To stay within the port's capacity, keep the number and size of streams small relative to the baud
-rate, or configure a higher baud rate.
+To keep the write buffer from filling, read each response before sending the next request. A higher
+baud rate moves more data through the port.
 
 Examples
 --------
