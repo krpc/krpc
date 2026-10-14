@@ -91,11 +91,13 @@ Reference
    just as :func:`krpc.connect` does, and the connection behaves identically
    thereafter.
 
-   Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and
-   Windows Server 2019 or later. This needs luasocket's ``socket.unix`` module,
-   which luasocket builds itself everywhere but Windows; there it comes from the
-   ``luasocket-unix-windows`` rock, which ``luarocks install krpc`` pulls in. A
-   luasocket built by hand needs that module built with it.
+   This needs luasocket's ``socket.unix`` module, which luasocket builds on Linux
+   and macOS.
+
+   .. note::
+
+      luasocket does not yet build ``socket.unix`` on Windows. Connect with
+      :func:`krpc.connect` there instead.
 
    :param string name: A descriptive name for the connection. This is passed to
                        the server and appears, for example, in the client
