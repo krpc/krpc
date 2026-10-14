@@ -1265,9 +1265,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Force AddForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
         {
-            var obj = new Force (this, force, position, referenceFrame);
-            PartForcesAddon.Add (obj);
-            return obj;
+            return Force.Add (this, force, position, referenceFrame);
         }
 
         /// <summary>
@@ -1282,7 +1280,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod (GameScene = GameScene.Flight)]
         public void InstantaneousForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
         {
-            PartForcesAddon.AddInstantaneous (new Force (this, force, position, referenceFrame));
+            Force.AddInstantaneous (this, force, position, referenceFrame);
         }
 
         /// <summary>

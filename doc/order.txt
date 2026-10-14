@@ -2373,6 +2373,8 @@ Debug.SetPitchHeadingRoll
 Debug.SetDirection
 Debug.ApplyRotation
 Debug.SetAngularVelocity
+Debug.AddForce
+Debug.InstantaneousForce
 Debug.FillAllResources
 Debug.FillResources
 Debug.InfinitePropellant
