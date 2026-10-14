@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -27,25 +26,25 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'java/client';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -60,6 +59,7 @@
     <link rel="next" title="KRPC API" href="api/krpc.html" />
     <link rel="prev" title="Java" href="../java.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
   
@@ -109,7 +109,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -261,7 +261,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -292,15 +292,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -326,7 +326,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -335,7 +335,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -495,15 +495,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -527,7 +527,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -540,7 +540,7 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Java Client</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Java Client</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/krpc/expressions.html">Expressions</a></li>
@@ -718,7 +718,7 @@ It requires Java 17 or later.</p>
 <span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">KRPC</span><span class="w"> </span><span class="n">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
-<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Connected to kRPC version &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="na">getStatus</span><span class="p">().</span><span class="na">getVersion</span><span class="p">());</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Connected to kRPC version "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="na">getStatus</span><span class="p">().</span><span class="na">getVersion</span><span class="p">());</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -726,7 +726,7 @@ It requires Java 17 or later.</p>
 </div>
 <p>To compile this program using javac on the command line, save the source as <code class="docutils literal notranslate"><span class="pre">Example.java</span></code> and run
 the following:</p>
-<pre class="literal-block">javac -cp krpc-java-0.7.0-742-de227f8.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java</pre>
+<pre class="literal-block">javac -cp krpc-java-0.7.0-756-c2120cc.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java</pre>
 <p>Note that you may need to change the paths to the JAR files.</p>
 <section id="connecting-to-the-server">
 <h3>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h3>
@@ -742,7 +742,7 @@ settings, and also a descriptive name for the connection, as follows:</p>
 
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Connecting</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">&quot;Remote example&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my.domain.name&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1001</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Remote example"</span><span class="p">,</span><span class="w"> </span><span class="s">"my.domain.name"</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1001</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">KRPC</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getStatus</span><span class="p">().</span><span class="na">getVersion</span><span class="p">());</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
@@ -772,7 +772,7 @@ vessel and then prints out its altitude:</p>
 
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RemoteProcedures</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">&quot;Vessel Name&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Vessel Name"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 <span class="w">      </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
 <span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span>
@@ -809,8 +809,8 @@ example, the following reads the vessel’s altitude and speed together:</p>
 
 <span class="w">      </span><span class="c1">// Get the remote procedure calls as message objects,</span>
 <span class="w">      </span><span class="c1">// so they can be passed to the server</span>
-<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getMeanAltitude&quot;</span><span class="p">);</span>
-<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getSpeed&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">);</span>
+<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getSpeed"</span><span class="p">);</span>
 
 <span class="w">      </span><span class="c1">// Build a function that reads the altitude and the speed</span>
 <span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">createTuple</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span>
@@ -820,7 +820,7 @@ example, the following reads the vessel’s altitude and speed together:</p>
 <span class="w">      </span><span class="c1">// Run the function once, so both values come from the same physics tick</span>
 <span class="w">      </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 <span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span>
-<span class="w">          </span><span class="s">&quot;Altitude: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getValue0</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; m, speed: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getValue1</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; m/s&quot;</span><span class="p">);</span>
+<span class="w">          </span><span class="s">"Altitude: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getValue0</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" m, speed: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getValue1</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" m/s"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -886,7 +886,7 @@ closed.</p>
 <span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 <span class="w">      </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
 <span class="w">      </span><span class="n">ReferenceFrame</span><span class="w"> </span><span class="n">refframe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getBody</span><span class="p">().</span><span class="na">getReferenceFrame</span><span class="p">();</span>
-<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">vesselStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;position&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">refframe</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">vesselStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="s">"position"</span><span class="p">,</span><span class="w"> </span><span class="n">refframe</span><span class="p">);</span>
 <span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">vesselStream</span><span class="p">.</span><span class="na">get</span><span class="p">());</span>
 <span class="w">      </span><span class="p">}</span>
@@ -936,7 +936,7 @@ when the stream ends. You can wait on it to block the current thread until one o
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 <span class="w">      </span><span class="n">Control</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">getControl</span><span class="p">();</span>
-<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">abort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getAbort&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">abort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="s">"getAbort"</span><span class="p">);</span>
 <span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">abort</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">abort</span><span class="p">.</span><span class="na">get</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">          </span><span class="n">abort</span><span class="p">.</span><span class="na">waitForUpdate</span><span class="p">();</span>
@@ -976,14 +976,14 @@ should return nothing.</p>
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 <span class="w">      </span><span class="n">Control</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">getControl</span><span class="p">();</span>
-<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">abort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getAbort&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">abort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="s">"getAbort"</span><span class="p">);</span>
 <span class="w">      </span><span class="n">abort</span><span class="p">.</span><span class="na">addCallback</span><span class="p">(</span>
 <span class="w">        </span><span class="p">(</span><span class="n">Boolean</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Abort 1 called with a value of &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="w">          </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Abort 1 called with a value of "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
 <span class="w">        </span><span class="p">});</span>
 <span class="w">      </span><span class="n">abort</span><span class="p">.</span><span class="na">addCallback</span><span class="p">(</span>
 <span class="w">        </span><span class="p">(</span><span class="n">Boolean</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Abort 2 called with a value of &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="w">          </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Abort 2 called with a value of "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
 <span class="w">        </span><span class="p">});</span>
 
 <span class="w">      </span><span class="c1">// Keep the program running...</span>
@@ -1021,16 +1021,16 @@ synchronization.</p>
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 <span class="w">      </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">getParts</span><span class="p">().</span><span class="na">getRoot</span><span class="p">();</span>
-<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">temperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">part</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getTemperature&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">temperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">part</span><span class="p">,</span><span class="w"> </span><span class="s">"getTemperature"</span><span class="p">);</span>
 <span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">temperature</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">          </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">temperature</span><span class="p">.</span><span class="na">waitForUpdate</span><span class="p">();</span>
-<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Temperature &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">temperature</span><span class="p">.</span><span class="na">get</span><span class="p">());</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Temperature "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">temperature</span><span class="p">.</span><span class="na">get</span><span class="p">());</span>
 <span class="w">          </span><span class="p">}</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">KRPC</span><span class="p">.</span><span class="na">ObjectDestroyedException</span><span class="w"> </span><span class="n">exn</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;The part was destroyed&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"The part was destroyed"</span><span class="p">);</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
@@ -1075,16 +1075,16 @@ vessel’s altitude in kilometers:</p>
 <span class="w">      </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
 
 <span class="w">      </span><span class="c1">// Build a function that computes</span>
-<span class="w">      </span><span class="c1">// the vessel&#39;s altitude in kilometers</span>
+<span class="w">      </span><span class="c1">// the vessel's altitude in kilometers</span>
 <span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">divide</span><span class="p">(</span>
 <span class="w">          </span><span class="n">connection</span><span class="p">,</span>
-<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getMeanAltitude&quot;</span><span class="p">)),</span>
+<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">)),</span>
 <span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
 
 <span class="w">      </span><span class="c1">// Stream the value of the function</span>
 <span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 <span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Altitude: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; km&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Altitude: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" km"</span><span class="p">);</span>
 <span class="w">        </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
@@ -1128,7 +1128,7 @@ same event object, so no firing is missed between two calls. Several firings bet
 
 <span class="w">      </span><span class="c1">// Get the remote procedure call as a message object,</span>
 <span class="w">      </span><span class="c1">// so it can be passed to the server</span>
-<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getMeanAltitude&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">);</span>
 
 <span class="w">      </span><span class="c1">// Build the function on the server</span>
 <span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">greaterThan</span><span class="p">(</span>
@@ -1139,7 +1139,7 @@ same event object, so no firing is missed between two calls. Several firings bet
 <span class="w">      </span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 <span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">waitFor</span><span class="p">();</span>
-<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Altitude reached 1000m"</span><span class="p">);</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
@@ -1591,8 +1591,8 @@ the callback was added.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1613,7 +1613,6 @@ the callback was added.</p>
 
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
   </p>
 </div>
       
@@ -1633,7 +1632,7 @@ the callback was added.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

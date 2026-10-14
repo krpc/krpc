@@ -384,6 +384,8 @@ Debug service
 C-nano client
 ^^^^^^^^^^^^^
 
+* Update to protobuf v36.2 (:issue:`1139`)
+* Update to nanopb 0.4.9.2 (:issue:`1139`)
 * :breaking:`Breaking` Renumber the ``KRPC`` service's procedures, so a program built against an earlier version must be rebuilt (:issue:`1124`)
 * Support a nullable structure field, list element, tuple item and dictionary value, each generated as a type holding the value beside a ``bool`` presence flag (:issue:`1091`)
 * Support structure types, generated as a C struct with a member per field (:issue:`1066`)
@@ -399,6 +401,7 @@ C-nano client
 C# client
 ^^^^^^^^^
 
+* Update to Google.Protobuf 3.36.2 (:issue:`1139`)
 * :breaking:`Breaking` Start a stream when it is added, removing ``Stream.Start`` and ``Event.Start`` (:issue:`1122`)
 * Wait for a stream's first value in ``Stream.Get`` (:issue:`1122`)
 * Call a callback added to a stream that has a value with that value straight away (:issue:`1122`)
@@ -441,6 +444,8 @@ C# client
 C++ client
 ^^^^^^^^^^
 
+* Update to protobuf v36.2 (:issue:`1139`)
+* Update to ASIO 1.38.2 (:issue:`1139`)
 * Add ``krpc::run``, which runs a server side function within a single physics tick, passing it any arguments, and returns its value (:issue:`1129`)
 * Add ``krpc::add_stream``, which streams the value of a server side function (:issue:`1129`)
 * Add ``krpc::add_event``, which creates an event from a server side function (:issue:`1129`)
@@ -483,6 +488,7 @@ C++ client
 Java client
 ^^^^^^^^^^^
 
+* Update to protobuf-java 4.36.2 (:issue:`1139`)
 * :breaking:`Breaking` Throw ``NullPointerException`` for a null where a value is required, reported by any service, in place of ``RPCException`` (:issue:`1124`)
 * :breaking:`Breaking` Throw ``NoSuchElementException`` for a missing key, and ``IndexOutOfBoundsException`` for an index out of range, reported by any service, in place of ``RPCException`` (:issue:`1124`)
 * :breaking:`Breaking` Throw ``ArithmeticException`` for a division by zero or an overflow, and ``UnsupportedOperationException`` for an unsupported operation, reported by any service, in place of ``RPCException`` (:issue:`1124`)
@@ -530,6 +536,7 @@ Lua client
 Python client
 ^^^^^^^^^^^^^
 
+* Require protobuf 7.36.2 or later (:issue:`1139`)
 * Fix type checkers skipping the code after a name the service defines, such as ``conn.space_center.ReferenceFrame`` (:issue:`1134`)
 * Fix type checkers typing a stream value as ``object`` (:issue:`1134`)
 * Fix type checkers rejecting ``stream_port=None`` in ``krpc.connect`` (:issue:`1134`)
@@ -574,6 +581,7 @@ Python client
 krpctools
 ^^^^^^^^^
 
+* :breaking:`Breaking` Run ``krpc-servicedefs`` and ``TestServer`` on the .NET 10 runtime, in place of .NET 8 (:issue:`1139`)
 * Generate python stubs that declare a service's classes, enumerations, structures and exceptions for type checkers (:issue:`1134`)
 * Fix ``krpc-clientgen`` failing to load a generator from a file (:issue:`1134`)
 * :breaking:`Breaking` Generate C# and C++ stubs that mark the calls returning a stream or an event, which need a v0.7.0 client (:issue:`1122`)

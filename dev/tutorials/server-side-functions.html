@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -27,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -36,10 +35,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -47,7 +46,7 @@
     <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/server-side-functions';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -62,6 +61,7 @@
     <link rel="next" title="C-nano" href="../cnano.html" />
     <link rel="prev" title="AutoPilot" href="autopilot.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
   
@@ -111,7 +111,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -263,7 +263,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -294,15 +294,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -328,7 +328,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -337,7 +337,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -497,15 +497,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -529,7 +529,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -554,7 +554,7 @@
 <li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Server Side Functions</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -652,13 +652,13 @@ the <a class="reference internal" href="#server-side-functions-api"><span class=
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button></div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)</span>
 <span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
     <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Altitude reached 1000m&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddEvent</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
 <span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="w"> </span><span class="p">();</span>
-<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"Altitude reached 1000m"</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -700,14 +700,14 @@ the function, so it follows the vessel’s current orbit each tick.</p>
 <p>Pass a function when creating a stream to stream its computed value. The server runs the
 computation on each stream update:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-2-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button></div><div aria-labelledby="tab-2-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-2-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The vessel&#39;s altitude, in kilometers, computed on the server</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-2-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button></div><div aria-labelledby="tab-2-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-2-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The vessel's altitude, in kilometers, computed on the server</span>
 <span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Altitude:&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="p">(),</span> <span class="s2">&quot;km&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude:"</span><span class="p">,</span> <span class="n">stream</span><span class="p">(),</span> <span class="s2">"km"</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// The vessel&#39;s altitude, in kilometers, computed on the server</span>
+</div><div aria-labelledby="tab-2-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// The vessel's altitude, in kilometers, computed on the server</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Altitude: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="n">Get</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; km&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"Altitude: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="n">Get</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" km"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -747,14 +747,14 @@ engines that staging reveals:</p>
 <span class="p">)</span>
 <span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
     <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;An engine has run out of fuel&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"An engine has run out of fuel"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-4-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddEvent</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span><span class="p">.</span><span class="n">Any</span><span class="w"> </span><span class="p">(</span><span class="n">engine</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="n">engine</span><span class="p">.</span><span class="n">HasFuel</span><span class="p">));</span>
 <span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="w"> </span><span class="p">();</span>
-<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;An engine has run out of fuel&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"An engine has run out of fuel"</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -767,8 +767,8 @@ liquid fuel left:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-5-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button></div><div aria-labelledby="tab-5-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-5-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fuel_fraction</span><span class="p">():</span>
     <span class="n">resources</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">resources</span>
-    <span class="n">amount</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">(</span><span class="s2">&quot;LiquidFuel&quot;</span><span class="p">)</span>
-    <span class="n">capacity</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="s2">&quot;LiquidFuel&quot;</span><span class="p">)</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">)</span>
+    <span class="n">capacity</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">amount</span> <span class="o">/</span> <span class="n">capacity</span>
 
 <span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">fuel_fraction</span><span class="p">)</span>
@@ -776,7 +776,7 @@ liquid fuel left:</p>
 </div>
 </div><div aria-labelledby="tab-5-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// A C# lambda holds a single expression</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">AddStream</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Amount</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;LiquidFuel&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Max</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;LiquidFuel&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Amount</span><span class="w"> </span><span class="p">(</span><span class="s">"LiquidFuel"</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Max</span><span class="w"> </span><span class="p">(</span><span class="s">"LiquidFuel"</span><span class="p">));</span>
 </pre></div>
 </div>
 </div></div>
@@ -799,9 +799,9 @@ with a type annotation:</p>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">engine</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="k">if</span> <span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="o">&gt;</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">engine</span><span class="o">.</span><span class="n">available_thrust</span><span class="p">:</span>
-            <span class="n">ratings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+            <span class="n">ratings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"full"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ratings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;partial&quot;</span><span class="p">)</span>
+            <span class="n">ratings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"partial"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ratings</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">burn_ratings</span><span class="p">))</span>
@@ -812,9 +812,9 @@ with a type annotation:</p>
 <span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span>
 <span class="w">        </span><span class="p">.</span><span class="n">Where</span><span class="w"> </span><span class="p">(</span><span class="n">engine</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">Active</span><span class="p">)</span>
 <span class="w">        </span><span class="p">.</span><span class="n">Select</span><span class="w"> </span><span class="p">(</span><span class="n">engine</span><span class="w"> </span><span class="o">=&gt;</span>
-<span class="w">            </span><span class="n">engine</span><span class="p">.</span><span class="n">Thrust</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.9</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">AvailableThrust</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;full&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;partial&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="n">engine</span><span class="p">.</span><span class="n">Thrust</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.9</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">AvailableThrust</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"full"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">"partial"</span><span class="p">)</span>
 <span class="w">        </span><span class="p">.</span><span class="n">ToList</span><span class="w"> </span><span class="p">());</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Join</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;, &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ratings</span><span class="p">));</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Join</span><span class="w"> </span><span class="p">(</span><span class="s">", "</span><span class="p">,</span><span class="w"> </span><span class="n">ratings</span><span class="p">));</span>
 </pre></div>
 </div>
 </div></div>
@@ -942,16 +942,16 @@ the game runs in.</p></li>
 on the stream or event evaluating the function:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-10-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-10-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-10-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-10-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button></div><div aria-labelledby="tab-10-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-10-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_fuel</span><span class="p">():</span>
-    <span class="k">if</span> <span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">(</span><span class="s2">&quot;LiquidFuel&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;not enough fuel&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"not enough fuel"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-10-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-10-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// A C# lambda cannot throw, so the expression API builds the statement</span>
 <span class="c1">// around a compiled condition</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">checkFuel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">IfThen</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
-<span class="w">    </span><span class="n">connection</span><span class="p">.</span><span class="n">Compile</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Amount</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;LiquidFuel&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">),</span>
-<span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="n">Throw</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;KRPC&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;InvalidOperationException&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantString</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;not enough fuel&quot;</span><span class="p">)));</span>
+<span class="w">    </span><span class="n">connection</span><span class="p">.</span><span class="n">Compile</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Amount</span><span class="w"> </span><span class="p">(</span><span class="s">"LiquidFuel"</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="n">Throw</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"KRPC"</span><span class="p">,</span><span class="w"> </span><span class="s">"InvalidOperationException"</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantString</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"not enough fuel"</span><span class="p">)));</span>
 </pre></div>
 </div>
 </div></div>
@@ -967,16 +967,16 @@ a condition no other exception describes.</p>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span><span class="p">:</span>
             <span class="n">engine</span><span class="o">.</span><span class="n">toggle_mode</span><span class="p">()</span>
-        <span class="k">return</span> <span class="s2">&quot;switched&quot;</span>
+        <span class="k">return</span> <span class="s2">"switched"</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;could not switch: &quot;</span> <span class="o">+</span> <span class="n">error</span>
+        <span class="k">return</span> <span class="s2">"could not switch: "</span> <span class="o">+</span> <span class="n">error</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-11-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-11-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// A C# lambda cannot hold a loop or a handler, so the expression API builds them</span>
-<span class="kt">var</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Variable</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;engine&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">Type</span><span class="p">.</span><span class="n">ClassType</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SpaceCenter&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Engine&quot;</span><span class="p">));</span>
-<span class="kt">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Variable</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;result&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p">.</span><span class="n">String</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
-<span class="kt">var</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Variable</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p">.</span><span class="n">String</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Variable</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"engine"</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Type</span><span class="p">.</span><span class="n">ClassType</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"SpaceCenter"</span><span class="p">,</span><span class="w"> </span><span class="s">"Engine"</span><span class="p">));</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Variable</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"result"</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p">.</span><span class="n">String</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Variable</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"error"</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p">.</span><span class="n">String</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">toggleMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="p">(</span><span class="n">System</span><span class="p">.</span><span class="n">Linq</span><span class="p">.</span><span class="n">Expressions</span><span class="p">.</span><span class="n">Expression</span><span class="o">&lt;</span><span class="n">Action</span><span class="o">&gt;</span><span class="p">)</span>
 <span class="w">    </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">ToggleMode</span><span class="w"> </span><span class="p">()));</span>
@@ -990,12 +990,12 @@ a condition no other exception describes.</p>
 <span class="w">                    </span><span class="n">Expression</span><span class="p">.</span><span class="n">CallWithArguments</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">toggleMode</span><span class="p">,</span>
 <span class="w">                        </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">Expression</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">})),</span>
 <span class="w">                </span><span class="n">Expression</span><span class="p">.</span><span class="n">Assign</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span>
-<span class="w">                    </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantString</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;switched&quot;</span><span class="p">))</span>
+<span class="w">                    </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantString</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"switched"</span><span class="p">))</span>
 <span class="w">            </span><span class="p">}),</span>
 <span class="w">            </span><span class="n">error</span><span class="p">,</span>
 <span class="w">            </span><span class="n">Expression</span><span class="p">.</span><span class="n">Assign</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span>
 <span class="w">                </span><span class="n">Expression</span><span class="p">.</span><span class="n">StringConcat</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Expression</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantString</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;could not switch: &quot;</span><span class="p">),</span>
+<span class="w">                    </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantString</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"could not switch: "</span><span class="p">),</span>
 <span class="w">                    </span><span class="n">error</span>
 <span class="w">                </span><span class="p">}))),</span>
 <span class="w">        </span><span class="n">result</span>
@@ -1072,11 +1072,11 @@ call uses the procedure for its rounding rule.</p>
 <p>The language’s print function compiles to <a class="reference internal" href="../python/api/stdlib.html#StdLib.print" title="StdLib.print"><code class="xref py py-meth docutils literal notranslate"><span class="pre">StdLib.print()</span></code></a>, which writes a line to the
 game’s log, <code class="docutils literal notranslate"><span class="pre">KSP.log</span></code>. This logs the vessel’s mass from the server:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-13-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-13-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-13-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-13-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button></div><div aria-labelledby="tab-13-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-13-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mass:&quot;</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span> <span class="s2">&quot;kg&quot;</span><span class="p">))</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-13-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-13-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-13-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-13-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button></div><div aria-labelledby="tab-13-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-13-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"Mass:"</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">mass</span><span class="p">,</span> <span class="s2">"kg"</span><span class="p">))</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-13-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-13-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="n">FormattableString</span><span class="p">.</span><span class="n">Invariant</span><span class="w"> </span><span class="p">(</span><span class="s">$&quot;Mass: {vessel.Mass} kg&quot;</span><span class="p">)));</span>
+<span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="n">FormattableString</span><span class="p">.</span><span class="n">Invariant</span><span class="w"> </span><span class="p">(</span><span class="s">$"Mass: {vessel.Mass} kg"</span><span class="p">)));</span>
 </pre></div>
 </div>
 </div></div>
@@ -1134,7 +1134,7 @@ running, catch the exception in the function:</p>
 <span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">above_1000m</span><span class="p">)</span>
 <span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
     <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Altitude reached 1000m&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-14-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-14-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">using</span> <span class="n">System</span><span class="p">;</span>
@@ -1152,14 +1152,14 @@ running, catch the exception in the function:</p>
 
         <span class="o">//</span> <span class="n">A</span> <span class="n">C</span><span class="c1"># lambda cannot hold a handler, so the expression API builds it</span>
         <span class="o">//</span> <span class="n">around</span> <span class="n">a</span> <span class="n">compiled</span> <span class="n">condition</span>
-        <span class="n">var</span> <span class="n">above</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;above&quot;</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
+        <span class="n">var</span> <span class="n">above</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">"above"</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
         <span class="n">var</span> <span class="n">above1000m</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">BlockWithVariables</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
             <span class="n">new</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Expression</span><span class="o">&gt;</span> <span class="p">{</span> <span class="n">above</span> <span class="p">},</span>
             <span class="n">new</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Expression</span><span class="o">&gt;</span> <span class="p">{</span>
                 <span class="n">Expression</span><span class="o">.</span><span class="n">TryCatch</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
                     <span class="n">Expression</span><span class="o">.</span><span class="n">Assign</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">above</span><span class="p">,</span>
                         <span class="n">connection</span><span class="o">.</span><span class="n">Compile</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="n">flight</span><span class="o">.</span><span class="n">MeanAltitude</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)),</span>
-                    <span class="s2">&quot;KRPC&quot;</span><span class="p">,</span> <span class="s2">&quot;ObjectNotLoadedException&quot;</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span>
+                    <span class="s2">"KRPC"</span><span class="p">,</span> <span class="s2">"ObjectNotLoadedException"</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span>
                     <span class="n">Expression</span><span class="o">.</span><span class="n">Assign</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">above</span><span class="p">,</span>
                         <span class="n">Expression</span><span class="o">.</span><span class="n">ConstantBool</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">false</span><span class="p">))),</span>
                 <span class="n">above</span>
@@ -1168,7 +1168,7 @@ running, catch the exception in the function:</p>
         <span class="n">var</span> <span class="n">evnt</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">above1000m</span><span class="p">);</span>
         <span class="n">lock</span> <span class="p">(</span><span class="n">evnt</span><span class="o">.</span><span class="n">Condition</span><span class="p">)</span> <span class="p">{</span>
             <span class="n">evnt</span><span class="o">.</span><span class="n">Wait</span><span class="p">();</span>
-            <span class="n">Console</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s2">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
+            <span class="n">Console</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -1191,7 +1191,7 @@ running, catch the exception in the function:</p>
   <span class="n">typedef</span> <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">KRPC</span><span class="p">::</span><span class="n">Type</span> <span class="n">KType</span><span class="p">;</span>
 
   <span class="o">//</span> <span class="n">above</span> <span class="o">=</span> <span class="n">mean_altitude</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">,</span> <span class="ow">or</span> <span class="n">false</span> <span class="k">if</span> <span class="n">the</span> <span class="n">vessel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">loaded</span>
-  <span class="n">auto</span> <span class="n">above</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">variable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">&quot;above&quot;</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">bool_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
+  <span class="n">auto</span> <span class="n">above</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">variable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"above"</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">bool_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
   <span class="n">auto</span> <span class="n">above_1000m</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">block_with_variables</span><span class="p">(</span>
     <span class="n">conn</span><span class="p">,</span>
     <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span><span class="n">above</span><span class="p">}),</span>
@@ -1201,14 +1201,14 @@ running, catch the exception in the function:</p>
           <span class="n">Expr</span><span class="p">::</span><span class="n">greater_than</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
             <span class="n">Expr</span><span class="p">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude_call</span><span class="p">()),</span>
             <span class="n">Expr</span><span class="p">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))),</span>
-        <span class="s2">&quot;KRPC&quot;</span><span class="p">,</span> <span class="s2">&quot;ObjectNotLoadedException&quot;</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">nullopt</span><span class="p">,</span>
+        <span class="s2">"KRPC"</span><span class="p">,</span> <span class="s2">"ObjectNotLoadedException"</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">nullopt</span><span class="p">,</span>
         <span class="n">Expr</span><span class="p">::</span><span class="n">assign</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">above</span><span class="p">,</span> <span class="n">Expr</span><span class="p">::</span><span class="n">constant_bool</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">false</span><span class="p">))),</span>
       <span class="n">above</span><span class="p">}));</span>
 
   <span class="n">auto</span> <span class="n">event</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">above_1000m</span><span class="p">);</span>
   <span class="n">event</span><span class="o">.</span><span class="n">acquire</span><span class="p">();</span>
   <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">();</span>
-  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;Altitude reached 1000m&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"Altitude reached 1000m"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
   <span class="n">event</span><span class="o">.</span><span class="n">release</span><span class="p">();</span>
 <span class="p">}</span>
 </pre></div>
@@ -1232,7 +1232,7 @@ running, catch the exception in the function:</p>
       <span class="n">Flight</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">spaceCenter</span><span class="o">.</span><span class="n">getActiveVessel</span><span class="p">()</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">null</span><span class="p">);</span>
 
       <span class="o">//</span> <span class="n">above</span> <span class="o">=</span> <span class="n">meanAltitude</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">,</span> <span class="ow">or</span> <span class="n">false</span> <span class="k">if</span> <span class="n">the</span> <span class="n">vessel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">loaded</span>
-      <span class="n">Expression</span> <span class="n">above</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;above&quot;</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">bool</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
+      <span class="n">Expression</span> <span class="n">above</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">"above"</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">bool</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
       <span class="n">Expression</span> <span class="n">above1000m</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">blockWithVariables</span><span class="p">(</span>
         <span class="n">connection</span><span class="p">,</span>
         <span class="n">Arrays</span><span class="o">.</span><span class="n">asList</span><span class="p">(</span><span class="n">above</span><span class="p">),</span>
@@ -1240,9 +1240,9 @@ running, catch the exception in the function:</p>
           <span class="n">Expression</span><span class="o">.</span><span class="n">tryCatch</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
             <span class="n">Expression</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">above</span><span class="p">,</span>
               <span class="n">Expression</span><span class="o">.</span><span class="n">greaterThan</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
-                <span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span> <span class="s2">&quot;getMeanAltitude&quot;</span><span class="p">)),</span>
+                <span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span> <span class="s2">"getMeanAltitude"</span><span class="p">)),</span>
                 <span class="n">Expression</span><span class="o">.</span><span class="n">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))),</span>
-            <span class="s2">&quot;KRPC&quot;</span><span class="p">,</span> <span class="s2">&quot;ObjectNotLoadedException&quot;</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span>
+            <span class="s2">"KRPC"</span><span class="p">,</span> <span class="s2">"ObjectNotLoadedException"</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span>
             <span class="n">Expression</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">above</span><span class="p">,</span>
               <span class="n">Expression</span><span class="o">.</span><span class="n">constantBool</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">false</span><span class="p">))),</span>
           <span class="n">above</span><span class="p">));</span>
@@ -1250,7 +1250,7 @@ running, catch the exception in the function:</p>
       <span class="n">Event</span> <span class="n">event</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">addEvent</span><span class="p">(</span><span class="n">above1000m</span><span class="p">);</span>
       <span class="n">synchronized</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">getCondition</span><span class="p">())</span> <span class="p">{</span>
         <span class="n">event</span><span class="o">.</span><span class="n">waitFor</span><span class="p">();</span>
-        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -1371,7 +1371,7 @@ and a comparison:</p>
 
 <span class="c1"># Convert a remote procedure call to a message,</span>
 <span class="c1"># so it can be passed to the server</span>
-<span class="n">mean_altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">flight</span><span class="p">,</span> <span class="s2">&quot;mean_altitude&quot;</span><span class="p">)</span>
+<span class="n">mean_altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">flight</span><span class="p">,</span> <span class="s2">"mean_altitude"</span><span class="p">)</span>
 
 <span class="c1"># Build the function on the server</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">greater_than</span><span class="p">(</span>
@@ -1384,7 +1384,7 @@ and a comparison:</p>
 <span class="c1"># Wait on the event</span>
 <span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
     <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Altitude reached 1000m&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-17-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-17-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">using</span> <span class="n">System</span><span class="p">;</span>
@@ -1410,7 +1410,7 @@ and a comparison:</p>
         <span class="n">var</span> <span class="n">evnt</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
         <span class="n">lock</span> <span class="p">(</span><span class="n">evnt</span><span class="o">.</span><span class="n">Condition</span><span class="p">)</span> <span class="p">{</span>
             <span class="n">evnt</span><span class="o">.</span><span class="n">Wait</span><span class="p">();</span>
-            <span class="n">Console</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s2">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
+            <span class="n">Console</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -1440,7 +1440,7 @@ and a comparison:</p>
   <span class="n">auto</span> <span class="n">event</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
   <span class="n">event</span><span class="o">.</span><span class="n">acquire</span><span class="p">();</span>
   <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">();</span>
-  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;Altitude reached 1000m&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"Altitude reached 1000m"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
   <span class="n">event</span><span class="o">.</span><span class="n">release</span><span class="p">();</span>
 <span class="p">}</span>
 </pre></div>
@@ -1464,7 +1464,7 @@ and a comparison:</p>
 
       <span class="o">//</span> <span class="n">Get</span> <span class="n">the</span> <span class="n">remote</span> <span class="n">procedure</span> <span class="n">call</span> <span class="k">as</span> <span class="n">a</span> <span class="n">message</span> <span class="nb">object</span><span class="p">,</span>
       <span class="o">//</span> <span class="n">so</span> <span class="n">it</span> <span class="n">can</span> <span class="n">be</span> <span class="n">passed</span> <span class="n">to</span> <span class="n">the</span> <span class="n">server</span>
-      <span class="n">ProcedureCall</span> <span class="n">meanAltitude</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span> <span class="s2">&quot;getMeanAltitude&quot;</span><span class="p">);</span>
+      <span class="n">ProcedureCall</span> <span class="n">meanAltitude</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span> <span class="s2">"getMeanAltitude"</span><span class="p">);</span>
 
       <span class="o">//</span> <span class="n">Build</span> <span class="n">the</span> <span class="n">function</span> <span class="n">on</span> <span class="n">the</span> <span class="n">server</span>
       <span class="n">Expression</span> <span class="n">expr</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">greaterThan</span><span class="p">(</span>
@@ -1475,7 +1475,7 @@ and a comparison:</p>
       <span class="n">Event</span> <span class="n">event</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
       <span class="n">synchronized</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">getCondition</span><span class="p">())</span> <span class="p">{</span>
         <span class="n">event</span><span class="o">.</span><span class="n">waitFor</span><span class="p">();</span>
-        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Altitude reached 1000m&quot;</span><span class="p">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -1552,16 +1552,16 @@ operand only when the first does not decide the result.</p>
 <span class="n">expression</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span>
 
 <span class="c1"># Build a function that computes</span>
-<span class="c1"># the vessel&#39;s altitude in kilometers</span>
+<span class="c1"># the vessel's altitude in kilometers</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
-    <span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">flight</span><span class="p">,</span> <span class="s2">&quot;mean_altitude&quot;</span><span class="p">)),</span>
+    <span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">flight</span><span class="p">,</span> <span class="s2">"mean_altitude"</span><span class="p">)),</span>
     <span class="n">expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
 <span class="p">)</span>
 
 <span class="c1"># Stream the value of the function</span>
 <span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Altitude:&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="p">(),</span> <span class="s2">&quot;km&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude:"</span><span class="p">,</span> <span class="n">stream</span><span class="p">(),</span> <span class="s2">"km"</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1578,7 +1578,7 @@ operand only when the first does not decide the result.</p>
         <span class="n">var</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">spaceCenter</span><span class="o">.</span><span class="n">ActiveVessel</span><span class="o">.</span><span class="n">Flight</span><span class="p">();</span>
 
         <span class="o">//</span> <span class="n">Build</span> <span class="n">a</span> <span class="n">function</span> <span class="n">that</span> <span class="n">computes</span>
-        <span class="o">//</span> <span class="n">the</span> <span class="n">vessel</span><span class="s1">&#39;s altitude in kilometers</span>
+        <span class="o">//</span> <span class="n">the</span> <span class="n">vessel</span><span class="s1">'s altitude in kilometers</span>
         <span class="n">var</span> <span class="n">expr</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Divide</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
             <span class="n">Expression</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">Connection</span><span class="o">.</span><span class="n">GetCall</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="n">flight</span><span class="o">.</span><span class="n">MeanAltitude</span><span class="p">)),</span>
             <span class="n">Expression</span><span class="o">.</span><span class="n">ConstantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="mi">1000</span><span class="p">));</span>
@@ -1586,7 +1586,7 @@ operand only when the first does not decide the result.</p>
         <span class="o">//</span> <span class="n">Stream</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="n">the</span> <span class="n">function</span>
         <span class="n">var</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">AddStream</span><span class="o">&lt;</span><span class="n">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
         <span class="k">while</span> <span class="p">(</span><span class="n">true</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">Console</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s2">&quot;Altitude: &quot;</span> <span class="o">+</span> <span class="n">stream</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; km&quot;</span><span class="p">);</span>
+            <span class="n">Console</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s2">"Altitude: "</span> <span class="o">+</span> <span class="n">stream</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span> <span class="o">+</span> <span class="s2">" km"</span><span class="p">);</span>
             <span class="n">Thread</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1608,7 +1608,7 @@ operand only when the first does not decide the result.</p>
   <span class="n">auto</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">active_vessel</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">()</span><span class="o">.</span><span class="n">flight</span><span class="p">();</span>
 
   <span class="o">//</span> <span class="n">Build</span> <span class="n">a</span> <span class="n">function</span> <span class="n">that</span> <span class="n">computes</span>
-  <span class="o">//</span> <span class="n">the</span> <span class="n">vessel</span><span class="s1">&#39;s altitude in kilometers</span>
+  <span class="o">//</span> <span class="n">the</span> <span class="n">vessel</span><span class="s1">'s altitude in kilometers</span>
   <span class="n">typedef</span> <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">KRPC</span><span class="p">::</span><span class="n">Expression</span> <span class="n">Expr</span><span class="p">;</span>
   <span class="n">auto</span> <span class="n">expr</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">divide</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
     <span class="n">Expr</span><span class="p">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude_call</span><span class="p">()),</span>
@@ -1617,7 +1617,7 @@ operand only when the first does not decide the result.</p>
   <span class="o">//</span> <span class="n">Stream</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="n">the</span> <span class="n">function</span>
   <span class="n">auto</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">add_stream</span><span class="o">&lt;</span><span class="n">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
   <span class="k">while</span> <span class="p">(</span><span class="n">true</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;Altitude: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">stream</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot; km&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"Altitude: "</span> <span class="o">&lt;&lt;</span> <span class="n">stream</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s2">" km"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
     <span class="n">std</span><span class="p">::</span><span class="n">this_thread</span><span class="p">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="p">::</span><span class="n">chrono</span><span class="p">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -1640,16 +1640,16 @@ operand only when the first does not decide the result.</p>
       <span class="n">Flight</span> <span class="n">flight</span> <span class="o">=</span> <span class="n">spaceCenter</span><span class="o">.</span><span class="n">getActiveVessel</span><span class="p">()</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">null</span><span class="p">);</span>
 
       <span class="o">//</span> <span class="n">Build</span> <span class="n">a</span> <span class="n">function</span> <span class="n">that</span> <span class="n">computes</span>
-      <span class="o">//</span> <span class="n">the</span> <span class="n">vessel</span><span class="s1">&#39;s altitude in kilometers</span>
+      <span class="o">//</span> <span class="n">the</span> <span class="n">vessel</span><span class="s1">'s altitude in kilometers</span>
       <span class="n">Expression</span> <span class="n">expr</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
           <span class="n">connection</span><span class="p">,</span>
-          <span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span> <span class="s2">&quot;getMeanAltitude&quot;</span><span class="p">)),</span>
+          <span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span> <span class="s2">"getMeanAltitude"</span><span class="p">)),</span>
           <span class="n">Expression</span><span class="o">.</span><span class="n">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="mi">1000</span><span class="p">));</span>
 
       <span class="o">//</span> <span class="n">Stream</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="n">the</span> <span class="n">function</span>
       <span class="n">Stream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">addStream</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
       <span class="k">while</span> <span class="p">(</span><span class="n">true</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;Altitude: &quot;</span> <span class="o">+</span> <span class="n">stream</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; km&quot;</span><span class="p">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">"Altitude: "</span> <span class="o">+</span> <span class="n">stream</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">+</span> <span class="s2">" km"</span><span class="p">);</span>
         <span class="n">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
@@ -1675,21 +1675,21 @@ the procedure, so any engine can supply it:</p>
 <span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
 
 <span class="c1"># A function taking an engine, returning true if it is out of fuel</span>
-<span class="n">engine</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="s2">&quot;engine&quot;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="s2">&quot;SpaceCenter&quot;</span><span class="p">,</span> <span class="s2">&quot;Engine&quot;</span><span class="p">))</span>
-<span class="n">has_fuel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;has_fuel&quot;</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span><span class="s2">"engine"</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">class_type</span><span class="p">(</span><span class="s2">"SpaceCenter"</span><span class="p">,</span> <span class="s2">"Engine"</span><span class="p">))</span>
+<span class="n">has_fuel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"has_fuel"</span><span class="p">)</span>
 <span class="n">out_of_fuel</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">lambda_</span><span class="p">(</span>
     <span class="p">[</span><span class="n">engine</span><span class="p">],</span>
     <span class="n">expression</span><span class="o">.</span><span class="n">not_</span><span class="p">(</span><span class="n">expression</span><span class="o">.</span><span class="n">call_with_arguments</span><span class="p">(</span><span class="n">has_fuel</span><span class="p">,</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">engine</span><span class="p">})),</span>
 <span class="p">)</span>
 
 <span class="c1"># Whether any engine satisfies it</span>
-<span class="n">engines</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="p">,</span> <span class="s2">&quot;engines&quot;</span><span class="p">)</span>
+<span class="n">engines</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="p">,</span> <span class="s2">"engines"</span><span class="p">)</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">engines</span><span class="p">),</span> <span class="n">out_of_fuel</span><span class="p">)</span>
 
 <span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
 <span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
     <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;An engine has run out of fuel&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"An engine has run out of fuel"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-20-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-20-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">using</span> <span class="n">System</span><span class="p">;</span>
@@ -1705,8 +1705,8 @@ the procedure, so any engine can supply it:</p>
         <span class="n">var</span> <span class="n">vessel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">SpaceCenter</span><span class="p">()</span><span class="o">.</span><span class="n">ActiveVessel</span><span class="p">;</span>
 
         <span class="o">//</span> <span class="n">A</span> <span class="n">function</span> <span class="n">taking</span> <span class="n">an</span> <span class="n">engine</span><span class="p">,</span> <span class="n">returning</span> <span class="n">true</span> <span class="k">if</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">out</span> <span class="n">of</span> <span class="n">fuel</span>
-        <span class="n">var</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;engine&quot;</span><span class="p">,</span>
-            <span class="n">Type</span><span class="o">.</span><span class="n">ClassType</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;SpaceCenter&quot;</span><span class="p">,</span> <span class="s2">&quot;Engine&quot;</span><span class="p">));</span>
+        <span class="n">var</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">"engine"</span><span class="p">,</span>
+            <span class="n">Type</span><span class="o">.</span><span class="n">ClassType</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">"SpaceCenter"</span><span class="p">,</span> <span class="s2">"Engine"</span><span class="p">));</span>
         <span class="n">var</span> <span class="n">hasFuel</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">GetCall</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="n">vessel</span><span class="o">.</span><span class="n">Parts</span><span class="o">.</span><span class="n">Engines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HasFuel</span><span class="p">);</span>
         <span class="n">var</span> <span class="n">outOfFuel</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Lambda</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
             <span class="n">new</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Expression</span><span class="o">&gt;</span> <span class="p">{</span> <span class="n">engine</span> <span class="p">},</span>
@@ -1722,7 +1722,7 @@ the procedure, so any engine can supply it:</p>
         <span class="n">var</span> <span class="n">evnt</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
         <span class="n">lock</span> <span class="p">(</span><span class="n">evnt</span><span class="o">.</span><span class="n">Condition</span><span class="p">)</span> <span class="p">{</span>
             <span class="n">evnt</span><span class="o">.</span><span class="n">Wait</span><span class="p">();</span>
-            <span class="n">Console</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s2">&quot;An engine has run out of fuel&quot;</span><span class="p">);</span>
+            <span class="n">Console</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s2">"An engine has run out of fuel"</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -1745,8 +1745,8 @@ the procedure, so any engine can supply it:</p>
   <span class="n">typedef</span> <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">KRPC</span><span class="p">::</span><span class="n">Type</span> <span class="n">KType</span><span class="p">;</span>
 
   <span class="o">//</span> <span class="n">A</span> <span class="n">function</span> <span class="n">taking</span> <span class="n">an</span> <span class="n">engine</span><span class="p">,</span> <span class="n">returning</span> <span class="n">true</span> <span class="k">if</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">out</span> <span class="n">of</span> <span class="n">fuel</span>
-  <span class="n">auto</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">parameter</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">&quot;engine&quot;</span><span class="p">,</span>
-    <span class="n">KType</span><span class="p">::</span><span class="n">class_type</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">&quot;SpaceCenter&quot;</span><span class="p">,</span> <span class="s2">&quot;Engine&quot;</span><span class="p">));</span>
+  <span class="n">auto</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">parameter</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"engine"</span><span class="p">,</span>
+    <span class="n">KType</span><span class="p">::</span><span class="n">class_type</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"SpaceCenter"</span><span class="p">,</span> <span class="s2">"Engine"</span><span class="p">));</span>
   <span class="n">auto</span> <span class="n">has_fuel</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="p">()</span><span class="o">.</span><span class="n">engines</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">has_fuel_call</span><span class="p">();</span>
   <span class="n">auto</span> <span class="n">out_of_fuel</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="k">lambda</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
     <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span><span class="n">engine</span><span class="p">}),</span>
@@ -1760,7 +1760,7 @@ the procedure, so any engine can supply it:</p>
   <span class="n">auto</span> <span class="n">event</span> <span class="o">=</span> <span class="n">krpc</span><span class="p">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
   <span class="n">event</span><span class="o">.</span><span class="n">acquire</span><span class="p">();</span>
   <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">();</span>
-  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;An engine has run out of fuel&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">"An engine has run out of fuel"</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
   <span class="n">event</span><span class="o">.</span><span class="n">release</span><span class="p">();</span>
 <span class="p">}</span>
 </pre></div>
@@ -1786,24 +1786,24 @@ the procedure, so any engine can supply it:</p>
 
       <span class="o">//</span> <span class="n">A</span> <span class="n">function</span> <span class="n">taking</span> <span class="n">an</span> <span class="n">engine</span><span class="p">,</span> <span class="n">returning</span> <span class="n">true</span> <span class="k">if</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">out</span> <span class="n">of</span> <span class="n">fuel</span>
       <span class="n">Expression</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">parameter</span><span class="p">(</span>
-        <span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;engine&quot;</span><span class="p">,</span>
-        <span class="n">Type</span><span class="o">.</span><span class="n">classType</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;SpaceCenter&quot;</span><span class="p">,</span> <span class="s2">&quot;Engine&quot;</span><span class="p">));</span>
+        <span class="n">connection</span><span class="p">,</span> <span class="s2">"engine"</span><span class="p">,</span>
+        <span class="n">Type</span><span class="o">.</span><span class="n">classType</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">"SpaceCenter"</span><span class="p">,</span> <span class="s2">"Engine"</span><span class="p">));</span>
       <span class="n">ProcedureCall</span> <span class="n">hasFuel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">getCall</span><span class="p">(</span>
-        <span class="n">vessel</span><span class="o">.</span><span class="n">getParts</span><span class="p">()</span><span class="o">.</span><span class="n">getEngines</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s2">&quot;getHasFuel&quot;</span><span class="p">);</span>
+        <span class="n">vessel</span><span class="o">.</span><span class="n">getParts</span><span class="p">()</span><span class="o">.</span><span class="n">getEngines</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s2">"getHasFuel"</span><span class="p">);</span>
       <span class="n">Expression</span> <span class="n">outOfFuel</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="k">lambda</span><span class="p">(</span>
         <span class="n">connection</span><span class="p">,</span> <span class="n">Arrays</span><span class="o">.</span><span class="n">asList</span><span class="p">(</span><span class="n">engine</span><span class="p">),</span>
         <span class="n">Expression</span><span class="o">.</span><span class="ow">not</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">Expression</span><span class="o">.</span><span class="n">callWithArguments</span><span class="p">(</span>
           <span class="n">connection</span><span class="p">,</span> <span class="n">hasFuel</span><span class="p">,</span> <span class="n">Collections</span><span class="o">.</span><span class="n">singletonMap</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">engine</span><span class="p">))));</span>
 
       <span class="o">//</span> <span class="n">Whether</span> <span class="nb">any</span> <span class="n">engine</span> <span class="n">satisfies</span> <span class="n">it</span>
-      <span class="n">ProcedureCall</span> <span class="n">engines</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">getCall</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">getParts</span><span class="p">(),</span> <span class="s2">&quot;getEngines&quot;</span><span class="p">);</span>
+      <span class="n">ProcedureCall</span> <span class="n">engines</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">getCall</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">getParts</span><span class="p">(),</span> <span class="s2">"getEngines"</span><span class="p">);</span>
       <span class="n">Expression</span> <span class="n">expr</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">any</span><span class="p">(</span>
         <span class="n">connection</span><span class="p">,</span> <span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">engines</span><span class="p">),</span> <span class="n">outOfFuel</span><span class="p">);</span>
 
       <span class="n">Event</span> <span class="n">event</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
       <span class="n">synchronized</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">getCondition</span><span class="p">())</span> <span class="p">{</span>
         <span class="n">event</span><span class="o">.</span><span class="n">waitFor</span><span class="p">();</span>
-        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">&quot;An engine has run out of fuel&quot;</span><span class="p">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">"An engine has run out of fuel"</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -1851,21 +1851,21 @@ index expression.</p>
 and build one. <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.Expression.get_field" title="KRPC.Expression.get_field"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.get_field()</span></code></a> reads a field by name:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-21-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-21-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-21-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-21-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-21-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-21-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-21-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-21-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-21-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-21-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The Name field of a structure a call returns</span>
-<span class="n">expr</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">site_info</span><span class="p">),</span> <span class="s2">&quot;Name&quot;</span><span class="p">)</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">site_info</span><span class="p">),</span> <span class="s2">"Name"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-21-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-21-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// The Name field of a structure a call returns</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">GetField</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
-<span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">siteInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Name&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">siteInfo</span><span class="p">),</span><span class="w"> </span><span class="s">"Name"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-21-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-21-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// The Name field of a structure a call returns</span>
-<span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">get_field</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">site_info</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Name&quot;</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">get_field</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">site_info</span><span class="p">),</span><span class="w"> </span><span class="s">"Name"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-21-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-21-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="c1">// The Name field of a structure a call returns</span>
 <span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">getField</span><span class="p">(</span>
-<span class="w">    </span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">siteInfo</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Name&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">siteInfo</span><span class="p">),</span><span class="w"> </span><span class="s">"Name"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div></div>
@@ -1887,8 +1887,8 @@ to <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.
 <span class="n">types</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Type</span>
 
 <span class="c1"># total = 0; for x in [1, 2, 3]: total += x</span>
-<span class="n">total</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">int</span><span class="p">())</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">int</span><span class="p">())</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s2">"total"</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">int</span><span class="p">())</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">int</span><span class="p">())</span>
 <span class="n">values</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">create_list</span><span class="p">([</span><span class="n">expression</span><span class="o">.</span><span class="n">constant_int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
 <span class="n">program</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">block_with_variables</span><span class="p">(</span>
     <span class="p">[</span><span class="n">total</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span>
@@ -1915,8 +1915,8 @@ to <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.
         <span class="n">var</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Connection</span><span class="p">();</span>
 
         <span class="o">//</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span><span class="p">;</span>
-        <span class="n">var</span> <span class="n">total</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
-        <span class="n">var</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
+        <span class="n">var</span> <span class="n">total</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
+        <span class="n">var</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
         <span class="n">var</span> <span class="n">values</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">CreateList</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">new</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Expression</span><span class="o">&gt;</span> <span class="p">{</span>
             <span class="n">Expression</span><span class="o">.</span><span class="n">ConstantInt</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
             <span class="n">Expression</span><span class="o">.</span><span class="n">ConstantInt</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
@@ -1951,8 +1951,8 @@ to <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.
   <span class="n">typedef</span> <span class="n">krpc</span><span class="p">::</span><span class="n">services</span><span class="p">::</span><span class="n">KRPC</span><span class="p">::</span><span class="n">Type</span> <span class="n">KType</span><span class="p">;</span>
 
   <span class="o">//</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="k">for</span> <span class="p">(</span><span class="n">auto</span> <span class="n">x</span> <span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">})</span> <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span><span class="p">;</span>
-  <span class="n">auto</span> <span class="n">total</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">variable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">int_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
-  <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">variable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">int_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
+  <span class="n">auto</span> <span class="n">total</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">variable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">int_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
+  <span class="n">auto</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">variable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">,</span> <span class="n">KType</span><span class="p">::</span><span class="n">int_</span><span class="p">(</span><span class="n">conn</span><span class="p">));</span>
   <span class="n">auto</span> <span class="n">values</span> <span class="o">=</span> <span class="n">Expr</span><span class="p">::</span><span class="n">create_list</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">({</span>
     <span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
     <span class="n">Expr</span><span class="p">::</span><span class="n">constant_int</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
@@ -1983,8 +1983,8 @@ to <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.
     <span class="k">try</span> <span class="p">(</span><span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">newInstance</span><span class="p">())</span> <span class="p">{</span>
       <span class="o">//</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">x</span> <span class="p">:</span> <span class="n">new</span> <span class="nb">int</span><span class="p">[]</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">})</span> <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span><span class="p">;</span>
       <span class="n">Expression</span> <span class="n">total</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span>
-        <span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
-      <span class="n">Expression</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
+        <span class="n">connection</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
+      <span class="n">Expression</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">,</span> <span class="n">Type</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="n">connection</span><span class="p">));</span>
       <span class="n">Expression</span> <span class="n">values</span> <span class="o">=</span> <span class="n">Expression</span><span class="o">.</span><span class="n">createList</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">Arrays</span><span class="o">.</span><span class="n">asList</span><span class="p">(</span>
         <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
         <span class="n">Expression</span><span class="o">.</span><span class="n">constantInt</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
@@ -2021,7 +2021,7 @@ frame or an engine. A function can compare it for equality, or pass it to a call
 <a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.Expression.call_with_arguments" title="KRPC.Expression.call_with_arguments"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.call_with_arguments()</span></code></a>. This event fires when the vessel’s target changes to a
 particular vessel:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-23-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-23-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-23-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-23-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-23-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-23-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-23-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-23-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-23-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-23-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="p">,</span> <span class="s2">&quot;target_vessel&quot;</span><span class="p">)</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-23-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-23-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-23-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-23-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-23-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-23-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-23-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-23-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-23-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-23-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="p">,</span> <span class="s2">"target_vessel"</span><span class="p">)</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span>
     <span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">target</span><span class="p">),</span>
     <span class="n">expression</span><span class="o">.</span><span class="n">constant_object</span><span class="p">(</span><span class="n">some_vessel</span><span class="o">.</span><span class="n">_object_id</span><span class="p">),</span>
@@ -2043,7 +2043,7 @@ particular vessel:</p>
 <span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-23-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-23-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;getTargetVessel&quot;</span><span class="p">);</span>
+</div><div aria-labelledby="tab-23-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-23-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="s">"getTargetVessel"</span><span class="p">);</span>
 <span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">equal</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">),</span>
 <span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantObject</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">someVessel</span><span class="p">.</span><span class="na">id</span><span class="p">));</span>
@@ -2060,46 +2060,46 @@ a captured remote object this way.</p>
 <p><a class="reference internal" href="../python/api/krpc/expressions.html#KRPC.Expression.throw" title="KRPC.Expression.throw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Expression.throw()</span></code></a> raises an exception, named by its service and class. This builds the
 fuel check from <a class="reference internal" href="#server-side-functions-exceptions"><span class="std std-ref">Exceptions</span></a>:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-24-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-24-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-24-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-24-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-24-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-24-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-24-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-24-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-24-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-24-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">amount</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="s2">&quot;LiquidFuel&quot;</span><span class="p">)</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-24-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-24-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-24-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-24-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-24-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-24-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-24-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-24-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-24-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-24-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">amount</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="s2">"LiquidFuel"</span><span class="p">)</span>
 <span class="n">expr</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">if_then</span><span class="p">(</span>
     <span class="n">expression</span><span class="o">.</span><span class="n">less_than</span><span class="p">(</span>
         <span class="n">expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">amount</span><span class="p">),</span> <span class="n">expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
     <span class="p">),</span>
     <span class="n">expression</span><span class="o">.</span><span class="n">throw</span><span class="p">(</span>
-        <span class="s2">&quot;KRPC&quot;</span><span class="p">,</span> <span class="s2">&quot;InvalidOperationException&quot;</span><span class="p">,</span>
-        <span class="n">expression</span><span class="o">.</span><span class="n">constant_string</span><span class="p">(</span><span class="s2">&quot;not enough fuel&quot;</span><span class="p">),</span>
+        <span class="s2">"KRPC"</span><span class="p">,</span> <span class="s2">"InvalidOperationException"</span><span class="p">,</span>
+        <span class="n">expression</span><span class="o">.</span><span class="n">constant_string</span><span class="p">(</span><span class="s2">"not enough fuel"</span><span class="p">),</span>
     <span class="p">),</span>
 <span class="p">)</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-24-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-24-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Amount</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;LiquidFuel&quot;</span><span class="p">));</span>
+</div><div aria-labelledby="tab-24-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-24-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Amount</span><span class="w"> </span><span class="p">(</span><span class="s">"LiquidFuel"</span><span class="p">));</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">IfThen</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="n">LessThan</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
 <span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">),</span>
 <span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantDouble</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)),</span>
-<span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="n">Throw</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;KRPC&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;InvalidOperationException&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantString</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;not enough fuel&quot;</span><span class="p">)));</span>
+<span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="n">Throw</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"KRPC"</span><span class="p">,</span><span class="w"> </span><span class="s">"InvalidOperationException"</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantString</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"not enough fuel"</span><span class="p">)));</span>
 <span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="w"> </span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-24-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-24-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">resources</span><span class="p">().</span><span class="n">amount_call</span><span class="p">(</span><span class="s">&quot;LiquidFuel&quot;</span><span class="p">);</span>
+</div><div aria-labelledby="tab-24-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-24-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">resources</span><span class="p">().</span><span class="n">amount_call</span><span class="p">(</span><span class="s">"LiquidFuel"</span><span class="p">);</span>
 <span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">if_then</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
 <span class="w">  </span><span class="n">Expr</span><span class="o">::</span><span class="n">less_than</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)),</span>
-<span class="w">  </span><span class="n">Expr</span><span class="o">::</span><span class="n">throw_</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;KRPC&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;InvalidOperationException&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_string</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;not enough fuel&quot;</span><span class="p">)));</span>
+<span class="w">  </span><span class="n">Expr</span><span class="o">::</span><span class="n">throw_</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"KRPC"</span><span class="p">,</span><span class="w"> </span><span class="s">"InvalidOperationException"</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_string</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"not enough fuel"</span><span class="p">)));</span>
 <span class="n">krpc</span><span class="o">::</span><span class="n">run</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-24-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-24-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span>
-<span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getResources</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;amount&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;LiquidFuel&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getResources</span><span class="p">(),</span><span class="w"> </span><span class="s">"amount"</span><span class="p">,</span><span class="w"> </span><span class="s">"LiquidFuel"</span><span class="p">);</span>
 <span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">ifThen</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="na">lessThan</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span>
 <span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">),</span>
 <span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)),</span>
-<span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="na">throw_</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;KRPC&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;InvalidOperationException&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantString</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;not enough fuel&quot;</span><span class="p">)));</span>
+<span class="w">    </span><span class="n">Expression</span><span class="p">.</span><span class="na">throw_</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"KRPC"</span><span class="p">,</span><span class="w"> </span><span class="s">"InvalidOperationException"</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantString</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="s">"not enough fuel"</span><span class="p">)));</span>
 <span class="n">connection</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -2223,8 +2223,8 @@ embeds any procedure with <a class="reference internal" href="../python/api/krpc
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2245,7 +2245,6 @@ embeds any procedure with <a class="reference internal" href="../python/api/krpc
 
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
   </p>
 </div>
       
@@ -2265,7 +2264,7 @@ embeds any procedure with <a class="reference internal" href="../python/api/krpc
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

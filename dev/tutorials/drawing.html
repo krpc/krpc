@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -27,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -36,10 +35,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -47,7 +46,7 @@
     <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/drawing';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -62,6 +61,7 @@
     <link rel="next" title="Object Lifetime" href="object-lifetime.html" />
     <link rel="prev" title="User Interface" href="user-interface.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
   
@@ -111,7 +111,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -263,7 +263,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -294,15 +294,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -328,7 +328,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -337,7 +337,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -497,15 +497,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -529,7 +529,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -550,7 +550,7 @@
 <li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Drawing</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Drawing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
@@ -638,8 +638,8 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;COM0&quot;</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Drawing Example&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Drawing Example"</span><span class="p">);</span>
 
 <span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
@@ -647,7 +647,7 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_Bodies</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">bodies</span><span class="p">);</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_t</span><span class="w"> </span><span class="n">kerbin</span><span class="p">;</span>
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">bodies</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">bodies</span><span class="p">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Kerbin&quot;</span><span class="p">))</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">bodies</span><span class="p">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="s">"Kerbin"</span><span class="p">))</span>
 <span class="w">      </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bodies</span><span class="p">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">kerbin_ref</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">kerbin_ref</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">);</span>
@@ -666,15 +666,15 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
 <span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Color</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">green</span><span class="p">);</span>
 <span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Dashed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Label</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Target orbit&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Label</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">"Target orbit"</span><span class="p">);</span>
 
-<span class="w">  </span><span class="c1">// Mark the north pole in the map view, with the game&#39;s flag icon</span>
+<span class="w">  </span><span class="c1">// Mark the north pole in the map view, with the game's flag icon</span>
 <span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">site</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_SurfacePosition</span><span class="p">(</span>
 <span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin_ref</span><span class="p">);</span>
 <span class="w">  </span><span class="n">krpc_Drawing_AddMapMarker</span><span class="p">(</span>
 <span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin_ref</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_DRAWING_MAPMARKERICON_FLAG</span><span class="p">,</span>
-<span class="w">    </span><span class="s">&quot;North pole&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">    </span><span class="s">"North pole"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// Draw a yellow arrow from the vessel, pointing prograde</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">orbital_ref</span><span class="p">;</span>
@@ -693,7 +693,7 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
 <span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_Speed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">vessel_orbit</span><span class="p">);</span>
 <span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">label</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
-<span class="w">    </span><span class="n">snprintf</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">label</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;%d m/s&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">speed</span><span class="p">);</span>
+<span class="w">    </span><span class="n">snprintf</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">label</span><span class="p">),</span><span class="w"> </span><span class="s">"%d m/s"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">speed</span><span class="p">);</span>
 <span class="w">    </span><span class="n">krpc_Drawing_Line_set_Label</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">arrow</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="p">);</span>
 <span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
@@ -709,11 +709,11 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="w"> </span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Drawing Example&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">(</span><span class="s">"Drawing Example"</span><span class="p">);</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">();</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">drawing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">Drawing</span><span class="w"> </span><span class="p">();</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">ActiveVessel</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">Bodies</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;Kerbin&quot;</span><span class="p">];</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="n">Bodies</span><span class="w"> </span><span class="p">[</span><span class="s">"Kerbin"</span><span class="p">];</span>
 
 <span class="w">        </span><span class="c1">// Draw a circular orbit 250 km above Kerbin, as a dashed green path</span>
 <span class="w">        </span><span class="c1">// with a label</span>
@@ -723,12 +723,12 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">drawing</span><span class="p">.</span><span class="n">AddOrbit</span><span class="w"> </span><span class="p">(</span><span class="n">orbit</span><span class="p">);</span>
 <span class="w">        </span><span class="n">path</span><span class="p">.</span><span class="n">Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tuple</span><span class="p">.</span><span class="n">Create</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
 <span class="w">        </span><span class="n">path</span><span class="p">.</span><span class="n">Dashed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
-<span class="w">        </span><span class="n">path</span><span class="p">.</span><span class="n">Label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Target orbit&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">path</span><span class="p">.</span><span class="n">Label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Target orbit"</span><span class="p">;</span>
 
-<span class="w">        </span><span class="c1">// Mark the north pole in the map view, with the game&#39;s flag icon</span>
+<span class="w">        </span><span class="c1">// Mark the north pole in the map view, with the game's flag icon</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">site</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="n">SurfacePosition</span><span class="w"> </span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="p">);</span>
 <span class="w">        </span><span class="n">drawing</span><span class="p">.</span><span class="n">AddMapMarker</span><span class="w"> </span><span class="p">(</span>
-<span class="w">            </span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="p">,</span><span class="w"> </span><span class="n">MapMarkerIcon</span><span class="p">.</span><span class="n">Flag</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;North pole&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="p">,</span><span class="w"> </span><span class="n">MapMarkerIcon</span><span class="p">.</span><span class="n">Flag</span><span class="p">,</span><span class="w"> </span><span class="s">"North pole"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Draw a yellow arrow from the vessel, pointing prograde</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">arrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">drawing</span><span class="p">.</span><span class="n">AddDirectionFromCom</span><span class="w"> </span><span class="p">(</span>
@@ -738,7 +738,7 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 
 <span class="w">        </span><span class="c1">// Label the arrow with the orbital speed of the vessel</span>
 <span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">arrow</span><span class="p">.</span><span class="n">Label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">Speed</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; m/s&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">arrow</span><span class="p">.</span><span class="n">Label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">Speed</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" m/s"</span><span class="p">;</span>
 <span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
@@ -757,11 +757,11 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="k">using</span><span class="w"> </span><span class="n">Drawing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">Drawing</span><span class="p">;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Client</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot;Drawing Example&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Client</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">"Drawing Example"</span><span class="p">);</span>
 <span class="w">  </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">space_center</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
 <span class="w">  </span><span class="n">Drawing</span><span class="w"> </span><span class="n">drawing</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">();</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">bodies</span><span class="p">()[</span><span class="s">&quot;Kerbin&quot;</span><span class="p">];</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">bodies</span><span class="p">()[</span><span class="s">"Kerbin"</span><span class="p">];</span>
 
 <span class="w">  </span><span class="c1">// Draw a circular orbit 250 km above Kerbin, as a dashed green path with</span>
 <span class="w">  </span><span class="c1">// a label</span>
@@ -771,12 +771,12 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">drawing</span><span class="p">.</span><span class="n">add_orbit</span><span class="p">(</span><span class="n">orbit</span><span class="p">);</span>
 <span class="w">  </span><span class="n">path</span><span class="p">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
 <span class="w">  </span><span class="n">path</span><span class="p">.</span><span class="n">set_dashed</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">path</span><span class="p">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&quot;Target orbit&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">path</span><span class="p">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">"Target orbit"</span><span class="p">);</span>
 
-<span class="w">  </span><span class="c1">// Mark the north pole in the map view, with the game&#39;s flag icon</span>
+<span class="w">  </span><span class="c1">// Mark the north pole in the map view, with the game's flag icon</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">site</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="n">surface_position</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="n">reference_frame</span><span class="p">());</span>
 <span class="w">  </span><span class="n">drawing</span><span class="p">.</span><span class="n">add_map_marker</span><span class="p">(</span>
-<span class="w">    </span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="n">reference_frame</span><span class="p">(),</span><span class="w"> </span><span class="n">Drawing</span><span class="o">::</span><span class="n">MapMarkerIcon</span><span class="o">::</span><span class="n">flag</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;North pole&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="n">reference_frame</span><span class="p">(),</span><span class="w"> </span><span class="n">Drawing</span><span class="o">::</span><span class="n">MapMarkerIcon</span><span class="o">::</span><span class="n">flag</span><span class="p">,</span><span class="w"> </span><span class="s">"North pole"</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// Draw a yellow arrow from the vessel, pointing prograde</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">arrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">drawing</span><span class="p">.</span><span class="n">add_direction_from_com</span><span class="p">(</span>
@@ -786,7 +786,7 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 
 <span class="w">  </span><span class="c1">// Label the arrow with the orbital speed of the vessel</span>
 <span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">arrow</span><span class="p">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">vessel</span><span class="p">.</span><span class="n">orbit</span><span class="p">().</span><span class="n">speed</span><span class="p">())</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; m/s&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">arrow</span><span class="p">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">vessel</span><span class="p">.</span><span class="n">orbit</span><span class="p">().</span><span class="n">speed</span><span class="p">())</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" m/s"</span><span class="p">);</span>
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -810,11 +810,11 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DrawingExample</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
 <span class="w">        </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">&quot;Drawing Example&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Drawing Example"</span><span class="p">);</span>
 <span class="w">        </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 <span class="w">        </span><span class="n">Drawing</span><span class="w"> </span><span class="n">drawing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Drawing</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
 <span class="w">        </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
-<span class="w">        </span><span class="n">CelestialBody</span><span class="w"> </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getBodies</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">&quot;Kerbin&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">CelestialBody</span><span class="w"> </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getBodies</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">"Kerbin"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Draw a circular orbit 250 km above Kerbin, as a dashed green path</span>
 <span class="w">        </span><span class="c1">// with a label</span>
@@ -824,13 +824,13 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="w">        </span><span class="n">OrbitPath</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">drawing</span><span class="p">.</span><span class="na">addOrbit</span><span class="p">(</span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
 <span class="w">        </span><span class="n">path</span><span class="p">.</span><span class="na">setColor</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">));</span>
 <span class="w">        </span><span class="n">path</span><span class="p">.</span><span class="na">setDashed</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-<span class="w">        </span><span class="n">path</span><span class="p">.</span><span class="na">setLabel</span><span class="p">(</span><span class="s">&quot;Target orbit&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">path</span><span class="p">.</span><span class="na">setLabel</span><span class="p">(</span><span class="s">"Target orbit"</span><span class="p">);</span>
 
-<span class="w">        </span><span class="c1">// Mark the north pole in the map view, with the game&#39;s flag icon</span>
+<span class="w">        </span><span class="c1">// Mark the north pole in the map view, with the game's flag icon</span>
 <span class="w">        </span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">site</span><span class="w"> </span><span class="o">=</span>
 <span class="w">          </span><span class="n">kerbin</span><span class="p">.</span><span class="na">surfacePosition</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="na">getReferenceFrame</span><span class="p">());</span>
 <span class="w">        </span><span class="n">drawing</span><span class="p">.</span><span class="na">addMapMarker</span><span class="p">(</span>
-<span class="w">          </span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="na">getReferenceFrame</span><span class="p">(),</span><span class="w"> </span><span class="n">MapMarkerIcon</span><span class="p">.</span><span class="na">FLAG</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;North pole&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+<span class="w">          </span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">.</span><span class="na">getReferenceFrame</span><span class="p">(),</span><span class="w"> </span><span class="n">MapMarkerIcon</span><span class="p">.</span><span class="na">FLAG</span><span class="p">,</span><span class="w"> </span><span class="s">"North pole"</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Draw a yellow arrow from the vessel, pointing prograde</span>
 <span class="w">        </span><span class="n">Line</span><span class="w"> </span><span class="n">arrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">drawing</span><span class="p">.</span><span class="na">addDirectionFromCom</span><span class="p">(</span>
@@ -841,21 +841,21 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 
 <span class="w">        </span><span class="c1">// Label the arrow with the orbital speed of the vessel</span>
 <span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">arrow</span><span class="p">.</span><span class="na">setLabel</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="s">&quot;%.0f m/s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getSpeed</span><span class="p">()));</span>
+<span class="w">            </span><span class="n">arrow</span><span class="p">.</span><span class="na">setLabel</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="s">"%.0f m/s"</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getSpeed</span><span class="p">()));</span>
 <span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc.platform&#39;</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">List</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;pl.List&#39;</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">&#39;Drawing Example&#39;</span><span class="p">)</span>
+</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc.platform'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">List</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'pl.List'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'Drawing Example'</span><span class="p">)</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">space_center</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">drawing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">drawing</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">space_center</span><span class="p">.</span><span class="py">bodies</span><span class="p">[</span><span class="s1">&#39;Kerbin&#39;</span><span class="p">]</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">space_center</span><span class="p">.</span><span class="py">bodies</span><span class="p">[</span><span class="s1">'Kerbin'</span><span class="p">]</span>
 
 <span class="c1">-- Draw a circular orbit 250 km above Kerbin, as a dashed green path with a label</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">orbit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">space_center</span><span class="p">.</span><span class="py">Orbit</span><span class="p">.</span><span class="nf">create_from_orbital_elements</span><span class="p">(</span>
@@ -863,12 +863,12 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="kd">local</span><span class="w"> </span><span class="nv">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">drawing</span><span class="p">.</span><span class="nf">add_orbit</span><span class="p">(</span><span class="nv">orbit</span><span class="p">)</span>
 <span class="nv">path</span><span class="p">.</span><span class="py">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">List</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">}</span>
 <span class="nv">path</span><span class="p">.</span><span class="py">dashed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-<span class="nv">path</span><span class="p">.</span><span class="py">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Target orbit&#39;</span>
+<span class="nv">path</span><span class="p">.</span><span class="py">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Target orbit'</span>
 
-<span class="c1">-- Mark the north pole in the map view, with the game&#39;s flag icon</span>
+<span class="c1">-- Mark the north pole in the map view, with the game's flag icon</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">site</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">kerbin</span><span class="p">:</span><span class="nf">surface_position</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">kerbin</span><span class="p">.</span><span class="py">reference_frame</span><span class="p">)</span>
 <span class="nv">drawing</span><span class="p">.</span><span class="nf">add_map_marker</span><span class="p">(</span>
-<span class="w">  </span><span class="nv">site</span><span class="p">,</span><span class="w"> </span><span class="nv">kerbin</span><span class="p">.</span><span class="py">reference_frame</span><span class="p">,</span><span class="w"> </span><span class="nv">drawing</span><span class="p">.</span><span class="py">MapMarkerIcon</span><span class="p">.</span><span class="py">flag</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;North pole&#39;</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">site</span><span class="p">,</span><span class="w"> </span><span class="nv">kerbin</span><span class="p">.</span><span class="py">reference_frame</span><span class="p">,</span><span class="w"> </span><span class="nv">drawing</span><span class="p">.</span><span class="py">MapMarkerIcon</span><span class="p">.</span><span class="py">flag</span><span class="p">,</span><span class="w"> </span><span class="s1">'North pole'</span><span class="p">)</span>
 
 <span class="c1">-- Draw a yellow arrow from the vessel, pointing prograde</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">arrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">drawing</span><span class="p">.</span><span class="nf">add_direction_from_com</span><span class="p">(</span><span class="nv">List</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">orbital_reference_frame</span><span class="p">)</span>
@@ -877,7 +877,7 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 
 <span class="c1">-- Label the arrow with the orbital speed of the vessel</span>
 <span class="kr">while</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="kr">do</span>
-<span class="w">  </span><span class="nv">arrow</span><span class="p">.</span><span class="py">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">string.format</span><span class="p">(</span><span class="s1">&#39;%.0f m/s&#39;</span><span class="p">,</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">orbit</span><span class="p">.</span><span class="py">speed</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">arrow</span><span class="p">.</span><span class="py">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">string.format</span><span class="p">(</span><span class="s1">'%.0f m/s'</span><span class="p">,</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">orbit</span><span class="p">.</span><span class="py">speed</span><span class="p">)</span>
 <span class="w">  </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="kr">end</span>
 </pre></div>
@@ -885,11 +885,11 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 </div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Drawing Example&quot;</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Drawing Example"</span><span class="p">)</span>
 <span class="n">space_center</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span>
 <span class="n">drawing</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">drawing</span>
 <span class="n">vessel</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-<span class="n">kerbin</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">bodies</span><span class="p">[</span><span class="s2">&quot;Kerbin&quot;</span><span class="p">]</span>
+<span class="n">kerbin</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">bodies</span><span class="p">[</span><span class="s2">"Kerbin"</span><span class="p">]</span>
 
 <span class="c1"># Draw a circular orbit 250 km above Kerbin, as a dashed green path with a label</span>
 <span class="n">orbit</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">Orbit</span><span class="o">.</span><span class="n">create_from_orbital_elements</span><span class="p">(</span>
@@ -898,12 +898,12 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="n">path</span> <span class="o">=</span> <span class="n">drawing</span><span class="o">.</span><span class="n">add_orbit</span><span class="p">(</span><span class="n">orbit</span><span class="p">)</span>
 <span class="n">path</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">path</span><span class="o">.</span><span class="n">dashed</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">path</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Target orbit&quot;</span>
+<span class="n">path</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">"Target orbit"</span>
 
-<span class="c1"># Mark the north pole in the map view, with the game&#39;s flag icon</span>
+<span class="c1"># Mark the north pole in the map view, with the game's flag icon</span>
 <span class="n">site</span> <span class="o">=</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">surface_position</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)</span>
 <span class="n">drawing</span><span class="o">.</span><span class="n">add_map_marker</span><span class="p">(</span>
-    <span class="n">site</span><span class="p">,</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">,</span> <span class="n">drawing</span><span class="o">.</span><span class="n">MapMarkerIcon</span><span class="o">.</span><span class="n">flag</span><span class="p">,</span> <span class="s2">&quot;North pole&quot;</span>
+    <span class="n">site</span><span class="p">,</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">,</span> <span class="n">drawing</span><span class="o">.</span><span class="n">MapMarkerIcon</span><span class="o">.</span><span class="n">flag</span><span class="p">,</span> <span class="s2">"North pole"</span>
 <span class="p">)</span>
 
 <span class="c1"># Draw a yellow arrow from the vessel, pointing prograde</span>
@@ -913,7 +913,7 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 
 <span class="c1"># Label the arrow with the orbital speed of the vessel</span>
 <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">arrow</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> m/s&quot;</span> <span class="o">%</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">speed</span>
+    <span class="n">arrow</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">"</span><span class="si">%d</span><span class="s2"> m/s"</span> <span class="o">%</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">speed</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -989,8 +989,8 @@ boxes, spheres, points and navball markers.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1011,7 +1011,6 @@ boxes, spheres, points and navball markers.</p>
 
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
   </p>
 </div>
       
@@ -1031,7 +1030,7 @@ boxes, spheres, points and navball markers.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

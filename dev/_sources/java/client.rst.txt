@@ -25,7 +25,7 @@ the following:
 
 .. parsed-literal::
 
-   javac -cp krpc-java-|jar-version|.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java
+   javac -cp krpc-java-|jar-version|.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java
 
 Note that you may need to change the paths to the JAR files.
 
