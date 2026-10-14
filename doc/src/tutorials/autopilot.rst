@@ -22,14 +22,10 @@ rotation, as a direction for the nose, or as a direction together with an up vec
 
 A minimal use case looks like this:
 
-.. code-block:: python
-
-   ap = vessel.auto_pilot
-   ap.reference_frame = vessel.surface_reference_frame
-   ap.target_pitch_and_heading(90, 90)   # point straight up, facing east
-   ap.engaged = True
-   ap.wait()                             # blocks until the vessel has settled on the target
-   ap.engaged = False
+.. literalinclude:: /scripts/tutorials/autopilot/TargetPitchAndHeading.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 ``wait()`` returns once the vessel has *settled* on the target: both the pointing error
 and the vessel's angular velocity must fall below a threshold, so it does not return while
@@ -93,24 +89,10 @@ turn the nose sweeps from straight up to downrange — straight through the poin
 roll measured against the vertical plane is undefined. Anchoring the roll to a fixed
 horizontal ``up`` (say north) keeps it defined the whole way:
 
-.. code-block:: python
-
-   ap = vessel.auto_pilot
-   ap.reference_frame = vessel.surface_reference_frame
-   up = (0, 1, 0)   # north, in the surface frame — off the flight path
-
-   # straight up at the pad, wings aligned to north
-   ap.set_direction_and_up((1, 0, 0), up, 0)
-   ap.engaged = True
-   ap.wait()
-
-   # ease over towards the eastern horizon; roll stays defined through the vertical
-   import math
-   for i in range(1, 91):
-       pitch = math.radians(90 - i)            # 90° down to 0°
-       direction = (math.sin(pitch), 0, math.cos(pitch))
-       ap.set_direction_and_up(direction, up, 0)
-       ap.wait()
+.. literalinclude:: /scripts/tutorials/autopilot/DirectionAndUp.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 .. _convenience-setters:
 
@@ -178,17 +160,10 @@ This matters most for a control loop that :ref:`holds a tick <holding-a-tick>`, 
 whole read, compute and write inside one tick. Manual mode then fixes the order: calls before
 **update** set what the loop flies the tick with, and calls after it read what the loop did.
 
-.. code-block:: python
-
-   ap.update_mode = conn.space_center.AutoPilotUpdateMode.manual
-   while True:
-       conn.krpc.hold_tick()
-       try:
-           ap.target_pitch_and_heading(control_law(vessel.flight().pitch), 90)
-           ap.update()
-           record(ap.error, vessel.control.pitch)
-       finally:
-           conn.krpc.release_tick()
+.. literalinclude:: /scripts/tutorials/autopilot/ManualUpdate.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 In manual mode the vessel is flown only on the ticks the loop runs on. On any other tick the
 vessel keeps the control output of the last run, and after a tenth of a second the autopilot
@@ -286,18 +261,10 @@ spread over that time, with no per-tick scripting on your part.
 
 For example, to pitch the nose over by 10° across 20 seconds:
 
-.. code-block:: python
-
-   ap = vessel.auto_pilot
-   ap.reference_frame = vessel.surface_reference_frame
-   ap.target_pitch_and_heading(90, 90)   # start pointing straight up
-   ap.engaged = True
-   ap.wait()
-
-   # ease a 10° pitch-over (90° → 80°) in over 20 seconds
-   ap.target_smoothing_time = 20
-   ap.target_pitch_and_heading(80, 90)
-   ap.wait()                             # returns once the 80° target is reached
+.. literalinclude:: /scripts/tutorials/autopilot/TargetSmoothing.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 Properties related to the commanded and effective targets are accessible via the API:
 
@@ -381,12 +348,10 @@ the same properties also seed the automatic estimator before it acquires. The **
 notch Q** (default 2.5) sets how narrow the notch is — higher is narrower, with less
 in-band lag but less tolerance to the mode frequency drifting.
 
-.. code-block:: python
-
-   ap = vessel.auto_pilot
-   # treat the craft as flexible from the start, notching a 1.4 Hz bending mode
-   ap.pitch_yaw_rate_filter_mode = conn.space_center.RateFilterMode.notch
-   ap.pitch_yaw_oscillation_frequency = 1.4
+.. literalinclude:: /scripts/tutorials/autopilot/RateFilter.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 .. _bandwidth-floor:
 
@@ -616,9 +581,10 @@ The info window
 For debugging, the autopilot can display an in-game window showing its live internal
 state. It is enabled per vessel, and hidden again when the game restarts:
 
-.. code-block:: python
-
-   vessel.auto_pilot.show_info_ui = True
+.. literalinclude:: /scripts/tutorials/autopilot/InfoUi.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 The window is laid out like a control panel of annunciator lamps and digital registers.
 Lamps are dim when nominal and light amber to flag something worth attention; the

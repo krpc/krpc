@@ -225,15 +225,10 @@ A function stream or event ends on any exception its function raises. This inclu
 ``ObjectNotLoadedException`` from the ``KRPC`` service, raised while the game loads or when a vessel
 unloads. To keep a function running through a load, catch the exception in the function:
 
-.. code-block:: python
-
-   def altitude_km():
-       try:
-           return flight.mean_altitude / 1000
-       except conn.krpc.ObjectNotLoadedException:
-           return 0.0
-
-   stream = conn.add_stream(altitude_km)
+.. literalinclude:: /scripts/python/client/NotLoadedStream.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 For an event, the handler returns ``False`` so the event does not fire.
 
@@ -280,25 +275,18 @@ also compiles the function on the server, so its first run is as fast as later o
 
 ``compile`` also works as a decorator, which replaces the function with its compiled form:
 
-.. code-block:: python
-
-   @conn.compile
-   def altitude_km():
-       return flight.mean_altitude / 1000
-
-   stream = conn.add_stream(altitude_km)
+.. literalinclude:: /scripts/python/client/CompileDecorator.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 A ``def`` can take parameters, each with a type annotation. ``run`` passes its arguments to them,
 with defaults and keyword arguments as in Python:
 
-.. code-block:: python
-
-   @conn.compile
-   def altitude_above(height: float, scale: float = 1000) -> float:
-       return (flight.mean_altitude - height) / scale
-
-   print(conn.run(altitude_above, 70000))
-   print(conn.run(altitude_above, 70000, scale=1))
+.. literalinclude:: /scripts/python/client/CompiledFunctionArguments.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
 
 Only a ``def`` takes parameters. An event or a function stream runs its function with no arguments.
 Passing ``add_event`` or ``add_stream`` a ``def`` with parameters raises
