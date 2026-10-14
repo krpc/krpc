@@ -1099,7 +1099,7 @@ time is passing 10x faster than normal. Returns 1 if time warp is not
 active.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1114,7 +1114,7 @@ if time warp is not active. When in on-rails time warp, this is equal to
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter19physics_warp_factorEv" title="krpc::services::SpaceCenter::physics_warp_factor"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">physics_warp_factor()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1135,9 +1135,13 @@ lowest possible value. For example, if the vessel is too close to a
 planet. See <a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a> for details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Outside the flight scene, every factor can be set.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1172,9 +1176,13 @@ for details.</p>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Outside the flight scene, every valid factor can be used.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1186,9 +1194,13 @@ A value between 0 and 7 inclusive. See
 for details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Outside the flight scene, this is the highest factor.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1213,9 +1225,14 @@ time warp, the warp rate is limited by <em>max_physics_rate</em>.</p>
 <dd class="field-even"><p>When the time warp is complete.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Outside the flight scene, only regular “on-rails” time warp is used.
+Throws an exception if the game scene changes during the time warp.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1408,7 +1425,7 @@ warp is not active, <a class="reference internal" href="#_CPPv4N4krpc8services11
 is active, or <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8WarpMode7physicsE" title="krpc::services::SpaceCenter::WarpMode::physics"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">WarpMode::physics</span></code></a> if physical time warp is active.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
 </dd></dl>

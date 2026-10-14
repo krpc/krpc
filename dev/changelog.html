@@ -711,6 +711,9 @@
 <li><p>The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and setting <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Alarm.EventOffset</span></code>, change when the alarm goes off (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1114">#1114</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.CanSave</span></code>, whether the game can be saved (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1117">#1117</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Remove <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LoadSpaceCenter</span></code>, replaced by setting <code class="docutils literal notranslate"><span class="pre">KRPC.GameScene</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1140">#1140</a>)</p></li>
+<li><p>Allow the time warp RPCs in the space center and tracking station, apart from <code class="docutils literal notranslate"><span class="pre">SpaceCenter.PhysicsWarpFactor</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1145">#1145</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SpaceCenter.WarpTo</span></code> throws an exception if the game scene changes during the time warp (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1145">#1145</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">SpaceCenter.MaximumRailsWarpFactor</span></code> returning 0 when only warp factor 1 is allowed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1145">#1145</a>)</p></li>
 </ul>
 </li>
 <li><p>Editor</p>

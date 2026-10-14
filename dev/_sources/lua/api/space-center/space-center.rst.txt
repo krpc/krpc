@@ -408,6 +408,10 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :Attribute: Can be read or written
    :rtype: number
 
+   .. note::
+
+      Outside the flight scene, every factor can be set.
+
 
 
 
@@ -433,6 +437,10 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :param number factor: The warp factor to check.
    :rtype: boolean
 
+   .. note::
+
+      Outside the flight scene, every valid factor can be used.
+
 
 
 
@@ -445,6 +453,10 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    :Attribute: Read-only, cannot be set
    :rtype: number
+
+   .. note::
+
+      Outside the flight scene, this is the highest factor.
 
 
 
@@ -463,6 +475,11 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :param number max_rails_rate: The maximum warp rate in regular "on-rails" time warp.
    :param number max_physics_rate: The maximum warp rate in physical time warp.
    :returns: When the time warp is complete.
+
+   .. note::
+
+      Outside the flight scene, only regular "on-rails" time warp is used.
+      Throws an exception if the game scene changes during the time warp.
 
 
 

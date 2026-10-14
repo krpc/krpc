@@ -305,7 +305,7 @@ SpaceCenter
       time is passing 10x faster than normal. Returns 1 if time warp is not
       active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. property:: float WarpFactor { get; }
 
@@ -315,7 +315,7 @@ SpaceCenter
       :prop:`SpaceCenter.RailsWarpFactor <SpaceCenter.SpaceCenter.RailsWarpFactor>`, and in physics time warp, this is equal to
       :prop:`SpaceCenter.PhysicsWarpFactor <SpaceCenter.SpaceCenter.PhysicsWarpFactor>`.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. property:: int RailsWarpFactor { get; set; }
 
@@ -327,7 +327,12 @@ SpaceCenter
       lowest possible value. For example, if the vessel is too close to a
       planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every factor can be set.
 
    .. property:: int PhysicsWarpFactor { get; set; }
 
@@ -348,7 +353,12 @@ SpaceCenter
 
        * **factor** -- The warp factor to check.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every valid factor can be used.
 
    .. property:: int MaximumRailsWarpFactor { get; }
 
@@ -357,7 +367,12 @@ SpaceCenter
       `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
       for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, this is the highest factor.
 
    .. method:: void WarpTo(double ut, float maxRailsRate = 1e+05f, float maxPhysicsRate = 2.0f)
 
@@ -376,7 +391,13 @@ SpaceCenter
        * **maxPhysicsRate** -- The maximum warp rate in physical time warp.
 
       :returns: When the time warp is complete.
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, only regular "on-rails" time warp is used.
+         Throws an exception if the game scene changes during the time warp.
 
    .. method:: System.Tuple<double,double,double> TransformPosition(System.Tuple<double,double,double> position, ReferenceFrame from, ReferenceFrame to)
 
@@ -524,7 +545,7 @@ SpaceCenter
       warp is not active, :enum:`WarpMode.Rails` if regular "on-rails" time warp
       is active, or :enum:`WarpMode.Physics` if physical time warp is active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. property:: Camera Camera { get; }
 

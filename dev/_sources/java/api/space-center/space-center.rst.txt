@@ -299,7 +299,7 @@ SpaceCenter
       time is passing 10x faster than normal. Returns 1 if time warp is not
       active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. method:: float getWarpFactor()
 
@@ -310,7 +310,7 @@ SpaceCenter
       :meth:`getRailsWarpFactor()`, and in physics time warp, this is equal to
       :meth:`getPhysicsWarpFactor()`.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. method:: int getRailsWarpFactor()
 
@@ -324,7 +324,12 @@ SpaceCenter
       lowest possible value. For example, if the vessel is too close to a
       planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every factor can be set.
 
    .. method:: int getPhysicsWarpFactor()
 
@@ -344,7 +349,12 @@ SpaceCenter
       for details.
 
       :param int factor: The warp factor to check.
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every valid factor can be used.
 
    .. method:: int getMaximumRailsWarpFactor()
 
@@ -354,7 +364,12 @@ SpaceCenter
       `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
       for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, this is the highest factor.
 
    .. method:: void warpTo(double ut, float maxRailsRate, float maxPhysicsRate)
 
@@ -370,7 +385,13 @@ SpaceCenter
       :param float maxRailsRate: The maximum warp rate in regular "on-rails" time warp.
       :param float maxPhysicsRate: The maximum warp rate in physical time warp.
       :returns: When the time warp is complete.
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, only regular "on-rails" time warp is used.
+         Throws an exception if the game scene changes during the time warp.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> transformPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame from, ReferenceFrame to)
 
@@ -497,7 +518,7 @@ SpaceCenter
       warp is not active, :meth:`WarpMode.RAILS` if regular "on-rails" time warp
       is active, or :meth:`WarpMode.PHYSICS` if physical time warp is active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. method:: Camera getCamera()
 

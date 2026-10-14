@@ -1201,7 +1201,7 @@ active.</p>
 <dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1222,7 +1222,7 @@ if time warp is not active. When in on-rails time warp, this is equal to
 <dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1244,9 +1244,13 @@ planet. See <a class="reference external" href="https://wiki.kerbalspaceprogram.
 <dd class="field-even"><p>int</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Outside the flight scene, every factor can be set.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1283,9 +1287,13 @@ for details.</p>
 <dd class="field-even"><p>bool</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Outside the flight scene, every valid factor can be used.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1303,9 +1311,13 @@ for details.</p>
 <dd class="field-even"><p>int</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Outside the flight scene, this is the highest factor.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1330,9 +1342,14 @@ time warp, the warp rate is limited by <em>max_physics_rate</em>.</p>
 <dd class="field-even"><p>When the time warp is complete.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Outside the flight scene, only regular “on-rails” time warp is used.
+Throws an exception if the game scene changes during the time warp.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1585,7 +1602,7 @@ is active, or <a class="reference internal" href="#SpaceCenter.WarpMode.physics"
 <dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.WarpMode" title="SpaceCenter.WarpMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">WarpMode</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Space Center, Flight, Tracking Station</p>
 </dd>
 </dl>
 </dd></dl>

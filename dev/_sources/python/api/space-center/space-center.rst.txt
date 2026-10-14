@@ -417,7 +417,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    :Attribute: Read-only, cannot be set
    :rtype: float
-   :Game Scenes: Flight
+   :Game Scenes: Space Center, Flight, Tracking Station
 
 
 
@@ -433,7 +433,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    :Attribute: Read-only, cannot be set
    :rtype: float
-   :Game Scenes: Flight
+   :Game Scenes: Space Center, Flight, Tracking Station
 
 
 
@@ -451,8 +451,12 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    :Attribute: Can be read or written
    :rtype: int
-   :Game Scenes: Flight
+   :Game Scenes: Space Center, Flight, Tracking Station
 
+
+   .. note::
+
+      Outside the flight scene, every factor can be set.
 
 
 
@@ -480,8 +484,12 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    :param int factor: The warp factor to check.
    :rtype: bool
-   :Game Scenes: Flight
+   :Game Scenes: Space Center, Flight, Tracking Station
 
+
+   .. note::
+
+      Outside the flight scene, every valid factor can be used.
 
 
 
@@ -495,8 +503,12 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    :Attribute: Read-only, cannot be set
    :rtype: int
-   :Game Scenes: Flight
+   :Game Scenes: Space Center, Flight, Tracking Station
 
+
+   .. note::
+
+      Outside the flight scene, this is the highest factor.
 
 
 
@@ -515,8 +527,13 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :param float max_rails_rate: The maximum warp rate in regular "on-rails" time warp.
    :param float max_physics_rate: The maximum warp rate in physical time warp.
    :returns: When the time warp is complete.
-   :Game Scenes: Flight
+   :Game Scenes: Space Center, Flight, Tracking Station
 
+
+   .. note::
+
+      Outside the flight scene, only regular "on-rails" time warp is used.
+      Throws an exception if the game scene changes during the time warp.
 
 
 
@@ -698,7 +715,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    :Attribute: Read-only, cannot be set
    :rtype: :class:`WarpMode`
-   :Game Scenes: Flight
+   :Game Scenes: Space Center, Flight, Tracking Station
 
 
 

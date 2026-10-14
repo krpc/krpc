@@ -125,6 +125,9 @@ SpaceCenter service
   * The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and setting ``SpaceCenter.Alarm.EventOffset``, change when the alarm goes off (:issue:`1114`)
   * Add ``SpaceCenter.CanSave``, whether the game can be saved (:issue:`1117`)
   * :breaking:`Breaking` Remove ``SpaceCenter.LoadSpaceCenter``, replaced by setting ``KRPC.GameScene`` (:issue:`1140`)
+  * Allow the time warp RPCs in the space center and tracking station, apart from ``SpaceCenter.PhysicsWarpFactor`` (:issue:`1145`)
+  * ``SpaceCenter.WarpTo`` throws an exception if the game scene changes during the time warp (:issue:`1145`)
+  * Fix ``SpaceCenter.MaximumRailsWarpFactor`` returning 0 when only warp factor 1 is allowed (:issue:`1145`)
 
 * Editor
 
