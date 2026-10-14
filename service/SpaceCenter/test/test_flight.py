@@ -354,23 +354,6 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
         )
         self.assertGreater(norm(broadside - head_on), 0.1 * norm(head_on))
 
-    # def test_drag_coefficient(self):
-    #     if not self.far:
-    #         # Using stock aerodynamic model
-    #         parts = {
-    #             'mk1pod': {'n': 1, 'mass': 0.8, 'drag': 0.2},
-    #             'fuelTank': {'n': 1, 'mass': 0.125, 'drag': 0.2},
-    #             'batteryPack': {'n': 2, 'mass': 0.01, 'drag': 0.2},
-    #             'solarPanels1': {'n': 3, 'mass': 0.02, 'drag': 0.25},
-    #             'liquidEngine2': {'n': 1, 'mass': 1.5, 'drag': 0.2}
-    #         }
-    #         total_mass = sum(x['mass']*x['n'] for x in parts.values())
-    #         mass_drag_products = sum(x['mass']*x['drag']*x['n']
-    #                                  for x in parts.values())
-    #         drag_coefficient = mass_drag_products / total_mass
-    #         self.assertAlmostEqual(
-    #             drag_coefficient, self.vessel.flight().drag_coefficient)
-
 
 class TestFlightAero(krpctest.TestCase):
     # Stock aerodynamic torque simulation (issue #914) for a craft with control
