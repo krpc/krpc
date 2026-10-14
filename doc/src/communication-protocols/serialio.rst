@@ -40,17 +40,11 @@ Unlike the TCP/IP and WebSockets protocols, all messages sent to the server afte
 connection handshake are wrapped in a ``MultiplexedRequest`` message, and all messages received
 from the server after the handshake are wrapped in a ``MultiplexedResponse`` message:
 
-.. code-block:: protobuf
-
-   message MultiplexedRequest {
-     ConnectionRequest connection_request = 1;
-     Request request = 2;
-   }
-
-   message MultiplexedResponse {
-     Response response = 1;
-     StreamUpdate stream_update = 2;
-   }
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message MultiplexedRequest {
+   :end-at: StreamUpdate stream_update = 2;
+   :append: }
 
 Connecting to the Server
 ------------------------
@@ -63,17 +57,10 @@ connection, a client must do the following:
 2. Send a ``MultiplexedRequest`` message to the server with its ``connection_request`` field
    populated. The ``ConnectionRequest`` message is defined as:
 
-   .. code-block:: protobuf
-
-      message ConnectionRequest {
-        Type type = 1;
-        string client_name = 2;
-        bytes client_identifier = 3;
-        enum Type {
-          RPC = 0;
-          STREAM = 1;
-        };
-      }
+   .. literalinclude:: /communication-protocols/krpc.proto
+      :language: protobuf
+      :start-at: message ConnectionRequest {
+      :end-before: message ConnectionResponse {
 
    The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
    be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
@@ -81,19 +68,10 @@ connection, a client must do the following:
 
 3. Receive a ``ConnectionResponse`` message from the server. This message is defined as:
 
-   .. code-block:: protobuf
-
-      message ConnectionResponse {
-        Status status = 1;
-        enum Status {
-          OK = 0;
-          MALFORMED_MESSAGE = 1;
-          TIMEOUT = 2;
-          WRONG_TYPE = 3;
-        }
-        string message = 2;
-        bytes client_identifier = 3;
-      }
+   .. literalinclude:: /communication-protocols/krpc.proto
+      :language: protobuf
+      :start-at: message ConnectionResponse {
+      :end-before: // Messages for calling remote procedures
 
    If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was successful.
    If not, the ``message`` field contains a description of what went wrong.

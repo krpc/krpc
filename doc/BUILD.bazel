@@ -47,9 +47,12 @@ stage_files(
         ":java-api",
         ":lua-api",
         ":python-api",
+        "//protobuf:krpc.proto",
     ],
     path_map = {
         "doc/src/": "",
+        # The protocol pages include their message definitions from the schema
+        "protobuf/krpc.proto": "communication-protocols/krpc.proto",
     },
 )
 

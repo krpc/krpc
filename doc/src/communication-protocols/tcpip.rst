@@ -38,17 +38,10 @@ connection, a client must do the following:
 
 2. Send a ``ConnectionRequest`` message to the server. This message is defined as:
 
-   .. code-block:: protobuf
-
-      message ConnectionRequest {
-        Type type = 1;
-        string client_name = 2;
-        bytes client_identifier = 3;
-        enum Type {
-          RPC = 0;
-          STREAM = 1;
-        };
-      }
+   .. literalinclude:: /communication-protocols/krpc.proto
+      :language: protobuf
+      :start-at: message ConnectionRequest {
+      :end-before: message ConnectionResponse {
 
    The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
    be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
@@ -56,19 +49,10 @@ connection, a client must do the following:
 
 3. Receive a `ConnectionResponse` message from the server. This message is defined as:
 
-   .. code-block:: protobuf
-
-      message ConnectionResponse {
-        Status status = 1;
-        enum Status {
-          OK = 0;
-          MALFORMED_MESSAGE = 1;
-          TIMEOUT = 2;
-          WRONG_TYPE = 3;
-        }
-        string message = 2;
-        bytes client_identifier = 3;
-      }
+   .. literalinclude:: /communication-protocols/krpc.proto
+      :language: protobuf
+      :start-at: message ConnectionResponse {
+      :end-before: // Messages for calling remote procedures
 
    If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was
    successful. If not, the ``message`` field contains a description of what went wrong.
