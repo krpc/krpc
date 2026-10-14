@@ -782,9 +782,10 @@ needing to repeatedly call the RPC directly, avoiding the communication overhead
 involve.</p>
 <p>A client can create a stream on the server by calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a>, or
 stream the value of a server side function by calling
-<a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a>. Each call creates a new stream with a new
-identifier, including a call for the same RPC or function as an existing stream. The stream sends
-its first result in the update after it is added.</p>
+<a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a>. An <a class="reference internal" href="#communication-protocol-events"><span class="std std-ref">event</span></a>
+is also a stream. Each call creates a new stream with a new identifier, including a call for the
+same RPC or function as an existing stream. The stream sends its first result in the update after it
+is added.</p>
 <p>A stream over a game object that is not loaded sends no result until the object loads. A stream over
 a procedure that is not available in the current game scene sends no result until the game returns
 to a scene where it is. An event still sends its first result, which says whether it has fired.</p>
@@ -797,8 +798,9 @@ for all of these RPCs are collected together into a stream update message. This 
 client over its stream server connection. If the value returned by a streams RPC does not change
 since the last update that was sent, its value is omitted from the update message in order to
 minimize network traffic. A client can also control the rate of the stream, by specifying a target
-number of Hertz. The server computes a time delay from the target rate, and only updates the stream
-if at least that time has passed since the last time the stream was updated.</p>
+number of Hertz with <a class="reference internal" href="#communication-protocol-set-stream-rate"><span class="std std-ref">SetStreamRate</span></a>. The server computes a time delay
+from the target rate, and only updates the stream if at least that time has passed since the last
+time the stream was updated.</p>
 <p>The first result travels on the stream connection and the <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> response on the RPC
 connection, so the result can arrive first. The same holds for every response carrying an <code class="docutils literal notranslate"><span class="pre">Event</span></code>
 message. A client keeps the results for an identifier higher than any it has been given, and applies
@@ -827,7 +829,7 @@ format:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> - The identifier of the stream. This is the value returned by
 <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a> or <a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a>
-when the stream is created.</p></li>
+when the stream is created, or the stream identifier in an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">result</span></code> - A <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message containing the result of the streams RPC. This is
 identical to the <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message returned when calling the RPC directly. See
 <a class="reference internal" href="#communication-protocol-anatomy-of-a-response"><span class="std std-ref">Anatomy of a Response</span></a> for details on the format and contents of this
@@ -841,9 +843,10 @@ gets no final result.</p>
 </section>
 </section>
 <section id="events">
-<h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
+<span id="communication-protocol-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
 <p>Events are a wrapper over a stream that returns a boolean value. The event is triggered when the
-stream returns true. Remote procedures that return an event return an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message that
+stream returns true. An event is created by <a class="reference internal" href="#communication-protocol-add-event"><span class="std std-ref">AddEvent</span></a> or by another
+remote procedure with an event return type. The procedure returns an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message, which
 contains a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message describing the underlying stream for the event. The stream starts when
 the event is created, and its first result says whether it has fired.</p>
 <p>The format for an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message is simply the following:</p>
@@ -857,6 +860,11 @@ the event is created, and its first result says whether it has fired.</p>
 <span id="communication-protocol-krpc-service"></span><h2>KRPC Service<a class="headerlink" href="#krpc-service" title="Link to this heading">#</a></h2>
 <p>The server provides a service called <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> containing procedures that are
 used to retrieve information about the server and to manage streams.</p>
+<p>The service has other members, such as the <code class="docutils literal notranslate"><span class="pre">GameScene</span></code>, <code class="docutils literal notranslate"><span class="pre">Paused</span></code> and <code class="docutils literal notranslate"><span class="pre">Clients</span></code> properties
+and the <code class="docutils literal notranslate"><span class="pre">HoldTick</span></code> procedure. They are called like the members of any other service, so the
+getter for <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> is the procedure <code class="docutils literal notranslate"><span class="pre">get_GameScene</span></code>. See
+<a class="reference internal" href="#communication-protocol-procedure-names"><span class="std std-ref">Procedure Names</span></a> for the naming rules, and the
+<a class="reference internal" href="#communication-protocol-service-description-message"><span class="std std-ref">Service Description Message</span></a> for the full list of members.</p>
 <section id="getstatus">
 <h3>GetStatus<a class="headerlink" href="#getstatus" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">GetStatus</span></code> procedure returns status information about the server. It
@@ -916,6 +924,18 @@ values have the type given by the function’s <code class="docutils literal not
 parameters. Any exception from the function ends the stream with that error, including one for a
 game object that is not loaded.</p>
 </section>
+<section id="addevent">
+<span id="communication-protocol-add-event"></span><h3>AddEvent<a class="headerlink" href="#addevent" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">AddEvent</span></code> procedure adds an event that fires when a server side function evaluates to true.
+Its argument is the function, built using the <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> class. The function must take no
+parameters and return a <code class="docutils literal notranslate"><span class="pre">bool</span></code>.</p>
+<p>The procedure returns an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message describing the event’s stream. See
+<a class="reference internal" href="#communication-protocol-events"><span class="std std-ref">Events</span></a> for the format of this message. The function is evaluated on
+each stream update, and the event fires on every update it returns true. A rate set with
+<a class="reference internal" href="#communication-protocol-set-stream-rate"><span class="std std-ref">SetStreamRate</span></a> limits how often the function is evaluated. Any
+exception from the function ends the event’s stream with that error, including one for a game object
+that is not loaded.</p>
+</section>
 <section id="runfunction">
 <span id="communication-protocol-run-function"></span><h3>RunFunction<a class="headerlink" href="#runfunction" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">RunFunction</span></code> procedure evaluates a server side function once, within a single physics
@@ -938,14 +958,26 @@ empty result.</p>
 server otherwise compiles a function when it is first run, streamed or added as an event, on the
 game’s main thread. Compiling a large function in advance keeps that time out of its first run.</p>
 </section>
+<section id="setstreamrate">
+<span id="communication-protocol-set-stream-rate"></span><h3>SetStreamRate<a class="headerlink" href="#setstreamrate" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">SetStreamRate</span></code> procedure sets the target update rate of a stream, in Hertz. Its arguments are
+the identifier of the stream and the rate, as a <code class="docutils literal notranslate"><span class="pre">float</span></code>. A rate of zero, the default, updates the
+stream on every fixed update. While the game is paused with the server setting “Pause the server
+when the game pauses” turned off, the server updates once per rendered frame.</p>
+<p>Setting the rate of a stream that has already ended does nothing. An identifier the server never
+issued raises <code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>. A client with no stream server connection gets an
+<code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>.</p>
+</section>
 <section id="removestream">
 <span id="communication-protocol-remove-stream"></span><h3>RemoveStream<a class="headerlink" href="#removestream" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">RemoveStream</span></code> procedure removes a stream from the server. It takes a single argument – the
 identifier of the stream to be removed. This is the identifier returned when the stream was added by
-calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a> or <a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a>.
+calling <a class="reference internal" href="#communication-protocol-add-stream"><span class="std std-ref">AddStream</span></a> or
+<a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a>, or the stream identifier in an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message.
 See <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more information on working with streams.</p>
 <p>Removing a stream that has already ended does nothing. An identifier the server never issued raises
-<code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>. <code class="docutils literal notranslate"><span class="pre">SetStreamRate</span></code> follows the same rules.</p>
+<code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>. A client with no stream server connection gets an
+<code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>.</p>
 </section>
 </section>
 <section id="service-description-message">
@@ -1409,8 +1441,10 @@ represent null on the wire.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getservices">GetServices</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addstream">AddStream</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addfunctionstream">AddFunctionStream</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addevent">AddEvent</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runfunction">RunFunction</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compilefunction">CompileFunction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setstreamrate">SetStreamRate</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#removestream">RemoveStream</a></li>
 </ul>
 </li>

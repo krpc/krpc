@@ -611,8 +611,12 @@
 port to interact with a kRPC server, for example an Arduino.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If a client library is available for your language, you do not need to implement this
-protocol.</p>
+<p>If a client library is available for your language, you do not need to implement this protocol.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The serial IO protocol carries RPCs only. Streams and events are not available, and the stream
+procedures, such as <code class="docutils literal notranslate"><span class="pre">KRPC.AddStream</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.RemoveStream</span></code>, return an error.</p>
 </div>
 <section id="configuring-the-server">
 <h2>Configuring the Server<a class="headerlink" href="#configuring-the-server" title="Link to this heading">#</a></h2>
@@ -654,11 +658,12 @@ from the server after the handshake are wrapped in a <code class="docutils liter
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>The server leaves the <code class="docutils literal notranslate"><span class="pre">stream_update</span></code> field of a <code class="docutils literal notranslate"><span class="pre">MultiplexedResponse</span></code> unset.</p>
 </section>
 <section id="connecting-to-the-server">
 <h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
-<p>There is a single serial port connection for both RPC calls and stream updates. To establish a
-connection, a client must do the following:</p>
+<p>There is a single serial port connection for RPC calls. To establish a connection, a client must
+do the following:</p>
 <ol class="arabic">
 <li><p>Open a connection to the serial port.</p></li>
 <li><p>Send a <code class="docutils literal notranslate"><span class="pre">MultiplexedRequest</span></code> message to the server with its <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> field
@@ -701,14 +706,6 @@ its first bytes are received. If it does not arrive in time, the server responds
 </li>
 </ol>
 </section>
-<section id="receiving-stream-updates">
-<h2>Receiving Stream Updates<a class="headerlink" href="#receiving-stream-updates" title="Link to this heading">#</a></h2>
-<p>Clients can receive <a class="reference internal" href="messages.html#communication-protocol-streams"><span class="std std-ref">Streams</span></a> over the same serial port connection used
-for RPC calls. Stream updates arrive as <code class="docutils literal notranslate"><span class="pre">MultiplexedResponse</span></code> messages with the <code class="docutils literal notranslate"><span class="pre">stream_update</span></code>
-field populated. After sending an RPC request, the client should inspect each received
-<code class="docutils literal notranslate"><span class="pre">MultiplexedResponse</span></code> to determine whether it contains a <code class="docutils literal notranslate"><span class="pre">response</span></code> (the result of an RPC call)
-or a <code class="docutils literal notranslate"><span class="pre">stream_update</span></code> (a stream result).</p>
-</section>
 <section id="invoking-remote-procedures">
 <h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
 <p>See <a class="reference internal" href="messages.html"><span class="doc">Messaging Protocol</span></a>.</p>
@@ -725,14 +722,13 @@ in each direction, and the two directions behave differently when their buffer f
 <li><p>Data received from the port is buffered until the game reads it. When the buffer fills, the
 server stops reading from the port until the game catches up. The data is kept, and the port
 carries it more slowly.</p></li>
-<li><p>Data written by the game is buffered until the port has sent it. When this buffer fills, which
-means the game has been producing data faster than the port can send for a sustained period,
-the server drops the connection and stops. It can be started again from the in-game
-configuration window. The easiest way to hit this limit is to request streams whose updates add
-up to more than the port’s data rate, as an update to a stream is sent every game update.</p></li>
+<li><p>Data written by the game is buffered until the port has sent it. The game writes only responses,
+so this buffer fills when a client sends requests faster than it reads their responses. The
+server then drops the connection and stops. It can be started again from the in-game
+configuration window.</p></li>
 </ul>
-<p>To stay within the port’s capacity, keep the number and size of streams small relative to the baud
-rate, or configure a higher baud rate.</p>
+<p>To keep the write buffer from filling, read each response before sending the next request. A higher
+baud rate moves more data through the port.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
@@ -883,7 +879,6 @@ the server version number from the response.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-server">Configuring the Server</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sending-and-receiving-messages">Sending and Receiving Messages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#receiving-stream-updates">Receiving Stream Updates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffering-and-data-rates">Buffering and Data Rates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
