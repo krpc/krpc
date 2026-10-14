@@ -26,28 +26,6 @@ concurrency:
 # dependencies first, so the cap only ever fires on a hang, in place of the
 # six hours a job would otherwise sit on a runner.
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    container:
-      image: ghcr.io/krpc/buildenv:3.13.0
-      options: --user runner:runner
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
-    steps:
-      - name: checkout
-        uses: actions/checkout@v7
-      - name: setup
-        uses: ./.github/actions/build-setup
-        with:
-          long-version: "false"
-      - name: bazel
-        run: bazel test //:buildifier
-      # Whether the lock file matches requirements.in, resolved against PyPI
-      - name: python-requirements
-        run: bazel test //tools/build/python:requirements.test
-
   # One entry per thing built or tested. `build` and `test` hold Bazel target
   # patterns and either may be left out; `artifact` and `path` upload the
   # result. The jobs further down stay out of the matrix because they produce
@@ -103,8 +81,10 @@ jobs:
             test: //client/websockets:test
           - name: test-tools
             test: //tools/benchmarks:test //tools/krpctest:test //tools/krpctools:test
+          # The Python lock file is resolved on Linux, so only Linux checks it
           - name: test-build-scripts
             test: >-
+              //:buildifier //tools/build/python:requirements.test
               //:pyright-release //:ruff-release
               //tools/build:pyright //tools/build:ruff
               //tools/build/protobuf:pyright //tools/build/protobuf:ruff
@@ -179,6 +159,7 @@ jobs:
             test: //tools/benchmarks:test //tools/krpctest:test //tools/krpctools:test
           - name: test-build-scripts
             test: >-
+              //:buildifier
               //:pyright-release //:ruff-release
               //tools/build:pyright //tools/build:ruff
               //tools/build/protobuf:pyright //tools/build/protobuf:ruff
@@ -600,7 +581,6 @@ jobs:
     timeout-minutes: 30
     if: always()
     needs:
-      - lint
       - linux
       - windows
       - linux-build-krpc
