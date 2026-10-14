@@ -163,9 +163,10 @@ involve.
 
 A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`, or
 stream the value of a server side function by calling
-:ref:`communication-protocol-add-function-stream`. Each call creates a new stream with a new
-identifier, including a call for the same RPC or function as an existing stream. The stream sends
-its first result in the update after it is added.
+:ref:`communication-protocol-add-function-stream`. An :ref:`event <communication-protocol-events>`
+is also a stream. Each call creates a new stream with a new identifier, including a call for the
+same RPC or function as an existing stream. The stream sends its first result in the update after it
+is added.
 
 A stream over a game object that is not loaded sends no result until the object loads. A stream over
 a procedure that is not available in the current game scene sends no result until the game returns
@@ -182,8 +183,9 @@ for all of these RPCs are collected together into a stream update message. This 
 client over its stream server connection. If the value returned by a streams RPC does not change
 since the last update that was sent, its value is omitted from the update message in order to
 minimize network traffic. A client can also control the rate of the stream, by specifying a target
-number of Hertz. The server computes a time delay from the target rate, and only updates the stream
-if at least that time has passed since the last time the stream was updated.
+number of Hertz with :ref:`communication-protocol-set-stream-rate`. The server computes a time delay
+from the target rate, and only updates the stream if at least that time has passed since the last
+time the stream was updated.
 
 The first result travels on the stream connection and the ``AddStream`` response on the RPC
 connection, so the result can arrive first. The same holds for every response carrying an ``Event``
@@ -216,7 +218,7 @@ The fields are:
 
 * ``id`` - The identifier of the stream. This is the value returned by
   :ref:`communication-protocol-add-stream` or :ref:`communication-protocol-add-function-stream`
-  when the stream is created.
+  when the stream is created, or the stream identifier in an ``Event`` message.
 
 * ``result`` - A ``ProcedureResult`` message containing the result of the streams RPC. This is
   identical to the ``ProcedureResult`` message returned when calling the RPC directly. See
@@ -229,11 +231,14 @@ itself, for example an event that has finished, the error is a ``StreamRemovedEx
 ``KRPC`` service. A stream removed by the client with :ref:`communication-protocol-remove-stream`
 gets no final result.
 
+.. _communication-protocol-events:
+
 Events
 ------
 
 Events are a wrapper over a stream that returns a boolean value. The event is triggered when the
-stream returns true. Remote procedures that return an event return an ``Event`` message that
+stream returns true. An event is created by :ref:`communication-protocol-add-event` or by another
+remote procedure with an event return type. The procedure returns an ``Event`` message, which
 contains a ``Stream`` message describing the underlying stream for the event. The stream starts when
 the event is created, and its first result says whether it has fired.
 
@@ -251,6 +256,12 @@ KRPC Service
 
 The server provides a service called ``KRPC`` containing procedures that are
 used to retrieve information about the server and to manage streams.
+
+The service has other members, such as the ``GameScene``, ``Paused`` and ``Clients`` properties
+and the ``HoldTick`` procedure. They are called like the members of any other service, so the
+getter for ``GameScene`` is the procedure ``get_GameScene``. See
+:ref:`communication-protocol-procedure-names` for the naming rules, and the
+:ref:`communication-protocol-service-description-message` for the full list of members.
 
 GetStatus
 ^^^^^^^^^
@@ -307,6 +318,22 @@ values have the type given by the function's ``ReturnType`` property. The functi
 parameters. Any exception from the function ends the stream with that error, including one for a
 game object that is not loaded.
 
+.. _communication-protocol-add-event:
+
+AddEvent
+^^^^^^^^
+
+The ``AddEvent`` procedure adds an event that fires when a server side function evaluates to true.
+Its argument is the function, built using the ``KRPC.Expression`` class. The function must take no
+parameters and return a ``bool``.
+
+The procedure returns an ``Event`` message describing the event's stream. See
+:ref:`communication-protocol-events` for the format of this message. The function is evaluated on
+each stream update, and the event fires on every update it returns true. A rate set with
+:ref:`communication-protocol-set-stream-rate` limits how often the function is evaluated. Any
+exception from the function ends the event's stream with that error, including one for a game object
+that is not loaded.
+
 .. _communication-protocol-run-function:
 
 RunFunction
@@ -337,6 +364,20 @@ The ``CompileFunction`` procedure compiles a server side function, and returns n
 server otherwise compiles a function when it is first run, streamed or added as an event, on the
 game's main thread. Compiling a large function in advance keeps that time out of its first run.
 
+.. _communication-protocol-set-stream-rate:
+
+SetStreamRate
+^^^^^^^^^^^^^
+
+The ``SetStreamRate`` procedure sets the target update rate of a stream, in Hertz. Its arguments are
+the identifier of the stream and the rate, as a ``float``. A rate of zero, the default, updates the
+stream on every fixed update. While the game is paused with the server setting "Pause the server
+when the game pauses" turned off, the server updates once per rendered frame.
+
+Setting the rate of a stream that has already ended does nothing. An identifier the server never
+issued raises ``KRPC.ArgumentException``. A client with no stream server connection gets an
+``InvalidOperationException``.
+
 .. _communication-protocol-remove-stream:
 
 RemoveStream
@@ -344,11 +385,13 @@ RemoveStream
 
 The ``RemoveStream`` procedure removes a stream from the server. It takes a single argument -- the
 identifier of the stream to be removed. This is the identifier returned when the stream was added by
-calling :ref:`communication-protocol-add-stream` or :ref:`communication-protocol-add-function-stream`.
+calling :ref:`communication-protocol-add-stream` or
+:ref:`communication-protocol-add-function-stream`, or the stream identifier in an ``Event`` message.
 See :ref:`communication-protocol-streams` for more information on working with streams.
 
 Removing a stream that has already ended does nothing. An identifier the server never issued raises
-``KRPC.ArgumentException``. ``SetStreamRate`` follows the same rules.
+``KRPC.ArgumentException``. A client with no stream server connection gets an
+``InvalidOperationException``.
 
 .. _communication-protocol-service-description-message:
 
