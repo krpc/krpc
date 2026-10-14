@@ -9,7 +9,6 @@ exports_files([
     "lua_protobuf.BUILD",
     "luafilesystem.BUILD",
     "luasocket.BUILD",
-    "luasocket_windows_unix.patch",
     "luaunit.BUILD",
     "penlight.BUILD",
     "run_lua.py.tmpl",
