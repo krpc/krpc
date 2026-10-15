@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 
 .. namespace:: KRPC.Client.Services.ServiceA
@@ -8,7 +8,7 @@
 
    A service whose procedures use another service's enumeration.
 
-   .. method:: void Frob(ServiceB.Mode mode = ServiceB.Mode.Fast)
+   .. function:: void Frob(ServiceB.Mode mode = ServiceB.Mode.Fast)
 
       Defaults to a member of another service's enumeration.
 
@@ -18,12 +18,12 @@
 
       :Game Scenes: All
 
-   .. method:: void FrobAll(System.Collections.Generic.IList<ServiceB.Mode> modes = { ServiceB.Mode.Fast })
+   .. function:: void FrobAll(System.Collections.Generic.IList<ServiceB.Mode> modes = null)
 
       Defaults to a collection containing a member of another service's enumeration.
 
       :parameters:
 
-
+       * **modes** -- If null, defaults to ``new System.Collections.Generic.List<ServiceB.Mode> { ServiceB.Mode.Fast }``.
 
       :Game Scenes: All

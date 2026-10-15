@@ -163,6 +163,9 @@ class Class(Appendable):
         )
 
 
+_NO_DEFAULT_VALUE = object()
+
+
 class Parameter(Appendable):
     def __init__(
         self,
@@ -171,16 +174,19 @@ class Parameter(Appendable):
         documentation,
         types,
         procedure,
-        default_value=None,
+        default_value=_NO_DEFAULT_VALUE,
     ):
         super().__init__()
         self.types = types
         self.name = name
         self.type = as_type(self.types, type)
-        self.has_default_value = default_value is not None
-        if default_value is not None:
+        # A default value of None is a null default
+        self.has_default_value = default_value is not _NO_DEFAULT_VALUE
+        if self.has_default_value:
             location = "%s parameter %s" % (procedure, name)
             default_value = decode_default_value(default_value, self.type, location)
+        else:
+            default_value = None
         self.default_value = default_value
         self.documentation = documentation
 

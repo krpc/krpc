@@ -526,7 +526,7 @@
 
    
 
-   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestClass> obj)
+   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestClass> obj = std::optional<TestClass>())
 
 
 
@@ -781,7 +781,7 @@
 
    
 
-   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestClass> obj)
+   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestClass> obj = std::optional<TestClass>())
 
 
 

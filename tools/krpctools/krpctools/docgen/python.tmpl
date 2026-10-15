@@ -168,7 +168,7 @@
 {% endmacro %}
 
 {% macro struct(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ x.name }}({% for field in x.fields.values() %}{{ field.name | snakecase }}{% if not loop.last %}, {% endif %}{% endfor %})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 

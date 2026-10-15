@@ -1,3 +1,4 @@
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -60,6 +61,8 @@ class JavaDomain(Domain[JavaLanguage]):
             return self.language.type_map[typ.protobuf_type.code]
         if generic and isinstance(typ, ValueType):
             return self.language.type_map_classes[typ.protobuf_type.code]
+        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+            return "krpc.client.Event"
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):

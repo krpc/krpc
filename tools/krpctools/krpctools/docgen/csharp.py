@@ -1,3 +1,4 @@
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -26,10 +27,16 @@ from .nodes import (
 )
 
 
+def _initializer(values):
+    """A collection initializer holding the given values"""
+    values = ", ".join(values)
+    return "{ %s }" % values if values else "{ }"
+
+
 class CsharpDomain(Domain[CsharpLanguage]):
     name = "csharp"
     prettyname = "C#"
-    sphinxname = "csharp"
+    sphinxname = "cs"
     highlight = "csharp"
     codeext = "cs"
     language = CsharpLanguage()
@@ -43,6 +50,8 @@ class CsharpDomain(Domain[CsharpLanguage]):
             return "void"
         if isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
+        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+            return "KRPC.Client.Event"
         if isinstance(typ, MessageType):
             return "KRPC.Schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
@@ -74,6 +83,26 @@ class CsharpDomain(Domain[CsharpLanguage]):
             return name + "?"
         return name
 
+    def default_parameter_type(self, typ):
+        """The type of a parameter that has a default value"""
+        name = self.parameter_type(typ)
+        if (
+            isinstance(typ, StructType)
+            and self.language.default_is_null(typ)
+            and not name.endswith("?")
+        ):
+            return name + "?"
+        return name
+
+    def signature_default_value(self, value, typ):
+        """The default value of a parameter, as the stub declares it"""
+        if self.language.default_is_null(typ):
+            return "null"
+        return self.default_value(value, typ)
+
+    def default_is_null(self, typ):
+        return self.language.default_is_null(typ)
+
     def default_value(self, value, typ):
         if isinstance(typ, StructType):
             values = (
@@ -91,36 +120,46 @@ class CsharpDomain(Domain[CsharpLanguage]):
             values = (
                 self.default_value(x, typ.value_types[i]) for i, x in enumerate(value)
             )
-            return "{ %s }" % ", ".join(values)
+            return "new %s(%s)" % (self.type(typ), ", ".join(values))
         if isinstance(typ, ListType):
             if value is None:
                 value = []
             values = (self.default_value(x, typ.value_type) for x in value)
-            return "{ %s }" % ", ".join(values)
+            return "new System.Collections.Generic.List<%s> %s" % (
+                self.type(typ.value_type),
+                _initializer(values),
+            )
         if isinstance(typ, SetType):
             if value is None:
                 value = set()
             values = (self.default_value(x, typ.value_type) for x in value)
-            return "{ %s }" % ", ".join(values)
+            return "new System.Collections.Generic.HashSet<%s> %s" % (
+                self.type(typ.value_type),
+                _initializer(values),
+            )
         if isinstance(typ, DictionaryType):
             if value is None:
                 value = {}
             entries = (
-                "%s: %s"
+                "{ %s, %s }"
                 % (
                     self.default_value(k, typ.key_type),
                     self.default_value(v, typ.value_type),
                 )
                 for k, v in value.items()
             )
-            return "{ %s }" % ", ".join(entries)
+            return "new System.Collections.Generic.Dictionary<%s,%s> %s" % (
+                self.type(typ.key_type),
+                self.type(typ.value_type),
+                _initializer(entries),
+            )
         return self.language.parse_default_value(value, typ)
 
     def see(self, obj):
         if isinstance(obj, (Property, ClassProperty)):
             prefix = "prop"
         elif isinstance(obj, EnumerationValue):
-            prefix = "enum"
+            prefix = "value"
         elif isinstance(obj, StructField):
             prefix = "prop"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):

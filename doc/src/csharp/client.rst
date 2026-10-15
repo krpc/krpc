@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 
 C# Client
@@ -382,7 +382,7 @@ Client API Reference
    A connection to the kRPC server. All interaction with kRPC is performed via an instance of this
    class.
 
-   .. method:: Connection(string name = "", System.Net.IPAddress address = null, int rpcPort = 50000, int streamPort = 50001, System.TimeSpan timeout = default)
+   .. function:: Connection(string name = "", System.Net.IPAddress address = null, int rpcPort = 50000, int streamPort = 50001, System.TimeSpan timeout = default)
 
       Connect to a kRPC server.
 
@@ -399,7 +399,7 @@ Client API Reference
          which waits indefinitely. A network that drops a connection attempt rather than refusing
          it otherwise leaves the client waiting.
 
-   .. method:: static Connection ConnectLocal(string name = "", string rpcPath = "", string streamPath = "")
+   .. function:: static Connection ConnectLocal(string name = "", string rpcPath = "", string streamPath = "")
 
       Connect to a kRPC server running on the same machine, over unix domain sockets rather than
       TCP/IP. The connection behaves identically once established. Unix domain sockets are
@@ -416,7 +416,7 @@ Client API Reference
          match the stream socket path shown in the in-game server window. Defaults as ``rpcPath``
          does. Pass ``null`` to connect without stream support.
 
-   .. method:: Stream<ReturnType> AddStream<ReturnType>(LambdaExpression expression)
+   .. function:: Stream<ReturnType> AddStream<ReturnType>(LambdaExpression expression)
 
       Create a stream from a lambda expression. A single remote procedure call with fixed
       arguments is streamed as that call. A cast of a call to a ``KRPC`` service procedure is
@@ -425,38 +425,38 @@ Client API Reference
       ``ReturnType`` cannot hold the lambda's value, and :type:`FunctionCompilationException` if
       the lambda cannot be compiled.
 
-   .. method:: Stream<ReturnType> AddStream<ReturnType>(KRPC.Client.Services.KRPC.Expression function)
+   .. function:: Stream<ReturnType> AddStream<ReturnType>(KRPC.Client.Services.KRPC.Expression function)
 
       Create a stream of the value of a server side function. Throws an
       ``InvalidOperationException`` if the function has no value or the type parameter cannot
       hold its value.
 
-   .. method:: KRPC.Client.Services.KRPC.Expression Compile<ReturnType>(Expression<Func<ReturnType>> expression)
+   .. function:: KRPC.Client.Services.KRPC.Expression Compile<ReturnType>(Expression<Func<ReturnType>> expression)
 
       Compile a lambda expression into a server side function. Throws
       :type:`FunctionCompilationException` if the lambda cannot run on the server. Compiling
       makes a remote procedure call per node, so compile a function once and reuse it. The
       server compiles the function too, so its first run is as fast as later ones.
 
-   .. method:: KRPC.Client.Services.KRPC.Expression Compile(Expression<Action> expression)
+   .. function:: KRPC.Client.Services.KRPC.Expression Compile(Expression<Action> expression)
 
       Compile a lambda expression with no value into a server side function.
 
-   .. method:: KRPC.Client.Services.KRPC.Expression Compile<T1,ReturnType>(Expression<Func<T1,ReturnType>> expression)
+   .. function:: KRPC.Client.Services.KRPC.Expression Compile<T1,ReturnType>(Expression<Func<T1,ReturnType>> expression)
 
       Compile a lambda expression with a parameter into a server side function. Overloads take
       up to four parameters, and a lambda with no value.
 
-   .. method:: Event AddEvent(Expression<Func<bool>> expression)
+   .. function:: Event AddEvent(Expression<Func<bool>> expression)
 
       Create an event from a lambda expression that evaluates to a boolean value. The lambda is
       translated as :meth:`Connection.Compile` translates it, on every call.
 
-   .. method:: Event AddEvent(KRPC.Client.Services.KRPC.Expression function)
+   .. function:: Event AddEvent(KRPC.Client.Services.KRPC.Expression function)
 
       Create an event from a server side function that evaluates to a boolean value.
 
-   .. method:: ReturnType Run<ReturnType>(KRPC.Client.Services.KRPC.Expression function, params object[] args)
+   .. function:: ReturnType Run<ReturnType>(KRPC.Client.Services.KRPC.Expression function, params object[] args)
 
       Run a server side function within a single physics tick, and return its value. The
       arguments are passed to the function's parameters. Throws an
@@ -465,26 +465,26 @@ Client API Reference
       cannot take its argument. A null result needs a reference type or a nullable value type as
       the type parameter.
 
-   .. method:: ReturnType Run<ReturnType>(Expression<Func<ReturnType>> expression)
+   .. function:: ReturnType Run<ReturnType>(Expression<Func<ReturnType>> expression)
 
       Run a lambda expression on the server within a single physics tick, and return its value.
       The lambda is translated as :meth:`Connection.Compile` translates it, on every call.
 
-   .. method:: void Run(KRPC.Client.Services.KRPC.Expression function, params object[] args)
+   .. function:: void Run(KRPC.Client.Services.KRPC.Expression function, params object[] args)
 
       Run a server side function with no value within a single physics tick. The arguments are
       passed to the function's parameters.
 
-   .. method:: void Run(Expression<Action> expression)
+   .. function:: void Run(Expression<Action> expression)
 
       Run a lambda expression with no value on the server within a single physics tick.
 
-   .. method:: KRPC.Schema.KRPC.ProcedureCall GetCall(LambdaExpression expression)
+   .. function:: KRPC.Schema.KRPC.ProcedureCall GetCall(LambdaExpression expression)
 
       Returns the procedure call message for a lambda expression that makes a single call. The
       expression API's ``Expression.Call`` takes it, as in :ref:`csharp-client-events`.
 
-   .. method:: void Dispose()
+   .. function:: void Dispose()
 
       Closes the connection and frees the resources associated with it.
 
@@ -505,7 +505,7 @@ Client API Reference
 
       The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
 
-   .. method:: ReturnType Get()
+   .. function:: ReturnType Get()
 
       Returns the most recent value for the stream, waiting for the first value if none has arrived
       yet. Throws the exception that ended the stream, if it has ended, such as an exception thrown
@@ -519,7 +519,7 @@ Client API Reference
       A condition variable that is notified (using ``Monitor.PulseAll``) whenever the value of the
       stream changes.
 
-   .. method:: bool Wait(double timeout = -1)
+   .. function:: bool Wait(double timeout = -1)
 
       This method blocks until the value of the stream changes or the operation times out. Returns
       ``true`` if the value changed, and ``false`` on a timeout.
@@ -530,7 +530,7 @@ Client API Reference
       the operation. Throws the exception that ended the stream, if it ends before or during the
       wait.
 
-   .. method:: int AddCallback(Action<ReturnType> callback)
+   .. function:: int AddCallback(Action<ReturnType> callback)
 
       Adds a callback function that is invoked whenever the value of the stream changes. The
       callback function should take one argument, which is passed the new value of the
@@ -544,24 +544,24 @@ Client API Reference
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
-   .. method:: void RemoveCallback(int tag)
+   .. function:: void RemoveCallback(int tag)
 
       Removes a callback from the stream. The tag is the identifier returned when the callback was
       added.
 
-   .. method:: int AddEndCallback(Action<System.Exception> callback)
+   .. function:: int AddEndCallback(Action<System.Exception> callback)
 
       Adds a callback function that is invoked once when the stream ends. The callback function
       should take one argument, which is passed the exception that ended the stream. It is invoked
       straight away if the stream has already ended. Returns a unique identifier for the callback
       which can be used to remove it.
 
-   .. method:: void RemoveEndCallback(int tag)
+   .. function:: void RemoveEndCallback(int tag)
 
       Removes an end callback from the stream. The tag is the identifier returned when the callback
       was added.
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Removes the stream from the server. Other streams of the same call are not affected.
 
@@ -578,7 +578,7 @@ Client API Reference
       The condition variable that is notified (using ``Monitor.PulseAll``) whenever the event
       occurs.
 
-   .. method:: bool Wait(double timeout = -1)
+   .. function:: bool Wait(double timeout = -1)
 
       This method blocks until the event occurs or the operation times out. It returns straight
       away if the event has occurred since the previous call on this event object. Returns ``true``
@@ -590,7 +590,7 @@ Client API Reference
       the operation. Throws the exception that ended the event, if it ends before or during the
       wait.
 
-   .. method:: int AddCallback(Action callback)
+   .. function:: int AddCallback(Action callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
       should be a function that takes zero arguments. If the event has not ended and has fired
@@ -599,23 +599,23 @@ Client API Reference
       invoke the callback. Returns a unique identifier for the callback which can be used to
       remove it.
 
-   .. method:: void RemoveCallback(int tag)
+   .. function:: void RemoveCallback(int tag)
 
       Removes a callback from the event. The tag is the identifier returned when the callback was
       added.
 
-   .. method:: int AddEndCallback(Action<System.Exception> callback)
+   .. function:: int AddEndCallback(Action<System.Exception> callback)
 
       Adds a callback function that is invoked once when the event ends, with the exception that
       ended it. It is invoked straight away if the event has already ended. Returns a unique
       identifier for the callback which can be used to remove it.
 
-   .. method:: void RemoveEndCallback(int tag)
+   .. function:: void RemoveEndCallback(int tag)
 
       Removes an end callback from the event. The tag is the identifier returned when the callback
       was added.
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Removes the event from the server.
 

@@ -41,30 +41,12 @@ class CsharpGenerator(Generator[CsharpLanguage]):
             if "default_value" not in parameter:
                 parameter["name_value"] = parameter["name"]
                 continue
-            ctype = parameter["type"]
-            default_value = parameter["default_value"]
-            if isinstance(typ, StructType):
-                # A structure is a value type, and its default value is not a compile-time
-                # constant, so the parameter takes the nullable form and the default is
-                # applied where the value is encoded
-                if not ctype.endswith("?"):
-                    parameter["type"] = ctype + "?"
+            if self.language.default_is_null(typ):
+                if isinstance(typ, StructType) and not parameter["type"].endswith("?"):
+                    parameter["type"] += "?"
                 parameter["name_value"] = "%s ?? %s" % (
                     parameter["name"],
-                    default_value,
-                )
-                parameter["default_value"] = "null"
-            elif (
-                ctype.startswith("systemAlias::Tuple")
-                or ctype.startswith("global::System.Collections.Generic.IList")
-                or ctype.startswith("genericCollectionsAlias::ISet")
-                or ctype.startswith(
-                    "global::System.Collections" + ".Generic.IDictionary"
-                )
-            ):
-                parameter["name_value"] = "%s ?? %s" % (
-                    parameter["name"],
-                    default_value,
+                    parameter["default_value"],
                 )
                 parameter["default_value"] = "null"
             else:

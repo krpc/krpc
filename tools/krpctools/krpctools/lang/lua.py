@@ -77,6 +77,8 @@ class LuaLanguage(Language):
         special = self.parse_special_value(value, typ)
         if special is not None:
             return special
+        if value is None:
+            return "Types.none"
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return "'%s'" % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:

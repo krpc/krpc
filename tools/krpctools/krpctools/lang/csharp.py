@@ -198,6 +198,15 @@ class CsharpLanguage(Language):
             Type.BYTES,
         )
 
+    @staticmethod
+    def default_is_null(typ):
+        """Whether a parameter of the type defaults to null, and is given its default value
+        when the call is encoded. C# requires a default value to be a compile-time constant,
+        which a structure or collection is not."""
+        return isinstance(
+            typ, (StructType, TupleType, ListType, SetType, DictionaryType)
+        )
+
     def parse_default_value(self, value, typ):
         special = self.parse_special_value(value, typ)
         if special is not None:

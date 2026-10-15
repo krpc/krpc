@@ -165,11 +165,11 @@
       :param TestNestedNullableStruct value:
    
 
-   .. method:: int echoNullableInt(int value)
+   .. method:: Integer echoNullableInt(Integer value)
 
 
 
-      :param int value:
+      :param Integer value:
    
 
    .. method:: java.util.List<Integer> echoNullableList(java.util.List<Integer> l)
@@ -370,7 +370,7 @@
 
    
 
-   .. method:: krpc.schema.KRPC.Event onTimer(int milliseconds, int repeats)
+   .. method:: krpc.client.Event onTimer(int milliseconds, int repeats)
 
 
 
@@ -378,7 +378,7 @@
       :param int repeats:
    
 
-   .. method:: krpc.schema.KRPC.Event onTimerUsingLambda(int milliseconds)
+   .. method:: krpc.client.Event onTimerUsingLambda(int milliseconds)
 
 
 
@@ -395,7 +395,7 @@
       :param TestClass obj:
    
 
-   .. method:: krpc.schema.KRPC.Event removeEventAfter(int milliseconds)
+   .. method:: krpc.client.Event removeEventAfter(int milliseconds)
 
 
 
@@ -691,6 +691,10 @@
 
    Struct documentation string.
 
+   .. constructor:: public TestStruct(int intField, String stringField, TestEnum enumField, java.util.List<Integer> listField)
+
+      Construct a TestStruct from the values of its fields.
+
 
    .. method:: int getIntField()
 
@@ -713,6 +717,10 @@
 
    Nested struct documentation string.
 
+   .. constructor:: public TestNestedStruct(TestStruct structField, TestClass objectField, String stringField)
+
+      Construct a TestNestedStruct from the values of its fields.
+
 
    .. method:: TestStruct getStructField()
 
@@ -730,6 +738,10 @@
 .. type:: public class TestNullableStruct
 
    Nullable struct documentation string.
+
+   .. constructor:: public TestNullableStruct(int intField, Integer nullableIntField, TestEnum nullableEnumField, String nullableStringField, TestClass nullableObjectField)
+
+      Construct a TestNullableStruct from the values of its fields.
 
 
    .. method:: int getIntField()
@@ -757,6 +769,10 @@
 
    Nested nullable struct documentation string.
 
+   .. constructor:: public TestNestedNullableStruct(java.util.List<TestClass> listField, String stringField)
+
+      Construct a TestNestedNullableStruct from the values of its fields.
+
 
    .. method:: java.util.List<TestClass> getListField()
 
@@ -772,6 +788,10 @@
    .. warning:: Deprecated. Use :type:`TestStruct` instead.
 
    Deprecated struct documentation string.
+
+   .. constructor:: public DeprecatedStruct(int value, int oldValue)
+
+      Construct a DeprecatedStruct from the values of its fields.
 
 
    .. method:: int getValue()

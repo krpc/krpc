@@ -249,7 +249,7 @@ Service documentation string.
 
 
 
-   :param int value:
+   :param int or None value:
    :rtype: int or None
    
 
@@ -260,7 +260,7 @@ Service documentation string.
 
 
 
-   :param list l:
+   :param list or None l:
    :rtype: list(int) or None
    
 
@@ -271,7 +271,7 @@ Service documentation string.
 
 
 
-   :param str value:
+   :param str or None value:
    :rtype: str or None
    
 
@@ -282,7 +282,7 @@ Service documentation string.
 
 
 
-   :param TestClass value:
+   :param TestClass or None value:
    :rtype: :class:`TestClass` or None
    
 
@@ -566,7 +566,7 @@ Service documentation string.
 
    :param int milliseconds:
    :param int repeats:
-   :rtype: :class:`krpc.schema.KRPC.Event`
+   :rtype: :class:`krpc.event.Event`
    
 
 
@@ -577,20 +577,20 @@ Service documentation string.
 
 
    :param int milliseconds:
-   :rtype: :class:`krpc.schema.KRPC.Event`
+   :rtype: :class:`krpc.event.Event`
    
 
 
 
 
-.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
+.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
 
 
 
    :param str x:
    :param str y:
    :param str z:
-   :param TestClass obj:
+   :param TestClass or None obj:
    :rtype: str
    
 
@@ -602,7 +602,7 @@ Service documentation string.
 
 
    :param int milliseconds:
-   :rtype: :class:`krpc.schema.KRPC.Event`
+   :rtype: :class:`krpc.event.Event`
    
 
 
@@ -717,7 +717,7 @@ Service documentation string.
 
 
 
-   :param TestStruct x:
+   :param TestStruct or None x:
    :rtype: :class:`TestStruct` or None
    
 
@@ -838,7 +838,7 @@ Service documentation string.
 
 
 
-      :param TestClass value:
+      :param TestClass or None value:
       :rtype: :class:`TestClass` or None
    
 
@@ -877,18 +877,18 @@ Service documentation string.
 
 
 
-      :param TestClass other:
+      :param TestClass or None other:
       :rtype: str
    
 
-   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
+   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
 
 
 
       :param str x:
       :param str y:
       :param str z:
-      :param TestClass obj:
+      :param TestClass or None obj:
       :rtype: str
    
 
@@ -905,7 +905,7 @@ Service documentation string.
 
 
 
-      :param TestClass value:
+      :param TestClass or None value:
       :rtype: :class:`TestClass` or None
    
 
@@ -985,7 +985,7 @@ Service documentation string.
 
 
 
-.. class:: TestStruct
+.. class:: TestStruct(int_field, string_field, enum_field, list_field)
 
    Struct documentation string.
 
@@ -1015,7 +1015,7 @@ Service documentation string.
       :rtype: list(int)
 
 
-.. class:: TestNestedStruct
+.. class:: TestNestedStruct(struct_field, object_field, string_field)
 
    Nested struct documentation string.
 
@@ -1039,7 +1039,7 @@ Service documentation string.
       :rtype: str
 
 
-.. class:: TestNullableStruct
+.. class:: TestNullableStruct(int_field, nullable_int_field, nullable_enum_field, nullable_string_field, nullable_object_field)
 
    Nullable struct documentation string.
 
@@ -1075,7 +1075,7 @@ Service documentation string.
       :rtype: :class:`TestClass` or None
 
 
-.. class:: TestNestedNullableStruct
+.. class:: TestNestedNullableStruct(list_field, string_field)
 
    Nested nullable struct documentation string.
 
@@ -1093,7 +1093,7 @@ Service documentation string.
       :rtype: str
 
 
-.. class:: DeprecatedStruct
+.. class:: DeprecatedStruct(value, old_value)
 
    .. warning:: Deprecated. Use :class:`TestStruct` instead.
 

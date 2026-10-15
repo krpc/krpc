@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 
 .. namespace:: KRPC.Client.Services.EmptyService
