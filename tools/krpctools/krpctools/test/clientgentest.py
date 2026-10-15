@@ -13,17 +13,31 @@ else:
     _Base = object
 
 
+def _services(value):
+    """The names of the services that definitions define or refer to"""
+    if isinstance(value, list):
+        return set().union(*map(_services, value))
+    if not isinstance(value, dict):
+        return set()
+    names = set().union(*map(_services, value.values()))
+    if isinstance(value.get("service"), str):
+        names.add(value["service"])
+    return names
+
+
 class ClientGenTestCase(_Base):
     language: str
     generator: type[Generator]
 
-    def generate(self, service_name, defs):
+    def generate(self, service_name, defs, includes=None):
         macro_template = (
             files("krpctools.clientgen")
             .joinpath(self.language + ".tmpl")
             .read_text(encoding="utf-8")
         )
-        g = self.generator(macro_template, service_name, Definitions(defs))
+        if includes is None:
+            includes = {name: name for name in _services(defs)}
+        g = self.generator(macro_template, service_name, Definitions(defs), includes)
         return g.generate()
 
     @staticmethod

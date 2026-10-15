@@ -1,24 +1,42 @@
 " clientgen tool "
 
+ClientgenInfo = provider(
+    doc = "The generated code of a service, and the path it is included by",
+    fields = ["service", "include"],
+)
+
 def _impl(ctx):
     language = ctx.attr.language
     service = ctx.attr.service
     defs = ctx.file.defs
     output = ctx.outputs.out
+    includes = [
+        "--include=%s=%s" % (dep[ClientgenInfo].service, dep[ClientgenInfo].include)
+        for dep in ctx.attr.deps
+    ]
 
     ctx.actions.run(
         inputs = [defs],
         outputs = [output],
         progress_message = "Generating %s code for %s service" % (language, service),
         executable = ctx.executable._clientgen,
-        arguments = [language, service, defs.path, "--output=%s" % output.path],
+        arguments = [language, service, defs.path, "--output=%s" % output.path] + includes,
     )
+
+    # The include path is relative to the package's include directory
+    include = ctx.attr.out.name
+    if include.startswith("include/"):
+        include = include[len("include/"):]
+    return [ClientgenInfo(service = service, include = include)]
 
 clientgen = rule(
     implementation = _impl,
     attrs = {
         "service": attr.string(mandatory = True),
         "defs": attr.label(allow_single_file = True),
+        # The generated code of the services whose types the service uses, which the
+        # generated code includes
+        "deps": attr.label_list(providers = [ClientgenInfo]),
         "out": attr.output(mandatory = True),
         "language": attr.string(mandatory = True),
         "_clientgen": attr.label(
@@ -57,13 +75,14 @@ def clientgen_csharp(name, service, defs, visibility = [], out = None):
     )
 
 # buildifier: disable=function-docstring
-def clientgen_cpp(name, service, defs, out = None):
+def clientgen_cpp(name, service, defs, out = None, deps = []):
     if out == None:
         out = "include/krpc/services/%s.hpp" % _snake_case(service)
     clientgen(
         name = name,
         service = service,
         defs = defs,
+        deps = deps,
         out = out,
         language = "cpp",
     )
@@ -81,13 +100,14 @@ def clientgen_java(name, service, defs, out = None):
     )
 
 # buildifier: disable=function-docstring
-def clientgen_cnano(name, service, defs, out = None):
+def clientgen_cnano(name, service, defs, out = None, deps = []):
     if out == None:
         out = "include/krpc_cnano/services/%s.h" % _snake_case(service)
     clientgen(
         name = name,
         service = service,
         defs = defs,
+        deps = deps,
         out = out,
         language = "cnano",
     )

@@ -46,8 +46,8 @@ class PythonGenerator(Generator[StubLanguage]):
     def parse_plain_cref_member(name):
         return snake_case(name)
 
-    def __init__(self, macro_template, service, definitions):
-        super().__init__(macro_template, service, definitions)
+    def __init__(self, macro_template, service, definitions, includes=None):
+        super().__init__(macro_template, service, definitions, includes)
         self.language = StubLanguage(service)
 
     def parse_python_type(self, typ):

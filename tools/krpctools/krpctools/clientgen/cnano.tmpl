@@ -10,6 +10,12 @@
 #include <krpc_cnano/pb_decode.h>
 #include <krpc_cnano/pb_encode.h>
 #include <krpc_cnano/types.h>
+{% if includes %}
+
+{% for include in includes %}
+#include <{{ include }}>
+{% endfor %}
+{% endif %}
 {% macro call(service_id, procedure_id, parameters) %}
 krpc_call_t _call;
 {% if parameters | length > 0 %}

@@ -15,6 +15,7 @@ def _cpp_template_fix(typ):
 
 class CppGenerator(Generator[CppLanguage]):
     language = CppLanguage()
+    includes_services = True
 
     plain_cref_separator = "::"
 

@@ -11,6 +11,8 @@
 #include <krpc_cnano/pb_encode.h>
 #include <krpc_cnano/types.h>
 
+#include <ServiceB>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

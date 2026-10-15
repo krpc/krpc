@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C
+  nano service uses, giving the path of its header (#1150)
 - **Breaking:** Run `krpc-servicedefs` and `TestServer` on the .NET 10 runtime, in place of
   .NET 8 (#1139)
 - Generate python stubs that declare a service's classes, enumerations, structures and

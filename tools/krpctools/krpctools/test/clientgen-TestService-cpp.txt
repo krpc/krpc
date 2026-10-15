@@ -18,6 +18,8 @@
 #include <krpc/service.hpp>
 #include <krpc/stream.hpp>
 
+#include <KRPC>
+
 namespace krpc {
 namespace services {
 

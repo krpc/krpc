@@ -51,6 +51,18 @@ class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):
         self.assertIn("std::optional<::krpc::Event>", actual)
         self.assertIn("std::optional<krpc::schema::Stream>", actual)
 
+    def test_includes_the_services_it_uses(self):
+        # ServiceA uses an enumeration of ServiceB only
+        includes = {"ServiceB": "b/service_b.hpp", "ServiceC": "c/service_c.hpp"}
+        actual = self.generate("ServiceA", self.load("Ordering"), includes)
+        self.assertIn("#include <b/service_b.hpp>\n", actual)
+        self.assertNotIn("service_c", actual)
+
+    def test_service_whose_include_is_not_provided(self):
+        with self.assertRaises(RuntimeError) as cm:
+            self.generate("ServiceA", self.load("Ordering"), {})
+        self.assertIn("ServiceB", str(cm.exception))
+
 
 if __name__ == "__main__":
     unittest.main()
