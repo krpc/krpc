@@ -195,13 +195,13 @@ public class {{ service_name }} {
                 return false;
             }
             {{ struct_name }} other = ({{ struct_name }}) obj;
-            return {% for field in struct['fields'] %}java.util.Objects.equals(this.{{ field.name }}, other.{{ field.name }}){% if not loop.last %}
+            return {% for field in struct['fields'] %}java.util.Objects.deepEquals(this.{{ field.name }}, other.{{ field.name }}){% if not loop.last %}
                 && {% endif %}{% endfor %};
         }
 
         @Override
         public int hashCode() {
-            return java.util.Objects.hash({% for field in struct['fields'] %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %});
+            return java.util.Arrays.deepHashCode(new Object[] {{ '{' }}{% for field in struct['fields'] %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}{{ '}' }});
         }
 
         /**
