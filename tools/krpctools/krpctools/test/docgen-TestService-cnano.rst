@@ -7,7 +7,7 @@
 Service documentation string.
 
 
-.. function:: krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connection, char * * result, float x, int32_t y, int64_t z)
+.. function:: krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connection, char * * returnValue, float x, int32_t y, int64_t z)
 
 
 
@@ -22,7 +22,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_AddToObjectList(krpc_connection_t connection, krpc_list_object_t * result, const krpc_list_object_t * l, const char * value)
+.. function:: krpc_error_t krpc_TestService_AddToObjectList(krpc_connection_t connection, krpc_list_object_t * returnValue, const krpc_list_object_t * l, const char * value)
 
 
 
@@ -36,7 +36,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_BlockingProcedure(krpc_connection_t connection, int32_t * result, int32_t n, int32_t sum)
+.. function:: krpc_error_t krpc_TestService_BlockingProcedure(krpc_connection_t connection, int32_t * returnValue, int32_t n, int32_t sum)
 
 
 
@@ -50,7 +50,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_BoolToString(krpc_connection_t connection, char * * result, bool value)
+.. function:: krpc_error_t krpc_TestService_BoolToString(krpc_connection_t connection, char * * returnValue, bool value)
 
 
 
@@ -63,7 +63,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_BytesToHexString(krpc_connection_t connection, char * * result, krpc_bytes_t value)
+.. function:: krpc_error_t krpc_TestService_BytesToHexString(krpc_connection_t connection, char * * returnValue, krpc_bytes_t value)
 
 
 
@@ -76,7 +76,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_Counter(krpc_connection_t connection, int32_t * result, const char * id, int32_t divisor)
+.. function:: krpc_error_t krpc_TestService_Counter(krpc_connection_t connection, int32_t * returnValue, const char * id, int32_t divisor)
 
 
 
@@ -90,7 +90,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_CounterStruct(krpc_connection_t connection, krpc_TestService_TestStruct_t * result, const char * id)
+.. function:: krpc_error_t krpc_TestService_CounterStruct(krpc_connection_t connection, krpc_TestService_TestStruct_t * returnValue, const char * id)
 
    Returns a struct whose IntField counts the number of times it has been called,
    so that a stream on it changes on every update.
@@ -104,7 +104,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, const char * value)
+.. function:: krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value)
 
 
 
@@ -117,7 +117,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_t connection, char * * result, float value)
+.. function:: krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_t connection, char * * returnValue, float value)
 
    .. warning:: Deprecated. Use :func:`krpc_TestService_FloatToString` instead.
 
@@ -132,7 +132,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_connection_t connection, char * * result, float value)
+.. function:: krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_connection_t connection, char * * returnValue, float value)
 
    .. warning:: Deprecated.
 
@@ -147,8 +147,8 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t connection, char * * result)
-.. function:: void krpc_TestService_set_DeprecatedProperty(const char * value)
+.. function:: krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t connection, char * * returnValue)
+.. function:: krpc_error_t krpc_TestService_set_DeprecatedProperty(krpc_connection_t connection, const char * value)
 
    .. warning:: Deprecated. Use :func:`krpc_TestService_StringProperty` instead.
 
@@ -159,7 +159,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t connection, krpc_dictionary_int32_bool_t * result, const krpc_dictionary_int32_bool_t * x)
+.. function:: krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t connection, krpc_dictionary_int32_bool_t * returnValue, const krpc_dictionary_int32_bool_t * x)
 
 
 
@@ -172,7 +172,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_DoubleSpecialDefaults(krpc_connection_t connection, krpc_list_double_t * result, double nan, double infinity, double negativeInfinity, double maximum, double lowest)
+.. function:: krpc_error_t krpc_TestService_DoubleSpecialDefaults(krpc_connection_t connection, krpc_list_double_t * returnValue, double nan, double infinity, double negativeInfinity, double maximum, double lowest)
 
    Procedure whose defaults are the special values of double.
 
@@ -189,7 +189,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t connection, char * * result, double value)
+.. function:: krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t connection, char * * returnValue, double value)
 
 
 
@@ -202,7 +202,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_DumpExpressionTree(krpc_connection_t connection, char * * result, krpc_KRPC_Expression_t expression)
+.. function:: krpc_error_t krpc_TestService_DumpExpressionTree(krpc_connection_t connection, char * * returnValue, krpc_KRPC_Expression_t expression)
 
    The expression tree of a function, as text.
 
@@ -215,7 +215,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoDictionaryOfNullableObjects(krpc_connection_t connection, krpc_dictionary_string_nullable_object_t * result, const krpc_dictionary_string_nullable_object_t * d)
+.. function:: krpc_error_t krpc_TestService_EchoDictionaryOfNullableObjects(krpc_connection_t connection, krpc_dictionary_string_nullable_object_t * returnValue, const krpc_dictionary_string_nullable_object_t * d)
 
 
 
@@ -228,7 +228,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoListOfNullableInts(krpc_connection_t connection, krpc_list_nullable_int32_t * result, const krpc_list_nullable_int32_t * l)
+.. function:: krpc_error_t krpc_TestService_EchoListOfNullableInts(krpc_connection_t connection, krpc_list_nullable_int32_t * returnValue, const krpc_list_nullable_int32_t * l)
 
 
 
@@ -241,7 +241,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoListOfNullableObjects(krpc_connection_t connection, krpc_list_nullable_object_t * result, const krpc_list_nullable_object_t * l)
+.. function:: krpc_error_t krpc_TestService_EchoListOfNullableObjects(krpc_connection_t connection, krpc_list_nullable_object_t * returnValue, const krpc_list_nullable_object_t * l)
 
 
 
@@ -254,7 +254,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoNestedListOfNullableObjects(krpc_connection_t connection, krpc_list_list_nullable_object_t * result, const krpc_list_list_nullable_object_t * l)
+.. function:: krpc_error_t krpc_TestService_EchoNestedListOfNullableObjects(krpc_connection_t connection, krpc_list_list_nullable_object_t * returnValue, const krpc_list_list_nullable_object_t * l)
 
 
 
@@ -267,7 +267,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoNestedNullableStruct(krpc_connection_t connection, krpc_TestService_TestNestedNullableStruct_t * result, const krpc_TestService_TestNestedNullableStruct_t * value)
+.. function:: krpc_error_t krpc_TestService_EchoNestedNullableStruct(krpc_connection_t connection, krpc_TestService_TestNestedNullableStruct_t * returnValue, const krpc_TestService_TestNestedNullableStruct_t * value)
 
 
 
@@ -280,7 +280,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * result, int32_t value)
+.. function:: krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * returnValue, bool * returnValueIsNull, const int32_t * value)
 
 
 
@@ -293,7 +293,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoNullableList(krpc_connection_t connection, krpc_list_int32_t * result, const krpc_list_int32_t * l)
+.. function:: krpc_error_t krpc_TestService_EchoNullableList(krpc_connection_t connection, krpc_list_int32_t * returnValue, bool * returnValueIsNull, const krpc_list_int32_t * l)
 
 
 
@@ -306,7 +306,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoNullableString(krpc_connection_t connection, char * * result, const char * value)
+.. function:: krpc_error_t krpc_TestService_EchoNullableString(krpc_connection_t connection, char * * returnValue, bool * returnValueIsNull, const char * value)
 
 
 
@@ -319,7 +319,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, krpc_TestService_TestClass_t value)
+.. function:: krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value)
 
 
 
@@ -332,7 +332,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EchoTupleWithANullableObject(krpc_connection_t connection, krpc_tuple_int32_nullable_object_t * result, const krpc_tuple_int32_nullable_object_t * t)
+.. function:: krpc_error_t krpc_TestService_EchoTupleWithANullableObject(krpc_connection_t connection, krpc_tuple_int32_nullable_object_t * returnValue, const krpc_tuple_int32_nullable_object_t * t)
 
 
 
@@ -345,7 +345,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EmptyListDefault(krpc_connection_t connection, krpc_list_string_t * result, const krpc_list_string_t * x)
+.. function:: krpc_error_t krpc_TestService_EmptyListDefault(krpc_connection_t connection, krpc_list_string_t * returnValue, const krpc_list_string_t * x)
 
 
 
@@ -358,7 +358,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EnumDefaultArg(krpc_connection_t connection, krpc_TestService_TestEnum_t * result, krpc_TestService_TestEnum_t x)
+.. function:: krpc_error_t krpc_TestService_EnumDefaultArg(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x)
 
 
 
@@ -371,7 +371,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EnumEcho(krpc_connection_t connection, krpc_TestService_TestEnum_t * result, krpc_TestService_TestEnum_t x)
+.. function:: krpc_error_t krpc_TestService_EnumEcho(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x)
 
 
 
@@ -384,7 +384,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EnumListDefault(krpc_connection_t connection, krpc_list_enum_t * result, const krpc_list_enum_t * x)
+.. function:: krpc_error_t krpc_TestService_EnumListDefault(krpc_connection_t connection, krpc_list_enum_t * returnValue, const krpc_list_enum_t * x)
 
 
 
@@ -397,7 +397,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * result)
+.. function:: krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue)
 
 
 
@@ -407,7 +407,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_FloatSpecialDefaults(krpc_connection_t connection, krpc_list_float_t * result, float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction)
+.. function:: krpc_error_t krpc_TestService_FloatSpecialDefaults(krpc_connection_t connection, krpc_list_float_t * returnValue, float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction)
 
    Procedure whose defaults are the special values of float, plus a finite fraction
    that no float can hold exactly.
@@ -426,7 +426,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_FloatToString(krpc_connection_t connection, char * * result, float value)
+.. function:: krpc_error_t krpc_TestService_FloatToString(krpc_connection_t connection, char * * returnValue, float value)
 
    Procedure documentation string.
 
@@ -439,7 +439,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_IncrementDictionary(krpc_connection_t connection, krpc_dictionary_string_int32_t * result, const krpc_dictionary_string_int32_t * d)
+.. function:: krpc_error_t krpc_TestService_IncrementDictionary(krpc_connection_t connection, krpc_dictionary_string_int32_t * returnValue, const krpc_dictionary_string_int32_t * d)
 
 
 
@@ -452,7 +452,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_IncrementList(krpc_connection_t connection, krpc_list_int32_t * result, const krpc_list_int32_t * l)
+.. function:: krpc_error_t krpc_TestService_IncrementList(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * l)
 
 
 
@@ -465,7 +465,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_IncrementListOfStructs(krpc_connection_t connection, krpc_list_TestService_TestStruct_t * result, const krpc_list_TestService_TestStruct_t * l)
+.. function:: krpc_error_t krpc_TestService_IncrementListOfStructs(krpc_connection_t connection, krpc_list_TestService_TestStruct_t * returnValue, const krpc_list_TestService_TestStruct_t * l)
 
 
 
@@ -478,7 +478,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_IncrementNestedCollection(krpc_connection_t connection, krpc_dictionary_string_list_int32_t * result, const krpc_dictionary_string_list_int32_t * d)
+.. function:: krpc_error_t krpc_TestService_IncrementNestedCollection(krpc_connection_t connection, krpc_dictionary_string_list_int32_t * returnValue, const krpc_dictionary_string_list_int32_t * d)
 
 
 
@@ -491,7 +491,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_IncrementSet(krpc_connection_t connection, krpc_set_int32_t * result, const krpc_set_int32_t * h)
+.. function:: krpc_error_t krpc_TestService_IncrementSet(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * h)
 
 
 
@@ -504,7 +504,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_IncrementTuple(krpc_connection_t connection, krpc_tuple_int32_int64_t * result, const krpc_tuple_int32_int64_t * t)
+.. function:: krpc_error_t krpc_TestService_IncrementTuple(krpc_connection_t connection, krpc_tuple_int32_int64_t * returnValue, const krpc_tuple_int32_int64_t * t)
 
 
 
@@ -517,7 +517,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_Int32SpecialDefaults(krpc_connection_t connection, krpc_list_int32_t * result, int32_t maximum, int32_t minimum)
+.. function:: krpc_error_t krpc_TestService_Int32SpecialDefaults(krpc_connection_t connection, krpc_list_int32_t * returnValue, int32_t maximum, int32_t minimum)
 
    Procedure whose defaults are the extremes of int.
 
@@ -531,7 +531,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_Int32ToString(krpc_connection_t connection, char * * result, int32_t value)
+.. function:: krpc_error_t krpc_TestService_Int32ToString(krpc_connection_t connection, char * * returnValue, int32_t value)
 
 
 
@@ -544,7 +544,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_Int64SpecialDefaults(krpc_connection_t connection, krpc_list_int64_t * result, int64_t maximum, int64_t minimum)
+.. function:: krpc_error_t krpc_TestService_Int64SpecialDefaults(krpc_connection_t connection, krpc_list_int64_t * returnValue, int64_t maximum, int64_t minimum)
 
    Procedure whose defaults are the extremes of long.
 
@@ -558,7 +558,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t connection, char * * result, int64_t value)
+.. function:: krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t connection, char * * returnValue, int64_t value)
 
 
 
@@ -571,7 +571,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, krpc_list_int32_t * result, const krpc_list_int32_t * x)
+.. function:: krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * x)
 
 
 
@@ -584,7 +584,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_NestedStructEcho(krpc_connection_t connection, krpc_TestService_TestNestedStruct_t * result, const krpc_TestService_TestNestedStruct_t * x)
+.. function:: krpc_error_t krpc_TestService_NestedStructEcho(krpc_connection_t connection, krpc_TestService_TestNestedStruct_t * returnValue, const krpc_TestService_TestNestedStruct_t * x)
 
 
 
@@ -597,7 +597,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_NotNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, krpc_TestService_TestClass_t value)
+.. function:: krpc_error_t krpc_TestService_NotNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value)
 
 
 
@@ -610,8 +610,8 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_NullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result)
-.. function:: void krpc_TestService_set_NullableObject(krpc_TestService_TestClass_t value)
+.. function:: krpc_error_t krpc_TestService_NullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue)
+.. function:: krpc_error_t krpc_TestService_set_NullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t value)
 
 
 
@@ -620,7 +620,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_NullableStructEcho(krpc_connection_t connection, krpc_TestService_TestNullableStruct_t * result, const krpc_TestService_TestNullableStruct_t * x)
+.. function:: krpc_error_t krpc_TestService_NullableStructEcho(krpc_connection_t connection, krpc_TestService_TestNullableStruct_t * returnValue, const krpc_TestService_TestNullableStruct_t * x)
 
 
 
@@ -633,8 +633,8 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * result)
-.. function:: void krpc_TestService_set_ObjectProperty(krpc_TestService_TestClass_t value)
+.. function:: krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue)
+.. function:: krpc_error_t krpc_TestService_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t value)
 
 
 
@@ -643,7 +643,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_schema_Event * result, uint32_t milliseconds, uint32_t repeats)
+.. function:: krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds, uint32_t repeats)
 
 
 
@@ -657,7 +657,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_OnTimerUsingLambda(krpc_connection_t connection, krpc_schema_Event * result, uint32_t milliseconds)
+.. function:: krpc_error_t krpc_TestService_OnTimerUsingLambda(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds)
 
 
 
@@ -670,7 +670,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connection, char * * result, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj)
+.. function:: krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connection, char * * returnValue, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj)
 
 
 
@@ -686,7 +686,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, krpc_schema_Event * result, uint32_t milliseconds)
+.. function:: krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds)
 
 
 
@@ -719,7 +719,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ReturnNullWhenNotAllowed(krpc_connection_t connection, krpc_TestService_TestClass_t * result)
+.. function:: krpc_error_t krpc_TestService_ReturnNullWhenNotAllowed(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue)
 
 
 
@@ -729,7 +729,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * result, const krpc_set_int32_t * x)
+.. function:: krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * x)
 
 
 
@@ -742,8 +742,8 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_StringProperty(krpc_connection_t connection, char * * result)
-.. function:: void krpc_TestService_set_StringProperty(const char * value)
+.. function:: krpc_error_t krpc_TestService_StringProperty(krpc_connection_t connection, char * * returnValue)
+.. function:: krpc_error_t krpc_TestService_set_StringProperty(krpc_connection_t connection, const char * value)
 
    Property documentation string.
 
@@ -752,7 +752,7 @@ Service documentation string.
 
 
 
-.. function:: void krpc_TestService_set_StringPropertyPrivateGet(const char * value)
+.. function:: krpc_error_t krpc_TestService_set_StringPropertyPrivateGet(krpc_connection_t connection, const char * value)
 
 
 
@@ -761,7 +761,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_StringPropertyPrivateSet(krpc_connection_t connection, char * * result)
+.. function:: krpc_error_t krpc_TestService_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue)
 
 
 
@@ -770,7 +770,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection, int32_t * result, const char * value)
+.. function:: krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection, int32_t * returnValue, const char * value)
 
 
 
@@ -783,7 +783,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_StructDefault(krpc_connection_t connection, krpc_TestService_TestStruct_t * result, const krpc_TestService_TestStruct_t * x)
+.. function:: krpc_error_t krpc_TestService_StructDefault(krpc_connection_t connection, krpc_TestService_TestStruct_t * returnValue, const krpc_TestService_TestStruct_t * x)
 
 
 
@@ -796,7 +796,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_StructEcho(krpc_connection_t connection, krpc_TestService_TestStruct_t * result, const krpc_TestService_TestStruct_t * x)
+.. function:: krpc_error_t krpc_TestService_StructEcho(krpc_connection_t connection, krpc_TestService_TestStruct_t * returnValue, const krpc_TestService_TestStruct_t * x)
 
 
 
@@ -809,7 +809,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_StructEchoNullable(krpc_connection_t connection, krpc_TestService_TestStruct_t * result, const krpc_TestService_TestStruct_t * x)
+.. function:: krpc_error_t krpc_TestService_StructEchoNullable(krpc_connection_t connection, krpc_TestService_TestStruct_t * returnValue, bool * returnValueIsNull, const krpc_TestService_TestStruct_t * x)
 
 
 
@@ -822,7 +822,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ThrowArgumentException(krpc_connection_t connection, int32_t * result)
+.. function:: krpc_error_t krpc_TestService_ThrowArgumentException(krpc_connection_t connection, int32_t * returnValue)
 
 
 
@@ -832,7 +832,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ThrowArgumentNullException(krpc_connection_t connection, int32_t * result, const char * foo)
+.. function:: krpc_error_t krpc_TestService_ThrowArgumentNullException(krpc_connection_t connection, int32_t * returnValue, const char * foo)
 
 
 
@@ -845,7 +845,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_connection_t connection, int32_t * result, int32_t foo)
+.. function:: krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_connection_t connection, int32_t * returnValue, int32_t foo)
 
 
 
@@ -858,7 +858,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * result)
+.. function:: krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue)
 
 
 
@@ -868,7 +868,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t connection, int32_t * result)
+.. function:: krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t connection, int32_t * returnValue)
 
 
 
@@ -878,7 +878,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ThrowInvalidOperationException(krpc_connection_t connection, int32_t * result)
+.. function:: krpc_error_t krpc_TestService_ThrowInvalidOperationException(krpc_connection_t connection, int32_t * returnValue)
 
 
 
@@ -888,7 +888,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_ThrowInvalidOperationExceptionLater(krpc_connection_t connection, int32_t * result)
+.. function:: krpc_error_t krpc_TestService_ThrowInvalidOperationExceptionLater(krpc_connection_t connection, int32_t * returnValue)
 
 
 
@@ -898,7 +898,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, krpc_tuple_int32_bool_t * result, const krpc_tuple_int32_bool_t * x)
+.. function:: krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, krpc_tuple_int32_bool_t * returnValue, const krpc_tuple_int32_bool_t * x)
 
 
 
@@ -911,7 +911,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_Uint32SpecialDefaults(krpc_connection_t connection, krpc_list_uint32_t * result, uint32_t maximum)
+.. function:: krpc_error_t krpc_TestService_Uint32SpecialDefaults(krpc_connection_t connection, krpc_list_uint32_t * returnValue, uint32_t maximum)
 
    Procedure whose default is the largest uint.
 
@@ -924,7 +924,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_Uint64SpecialDefaults(krpc_connection_t connection, krpc_list_uint64_t * result, uint64_t maximum)
+.. function:: krpc_error_t krpc_TestService_Uint64SpecialDefaults(krpc_connection_t connection, krpc_list_uint64_t * returnValue, uint64_t maximum)
 
    Procedure whose default is the largest ulong.
 
@@ -942,7 +942,7 @@ Service documentation string.
 
    Class documentation string.
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_EchoNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, krpc_TestService_TestClass_t value)
+   .. function:: krpc_error_t krpc_TestService_TestClass_EchoNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value)
 
 
 
@@ -952,7 +952,7 @@ Service documentation string.
 
    
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_FloatToString(krpc_connection_t connection, char * * result, float x)
+   .. function:: krpc_error_t krpc_TestService_TestClass_FloatToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, float x)
 
 
 
@@ -962,28 +962,28 @@ Service documentation string.
 
    
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_GetValue(krpc_connection_t connection, char * * result)
+   .. function:: krpc_error_t krpc_TestService_TestClass_GetValue(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance)
 
       Method documentation string.
 
 
    
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_IntProperty(krpc_connection_t connection, int32_t * result)
-   .. function:: void krpc_TestService_TestClass_set_IntProperty(int32_t value)
+   .. function:: krpc_error_t krpc_TestService_TestClass_IntProperty(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_TestClass_t instance)
+   .. function:: krpc_error_t krpc_TestService_TestClass_set_IntProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, int32_t value)
 
       Property documentation string.
 
    
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * result)
-   .. function:: void krpc_TestService_TestClass_set_ObjectProperty(krpc_TestService_TestClass_t value)
+   .. function:: krpc_error_t krpc_TestService_TestClass_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance)
+   .. function:: krpc_error_t krpc_TestService_TestClass_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value)
 
 
 
    
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_ObjectToString(krpc_connection_t connection, char * * result, krpc_TestService_TestClass_t other)
+   .. function:: krpc_error_t krpc_TestService_TestClass_ObjectToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t other)
 
 
 
@@ -993,7 +993,7 @@ Service documentation string.
 
    
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_OptionalArguments(krpc_connection_t connection, char * * result, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj)
+   .. function:: krpc_error_t krpc_TestService_TestClass_OptionalArguments(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj)
 
 
 
@@ -1006,7 +1006,7 @@ Service documentation string.
 
    
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_StaticMethod(krpc_connection_t connection, char * * result, const char * a, const char * b)
+   .. function:: krpc_error_t krpc_TestService_TestClass_StaticMethod(krpc_connection_t connection, char * * returnValue, const char * a, const char * b)
 
 
 
@@ -1017,7 +1017,7 @@ Service documentation string.
 
    
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_StaticNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, krpc_TestService_TestClass_t value)
+   .. function:: krpc_error_t krpc_TestService_TestClass_StaticNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value)
 
 
 
@@ -1027,13 +1027,13 @@ Service documentation string.
 
    
 
-   .. function:: void krpc_TestService_TestClass_set_StringPropertyPrivateGet(const char * value)
+   .. function:: krpc_error_t krpc_TestService_TestClass_set_StringPropertyPrivateGet(krpc_connection_t connection, krpc_TestService_TestClass_t instance, const char * value)
 
 
 
    
 
-   .. function:: krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(krpc_connection_t connection, char * * result)
+   .. function:: krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance)
 
 
 
@@ -1047,7 +1047,7 @@ Service documentation string.
 
    Deprecated class documentation string.
 
-   .. function:: krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * result)
+   .. function:: krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance)
 
       .. warning:: Deprecated. Use :func:`krpc_TestService_TestClass_GetValue` instead.
 

@@ -60,12 +60,12 @@
 {% endif %}
 {% endmacro %}
 
-{% macro property(service_name, x) %}{{ mark_documented(x) }}
+{% macro property(service_name, x, instance=None) %}{{ mark_documented(x) }}
 {% if x.getter != None %}
-.. function:: krpc_error_t krpc_{{ service_name }}_{{ domain.method_name(x.name) }}(krpc_connection_t connection, {{ domain.return_type(x.type) }} result)
+.. function:: krpc_error_t krpc_{{ service_name }}_{{ domain.method_name(x.name) }}({{ parameters(x.type, [], instance) }})
 {% endif %}
 {% if x.setter != None %}
-.. function:: void krpc_{{ service_name }}_set_{{ x.name }}({{ domain.parameter_type(x.type) }} value)
+.. function:: krpc_error_t krpc_{{ service_name }}_set_{{ x.name }}(krpc_connection_t connection{% if instance %}, {{ instance }} instance{% endif %}, {{ domain.parameter_type(x.type) }} value)
 {% endif %}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
@@ -85,7 +85,7 @@
 {% endmacro %}
 
 {% macro class_method(service_name, class_name, x) %}{{ mark_documented(x) }}
-.. function:: krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ domain.method_name(x.name) }}({{ parameters(x.return_type, x.parameters[1:]) }})
+.. function:: krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ domain.method_name(x.name) }}({{ parameters(x.return_type, x.parameters[1:], 'krpc_'+service_name+'_'+class_name+'_t') }})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -125,7 +125,7 @@
 {% endmacro %}
 
 {% macro class_property(service_name, class_name, x) %}{{ mark_documented(x) }}
-{{ property(service_name+'_'+class_name, x) }}
+{{ property(service_name+'_'+class_name, x, 'krpc_'+service_name+'_'+class_name+'_t') }}
 {% endmacro %}
 
 {% macro enumeration(x) %}{{ mark_documented(x) }}
@@ -179,8 +179,8 @@ Exception class {{ x.name }}
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) }}{% endif %}
 {% endmacro %}
 
-{% macro parameters(return_type, parameters) %}
-krpc_connection_t connection{% if domain.return_type(return_type) != 'void' %}, {{ domain.return_type(return_type) }} result{% endif %}{% for p in parameters %}, {{ parameter(p) }}{% endfor %}
+{% macro parameters(return_type, parameters, instance=None) %}
+krpc_connection_t connection{% if domain.return_type(return_type) != 'void' %}, {{ domain.return_type(return_type) }} returnValue{% if domain.returns_null_flag(return_type) %}, bool * returnValueIsNull{% endif %}{% endif %}{% if instance %}, {{ instance }} instance{% endif %}{% for p in parameters %}, {{ parameter(p) }}{% endfor %}
 {% endmacro %}
 
 {% macro parameter(x) %}

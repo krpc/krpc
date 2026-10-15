@@ -253,3 +253,22 @@ class CnanoLanguage(Language):
 
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
+
+    @staticmethod
+    def passes_null_by_pointer(typ):
+        """Whether a nullable parameter of the type is passed as a pointer, which is NULL for
+        null. A scalar or enumeration has no null value of its own. A string or collection
+        is a pointer already, and a class is KRPC_NULL."""
+        if not typ.nullable:
+            return False
+        if isinstance(typ, EnumerationType):
+            return True
+        if isinstance(typ, ValueType):
+            return typ.protobuf_type.code != Type.STRING
+        return False
+
+    @staticmethod
+    def returns_null_flag(typ):
+        """Whether a nullable return value of the type comes with a flag saying whether it
+        is null. A class return is KRPC_NULL for null."""
+        return typ is not None and typ.nullable and not isinstance(typ, ClassType)

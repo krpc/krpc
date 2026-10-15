@@ -1,6 +1,5 @@
 import collections
 
-from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -221,17 +220,6 @@ class CnanoGenerator(Generator[CnanoLanguage]):
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
 
-    @staticmethod
-    def _needs_pointer(typ):
-        # By-value non-class scalars and enums have no null sentinel, so a nullable one
-        # is passed as a pointer (NULL means null). Strings and collections are already
-        # pointers, and classes use KRPC_NULL, so they are unchanged.
-        if isinstance(typ, EnumerationType):
-            return True
-        if isinstance(typ, ValueType):
-            return typ.protobuf_type.code != Type.STRING
-        return False
-
     def generate_context_parameters(self, name, procedure):
         parameters = super().generate_context_parameters(name, procedure)
         for parameter, info in zip(parameters, procedure["parameters"]):
@@ -242,7 +230,7 @@ class CnanoGenerator(Generator[CnanoLanguage]):
                 parameter["null_check"] = "%s == KRPC_NULL" % parameter["name"]
             else:
                 parameter["null_check"] = "%s == NULL" % parameter["name"]
-                if self._needs_pointer(typ):
+                if self.language.passes_null_by_pointer(typ):
                     ctype = parameter["type"]["ctype"]
                     parameter["type"]["ccvtype"] = "const %s *" % ctype
                     parameter["type"]["getptr"] = ""

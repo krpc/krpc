@@ -155,7 +155,12 @@ class CnanoDomain(Domain[CnanoLanguage]):
         return self.type(typ)["ctype"] + " *"
 
     def parameter_type(self, typ):
+        if self.language.passes_null_by_pointer(typ):
+            return "const %s *" % self.type(typ)["ctype"]
         return self.type(typ)["ccvtype"]
+
+    def returns_null_flag(self, typ):
+        return self.language.returns_null_flag(typ)
 
     def ref(self, obj):
         name = obj.fullname.split(".")
