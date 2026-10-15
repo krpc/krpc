@@ -53,6 +53,14 @@ class TestSpaceCenter(krpctest.TestCase):
         # An unknown directory yields an empty list rather than an error
         self.assertEqual([], self.sc.launchable_vessels("NoSuchDirectory"))
 
+    def test_launch_sites(self):
+        sites = {site.name: site for site in self.sc.launch_sites}
+        self.assertEqual(self.sc.EditorFacility.vab, sites["LaunchPad"].editor_facility)
+        self.assertEqual(self.sc.EditorFacility.sph, sites["Runway"].editor_facility)
+        for site in sites.values():
+            self.assertIsNotNone(site.body)
+        self.assertEqual(self.kerbin, sites["LaunchPad"].body)
+
     def test_active_vessel(self):
         active = self.sc.active_vessel
         self.assertEqual("Vessel", active.name)
