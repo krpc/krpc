@@ -42,6 +42,6 @@
     <Compile Include="Addon.cs" />
     <Compile Include="API.cs" />
     <Compile Include="Laser.cs" />
-    <Compile Include="LiDAR.cs" />
+    <Compile Include="LIDAR.cs" />
   </ItemGroup>
 </Project>

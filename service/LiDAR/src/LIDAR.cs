@@ -10,7 +10,7 @@ namespace KRPC.LiDAR
     /// LaserDist service.
     /// </summary>
     [KRPCService(Id = 10, GameScene = GameScene.All)]
-    public static class LiDAR
+    public static class LIDAR
     {
         static void CheckAPI()
         {

@@ -1,4 +1,5 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Rename `conn.li_dar` to `conn.lidar`, for the `LIDAR` service (#1149)
 - Support a nullable structure field, list element, tuple item and dictionary value, which is
   `Types.none` when absent (#1091)
 - Support structure types, built from their field values in order and giving them named

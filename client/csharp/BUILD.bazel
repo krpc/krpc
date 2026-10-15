@@ -116,7 +116,6 @@ csharp_library(
 
 clientgen_csharp(
     name = "services-krpc",
-    out = "Services/KRPC.cs",
     defs = "//core:ServiceDefinitions",
     service = "KRPC",
     visibility = [
@@ -126,7 +125,6 @@ clientgen_csharp(
 
 clientgen_csharp(
     name = "services-spacecenter",
-    out = "Services/SpaceCenter.cs",
     defs = "//service/SpaceCenter:ServiceDefinitions",
     service = "SpaceCenter",
     visibility = [
@@ -136,14 +134,12 @@ clientgen_csharp(
 
 clientgen_csharp(
     name = "services-drawing",
-    out = "Services/Drawing.cs",
     defs = "//service/Drawing:ServiceDefinitions",
     service = "Drawing",
 )
 
 clientgen_csharp(
     name = "services-infernalrobotics",
-    out = "Services/InfernalRobotics.cs",
     defs = "//service/InfernalRobotics:ServiceDefinitions",
     service = "InfernalRobotics",
     visibility = [
@@ -153,7 +149,6 @@ clientgen_csharp(
 
 clientgen_csharp(
     name = "services-kerbalalarmclock",
-    out = "Services/KerbalAlarmClock.cs",
     defs = "//service/KerbalAlarmClock:ServiceDefinitions",
     service = "KerbalAlarmClock",
     visibility = [
@@ -163,42 +158,36 @@ clientgen_csharp(
 
 clientgen_csharp(
     name = "services-remotetech",
-    out = "Services/RemoteTech.cs",
     defs = "//service/RemoteTech:ServiceDefinitions",
     service = "RemoteTech",
 )
 
 clientgen_csharp(
     name = "services-ui",
-    out = "Services/UI.cs",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
 )
 
 clientgen_csharp(
     name = "services-stdlib",
-    out = "Services/StdLib.cs",
     defs = "//core:StdLibServiceDefinitions",
     service = "StdLib",
 )
 
 clientgen_csharp(
     name = "services-lidar",
-    out = "Services/LiDAR.cs",
     defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LiDAR",
+    service = "LIDAR",
 )
 
 clientgen_csharp(
     name = "services-dockingcamera",
-    out = "Services/DockingCamera.cs",
     defs = "//service/DockingCamera:ServiceDefinitions",
     service = "DockingCamera",
 )
 
 clientgen_csharp(
     name = "services-debug",
-    out = "Services/Debug.cs",
     defs = "//service/Debug:ServiceDefinitions",
     service = "Debug",
 )
@@ -365,7 +354,6 @@ csharp_binary(
 
 clientgen_csharp(
     name = "services-testservice",
-    out = "Services/TestService.cs",
     defs = "//tools/TestServer:ServiceDefinitions",
     service = "TestService",
     visibility = [

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from krpc.services.infernalrobotics import InfernalRobotics
     from krpc.services.kerbalalarmclock import KerbalAlarmClock
     from krpc.services.krpc import KRPC
-    from krpc.services.lidar import LiDAR
+    from krpc.services.lidar import LIDAR
     from krpc.services.remotetech import RemoteTech
     from krpc.services.spacecenter import SpaceCenter
     from krpc.services.stdlib import StdLib
@@ -23,7 +23,7 @@ else:
         from krpc.services.infernalrobotics import InfernalRobotics
         from krpc.services.kerbalalarmclock import KerbalAlarmClock
         from krpc.services.krpc import KRPC
-        from krpc.services.lidar import LiDAR
+        from krpc.services.lidar import LIDAR
         from krpc.services.remotetech import RemoteTech
         from krpc.services.spacecenter import SpaceCenter
         from krpc.services.stdlib import StdLib
@@ -44,7 +44,7 @@ else:
         InfernalRobotics = _unavailable
         KerbalAlarmClock = _unavailable
         RemoteTech = _unavailable
-        LiDAR = _unavailable
+        LIDAR = _unavailable
         DockingCamera = _unavailable
         Debug = _unavailable
 
@@ -60,7 +60,7 @@ class Client:
         self.infernal_robotics: InfernalRobotics = InfernalRobotics(self)
         self.kerbal_alarm_clock: KerbalAlarmClock = KerbalAlarmClock(self)
         self.remote_tech: RemoteTech = RemoteTech(self)
-        self.lidar: LiDAR = LiDAR(self)
+        self.lidar: LIDAR = LIDAR(self)
         self.docking_camera: DockingCamera = DockingCamera(self)
         self.debug: Debug = Debug(self)
 
@@ -74,7 +74,7 @@ class Client:
             "InfernalRobotics": self.infernal_robotics,
             "KerbalAlarmClock": self.kerbal_alarm_clock,
             "RemoteTech": self.remote_tech,
-            "LiDAR": self.lidar,
+            "LIDAR": self.lidar,
             "DockingCamera": self.docking_camera,
             "Debug": self.debug,
         }

@@ -2352,11 +2352,11 @@ UI.ContentSizeFit
 UI.ContentSizeFit.Unconstrained
 UI.ContentSizeFit.MinSize
 UI.ContentSizeFit.PreferredSize
-LiDAR
-LiDAR.Available
-LiDAR.Laser
-LiDAR.Laser.Part
-LiDAR.Laser.Cloud
+LIDAR
+LIDAR.Available
+LIDAR.Laser
+LIDAR.Laser.Part
+LIDAR.Laser.Cloud
 DockingCamera
 DockingCamera.Available
 DockingCamera.Camera

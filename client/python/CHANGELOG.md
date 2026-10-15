@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Rename the `LiDAR` service class to `LIDAR`, and `conn.li_dar` to `conn.lidar` in
+  a client without stubs (#1149)
 - Require protobuf 7.36.2 or later (#1139)
 - Fix type checkers skipping the code after a name the service defines, such as
   `conn.space_center.ReferenceFrame` (#1134)

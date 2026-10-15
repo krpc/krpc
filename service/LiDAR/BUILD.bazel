@@ -50,7 +50,7 @@ service_definitions(
         "//service/SpaceCenter:KRPC.SpaceCenter",
         "//server:KRPC",
     ],
-    service = "LiDAR",
+    service = "LIDAR",
     visibility = ["//visibility:public"],
 )
 

@@ -141,84 +141,72 @@ py_sdist(
 
 clientgen_python(
     name = "services-krpc",
-    out = "krpc/services/krpc.py",
     defs = "//core:ServiceDefinitions",
     service = "KRPC",
 )
 
 clientgen_python(
     name = "services-testservice",
-    out = "krpc/services/testservice.py",
     defs = "//tools/TestServer:ServiceDefinitions",
     service = "TestService",
 )
 
 clientgen_python(
     name = "services-spacecenter",
-    out = "krpc/services/spacecenter.py",
     defs = "//service/SpaceCenter:ServiceDefinitions",
     service = "SpaceCenter",
 )
 
 clientgen_python(
     name = "services-drawing",
-    out = "krpc/services/drawing.py",
     defs = "//service/Drawing:ServiceDefinitions",
     service = "Drawing",
 )
 
 clientgen_python(
     name = "services-infernalrobotics",
-    out = "krpc/services/infernalrobotics.py",
     defs = "//service/InfernalRobotics:ServiceDefinitions",
     service = "InfernalRobotics",
 )
 
 clientgen_python(
     name = "services-kerbalalarmclock",
-    out = "krpc/services/kerbalalarmclock.py",
     defs = "//service/KerbalAlarmClock:ServiceDefinitions",
     service = "KerbalAlarmClock",
 )
 
 clientgen_python(
     name = "services-remotetech",
-    out = "krpc/services/remotetech.py",
     defs = "//service/RemoteTech:ServiceDefinitions",
     service = "RemoteTech",
 )
 
 clientgen_python(
     name = "services-ui",
-    out = "krpc/services/ui.py",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
 )
 
 clientgen_python(
     name = "services-stdlib",
-    out = "krpc/services/stdlib.py",
     defs = "//core:StdLibServiceDefinitions",
     service = "StdLib",
 )
 
 clientgen_python(
     name = "services-lidar",
-    out = "krpc/services/lidar.py",
     defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LiDAR",
+    service = "LIDAR",
 )
 
 clientgen_python(
     name = "services-dockingcamera",
-    out = "krpc/services/dockingcamera.py",
     defs = "//service/DockingCamera:ServiceDefinitions",
     service = "DockingCamera",
 )
 
 clientgen_python(
     name = "services-debug",
-    out = "krpc/services/debug.py",
     defs = "//service/Debug:ServiceDefinitions",
     service = "Debug",
 )

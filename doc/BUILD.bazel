@@ -79,7 +79,7 @@ changeloggen(
         "//service/InfernalRobotics:CHANGELOG.md": "InfernalRobotics service",
         "//service/KerbalAlarmClock:CHANGELOG.md": "KerbalAlarmClock service",
         "//service/RemoteTech:CHANGELOG.md": "RemoteTech service",
-        "//service/LiDAR:CHANGELOG.md": "LiDAR service",
+        "//service/LiDAR:CHANGELOG.md": "LIDAR service",
         "//service/DockingCamera:CHANGELOG.md": "DockingCamera service",
         "//service/Debug:CHANGELOG.md": "Debug service",
         "//client/cnano:CHANGELOG.md": "C-nano client",
