@@ -802,9 +802,11 @@ SpaceCenter.CrewMember.RosterStatus
 SpaceCenter.CrewMember.Part
 SpaceCenter.CrewMember.EVA
 SpaceCenter.CrewMember.SuitType
-SpaceCenter.CrewMember.CareerLogFlights
-SpaceCenter.CrewMember.CareerLogTypes
-SpaceCenter.CrewMember.CareerLogTargets
+SpaceCenter.CrewMember.CareerLog
+SpaceCenter.FlightLogEntry
+SpaceCenter.FlightLogEntry.Flight
+SpaceCenter.FlightLogEntry.Type
+SpaceCenter.FlightLogEntry.Target
 SpaceCenter.CrewMemberType
 SpaceCenter.CrewMemberType.Applicant
 SpaceCenter.CrewMemberType.Crew
