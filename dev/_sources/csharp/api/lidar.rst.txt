@@ -1,7 +1,7 @@
 .. default-domain:: csharp
 .. highlight:: csharp
 
-LiDAR API
+LIDAR API
 =========
 
 Provides RPCs to interact with the `LaserDist <https://github.com/nullprofile/LaserDist>`_ mod.

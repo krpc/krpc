@@ -1,17 +1,17 @@
 .. default-domain:: cpp
 .. highlight:: cpp
-.. namespace:: krpc::services::LiDAR
+.. namespace:: krpc::services::LIDAR
 
-LiDAR
+LIDAR
 =====
 
 
 .. namespace:: krpc::services
-.. class:: LiDAR : public krpc::Service
+.. class:: LIDAR : public krpc::Service
 
    LaserDist service.
 
-   .. function:: LiDAR(krpc::Client* client)
+   .. function:: LIDAR(krpc::Client* client)
 
       Construct an instance of this service.
 

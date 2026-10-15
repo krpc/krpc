@@ -1,12 +1,12 @@
 .. default-domain:: py
 .. highlight:: py
-.. currentmodule:: LiDAR
+.. currentmodule:: LIDAR
 
-LiDAR
+LIDAR
 =====
 
 
-.. module:: LiDAR
+.. module:: LIDAR
 
 LaserDist service.
 

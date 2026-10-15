@@ -1,12 +1,12 @@
 .. default-domain:: csharp
 .. highlight:: csharp
-.. namespace:: KRPC.Client.Services.LiDAR
+.. namespace:: KRPC.Client.Services.LIDAR
 
-LiDAR
+LIDAR
 =====
 
 
-.. class:: LiDAR
+.. class:: LIDAR
 
    LaserDist service.
 

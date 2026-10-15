@@ -1,12 +1,12 @@
 .. default-domain:: lua
 .. highlight:: lua
-.. currentmodule:: LiDAR
+.. currentmodule:: LIDAR
 
-LiDAR
+LIDAR
 =====
 
 
-.. module:: LiDAR
+.. module:: LIDAR
 
 LaserDist service.
 
@@ -26,4 +26,4 @@ LaserDist service.
    Get a LaserDist part.
 
    :param SpaceCenter.Part part:
-   :rtype: :class:`LiDAR.Laser`
+   :rtype: :class:`LIDAR.Laser`

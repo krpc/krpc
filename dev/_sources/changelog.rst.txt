@@ -372,9 +372,10 @@ RemoteTech service
 * An ``Antenna`` whose part is destroyed, or that is no longer an antenna, and a ``Comms`` whose vessel is gone, raise ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
 
 
-LiDAR service
+LIDAR service
 ^^^^^^^^^^^^^
 
+* :breaking:`Breaking` Rename the service from ``LiDAR`` to ``LIDAR`` (:issue:`1149`)
 * A ``Laser`` whose part is destroyed, or that is no longer a laser, raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
 
 
@@ -393,6 +394,7 @@ Debug service
 C-nano client
 ^^^^^^^^^^^^^
 
+* :breaking:`Breaking` Rename ``dockingcamera.h`` to ``docking_camera.h`` (:issue:`1149`)
 * Update to protobuf v36.2 (:issue:`1139`)
 * Update to nanopb 0.4.9.2 (:issue:`1139`)
 * :breaking:`Breaking` Renumber the ``KRPC`` service's procedures, so a program built against an earlier version must be rebuilt (:issue:`1124`)
@@ -530,6 +532,7 @@ Java client
 Lua client
 ^^^^^^^^^^
 
+* :breaking:`Breaking` Rename ``conn.li_dar`` to ``conn.lidar``, for the ``LIDAR`` service (:issue:`1149`)
 * Support a nullable structure field, list element, tuple item and dictionary value, which is ``Types.none`` when absent (:issue:`1091`)
 * Support structure types, built from their field values in order and giving them named access (:issue:`1066`)
 * A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (:issue:`1066`)
@@ -549,6 +552,7 @@ Lua client
 Python client
 ^^^^^^^^^^^^^
 
+* :breaking:`Breaking` Rename the ``LiDAR`` service class to ``LIDAR``, and ``conn.li_dar`` to ``conn.lidar`` in a client without stubs (:issue:`1149`)
 * Require protobuf 7.36.2 or later (:issue:`1139`)
 * Fix type checkers skipping the code after a name the service defines, such as ``conn.space_center.ReferenceFrame`` (:issue:`1134`)
 * Fix type checkers typing a stream value as ``object`` (:issue:`1134`)
@@ -886,7 +890,7 @@ RemoteTech service
 * Fix ``RemoteTech.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
 
 
-LiDAR service
+LIDAR service
 ^^^^^^^^^^^^^
 
 * Fix ``LiDAR.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
@@ -1212,7 +1216,7 @@ KerbalAlarmClock service
 * Update API wrapper to work with KerbalAlarmClock v3.13.0.0
 
 
-LiDAR service
+LIDAR service
 ^^^^^^^^^^^^^
 
 * Initial version

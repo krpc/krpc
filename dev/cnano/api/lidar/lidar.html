@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>LiDAR &#8212; kRPC vdev documentation</title>
+    <title>LIDAR &#8212; kRPC vdev documentation</title>
   
   
   
@@ -57,7 +57,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Laser" href="laser.html" />
-    <link rel="prev" title="LiDAR API" href="../lidar.html" />
+    <link rel="prev" title="LIDAR API" href="../lidar.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -625,8 +625,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">LiDAR</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../lidar.html">LIDAR API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">LIDAR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="laser.html">Laser</a></li>
 </ul>
 </details></li>
@@ -683,9 +683,9 @@
     <li class="breadcrumb-item"><a href="../../../cnano.html" class="nav-link">C-nano</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../lidar.html" class="nav-link">LiDAR API</a></li>
+    <li class="breadcrumb-item"><a href="../lidar.html" class="nav-link">LIDAR API</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">LiDAR</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">LIDAR</span></li>
   </ul>
 </nav>
 </div>
@@ -703,17 +703,17 @@
                 <article class="bd-article">
                   
   <section id="lidar">
-<h1>LiDAR<a class="headerlink" href="#lidar" title="Link to this heading">#</a></h1>
+<h1>LIDAR<a class="headerlink" href="#lidar" title="Link to this heading">#</a></h1>
 <p>LaserDist service.</p>
 <dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_LiDAR_Available">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_LiDAR_Available</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_LiDAR_Available" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object c" id="c.krpc_LIDAR_Available">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_LIDAR_Available</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_LIDAR_Available" title="Link to this definition">#</a><br /></dt>
 <dd><p>Check if the LaserDist API is available.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_LiDAR_Laser">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_LiDAR_Laser</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="laser.html#c.krpc_LiDAR_Laser_t" title="krpc_LiDAR_Laser_t"><span class="n"><span class="pre">krpc_LiDAR_Laser_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">part</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_LiDAR_Laser" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object c" id="c.krpc_LIDAR_Laser">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_LIDAR_Laser</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="laser.html#c.krpc_LIDAR_Laser_t" title="krpc_LIDAR_Laser_t"><span class="n"><span class="pre">krpc_LIDAR_Laser_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">part</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_LIDAR_Laser" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get a LaserDist part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -739,7 +739,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">LiDAR API</p>
+        <p class="prev-next-title">LIDAR API</p>
       </div>
     </a>
     <a class="right-next"

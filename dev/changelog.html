@@ -975,8 +975,9 @@
 </ul>
 </section>
 <section id="lidar-service">
-<h3>LiDAR service<a class="headerlink" href="#lidar-service" title="Link to this heading">#</a></h3>
+<h3>LIDAR service<a class="headerlink" href="#lidar-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p><span class="changelog-marker breaking">Breaking</span> Rename the service from <code class="docutils literal notranslate"><span class="pre">LiDAR</span></code> to <code class="docutils literal notranslate"><span class="pre">LIDAR</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1149">#1149</a>)</p></li>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">Laser</span></code> whose part is destroyed, or that is no longer a laser, raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
 </ul>
 </section>
@@ -995,6 +996,7 @@
 <section id="c-nano-client">
 <h3>C-nano client<a class="headerlink" href="#c-nano-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p><span class="changelog-marker breaking">Breaking</span> Rename <code class="docutils literal notranslate"><span class="pre">dockingcamera.h</span></code> to <code class="docutils literal notranslate"><span class="pre">docking_camera.h</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1149">#1149</a>)</p></li>
 <li><p>Update to protobuf v36.2 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1139">#1139</a>)</p></li>
 <li><p>Update to nanopb 0.4.9.2 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1139">#1139</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Renumber the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service’s procedures, so a program built against an earlier version must be rebuilt (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1124">#1124</a>)</p></li>
@@ -1132,6 +1134,7 @@
 <section id="lua-client">
 <h3>Lua client<a class="headerlink" href="#lua-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p><span class="changelog-marker breaking">Breaking</span> Rename <code class="docutils literal notranslate"><span class="pre">conn.li_dar</span></code> to <code class="docutils literal notranslate"><span class="pre">conn.lidar</span></code>, for the <code class="docutils literal notranslate"><span class="pre">LIDAR</span></code> service (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1149">#1149</a>)</p></li>
 <li><p>Support a nullable structure field, list element, tuple item and dictionary value, which is <code class="docutils literal notranslate"><span class="pre">Types.none</span></code> when absent (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1091">#1091</a>)</p></li>
 <li><p>Support structure types, built from their field values in order and giving them named access (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
 <li><p>A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
@@ -1151,6 +1154,7 @@
 <section id="python-client">
 <h3>Python client<a class="headerlink" href="#python-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p><span class="changelog-marker breaking">Breaking</span> Rename the <code class="docutils literal notranslate"><span class="pre">LiDAR</span></code> service class to <code class="docutils literal notranslate"><span class="pre">LIDAR</span></code>, and <code class="docutils literal notranslate"><span class="pre">conn.li_dar</span></code> to <code class="docutils literal notranslate"><span class="pre">conn.lidar</span></code> in a client without stubs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1149">#1149</a>)</p></li>
 <li><p>Require protobuf 7.36.2 or later (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1139">#1139</a>)</p></li>
 <li><p>Fix type checkers skipping the code after a name the service defines, such as <code class="docutils literal notranslate"><span class="pre">conn.space_center.ReferenceFrame</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1134">#1134</a>)</p></li>
 <li><p>Fix type checkers typing a stream value as <code class="docutils literal notranslate"><span class="pre">object</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1134">#1134</a>)</p></li>
@@ -1508,7 +1512,7 @@
 </ul>
 </section>
 <section id="id9">
-<h3>LiDAR service<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<h3>LIDAR service<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">LiDAR.Available</span></code> incorrectly reporting false in game scenes other than flight (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/937">#937</a>)</p></li>
 </ul>
@@ -1831,7 +1835,7 @@
 </ul>
 </section>
 <section id="id35">
-<h3>LiDAR service<a class="headerlink" href="#id35" title="Link to this heading">#</a></h3>
+<h3>LIDAR service<a class="headerlink" href="#id35" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
@@ -3554,7 +3558,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#infernalrobotics-service">InfernalRobotics service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kerbalalarmclock-service">KerbalAlarmClock service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remotetech-service">RemoteTech service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lidar-service">LiDAR service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lidar-service">LIDAR service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dockingcamera-service">DockingCamera service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-service">Debug service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-nano-client">C-nano client</a></li>
@@ -3574,7 +3578,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">InfernalRobotics service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">KerbalAlarmClock service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">RemoteTech service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">LiDAR service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">LIDAR service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">DockingCamera service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">C# client</a></li>
@@ -3615,7 +3619,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">Drawing service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">InfernalRobotics service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">KerbalAlarmClock service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">LiDAR service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">LIDAR service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">DockingCamera service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">C# client</a></li>
