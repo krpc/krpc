@@ -229,9 +229,9 @@ clientgen_java(
 
 clientgen_java(
     name = "services-lidar",
-    out = "services/LiDAR.java",
+    out = "services/LIDAR.java",
     defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LiDAR",
+    service = "LIDAR",
 )
 
 clientgen_java(

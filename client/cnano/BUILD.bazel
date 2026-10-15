@@ -118,7 +118,7 @@ clientgen_cnano(
     name = "services-lidar",
     out = "include/krpc_cnano/services/lidar.h",
     defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LiDAR",
+    service = "LIDAR",
 )
 
 clientgen_cnano(

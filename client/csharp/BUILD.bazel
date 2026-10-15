@@ -184,9 +184,9 @@ clientgen_csharp(
 
 clientgen_csharp(
     name = "services-lidar",
-    out = "Services/LiDAR.cs",
+    out = "Services/LIDAR.cs",
     defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LiDAR",
+    service = "LIDAR",
 )
 
 clientgen_csharp(

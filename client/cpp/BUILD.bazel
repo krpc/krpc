@@ -117,7 +117,7 @@ clientgen_cpp(
     name = "services-lidar",
     out = "include/krpc/services/lidar.hpp",
     defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LiDAR",
+    service = "LIDAR",
 )
 
 clientgen_cpp(

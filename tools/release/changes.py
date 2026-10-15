@@ -16,7 +16,7 @@ COMPONENTS = [
     ("InfernalRobotics service", "service/InfernalRobotics/CHANGELOG.md"),
     ("KerbalAlarmClock service", "service/KerbalAlarmClock/CHANGELOG.md"),
     ("RemoteTech service", "service/RemoteTech/CHANGELOG.md"),
-    ("LiDAR service", "service/LiDAR/CHANGELOG.md"),
+    ("LIDAR service", "service/LiDAR/CHANGELOG.md"),
     ("DockingCamera service", "service/DockingCamera/CHANGELOG.md"),
     ("C-nano client", "client/cnano/CHANGELOG.md"),
     ("C# client", "client/csharp/CHANGELOG.md"),

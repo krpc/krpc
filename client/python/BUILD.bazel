@@ -206,7 +206,7 @@ clientgen_python(
     name = "services-lidar",
     out = "krpc/services/lidar.py",
     defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LiDAR",
+    service = "LIDAR",
 )
 
 clientgen_python(

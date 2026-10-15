@@ -11,7 +11,7 @@ namespace KRPC.LiDAR
     /// <summary>
     /// A LaserDist laser.
     /// </summary>
-    [KRPCClass(Service = "LiDAR")]
+    [KRPCClass(Service = "LIDAR")]
     public class Laser : Equatable<Laser>, IGameObjectState
     {
         // The module that makes a part a laser. The mod's API takes the part, so the part
