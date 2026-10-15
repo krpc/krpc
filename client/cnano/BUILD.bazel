@@ -60,77 +60,66 @@ genrule(
 
 clientgen_cnano(
     name = "services-krpc",
-    out = "include/krpc_cnano/services/krpc.h",
     defs = "//core:ServiceDefinitions",
     service = "KRPC",
 )
 
 clientgen_cnano(
     name = "services-spacecenter",
-    out = "include/krpc_cnano/services/space_center.h",
     defs = "//service/SpaceCenter:ServiceDefinitions",
     service = "SpaceCenter",
 )
 
 clientgen_cnano(
     name = "services-drawing",
-    out = "include/krpc_cnano/services/drawing.h",
     defs = "//service/Drawing:ServiceDefinitions",
     service = "Drawing",
 )
 
 clientgen_cnano(
     name = "services-infernalrobotics",
-    out = "include/krpc_cnano/services/infernal_robotics.h",
     defs = "//service/InfernalRobotics:ServiceDefinitions",
     service = "InfernalRobotics",
 )
 
 clientgen_cnano(
     name = "services-kerbalalarmclock",
-    out = "include/krpc_cnano/services/kerbal_alarm_clock.h",
     defs = "//service/KerbalAlarmClock:ServiceDefinitions",
     service = "KerbalAlarmClock",
 )
 
 clientgen_cnano(
     name = "services-remotetech",
-    out = "include/krpc_cnano/services/remote_tech.h",
     defs = "//service/RemoteTech:ServiceDefinitions",
     service = "RemoteTech",
 )
 
 clientgen_cnano(
     name = "services-ui",
-    out = "include/krpc_cnano/services/ui.h",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
 )
 
 clientgen_cnano(
     name = "services-stdlib",
-    out = "include/krpc_cnano/services/stdlib.h",
     defs = "//core:StdLibServiceDefinitions",
     service = "StdLib",
 )
 
 clientgen_cnano(
     name = "services-lidar",
-    out = "include/krpc_cnano/services/lidar.h",
     defs = "//service/LiDAR:ServiceDefinitions",
     service = "LIDAR",
 )
 
 clientgen_cnano(
     name = "services-dockingcamera",
-    out = "include/krpc_cnano/services/dockingcamera.h",
     defs = "//service/DockingCamera:ServiceDefinitions",
     service = "DockingCamera",
 )
 
 clientgen_cnano(
     name = "services-debug",
-    out = "include/krpc_cnano/services/debug.h",
     defs = "//service/Debug:ServiceDefinitions",
     service = "Debug",
 )

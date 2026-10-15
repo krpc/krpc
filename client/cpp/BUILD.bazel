@@ -59,77 +59,66 @@ genrule(
 
 clientgen_cpp(
     name = "services-krpc",
-    out = "include/krpc/services/krpc.hpp",
     defs = "//core:ServiceDefinitions",
     service = "KRPC",
 )
 
 clientgen_cpp(
     name = "services-spacecenter",
-    out = "include/krpc/services/space_center.hpp",
     defs = "//service/SpaceCenter:ServiceDefinitions",
     service = "SpaceCenter",
 )
 
 clientgen_cpp(
     name = "services-drawing",
-    out = "include/krpc/services/drawing.hpp",
     defs = "//service/Drawing:ServiceDefinitions",
     service = "Drawing",
 )
 
 clientgen_cpp(
     name = "services-infernalrobotics",
-    out = "include/krpc/services/infernal_robotics.hpp",
     defs = "//service/InfernalRobotics:ServiceDefinitions",
     service = "InfernalRobotics",
 )
 
 clientgen_cpp(
     name = "services-kerbalalarmclock",
-    out = "include/krpc/services/kerbal_alarm_clock.hpp",
     defs = "//service/KerbalAlarmClock:ServiceDefinitions",
     service = "KerbalAlarmClock",
 )
 
 clientgen_cpp(
     name = "services-remotetech",
-    out = "include/krpc/services/remote_tech.hpp",
     defs = "//service/RemoteTech:ServiceDefinitions",
     service = "RemoteTech",
 )
 
 clientgen_cpp(
     name = "services-ui",
-    out = "include/krpc/services/ui.hpp",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
 )
 
 clientgen_cpp(
     name = "services-stdlib",
-    out = "include/krpc/services/stdlib.hpp",
     defs = "//core:StdLibServiceDefinitions",
     service = "StdLib",
 )
 
 clientgen_cpp(
     name = "services-lidar",
-    out = "include/krpc/services/lidar.hpp",
     defs = "//service/LiDAR:ServiceDefinitions",
     service = "LIDAR",
 )
 
 clientgen_cpp(
     name = "services-dockingcamera",
-    out = "include/krpc/services/docking_camera.hpp",
     defs = "//service/DockingCamera:ServiceDefinitions",
     service = "DockingCamera",
 )
 
 clientgen_cpp(
     name = "services-debug",
-    out = "include/krpc/services/debug.hpp",
     defs = "//service/Debug:ServiceDefinitions",
     service = "Debug",
 )

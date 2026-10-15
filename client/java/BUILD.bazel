@@ -173,84 +173,72 @@ java_checkstyle_test(
 
 clientgen_java(
     name = "services-krpc",
-    out = "services/KRPC.java",
     defs = "//core:ServiceDefinitions",
     service = "KRPC",
 )
 
 clientgen_java(
     name = "services-spacecenter",
-    out = "services/SpaceCenter.java",
     defs = "//service/SpaceCenter:ServiceDefinitions",
     service = "SpaceCenter",
 )
 
 clientgen_java(
     name = "services-drawing",
-    out = "services/Drawing.java",
     defs = "//service/Drawing:ServiceDefinitions",
     service = "Drawing",
 )
 
 clientgen_java(
     name = "services-infernalrobotics",
-    out = "services/InfernalRobotics.java",
     defs = "//service/InfernalRobotics:ServiceDefinitions",
     service = "InfernalRobotics",
 )
 
 clientgen_java(
     name = "services-kerbalalarmclock",
-    out = "services/KerbalAlarmClock.java",
     defs = "//service/KerbalAlarmClock:ServiceDefinitions",
     service = "KerbalAlarmClock",
 )
 
 clientgen_java(
     name = "services-remotetech",
-    out = "services/RemoteTech.java",
     defs = "//service/RemoteTech:ServiceDefinitions",
     service = "RemoteTech",
 )
 
 clientgen_java(
     name = "services-ui",
-    out = "services/UI.java",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
 )
 
 clientgen_java(
     name = "services-stdlib",
-    out = "services/StdLib.java",
     defs = "//core:StdLibServiceDefinitions",
     service = "StdLib",
 )
 
 clientgen_java(
     name = "services-lidar",
-    out = "services/LIDAR.java",
     defs = "//service/LiDAR:ServiceDefinitions",
     service = "LIDAR",
 )
 
 clientgen_java(
     name = "services-dockingcamera",
-    out = "services/DockingCamera.java",
     defs = "//service/DockingCamera:ServiceDefinitions",
     service = "DockingCamera",
 )
 
 clientgen_java(
     name = "services-debug",
-    out = "services/Debug.java",
     defs = "//service/Debug:ServiceDefinitions",
     service = "Debug",
 )
 
 clientgen_java(
     name = "services-testservice",
-    out = "services/TestService.java",
     defs = "//tools/TestServer:ServiceDefinitions",
     service = "TestService",
 )
