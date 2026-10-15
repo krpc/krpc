@@ -196,6 +196,7 @@
     <Compile Include="Service\Scanner\StructSignature.cs" />
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Services.cs" />
+    <Compile Include="Service\StdLib\AxisAngle.cs" />
     <Compile Include="Service\StdLib\DecimalRounding.cs" />
     <Compile Include="Service\StdLib\StdLib.cs" />
     <Compile Include="Service\Stream.cs" />
