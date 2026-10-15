@@ -162,9 +162,15 @@
 {% endif %}
 {{ gendoc(x.documentation) | indent }}
 
-{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+   .. function:: {{ x.name }}({% for field in x.fields.values() %}{{ domain.field_type(field) }} {{ field.name | lower_camelcase }}{% if not loop.last %}, {% endif %}{% endfor %})
+
+      Construct a {{ x.name }} from the values of its fields.
+
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. property:: {{ domain.field_type(field) }} {{ field.name }} {{'{'}} get; set; {{'}'}}
+   .. property:: {{ domain.field_type(field) }} {{ field.name }} {{'{'}} get; {{'}'}}
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 

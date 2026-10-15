@@ -985,7 +985,7 @@ Service documentation string.
 
 
 
-.. class:: TestStruct
+.. class:: TestStruct(int_field, string_field, enum_field, list_field)
 
    Struct documentation string.
 
@@ -1015,7 +1015,7 @@ Service documentation string.
       :rtype: list(int)
 
 
-.. class:: TestNestedStruct
+.. class:: TestNestedStruct(struct_field, object_field, string_field)
 
    Nested struct documentation string.
 
@@ -1039,7 +1039,7 @@ Service documentation string.
       :rtype: str
 
 
-.. class:: TestNullableStruct
+.. class:: TestNullableStruct(int_field, nullable_int_field, nullable_enum_field, nullable_string_field, nullable_object_field)
 
    Nullable struct documentation string.
 
@@ -1075,7 +1075,7 @@ Service documentation string.
       :rtype: :class:`TestClass` or None
 
 
-.. class:: TestNestedNullableStruct
+.. class:: TestNestedNullableStruct(list_field, string_field)
 
    Nested nullable struct documentation string.
 
@@ -1093,7 +1093,7 @@ Service documentation string.
       :rtype: str
 
 
-.. class:: DeprecatedStruct
+.. class:: DeprecatedStruct(value, old_value)
 
    .. warning:: Deprecated. Use :class:`TestStruct` instead.
 

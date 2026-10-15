@@ -880,20 +880,24 @@
 
    Struct documentation string.
 
+   .. function:: TestStruct(int intField, string stringField, TestEnum enumField, System.Collections.Generic.IList<int> listField)
 
-   .. property:: int IntField { get; set; }
+      Construct a TestStruct from the values of its fields.
+
+
+   .. property:: int IntField { get; }
 
       Struct IntField documentation string.
 
-   .. property:: string StringField { get; set; }
+   .. property:: string StringField { get; }
 
 
 
-   .. property:: TestEnum EnumField { get; set; }
+   .. property:: TestEnum EnumField { get; }
 
 
 
-   .. property:: System.Collections.Generic.IList<int> ListField { get; set; }
+   .. property:: System.Collections.Generic.IList<int> ListField { get; }
 
 
 
@@ -902,16 +906,20 @@
 
    Nested struct documentation string.
 
+   .. function:: TestNestedStruct(TestStruct structField, TestClass objectField, string stringField)
 
-   .. property:: TestStruct StructField { get; set; }
-
-
-
-   .. property:: TestClass ObjectField { get; set; }
+      Construct a TestNestedStruct from the values of its fields.
 
 
+   .. property:: TestStruct StructField { get; }
 
-   .. property:: string StringField { get; set; }
+
+
+   .. property:: TestClass ObjectField { get; }
+
+
+
+   .. property:: string StringField { get; }
 
 
 
@@ -920,24 +928,28 @@
 
    Nullable struct documentation string.
 
+   .. function:: TestNullableStruct(int intField, int? nullableIntField, TestEnum? nullableEnumField, string nullableStringField, TestClass nullableObjectField)
 
-   .. property:: int IntField { get; set; }
-
-
-
-   .. property:: int? NullableIntField { get; set; }
+      Construct a TestNullableStruct from the values of its fields.
 
 
-
-   .. property:: TestEnum? NullableEnumField { get; set; }
+   .. property:: int IntField { get; }
 
 
 
-   .. property:: string NullableStringField { get; set; }
+   .. property:: int? NullableIntField { get; }
 
 
 
-   .. property:: TestClass NullableObjectField { get; set; }
+   .. property:: TestEnum? NullableEnumField { get; }
+
+
+
+   .. property:: string NullableStringField { get; }
+
+
+
+   .. property:: TestClass NullableObjectField { get; }
 
 
 
@@ -946,12 +958,16 @@
 
    Nested nullable struct documentation string.
 
+   .. function:: TestNestedNullableStruct(System.Collections.Generic.IList<TestClass> listField, string stringField)
 
-   .. property:: System.Collections.Generic.IList<TestClass> ListField { get; set; }
+      Construct a TestNestedNullableStruct from the values of its fields.
+
+
+   .. property:: System.Collections.Generic.IList<TestClass> ListField { get; }
 
 
 
-   .. property:: string StringField { get; set; }
+   .. property:: string StringField { get; }
 
 
 
@@ -962,12 +978,16 @@
 
    Deprecated struct documentation string.
 
+   .. function:: DeprecatedStruct(int value, int oldValue)
 
-   .. property:: int Value { get; set; }
+      Construct a DeprecatedStruct from the values of its fields.
+
+
+   .. property:: int Value { get; }
 
       Deprecated struct Value documentation string.
 
-   .. property:: int OldValue { get; set; }
+   .. property:: int OldValue { get; }
 
       .. warning:: Deprecated. Use :prop:`DeprecatedStruct.Value` instead.
 
