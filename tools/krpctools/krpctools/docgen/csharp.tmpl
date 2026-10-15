@@ -192,7 +192,7 @@
 {% if not x.has_default_value -%}
 {{ domain.parameter_type(x.type) }} {{ x.name }}
 {%- else -%}
-{{ domain.parameter_type(x.type) }} {{ x.name }} = {{ domain.default_value(x.default_value, x.type) }}
+{{ domain.default_parameter_type(x.type) }} {{ x.name }} = {{ domain.signature_default_value(x.default_value, x.type) }}
 {%- endif %}
 {% endmacro %}
 
@@ -201,7 +201,9 @@
    :parameters:
 
    {% for p in x %}
-   {% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}    * **{{ p.name }}** -- {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   {% set doc = hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %}
+   {% set null_default = p.has_default_value and domain.default_is_null(p.type) %}
+   {% if doc or null_default %}    * **{{ p.name }}** -- {% if doc %}{{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if doc and null_default %} {% endif %}{% if null_default %}If null, defaults to ``{{ domain.default_value(p.default_value, p.type) }}``.{% endif %}{% endif %}
 
    {% endfor %}
 {% endif %}

@@ -126,13 +126,13 @@
 
       :Game Scenes: All
 
-   .. function:: System.Collections.Generic.IDictionary<int,bool> DictionaryDefault(System.Collections.Generic.IDictionary<int,bool> x = { 1: false, 2: true })
+   .. function:: System.Collections.Generic.IDictionary<int,bool> DictionaryDefault(System.Collections.Generic.IDictionary<int,bool> x = null)
 
 
 
       :parameters:
 
-
+       * **x** -- If null, defaults to ``new System.Collections.Generic.Dictionary<int,bool> { { 1, false }, { 2, true } }``.
 
       :Game Scenes: All
 
@@ -270,13 +270,13 @@
 
       :Game Scenes: All
 
-   .. function:: System.Collections.Generic.IList<string> EmptyListDefault(System.Collections.Generic.IList<string> x = {  })
+   .. function:: System.Collections.Generic.IList<string> EmptyListDefault(System.Collections.Generic.IList<string> x = null)
 
 
 
       :parameters:
 
-
+       * **x** -- If null, defaults to ``new System.Collections.Generic.List<string> { }``.
 
       :Game Scenes: All
 
@@ -300,13 +300,13 @@
 
       :Game Scenes: All
 
-   .. function:: System.Collections.Generic.IList<TestEnum> EnumListDefault(System.Collections.Generic.IList<TestEnum> x = { TestEnum.ValueB, TestEnum.ValueC })
+   .. function:: System.Collections.Generic.IList<TestEnum> EnumListDefault(System.Collections.Generic.IList<TestEnum> x = null)
 
 
 
       :parameters:
 
-
+       * **x** -- If null, defaults to ``new System.Collections.Generic.List<TestEnum> { TestEnum.ValueB, TestEnum.ValueC }``.
 
       :Game Scenes: All
 
@@ -445,13 +445,13 @@
 
       :Game Scenes: All
 
-   .. function:: System.Collections.Generic.IList<int> ListDefault(System.Collections.Generic.IList<int> x = { 1, 2, 3 })
+   .. function:: System.Collections.Generic.IList<int> ListDefault(System.Collections.Generic.IList<int> x = null)
 
 
 
       :parameters:
 
-
+       * **x** -- If null, defaults to ``new System.Collections.Generic.List<int> { 1, 2, 3 }``.
 
       :Game Scenes: All
 
@@ -562,13 +562,13 @@
 
       :Game Scenes: All
 
-   .. function:: System.Collections.Generic.ISet<int> SetDefault(System.Collections.Generic.ISet<int> x = { 1, 2, 3 })
+   .. function:: System.Collections.Generic.ISet<int> SetDefault(System.Collections.Generic.ISet<int> x = null)
 
 
 
       :parameters:
 
-
+       * **x** -- If null, defaults to ``new System.Collections.Generic.HashSet<int> { 1, 2, 3 }``.
 
       :Game Scenes: All
 
@@ -600,13 +600,13 @@
 
       :Game Scenes: All
 
-   .. function:: TestStruct StructDefault(TestStruct x = new TestStruct(42, "jeb", TestEnum.ValueB, { 1, 2, 3 }))
+   .. function:: TestStruct StructDefault(TestStruct? x = null)
 
 
 
       :parameters:
 
-
+       * **x** -- If null, defaults to ``new TestStruct(42, "jeb", TestEnum.ValueB, new System.Collections.Generic.List<int> { 1, 2, 3 })``.
 
       :Game Scenes: All
 
@@ -685,13 +685,13 @@
 
       :Game Scenes: All
 
-   .. function:: System.Tuple<int,bool> TupleDefault(System.Tuple<int,bool> x = { 1, false })
+   .. function:: System.Tuple<int,bool> TupleDefault(System.Tuple<int,bool> x = null)
 
 
 
       :parameters:
 
-
+       * **x** -- If null, defaults to ``new System.Tuple<int,bool>(1, false)``.
 
       :Game Scenes: All
 

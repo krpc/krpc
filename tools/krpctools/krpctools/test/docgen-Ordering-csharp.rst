@@ -18,12 +18,12 @@
 
       :Game Scenes: All
 
-   .. function:: void FrobAll(System.Collections.Generic.IList<ServiceB.Mode> modes = { ServiceB.Mode.Fast })
+   .. function:: void FrobAll(System.Collections.Generic.IList<ServiceB.Mode> modes = null)
 
       Defaults to a collection containing a member of another service's enumeration.
 
       :parameters:
 
-
+       * **modes** -- If null, defaults to ``new System.Collections.Generic.List<ServiceB.Mode> { ServiceB.Mode.Fast }``.
 
       :Game Scenes: All
