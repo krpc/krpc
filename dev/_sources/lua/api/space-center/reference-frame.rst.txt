@@ -40,15 +40,18 @@ ReferenceFrame
          creates one repeatedly, for example once per update, should remove each one
          when it is finished with it.
 
-   .. staticmethod:: create_hybrid(position, rotation, velocity, angular_velocity)
+   .. staticmethod:: create_hybrid(position, [rotation = Types.none], [velocity = Types.none], [angular_velocity = Types.none])
 
       Create a hybrid reference frame. This is a custom reference frame
       whose components inherited from other reference frames.
 
       :param SpaceCenter.ReferenceFrame position: The reference frame providing the position of the origin.
-      :param SpaceCenter.ReferenceFrame rotation: The reference frame providing the rotation of the frame.
-      :param SpaceCenter.ReferenceFrame velocity: The reference frame providing the linear velocity of the frame.
-      :param SpaceCenter.ReferenceFrame angular_velocity: The reference frame providing the angular velocity of the frame.
+      :param rotation: The reference frame providing the rotation of the frame.
+      :type rotation: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
+      :param velocity: The reference frame providing the linear velocity of the frame.
+      :type velocity: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
+      :param angular_velocity: The reference frame providing the angular velocity of the frame.
+      :type angular_velocity: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :rtype: :class:`SpaceCenter.ReferenceFrame`
 
       .. note::

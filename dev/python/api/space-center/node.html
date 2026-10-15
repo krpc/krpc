@@ -804,11 +804,11 @@ node is executed. This is equivalent to the delta-v reported in-game.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SpaceCenter.Node.burn_vector">
-<span class="sig-name descname"><span class="pre">burn_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Node.burn_vector" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">burn_vector</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Node.burn_vector" title="Link to this definition">#</a></dt>
 <dd><p>Returns the burn vector for the maneuver node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the returned vector is in. Defaults to <a class="reference internal" href="vessel.html#SpaceCenter.Vessel.orbital_reference_frame" title="SpaceCenter.Vessel.orbital_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.orbital_reference_frame</span></code></a>.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a><em> or </em><em>None</em>) – The reference frame that the returned vector is in. Defaults to <a class="reference internal" href="vessel.html#SpaceCenter.Vessel.orbital_reference_frame" title="SpaceCenter.Vessel.orbital_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.orbital_reference_frame</span></code></a>.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.</p>
@@ -828,11 +828,11 @@ node is executed. This is equivalent to the delta-v reported in-game.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SpaceCenter.Node.remaining_burn_vector">
-<span class="sig-name descname"><span class="pre">remaining_burn_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Node.remaining_burn_vector" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">remaining_burn_vector</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Node.remaining_burn_vector" title="Link to this definition">#</a></dt>
 <dd><p>Returns the remaining burn vector for the maneuver node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the returned vector is in. Defaults to <a class="reference internal" href="vessel.html#SpaceCenter.Vessel.orbital_reference_frame" title="SpaceCenter.Vessel.orbital_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.orbital_reference_frame</span></code></a>.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a><em> or </em><em>None</em>) – The reference frame that the returned vector is in. Defaults to <a class="reference internal" href="vessel.html#SpaceCenter.Vessel.orbital_reference_frame" title="SpaceCenter.Vessel.orbital_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.orbital_reference_frame</span></code></a>.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.</p>

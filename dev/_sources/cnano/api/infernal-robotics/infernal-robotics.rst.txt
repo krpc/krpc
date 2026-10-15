@@ -10,7 +10,7 @@ This service provides functionality to interact with
 `Infernal Robotics <https://forum.kerbalspaceprogram.com/index.php?/topic/184787-infernal-robotics-next/>`_.
 
 
-.. function:: krpc_error_t krpc_InfernalRobotics_Available(krpc_connection_t connection, bool * result)
+.. function:: krpc_error_t krpc_InfernalRobotics_Available(krpc_connection_t connection, bool * returnValue)
 
    Whether Infernal Robotics is installed.
 
@@ -19,7 +19,7 @@ This service provides functionality to interact with
 
 
 
-.. function:: krpc_error_t krpc_InfernalRobotics_Ready(krpc_connection_t connection, bool * result)
+.. function:: krpc_error_t krpc_InfernalRobotics_Ready(krpc_connection_t connection, bool * returnValue)
 
    Whether Infernal Robotics API is ready.
 
@@ -29,7 +29,7 @@ This service provides functionality to interact with
 
 
 
-.. function:: krpc_error_t krpc_InfernalRobotics_ServoGroups(krpc_connection_t connection, krpc_list_object_t * result, krpc_SpaceCenter_Vessel_t vessel)
+.. function:: krpc_error_t krpc_InfernalRobotics_ServoGroups(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Vessel_t vessel)
 
    A list of all the servo groups in the given *vessel*.
 
@@ -49,7 +49,7 @@ This service provides functionality to interact with
 
 
 
-.. function:: krpc_error_t krpc_InfernalRobotics_ServoGroupWithName(krpc_connection_t connection, krpc_InfernalRobotics_ServoGroup_t * result, krpc_SpaceCenter_Vessel_t vessel, const char * name)
+.. function:: krpc_error_t krpc_InfernalRobotics_ServoGroupWithName(krpc_connection_t connection, krpc_InfernalRobotics_ServoGroup_t * returnValue, krpc_SpaceCenter_Vessel_t vessel, const char * name)
 
    Returns the servo group in the given *vessel* with the given *name*,
    or ``nullptr`` if none exists. If multiple servo groups have the same name, only one of them is returned.
@@ -65,7 +65,7 @@ This service provides functionality to interact with
 
 
 
-.. function:: krpc_error_t krpc_InfernalRobotics_ServoWithName(krpc_connection_t connection, krpc_InfernalRobotics_Servo_t * result, krpc_SpaceCenter_Vessel_t vessel, const char * name)
+.. function:: krpc_error_t krpc_InfernalRobotics_ServoWithName(krpc_connection_t connection, krpc_InfernalRobotics_Servo_t * returnValue, krpc_SpaceCenter_Vessel_t vessel, const char * name)
 
    Returns the servo in the given *vessel* with the given *name* or
    ``nullptr`` if none exists. If multiple servos have the same name, only one of them is returned.

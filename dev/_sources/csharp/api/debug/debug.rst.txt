@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.Debug
 
@@ -20,7 +20,7 @@ Debug
       career progress made with it are not earned. It is intended for setting up a
       scenario to fly or a script to test, without flying there first.
 
-   .. method:: void SetCircularOrbit(SpaceCenter.CelestialBody body, double altitude)
+   .. function:: void SetCircularOrbit(SpaceCenter.CelestialBody body, double altitude)
 
       Move the active vessel onto a circular orbit around a body.
 
@@ -31,7 +31,7 @@ Debug
 
       :Game Scenes: Flight
 
-   .. method:: void SetOrbit(SpaceCenter.CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+   .. function:: void SetOrbit(SpaceCenter.CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
 
       Move the active vessel onto the orbit with the given orbital elements. The angles use
       the same units and conventions as :type:`SpaceCenter.Orbit`.
@@ -49,7 +49,7 @@ Debug
 
       :Game Scenes: Flight
 
-   .. method:: void SetLanded(SpaceCenter.CelestialBody body, double latitude, double longitude, double altitude = 0.0)
+   .. function:: void SetLanded(SpaceCenter.CelestialBody body, double latitude, double longitude, double altitude = 0.0)
 
       Place the active vessel on the surface of a body at the given latitude and longitude,
       and wait for it to come to rest.
@@ -63,7 +63,7 @@ Debug
 
       :Game Scenes: Flight
 
-   .. method:: void SetFlight(SpaceCenter.CelestialBody body, double latitude, double longitude, double altitude, double speed, double heading, double pitch = 0.0, double roll = 0.0, double angleOfAttack = 0.0)
+   .. function:: void SetFlight(SpaceCenter.CelestialBody body, double latitude, double longitude, double altitude, double speed, double heading, double pitch = 0.0, double roll = 0.0, double angleOfAttack = 0.0)
 
       Place the active vessel in atmospheric flight over the given point: at the given altitude
       and airspeed, pointing along the given heading at the given pitch and roll, and
@@ -90,7 +90,7 @@ Debug
          The pitch, heading and roll match those reported by the vessel's
          :type:`SpaceCenter.Flight`.
 
-   .. method:: void SetPosition(System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame)
+   .. function:: void SetPosition(System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame = null)
 
       Move the active vessel to the given position, leaving its velocity as it is. To put it
       alongside another vessel, pass a position in that vessel's reference frame.
@@ -108,7 +108,7 @@ Debug
          This is the inverse of :meth:`SpaceCenter.Vessel.Position` in the same
          reference frame.
 
-   .. method:: void SetVelocity(System.Tuple<double,double,double> velocity, SpaceCenter.ReferenceFrame referenceFrame)
+   .. function:: void SetVelocity(System.Tuple<double,double,double> velocity, SpaceCenter.ReferenceFrame referenceFrame = null)
 
       Set the velocity of the active vessel, leaving it where it is. The vessel is moved onto the
       orbit that passes through its current position at the new velocity, so this works
@@ -127,7 +127,7 @@ Debug
          This is the inverse of :meth:`SpaceCenter.Vessel.Velocity` in the same
          reference frame.
 
-   .. method:: void SetPitchHeadingRoll(double pitch, double heading, double roll, SpaceCenter.ReferenceFrame referenceFrame, SpaceCenter.Vessel vessel)
+   .. function:: void SetPitchHeadingRoll(double pitch, double heading, double roll, SpaceCenter.ReferenceFrame referenceFrame = null, SpaceCenter.Vessel vessel = null)
 
       Set the attitude of a vessel to the given pitch, heading and roll in the given
       reference frame, and stop it rotating. Lets a script start from a fixed, still
@@ -149,7 +149,7 @@ Debug
          The angles match those reported by the vessel's
          :type:`SpaceCenter.Flight`.
 
-   .. method:: void SetDirection(System.Tuple<double,double,double> direction, double roll, SpaceCenter.ReferenceFrame referenceFrame, SpaceCenter.Vessel vessel)
+   .. function:: void SetDirection(System.Tuple<double,double,double> direction, double roll, SpaceCenter.ReferenceFrame referenceFrame = null, SpaceCenter.Vessel vessel = null)
 
       Point a vessel along the given direction in the given reference frame, and stop it
       rotating. This is :meth:`Debug.SetPitchHeadingRoll <Debug.Debug.SetPitchHeadingRoll>` with a pointing vector instead
@@ -165,7 +165,7 @@ Debug
 
       :Game Scenes: Flight
 
-   .. method:: void ApplyRotation(double angle, System.Tuple<double,double,double> axis, SpaceCenter.Vessel vessel)
+   .. function:: void ApplyRotation(double angle, System.Tuple<double,double,double> axis, SpaceCenter.Vessel vessel = null)
 
       Rotate a vessel about the given axis, in its own reference frame, by the given angle.
 
@@ -177,7 +177,7 @@ Debug
 
       :Game Scenes: Flight
 
-   .. method:: void SetAngularVelocity(System.Tuple<double,double,double> angularVelocity, SpaceCenter.ReferenceFrame referenceFrame, SpaceCenter.Vessel vessel)
+   .. function:: void SetAngularVelocity(System.Tuple<double,double,double> angularVelocity, SpaceCenter.ReferenceFrame referenceFrame = null, SpaceCenter.Vessel vessel = null)
 
       Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
       zero vector to stop the vessel rotating.
@@ -196,7 +196,7 @@ Debug
          The whole vessel is put into a rigid rotation about its center of mass, so it spins in
          place rather than shearing apart or translating.
 
-   .. method:: SpaceCenter.Force AddForce(SpaceCenter.Part part, System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame)
+   .. function:: SpaceCenter.Force AddForce(SpaceCenter.Part part, System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame)
 
       Exert a constant force on a part, acting at the given position.
 
@@ -215,7 +215,7 @@ Debug
 
          The force is removed when the client that added it disconnects.
 
-   .. method:: void InstantaneousForce(SpaceCenter.Part part, System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame)
+   .. function:: void InstantaneousForce(SpaceCenter.Part part, System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame)
 
       Exert an instantaneous force on a part, acting at the given position.
 
@@ -233,7 +233,7 @@ Debug
 
          The force is applied instantaneously in a single physics update.
 
-   .. method:: void FillAllResources(SpaceCenter.Vessel vessel)
+   .. function:: void FillAllResources(SpaceCenter.Vessel vessel = null)
 
       Fill every resource tank on a vessel to its maximum capacity.
 
@@ -243,7 +243,7 @@ Debug
 
       :Game Scenes: Flight
 
-   .. method:: void FillResources(string resourceName, SpaceCenter.Vessel vessel)
+   .. function:: void FillResources(string resourceName, SpaceCenter.Vessel vessel = null)
 
       Fill the tanks of a single resource on a vessel to their maximum capacity.
 
@@ -353,7 +353,7 @@ Debug
 
       :Game Scenes: All
 
-   .. method:: void UnlockTechnologyTree()
+   .. function:: void UnlockTechnologyTree()
 
       Research every node in the technology tree and purchase every part in it.
       Only available in career and science mode.
@@ -361,7 +361,7 @@ Debug
 
       :Game Scenes: All
 
-   .. method:: void UpgradeFacilities()
+   .. function:: void UpgradeFacilities()
 
       Upgrade every building at the space center to its highest level.
       Only available in career mode.
@@ -369,7 +369,7 @@ Debug
 
       :Game Scenes: All
 
-   .. method:: void MaxKerbalExperience()
+   .. function:: void MaxKerbalExperience()
 
       Raise every kerbal in the roster to the highest experience level.
 

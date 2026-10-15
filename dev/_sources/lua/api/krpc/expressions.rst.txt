@@ -590,7 +590,8 @@ assembled and run.
       :param KRPC.Expression body: The statement to evaluate.
       :param string service: The name of the service the exception is defined in.
       :param string name: The name of the exception.
-      :param KRPC.Expression message: A string variable assigned the exception's message, or null.
+      :param message: A string variable assigned the exception's message, or null.
+      :type message: :class:`KRPC.Expression` or ``Types.none``
       :param KRPC.Expression handler: The statement evaluated when the exception is caught.
       :rtype: :class:`KRPC.Expression`
 
@@ -604,7 +605,8 @@ assembled and run.
       A try-catch statement that handles any exception.
 
       :param KRPC.Expression body: The statement to evaluate.
-      :param KRPC.Expression message: A string variable assigned the exception's message, or null.
+      :param message: A string variable assigned the exception's message, or null.
+      :type message: :class:`KRPC.Expression` or ``Types.none``
       :param KRPC.Expression handler: The statement evaluated when an exception is caught.
       :rtype: :class:`KRPC.Expression`
 

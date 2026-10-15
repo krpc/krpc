@@ -10,13 +10,13 @@ Canvas
 
    A canvas for user interface elements. See :func:`krpc_UI_StockCanvas` and :func:`krpc_UI_AddCanvas`.
 
-   .. function:: krpc_error_t krpc_UI_Canvas_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+   .. function:: krpc_error_t krpc_UI_Canvas_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_Canvas_t instance)
 
       The rect transform for the UI object.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+   .. function:: krpc_error_t krpc_UI_Canvas_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * returnValue, krpc_UI_Canvas_t instance)
 
       How much space the UI object asks a layout for.
 
@@ -27,8 +27,8 @@ Canvas
          Only has an effect when the object is in a panel that has a layout. A canvas is
          not inside a layout and does not have one.
 
-   .. function:: krpc_error_t krpc_UI_Canvas_Visible(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_UI_Canvas_set_Visible(bool value)
+   .. function:: krpc_error_t krpc_UI_Canvas_Visible(krpc_connection_t connection, bool * returnValue, krpc_UI_Canvas_t instance)
+   .. function:: krpc_error_t krpc_UI_Canvas_set_Visible(krpc_connection_t connection, krpc_UI_Canvas_t instance, bool value)
 
       Whether the UI object is visible.
 
@@ -41,7 +41,7 @@ Canvas
          be built with its parts visible, inside a panel that is not, and shown all at
          once by making that panel visible.
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddPanel(krpc_connection_t connection, krpc_UI_Panel_t * result, bool visible)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddPanel(krpc_connection_t connection, krpc_UI_Panel_t * returnValue, krpc_UI_Canvas_t instance, bool visible)
 
       Create a panel within this object.
 
@@ -51,7 +51,7 @@ Canvas
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddText(krpc_connection_t connection, krpc_UI_Text_t * result, const char * content, bool visible)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddText(krpc_connection_t connection, krpc_UI_Text_t * returnValue, krpc_UI_Canvas_t instance, const char * content, bool visible)
 
       Add text to this object.
 
@@ -62,7 +62,7 @@ Canvas
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddInputField(krpc_connection_t connection, krpc_UI_InputField_t * result, bool visible)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddInputField(krpc_connection_t connection, krpc_UI_InputField_t * returnValue, krpc_UI_Canvas_t instance, bool visible)
 
       Add an input field to this object.
 
@@ -72,7 +72,7 @@ Canvas
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddButton(krpc_connection_t connection, krpc_UI_Button_t * result, const char * content, bool visible)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddButton(krpc_connection_t connection, krpc_UI_Button_t * returnValue, krpc_UI_Canvas_t instance, const char * content, bool visible)
 
       Add a button to this object.
 
@@ -83,7 +83,7 @@ Canvas
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddToggle(krpc_connection_t connection, krpc_UI_Toggle_t * result, const char * content, bool visible)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddToggle(krpc_connection_t connection, krpc_UI_Toggle_t * returnValue, krpc_UI_Canvas_t instance, const char * content, bool visible)
 
       Add a toggle to this object.
 
@@ -94,7 +94,7 @@ Canvas
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddToggleGroup(krpc_connection_t connection, krpc_UI_ToggleGroup_t * result)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddToggleGroup(krpc_connection_t connection, krpc_UI_ToggleGroup_t * returnValue, krpc_UI_Canvas_t instance)
 
       Add a toggle group to this object, to make a set of toggles into radio buttons.
 
@@ -106,7 +106,7 @@ Canvas
          The group is not drawn and does not take up any space. The toggles that belong
          to it can be added anywhere.
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddSlider(krpc_connection_t connection, krpc_UI_Slider_t * result, bool vertical, bool visible)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddSlider(krpc_connection_t connection, krpc_UI_Slider_t * returnValue, krpc_UI_Canvas_t instance, bool vertical, bool visible)
 
       Add a slider to this object.
 
@@ -117,7 +117,7 @@ Canvas
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddDropdown(krpc_connection_t connection, krpc_UI_Dropdown_t * result, bool visible)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddDropdown(krpc_connection_t connection, krpc_UI_Dropdown_t * returnValue, krpc_UI_Canvas_t instance, bool visible)
 
       Add a dropdown to this object.
 
@@ -127,7 +127,7 @@ Canvas
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddImage(krpc_connection_t connection, krpc_UI_Image_t * result, bool visible)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddImage(krpc_connection_t connection, krpc_UI_Image_t * returnValue, krpc_UI_Canvas_t instance, bool visible)
 
       Add an image to this object.
 
@@ -137,7 +137,7 @@ Canvas
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_AddScrollView(krpc_connection_t connection, krpc_UI_ScrollView_t * result, bool visible)
+   .. function:: krpc_error_t krpc_UI_Canvas_AddScrollView(krpc_connection_t connection, krpc_UI_ScrollView_t * returnValue, krpc_UI_Canvas_t instance, bool visible)
 
       Add a scroll view to this object.
 
@@ -147,6 +147,6 @@ Canvas
 
    
 
-   .. function:: krpc_error_t krpc_UI_Canvas_Remove(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_UI_Canvas_Remove(krpc_connection_t connection, krpc_UI_Canvas_t instance)
 
       Remove the UI object.

@@ -124,7 +124,7 @@ Camera
       Returns an error is the camera is not in map mode.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.CelestialBody`
+      :rtype: :class:`SpaceCenter.CelestialBody` or ``Types.none``
 
    .. attribute:: focussed_vessel: SpaceCenter.Vessel
 
@@ -133,7 +133,7 @@ Camera
       Returns an error is the camera is not in map mode.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.Vessel`
+      :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``
 
    .. attribute:: focussed_node: SpaceCenter.Node
 
@@ -142,7 +142,7 @@ Camera
       Returns an error is the camera is not in map mode.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.Node`
+      :rtype: :class:`SpaceCenter.Node` or ``Types.none``
 
    .. attribute:: focussed_crew_member: SpaceCenter.CrewMember
 
@@ -154,7 +154,7 @@ Camera
       and in a part whose interior the game has placed them in.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.CrewMember`
+      :rtype: :class:`SpaceCenter.CrewMember` or ``Types.none``
 
 
 

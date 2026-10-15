@@ -165,7 +165,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
    :param KRPC.Expression function: The function to run.
    :param List arguments: The encoded arguments, one per parameter.
    :returns: The encoded value of the function, or no bytes for a function with no value.
-   :rtype: string
+   :rtype: string or ``Types.none``
 
    .. note::
 

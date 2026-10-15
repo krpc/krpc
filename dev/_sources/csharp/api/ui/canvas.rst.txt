@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.UI
 
@@ -42,7 +42,7 @@ Canvas
          be built with its parts visible, inside a panel that is not, and shown all at
          once by making that panel visible.
 
-   .. method:: Panel AddPanel(bool visible = true)
+   .. function:: Panel AddPanel(bool visible = true)
 
       Create a panel within this object.
 
@@ -52,7 +52,7 @@ Canvas
 
       :Game Scenes: All
 
-   .. method:: Text AddText(string content, bool visible = true)
+   .. function:: Text AddText(string content, bool visible = true)
 
       Add text to this object.
 
@@ -63,7 +63,7 @@ Canvas
 
       :Game Scenes: All
 
-   .. method:: InputField AddInputField(bool visible = true)
+   .. function:: InputField AddInputField(bool visible = true)
 
       Add an input field to this object.
 
@@ -73,7 +73,7 @@ Canvas
 
       :Game Scenes: All
 
-   .. method:: Button AddButton(string content, bool visible = true)
+   .. function:: Button AddButton(string content, bool visible = true)
 
       Add a button to this object.
 
@@ -84,7 +84,7 @@ Canvas
 
       :Game Scenes: All
 
-   .. method:: Toggle AddToggle(string content, bool visible = true)
+   .. function:: Toggle AddToggle(string content, bool visible = true)
 
       Add a toggle to this object.
 
@@ -95,7 +95,7 @@ Canvas
 
       :Game Scenes: All
 
-   .. method:: ToggleGroup AddToggleGroup()
+   .. function:: ToggleGroup AddToggleGroup()
 
       Add a toggle group to this object, to make a set of toggles into radio buttons.
 
@@ -108,7 +108,7 @@ Canvas
          The group is not drawn and does not take up any space. The toggles that belong
          to it can be added anywhere.
 
-   .. method:: Slider AddSlider(bool vertical = false, bool visible = true)
+   .. function:: Slider AddSlider(bool vertical = false, bool visible = true)
 
       Add a slider to this object.
 
@@ -119,7 +119,7 @@ Canvas
 
       :Game Scenes: All
 
-   .. method:: Dropdown AddDropdown(bool visible = true)
+   .. function:: Dropdown AddDropdown(bool visible = true)
 
       Add a dropdown to this object.
 
@@ -129,7 +129,7 @@ Canvas
 
       :Game Scenes: All
 
-   .. method:: Image AddImage(bool visible = true)
+   .. function:: Image AddImage(bool visible = true)
 
       Add an image to this object.
 
@@ -139,7 +139,7 @@ Canvas
 
       :Game Scenes: All
 
-   .. method:: ScrollView AddScrollView(bool visible = true)
+   .. function:: ScrollView AddScrollView(bool visible = true)
 
       Add a scroll view to this object.
 
@@ -149,7 +149,7 @@ Canvas
 
       :Game Scenes: All
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the UI object.
 

@@ -46,7 +46,7 @@ Parts
       oriented by its root part.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
       .. note::
 
@@ -390,7 +390,7 @@ Part
       parts tree.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
       .. note:: See the discussion on :rst:ref:`lua-api-parts-trees-of-parts`.
 
@@ -811,7 +811,7 @@ Part
       An :attr:`SpaceCenter.Part.antenna` if the part is an antenna, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Antenna`
+      :rtype: :class:`SpaceCenter.Antenna` or ``Types.none``
 
       .. note::
 
@@ -823,7 +823,7 @@ Part
       A :attr:`SpaceCenter.Part.cargo_bay` if the part is a cargo bay, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.CargoBay`
+      :rtype: :class:`SpaceCenter.CargoBay` or ``Types.none``
 
    .. attribute:: control_surface: SpaceCenter.ControlSurface
 
@@ -831,28 +831,28 @@ Part
       otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ControlSurface`
+      :rtype: :class:`SpaceCenter.ControlSurface` or ``Types.none``
 
    .. attribute:: decoupler: SpaceCenter.Decoupler
 
       A :attr:`SpaceCenter.Part.decoupler` if the part is a decoupler, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Decoupler`
+      :rtype: :class:`SpaceCenter.Decoupler` or ``Types.none``
 
    .. attribute:: docking_port: SpaceCenter.DockingPort
 
       A :attr:`SpaceCenter.Part.docking_port` if the part is a docking port, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.DockingPort`
+      :rtype: :class:`SpaceCenter.DockingPort` or ``Types.none``
 
    .. attribute:: engine: SpaceCenter.Engine
 
       An :attr:`SpaceCenter.Part.engine` if the part is an engine, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Engine`
+      :rtype: :class:`SpaceCenter.Engine` or ``Types.none``
 
    .. attribute:: experiment: SpaceCenter.Experiment
 
@@ -860,7 +860,7 @@ Part
       single science experiment, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Experiment`
+      :rtype: :class:`SpaceCenter.Experiment` or ``Types.none``
 
       .. note::
 
@@ -872,21 +872,21 @@ Part
       A list of :attr:`SpaceCenter.Part.experiment` objects that the part contains.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
+      :rtype: List or ``Types.none``
 
    .. attribute:: fairing: SpaceCenter.Fairing
 
       A :attr:`SpaceCenter.Part.fairing` if the part is a fairing, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Fairing`
+      :rtype: :class:`SpaceCenter.Fairing` or ``Types.none``
 
    .. attribute:: intake: SpaceCenter.Intake
 
       An :attr:`SpaceCenter.Part.intake` if the part is an intake, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Intake`
+      :rtype: :class:`SpaceCenter.Intake` or ``Types.none``
 
       .. note::
 
@@ -899,56 +899,56 @@ Part
       A :attr:`SpaceCenter.Part.leg` if the part is a landing leg, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Leg`
+      :rtype: :class:`SpaceCenter.Leg` or ``Types.none``
 
    .. attribute:: launch_clamp: SpaceCenter.LaunchClamp
 
       A :attr:`SpaceCenter.Part.launch_clamp` if the part is a launch clamp, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.LaunchClamp`
+      :rtype: :class:`SpaceCenter.LaunchClamp` or ``Types.none``
 
    .. attribute:: light: SpaceCenter.Light
 
       A :attr:`SpaceCenter.Part.light` if the part is a light, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Light`
+      :rtype: :class:`SpaceCenter.Light` or ``Types.none``
 
    .. attribute:: parachute: SpaceCenter.Parachute
 
       A :attr:`SpaceCenter.Part.parachute` if the part is a parachute, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Parachute`
+      :rtype: :class:`SpaceCenter.Parachute` or ``Types.none``
 
    .. attribute:: radiator: SpaceCenter.Radiator
 
       A :attr:`SpaceCenter.Part.radiator` if the part is a radiator, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Radiator`
+      :rtype: :class:`SpaceCenter.Radiator` or ``Types.none``
 
    .. attribute:: resource_drain: SpaceCenter.ResourceDrain
 
       A :attr:`SpaceCenter.Part.resource_drain` if the part is a resource drain, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ResourceDrain`
+      :rtype: :class:`SpaceCenter.ResourceDrain` or ``Types.none``
 
    .. attribute:: rcs: SpaceCenter.RCS
 
       A :attr:`SpaceCenter.Part.rcs` if the part is an RCS block/thruster, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RCS`
+      :rtype: :class:`SpaceCenter.RCS` or ``Types.none``
 
    .. attribute:: reaction_wheel: SpaceCenter.ReactionWheel
 
       A :attr:`SpaceCenter.Part.reaction_wheel` if the part is a reaction wheel, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReactionWheel`
+      :rtype: :class:`SpaceCenter.ReactionWheel` or ``Types.none``
 
    .. attribute:: resource_converter: SpaceCenter.ResourceConverter
 
@@ -956,7 +956,7 @@ Part
       otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ResourceConverter`
+      :rtype: :class:`SpaceCenter.ResourceConverter` or ``Types.none``
 
    .. attribute:: resource_harvester: SpaceCenter.ResourceHarvester
 
@@ -964,7 +964,7 @@ Part
       otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ResourceHarvester`
+      :rtype: :class:`SpaceCenter.ResourceHarvester` or ``Types.none``
 
    .. attribute:: robotic_controller: SpaceCenter.RoboticController
 
@@ -972,56 +972,56 @@ Part
       otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticController`
+      :rtype: :class:`SpaceCenter.RoboticController` or ``Types.none``
 
    .. attribute:: robotic_hinge: SpaceCenter.RoboticHinge
 
       A :attr:`SpaceCenter.Part.robotic_hinge` if the part is a robotic hinge, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticHinge`
+      :rtype: :class:`SpaceCenter.RoboticHinge` or ``Types.none``
 
    .. attribute:: robotic_piston: SpaceCenter.RoboticPiston
 
       A :attr:`SpaceCenter.Part.robotic_piston` if the part is a robotic piston, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticPiston`
+      :rtype: :class:`SpaceCenter.RoboticPiston` or ``Types.none``
 
    .. attribute:: robotic_rotation: SpaceCenter.RoboticRotation
 
       A :attr:`SpaceCenter.Part.robotic_rotation` if the part is a robotic rotation servo, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticRotation`
+      :rtype: :class:`SpaceCenter.RoboticRotation` or ``Types.none``
 
    .. attribute:: robotic_rotor: SpaceCenter.RoboticRotor
 
       A :attr:`SpaceCenter.Part.robotic_rotor` if the part is a robotic rotor, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticRotor`
+      :rtype: :class:`SpaceCenter.RoboticRotor` or ``Types.none``
 
    .. attribute:: sensor: SpaceCenter.Sensor
 
       A :attr:`SpaceCenter.Part.sensor` if the part is a sensor, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Sensor`
+      :rtype: :class:`SpaceCenter.Sensor` or ``Types.none``
 
    .. attribute:: solar_panel: SpaceCenter.SolarPanel
 
       A :attr:`SpaceCenter.Part.solar_panel` if the part is a solar panel, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.SolarPanel`
+      :rtype: :class:`SpaceCenter.SolarPanel` or ``Types.none``
 
    .. attribute:: wheel: SpaceCenter.Wheel
 
       A :attr:`SpaceCenter.Part.wheel` if the part is a wheel, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Wheel`
+      :rtype: :class:`SpaceCenter.Wheel` or ``Types.none``
 
    .. method:: position(reference_frame)
 
@@ -2105,7 +2105,7 @@ Decoupler
       The part attached to this decoupler's explosive node.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
 
 
@@ -2182,7 +2182,7 @@ Docking Port
       docking port is not docked to anything.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
    .. method:: undock()
 

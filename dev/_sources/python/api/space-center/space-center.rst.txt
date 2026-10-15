@@ -160,14 +160,14 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: launch_vessel(craft_directory, name, launch_site, crew, [recover = True], [flag_url = ''])
+.. staticmethod:: launch_vessel(craft_directory, name, launch_site, [crew = None], [recover = True], [flag_url = ''])
 
    Launch a vessel.
 
    :param str craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
    :param str name: Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
    :param str launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
-   :param list crew: The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks.
+   :param list or None crew: The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks.
    :param bool recover: If true and there is a vessel on the launch site, recover it before launching.
    :param str flag_url: If not ``None``, the asset URL of the mission flag to use for the launch.
    

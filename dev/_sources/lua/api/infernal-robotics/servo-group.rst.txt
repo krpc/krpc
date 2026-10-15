@@ -110,7 +110,7 @@ ServoGroup
       or ``nil`` if none exists.
 
       :param string name: Name of servo to find.
-      :rtype: :class:`InfernalRobotics.Servo`
+      :rtype: :class:`InfernalRobotics.Servo` or ``Types.none``
 
    .. attribute:: parts: List
 

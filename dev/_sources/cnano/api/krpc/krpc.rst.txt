@@ -18,7 +18,7 @@ KRPC
 Main kRPC service, used by clients to interact with basic server functionality.
 
 
-.. function:: krpc_error_t krpc_KRPC_GetClientID(krpc_connection_t connection, krpc_bytes_t * result)
+.. function:: krpc_error_t krpc_KRPC_GetClientID(krpc_connection_t connection, krpc_bytes_t * returnValue)
 
    Returns the identifier for the current client.
 
@@ -28,7 +28,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_GetClientName(krpc_connection_t connection, char * * result)
+.. function:: krpc_error_t krpc_KRPC_GetClientName(krpc_connection_t connection, char * * returnValue)
 
    Returns the name of the current client.
    This is an empty string if the client has no name.
@@ -39,7 +39,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_Clients(krpc_connection_t connection, krpc_list_tuple_bytes_string_string_t * result)
+.. function:: krpc_error_t krpc_KRPC_Clients(krpc_connection_t connection, krpc_list_tuple_bytes_string_string_t * returnValue)
 
    A list of RPC clients that are currently connected to the server.
    Each entry in the list is a clients identifier, name and address.
@@ -49,7 +49,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krpc_schema_Status * result)
+.. function:: krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krpc_schema_Status * returnValue)
 
    Returns some information about the server, such as the version.
 
@@ -59,7 +59,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_GetServices(krpc_connection_t connection, krpc_schema_Services * result)
+.. function:: krpc_error_t krpc_KRPC_GetServices(krpc_connection_t connection, krpc_schema_Services * returnValue)
 
    Returns information on all services, procedures, classes, properties etc. provided by the server.
    Can be used by client libraries to automatically create functionality such as stubs.
@@ -70,7 +70,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * result, krpc_KRPC_Expression_t function)
+.. function:: krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, krpc_KRPC_Expression_t function)
 
    Add a stream of the value a server side function computes on each update.
 
@@ -171,7 +171,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_RunFunction(krpc_connection_t connection, krpc_bytes_t * result, krpc_KRPC_Expression_t function, const krpc_list_nullable_bytes_t * arguments)
+.. function:: krpc_error_t krpc_KRPC_RunFunction(krpc_connection_t connection, krpc_bytes_t * returnValue, bool * returnValueIsNull, krpc_KRPC_Expression_t function, const krpc_list_nullable_bytes_t * arguments)
 
    Run a server side function once, within a single physics tick, and return
    the value it produces.
@@ -193,8 +193,8 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_GameScene(krpc_connection_t connection, krpc_KRPC_GameScene_t * result)
-.. function:: void krpc_KRPC_set_GameScene(krpc_KRPC_GameScene_t value)
+.. function:: krpc_error_t krpc_KRPC_GameScene(krpc_connection_t connection, krpc_KRPC_GameScene_t * returnValue)
+.. function:: krpc_error_t krpc_KRPC_set_GameScene(krpc_connection_t connection, krpc_KRPC_GameScene_t value)
 
    The current game scene. Setting this switches the game to the given
    scene, or opens/closes the corresponding facility for the pseudo-scenes.
@@ -212,8 +212,8 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_Paused(krpc_connection_t connection, bool * result)
-.. function:: void krpc_KRPC_set_Paused(bool value)
+.. function:: krpc_error_t krpc_KRPC_Paused(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_KRPC_set_Paused(krpc_connection_t connection, bool value)
 
    Whether the game is paused.
 
@@ -222,7 +222,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_GameStateLoads(krpc_connection_t connection, uint32_t * result)
+.. function:: krpc_error_t krpc_KRPC_GameStateLoads(krpc_connection_t connection, uint32_t * returnValue)
 
    The number of game states that have finished loading.
 

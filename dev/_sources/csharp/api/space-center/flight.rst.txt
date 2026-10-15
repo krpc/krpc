@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -367,7 +367,7 @@ Flight
          The point is fixed relative to the hull. :prop:`Flight.CenterOfBuoyancy` moves as
          the vessel rides the waves.
 
-   .. method:: double BuoyantForceAt(double density, double gravity)
+   .. function:: double BuoyantForceAt(double density, double gravity)
 
       The buoyant force on the vessel when fully submerged in a fluid of the given
       density, in Newtons.
@@ -379,7 +379,7 @@ Flight
 
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> BuoyantTorqueAt(double density, double gravity)
+   .. function:: System.Tuple<double,double,double> BuoyantTorqueAt(double density, double gravity)
 
       The torque the buoyant force exerts about the vessel's center of mass when fully
       submerged in a fluid of the given density, in reference frame
@@ -441,7 +441,7 @@ Flight
          :meth:`Flight.SimulateAerodynamicTorqueAt` does. It is intended for validating the
          simulator against the live game state.
 
-   .. method:: System.Tuple<double,double,double> SimulateAerodynamicForceAt(CelestialBody body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, System.Tuple<double,double,double,double> rotation)
+   .. function:: System.Tuple<double,double,double> SimulateAerodynamicForceAt(CelestialBody body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, System.Tuple<double,double,double,double> rotation)
 
       Simulate and return the total aerodynamic forces acting on the vessel,
       if it were traveling with the given velocity, at the given position and
@@ -467,7 +467,7 @@ Flight
          the requested orientation, not the force in the vessel's current orientation.
          Atmospheric temperature and density are evaluated at the current universal time.
 
-   .. method:: System.Tuple<double,double,double> SimulateAerodynamicTorqueAt(CelestialBody body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, System.Tuple<double,double,double,double> rotation, System.Tuple<double,double,double> angularVelocity)
+   .. function:: System.Tuple<double,double,double> SimulateAerodynamicTorqueAt(CelestialBody body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, System.Tuple<double,double,double,double> rotation, System.Tuple<double,double,double> angularVelocity)
 
       Simulate and return the total aerodynamic torque acting on the vessel about its
       center of mass, if it were traveling with the given velocity, at the given
@@ -500,7 +500,7 @@ Flight
          the game applies each part's force to that part and propagates it through the joints
          rather than to the vessel as a rigid body.
 
-   .. method:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> SimulateAerodynamicWrenchAt(CelestialBody body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, System.Tuple<double,double,double,double> rotation, System.Tuple<double,double,double> angularVelocity, double ut)
+   .. function:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> SimulateAerodynamicWrenchAt(CelestialBody body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, System.Tuple<double,double,double,double> rotation, System.Tuple<double,double,double> angularVelocity, double ut)
 
       Simulate and return the total aerodynamic force and torque acting on the vessel,
       if its center of mass were traveling with the given velocity, at the given position,

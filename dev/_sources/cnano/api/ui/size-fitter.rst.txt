@@ -11,15 +11,15 @@ Size Fitter
    Sizes a panel to fit what it contains, rather than the other way round.
    See :func:`krpc_UI_Panel_SizeFitter`.
 
-   .. function:: krpc_error_t krpc_UI_SizeFitter_HorizontalFit(krpc_connection_t connection, krpc_UI_ContentSizeFit_t * result)
-   .. function:: void krpc_UI_SizeFitter_set_HorizontalFit(krpc_UI_ContentSizeFit_t value)
+   .. function:: krpc_error_t krpc_UI_SizeFitter_HorizontalFit(krpc_connection_t connection, krpc_UI_ContentSizeFit_t * returnValue, krpc_UI_SizeFitter_t instance)
+   .. function:: krpc_error_t krpc_UI_SizeFitter_set_HorizontalFit(krpc_connection_t connection, krpc_UI_SizeFitter_t instance, krpc_UI_ContentSizeFit_t value)
 
       How the width of the panel is chosen.
 
    
 
-   .. function:: krpc_error_t krpc_UI_SizeFitter_VerticalFit(krpc_connection_t connection, krpc_UI_ContentSizeFit_t * result)
-   .. function:: void krpc_UI_SizeFitter_set_VerticalFit(krpc_UI_ContentSizeFit_t value)
+   .. function:: krpc_error_t krpc_UI_SizeFitter_VerticalFit(krpc_connection_t connection, krpc_UI_ContentSizeFit_t * returnValue, krpc_UI_SizeFitter_t instance)
+   .. function:: krpc_error_t krpc_UI_SizeFitter_set_VerticalFit(krpc_connection_t connection, krpc_UI_SizeFitter_t instance, krpc_UI_ContentSizeFit_t value)
 
       How the height of the panel is chosen.
 

@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -77,7 +77,7 @@ Closest Approach
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame = null)
 
       The position of the orbiting object at the closest approach.
 
@@ -88,7 +88,7 @@ Closest Approach
       :returns: The position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> TargetPosition(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> TargetPosition(ReferenceFrame referenceFrame = null)
 
       The position of the target object at the closest approach.
 
@@ -99,7 +99,7 @@ Closest Approach
       :returns: The position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame = null)
 
       The velocity of the orbiting object at the closest approach.
 
@@ -110,7 +110,7 @@ Closest Approach
       :returns: The velocity as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> TargetVelocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> TargetVelocity(ReferenceFrame referenceFrame = null)
 
       The velocity of the target object at the closest approach.
 
@@ -121,7 +121,7 @@ Closest Approach
       :returns: The velocity as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> RelativePosition(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> RelativePosition(ReferenceFrame referenceFrame = null)
 
       The position of the target relative to the orbiting object at the closest
       approach.
@@ -133,7 +133,7 @@ Closest Approach
       :returns: The relative position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> RelativeVelocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> RelativeVelocity(ReferenceFrame referenceFrame = null)
 
       The velocity of the target relative to the orbiting object at the closest
       approach.

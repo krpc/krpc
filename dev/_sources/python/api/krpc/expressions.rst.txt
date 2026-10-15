@@ -648,7 +648,7 @@ assembled and run.
       :param Expression body: The statement to evaluate.
       :param str service: The name of the service the exception is defined in.
       :param str name: The name of the exception.
-      :param Expression message: A string variable assigned the exception's message, or null.
+      :param Expression or None message: A string variable assigned the exception's message, or null.
       :param Expression handler: The statement evaluated when the exception is caught.
       :rtype: :class:`Expression`
    
@@ -663,7 +663,7 @@ assembled and run.
       A try-catch statement that handles any exception.
 
       :param Expression body: The statement to evaluate.
-      :param Expression message: A string variable assigned the exception's message, or null.
+      :param Expression or None message: A string variable assigned the exception's message, or null.
       :param Expression handler: The statement evaluated when an exception is caught.
       :rtype: :class:`Expression`
    

@@ -142,7 +142,7 @@ Vessel
 
    
 
-   .. function:: Flight flight(std::optional<ReferenceFrame> reference_frame)
+   .. function:: Flight flight(std::optional<ReferenceFrame> reference_frame = std::optional<ReferenceFrame>())
 
       Returns a :func:`Vessel::flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.

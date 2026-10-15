@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.UI
 
@@ -47,7 +47,7 @@ Panel
 
       .. note::
 
-         Has no effect while the style of the panel is :enum:`PanelStyle.None`,
+         Has no effect while the style of the panel is :value:`PanelStyle.None`,
          as the panel is then not drawn at all.
 
    .. property:: bool Draggable { get; set; }
@@ -62,7 +62,7 @@ Panel
          Dragging anywhere on the panel moves it, including over the elements it
          contains, unless one of them takes the pointer for itself. Give a panel a title
          bar of its own if only part of it should move it.
-         A panel whose style is :enum:`PanelStyle.None` is not drawn, so it takes
+         A panel whose style is :value:`PanelStyle.None` is not drawn, so it takes
          no pointer events of its own and can only be dragged by the elements it
          contains.
 
@@ -80,7 +80,7 @@ Panel
          be built with its parts visible, inside a panel that is not, and shown all at
          once by making that panel visible.
 
-   .. method:: Panel AddPanel(bool visible = true)
+   .. function:: Panel AddPanel(bool visible = true)
 
       Create a panel within this object.
 
@@ -90,7 +90,7 @@ Panel
 
       :Game Scenes: All
 
-   .. method:: Text AddText(string content, bool visible = true)
+   .. function:: Text AddText(string content, bool visible = true)
 
       Add text to this object.
 
@@ -101,7 +101,7 @@ Panel
 
       :Game Scenes: All
 
-   .. method:: InputField AddInputField(bool visible = true)
+   .. function:: InputField AddInputField(bool visible = true)
 
       Add an input field to this object.
 
@@ -111,7 +111,7 @@ Panel
 
       :Game Scenes: All
 
-   .. method:: Button AddButton(string content, bool visible = true)
+   .. function:: Button AddButton(string content, bool visible = true)
 
       Add a button to this object.
 
@@ -122,7 +122,7 @@ Panel
 
       :Game Scenes: All
 
-   .. method:: Toggle AddToggle(string content, bool visible = true)
+   .. function:: Toggle AddToggle(string content, bool visible = true)
 
       Add a toggle to this object.
 
@@ -133,7 +133,7 @@ Panel
 
       :Game Scenes: All
 
-   .. method:: ToggleGroup AddToggleGroup()
+   .. function:: ToggleGroup AddToggleGroup()
 
       Add a toggle group to this object, to make a set of toggles into radio buttons.
 
@@ -146,7 +146,7 @@ Panel
          The group is not drawn and does not take up any space. The toggles that belong
          to it can be added anywhere.
 
-   .. method:: Slider AddSlider(bool vertical = false, bool visible = true)
+   .. function:: Slider AddSlider(bool vertical = false, bool visible = true)
 
       Add a slider to this object.
 
@@ -157,7 +157,7 @@ Panel
 
       :Game Scenes: All
 
-   .. method:: Dropdown AddDropdown(bool visible = true)
+   .. function:: Dropdown AddDropdown(bool visible = true)
 
       Add a dropdown to this object.
 
@@ -167,7 +167,7 @@ Panel
 
       :Game Scenes: All
 
-   .. method:: Image AddImage(bool visible = true)
+   .. function:: Image AddImage(bool visible = true)
 
       Add an image to this object.
 
@@ -177,7 +177,7 @@ Panel
 
       :Game Scenes: All
 
-   .. method:: ScrollView AddScrollView(bool visible = true)
+   .. function:: ScrollView AddScrollView(bool visible = true)
 
       Add a scroll view to this object.
 
@@ -194,21 +194,21 @@ Panel
 
       :Game Scenes: All
 
-   .. method:: Layout AddHorizontalLayout()
+   .. function:: Layout AddHorizontalLayout()
 
       Arrange the elements of the panel in a row.
 
 
       :Game Scenes: All
 
-   .. method:: Layout AddVerticalLayout()
+   .. function:: Layout AddVerticalLayout()
 
       Arrange the elements of the panel in a column.
 
 
       :Game Scenes: All
 
-   .. method:: Layout AddGridLayout()
+   .. function:: Layout AddGridLayout()
 
       Arrange the elements of the panel in a grid of equally sized cells.
 
@@ -233,7 +233,7 @@ Panel
          Both directions start out unconstrained, which leaves the size of the panel
          alone.
 
-   .. method:: void BringToFront()
+   .. function:: void BringToFront()
 
       Draw the panel in front of the other elements beside it. Elements are drawn
       in the order they were added, so of two overlapping panels the newer hides
@@ -248,7 +248,7 @@ Panel
          A draggable panel also brings itself to the front when the user starts
          dragging it, the way a window comes to the front when it is clicked.
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the UI object.
 
@@ -262,16 +262,16 @@ Panel
    How the background of a panel is drawn.
 
 
-   .. value:: Window
+   .. enumerator:: Window
 
       As a window, the heavier of the two frames the game uses.
 
 
-   .. value:: Box
+   .. enumerator:: Box
 
       As a box, the lighter frame the game groups related controls in.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       Not drawn at all, leaving whatever is behind the panel showing through.

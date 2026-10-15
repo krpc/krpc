@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.UI
 
@@ -58,7 +58,7 @@ Layout
    .. property:: int ConstraintCount { get; set; }
 
       The number of columns or rows that :prop:`Layout.Constraint` fixes, ignored when
-      the constraint is :enum:`GridConstraint.Flexible`.
+      the constraint is :value:`GridConstraint.Flexible`.
 
       :Game Scenes: All
 
@@ -74,16 +74,16 @@ Layout
    What fixes the shape of a grid layout.
 
 
-   .. value:: Flexible
+   .. enumerator:: Flexible
 
       Fit as many columns and rows as the size of the panel allows.
 
 
-   .. value:: FixedColumnCount
+   .. enumerator:: FixedColumnCount
 
       Use a fixed number of columns, and as many rows as are needed.
 
 
-   .. value:: FixedRowCount
+   .. enumerator:: FixedRowCount
 
       Use a fixed number of rows, and as many columns as are needed.

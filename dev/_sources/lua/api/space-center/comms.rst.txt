@@ -144,4 +144,4 @@ Communications
 
       The vessel for this communication node, or null if the node is not a vessel.
 
-      :rtype: :class:`SpaceCenter.Vessel`
+      :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``

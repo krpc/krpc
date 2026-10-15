@@ -16,7 +16,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddLine(krpc_connection_t connection, krpc_Drawing_Line_t * result, const krpc_tuple_double_double_double_t * start, const krpc_tuple_double_double_double_t * end, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddLine(krpc_connection_t connection, krpc_Drawing_Line_t * returnValue, const krpc_tuple_double_double_double_t * start, const krpc_tuple_double_double_double_t * end, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
 
    Draw a line in the scene.
 
@@ -33,7 +33,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddDirection(krpc_connection_t connection, krpc_Drawing_Line_t * result, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, float length, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddDirection(krpc_connection_t connection, krpc_Drawing_Line_t * returnValue, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, float length, bool visible)
 
    Draw a direction vector in the scene, starting from the origin of the given reference frame.
 
@@ -50,7 +50,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddDirectionFromCom(krpc_connection_t connection, krpc_Drawing_Line_t * result, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, float length, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddDirectionFromCom(krpc_connection_t connection, krpc_Drawing_Line_t * returnValue, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, float length, bool visible)
 
    Draw a direction vector in the scene, from the center of mass of the active vessel.
 
@@ -67,7 +67,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddAxes(krpc_connection_t connection, krpc_list_object_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, float length, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddAxes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, float length, bool visible)
 
    Draw the axes of a reference frame in the scene, as arrows from its origin.
 
@@ -84,7 +84,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddPolygon(krpc_connection_t connection, krpc_Drawing_Polygon_t * result, const krpc_list_tuple_double_double_double_t * vertices, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddPolygon(krpc_connection_t connection, krpc_Drawing_Polygon_t * returnValue, const krpc_list_tuple_double_double_double_t * vertices, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
 
    Draw a polygon in the scene, defined by a list of vertices.
 
@@ -100,7 +100,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddPolyline(krpc_connection_t connection, krpc_Drawing_Polyline_t * result, const krpc_list_tuple_double_double_double_t * vertices, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddPolyline(krpc_connection_t connection, krpc_Drawing_Polyline_t * returnValue, const krpc_list_tuple_double_double_double_t * vertices, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
 
    Draw an open line through a list of vertices in the scene.
 
@@ -116,7 +116,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddCircle(krpc_connection_t connection, krpc_Drawing_Circle_t * result, const krpc_tuple_double_double_double_t * center, const krpc_tuple_double_double_double_t * normal, double radius, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddCircle(krpc_connection_t connection, krpc_Drawing_Circle_t * returnValue, const krpc_tuple_double_double_double_t * center, const krpc_tuple_double_double_double_t * normal, double radius, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
 
    Draw a circle in the scene.
 
@@ -138,7 +138,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddArc(krpc_connection_t connection, krpc_Drawing_Arc_t * result, const krpc_tuple_double_double_double_t * center, const krpc_tuple_double_double_double_t * normal, const krpc_tuple_double_double_double_t * startDirection, double angle, double radius, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddArc(krpc_connection_t connection, krpc_Drawing_Arc_t * returnValue, const krpc_tuple_double_double_double_t * center, const krpc_tuple_double_double_double_t * normal, const krpc_tuple_double_double_double_t * startDirection, double angle, double radius, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
 
    Draw an arc of a circle in the scene.
 
@@ -163,7 +163,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddOrbit(krpc_connection_t connection, krpc_Drawing_OrbitPath_t * result, krpc_SpaceCenter_Orbit_t orbit, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddOrbit(krpc_connection_t connection, krpc_Drawing_OrbitPath_t * returnValue, krpc_SpaceCenter_Orbit_t orbit, bool visible)
 
    Draw the path of an orbit in the scene.
 
@@ -183,7 +183,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddPoint(krpc_connection_t connection, krpc_Drawing_Point_t * result, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddPoint(krpc_connection_t connection, krpc_Drawing_Point_t * returnValue, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
 
    Draw a point in the scene, as a dot that keeps its size on screen.
 
@@ -199,7 +199,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddBox(krpc_connection_t connection, krpc_Drawing_Box_t * result, const krpc_tuple_double_double_double_t * center, const krpc_tuple_double_double_double_t * size, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_double_t * rotation, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddBox(krpc_connection_t connection, krpc_Drawing_Box_t * returnValue, const krpc_tuple_double_double_double_t * center, const krpc_tuple_double_double_double_t * size, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_double_t * rotation, bool visible)
 
    Draw the edges of a box in the scene.
 
@@ -217,7 +217,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddSphere(krpc_connection_t connection, krpc_Drawing_Sphere_t * result, const krpc_tuple_double_double_double_t * center, double radius, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddSphere(krpc_connection_t connection, krpc_Drawing_Sphere_t * returnValue, const krpc_tuple_double_double_double_t * center, double radius, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
 
    Draw a solid sphere in the scene.
 
@@ -234,7 +234,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddText(krpc_connection_t connection, krpc_Drawing_Text_t * result, const char * text, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_double_t * rotation, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddText(krpc_connection_t connection, krpc_Drawing_Text_t * returnValue, const char * text, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_double_t * rotation, bool visible)
 
    Draw text in the scene.
 
@@ -252,7 +252,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddNavballMarker(krpc_connection_t connection, krpc_Drawing_NavballMarker_t * result, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddNavballMarker(krpc_connection_t connection, krpc_Drawing_NavballMarker_t * returnValue, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
 
    Draw a marker on the navball, pointing in the given direction.
 
@@ -268,7 +268,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddMapMarker(krpc_connection_t connection, krpc_Drawing_MapMarker_t * result, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, krpc_Drawing_MapMarkerIcon_t icon, const char * caption, bool visible)
+.. function:: krpc_error_t krpc_Drawing_AddMapMarker(krpc_connection_t connection, krpc_Drawing_MapMarker_t * returnValue, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, krpc_Drawing_MapMarkerIcon_t icon, const char * caption, bool visible)
 
    Draw a marker in the map view, with one of the game's own map icons.
 
@@ -286,7 +286,7 @@ and the tracking station.
 
 
 
-.. function:: krpc_error_t krpc_Drawing_AddImage(krpc_connection_t connection, krpc_Drawing_Image_t * result, krpc_bytes_t data)
+.. function:: krpc_error_t krpc_Drawing_AddImage(krpc_connection_t connection, krpc_Drawing_Image_t * returnValue, krpc_bytes_t data)
 
    Load an image that markers can be drawn with, from the contents of a PNG or JPEG
    file. The transparency of a PNG image is kept.

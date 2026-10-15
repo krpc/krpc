@@ -115,6 +115,10 @@ Communications
 
    Represents a communication node in the network. For example, a vessel or the KSC.
 
+   .. constructor:: public CommNode(String name, boolean isHome, boolean isControlPoint, boolean isVessel, Vessel vessel)
+
+      Construct a CommNode from the values of its fields.
+
 
    .. method:: String getName()
 

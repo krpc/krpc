@@ -45,7 +45,7 @@ MapMarker
       icon.
 
       :Attribute: Can be read or written
-      :rtype: :class:`Drawing.Image`
+      :rtype: :class:`Drawing.Image` or ``Types.none``
 
    .. attribute:: caption: string
 

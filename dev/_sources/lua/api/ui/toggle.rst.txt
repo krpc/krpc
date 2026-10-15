@@ -74,7 +74,7 @@ Toggle
       The group that the toggle belongs to, or ``nil`` if it does not belong to one.
 
       :Attribute: Can be read or written
-      :rtype: :class:`UI.ToggleGroup`
+      :rtype: :class:`UI.ToggleGroup` or ``Types.none``
 
       .. note::
 

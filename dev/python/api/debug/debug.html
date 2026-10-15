@@ -810,14 +810,14 @@ without flying the craft up from the runway.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Debug.set_position">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_position" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_position" title="Link to this definition">#</a></dt>
 <dd><p>Move the active vessel to the given position, leaving its velocity as it is. To put it
 alongside another vessel, pass a position in that vessel’s reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>position</strong> (<em>tuple</em>) – Position of the vessel’s center of mass, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame the position is in. Defaults to the reference frame of the body being orbited.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a><em> or </em><em>None</em>) – Reference frame the position is in. Defaults to the reference frame of the body being orbited.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -833,7 +833,7 @@ reference frame.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Debug.set_velocity">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">velocity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_velocity" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">velocity</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_velocity" title="Link to this definition">#</a></dt>
 <dd><p>Set the velocity of the active vessel, leaving it where it is. The vessel is moved onto the
 orbit that passes through its current position at the new velocity, so this works
 in orbit and in the atmosphere alike.</p>
@@ -841,7 +841,7 @@ in orbit and in the atmosphere alike.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>velocity</strong> (<em>tuple</em>) – Velocity in meters per second.</p></li>
-<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a><em> or </em><em>None</em>) – Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -857,7 +857,7 @@ reference frame.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Debug.set_pitch_heading_roll">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_pitch_heading_roll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_pitch_heading_roll" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_pitch_heading_roll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roll</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_pitch_heading_roll" title="Link to this definition">#</a></dt>
 <dd><p>Set the attitude of a vessel to the given pitch, heading and roll in the given
 reference frame, and stop it rotating. Lets a script start from a fixed, still
 pose without first flying the autopilot there.</p>
@@ -867,8 +867,8 @@ pose without first flying the autopilot there.</p>
 <li><p><strong>pitch</strong> (<em>float</em>) – Target pitch, in degrees.</p></li>
 <li><p><strong>heading</strong> (<em>float</em>) – Target heading, in degrees.</p></li>
 <li><p><strong>roll</strong> (<em>float</em>) – Target roll, in degrees.</p></li>
-<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame the angles are in. Defaults to the vessel’s surface reference frame.</p></li>
-<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a>) – Vessel to rotate. Defaults to the active vessel.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a><em> or </em><em>None</em>) – Reference frame the angles are in. Defaults to the vessel’s surface reference frame.</p></li>
+<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a><em> or </em><em>None</em>) – Vessel to rotate. Defaults to the active vessel.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -884,7 +884,7 @@ pose without first flying the autopilot there.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Debug.set_direction">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_direction" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roll</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_direction" title="Link to this definition">#</a></dt>
 <dd><p>Point a vessel along the given direction in the given reference frame, and stop it
 rotating. This is <a class="reference internal" href="#Debug.set_pitch_heading_roll" title="Debug.set_pitch_heading_roll"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_pitch_heading_roll()</span></code></a> with a pointing vector instead
 of a pitch and heading, matching the attitude the autopilot holds for the same
@@ -894,8 +894,8 @@ target direction and roll.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>direction</strong> (<em>tuple</em>) – Direction to point the nose of the vessel in.</p></li>
 <li><p><strong>roll</strong> (<em>float</em>) – Target roll, in degrees, or <code class="docutils literal notranslate"><span class="pre">NaN</span></code> to leave the roll uncontrolled.</p></li>
-<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame the direction and roll are in. Defaults to the vessel’s surface reference frame.</p></li>
-<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a>) – Vessel to rotate. Defaults to the active vessel.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a><em> or </em><em>None</em>) – Reference frame the direction and roll are in. Defaults to the vessel’s surface reference frame.</p></li>
+<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a><em> or </em><em>None</em>) – Vessel to rotate. Defaults to the active vessel.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -906,14 +906,14 @@ target direction and roll.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Debug.apply_rotation">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">apply_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.apply_rotation" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">apply_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Debug.apply_rotation" title="Link to this definition">#</a></dt>
 <dd><p>Rotate a vessel about the given axis, in its own reference frame, by the given angle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>angle</strong> (<em>float</em>) – Angle to rotate by, in degrees.</p></li>
 <li><p><strong>axis</strong> (<em>tuple</em>) – Axis to rotate about.</p></li>
-<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a>) – Vessel to rotate. Defaults to the active vessel.</p></li>
+<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a><em> or </em><em>None</em>) – Vessel to rotate. Defaults to the active vessel.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -924,15 +924,15 @@ target direction and roll.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Debug.set_angular_velocity">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_angular_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angular_velocity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_angular_velocity" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_angular_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angular_velocity</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Debug.set_angular_velocity" title="Link to this definition">#</a></dt>
 <dd><p>Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
 zero vector to stop the vessel rotating.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>angular_velocity</strong> (<em>tuple</em>) – Angular velocity, in radians per second. The direction is the axis of rotation and the magnitude is the rate.</p></li>
-<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a>) – Reference frame the angular velocity is in. Defaults to the vessel’s surface reference frame.</p></li>
-<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a>) – Vessel to rotate. Defaults to the active vessel.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>SpaceCenter.ReferenceFrame</em></a><em> or </em><em>None</em>) – Reference frame the angular velocity is in. Defaults to the vessel’s surface reference frame.</p></li>
+<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a><em> or </em><em>None</em>) – Vessel to rotate. Defaults to the active vessel.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -1000,11 +1000,11 @@ place rather than shearing apart or translating.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Debug.fill_all_resources">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">fill_all_resources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vessel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.fill_all_resources" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">fill_all_resources</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">vessel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Debug.fill_all_resources" title="Link to this definition">#</a></dt>
 <dd><p>Fill every resource tank on a vessel to its maximum capacity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a>) – Vessel to fill. Defaults to the active vessel.</p>
+<dd class="field-odd"><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a><em> or </em><em>None</em>) – Vessel to fill. Defaults to the active vessel.</p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>Flight</p>
@@ -1014,13 +1014,13 @@ place rather than shearing apart or translating.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Debug.fill_resources">
-<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">fill_resources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Debug.fill_resources" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">fill_resources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_name</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">vessel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Debug.fill_resources" title="Link to this definition">#</a></dt>
 <dd><p>Fill the tanks of a single resource on a vessel to their maximum capacity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>resource_name</strong> (<em>str</em>) – Name of the resource to fill, for example <code class="docutils literal notranslate"><span class="pre">&quot;LiquidFuel&quot;</span></code>.</p></li>
-<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a>) – Vessel to fill. Defaults to the active vessel.</p></li>
+<li><p><strong>vessel</strong> (<a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>SpaceCenter.Vessel</em></a><em> or </em><em>None</em>) – Vessel to fill. Defaults to the active vessel.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>

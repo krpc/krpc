@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.Drawing
 
@@ -16,7 +16,7 @@ Drawing
       For drawing and interacting with the user interface, see the UI service.
       Objects drawn by a client are removed when that client disconnects.
 
-   .. method:: Line AddLine(System.Tuple<double,double,double> start, System.Tuple<double,double,double> end, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
+   .. function:: Line AddLine(System.Tuple<double,double,double> start, System.Tuple<double,double,double> end, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
 
       Draw a line in the scene.
 
@@ -29,7 +29,7 @@ Drawing
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: Line AddDirection(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, float length = 1e+01f, bool visible = true)
+   .. function:: Line AddDirection(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, float length = 1e+01f, bool visible = true)
 
       Draw a direction vector in the scene, starting from the origin of the given reference frame.
 
@@ -42,7 +42,7 @@ Drawing
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: Line AddDirectionFromCom(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, float length = 1e+01f, bool visible = true)
+   .. function:: Line AddDirectionFromCom(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, float length = 1e+01f, bool visible = true)
 
       Draw a direction vector in the scene, from the center of mass of the active vessel.
 
@@ -55,7 +55,7 @@ Drawing
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<Line> AddAxes(SpaceCenter.ReferenceFrame referenceFrame, float length = 1e+01f, bool visible = true)
+   .. function:: System.Collections.Generic.IList<Line> AddAxes(SpaceCenter.ReferenceFrame referenceFrame, float length = 1e+01f, bool visible = true)
 
       Draw the axes of a reference frame in the scene, as arrows from its origin.
 
@@ -68,7 +68,7 @@ Drawing
       :returns: The lines for the x, y and z axes, colored red, green and blue.
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: Polygon AddPolygon(System.Collections.Generic.IList<System.Tuple<double,double,double>> vertices, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
+   .. function:: Polygon AddPolygon(System.Collections.Generic.IList<System.Tuple<double,double,double>> vertices, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
 
       Draw a polygon in the scene, defined by a list of vertices.
 
@@ -80,7 +80,7 @@ Drawing
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: Polyline AddPolyline(System.Collections.Generic.IList<System.Tuple<double,double,double>> vertices, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
+   .. function:: Polyline AddPolyline(System.Collections.Generic.IList<System.Tuple<double,double,double>> vertices, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
 
       Draw an open line through a list of vertices in the scene.
 
@@ -92,7 +92,7 @@ Drawing
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: Circle AddCircle(System.Tuple<double,double,double> center, System.Tuple<double,double,double> normal, double radius, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
+   .. function:: Circle AddCircle(System.Tuple<double,double,double> center, System.Tuple<double,double,double> normal, double radius, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
 
       Draw a circle in the scene.
 
@@ -111,7 +111,7 @@ Drawing
 
          Throws an exception if the normal is zero.
 
-   .. method:: Arc AddArc(System.Tuple<double,double,double> center, System.Tuple<double,double,double> normal, System.Tuple<double,double,double> startDirection, double angle, double radius, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
+   .. function:: Arc AddArc(System.Tuple<double,double,double> center, System.Tuple<double,double,double> normal, System.Tuple<double,double,double> startDirection, double angle, double radius, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
 
       Draw an arc of a circle in the scene.
 
@@ -133,7 +133,7 @@ Drawing
          The arc turns counterclockwise about the normal, seen from the side it points to.
          Throws an exception if the normal is zero, or the start direction is parallel to it.
 
-   .. method:: OrbitPath AddOrbit(SpaceCenter.Orbit orbit, bool visible = true)
+   .. function:: OrbitPath AddOrbit(SpaceCenter.Orbit orbit, bool visible = true)
 
       Draw the path of an orbit in the scene.
 
@@ -150,7 +150,7 @@ Drawing
          The path follows the orbit as it changes, and ends where the orbit leaves the
          sphere of influence of its body.
 
-   .. method:: Point AddPoint(System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
+   .. function:: Point AddPoint(System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
 
       Draw a point in the scene, as a dot that keeps its size on screen.
 
@@ -162,7 +162,7 @@ Drawing
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: Box AddBox(System.Tuple<double,double,double> center, System.Tuple<double,double,double> size, SpaceCenter.ReferenceFrame referenceFrame, System.Tuple<double,double,double,double> rotation = { 0.0, 0.0, 0.0, 1.0 }, bool visible = true)
+   .. function:: Box AddBox(System.Tuple<double,double,double> center, System.Tuple<double,double,double> size, SpaceCenter.ReferenceFrame referenceFrame, System.Tuple<double,double,double,double> rotation = null, bool visible = true)
 
       Draw the edges of a box in the scene.
 
@@ -171,12 +171,12 @@ Drawing
        * **center** -- Position of the center of the box.
        * **size** -- Lengths of the sides of the box along its x, y and z axes, in meters.
        * **referenceFrame** -- Reference frame that the position and rotation are in.
-       * **rotation** -- Rotation of the box, as a quaternion.
+       * **rotation** -- Rotation of the box, as a quaternion. If null, defaults to ``new System.Tuple<double,double,double,double>(0.0, 0.0, 0.0, 1.0)``.
        * **visible** -- Whether the box is visible.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: Sphere AddSphere(System.Tuple<double,double,double> center, double radius, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
+   .. function:: Sphere AddSphere(System.Tuple<double,double,double> center, double radius, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
 
       Draw a solid sphere in the scene.
 
@@ -189,7 +189,7 @@ Drawing
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: Text AddText(string text, SpaceCenter.ReferenceFrame referenceFrame, System.Tuple<double,double,double> position, System.Tuple<double,double,double,double> rotation, bool visible = true)
+   .. function:: Text AddText(string text, SpaceCenter.ReferenceFrame referenceFrame, System.Tuple<double,double,double> position, System.Tuple<double,double,double,double> rotation, bool visible = true)
 
       Draw text in the scene.
 
@@ -203,7 +203,7 @@ Drawing
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: NavballMarker AddNavballMarker(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
+   .. function:: NavballMarker AddNavballMarker(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
 
       Draw a marker on the navball, pointing in the given direction.
 
@@ -215,7 +215,7 @@ Drawing
 
       :Game Scenes: Flight
 
-   .. method:: MapMarker AddMapMarker(System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame, MapMarkerIcon icon = MapMarkerIcon.Generic, string caption = "", bool visible = true)
+   .. function:: MapMarker AddMapMarker(System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame, MapMarkerIcon icon = MapMarkerIcon.Generic, string caption = "", bool visible = true)
 
       Draw a marker in the map view, with one of the game's own map icons.
 
@@ -229,7 +229,7 @@ Drawing
 
       :Game Scenes: Flight, Tracking Station
 
-   .. method:: Image AddImage(byte[] data)
+   .. function:: Image AddImage(byte[] data)
 
       Load an image that markers can be drawn with, from the contents of a PNG or JPEG
       file. The transparency of a PNG image is kept.
@@ -245,7 +245,7 @@ Drawing
 
          Throws an exception if the data is not a PNG or JPEG image.
 
-   .. method:: void Clear(bool clientOnly = false)
+   .. function:: void Clear(bool clientOnly = false)
 
       Remove all objects being drawn.
 

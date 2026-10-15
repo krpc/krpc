@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.UI
 
@@ -116,7 +116,7 @@ Dropdown
 
       :Game Scenes: All
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the UI object.
 

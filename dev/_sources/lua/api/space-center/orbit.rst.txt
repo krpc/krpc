@@ -12,7 +12,7 @@ Orbit
    :attr:`SpaceCenter.Vessel.orbit`, or a celestial body, obtained by calling
    :attr:`SpaceCenter.CelestialBody.orbit`.
 
-   .. staticmethod:: create_from_position_and_velocity(body, position, velocity, ut, reference_frame)
+   .. staticmethod:: create_from_position_and_velocity(body, position, velocity, ut, [reference_frame = Types.none])
 
       Create the orbit that passes through a given position at a given velocity.
       The orbit coasts freely under the gravity of the body being orbited, so it
@@ -23,7 +23,8 @@ Orbit
       :param Tuple position: The position, as a position vector.
       :param Tuple velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.
       :param number ut: The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that *position* and *velocity* are in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of *body*.
+      :param reference_frame: The reference frame that *position* and *velocity* are in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of *body*.
+      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :rtype: :class:`SpaceCenter.Orbit`
 
       .. note::
@@ -260,59 +261,65 @@ Orbit
       :param number true_anomaly: The true anomaly.
       :rtype: number
 
-   .. method:: position(reference_frame)
+   .. method:: position([reference_frame = Types.none])
 
       The position the orbit has reached at the current time, in the given reference
       frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :param reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The position as a vector.
       :rtype: Tuple
 
-   .. method:: position_at(ut, reference_frame)
+   .. method:: position_at(ut, [reference_frame = Types.none])
 
       The position at a given time, in the specified reference frame.
 
       :param number ut: The universal time to measure the position at.
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :param reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The position as a vector.
       :rtype: Tuple
 
-   .. method:: position_at_true_anomaly(true_anomaly, reference_frame)
+   .. method:: position_at_true_anomaly(true_anomaly, [reference_frame = Types.none])
 
       The position at the point in the orbit given by the true anomaly, in the specified
       reference frame.
 
       :param number true_anomaly: The true anomaly.
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :param reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The position as a vector.
       :rtype: Tuple
 
-   .. method:: velocity(reference_frame)
+   .. method:: velocity([reference_frame = Types.none])
 
       The velocity the orbit has reached at the current time, in the given reference
       frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :param reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :rtype: Tuple
 
-   .. method:: velocity_at(ut, reference_frame)
+   .. method:: velocity_at(ut, [reference_frame = Types.none])
 
       The velocity at a given time, in the specified reference frame.
 
       :param number ut: The universal time to measure the velocity at.
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :param reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :rtype: Tuple
 
-   .. method:: velocity_at_true_anomaly(true_anomaly, reference_frame)
+   .. method:: velocity_at_true_anomaly(true_anomaly, [reference_frame = Types.none])
 
       The velocity at the point in the orbit given by the true anomaly, in the specified
       reference frame.
 
       :param number true_anomaly: The true anomaly.
-      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :param reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
+      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :rtype: Tuple
 
@@ -596,7 +603,7 @@ Orbit
       orbit after the change. Otherwise returns ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Orbit`
+      :rtype: :class:`SpaceCenter.Orbit` or ``Types.none``
 
    .. method:: next_closest_approach(target)
 

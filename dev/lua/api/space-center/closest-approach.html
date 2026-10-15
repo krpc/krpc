@@ -789,7 +789,7 @@ not depend on the choice of reference frame.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -804,7 +804,7 @@ celestial body.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -818,7 +818,7 @@ celestial body.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -833,18 +833,18 @@ celestial body.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.CelestialBody</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.ClosestApproach.position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.position" title="Link to this definition">#</a></dt>
+<span class="property"> </span><span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">reference_frame</span> <span class="pre">=</span> <span class="pre">Types.none</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.position" title="Link to this definition">#</a></dt>
 <dd><p>The position of the orbiting object at the closest approach.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code>) – The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The position as a vector.</p>
@@ -857,11 +857,11 @@ celestial body.</p>
 
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.ClosestApproach.target_position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">target_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.target_position" title="Link to this definition">#</a></dt>
+<span class="property"> </span><span class="sig-name descname"><span class="pre">target_position</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">reference_frame</span> <span class="pre">=</span> <span class="pre">Types.none</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.target_position" title="Link to this definition">#</a></dt>
 <dd><p>The position of the target object at the closest approach.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code>) – The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The position as a vector.</p>
@@ -874,11 +874,11 @@ celestial body.</p>
 
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.ClosestApproach.velocity">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.velocity" title="Link to this definition">#</a></dt>
+<span class="property"> </span><span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">reference_frame</span> <span class="pre">=</span> <span class="pre">Types.none</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.velocity" title="Link to this definition">#</a></dt>
 <dd><p>The velocity of the orbiting object at the closest approach.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code>) – The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The velocity as a vector.</p>
@@ -891,11 +891,11 @@ celestial body.</p>
 
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.ClosestApproach.target_velocity">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">target_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.target_velocity" title="Link to this definition">#</a></dt>
+<span class="property"> </span><span class="sig-name descname"><span class="pre">target_velocity</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">reference_frame</span> <span class="pre">=</span> <span class="pre">Types.none</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.target_velocity" title="Link to this definition">#</a></dt>
 <dd><p>The velocity of the target object at the closest approach.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code>) – The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The velocity as a vector.</p>
@@ -908,12 +908,12 @@ celestial body.</p>
 
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.ClosestApproach.relative_position">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">relative_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.relative_position" title="Link to this definition">#</a></dt>
+<span class="property"> </span><span class="sig-name descname"><span class="pre">relative_position</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">reference_frame</span> <span class="pre">=</span> <span class="pre">Types.none</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.relative_position" title="Link to this definition">#</a></dt>
 <dd><p>The position of the target relative to the orbiting object at the closest
 approach.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code>) – The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The relative position as a vector.</p>
@@ -926,12 +926,12 @@ approach.</p>
 
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.ClosestApproach.relative_velocity">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">relative_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.relative_velocity" title="Link to this definition">#</a></dt>
+<span class="property"> </span><span class="sig-name descname"><span class="pre">relative_velocity</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">reference_frame</span> <span class="pre">=</span> <span class="pre">Types.none</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ClosestApproach.relative_velocity" title="Link to this definition">#</a></dt>
 <dd><p>The velocity of the target relative to the orbiting object at the closest
 approach.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code>) – The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The relative velocity as a vector.</p>

@@ -21,7 +21,7 @@ ReferenceFrame
       Apart from being created and removed, a reference frame is only used as a
       parameter to other functions.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_CreateRelative(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_double_t * rotation, const krpc_tuple_double_double_double_t * velocity, const krpc_tuple_double_double_double_t * angularVelocity)
+   .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_CreateRelative(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_double_t * rotation, const krpc_tuple_double_double_double_t * velocity, const krpc_tuple_double_double_double_t * angularVelocity)
 
       Create a relative reference frame. This is a custom reference frame
       whose components offset the components of a parent reference frame.
@@ -43,7 +43,7 @@ ReferenceFrame
          creates one repeatedly, for example once per update, should remove each one
          when it is finished with it.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_CreateHybrid(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result, krpc_SpaceCenter_ReferenceFrame_t position, krpc_SpaceCenter_ReferenceFrame_t rotation, krpc_SpaceCenter_ReferenceFrame_t velocity, krpc_SpaceCenter_ReferenceFrame_t angularVelocity)
+   .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_CreateHybrid(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_ReferenceFrame_t position, krpc_SpaceCenter_ReferenceFrame_t rotation, krpc_SpaceCenter_ReferenceFrame_t velocity, krpc_SpaceCenter_ReferenceFrame_t angularVelocity)
 
       Create a hybrid reference frame. This is a custom reference frame
       whose components inherited from other reference frames.
@@ -68,7 +68,7 @@ ReferenceFrame
          creates one repeatedly, for example once per update, should remove each one
          when it is finished with it.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_Remove(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_Remove(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t instance)
 
       Remove the reference frame, releasing the memory the server holds for it.
 

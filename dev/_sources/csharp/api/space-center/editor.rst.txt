@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -31,7 +31,7 @@ Editor
          An editor that has not had a vessel loaded into it holds an empty vessel, with
          no parts, rather than nothing at all.
 
-   .. method:: void LoadVessel(string craftDirectory, string name)
+   .. function:: void LoadVessel(string craftDirectory, string name)
 
       Load a vessel from a craft file into the editor, replacing the vessel that
       is currently being constructed.
@@ -50,14 +50,14 @@ Editor
          directory it came from. Its delta-v figures are recalculated in the
          background afterwards; see :prop:`EditorVessel.DeltaVReady`.
 
-   .. method:: void LaunchVessel(string launchSite, System.Collections.Generic.IList<string> crew, bool recover = true, string flagUrl = "")
+   .. function:: void LaunchVessel(string launchSite, System.Collections.Generic.IList<string> crew = null, bool recover = true, string flagUrl = "")
 
       Launch the vessel that is being constructed, from the given launch site.
 
       :parameters:
 
        * **launchSite** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
-       * **crew** -- The Kerbals to place in the vessel, by name. Controls how the vessel is crewed, as described in the remarks.
+       * **crew** -- The Kerbals to place in the vessel, by name. Controls how the vessel is crewed, as described in the remarks. If null, defaults to ``new System.Collections.Generic.List<string> { }``.
        * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
        * **flagUrl** -- If not ``null``, the asset URL of the mission flag to use for the launch.
 
@@ -133,17 +133,17 @@ Editor
    See :prop:`Editor.DeltaVSituation`.
 
 
-   .. value:: SeaLevel
+   .. enumerator:: SeaLevel
 
       At sea level on the selected body.
 
 
-   .. value:: Altitude
+   .. enumerator:: Altitude
 
       At the selected altitude on the selected body.
 
 
-   .. value:: Vacuum
+   .. enumerator:: Vacuum
 
       In vacuum.
 
@@ -197,7 +197,7 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. method:: System.Tuple<double,double,double> CenterOfMass(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> CenterOfMass(ReferenceFrame referenceFrame)
 
       The position of the center of mass of the vessel, in the given reference frame.
 
@@ -240,7 +240,7 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. method:: System.Tuple<double,double,double> CenterOfBuoyancy(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> CenterOfBuoyancy(ReferenceFrame referenceFrame)
 
       The point the buoyant force acts through with the vessel fully submerged.
       Returns ``null`` if no part of the vessel displaces any water.
@@ -259,7 +259,7 @@ Editor
          :meth:`EditorVessel.CenterOfMass`. Compare the two in the same reference frame to see
          which way an untrimmed hull will roll.
 
-   .. method:: double BuoyantForceAt(double density, double gravity)
+   .. function:: double BuoyantForceAt(double density, double gravity)
 
       The buoyant force on the vessel when fully submerged in a fluid of the given
       density, in Newtons.
@@ -279,7 +279,7 @@ Editor
          :prop:`Part.BuoyancyMultiplier`, so the result is what the game would
          do to the vessel.
 
-   .. method:: System.Tuple<double,double,double> BuoyantTorqueAt(double density, double gravity, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> BuoyantTorqueAt(double density, double gravity, ReferenceFrame referenceFrame)
 
       The torque the buoyant force exerts about the vessel's center of mass when fully
       submerged in a fluid of the given density, under gravity acting down the editor.
@@ -344,7 +344,7 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. method:: Stage StageAt(int stage)
+   .. function:: Stage StageAt(int stage)
 
       The activation stage with the given number. Pass -1 to get the parts that are
       never activated (those with no staging icon).
@@ -363,7 +363,7 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. method:: Stage DecoupleStageAt(int stage)
+   .. function:: Stage DecoupleStageAt(int stage)
 
       The decouple stage with the given number. Pass -1 to get the parts that are
       never decoupled and remain on the vessel after all stages have fired.

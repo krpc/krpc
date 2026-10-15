@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -54,7 +54,7 @@ Parts
          give it one either. Assign this property to choose the control point, which is
          equivalent to "Control From Here" in game.
 
-   .. method:: System.Collections.Generic.IList<Part> WithName(string name)
+   .. function:: System.Collections.Generic.IList<Part> WithName(string name)
 
       A list of parts whose :prop:`Part.Name` is *name*.
 
@@ -64,7 +64,7 @@ Parts
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Part> WithTitle(string title)
+   .. function:: System.Collections.Generic.IList<Part> WithTitle(string title)
 
       A list of all parts whose :prop:`Part.Title` is *title*.
 
@@ -74,7 +74,7 @@ Parts
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Part> WithTag(string tag)
+   .. function:: System.Collections.Generic.IList<Part> WithTag(string tag)
 
       A list of all parts whose :prop:`Part.Tag` is *tag*.
 
@@ -84,7 +84,7 @@ Parts
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Part> WithModule(string moduleName)
+   .. function:: System.Collections.Generic.IList<Part> WithModule(string moduleName)
 
       A list of all parts that contain a :type:`Module` whose
       :prop:`Module.Name` is *moduleName*.
@@ -95,7 +95,7 @@ Parts
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Module> ModulesWithName(string moduleName)
+   .. function:: System.Collections.Generic.IList<Module> ModulesWithName(string moduleName)
 
       A list of modules (combined across all parts in the vessel) whose
       :prop:`Module.Name` is *moduleName*.
@@ -484,7 +484,7 @@ Part
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: double BuoyantForceAt(double density, double gravity)
+   .. function:: double BuoyantForceAt(double density, double gravity)
 
       The buoyant force on the part when fully submerged in a fluid of the given
       density, in Newtons.
@@ -950,7 +950,7 @@ Part
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position of the part in the given reference frame.
 
@@ -968,7 +968,7 @@ Part
          It s not necessarily the same as the parts center of mass.
          Use :meth:`Part.CenterOfMass` to get the parts center of mass.
 
-   .. method:: System.Tuple<double,double,double> CenterOfMass(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> CenterOfMass(ReferenceFrame referenceFrame)
 
       The position of the parts center of mass in the given reference frame.
       If the part is physicsless in flight, this is equivalent to :meth:`Part.Position`.
@@ -980,7 +980,7 @@ Part
       :returns: The position as a vector.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> BoundingBox(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> BoundingBox(ReferenceFrame referenceFrame)
 
       The axis-aligned bounding box of the part in the given reference frame.
 
@@ -999,7 +999,7 @@ Part
          If the part has no visible model, the box has zero volume and is centered on
          the :meth:`Part.CenterOfMass` of the part.
 
-   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
 
       The direction the part points in, in the given reference frame.
 
@@ -1010,7 +1010,7 @@ Part
       :returns: The direction as a unit vector.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
 
       The linear velocity of the part in the given reference frame.
 
@@ -1021,7 +1021,7 @@ Part
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
 
       The rotation of the part, in the given reference frame.
 
@@ -1032,7 +1032,7 @@ Part
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Lift(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Lift(ReferenceFrame referenceFrame)
 
       The aerodynamic `lift <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
       currently acting on the part.
@@ -1049,7 +1049,7 @@ Part
 
          Not available when the Ferram Aerospace Research mod is installed.
 
-   .. method:: System.Tuple<double,double,double> Drag(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Drag(ReferenceFrame referenceFrame)
 
       The aerodynamic `drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
       currently acting on the part.
@@ -1066,7 +1066,7 @@ Part
 
          Not available when the Ferram Aerospace Research mod is installed.
 
-   .. method:: System.Tuple<double,double,double> CenterOfBuoyancy(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> CenterOfBuoyancy(ReferenceFrame referenceFrame)
 
       The point the buoyant force on the part acts at, in the given reference frame.
 
@@ -1084,7 +1084,7 @@ Part
          towards the submerged part of the hull. Any other part reports its configured
          center of buoyancy.
 
-   .. method:: System.Tuple<double,double,double> CenterOfDisplacement(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> CenterOfDisplacement(ReferenceFrame referenceFrame)
 
       The point the depth of the part is measured at, in the given reference frame.
 
@@ -1095,7 +1095,7 @@ Part
       :returns: The position as a vector.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: System.Tuple<double,double,double> BuoyantForce(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> BuoyantForce(ReferenceFrame referenceFrame)
 
       The buoyant force currently acting on the part.
 
@@ -1171,7 +1171,7 @@ Part
          reference frame for the docking port, returned by
          :prop:`DockingPort.ReferenceFrame`.
 
-   .. method:: Force AddForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+   .. function:: Force AddForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
       .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
 
@@ -1191,7 +1191,7 @@ Part
 
          The force is removed when the client that added it disconnects.
 
-   .. method:: void InstantaneousForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+   .. function:: void InstantaneousForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
       .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
 
@@ -1257,37 +1257,37 @@ Part
    The state of an auto-strut. :prop:`Part.AutoStrutMode`
 
 
-   .. value:: Off
+   .. enumerator:: Off
 
       Off
 
 
-   .. value:: Root
+   .. enumerator:: Root
 
       Root
 
 
-   .. value:: Heaviest
+   .. enumerator:: Heaviest
 
       Heaviest
 
 
-   .. value:: Grandparent
+   .. enumerator:: Grandparent
 
       Grandparent
 
 
-   .. value:: ForceRoot
+   .. enumerator:: ForceRoot
 
       ForceRoot
 
 
-   .. value:: ForceHeaviest
+   .. enumerator:: ForceHeaviest
 
       ForceHeaviest
 
 
-   .. value:: ForceGrandparent
+   .. enumerator:: ForceGrandparent
 
       ForceGrandparent
 
@@ -1323,7 +1323,7 @@ Part
 
       :Game Scenes: Flight
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the force.
 
@@ -1498,7 +1498,7 @@ Module
          The getter throws an exception if the field is not a double precision floating point
          field (see :prop:`PartField.Type`).
 
-   .. method:: void Reset()
+   .. function:: void Reset()
 
       Set the value of the field to its original value.
 
@@ -1518,32 +1518,32 @@ Module
    The type of a part module field. See :prop:`PartField.Type`.
 
 
-   .. value:: Boolean
+   .. enumerator:: Boolean
 
       A boolean field. Access using :prop:`PartField.BoolValue`.
 
 
-   .. value:: Integer
+   .. enumerator:: Integer
 
       An integer field. Access using :prop:`PartField.IntValue`.
 
 
-   .. value:: Float
+   .. enumerator:: Float
 
       A single precision floating point field. Access using :prop:`PartField.FloatValue`.
 
 
-   .. value:: Double
+   .. enumerator:: Double
 
       A double precision floating point field. Access using :prop:`PartField.DoubleValue`.
 
 
-   .. value:: String
+   .. enumerator:: String
 
       A string field. Access using :prop:`PartField.Value`.
 
 
-   .. value:: Unknown
+   .. enumerator:: Unknown
 
       A field whose type is not one of the above. Its value can still be read as a
       string using :prop:`PartField.Value`.
@@ -1587,7 +1587,7 @@ Module
 
       :Game Scenes: All
 
-   .. method:: void Trigger()
+   .. function:: void Trigger()
 
       Trigger the event. Equivalent to clicking the button in the right-click menu of the part.
 
@@ -1658,7 +1658,7 @@ Config Node
          If a name appears more than once, only the first value is included. Use
          :meth:`ConfigNode.GetValues` to get all of the values with a given name.
 
-   .. method:: bool HasValue(string name)
+   .. function:: bool HasValue(string name)
 
       Returns ``true`` if the node has a value with the given name.
 
@@ -1668,7 +1668,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: string GetValue(string name)
+   .. function:: string GetValue(string name)
 
       Returns the value with the given name. If there is more than one value with
       the given name, the first is returned. Throws an exception if there is no
@@ -1680,7 +1680,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<string> GetValues(string name)
+   .. function:: System.Collections.Generic.IList<string> GetValues(string name)
 
       Returns all of the values with the given name, as a list.
 
@@ -1696,7 +1696,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: bool HasNode(string name)
+   .. function:: bool HasNode(string name)
 
       Returns ``true`` if the node has a child node with the given name.
 
@@ -1706,7 +1706,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: ConfigNode GetNode(string name)
+   .. function:: ConfigNode GetNode(string name)
 
       Returns the child node with the given name. If there is more than one child
       node with the given name, the first is returned. Throws an exception if there
@@ -1718,7 +1718,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<ConfigNode> GetNodes(string name)
+   .. function:: System.Collections.Generic.IList<ConfigNode> GetNodes(string name)
 
       Returns all of the child nodes with the given name, as a list.
 
@@ -1785,14 +1785,14 @@ Antenna
 
       :Game Scenes: Flight
 
-   .. method:: void Transmit()
+   .. function:: void Transmit()
 
       Transmit data.
 
 
       :Game Scenes: Flight
 
-   .. method:: void Cancel()
+   .. function:: void Cancel()
 
       Cancel current transmission of data.
 
@@ -1871,7 +1871,7 @@ Cargo Bay
          inside are sheltered: a bay whose open end has nothing attached to it never shelters
          anything, however tightly shut it is. Use :prop:`Part.Shielded` for that.
 
-         A cargo bay is never :enum:`DeployableState.Broken`, as the game
+         A cargo bay is never :value:`DeployableState.Broken`, as the game
          does not track damage for them.
 
    .. property:: bool Open { get; set; }
@@ -2007,7 +2007,7 @@ Decoupler
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: Vessel Decouple()
+   .. function:: Vessel Decouple()
 
       Fires the decoupler. Returns the new vessel created when the decoupler fires.
       Throws an exception if the decoupler has already fired.
@@ -2070,29 +2070,29 @@ resource harvesters, solar panels and wheels.
    :prop:`Wheel.State`
 
 
-   .. value:: Deployed
+   .. enumerator:: Deployed
 
       The part is fully deployed. A cargo bay in this state is fully open.
       Parts that cannot be retracted, such as fixed radiators, solar panels,
       antennas, landing legs and wheels, are always in this state.
 
 
-   .. value:: Retracted
+   .. enumerator:: Retracted
 
       The part is fully retracted. A cargo bay in this state is closed and locked.
 
 
-   .. value:: Deploying
+   .. enumerator:: Deploying
 
       The part is being deployed. A cargo bay in this state is opening.
 
 
-   .. value:: Retracting
+   .. enumerator:: Retracting
 
       The part is being retracted. A cargo bay in this state is closing.
 
 
-   .. value:: Broken
+   .. enumerator:: Broken
 
       The part is broken. Cargo bays and resource harvesters never report
       this state, as the game does not track damage for them.
@@ -2126,7 +2126,7 @@ Docking Port
 
       :Game Scenes: Flight
 
-   .. method:: Vessel Undock()
+   .. function:: Vessel Undock()
 
       Undocks the docking port and returns the new :type:`Vessel` that is created.
       This method can be called for either docking port in a docked pair.
@@ -2196,7 +2196,7 @@ Docking Port
 
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position of the docking port, in the given reference frame.
 
@@ -2207,7 +2207,7 @@ Docking Port
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
 
       The direction that docking port points in, in the given reference frame.
 
@@ -2218,7 +2218,7 @@ Docking Port
       :returns: The direction as a unit vector.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
 
       The rotation of the docking port, in the given reference frame.
 
@@ -2265,36 +2265,36 @@ Docking Port
    The state of a docking port. See :prop:`DockingPort.State`.
 
 
-   .. value:: Ready
+   .. enumerator:: Ready
 
       The docking port is ready to dock to another docking port.
 
 
-   .. value:: Docked
+   .. enumerator:: Docked
 
       The docking port is docked to another docking port, or docked to
       another part (from the VAB/SPH).
 
 
-   .. value:: Docking
+   .. enumerator:: Docking
 
       The docking port is very close to another docking port,
       but has not docked. It is using magnetic force to acquire a solid dock.
 
 
-   .. value:: Undocking
+   .. enumerator:: Undocking
 
       The docking port has just been undocked from another docking port,
       and is disabled until it moves away by a sufficient distance
       (:prop:`DockingPort.ReengageDistance`).
 
 
-   .. value:: Shielded
+   .. enumerator:: Shielded
 
       The docking port has a shield, and the shield is closed.
 
 
-   .. value:: Moving
+   .. enumerator:: Moving
 
       The docking ports shield is currently opening/closing.
 
@@ -2343,7 +2343,7 @@ Engine
 
       :Game Scenes: Flight
 
-   .. method:: float AvailableThrustAt(double pressure)
+   .. function:: float AvailableThrustAt(double pressure)
 
       The amount of thrust, in Newtons, that would be produced by the engine
       when activated and with its throttle set to 100%.
@@ -2363,7 +2363,7 @@ Engine
 
       :Game Scenes: Flight
 
-   .. method:: float MaxThrustAt(double pressure)
+   .. function:: float MaxThrustAt(double pressure)
 
       The amount of thrust, in Newtons, that would be produced by the engine
       when activated and fueled, with its throttle and throttle limiter set to 100%.
@@ -2413,7 +2413,7 @@ Engine
 
       :Game Scenes: Flight
 
-   .. method:: float SpecificImpulseAt(double pressure)
+   .. function:: float SpecificImpulseAt(double pressure)
 
       The specific impulse of the engine under the given pressure, in seconds. Returns zero
       if the engine is not active.
@@ -2537,7 +2537,7 @@ Engine
 
       :Game Scenes: Flight
 
-   .. method:: void ToggleMode()
+   .. function:: void ToggleMode()
 
       Toggle the current engine mode.
 
@@ -2627,7 +2627,7 @@ Engine
 
       :Game Scenes: Flight
 
-   .. method:: void ToggleThrustReversal()
+   .. function:: void ToggleThrustReversal()
 
       Toggle the engine's thrust reverser. Throws an exception if the engine
       does not have a thrust reverser (see :prop:`Engine.CanReverseThrust`).
@@ -2801,28 +2801,28 @@ Experiment
 
       :Game Scenes: Flight
 
-   .. method:: void Run()
+   .. function:: void Run()
 
       Run the experiment.
 
 
       :Game Scenes: Flight
 
-   .. method:: void Transmit()
+   .. function:: void Transmit()
 
       Transmit all experimental data contained by this part.
 
 
       :Game Scenes: Flight
 
-   .. method:: void Dump()
+   .. function:: void Dump()
 
       Dump the experimental data contained by the experiment.
 
 
       :Game Scenes: Flight
 
-   .. method:: void Reset()
+   .. function:: void Reset()
 
       Reset the experiment.
 
@@ -2974,7 +2974,7 @@ Fairing
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: void Jettison()
+   .. function:: void Jettison()
 
       Jettison the fairing. Has no effect if it has already been jettisoned.
 
@@ -3089,7 +3089,7 @@ Launch Clamp
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: void Release()
+   .. function:: void Release()
 
       Releases the docking clamp. Has no effect if the clamp has already been released.
 
@@ -3158,7 +3158,7 @@ Parachute
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: void Deploy()
+   .. function:: void Deploy()
 
       Deploys the parachute. This has no effect if the parachute has already
       been deployed.
@@ -3172,7 +3172,7 @@ Parachute
 
       :Game Scenes: Flight
 
-   .. method:: void Arm()
+   .. function:: void Arm()
 
       Deploys the parachute. This has no effect if the parachute has already
       been armed or deployed.
@@ -3186,7 +3186,7 @@ Parachute
 
       :Game Scenes: Flight
 
-   .. method:: void Cut()
+   .. function:: void Cut()
 
       Cuts the parachute.
 
@@ -3218,7 +3218,7 @@ Parachute
       Whether it is currently safe to deploy the parachute, given the vessel's
       flight conditions. Computed by KSP from the current airspeed, pressure and
       temperature. Only applicable to stock parachutes.
-      Note that KSP reports :enum:`ParachuteSafeState.Unsafe` for the first
+      Note that KSP reports :value:`ParachuteSafeState.Unsafe` for the first
       second after the vessel unpacks, before its thermal data is valid.
 
       :Game Scenes: Flight
@@ -3230,28 +3230,28 @@ Parachute
    The state of a parachute. See :prop:`Parachute.State`.
 
 
-   .. value:: Stowed
+   .. enumerator:: Stowed
 
       The parachute is safely tucked away inside its housing.
 
 
-   .. value:: Armed
+   .. enumerator:: Armed
 
       The parachute is armed for deployment.
 
 
-   .. value:: SemiDeployed
+   .. enumerator:: SemiDeployed
 
       The parachute has been deployed and is providing some drag,
       but is not fully deployed yet. (Stock parachutes only)
 
 
-   .. value:: Deployed
+   .. enumerator:: Deployed
 
       The parachute is fully deployed.
 
 
-   .. value:: Cut
+   .. enumerator:: Cut
 
       The parachute has been cut.
 
@@ -3262,22 +3262,22 @@ Parachute
    The safety state of deploying a parachute. See :prop:`Parachute.SafeState`.
 
 
-   .. value:: Safe
+   .. enumerator:: Safe
 
       The parachute is safe to deploy.
 
 
-   .. value:: Risky
+   .. enumerator:: Risky
 
       Deploying the parachute is risky, and it may break off.
 
 
-   .. value:: Unsafe
+   .. enumerator:: Unsafe
 
       The parachute is unsafe to deploy, and will break off.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       The safety state is not available, because the vessel is not in an
       atmosphere or the parachute has already been deployed or cut.
@@ -3320,7 +3320,7 @@ Radiator
 
       .. note::
 
-         A fixed radiator is always :enum:`DeployableState.Deployed`.
+         A fixed radiator is always :value:`DeployableState.Deployed`.
 
 
 
@@ -3344,7 +3344,7 @@ Resource Converter
 
       :Game Scenes: Flight
 
-   .. method:: string Name(int index)
+   .. function:: string Name(int index)
 
       The name of the specified converter.
 
@@ -3354,7 +3354,7 @@ Resource Converter
 
       :Game Scenes: Flight
 
-   .. method:: bool Active(int index)
+   .. function:: bool Active(int index)
 
       True if the specified converter is active.
 
@@ -3364,7 +3364,7 @@ Resource Converter
 
       :Game Scenes: Flight
 
-   .. method:: void Start(int index)
+   .. function:: void Start(int index)
 
       Start the specified converter.
 
@@ -3374,7 +3374,7 @@ Resource Converter
 
       :Game Scenes: Flight
 
-   .. method:: void Stop(int index)
+   .. function:: void Stop(int index)
 
       Stop the specified converter.
 
@@ -3384,7 +3384,7 @@ Resource Converter
 
       :Game Scenes: Flight
 
-   .. method:: ResourceConverterState State(int index)
+   .. function:: ResourceConverterState State(int index)
 
       The state of the specified converter.
 
@@ -3394,7 +3394,7 @@ Resource Converter
 
       :Game Scenes: Flight
 
-   .. method:: string StatusInfo(int index)
+   .. function:: string StatusInfo(int index)
 
       Status information for the specified converter.
       This is the full status message shown in the in-game UI.
@@ -3405,7 +3405,7 @@ Resource Converter
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<string> Inputs(int index)
+   .. function:: System.Collections.Generic.IList<string> Inputs(int index)
 
       List of the names of resources consumed by the specified converter.
 
@@ -3415,7 +3415,7 @@ Resource Converter
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<string> Outputs(int index)
+   .. function:: System.Collections.Generic.IList<string> Outputs(int index)
 
       List of the names of resources produced by the specified converter.
 
@@ -3450,32 +3450,32 @@ Resource Converter
    The state of a resource converter. See :meth:`ResourceConverter.State`.
 
 
-   .. value:: Running
+   .. enumerator:: Running
 
       Converter is running.
 
 
-   .. value:: Idle
+   .. enumerator:: Idle
 
       Converter is idle.
 
 
-   .. value:: MissingResource
+   .. enumerator:: MissingResource
 
       Converter is missing a required resource.
 
 
-   .. value:: StorageFull
+   .. enumerator:: StorageFull
 
       No available storage for output resource.
 
 
-   .. value:: Capacity
+   .. enumerator:: Capacity
 
       At preset resource capacity.
 
 
-   .. value:: Unknown
+   .. enumerator:: Unknown
 
       Unknown state. Possible with modified resource converters.
       In this case, check :meth:`ResourceConverter.StatusInfo` for more information.
@@ -3506,7 +3506,7 @@ Resource Harvester
 
       .. note::
 
-         A harvester is never :enum:`DeployableState.Broken`, as the game
+         A harvester is never :value:`DeployableState.Broken`, as the game
          does not track damage for them.
 
    .. property:: bool Deployed { get; set; }
@@ -3628,7 +3628,7 @@ Resource Drain
 
       :Game Scenes: Flight
 
-   .. method:: void SetResource(Resource resource, bool enabled)
+   .. function:: void SetResource(Resource resource, bool enabled)
 
       Whether the given resource should be drained.
 
@@ -3639,7 +3639,7 @@ Resource Drain
 
       :Game Scenes: Flight
 
-   .. method:: bool CheckResource(Resource resource)
+   .. function:: bool CheckResource(Resource resource)
 
       Whether the provided resource is enabled for draining.
 
@@ -3673,14 +3673,14 @@ Resource Drain
 
       :Game Scenes: Flight
 
-   .. method:: void Start()
+   .. function:: void Start()
 
       Activates resource draining for all enabled parts.
 
 
       :Game Scenes: Flight
 
-   .. method:: void Stop()
+   .. function:: void Stop()
 
       Turns off resource draining.
 
@@ -3695,12 +3695,12 @@ Resource Drain
    See :prop:`ResourceDrain.DrainMode`.
 
 
-   .. value:: Part
+   .. enumerator:: Part
 
       Drains from the parent part.
 
 
-   .. value:: Vessel
+   .. enumerator:: Vessel
 
       Drains from all available parts.
 
@@ -3750,21 +3750,21 @@ Robotic Controller
 
       :Game Scenes: Flight
 
-   .. method:: void Play()
+   .. function:: void Play()
 
       Start playing the controller's sequence.
 
 
       :Game Scenes: Flight
 
-   .. method:: void Stop()
+   .. function:: void Stop()
 
       Stop playing the controller's sequence.
 
 
       :Game Scenes: Flight
 
-   .. method:: bool HasPart(Part part)
+   .. function:: bool HasPart(Part part)
 
       Whether the controller has a part.
 
@@ -3774,14 +3774,14 @@ Robotic Controller
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<System.Collections.Generic.IList<string>> Axes()
+   .. function:: System.Collections.Generic.IList<System.Collections.Generic.IList<string>> Axes()
 
       The axes for the controller.
 
 
       :Game Scenes: Flight
 
-   .. method:: bool AddAxis(Module module, string fieldName)
+   .. function:: bool AddAxis(Module module, string fieldName)
 
       Add an axis to the controller.
 
@@ -3793,7 +3793,7 @@ Robotic Controller
       :returns: Returns ``true`` if the axis is added successfully.
       :Game Scenes: Flight
 
-   .. method:: bool AddKeyFrame(Module module, string fieldName, float time, float value)
+   .. function:: bool AddKeyFrame(Module module, string fieldName, float time, float value)
 
       Add key frame value for controller axis.
 
@@ -3807,7 +3807,7 @@ Robotic Controller
       :returns: Returns ``true`` if the key frame is added successfully.
       :Game Scenes: Flight
 
-   .. method:: bool ClearAxis(Module module, string fieldName)
+   .. function:: bool ClearAxis(Module module, string fieldName)
 
       Clear axis.
 
@@ -3889,7 +3889,7 @@ Robotic Hinge
 
       :Game Scenes: Flight
 
-   .. method:: void MoveHome()
+   .. function:: void MoveHome()
 
       Move hinge to its built position.
 
@@ -3966,7 +3966,7 @@ Robotic Piston
 
       :Game Scenes: Flight
 
-   .. method:: void MoveHome()
+   .. function:: void MoveHome()
 
       Move piston to its built position.
 
@@ -4050,7 +4050,7 @@ Robotic Rotation
 
       :Game Scenes: Flight
 
-   .. method:: void MoveHome()
+   .. function:: void MoveHome()
 
       Move rotation servo to its built position.
 
@@ -4269,7 +4269,7 @@ RCS
 
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> OverrideForce(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
+   .. function:: System.Tuple<double,double,double> OverrideForce(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
 
       The force the given demands would produce, in Newtons. The vector is in the
       vessel's reference frame (:prop:`Vessel.ReferenceFrame`).
@@ -4289,7 +4289,7 @@ RCS
          The demands do not have to be applied. The prediction leaves out full thrust,
          which :prop:`RCS.Force` includes.
 
-   .. method:: System.Tuple<double,double,double> OverrideTorque(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
+   .. function:: System.Tuple<double,double,double> OverrideTorque(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
 
       The torque the given demands would produce about the vessel's center of mass, in
       Newton meters. The vector is in the vessel's reference frame
@@ -4500,7 +4500,7 @@ Thruster
 
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> ThrustPosition(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> ThrustPosition(ReferenceFrame referenceFrame)
 
       The position at which the thruster generates thrust, in the given reference frame.
       For gimballed engines, this takes into account the current rotation of the gimbal.
@@ -4512,7 +4512,7 @@ Thruster
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> ThrustDirection(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> ThrustDirection(ReferenceFrame referenceFrame)
 
       The direction of the force generated by the thruster, in the given reference frame.
       This is opposite to the direction in which the thruster expels propellant.
@@ -4546,7 +4546,7 @@ Thruster
 
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> GimbalPosition(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> GimbalPosition(ReferenceFrame referenceFrame)
 
       Position around which the gimbal pivots.
 
@@ -4563,7 +4563,7 @@ Thruster
 
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> InitialThrustPosition(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> InitialThrustPosition(ReferenceFrame referenceFrame)
 
       The position at which the thruster generates thrust, when the engine is in its
       initial position (no gimballing), in the given reference frame.
@@ -4581,7 +4581,7 @@ Thruster
          This position can move when the gimbal rotates. This is because the thrust position and
          gimbal position are not necessarily the same.
 
-   .. method:: System.Tuple<double,double,double> InitialThrustDirection(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> InitialThrustDirection(ReferenceFrame referenceFrame)
 
       The direction of the force generated by the thruster, when the engine is in its
       initial position (no gimballing), in the given reference frame.
@@ -4825,27 +4825,27 @@ Wheel
    The state of the motor on a powered wheel. See :prop:`Wheel.MotorState`.
 
 
-   .. value:: Idle
+   .. enumerator:: Idle
 
       The motor is idle.
 
 
-   .. value:: Running
+   .. enumerator:: Running
 
       The motor is running.
 
 
-   .. value:: Disabled
+   .. enumerator:: Disabled
 
       The motor is disabled.
 
 
-   .. value:: Inoperable
+   .. enumerator:: Inoperable
 
       The motor is inoperable.
 
 
-   .. value:: NotEnoughResources
+   .. enumerator:: NotEnoughResources
 
       The motor does not have enough resources to run.
 

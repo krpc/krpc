@@ -143,12 +143,13 @@ Vessel
       :Attribute: Read-only, cannot be set
       :rtype: string
 
-   .. method:: flight(reference_frame)
+   .. method:: flight([reference_frame = Types.none])
 
       Returns a :meth:`SpaceCenter.Vessel.flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.
 
-      :param SpaceCenter.ReferenceFrame reference_frame: Reference frame. Defaults to the vessel's surface reference frame (:attr:`SpaceCenter.Vessel.surface_reference_frame`).
+      :param reference_frame: Reference frame. Defaults to the vessel's surface reference frame (:attr:`SpaceCenter.Vessel.surface_reference_frame`).
+      :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
       :rtype: :class:`SpaceCenter.Flight`
 
       .. note:: When this is called with no arguments, the vessel's surface reference
@@ -1091,7 +1092,7 @@ Vessel
       occupying a part, or the vessel containing the part is not loaded.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
    .. method:: eva()
 

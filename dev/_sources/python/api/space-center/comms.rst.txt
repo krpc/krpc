@@ -121,7 +121,7 @@ Communications
 
 
 
-.. class:: CommNode
+.. class:: CommNode(name, is_home, is_control_point, is_vessel, vessel)
 
    Represents a communication node in the network. For example, a vessel or the KSC.
 

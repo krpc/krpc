@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.UI
 
@@ -106,7 +106,7 @@ Text
 
       :Game Scenes: All
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the UI object.
 
@@ -120,22 +120,22 @@ Text
    Font style.
 
 
-   .. value:: Normal
+   .. enumerator:: Normal
 
       Normal.
 
 
-   .. value:: Bold
+   .. enumerator:: Bold
 
       Bold.
 
 
-   .. value:: Italic
+   .. enumerator:: Italic
 
       Italic.
 
 
-   .. value:: BoldAndItalic
+   .. enumerator:: BoldAndItalic
 
       Bold and italic.
 
@@ -146,17 +146,17 @@ Text
    Text alignment.
 
 
-   .. value:: Left
+   .. enumerator:: Left
 
       Left aligned.
 
 
-   .. value:: Right
+   .. enumerator:: Right
 
       Right aligned.
 
 
-   .. value:: Center
+   .. enumerator:: Center
 
       Center aligned.
 
@@ -167,46 +167,46 @@ Text
    Text alignment.
 
 
-   .. value:: LowerCenter
+   .. enumerator:: LowerCenter
 
       Lower center.
 
 
-   .. value:: LowerLeft
+   .. enumerator:: LowerLeft
 
       Lower left.
 
 
-   .. value:: LowerRight
+   .. enumerator:: LowerRight
 
       Lower right.
 
 
-   .. value:: MiddleCenter
+   .. enumerator:: MiddleCenter
 
       Middle center.
 
 
-   .. value:: MiddleLeft
+   .. enumerator:: MiddleLeft
 
       Middle left.
 
 
-   .. value:: MiddleRight
+   .. enumerator:: MiddleRight
 
       Middle right.
 
 
-   .. value:: UpperCenter
+   .. enumerator:: UpperCenter
 
       Upper center.
 
 
-   .. value:: UpperLeft
+   .. enumerator:: UpperLeft
 
       Upper left.
 
 
-   .. value:: UpperRight
+   .. enumerator:: UpperRight
 
       Upper right.

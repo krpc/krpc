@@ -13,13 +13,13 @@ Editor
    Provides access to the vehicle assembly building and space plane hangar.
    Obtained by calling :func:`krpc_SpaceCenter_Editor`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Editor_Facility(krpc_connection_t connection, krpc_SpaceCenter_EditorFacility_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_Facility(krpc_connection_t connection, krpc_SpaceCenter_EditorFacility_t * returnValue, krpc_SpaceCenter_Editor_t instance)
 
       The editor that is currently open.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Editor_Vessel(krpc_connection_t connection, krpc_SpaceCenter_EditorVessel_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_Vessel(krpc_connection_t connection, krpc_SpaceCenter_EditorVessel_t * returnValue, krpc_SpaceCenter_Editor_t instance)
 
       The vessel that is being constructed.
 
@@ -31,7 +31,7 @@ Editor
          An editor that has not had a vessel loaded into it holds an empty vessel, with
          no parts, rather than nothing at all.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Editor_LoadVessel(krpc_connection_t connection, const char * craftDirectory, const char * name)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_LoadVessel(krpc_connection_t connection, krpc_SpaceCenter_Editor_t instance, const char * craftDirectory, const char * name)
 
       Load a vessel from a craft file into the editor, replacing the vessel that
       is currently being constructed.
@@ -50,7 +50,7 @@ Editor
          directory it came from. Its delta-v figures are recalculated in the
          background afterwards; see :func:`krpc_SpaceCenter_EditorVessel_DeltaVReady`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Editor_LaunchVessel(krpc_connection_t connection, const char * launchSite, const krpc_list_string_t * crew, bool recover, const char * flagUrl)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_LaunchVessel(krpc_connection_t connection, krpc_SpaceCenter_Editor_t instance, const char * launchSite, const krpc_list_string_t * crew, bool recover, const char * flagUrl)
 
       Launch the vessel that is being constructed, from the given launch site.
 
@@ -74,8 +74,8 @@ Editor
          in the editor.
          Throws an exception if any of the games pre-flight checks fail.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Editor_DeltaVBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
-   .. function:: void krpc_SpaceCenter_Editor_set_DeltaVBody(krpc_SpaceCenter_CelestialBody_t value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_DeltaVBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * returnValue, krpc_SpaceCenter_Editor_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_set_DeltaVBody(krpc_connection_t connection, krpc_SpaceCenter_Editor_t instance, krpc_SpaceCenter_CelestialBody_t value)
 
       The body whose gravity and atmosphere the vessel's delta-v, thrust, TWR and
       specific impulse figures assume.
@@ -96,8 +96,8 @@ Editor
          the figures are out of date until :func:`krpc_SpaceCenter_EditorVessel_DeltaVReady` is
          true again.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Editor_DeltaVAltitude(krpc_connection_t connection, double * result)
-   .. function:: void krpc_SpaceCenter_Editor_set_DeltaVAltitude(double value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_DeltaVAltitude(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Editor_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_set_DeltaVAltitude(krpc_connection_t connection, krpc_SpaceCenter_Editor_t instance, double value)
 
       The altitude above :func:`krpc_SpaceCenter_Editor_DeltaVBody`, in meters, that the vessel's
       delta-v, thrust, TWR and specific impulse figures assume. The atmospheric
@@ -110,8 +110,8 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Editor_DeltaVSituation(krpc_connection_t connection, krpc_SpaceCenter_DeltaVSituation_t * result)
-   .. function:: void krpc_SpaceCenter_Editor_set_DeltaVSituation(krpc_SpaceCenter_DeltaVSituation_t value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_DeltaVSituation(krpc_connection_t connection, krpc_SpaceCenter_DeltaVSituation_t * returnValue, krpc_SpaceCenter_Editor_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_set_DeltaVSituation(krpc_connection_t connection, krpc_SpaceCenter_Editor_t instance, krpc_SpaceCenter_DeltaVSituation_t value)
 
       Which situation the game's own delta-v readout shows figures for.
 
@@ -157,21 +157,21 @@ Editor
    The vessel that is being constructed in the editor.
    Obtained by calling :func:`krpc_SpaceCenter_Editor_Vessel`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Name(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_SpaceCenter_EditorVessel_set_Name(const char * value)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_set_Name(krpc_connection_t connection, krpc_SpaceCenter_EditorVessel_t instance, const char * value)
 
       The name of the vessel.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Description(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_SpaceCenter_EditorVessel_set_Description(const char * value)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Description(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_set_Description(krpc_connection_t connection, krpc_SpaceCenter_EditorVessel_t instance, const char * value)
 
       The description of the vessel.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Facility(krpc_connection_t connection, krpc_SpaceCenter_EditorFacility_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Facility(krpc_connection_t connection, krpc_SpaceCenter_EditorFacility_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The editor the vessel is in.
 
@@ -184,25 +184,25 @@ Editor
          designed in. A vessel moved from the vehicle assembly building to the space
          plane hangar reports the space plane hangar.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Size(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Size(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The dimensions of the vessel's bounding box, in meters.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Mass(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Mass(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The total mass of the vessel, including resources and crew, in kg.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DryMass(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DryMass(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The total mass of the vessel, excluding resources, in kg.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CenterOfMass(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CenterOfMass(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position of the center of mass of the vessel, in the given reference frame.
 
@@ -222,7 +222,7 @@ Editor
          part. A celestial body frame is not a position on that body: the
          editor is not placed in the solar system the way a vessel in flight is.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
       The inertia values in the returned 3-tuple are around the pitch, roll and yaw
@@ -230,7 +230,7 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The inertia tensor of the vessel around its center of mass, in the root
       part's reference transform. Returns the 3x3 matrix as a list of elements,
@@ -238,14 +238,14 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Displacement(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Displacement(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The volume of water the vessel displaces when fully submerged, in
       :math:`m^3`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CenterOfBuoyancy(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CenterOfBuoyancy(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_EditorVessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The point the buoyant force acts through with the vessel fully submerged.
       Returns ``nullptr`` if no part of the vessel displaces any water.
@@ -264,7 +264,7 @@ Editor
          :func:`krpc_SpaceCenter_EditorVessel_CenterOfMass`. Compare the two in the same reference frame to see
          which way an untrimmed hull will roll.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BuoyantForceAt(krpc_connection_t connection, double * result, double density, double gravity)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BuoyantForceAt(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_EditorVessel_t instance, double density, double gravity)
 
       The buoyant force on the vessel when fully submerged in a fluid of the given
       density, in Newtons.
@@ -284,7 +284,7 @@ Editor
          :func:`krpc_SpaceCenter_Part_BuoyancyMultiplier`, so the result is what the game would
          do to the vessel.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BuoyantTorqueAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double density, double gravity, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BuoyantTorqueAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, double density, double gravity, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The torque the buoyant force exerts about the vessel's center of mass when fully
       submerged in a fluid of the given density, under gravity acting down the editor.
@@ -303,19 +303,19 @@ Editor
 
          A hull trimmed level carries zero torque.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Cost(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Cost(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The total cost of the vessel, including resources, in funds.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CrewCapacity(krpc_connection_t connection, int32_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CrewCapacity(krpc_connection_t connection, int32_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The total number of crew that the vessel can hold.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Parts(krpc_connection_t connection, krpc_SpaceCenter_Parts_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Parts(krpc_connection_t connection, krpc_SpaceCenter_Parts_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       A :type:`krpc_SpaceCenter_Parts_t` object, that can be used to interact with the parts
       that make up the vessel.
@@ -330,7 +330,7 @@ Editor
                 the part's reference frames, :func:`krpc_SpaceCenter_Part_MomentOfInertia`
                 and :func:`krpc_SpaceCenter_Part_InertiaTensor` are available.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       A :func:`krpc_SpaceCenter_EditorVessel_Resources` object for the resources the vessel can hold.
 
@@ -341,7 +341,7 @@ Editor
                 members work, as they are part of the design, but nothing here reports how
                 a resource would be drawn on in flight.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Stages(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Stages(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       Activation (burn) stages for the vessel, in ascending stage order. This does
       not include the -1 stage (parts with no staging icon), as it carries no
@@ -349,7 +349,7 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_StageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * result, int32_t stage)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_StageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, int32_t stage)
 
       The activation stage with the given number. Pass -1 to get the parts that are
       never activated (those with no staging icon).
@@ -360,7 +360,7 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DecoupleStages(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DecoupleStages(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       Decouple stages for the vessel, in ascending stage order. The -1 stage,
       containing the parts that are never decoupled and remain on the vessel, is
@@ -368,7 +368,7 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DecoupleStageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * result, int32_t stage)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DecoupleStageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, int32_t stage)
 
       The decouple stage with the given number. Pass -1 to get the parts that are
       never decoupled and remain on the vessel after all stages have fired.
@@ -379,7 +379,7 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DeltaVReady(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DeltaVReady(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       Whether the stock delta-v figures for the vessel have been calculated.
 
@@ -395,26 +395,26 @@ Editor
          then raises an error rather than returning a stale figure. Poll this after
          changing anything the figures depend on.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DeltaV(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DeltaV(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       Total delta-v for the vessel in the situation the game's delta-v readout
       assumes, in m/s. See :func:`krpc_SpaceCenter_Editor_DeltaVBody`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_VacuumDeltaV(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_VacuumDeltaV(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       Total vacuum delta-v for the vessel, in m/s.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_SeaLevelDeltaV(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_SeaLevelDeltaV(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       Total sea-level delta-v for the vessel, in m/s.
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BurnTime(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BurnTime(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       Total burn time for the vessel, in seconds.
 

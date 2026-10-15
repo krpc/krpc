@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -53,7 +53,7 @@ AutoPilot
 
       When the auto-pilot's control loop runs within a server update, relative to the
       calls the update executes. Defaults to
-      :enum:`AutoPilotUpdateMode.AfterCalls`.
+      :value:`AutoPilotUpdateMode.AfterCalls`.
 
       :Game Scenes: Flight
 
@@ -66,7 +66,7 @@ AutoPilot
          point the game takes control inputs at, whatever the mode, so a vessel is never left
          without control input.
 
-   .. method:: void Update()
+   .. function:: void Update()
 
       Run one tick of the auto-pilot's control loop now. Does nothing if it has already run
       on this physics tick. Throws an exception if the auto-pilot is not engaged.
@@ -77,7 +77,7 @@ AutoPilot
 
       .. note::
 
-         For :enum:`AutoPilotUpdateMode.Manual`, where the loop runs only when this is
+         For :value:`AutoPilotUpdateMode.Manual`, where the loop runs only when this is
          called. In the other modes this runs it early; either way it runs once per tick. On a
          tick it is not called for, the vessel keeps the control output of the last tick it did
          run on, and after a tenth of a second of that the auto-pilot stops contributing any
@@ -92,7 +92,7 @@ AutoPilot
 
       :Game Scenes: Flight
 
-   .. method:: void Reset()
+   .. function:: void Reset()
 
       Disengages the auto-pilot and resets all configuration parameters to their defaults.
       Also resets the target pitch, heading and roll, and clears all internal controller
@@ -192,7 +192,7 @@ AutoPilot
          vessel is still being held in exactly the same orientation. Set the reference first and
          the roll afterwards, or set both at once with :meth:`AutoPilot.SetDirectionAndUp`.
 
-   .. method:: void TargetPitchAndHeading(float pitch, float heading)
+   .. function:: void TargetPitchAndHeading(float pitch, float heading)
 
       Set target pitch and heading angles.
 
@@ -234,7 +234,7 @@ AutoPilot
 
       :Game Scenes: Flight
 
-   .. method:: void SetDirectionAndUp(System.Tuple<double,double,double> direction, System.Tuple<double,double,double> up, float roll = 0.0f)
+   .. function:: void SetDirectionAndUp(System.Tuple<double,double,double> direction, System.Tuple<double,double,double> up, float roll = 0.0f)
 
       Set the target attitude from a nose direction and an up vector: point the nose along
       *direction* and roll so the vessel's dorsal (roof) axis aligns with
@@ -306,7 +306,7 @@ AutoPilot
 
       :Game Scenes: Flight
 
-   .. method:: void Wait(double timeout = -1.0)
+   .. function:: void Wait(double timeout = -1.0)
 
       Blocks until the vessel is pointing in the target direction and has
       the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
@@ -591,12 +591,12 @@ AutoPilot
 
       Controls the rate-feedback filtering (the wobble-suppression filter on the measured
       angular velocity) for the pitch and yaw axes of a structurally flexible vessel. When
-      :enum:`RateFilterMode.Automatic` (the default) the auto-pilot detects the
+      :value:`RateFilterMode.Automatic` (the default) the auto-pilot detects the
       oscillation at runtime, estimates its frequency and routes it to the appropriate tool
       (a notch filter for a low-frequency mode near the control band, a low-pass for a
-      high-frequency mode). :enum:`RateFilterMode.Off` disables rate filtering only,
-      leaving the other oscillation mitigations unaffected. :enum:`RateFilterMode.Notch`
-      and :enum:`RateFilterMode.LowPass` force the respective tool unconditionally at
+      high-frequency mode). :value:`RateFilterMode.Off` disables rate filtering only,
+      leaving the other oscillation mitigations unaffected. :value:`RateFilterMode.Notch`
+      and :value:`RateFilterMode.LowPass` force the respective tool unconditionally at
       :prop:`AutoPilot.PitchYawOscillationFrequency`, for a vessel known in advance to be
       flexible.
 
@@ -607,14 +607,14 @@ AutoPilot
       Controls the rate-feedback filtering for the roll axis. Behaves as
       :prop:`AutoPilot.PitchYawRateFilterMode` but for roll, using
       :prop:`AutoPilot.RollOscillationFrequency`. Defaults to
-      :enum:`RateFilterMode.Automatic`.
+      :value:`RateFilterMode.Automatic`.
 
       :Game Scenes: Flight
 
    .. property:: double PitchYawOscillationFrequency { get; set; }
 
       The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
-      filter frequency in :enum:`RateFilterMode.Notch` / :enum:`RateFilterMode.LowPass`
+      filter frequency in :value:`RateFilterMode.Notch` / :value:`RateFilterMode.LowPass`
       mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
       to 1.5 Hz.
 
@@ -640,9 +640,9 @@ AutoPilot
 
       Controls the bandwidth-floor mitigation: the reduction of the inner control loop
       bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
-      :enum:`MitigationMode.Automatic` (the default) it engages on a latched axis
-      while holding (and during a detected limit cycle). :enum:`MitigationMode.Off`
-      never reduces the bandwidth; :enum:`MitigationMode.Forced` keeps it fully
+      :value:`MitigationMode.Automatic` (the default) it engages on a latched axis
+      while holding (and during a detected limit cycle). :value:`MitigationMode.Off`
+      never reduces the bandwidth; :value:`MitigationMode.Forced` keeps it fully
       reduced at all times.
 
       :Game Scenes: Flight
@@ -660,9 +660,9 @@ AutoPilot
 
       Controls the feedforward-cut mitigation: removal of the acceleration feedforward on a
       structurally flexible axis while holding, so it cannot re-excite a residual mode at
-      the reduced bandwidth. When :enum:`MitigationMode.Automatic` (the default) it
-      follows the hold gate on a latched axis. :enum:`MitigationMode.Off` never cuts
-      the feedforward; :enum:`MitigationMode.Forced` always cuts it fully.
+      the reduced bandwidth. When :value:`MitigationMode.Automatic` (the default) it
+      follows the hold gate on a latched axis. :value:`MitigationMode.Off` never cuts
+      the feedforward; :value:`MitigationMode.Forced` always cuts it fully.
 
       :Game Scenes: Flight
 
@@ -670,9 +670,9 @@ AutoPilot
 
       Controls the output-smoothing mitigation: a low-pass on the delivered actuator
       command that caps residual control chatter. When
-      :enum:`MitigationMode.Automatic` (the default) it engages on a latched axis
+      :value:`MitigationMode.Automatic` (the default) it engages on a latched axis
       (and, lightly, while the oscillation detector is firing on an unlatched one).
-      :enum:`MitigationMode.Off` never smooths; :enum:`MitigationMode.Forced`
+      :value:`MitigationMode.Off` never smooths; :value:`MitigationMode.Forced`
       smooths fully at all times.
 
       :Game Scenes: Flight
@@ -767,19 +767,19 @@ AutoPilot
    the update executes. See :prop:`AutoPilot.UpdateMode`.
 
 
-   .. value:: AfterCalls
+   .. enumerator:: AfterCalls
 
       The default. The control loop runs once the update has executed the calls it
       received, so a target set during a tick is flown on that tick.
 
 
-   .. value:: BeforeCalls
+   .. enumerator:: BeforeCalls
 
       The control loop runs before the update executes any calls, so calls made during a
       tick see the attitude error and control output it computed for that tick.
 
 
-   .. value:: Manual
+   .. enumerator:: Manual
 
       The control loop runs only when :meth:`AutoPilot.Update` is called, so a
       program chooses where among its own calls it runs.
@@ -795,7 +795,7 @@ AutoPilot
    See :prop:`AutoPilot.PitchYawRateFilterMode` and :prop:`AutoPilot.RollRateFilterMode`.
 
 
-   .. value:: Automatic
+   .. enumerator:: Automatic
 
       The default. The auto-pilot detects structural oscillation at runtime, estimates its
       frequency and routes it to the appropriate filter: a notch for a low-frequency mode
@@ -803,12 +803,12 @@ AutoPilot
       while the frequency is not yet known. Rigid vessels are left untouched.
 
 
-   .. value:: Off
+   .. enumerator:: Off
 
       No rate filtering. The other oscillation mitigations are unaffected.
 
 
-   .. value:: Notch
+   .. enumerator:: Notch
 
       Force a notch filter at the manually set frequency
       (:prop:`AutoPilot.PitchYawOscillationFrequency` /
@@ -816,7 +816,7 @@ AutoPilot
       is known in advance.
 
 
-   .. value:: LowPass
+   .. enumerator:: LowPass
 
       Force a low-pass filter derived from the manually set frequency.
 
@@ -831,18 +831,18 @@ AutoPilot
    :prop:`AutoPilot.OscillationOutputFilterMode`).
 
 
-   .. value:: Automatic
+   .. enumerator:: Automatic
 
       The default: the mitigation engages automatically, driven by the runtime oscillation
       detector and the hold gate. Rigid vessels are left untouched.
 
 
-   .. value:: Off
+   .. enumerator:: Off
 
       The mitigation never engages. The other mitigations are unaffected.
 
 
-   .. value:: Forced
+   .. enumerator:: Forced
 
       The mitigation is fully engaged at all times, regardless of what the oscillation
       detector reports.

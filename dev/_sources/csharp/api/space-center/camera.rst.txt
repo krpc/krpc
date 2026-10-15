@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -17,7 +17,7 @@ Camera
 
       :Game Scenes: Flight
 
-   .. method:: void NextCamera()
+   .. function:: void NextCamera()
 
       Switch to the next available camera.
       In flight, this moves to the next flight camera mode. In IVA, it moves the
@@ -26,7 +26,7 @@ Camera
 
       :Game Scenes: Flight
 
-   .. method:: void PreviousCamera()
+   .. function:: void PreviousCamera()
 
       Switch to the previous available camera.
       In flight, this moves to the previous flight camera mode. In IVA, it moves
@@ -152,36 +152,36 @@ Camera
    See :prop:`Camera.Mode`.
 
 
-   .. value:: Automatic
+   .. enumerator:: Automatic
 
       The camera is showing the active vessel, in "auto" mode.
 
 
-   .. value:: Free
+   .. enumerator:: Free
 
       The camera is showing the active vessel, in "free" mode.
 
 
-   .. value:: Chase
+   .. enumerator:: Chase
 
       The camera is showing the active vessel, in "chase" mode.
 
 
-   .. value:: Locked
+   .. enumerator:: Locked
 
       The camera is showing the active vessel, in "locked" mode.
 
 
-   .. value:: Orbital
+   .. enumerator:: Orbital
 
       The camera is showing the active vessel, in "orbital" mode.
 
 
-   .. value:: IVA
+   .. enumerator:: IVA
 
       The Intra-Vehicular Activity view is being shown.
 
 
-   .. value:: Map
+   .. enumerator:: Map
 
       The map view is being shown.

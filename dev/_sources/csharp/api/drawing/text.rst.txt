@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.Drawing
 
@@ -40,7 +40,7 @@ Text
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the object.
 
@@ -59,7 +59,7 @@ Text
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: static System.Collections.Generic.IList<string> AvailableFonts(IConnection connection, )
+   .. function:: static System.Collections.Generic.IList<string> AvailableFonts(IConnection connection, )
 
       A list of all available fonts.
 

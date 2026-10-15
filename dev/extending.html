@@ -669,9 +669,9 @@ from the service assembly so that they can interact with new or changed function
 <span id="service-api-attributes"></span><h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h3>
 <p>The following <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">C# attributes</a> can be used
 to add functionality to the kRPC server.</p>
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCService">
-<span class="sig-name descname"><span class="pre">KRPCService</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">Name</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.uint32" title="System.UInt32"><span class="pre">UInt32</span></a> <em><span class="pre">Id</span></em><em> <span class="pre">=</span> <span class="pre">0</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="KRPC.Service.GameScene enum"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.All</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCService" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCService">
+<span class="sig-name descname"><span class="pre">KRPCService</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">Name</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a> <em><span class="pre">Id</span></em><em> <span class="pre">=</span> <span class="pre">0</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.All</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCService" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -681,7 +681,7 @@ the class this attribute is applied to.</p></li>
 by id rather than by name. If omitted or set to 0, an identifier is generated from a hash of
 the service name.</p></li>
 <li><p><strong>GameScene</strong> – The game scenes in which the services procedures are available. Defaults to
-all game scenes. If this is set to <a class="reference internal" href="#value-KRPC.Service.GameScene.Inherit" title="KRPC.Service.GameScene.Inherit value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> the service
+all game scenes. If this is set to <a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Inherit" title="enumerator: KRPC.Service.GameScene.Inherit"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> the service
 will be available in all game scenes.</p></li>
 </ul>
 </dd>
@@ -699,7 +699,7 @@ server.</p>
 <li><p>The class must be <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code>.</p></li>
 <li><p>The name of the class, or the <code class="docutils literal notranslate"><span class="pre">Name</span></code> parameter if specified, must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC
 identifier</span></a>.</p></li>
-<li><p>The class must not be declared within another class that has the <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>
+<li><p>The class must not be declared within another class that has the <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>
 attribute. Nesting of services is not permitted.</p></li>
 </ul>
 <p>Services are configured to be available in specific <a class="reference internal" href="#service-api-game-scenes"><span class="std std-ref">game scenes</span></a>
@@ -736,9 +736,9 @@ scene:</p>
 </ul>
 </dd></dl>
 
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCProcedure">
-<span class="sig-name descname"><span class="pre">KRPCProcedure</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <em><span class="pre">Nullable</span></em><em> <span class="pre">=</span> <span class="pre">false</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="KRPC.Service.GameScene enum"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.Inherit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCProcedure" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCProcedure">
+<span class="sig-name descname"><span class="pre">KRPCProcedure</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <em><span class="pre">Nullable</span></em><em> <span class="pre">=</span> <span class="pre">false</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.Inherit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCProcedure" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -754,7 +754,7 @@ methods, to add them to the server as procedures.</p>
 <ul class="simple">
 <li><p>The method must be <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code>.</p></li>
 <li><p>The name of the method must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
-<li><p>The method must be declared inside a class that is a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>.</p></li>
+<li><p>The method must be declared inside a class that is a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>.</p></li>
 <li><p>The parameter types and return type must be <a class="reference internal" href="#service-api-serializable-types"><span class="std std-ref">types that kRPC knows how to serialize</span></a>.</p></li>
 <li><p>Parameters can have default arguments.</p></li>
 </ul>
@@ -783,9 +783,9 @@ and an optional description, and returns a <code class="docutils literal notrans
 </div>
 </dd></dl>
 
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCClass">
-<span class="sig-name descname"><span class="pre">KRPCClass</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">Service</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="KRPC.Service.GameScene enum"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.Inherit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCClass" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCClass">
+<span class="sig-name descname"><span class="pre">KRPCClass</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">Service</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.Inherit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCClass" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -799,10 +799,10 @@ available. Defaults to inherit this setting from the service the class is define
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to
 non-static classes. It adds the class to the server, so that references to instances of the class
 can be passed between client and server.</p>
-<p>A <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> must be part of a service, just like a
-<a class="reference internal" href="#attribute-KRPCProcedure" title="KRPCProcedure attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>. However, it would be restrictive if the class had to be declared as
-a nested class inside a class with the <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a> attribute. Therefore, a
-<a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> can be declared outside of any service if it has the <code class="docutils literal notranslate"><span class="pre">Service</span></code>
+<p>A <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> must be part of a service, just like a
+<a class="reference internal" href="#attribute-KRPCProcedure" title="attribute: KRPCProcedure"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>. However, it would be restrictive if the class had to be declared as
+a nested class inside a class with the <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a> attribute. Therefore, a
+<a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> can be declared outside of any service if it has the <code class="docutils literal notranslate"><span class="pre">Service</span></code>
 parameter set to the name of the service that it is part of. Also, the service that the
 <code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter refers to does not have to exist. If it does not exist, a service with the
 given name is created.</p>
@@ -814,7 +814,7 @@ override this setting.</p>
 <ul class="simple">
 <li><p>The class must be <code class="docutils literal notranslate"><span class="pre">public</span></code> and <em>not</em> <code class="docutils literal notranslate"><span class="pre">static</span></code>.</p></li>
 <li><p>The name of the class must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
-<li><p>The class must either be declared inside a class that is a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have
+<li><p>The class must either be declared inside a class that is a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have
 its <code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter set to the name of the service it is part of.</p></li>
 </ul>
 <p><strong>Examples</strong></p>
@@ -841,9 +841,9 @@ its <code class="docutils literal notranslate"><span class="pre">Service</span><
 </ul>
 </dd></dl>
 
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCMethod">
-<span class="sig-name descname"><span class="pre">KRPCMethod</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <em><span class="pre">Nullable</span></em><em> <span class="pre">=</span> <span class="pre">false</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="KRPC.Service.GameScene enum"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.Inherit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCMethod" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCMethod">
+<span class="sig-name descname"><span class="pre">KRPCMethod</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <em><span class="pre">Nullable</span></em><em> <span class="pre">=</span> <span class="pre">false</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.Inherit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCMethod" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -854,14 +854,14 @@ setting from the class the method is defined in.</p></li>
 </dd>
 </dl>
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to methods
-inside a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. This allows a client to call methods on an instance, or static
+inside a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. This allows a client to call methods on an instance, or static
 methods in the class. It can also be applied to a C# extension method, adding a method to a
 class belonging to another service; see <a class="reference internal" href="#service-api-extension-members"><span class="std std-ref">Extending Other Services</span></a>.</p>
 <p>The method to which this attribute is applied must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>The method must be <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p></li>
 <li><p>The name of the method must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
-<li><p>The method must be declared in a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>, or be a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> extension
+<li><p>The method must be declared in a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>, or be a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> extension
 method of one.</p></li>
 <li><p>The parameter types and return type must be <a class="reference internal" href="#service-api-serializable-types"><span class="std std-ref">types that kRPC can serialize</span></a>.</p></li>
 <li><p>Parameters can have default arguments.</p></li>
@@ -883,14 +883,14 @@ to true. A parameter that may be <code class="docutils literal notranslate"><spa
 </div>
 </dd></dl>
 
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCProperty">
-<span class="sig-name descname"><span class="pre">KRPCProperty</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <em><span class="pre">Nullable</span></em><em> <span class="pre">=</span> <span class="pre">false</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="KRPC.Service.GameScene enum"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.Inherit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCProperty" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCProperty">
+<span class="sig-name descname"><span class="pre">KRPCProperty</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <em><span class="pre">Nullable</span></em><em> <span class="pre">=</span> <span class="pre">false</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="enum: KRPC.Service.GameScene"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.Inherit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCProperty" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>Nullable</strong> – Whether the property can be null. This makes both the getter’s return value
-and the setter’s argument nullable, and on a field of a <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> it makes
+and the setter’s argument nullable, and on a field of a <a class="reference internal" href="#attribute-KRPCStruct" title="attribute: KRPCStruct"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> it makes
 the field nullable. Defaults to false.</p></li>
 <li><p><strong>GameScene</strong> – The game scenes in which the property is available. Defaults to inherit this
 setting from the class the property is defined in.</p></li>
@@ -900,24 +900,24 @@ setting from the class the property is defined in.</p></li>
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to class
 properties, and comes in three flavors:</p>
 <ol class="arabic simple">
-<li><p>Applied to static properties in a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>. In this case, the property must
+<li><p>Applied to static properties in a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>. In this case, the property must
 satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>Must be <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> and have at least one publicly accessible getter or setter.</p></li>
 <li><p>The name of the property must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
-<li><p>Must be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>.</p></li>
+<li><p>Must be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>.</p></li>
 </ul>
 </li>
-<li><p>Applied to non-static properties in a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. In this case, the property
+<li><p>Applied to non-static properties in a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. In this case, the property
 must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>Must be <code class="docutils literal notranslate"><span class="pre">public</span></code> and <em>not</em> <code class="docutils literal notranslate"><span class="pre">static</span></code>, and have at least one publicly accessible getter or
 setter.</p></li>
 <li><p>The name of the property must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
-<li><p>Must be declared inside a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>.</p></li>
+<li><p>Must be declared inside a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>.</p></li>
 </ul>
 </li>
-<li><p>Applied to a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> extension method of a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>, adding a
+<li><p>Applied to a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> extension method of a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>, adding a
 property to a class belonging to another service. C# has no extension properties, so the
 getter and setter are a pair of methods; see <a class="reference internal" href="#service-api-extension-members"><span class="std std-ref">Extending Other Services</span></a>.</p></li>
 </ol>
@@ -960,9 +960,9 @@ is not nullable fails with an error. See <a class="reference internal" href="#se
 </ul>
 </dd></dl>
 
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCEnum">
-<span class="sig-name descname"><span class="pre">KRPCEnum</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">Service</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCEnum" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCEnum">
+<span class="sig-name descname"><span class="pre">KRPCEnum</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">Service</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCEnum" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -973,15 +973,15 @@ to the service that contains its definition.</p></li>
 </dl>
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to
 enumeration types. It adds the enumeration and its permissible values to the server. This
-attribute works similarly to <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>, but is applied to enumeration types.</p>
-<p>A <a class="reference internal" href="#attribute-KRPCEnum" title="KRPCEnum attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a> must be part of a service, just like a
-<a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. Similarly, a <a class="reference internal" href="#attribute-KRPCEnum" title="KRPCEnum attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a> can be declared outside of a
+attribute works similarly to <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>, but is applied to enumeration types.</p>
+<p>A <a class="reference internal" href="#attribute-KRPCEnum" title="attribute: KRPCEnum"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a> must be part of a service, just like a
+<a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. Similarly, a <a class="reference internal" href="#attribute-KRPCEnum" title="attribute: KRPCEnum"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a> can be declared outside of a
 service if it has its <code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter set to the name of the service that it is part of.</p>
 <p>The enumeration type to which this attribute is applied must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>The enumeration must be <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p></li>
 <li><p>The name of the enumeration must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
-<li><p>The enumeration must either be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have it’s
+<li><p>The enumeration must either be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have it’s
 <code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter set to the name of the service it is part of.</p></li>
 <li><p>The <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/enum">underlying C# type</a> must be an
 <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p></li>
@@ -1007,9 +1007,9 @@ service if it has its <code class="docutils literal notranslate"><span class="pr
 </ul>
 </dd></dl>
 
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCStruct">
-<span class="sig-name descname"><span class="pre">KRPCStruct</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">Service</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCStruct" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCStruct">
+<span class="sig-name descname"><span class="pre">KRPCStruct</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">Service</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCStruct" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1023,20 +1023,20 @@ structure is added to the service that contains its definition.</p></li>
 with named fields. Its value is sent to the client in full, where a class sends a reference to
 an object held on the server.</p>
 <p>The fields of the structure are its <code class="docutils literal notranslate"><span class="pre">public</span></code> instance properties that are annotated with
-<a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> and have both a getter and a setter, in the order they are declared.
+<a class="reference internal" href="#attribute-KRPCProperty" title="attribute: KRPCProperty"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> and have both a getter and a setter, in the order they are declared.
 An unannotated property is invisible to a client.</p>
-<p>A <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> must be part of a service, just like a
-<a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. Similarly, a <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> can be declared outside of a
+<p>A <a class="reference internal" href="#attribute-KRPCStruct" title="attribute: KRPCStruct"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> must be part of a service, just like a
+<a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. Similarly, a <a class="reference internal" href="#attribute-KRPCStruct" title="attribute: KRPCStruct"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> can be declared outside of a
 service if it has its <code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter set to the name of the service that it is part of.</p>
 <p>The struct type to which this attribute is applied must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>The struct must be <code class="docutils literal notranslate"><span class="pre">public</span></code> and must not be generic.</p></li>
 <li><p>The name of the struct must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
-<li><p>The struct must either be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have its <code class="docutils literal notranslate"><span class="pre">Service</span></code>
+<li><p>The struct must either be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have its <code class="docutils literal notranslate"><span class="pre">Service</span></code>
 parameter set to the name of the service it is part of.</p></li>
 <li><p>It must have at least one field, and the type of every field must be a <a class="reference internal" href="#service-api-serializable-types"><span class="std std-ref">serializable type</span></a>.</p></li>
 <li><p>A field must not restrict the game scenes it is available in, so the <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> parameter
-of its <a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute must not be set.</p></li>
+of its <a class="reference internal" href="#attribute-KRPCProperty" title="attribute: KRPCProperty"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute must not be set.</p></li>
 <li><p>A field may be nullable. See <a class="reference internal" href="#service-api-null-values"><span class="std std-ref">Null Values</span></a>.</p></li>
 <li><p>The structure must not contain itself, whether directly or through the fields of another
 structure that it contains.</p></li>
@@ -1046,7 +1046,7 @@ fields in order, so reordering them, removing one, or changing the type of one b
 generated against the previous definition.</p>
 <p><strong>Choosing between a structure and a class.</strong> A structure sends the values of all of its fields
 in a single procedure call. Use one for compound data whose fields are almost always wanted
-together, such as a position and a velocity. Use a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> for something with
+together, such as a position and a velocity. Use a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> for something with
 mutable state, or whose members are expensive enough to read one at a time.</p>
 <p><strong>Examples</strong></p>
 <ul>
@@ -1088,15 +1088,15 @@ mutable state, or whose members are expensive enough to read one at a time.</p>
 </pre></div>
 </div>
 <p>A reference-typed field is made nullable by the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of its
-<a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute. A field whose type is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> needs no
+<a class="reference internal" href="#attribute-KRPCProperty" title="attribute: KRPCProperty"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute. A field whose type is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> needs no
 annotation.</p>
 </li>
 </ul>
 </dd></dl>
 
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCException">
-<span class="sig-name descname"><span class="pre">KRPCException</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">Service</span></em>, <span class="pre">Type</span> <em><span class="pre">MappedException</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCException" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCException">
+<span class="sig-name descname"><span class="pre">KRPCException</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">Service</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Type" title="type: msdn ~&gt; System.Type"><span class="pre">Type</span></a> <em><span class="pre">MappedException</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCException" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1109,21 +1109,21 @@ can be used to map a built-in C# exception type onto this kRPC exception type.</
 </dl>
 <p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to
 an exception class type.</p>
-<p>A <a class="reference internal" href="#attribute-KRPCException" title="KRPCException attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a> must be part of a service, just like a
-<a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. Similarly, a <a class="reference internal" href="#attribute-KRPCException" title="KRPCException attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a> can be declared outside of a
+<p>A <a class="reference internal" href="#attribute-KRPCException" title="attribute: KRPCException"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a> must be part of a service, just like a
+<a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. Similarly, a <a class="reference internal" href="#attribute-KRPCException" title="attribute: KRPCException"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a> can be declared outside of a
 service if it has its <code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter set to the name of the service that it is part of.</p>
 <p>The class type to which this attribute is applied must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>The class must be <code class="docutils literal notranslate"><span class="pre">public</span></code>.</p></li>
 <li><p>The name of the class must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
-<li><p>The class must either be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have it’s <code class="docutils literal notranslate"><span class="pre">Service</span></code>
+<li><p>The class must either be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have it’s <code class="docutils literal notranslate"><span class="pre">Service</span></code>
 parameter set to the name of the service it is part of.</p></li>
 </ul>
 </dd></dl>
 
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCDefaultValue">
-<span class="sig-name descname"><span class="pre">KRPCDefaultValue</span></span> <span class="sig-paren">(</span><span class="pre">Type</span> <em><span class="pre">ValueConstructor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCDefaultValue" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCDefaultValue">
+<span class="sig-name descname"><span class="pre">KRPCDefaultValue</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Type" title="type: msdn ~&gt; System.Type"><span class="pre">Type</span></a> <em><span class="pre">ValueConstructor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCDefaultValue" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1173,9 +1173,9 @@ syntax. kRPC will detect the default values and use them.</p>
 </ul>
 </dd></dl>
 
-<dl class="csharp attribute">
-<dt class="sig sig-object csharp" id="attribute-KRPCNullable">
-<span class="sig-name descname"><span class="pre">KRPCNullable</span></span> <span class="sig-paren">(</span><em><span class="pre">params</span></em> <a class="reference internal" href="#enum-KRPC.Service.Attributes.Position" title="KRPC.Service.Attributes.Position enum"><span class="pre">KRPC.Service.Attributes.Position</span></a><span class="pre">[]</span> <em><span class="pre">Path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCNullable" title="Link to this definition">#</a></dt>
+<dl class="cs attribute">
+<dt class="sig sig-object cs" id="attribute-KRPCNullable">
+<span class="sig-name descname"><span class="pre">KRPCNullable</span></span> <span class="sig-paren">(</span><span class="property"><span class="pre">params</span></span> <a class="reference internal" href="#enum-KRPC.Service.Attributes.Position" title="enum: KRPC.Service.Attributes.Position"><span class="pre">KRPC.Service.Attributes.Position</span></a><span class="pre">[]</span> <em><span class="pre">Path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCNullable" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1189,7 +1189,7 @@ kRPC procedure or class method parameter to indicate that the parameter is permi
 <code class="docutils literal notranslate"><span class="pre">null</span></code>. It can be applied to a parameter of any serializable type, not only class types.
 Applied to a method it marks the return value instead. Applied to a property it marks both
 the getter’s return value and the setter’s argument, as <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> on
-<a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> does.</p>
+<a class="reference internal" href="#attribute-KRPCProperty" title="attribute: KRPCProperty"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> does.</p>
 <p>The server enforces nullability: a call that passes <code class="docutils literal notranslate"><span class="pre">null</span></code> for a parameter that is not
 nullable fails with an error. A parameter is nullable if it is marked with <code class="docutils literal notranslate"><span class="pre">KRPCNullable</span></code>,
 is assigned a default value of <code class="docutils literal notranslate"><span class="pre">null</span></code>, or has a <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> type. See
@@ -1210,7 +1210,7 @@ is assigned a default value of <code class="docutils literal notranslate"><span 
 
 <section id="nullable-positions">
 <span id="service-api-nullable-positions"></span><h4>Nullable Positions<a class="headerlink" href="#nullable-positions" title="Link to this heading">#</a></h4>
-<p>Giving <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> a path marks a position nested inside a value, rather than the
+<p>Giving <a class="reference internal" href="#attribute-KRPCNullable" title="attribute: KRPCNullable"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> a path marks a position nested inside a value, rather than the
 value itself. Each step names a position of the type the step before it reached, outermost first:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">static</span><span class="w"> </span><span class="n">KRPC</span><span class="p">.</span><span class="n">Service</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">Position</span><span class="p">;</span>
 
@@ -1229,28 +1229,28 @@ value itself. Each step names a position of the type the step before it reached,
 </pre></div>
 </div>
 <p>Without the <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">static</span></code> each position is written <code class="docutils literal notranslate"><span class="pre">Position.Element</span></code>, as <code class="docutils literal notranslate"><span class="pre">GameScene</span></code>
-already is on <a class="reference internal" href="#attribute-KRPCProcedure" title="KRPCProcedure attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>.</p>
+already is on <a class="reference internal" href="#attribute-KRPCProcedure" title="attribute: KRPCProcedure"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>.</p>
 <p>A path step that names no position of the type it is applied to is an error, which the server
 reports when it loads the service. A dictionary key and a set element have no name here, and so
 cannot be made nullable. The positions are:</p>
-<dl class="csharp enum">
-<dt class="sig sig-object csharp" id="enum-KRPC.Service.Attributes.Position">
-<span class="sig-name descname"><span class="pre">enum</span> <span class="pre">KRPC.Service.Attributes.Position</span></span><a class="headerlink" href="#enum-KRPC.Service.Attributes.Position" title="Link to this definition">#</a></dt>
-<dd><dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.Attributes.Position.Element">
-<span class="sig-name descname"><span class="pre">Element</span></span><a class="headerlink" href="#value-KRPC.Service.Attributes.Position.Element" title="Link to this definition">#</a></dt>
+<dl class="cs enum">
+<dt class="sig sig-object cs" id="enum-KRPC.Service.Attributes.Position">
+<span class="property"><span class="pre">enum</span> </span><span class="sig-name descname"><span class="pre">KRPC.Service.Attributes.Position</span></span><a class="headerlink" href="#enum-KRPC.Service.Attributes.Position" title="Link to this definition">#</a></dt>
+<dd><dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.Attributes.Position.Element">
+<span class="sig-name descname"><span class="pre">Element</span></span><a class="headerlink" href="#enumerator-KRPC.Service.Attributes.Position.Element" title="Link to this definition">#</a></dt>
 <dd><p>The element of a list.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.Attributes.Position.Value">
-<span class="sig-name descname"><span class="pre">Value</span></span><a class="headerlink" href="#value-KRPC.Service.Attributes.Position.Value" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.Attributes.Position.Value">
+<span class="sig-name descname"><span class="pre">Value</span></span><a class="headerlink" href="#enumerator-KRPC.Service.Attributes.Position.Value" title="Link to this definition">#</a></dt>
 <dd><p>The value of a dictionary.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.Attributes.Position.Item1">
-<span class="sig-name descname"><span class="pre">Item1</span></span><a class="headerlink" href="#value-KRPC.Service.Attributes.Position.Item1" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.Attributes.Position.Item1">
+<span class="sig-name descname"><span class="pre">Item1</span></span><a class="headerlink" href="#enumerator-KRPC.Service.Attributes.Position.Item1" title="Link to this definition">#</a></dt>
 <dd><p>The first item of a tuple. <code class="docutils literal notranslate"><span class="pre">Item2</span></code> to <code class="docutils literal notranslate"><span class="pre">Item7</span></code> name the ones after it.</p>
 </dd></dl>
 
@@ -1281,9 +1281,9 @@ following types are serializable:</p>
 <ul class="simple">
 <li><p>The C# types <code class="docutils literal notranslate"><span class="pre">double</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">long</span></code>, <code class="docutils literal notranslate"><span class="pre">uint</span></code>, <code class="docutils literal notranslate"><span class="pre">ulong</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>
 and <code class="docutils literal notranslate"><span class="pre">byte[]</span></code></p></li>
-<li><p>Any type annotated with <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a></p></li>
-<li><p>Any type annotated with <a class="reference internal" href="#attribute-KRPCEnum" title="KRPCEnum attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a></p></li>
-<li><p>Any type annotated with <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a></p></li>
+<li><p>Any type annotated with <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a></p></li>
+<li><p>Any type annotated with <a class="reference internal" href="#attribute-KRPCEnum" title="attribute: KRPCEnum"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a></p></li>
+<li><p>Any type annotated with <a class="reference internal" href="#attribute-KRPCStruct" title="attribute: KRPCStruct"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a></p></li>
 <li><p>Collections of serializable types:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">System.Collections.Generic.IList&lt;T&gt;</span></code> where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a serializable type</p></li>
@@ -1312,30 +1312,30 @@ field.</p></li>
 </ul>
 <p>A <strong>parameter</strong> is nullable if any of the following hold:</p>
 <ul class="simple">
-<li><p>It is annotated with <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a>.</p></li>
+<li><p>It is annotated with <a class="reference internal" href="#attribute-KRPCNullable" title="attribute: KRPCNullable"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a>.</p></li>
 <li><p>It has a default value of <code class="docutils literal notranslate"><span class="pre">null</span></code> (for example <code class="docutils literal notranslate"><span class="pre">Vessel</span> <span class="pre">target</span> <span class="pre">=</span> <span class="pre">null</span></code>). A null default is
 itself a declaration that <code class="docutils literal notranslate"><span class="pre">null</span></code> is a valid value, so no further annotation is needed.</p></li>
 <li><p>Its type is a nullable value type, <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> (for example <code class="docutils literal notranslate"><span class="pre">int?</span></code>); see below.</p></li>
 </ul>
-<p>A <strong>return value</strong> is nullable if the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of its <a class="reference internal" href="#attribute-KRPCProcedure" title="KRPCProcedure attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>,
-<a class="reference internal" href="#attribute-KRPCMethod" title="KRPCMethod attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCMethod</span></code></a> or <a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute is set to true, or if its type
+<p>A <strong>return value</strong> is nullable if the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of its <a class="reference internal" href="#attribute-KRPCProcedure" title="attribute: KRPCProcedure"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProcedure</span></code></a>,
+<a class="reference internal" href="#attribute-KRPCMethod" title="attribute: KRPCMethod"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCMethod</span></code></a> or <a class="reference internal" href="#attribute-KRPCProperty" title="attribute: KRPCProperty"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute is set to true, or if its type
 is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. For a property, <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code> makes the getter’s return value <em>and</em> the
 setter’s argument nullable.</p>
 <p>Return nullability is always declared, as kRPC reads the attribute rather than the method body.</p>
 <p>A <strong>structure field</strong> is nullable if the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of its
-<a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute is set, or if its type is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. Setting
+<a class="reference internal" href="#attribute-KRPCProperty" title="attribute: KRPCProperty"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> attribute is set, or if its type is <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. Setting
 <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> on a value-typed field is an error. Write the field as <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> instead.</p>
 <section id="nullable-value-types">
 <span id="service-api-nullable-value-types"></span><h4>Nullable Value Types<a class="headerlink" href="#nullable-value-types" title="Link to this heading">#</a></h4>
 <p>A parameter, return value or structure field of type <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code> – <code class="docutils literal notranslate"><span class="pre">int?</span></code>, <code class="docutils literal notranslate"><span class="pre">float?</span></code>,
 <code class="docutils literal notranslate"><span class="pre">bool?</span></code>, an <code class="docutils literal notranslate"><span class="pre">enum?</span></code> and so on – is automatically nullable; it needs neither
-<a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> nor <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code>. To clients it appears as an ordinary value of
+<a class="reference internal" href="#attribute-KRPCNullable" title="attribute: KRPCNullable"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> nor <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code>. To clients it appears as an ordinary value of
 type <code class="docutils literal notranslate"><span class="pre">T</span></code> that may be null.</p>
 <p>Only value types can be <code class="docutils literal notranslate"><span class="pre">Nullable&lt;T&gt;</span></code>. A <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references">nullable reference type</a> annotation such as
 <code class="docutils literal notranslate"><span class="pre">string?</span></code> or <code class="docutils literal notranslate"><span class="pre">IList&lt;int&gt;?</span></code> is a compile-time annotation, and the <code class="docutils literal notranslate"><span class="pre">?</span></code> is erased before kRPC
 reads the type. Such a parameter or return value is treated as non-nullable.</p>
-<p>Use <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code> to make a reference-typed parameter,
-return value or structure field nullable, and a path on <a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> to make a
+<p>Use <a class="reference internal" href="#attribute-KRPCNullable" title="attribute: KRPCNullable"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Nullable</span> <span class="pre">=</span> <span class="pre">true</span></code> to make a reference-typed parameter,
+return value or structure field nullable, and a path on <a class="reference internal" href="#attribute-KRPCNullable" title="attribute: KRPCNullable"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a> to make a
 reference-typed position nested inside one nullable. See <a class="reference internal" href="#service-api-nullable-positions"><span class="std std-ref">Nullable Positions</span></a>.</p>
 </section>
 </section>
@@ -1404,9 +1404,9 @@ kRPC. kRPC suspends the call, allows the next physics tick to run, then invokes 
 The continuation can itself throw another <code class="docutils literal notranslate"><span class="pre">YieldException</span></code> to yield again, forming a chain. The
 client blocks throughout and receives the final return value (or exception) once the chain
 completes.</p>
-<dl class="csharp class">
-<dt class="sig sig-object csharp" id="class-KRPC.Service.YieldException">
-<span class="sig-name descname"><span class="pre">class</span> <span class="pre">KRPC.Service.YieldException&lt;T&gt;</span></span><a class="headerlink" href="#class-KRPC.Service.YieldException" title="Link to this definition">#</a></dt>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Service.YieldException">
+<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">KRPC.Service.YieldException</span></span><span class="pre">&lt;</span><span class="pre">T</span><span class="pre">&gt;</span><a class="headerlink" href="#class-KRPC.Service.YieldException" title="Link to this definition">#</a></dt>
 <dd><p>Thrown by a procedure or method to suspend execution until the next physics tick. <code class="docutils literal notranslate"><span class="pre">T</span></code> must be
 a delegate type. kRPC invokes the delegate on the following <code class="docutils literal notranslate"><span class="pre">FixedUpdate</span></code> and uses its return
 value as the result of the RPC call. If the delegate itself throws a <code class="docutils literal notranslate"><span class="pre">YieldException</span></code>, kRPC
@@ -1461,108 +1461,108 @@ helper has the right context every time it runs.</p>
 <p>Anything that can be called is configured to be available from a particular game scene, or
 scenes. This includes service procedures and properties, and class methods and properties. This is
 controlled by the following enumeration:</p>
-<dl class="csharp enum">
-<dt class="sig sig-object csharp" id="enum-KRPC.Service.GameScene">
-<span class="sig-name descname"><span class="pre">enum</span> <span class="pre">KRPC.Service.GameScene</span></span><a class="headerlink" href="#enum-KRPC.Service.GameScene" title="Link to this definition">#</a></dt>
-<dd><dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.Inherit">
-<span class="sig-name descname"><span class="pre">Inherit</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.Inherit" title="Link to this definition">#</a></dt>
+<dl class="cs enum">
+<dt class="sig sig-object cs" id="enum-KRPC.Service.GameScene">
+<span class="property"><span class="pre">enum</span> </span><span class="sig-name descname"><span class="pre">KRPC.Service.GameScene</span></span><a class="headerlink" href="#enum-KRPC.Service.GameScene" title="Link to this definition">#</a></dt>
+<dd><dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.Inherit">
+<span class="sig-name descname"><span class="pre">Inherit</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.Inherit" title="Link to this definition">#</a></dt>
 <dd><p>Inherit the game scene from the containing service or class. This is the default.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.All">
-<span class="sig-name descname"><span class="pre">All</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.All" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.All">
+<span class="sig-name descname"><span class="pre">All</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.All" title="Link to this definition">#</a></dt>
 <dd><p>All game scenes.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.SpaceCenter">
-<span class="sig-name descname"><span class="pre">SpaceCenter</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.SpaceCenter" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.SpaceCenter">
+<span class="sig-name descname"><span class="pre">SpaceCenter</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.SpaceCenter" title="Link to this definition">#</a></dt>
 <dd><p>The game scene showing the Kerbal Space Center buildings.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.Flight">
-<span class="sig-name descname"><span class="pre">Flight</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.Flight" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.Flight">
+<span class="sig-name descname"><span class="pre">Flight</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.Flight" title="Link to this definition">#</a></dt>
 <dd><p>The game scene showing a vessel in flight (or on the launchpad/runway).</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.TrackingStation">
-<span class="sig-name descname"><span class="pre">TrackingStation</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.TrackingStation" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.TrackingStation">
+<span class="sig-name descname"><span class="pre">TrackingStation</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.TrackingStation" title="Link to this definition">#</a></dt>
 <dd><p>The tracking station.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.EditorVAB">
-<span class="sig-name descname"><span class="pre">EditorVAB</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.EditorVAB" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.EditorVAB">
+<span class="sig-name descname"><span class="pre">EditorVAB</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.EditorVAB" title="Link to this definition">#</a></dt>
 <dd><p>The Vehicle Assembly Building.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.EditorSPH">
-<span class="sig-name descname"><span class="pre">EditorSPH</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.EditorSPH" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.EditorSPH">
+<span class="sig-name descname"><span class="pre">EditorSPH</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.EditorSPH" title="Link to this definition">#</a></dt>
 <dd><p>The Space Plane Hangar.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.Editor">
-<span class="sig-name descname"><span class="pre">Editor</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.Editor" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.Editor">
+<span class="sig-name descname"><span class="pre">Editor</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.Editor" title="Link to this definition">#</a></dt>
 <dd><p>Either the VAB or the SPH.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.MissionBuilder">
-<span class="sig-name descname"><span class="pre">MissionBuilder</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.MissionBuilder" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.MissionBuilder">
+<span class="sig-name descname"><span class="pre">MissionBuilder</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.MissionBuilder" title="Link to this definition">#</a></dt>
 <dd><p>The mission builder.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.AstronautComplex">
-<span class="sig-name descname"><span class="pre">AstronautComplex</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.AstronautComplex" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.AstronautComplex">
+<span class="sig-name descname"><span class="pre">AstronautComplex</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.AstronautComplex" title="Link to this definition">#</a></dt>
 <dd><p>The astronaut complex facility, open within the space center scene.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.MissionControl">
-<span class="sig-name descname"><span class="pre">MissionControl</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.MissionControl" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.MissionControl">
+<span class="sig-name descname"><span class="pre">MissionControl</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.MissionControl" title="Link to this definition">#</a></dt>
 <dd><p>The mission control facility, open within the space center scene.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.ResearchAndDevelopment">
-<span class="sig-name descname"><span class="pre">ResearchAndDevelopment</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.ResearchAndDevelopment" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.ResearchAndDevelopment">
+<span class="sig-name descname"><span class="pre">ResearchAndDevelopment</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.ResearchAndDevelopment" title="Link to this definition">#</a></dt>
 <dd><p>The research and development facility, open within the space center scene.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.Administration">
-<span class="sig-name descname"><span class="pre">Administration</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.Administration" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Service.GameScene.Administration">
+<span class="sig-name descname"><span class="pre">Administration</span></span><a class="headerlink" href="#enumerator-KRPC.Service.GameScene.Administration" title="Link to this definition">#</a></dt>
 <dd><p>The administration facility, open within the space center scene.</p>
 </dd></dl>
 
 </dd></dl>
 
-<p>The special enumeration value <a class="reference internal" href="#value-KRPC.Service.GameScene.Inherit" title="KRPC.Service.GameScene.Inherit value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> can be used to inherit
+<p>The special enumeration value <a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Inherit" title="enumerator: KRPC.Service.GameScene.Inherit"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> can be used to inherit
 the game scene setting from the containing service or class. Game scene inheritance works as
 follows:</p>
 <ul class="simple">
-<li><p>A service set to <a class="reference internal" href="#value-KRPC.Service.GameScene.Inherit" title="KRPC.Service.GameScene.Inherit value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> will be available in all game
-scenes. This is equivalent to setting it to <a class="reference internal" href="#value-KRPC.Service.GameScene.All" title="KRPC.Service.GameScene.All value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.All</span></code></a>.</p></li>
-<li><p>A service procedure or property set to <a class="reference internal" href="#value-KRPC.Service.GameScene.Inherit" title="KRPC.Service.GameScene.Inherit value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> will be
+<li><p>A service set to <a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Inherit" title="enumerator: KRPC.Service.GameScene.Inherit"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> will be available in all game
+scenes. This is equivalent to setting it to <a class="reference internal" href="#enumerator-KRPC.Service.GameScene.All" title="enumerator: KRPC.Service.GameScene.All"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.All</span></code></a>.</p></li>
+<li><p>A service procedure or property set to <a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Inherit" title="enumerator: KRPC.Service.GameScene.Inherit"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> will be
 available in the same game scenes as the containing service.</p></li>
-<li><p>A class set to <a class="reference internal" href="#value-KRPC.Service.GameScene.Inherit" title="KRPC.Service.GameScene.Inherit value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> will be available in the same game
+<li><p>A class set to <a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Inherit" title="enumerator: KRPC.Service.GameScene.Inherit"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> will be available in the same game
 scenes as the containing service.</p></li>
-<li><p>A class method or property set to <a class="reference internal" href="#value-KRPC.Service.GameScene.Inherit" title="KRPC.Service.GameScene.Inherit value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> will be available
+<li><p>A class method or property set to <a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Inherit" title="enumerator: KRPC.Service.GameScene.Inherit"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> will be available
 in the same game scenes as the containing class. If the containing class is set to
-<a class="reference internal" href="#value-KRPC.Service.GameScene.Inherit" title="KRPC.Service.GameScene.Inherit value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> the class method or property will be available in
+<a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Inherit" title="enumerator: KRPC.Service.GameScene.Inherit"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> the class method or property will be available in
 the same game scenes as the containing service.</p></li>
 </ul>
 <p><strong>Examples</strong></p>
 <ul>
 <li><p>Declare a service whose procedures are available in the
-<a class="reference internal" href="#value-KRPC.Service.GameScene.Flight" title="KRPC.Service.GameScene.Flight value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Flight</span></code></a> game scene:</p>
+<a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Flight" title="enumerator: KRPC.Service.GameScene.Flight"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Flight</span></code></a> game scene:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService (GameScene = GameScene.Flight)]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MyService</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// ...</span>
@@ -1571,7 +1571,7 @@ the same game scenes as the containing service.</p></li>
 </div>
 </li>
 <li><p>Declare a service whose procedures are available in the
-<a class="reference internal" href="#value-KRPC.Service.GameScene.Flight" title="KRPC.Service.GameScene.Flight value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Flight</span></code></a> and <a class="reference internal" href="#value-KRPC.Service.GameScene.Editor" title="KRPC.Service.GameScene.Editor value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Editor</span></code></a> game
+<a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Flight" title="enumerator: KRPC.Service.GameScene.Flight"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Flight</span></code></a> and <a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Editor" title="enumerator: KRPC.Service.GameScene.Editor"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Editor</span></code></a> game
 scenes:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService (GameScene = (GameScene.Flight | GameScene.Editor))]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MyService</span><span class="w"> </span><span class="p">{</span>
@@ -1581,7 +1581,7 @@ scenes:</p>
 </div>
 </li>
 <li><p>Declare a service whose procedures are available in the
-<a class="reference internal" href="#value-KRPC.Service.GameScene.Flight" title="KRPC.Service.GameScene.Flight value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Flight</span></code></a> game scene by default, and declare a procedure which
+<a class="reference internal" href="#enumerator-KRPC.Service.GameScene.Flight" title="enumerator: KRPC.Service.GameScene.Flight"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Flight</span></code></a> game scene by default, and declare a procedure which
 overrides this and is available in all game scenes:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService (GameScene = GameScene.Flight)]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MyService</span><span class="w"> </span><span class="p">{</span>
@@ -1622,7 +1622,7 @@ is called, and the generated C#, C++, Java and C-nano client code marks deprecat
 <section id="extending-other-services">
 <span id="service-api-extension-members"></span><h3>Extending Other Services<a class="headerlink" href="#extending-other-services" title="Link to this heading">#</a></h3>
 <p>A mod can add methods and properties to a class belonging to another service, as
-<a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> lets it add a class to one. A <code class="docutils literal notranslate"><span class="pre">TestFlight</span></code> mod can add
+<a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> lets it add a class to one. A <code class="docutils literal notranslate"><span class="pre">TestFlight</span></code> mod can add
 <code class="docutils literal notranslate"><span class="pre">vessel.parts.with_failure(...)</span></code> to <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Parts</span></code>. The member is written as a C# extension
 method, and joins the service that owns the type being extended:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TestFlightExtensions</span><span class="w"> </span><span class="p">{</span>
@@ -1640,7 +1640,7 @@ Python or Lua, exposes the member as an ordinary member of the class it extends.
 such as C#, C++, Java or C-nano, reaches it once its code is regenerated from the mod’s assembly
 and the assembly declaring the service being extended; see <a class="reference internal" href="#service-api-clientgen"><span class="std std-ref">Generating Service Code for Static Clients</span></a>.</p>
 <p>C# has no extension properties, so a property is a pair of extension methods named <code class="docutils literal notranslate"><span class="pre">GetX</span></code> and
-<code class="docutils literal notranslate"><span class="pre">SetX</span></code>, each carrying <a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a>. The getter takes only the instance and returns
+<code class="docutils literal notranslate"><span class="pre">SetX</span></code>, each carrying <a class="reference internal" href="#attribute-KRPCProperty" title="attribute: KRPCProperty"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a>. The getter takes only the instance and returns
 a value. The setter takes the instance and the value to set, and returns nothing. Either one on its
 own gives a read-only or a write-only property.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCProperty]</span>
@@ -1659,9 +1659,9 @@ own gives a read-only or a write-only property.</p>
 <p>An extension member must satisfy the following criteria:</p>
 <ul class="simple">
 <li><p>The method must be a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> C# extension method, declared in a <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code> class
-outside any <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>. A class that is not public puts its members out of reach,
+outside any <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>. A class that is not public puts its members out of reach,
 and the server names it in a warning in the log.</p></li>
-<li><p>The type it extends must be a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. A <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> is a value
+<li><p>The type it extends must be a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. A <a class="reference internal" href="#attribute-KRPCStruct" title="attribute: KRPCStruct"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> is a value
 with a fixed set of fields, and cannot be extended.</p></li>
 <li><p>The name of the member must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>, and must
 not clash with a member the class already has, or with another extension member. The getter and
@@ -1670,12 +1670,12 @@ the setter of an extension property must be declared in the same class.</p></li>
 </ul>
 <p>Deprecation and the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> parameter of the attribute work as they do for a member declared
 in the class. A setter’s value is an ordinary parameter, so mark it nullable with
-<a class="reference internal" href="#attribute-KRPCNullable" title="KRPCNullable attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> parameter defaults to the game scenes of the class
+<a class="reference internal" href="#attribute-KRPCNullable" title="attribute: KRPCNullable"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCNullable</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> parameter defaults to the game scenes of the class
 being extended.</p>
 <section id="exposing-a-part-module-as-a-class">
 <h4>Exposing a Part Module as a Class<a class="headerlink" href="#exposing-a-part-module-as-a-class" title="Link to this heading">#</a></h4>
 <p>A mod that adds a <code class="docutils literal notranslate"><span class="pre">PartModule</span></code> to a part can expose it as a class of its own, in place of the
-string-keyed <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code> API. Declare a <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> wrapping the module, and
+string-keyed <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code> API. Declare a <a class="reference internal" href="#attribute-KRPCClass" title="attribute: KRPCClass"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> wrapping the module, and
 add a nullable extension property on <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code> that returns it. The wrapper names the
 module with a <code class="docutils literal notranslate"><span class="pre">KRPC.SpaceCenter.ModuleRef</span></code>, as <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code> does:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCClass (Service = "TestFlight")]</span>
@@ -1817,7 +1817,7 @@ these requirements and so is more portable.</p>
 <p>The following demonstrates how to generate code for the C++ and C# clients to interact with the
 LaunchControl service, given in an example previously.</p>
 <p>krpc-clientgen expects to be passed the location of your copy of Kerbal Space Program, the name of
-the language to generate, the name of the service (from the <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a> attribute), a
+the language to generate, the name of the service (from the <a class="reference internal" href="#attribute-KRPCService" title="attribute: KRPCService"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a> attribute), a
 path to the assembly containing the service and the path to write the generated code to.</p>
 <p>For C++, run the following:</p>
 <p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--ksp=/path/to/ksp</span> <span class="pre">cpp</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span> <span class="pre">launch_control.hpp</span></code></p>

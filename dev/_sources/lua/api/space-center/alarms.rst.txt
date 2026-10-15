@@ -32,7 +32,7 @@ Alarms
       one alarm shares the given title, the first one found is returned.
 
       :param string name: The title of the alarm to return.
-      :rtype: :class:`SpaceCenter.Alarm`
+      :rtype: :class:`SpaceCenter.Alarm` or ``Types.none``
 
    .. staticmethod:: add_alarm(time, [title = 'Alarm'], [description = ''])
 
@@ -180,7 +180,7 @@ Alarms
       Vessel the alarm references. ``nil`` if it does not reference a vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Vessel`
+      :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``
 
    .. attribute:: node: SpaceCenter.Node
 

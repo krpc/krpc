@@ -11,37 +11,37 @@ Communications
    Used to interact with CommNet for a given vessel.
    Obtained by calling :func:`krpc_SpaceCenter_Vessel_Comms`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Comms_CanCommunicate(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_CanCommunicate(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Comms_t instance)
 
       Whether the vessel can communicate with KSC.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Comms_CanTransmitScience(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_CanTransmitScience(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Comms_t instance)
 
       Whether the vessel can transmit science data to KSC.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Comms_SignalStrength(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_SignalStrength(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Comms_t instance)
 
       Signal strength to KSC.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Comms_SignalDelay(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_SignalDelay(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Comms_t instance)
 
       Signal delay to KSC in seconds.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Comms_Power(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_Power(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Comms_t instance)
 
       The combined power of all active antennae on the vessel.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Comms_ControlPath(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_ControlPath(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Comms_t instance)
 
       The communication path used to control the vessel.
 
@@ -53,25 +53,25 @@ Communications
 
    Represents a communication link between two nodes in the network.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_Type(krpc_connection_t connection, krpc_SpaceCenter_CommLinkType_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_Type(krpc_connection_t connection, krpc_SpaceCenter_CommLinkType_t * returnValue, krpc_SpaceCenter_CommLink_t instance)
 
       The type of link.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_SignalStrength(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_SignalStrength(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CommLink_t instance)
 
       Signal strength of the link.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_Start(krpc_connection_t connection, krpc_SpaceCenter_CommNode_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_Start(krpc_connection_t connection, krpc_SpaceCenter_CommNode_t * returnValue, krpc_SpaceCenter_CommLink_t instance)
 
       Start point of the link.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_End(krpc_connection_t connection, krpc_SpaceCenter_CommNode_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_End(krpc_connection_t connection, krpc_SpaceCenter_CommNode_t * returnValue, krpc_SpaceCenter_CommLink_t instance)
 
       End point of the link.
 

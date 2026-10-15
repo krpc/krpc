@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.StdLib
 
@@ -29,7 +29,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Abs(double x)
+   .. function:: double Abs(double x)
 
       The absolute value of a number.
 
@@ -39,7 +39,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: int Sign(double x)
+   .. function:: int Sign(double x)
 
       The sign of a number: -1 if it is negative, 1 if it is positive,
       and 0 if it is zero or not a number.
@@ -50,7 +50,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double CopySign(double x, double y)
+   .. function:: double CopySign(double x, double y)
 
       The magnitude of the first number with the sign of the second.
 
@@ -61,7 +61,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: bool IsNan(double x)
+   .. function:: bool IsNan(double x)
 
       Whether a number is not a number.
 
@@ -71,7 +71,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: bool IsFinite(double x)
+   .. function:: bool IsFinite(double x)
 
       Whether a number is neither infinite nor not a number.
 
@@ -81,7 +81,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Floor(double x)
+   .. function:: double Floor(double x)
 
       The largest whole number less than or equal to the given number.
 
@@ -91,7 +91,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Ceiling(double x)
+   .. function:: double Ceiling(double x)
 
       The smallest whole number greater than or equal to the given number.
 
@@ -101,7 +101,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Round(double x, int digits = 0)
+   .. function:: double Round(double x, int digits = 0)
 
       The given number rounded to the given number of decimal places,
       with a halfway value rounded to the nearer even number.
@@ -118,7 +118,7 @@ Standard Library
 
          Throws an exception if the rounded value is too large for a double.
 
-   .. method:: double RoundHalfAwayFromZero(double x, int digits = 0)
+   .. function:: double RoundHalfAwayFromZero(double x, int digits = 0)
 
       The given number rounded to the given number of decimal places,
       with a halfway value rounded away from zero.
@@ -135,7 +135,7 @@ Standard Library
 
          Throws an exception if the rounded value is too large for a double.
 
-   .. method:: double RoundHalfUp(double x, int digits = 0)
+   .. function:: double RoundHalfUp(double x, int digits = 0)
 
       The given number rounded to the given number of decimal places,
       with a halfway value rounded toward positive infinity.
@@ -152,7 +152,7 @@ Standard Library
 
          Throws an exception if the rounded value is too large for a double.
 
-   .. method:: double Sqrt(double x)
+   .. function:: double Sqrt(double x)
 
       The square root of a number.
 
@@ -162,7 +162,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Hypot(double x, double y)
+   .. function:: double Hypot(double x, double y)
 
       The length of the hypotenuse of a right triangle with the given sides.
 
@@ -173,7 +173,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Sin(double x)
+   .. function:: double Sin(double x)
 
       The sine of an angle, in radians.
 
@@ -183,7 +183,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Cos(double x)
+   .. function:: double Cos(double x)
 
       The cosine of an angle, in radians.
 
@@ -193,7 +193,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Tan(double x)
+   .. function:: double Tan(double x)
 
       The tangent of an angle, in radians.
 
@@ -203,7 +203,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Asin(double x)
+   .. function:: double Asin(double x)
 
       The angle, in radians, whose sine is the given number.
 
@@ -213,7 +213,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Acos(double x)
+   .. function:: double Acos(double x)
 
       The angle, in radians, whose cosine is the given number.
 
@@ -223,7 +223,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Atan(double x)
+   .. function:: double Atan(double x)
 
       The angle, in radians, whose tangent is the given number.
 
@@ -233,7 +233,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Atan2(double y, double x)
+   .. function:: double Atan2(double y, double x)
 
       The angle, in radians, between the positive x axis and the point (x, y).
 
@@ -244,7 +244,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Log(double x, double newBase = 2.718281828459045)
+   .. function:: double Log(double x, double newBase = 2.718281828459045)
 
       The logarithm of a number, natural unless another base is given.
 
@@ -255,7 +255,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Log10(double x)
+   .. function:: double Log10(double x)
 
       The base 10 logarithm of a number.
 
@@ -265,7 +265,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Exp(double x)
+   .. function:: double Exp(double x)
 
       The number e raised to the given power.
 
@@ -275,7 +275,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Min(double x, double y)
+   .. function:: double Min(double x, double y)
 
       The smaller of two numbers.
 
@@ -286,7 +286,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Max(double x, double y)
+   .. function:: double Max(double x, double y)
 
       The larger of two numbers.
 
@@ -297,7 +297,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double Clamp(double x, double min, double max)
+   .. function:: double Clamp(double x, double min, double max)
 
       The given number limited to the given range.
 
@@ -314,7 +314,7 @@ Standard Library
 
          Throws an exception if the minimum is greater than the maximum.
 
-   .. method:: double Lerp(double a, double b, double t)
+   .. function:: double Lerp(double a, double b, double t)
 
       Linear interpolation between two numbers.
 
@@ -332,7 +332,7 @@ Standard Library
          The parameter is not limited to the range 0 to 1, and a value outside it
          extrapolates.
 
-   .. method:: double InverseLerp(double a, double b, double x)
+   .. function:: double InverseLerp(double a, double b, double x)
 
       The interpolation parameter of a number between two others,
       limited to the range 0 to 1.
@@ -350,7 +350,7 @@ Standard Library
 
          Returns 0 if the two numbers are equal.
 
-   .. method:: double DegreesToRadians(double x)
+   .. function:: double DegreesToRadians(double x)
 
       The angle in radians of an angle in degrees.
 
@@ -360,7 +360,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double RadiansToDegrees(double x)
+   .. function:: double RadiansToDegrees(double x)
 
       The angle in degrees of an angle in radians.
 
@@ -370,7 +370,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> VectorAdd(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+   .. function:: System.Tuple<double,double,double> VectorAdd(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
 
       The sum of two vectors.
 
@@ -381,7 +381,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> VectorSubtract(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+   .. function:: System.Tuple<double,double,double> VectorSubtract(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
 
       The difference of two vectors.
 
@@ -392,7 +392,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> VectorScale(System.Tuple<double,double,double> v, double scale)
+   .. function:: System.Tuple<double,double,double> VectorScale(System.Tuple<double,double,double> v, double scale)
 
       A vector scaled by a number.
 
@@ -403,7 +403,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double VectorDot(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+   .. function:: double VectorDot(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
 
       The dot product of two vectors.
 
@@ -414,7 +414,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> VectorCross(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+   .. function:: System.Tuple<double,double,double> VectorCross(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
 
       The cross product of two vectors.
 
@@ -425,7 +425,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double VectorMagnitude(System.Tuple<double,double,double> v)
+   .. function:: double VectorMagnitude(System.Tuple<double,double,double> v)
 
       The magnitude (length) of a vector.
 
@@ -435,7 +435,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> VectorNormalize(System.Tuple<double,double,double> v)
+   .. function:: System.Tuple<double,double,double> VectorNormalize(System.Tuple<double,double,double> v)
 
       A vector scaled to a magnitude of 1.
 
@@ -450,7 +450,7 @@ Standard Library
 
          Throws an exception if the vector is zero.
 
-   .. method:: double VectorDistance(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+   .. function:: double VectorDistance(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
 
       The distance between two positions.
 
@@ -461,7 +461,7 @@ Standard Library
 
       :Game Scenes: All
 
-   .. method:: double VectorAngle(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+   .. function:: double VectorAngle(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
 
       The angle between two vectors, in radians, between 0 and pi.
 
@@ -477,7 +477,7 @@ Standard Library
 
          Throws an exception if either vector is zero.
 
-   .. method:: System.Tuple<double,double,double> VectorLerp(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v, double t)
+   .. function:: System.Tuple<double,double,double> VectorLerp(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v, double t)
 
       Linear interpolation between two vectors.
 
@@ -495,7 +495,7 @@ Standard Library
          The parameter is not limited to the range 0 to 1, and a value outside it
          extrapolates.
 
-   .. method:: System.Tuple<double,double,double,double> QuaternionMultiply(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r)
+   .. function:: System.Tuple<double,double,double,double> QuaternionMultiply(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r)
 
       The composition of two rotations: the rotation r followed by the
       rotation q.
@@ -512,7 +512,7 @@ Standard Library
 
          Throws an exception if either quaternion is zero.
 
-   .. method:: System.Tuple<double,double,double,double> QuaternionInverse(System.Tuple<double,double,double,double> q)
+   .. function:: System.Tuple<double,double,double,double> QuaternionInverse(System.Tuple<double,double,double,double> q)
 
       The inverse of a rotation.
 
@@ -527,7 +527,7 @@ Standard Library
 
          Throws an exception if the quaternion is zero.
 
-   .. method:: System.Tuple<double,double,double> QuaternionRotateVector(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double> v)
+   .. function:: System.Tuple<double,double,double> QuaternionRotateVector(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double> v)
 
       A vector rotated by a rotation.
 
@@ -543,7 +543,7 @@ Standard Library
 
          Throws an exception if the quaternion is zero.
 
-   .. method:: System.Tuple<double,double,double,double> QuaternionFromAxisAngle(System.Tuple<double,double,double> axis, double angle)
+   .. function:: System.Tuple<double,double,double,double> QuaternionFromAxisAngle(System.Tuple<double,double,double> axis, double angle)
 
       The rotation about an axis by an angle.
 
@@ -559,7 +559,7 @@ Standard Library
 
          Throws an exception if the axis is zero.
 
-   .. method:: System.Tuple<System.Tuple<double,double,double>,double> QuaternionToAxisAngle(System.Tuple<double,double,double,double> q)
+   .. function:: System.Tuple<System.Tuple<double,double,double>,double> QuaternionToAxisAngle(System.Tuple<double,double,double,double> q)
 
       The axis and angle of a rotation, with the angle in radians between 0 and pi.
 
@@ -575,7 +575,7 @@ Standard Library
          The axis is a unit vector, or zero for no rotation. Throws an exception if the
          quaternion is zero.
 
-   .. method:: System.Tuple<double,double,double,double> QuaternionFromToRotation(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+   .. function:: System.Tuple<double,double,double,double> QuaternionFromToRotation(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
 
       The shortest rotation that takes one direction onto another.
 
@@ -592,7 +592,7 @@ Standard Library
          Opposite directions give a half turn about an arbitrary perpendicular axis.
          Throws an exception if either vector is zero.
 
-   .. method:: System.Tuple<double,double,double,double> QuaternionLookRotation(System.Tuple<double,double,double> forward, System.Tuple<double,double,double> up)
+   .. function:: System.Tuple<double,double,double,double> QuaternionLookRotation(System.Tuple<double,double,double> forward, System.Tuple<double,double,double> up)
 
       The rotation that takes the z axis onto a forward direction, and the y axis
       toward an up direction.
@@ -610,7 +610,7 @@ Standard Library
          The up direction need not be perpendicular to the forward direction. Throws an
          exception if either vector is zero, or if they are parallel.
 
-   .. method:: double QuaternionAngle(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r)
+   .. function:: double QuaternionAngle(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r)
 
       The angle of the rotation that takes one rotation to another,
       in radians, between 0 and pi.
@@ -627,7 +627,7 @@ Standard Library
 
          Throws an exception if either quaternion is zero.
 
-   .. method:: System.Tuple<double,double,double,double> QuaternionSlerp(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r, double t)
+   .. function:: System.Tuple<double,double,double,double> QuaternionSlerp(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r, double t)
 
       Spherical linear interpolation between two rotations.
 
@@ -645,7 +645,7 @@ Standard Library
          The parameter is not limited to the range 0 to 1, and a value outside it
          extrapolates. Throws an exception if either quaternion is zero.
 
-   .. method:: void Print(string message)
+   .. function:: void Print(string message)
 
       Writes a message to the game's log, for debugging.
 

@@ -10,15 +10,15 @@ OrbitPath
 
    The path of an orbit. Created using :func:`krpc_Drawing_AddOrbit`.
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_Orbit(krpc_SpaceCenter_Orbit_t value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_Orbit(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, krpc_SpaceCenter_Orbit_t value)
 
       The orbit.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_WholeOrbit(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_WholeOrbit(bool value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_WholeOrbit(krpc_connection_t connection, bool * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_WholeOrbit(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, bool value)
 
       Whether the whole orbit is drawn, up to where it leaves the sphere of influence of
       its body. When false, the orbit is drawn from :func:`krpc_Drawing_OrbitPath_StartTrueAnomaly`
@@ -26,8 +26,8 @@ OrbitPath
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_StartTrueAnomaly(krpc_connection_t connection, double * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_StartTrueAnomaly(double value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_StartTrueAnomaly(krpc_connection_t connection, double * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_StartTrueAnomaly(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, double value)
 
       The true anomaly at which the path starts, in radians.
 
@@ -38,8 +38,8 @@ OrbitPath
 
          Setting this sets :func:`krpc_Drawing_OrbitPath_WholeOrbit` to false.
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_EndTrueAnomaly(krpc_connection_t connection, double * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_EndTrueAnomaly(double value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_EndTrueAnomaly(krpc_connection_t connection, double * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_EndTrueAnomaly(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, double value)
 
       The true anomaly at which the path ends, in radians.
 
@@ -50,15 +50,15 @@ OrbitPath
 
          Setting this sets :func:`krpc_Drawing_OrbitPath_WholeOrbit` to false.
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Visible(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_Visible(bool value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Visible(krpc_connection_t connection, bool * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_Visible(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, bool value)
 
       Whether the object is visible.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_Color(const krpc_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_Color(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, const krpc_tuple_double_double_double_t * value)
 
       The color of the path.
 
@@ -69,8 +69,8 @@ OrbitPath
 
          For a path drawn with more than one color, this is the color at its start.
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Colors(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_Colors(const krpc_list_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Colors(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_Colors(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, const krpc_list_tuple_double_double_double_t * value)
 
       The colors of the path, blended evenly from its start to its end.
 
@@ -81,57 +81,57 @@ OrbitPath
 
          Throws an exception if the list is empty or holds more than 8 colors.
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Thickness(krpc_connection_t connection, float * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_Thickness(float value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Thickness(krpc_connection_t connection, float * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_Thickness(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, float value)
 
       The thickness of the path.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_StartArrow(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_StartArrow(bool value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_StartArrow(krpc_connection_t connection, bool * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_StartArrow(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, bool value)
 
       Whether an arrow head is drawn at the start.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_EndArrow(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_EndArrow(bool value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_EndArrow(krpc_connection_t connection, bool * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_EndArrow(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, bool value)
 
       Whether an arrow head is drawn at the end.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_ArrowSize(krpc_connection_t connection, float * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_ArrowSize(float value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_ArrowSize(krpc_connection_t connection, float * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_ArrowSize(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, float value)
 
       The size of the arrow heads, relative to the thickness.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Dashed(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_Dashed(bool value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Dashed(krpc_connection_t connection, bool * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_Dashed(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, bool value)
 
       Whether the path is drawn as a dashed line.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Label(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_Label(const char * value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Label(krpc_connection_t connection, char * * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_Label(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, const char * value)
 
       Text drawn halfway along the path, facing the camera. Empty for no label.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Material(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_Drawing_OrbitPath_set_Material(const char * value)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Material(krpc_connection_t connection, char * * returnValue, krpc_Drawing_OrbitPath_t instance)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_set_Material(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance, const char * value)
 
       Material used to render the object.
       Creates the material from a shader with the given name.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Remove(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_Drawing_OrbitPath_Remove(krpc_connection_t connection, krpc_Drawing_OrbitPath_t instance)
 
       Remove the object.
 

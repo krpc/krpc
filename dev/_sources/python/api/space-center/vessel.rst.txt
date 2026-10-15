@@ -155,12 +155,12 @@ Vessel
       :rtype: str
    
 
-   .. method:: flight(reference_frame)
+   .. method:: flight([reference_frame = None])
 
       Returns a :meth:`Vessel.flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.
 
-      :param ReferenceFrame reference_frame: Reference frame. Defaults to the vessel's surface reference frame (:attr:`Vessel.surface_reference_frame`).
+      :param ReferenceFrame or None reference_frame: Reference frame. Defaults to the vessel's surface reference frame (:attr:`Vessel.surface_reference_frame`).
       :rtype: :class:`Flight`
       :Game Scenes: Flight
 

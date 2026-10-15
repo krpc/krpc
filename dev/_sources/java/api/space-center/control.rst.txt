@@ -729,6 +729,10 @@ Control
    An action, belonging to a part module, that is assigned to an action group.
    Obtained by calling :meth:`Control.getActionGroupActions(int)`.
 
+   .. constructor:: public ActionGroupAction(Part part, Module module, String name, String id)
+
+      Construct a ActionGroupAction from the values of its fields.
+
 
    .. method:: Part getPart()
 

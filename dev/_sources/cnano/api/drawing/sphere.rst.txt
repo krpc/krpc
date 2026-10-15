@@ -15,50 +15,50 @@ Sphere
       The sphere is drawn with an additive material, so a darker color draws it more
       transparent.
 
-   .. function:: krpc_error_t krpc_Drawing_Sphere_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
-   .. function:: void krpc_Drawing_Sphere_set_Center(const krpc_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_Sphere_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_set_Center(krpc_connection_t connection, krpc_Drawing_Sphere_t instance, const krpc_tuple_double_double_double_t * value)
 
       Position of the center of the sphere.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Sphere_Radius(krpc_connection_t connection, double * result)
-   .. function:: void krpc_Drawing_Sphere_set_Radius(double value)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_Radius(krpc_connection_t connection, double * returnValue, krpc_Drawing_Sphere_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_set_Radius(krpc_connection_t connection, krpc_Drawing_Sphere_t instance, double value)
 
       Radius of the sphere, in meters.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Sphere_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
-   .. function:: void krpc_Drawing_Sphere_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_Drawing_Sphere_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_set_ReferenceFrame(krpc_connection_t connection, krpc_Drawing_Sphere_t instance, krpc_SpaceCenter_ReferenceFrame_t value)
 
       Reference frame for the positions of the object.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Sphere_Visible(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_Drawing_Sphere_set_Visible(bool value)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_Visible(krpc_connection_t connection, bool * returnValue, krpc_Drawing_Sphere_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_set_Visible(krpc_connection_t connection, krpc_Drawing_Sphere_t instance, bool value)
 
       Whether the object is visible.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Sphere_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
-   .. function:: void krpc_Drawing_Sphere_set_Color(const krpc_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_Sphere_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_set_Color(krpc_connection_t connection, krpc_Drawing_Sphere_t instance, const krpc_tuple_double_double_double_t * value)
 
       The color of the object.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Sphere_Material(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_Drawing_Sphere_set_Material(const char * value)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_Material(krpc_connection_t connection, char * * returnValue, krpc_Drawing_Sphere_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_set_Material(krpc_connection_t connection, krpc_Drawing_Sphere_t instance, const char * value)
 
       Material used to render the object.
       Creates the material from a shader with the given name.
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Sphere_Remove(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_Drawing_Sphere_Remove(krpc_connection_t connection, krpc_Drawing_Sphere_t instance)
 
       Remove the object.
 

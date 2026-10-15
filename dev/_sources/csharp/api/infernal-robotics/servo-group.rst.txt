@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.InfernalRobotics
 
@@ -93,7 +93,7 @@ ServoGroup
 
       :Game Scenes: Flight
 
-   .. method:: Servo ServoWithName(string name)
+   .. function:: Servo ServoWithName(string name)
 
       Returns the servo with the given *name* from this group,
       or ``null`` if none exists.
@@ -110,42 +110,42 @@ ServoGroup
 
       :Game Scenes: Flight
 
-   .. method:: void MoveRight()
+   .. function:: void MoveRight()
 
       Moves all of the servos in the group to the right.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MoveLeft()
+   .. function:: void MoveLeft()
 
       Moves all of the servos in the group to the left.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MoveCenter()
+   .. function:: void MoveCenter()
 
       Moves all of the servos in the group to the center.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MoveNextPreset()
+   .. function:: void MoveNextPreset()
 
       Moves all of the servos in the group to the next preset.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MovePrevPreset()
+   .. function:: void MovePrevPreset()
 
       Moves all of the servos in the group to the previous preset.
 
 
       :Game Scenes: Flight
 
-   .. method:: void Stop()
+   .. function:: void Stop()
 
       Stops the servos in the group.
 

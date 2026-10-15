@@ -9,7 +9,7 @@ LIDAR
 LaserDist service.
 
 
-.. function:: krpc_error_t krpc_LIDAR_Available(krpc_connection_t connection, bool * result)
+.. function:: krpc_error_t krpc_LIDAR_Available(krpc_connection_t connection, bool * returnValue)
 
    Check if the LaserDist API is available.
 
@@ -18,7 +18,7 @@ LaserDist service.
 
 
 
-.. function:: krpc_error_t krpc_LIDAR_Laser(krpc_connection_t connection, krpc_LIDAR_Laser_t * result, krpc_SpaceCenter_Part_t part)
+.. function:: krpc_error_t krpc_LIDAR_Laser(krpc_connection_t connection, krpc_LIDAR_Laser_t * returnValue, krpc_SpaceCenter_Part_t part)
 
    Get a LaserDist part.
 

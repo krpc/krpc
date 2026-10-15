@@ -11,13 +11,13 @@ Text
    A text label.
    Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
 
-   .. function:: krpc_error_t krpc_UI_Text_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+   .. function:: krpc_error_t krpc_UI_Text_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_Text_t instance)
 
       The rect transform for the UI object.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+   .. function:: krpc_error_t krpc_UI_Text_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * returnValue, krpc_UI_Text_t instance)
 
       How much space the UI object asks a layout for.
 
@@ -28,8 +28,8 @@ Text
          Only has an effect when the object is in a panel that has a layout. A canvas is
          not inside a layout and does not have one.
 
-   .. function:: krpc_error_t krpc_UI_Text_Visible(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_UI_Text_set_Visible(bool value)
+   .. function:: krpc_error_t krpc_UI_Text_Visible(krpc_connection_t connection, bool * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Visible(krpc_connection_t connection, krpc_UI_Text_t instance, bool value)
 
       Whether the UI object is visible.
 
@@ -42,15 +42,15 @@ Text
          be built with its parts visible, inside a panel that is not, and shown all at
          once by making that panel visible.
 
-   .. function:: krpc_error_t krpc_UI_Text_Content(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_UI_Text_set_Content(const char * value)
+   .. function:: krpc_error_t krpc_UI_Text_Content(krpc_connection_t connection, char * * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Content(krpc_connection_t connection, krpc_UI_Text_t instance, const char * value)
 
       The text string
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_WordWrap(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_UI_Text_set_WordWrap(bool value)
+   .. function:: krpc_error_t krpc_UI_Text_WordWrap(krpc_connection_t connection, bool * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_WordWrap(krpc_connection_t connection, krpc_UI_Text_t instance, bool value)
 
       Whether the text wraps onto further lines when it is wider than the space it
       has. Text that does not wrap carries on past the edge, and its preferred size
@@ -58,8 +58,8 @@ Text
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_Font(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_UI_Text_set_Font(const char * value)
+   .. function:: krpc_error_t krpc_UI_Text_Font(krpc_connection_t connection, char * * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Font(krpc_connection_t connection, krpc_UI_Text_t instance, const char * value)
 
       Name of the font
 
@@ -70,49 +70,49 @@ Text
          Empty if the game provided no font to draw the text with, in which case it is
          not drawn. See :func:`krpc_UI_Text_AvailableFonts` for the names that can be set.
 
-   .. function:: krpc_error_t krpc_UI_Text_AvailableFonts(krpc_connection_t connection, krpc_list_string_t * result)
+   .. function:: krpc_error_t krpc_UI_Text_AvailableFonts(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_UI_Text_t instance)
 
       A list of all available fonts.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_Size(krpc_connection_t connection, int32_t * result)
-   .. function:: void krpc_UI_Text_set_Size(int32_t value)
+   .. function:: krpc_error_t krpc_UI_Text_Size(krpc_connection_t connection, int32_t * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Size(krpc_connection_t connection, krpc_UI_Text_t instance, int32_t value)
 
       Font size.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_Style(krpc_connection_t connection, krpc_UI_FontStyle_t * result)
-   .. function:: void krpc_UI_Text_set_Style(krpc_UI_FontStyle_t value)
+   .. function:: krpc_error_t krpc_UI_Text_Style(krpc_connection_t connection, krpc_UI_FontStyle_t * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Style(krpc_connection_t connection, krpc_UI_Text_t instance, krpc_UI_FontStyle_t value)
 
       Font style.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
-   .. function:: void krpc_UI_Text_set_Color(const krpc_tuple_double_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_UI_Text_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Color(krpc_connection_t connection, krpc_UI_Text_t instance, const krpc_tuple_double_double_double_double_t * value)
 
       The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
       fully transparent and 1 is fully opaque.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_Alignment(krpc_connection_t connection, krpc_UI_TextAnchor_t * result)
-   .. function:: void krpc_UI_Text_set_Alignment(krpc_UI_TextAnchor_t value)
+   .. function:: krpc_error_t krpc_UI_Text_Alignment(krpc_connection_t connection, krpc_UI_TextAnchor_t * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Alignment(krpc_connection_t connection, krpc_UI_Text_t instance, krpc_UI_TextAnchor_t value)
 
       Alignment.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_LineSpacing(krpc_connection_t connection, float * result)
-   .. function:: void krpc_UI_Text_set_LineSpacing(float value)
+   .. function:: krpc_error_t krpc_UI_Text_LineSpacing(krpc_connection_t connection, float * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_LineSpacing(krpc_connection_t connection, krpc_UI_Text_t instance, float value)
 
       Line spacing.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_Remove(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_UI_Text_Remove(krpc_connection_t connection, krpc_UI_Text_t instance)
 
       Remove the UI object.
 

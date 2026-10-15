@@ -704,9 +704,9 @@
                   
   <section id="ui">
 <h1>UI<a class="headerlink" href="#ui" title="Link to this heading">#</a></h1>
-<dl class="csharp class">
-<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.UI.UI">
-<span class="sig-name descname"><span class="pre">class</span> <span class="pre">UI</span></span><a class="headerlink" href="#class-KRPC.Client.Services.UI.UI" title="Link to this definition">#</a></dt>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.UI.UI">
+<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">UI</span></span><a class="headerlink" href="#class-KRPC.Client.Services.UI.UI" title="Link to this definition">#</a></dt>
 <dd><p>Provides functionality for drawing and interacting with in-game user interface elements.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -715,9 +715,9 @@ User interface elements created by a client are removed when that client
 disconnects, and when the game scene changes. A client that needs its
 interface in more than one scene must create it again in each of them.</p>
 </div>
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.UI.StockCanvas">
-<a class="reference internal" href="canvas.html#class-KRPC.Client.Services.UI.Canvas" title="KRPC.Client.Services.UI.Canvas class"><span class="pre">Canvas</span></a> <span class="sig-name descname"><span class="pre">StockCanvas</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.UI.StockCanvas" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.UI.UI.StockCanvas">
+<a class="reference internal" href="canvas.html#class-KRPC.Client.Services.UI.Canvas" title="class: KRPC.Client.Services.UI.Canvas"><span class="pre">Canvas</span></a> <span class="sig-name descname"><span class="pre">StockCanvas</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.UI.StockCanvas" title="Link to this definition">#</a></dt>
 <dd><p>The stock UI canvas.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -726,9 +726,9 @@ interface in more than one scene must create it again in each of them.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.UI.UI.AddCanvas">
-<a class="reference internal" href="canvas.html#class-KRPC.Client.Services.UI.Canvas" title="KRPC.Client.Services.UI.Canvas class"><span class="pre">Canvas</span></a> <span class="sig-name descname"><span class="pre">AddCanvas</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.UI.UI.AddCanvas" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.UI.UI.AddCanvas">
+<a class="reference internal" href="canvas.html#class-KRPC.Client.Services.UI.Canvas" title="class: KRPC.Client.Services.UI.Canvas"><span class="pre">Canvas</span></a> <span class="sig-name descname"><span class="pre">AddCanvas</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.UI.UI.AddCanvas" title="Link to this definition">#</a></dt>
 <dd><p>Add a new canvas.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -737,13 +737,13 @@ interface in more than one scene must create it again in each of them.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you want to add UI elements to KSPs stock UI canvas, use <a class="reference internal" href="#property-KRPC.Client.Services.UI.UI.StockCanvas" title="KRPC.Client.Services.UI.UI.StockCanvas property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">UI.StockCanvas</span></code></a>.</p>
+<p>If you want to add UI elements to KSPs stock UI canvas, use <a class="reference internal" href="#property-KRPC.Client.Services.UI.UI.StockCanvas" title="property: KRPC.Client.Services.UI.UI.StockCanvas"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">UI.StockCanvas</span></code></a>.</p>
 </div>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.UI.UI.Message">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Message</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">content</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">duration</span></em><em> <span class="pre">=</span> <span class="pre">1.0f</span></em>, <a class="reference internal" href="#enum-KRPC.Client.Services.UI.MessagePosition" title="KRPC.Client.Services.UI.MessagePosition enum"><span class="pre">MessagePosition</span></a> <em><span class="pre">position</span></em><em> <span class="pre">=</span> <span class="pre">MessagePosition.TopCenter</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">color</span></em><em> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">1.0,</span> <span class="pre">0.92,</span> <span class="pre">0.016,</span> <span class="pre">1.0</span> <span class="pre">}</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">size</span></em><em> <span class="pre">=</span> <span class="pre">2e+01f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.UI.UI.Message" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.UI.UI.Message">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Message</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">content</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">duration</span></em><em> <span class="pre">=</span> <span class="pre">1.0f</span></em>, <a class="reference internal" href="#enum-KRPC.Client.Services.UI.MessagePosition" title="enum: KRPC.Client.Services.UI.MessagePosition"><span class="pre">MessagePosition</span></a> <em><span class="pre">position</span></em><em> <span class="pre">=</span> <span class="pre">MessagePosition.TopCenter</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-4" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <em><span class="pre">color</span></em><em> <span class="pre">=</span> <span class="pre">null</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">size</span></em><em> <span class="pre">=</span> <span class="pre">2e+01f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.UI.UI.Message" title="Link to this definition">#</a></dt>
 <dd><p>Display a message on the screen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -751,7 +751,7 @@ interface in more than one scene must create it again in each of them.</p>
 <li><p><strong>content</strong> – Message content.</p></li>
 <li><p><strong>duration</strong> – Duration before the message disappears, in seconds.</p></li>
 <li><p><strong>position</strong> – Position to display the message.</p></li>
-<li><p><strong>color</strong> – The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.</p></li>
+<li><p><strong>color</strong> – The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque. If null, defaults to <code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">System.Tuple&lt;double,double,double,double&gt;(1.0,</span> <span class="pre">0.92,</span> <span class="pre">0.016,</span> <span class="pre">1.0)</span></code>.</p></li>
 <li><p><strong>size</strong> – Size of the message, differs per position.</p></li>
 </ul>
 </dd>
@@ -765,9 +765,9 @@ interface in more than one scene must create it again in each of them.</p>
 </div>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.UI.UI.Clear">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Clear</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <em><span class="pre">clientOnly</span></em><em> <span class="pre">=</span> <span class="pre">false</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.UI.UI.Clear" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.UI.UI.Clear">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Clear</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <em><span class="pre">clientOnly</span></em><em> <span class="pre">=</span> <span class="pre">false</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.UI.UI.Clear" title="Link to this definition">#</a></dt>
 <dd><p>Remove all user interface elements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -783,31 +783,31 @@ interface in more than one scene must create it again in each of them.</p>
 
 </dd></dl>
 
-<dl class="csharp enum">
-<dt class="sig sig-object csharp" id="enum-KRPC.Client.Services.UI.MessagePosition">
-<span class="sig-name descname"><span class="pre">enum</span> <span class="pre">MessagePosition</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.UI.MessagePosition" title="Link to this definition">#</a></dt>
+<dl class="cs enum">
+<dt class="sig sig-object cs" id="enum-KRPC.Client.Services.UI.MessagePosition">
+<span class="property"><span class="pre">enum</span> </span><span class="sig-name descname"><span class="pre">MessagePosition</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.UI.MessagePosition" title="Link to this definition">#</a></dt>
 <dd><p>Message position.</p>
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.UI.MessagePosition.TopLeft">
-<span class="sig-name descname"><span class="pre">TopLeft</span></span><a class="headerlink" href="#value-KRPC.Client.Services.UI.MessagePosition.TopLeft" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.UI.MessagePosition.TopLeft">
+<span class="sig-name descname"><span class="pre">TopLeft</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.UI.MessagePosition.TopLeft" title="Link to this definition">#</a></dt>
 <dd><p>Top left.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.UI.MessagePosition.TopCenter">
-<span class="sig-name descname"><span class="pre">TopCenter</span></span><a class="headerlink" href="#value-KRPC.Client.Services.UI.MessagePosition.TopCenter" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.UI.MessagePosition.TopCenter">
+<span class="sig-name descname"><span class="pre">TopCenter</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.UI.MessagePosition.TopCenter" title="Link to this definition">#</a></dt>
 <dd><p>Top center.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.UI.MessagePosition.TopRight">
-<span class="sig-name descname"><span class="pre">TopRight</span></span><a class="headerlink" href="#value-KRPC.Client.Services.UI.MessagePosition.TopRight" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.UI.MessagePosition.TopRight">
+<span class="sig-name descname"><span class="pre">TopRight</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.UI.MessagePosition.TopRight" title="Link to this definition">#</a></dt>
 <dd><p>Top right.</p>
 </dd></dl>
 
-<dl class="csharp value">
-<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.UI.MessagePosition.BottomCenter">
-<span class="sig-name descname"><span class="pre">BottomCenter</span></span><a class="headerlink" href="#value-KRPC.Client.Services.UI.MessagePosition.BottomCenter" title="Link to this definition">#</a></dt>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.UI.MessagePosition.BottomCenter">
+<span class="sig-name descname"><span class="pre">BottomCenter</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.UI.MessagePosition.BottomCenter" title="Link to this definition">#</a></dt>
 <dd><p>Bottom center.</p>
 </dd></dl>
 

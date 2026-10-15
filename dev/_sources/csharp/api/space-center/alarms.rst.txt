@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -17,7 +17,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Alarm> AlarmsWithType(AlarmType type)
+   .. function:: System.Collections.Generic.IList<Alarm> AlarmsWithType(AlarmType type)
 
       A list of all alarms of the given type.
 
@@ -27,7 +27,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: Alarm AlarmWithName(string name)
+   .. function:: Alarm AlarmWithName(string name)
 
       Returns the first alarm with the given title, or ``null`` if no such
       alarm exists. Alarm titles are not guaranteed to be unique; if more than
@@ -39,7 +39,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: static Alarm AddAlarm(IConnection connection, double time, string title = "Alarm", string description = "")
+   .. function:: static Alarm AddAlarm(IConnection connection, double time, string title = "Alarm", string description = "")
 
       Create an alarm.
 
@@ -51,7 +51,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: static Alarm AddVesselAlarm(IConnection connection, double time, Vessel vessel, string title = "Vessel Alarm", string description = "")
+   .. function:: static Alarm AddVesselAlarm(IConnection connection, double time, Vessel vessel, string title = "Vessel Alarm", string description = "")
 
       Create an alarm linked to a vessel.
 
@@ -64,7 +64,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: static Alarm AddApoapsisAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "Apoapsis Alarm", string description = "")
+   .. function:: static Alarm AddApoapsisAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "Apoapsis Alarm", string description = "")
 
       Create an alarm for the given vessel's next apoapsis.
 
@@ -77,7 +77,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: static Alarm AddPeriapsisAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "Periapsis Alarm", string description = "")
+   .. function:: static Alarm AddPeriapsisAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "Periapsis Alarm", string description = "")
 
       Create an alarm for the given vessel's next periapsis.
 
@@ -90,7 +90,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: static Alarm AddManeuverNodeAlarm(IConnection connection, Vessel vessel, Node node, double offset = 60.0, bool addBurnTime = true, string title = "Maneuver Node Alarm", string description = "")
+   .. function:: static Alarm AddManeuverNodeAlarm(IConnection connection, Vessel vessel, Node node, double offset = 60.0, bool addBurnTime = true, string title = "Maneuver Node Alarm", string description = "")
 
       Create an alarm for the given vessel and maneuver node.
 
@@ -105,7 +105,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: static Alarm AddSOIAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "SOI Change Alarm", string description = "")
+   .. function:: static Alarm AddSOIAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "SOI Change Alarm", string description = "")
 
       Create an alarm for the given vessel's next sphere of influence change.
 
@@ -118,7 +118,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: static Alarm AddTransferWindowAlarm(IConnection connection, Vessel vessel, CelestialBody target, string title = "Transfer Window Alarm", string description = "")
+   .. function:: static Alarm AddTransferWindowAlarm(IConnection connection, Vessel vessel, CelestialBody target, string title = "Transfer Window Alarm", string description = "")
 
       Create an alarm for the next planetary transfer window from the vessel's
       current parent body to the target body.
@@ -205,7 +205,7 @@ Alarms
    .. property:: Node Node { get; set; }
 
       Maneuver node the alarm references. Only valid for alarms of type
-      :enum:`AlarmType.Maneuver`.
+      :value:`AlarmType.Maneuver`.
 
       :Game Scenes: All
 
@@ -213,12 +213,12 @@ Alarms
       .. note::
 
          Throws an exception if the alarm is not of
-         type :enum:`AlarmType.Maneuver`.
+         type :value:`AlarmType.Maneuver`.
 
    .. property:: CelestialBody OriginBody { get; set; }
 
       Origin body for the transfer window. Only valid for alarms of type
-      :enum:`AlarmType.TransferWindow`.
+      :value:`AlarmType.TransferWindow`.
 
       :Game Scenes: All
 
@@ -226,12 +226,12 @@ Alarms
       .. note::
 
          Throws an exception if the alarm is not of
-         type :enum:`AlarmType.TransferWindow`.
+         type :value:`AlarmType.TransferWindow`.
 
    .. property:: CelestialBody DestinationBody { get; set; }
 
       Destination body for the transfer window. Only valid for alarms of type
-      :enum:`AlarmType.TransferWindow`.
+      :value:`AlarmType.TransferWindow`.
 
       :Game Scenes: All
 
@@ -239,7 +239,7 @@ Alarms
       .. note::
 
          Throws an exception if the alarm is not of
-         type :enum:`AlarmType.TransferWindow`.
+         type :value:`AlarmType.TransferWindow`.
 
    .. property:: AlarmWarpAction WarpAction { get; set; }
 
@@ -278,7 +278,7 @@ Alarms
 
       :Game Scenes: All
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Removes the alarm.
 
@@ -297,38 +297,38 @@ Alarms
    The type of an alarm. See :prop:`Alarm.Type`.
 
 
-   .. value:: Raw
+   .. enumerator:: Raw
 
       An alarm for a specific date/time or a specific period in the future.
 
 
-   .. value:: Apoapsis
+   .. enumerator:: Apoapsis
 
       An alarm for the next apoapsis of a vessel.
 
 
-   .. value:: Periapsis
+   .. enumerator:: Periapsis
 
       An alarm for the next periapsis of a vessel.
 
 
-   .. value:: Maneuver
+   .. enumerator:: Maneuver
 
       An alarm based on a maneuver node on the vessel's flight path.
 
 
-   .. value:: SOIChange
+   .. enumerator:: SOIChange
 
       An alarm for the next sphere of influence change on the vessel's flight path.
 
 
-   .. value:: TransferWindow
+   .. enumerator:: TransferWindow
 
       An alarm for the next planetary transfer window from the vessel's current
       orbit to a target body.
 
 
-   .. value:: Unknown
+   .. enumerator:: Unknown
 
       The alarm is of a type not recognized by kRPC. Typically this is a type
       introduced by a mod.
@@ -341,17 +341,17 @@ Alarms
    See :prop:`Alarm.WarpAction`.
 
 
-   .. value:: NoChange
+   .. enumerator:: NoChange
 
       Do not change time warp when the alarm fires.
 
 
-   .. value:: StopWarp
+   .. enumerator:: StopWarp
 
       Drop out of time warp when the alarm fires.
 
 
-   .. value:: PauseGame
+   .. enumerator:: PauseGame
 
       Pause the game when the alarm fires.
 
@@ -363,16 +363,16 @@ Alarms
    See :prop:`Alarm.MessageAction`.
 
 
-   .. value:: NoMessage
+   .. enumerator:: NoMessage
 
       Do not display a message when the alarm fires.
 
 
-   .. value:: Message
+   .. enumerator:: Message
 
       Display a message when the alarm fires.
 
 
-   .. value:: MessageIfNotActiveVessel
+   .. enumerator:: MessageIfNotActiveVessel
 
       Display a message only if the alarm's vessel is not the currently active vessel.

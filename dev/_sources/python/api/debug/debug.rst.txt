@@ -95,13 +95,13 @@ options.
 
 
 
-.. staticmethod:: set_position(position, reference_frame)
+.. staticmethod:: set_position(position, [reference_frame = None])
 
    Move the active vessel to the given position, leaving its velocity as it is. To put it
    alongside another vessel, pass a position in that vessel's reference frame.
 
    :param tuple position: Position of the vessel's center of mass, in meters.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the position is in. Defaults to the reference frame of the body being orbited.
+   :param SpaceCenter.ReferenceFrame or None reference_frame: Reference frame the position is in. Defaults to the reference frame of the body being orbited.
    :Game Scenes: Flight
 
 
@@ -113,14 +113,14 @@ options.
 
 
 
-.. staticmethod:: set_velocity(velocity, reference_frame)
+.. staticmethod:: set_velocity(velocity, [reference_frame = None])
 
    Set the velocity of the active vessel, leaving it where it is. The vessel is moved onto the
    orbit that passes through its current position at the new velocity, so this works
    in orbit and in the atmosphere alike.
 
    :param tuple velocity: Velocity in meters per second.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.
+   :param SpaceCenter.ReferenceFrame or None reference_frame: Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.
    :Game Scenes: Flight
 
 
@@ -132,7 +132,7 @@ options.
 
 
 
-.. staticmethod:: set_pitch_heading_roll(pitch, heading, roll, reference_frame, vessel)
+.. staticmethod:: set_pitch_heading_roll(pitch, heading, roll, [reference_frame = None], [vessel = None])
 
    Set the attitude of a vessel to the given pitch, heading and roll in the given
    reference frame, and stop it rotating. Lets a script start from a fixed, still
@@ -141,8 +141,8 @@ options.
    :param float pitch: Target pitch, in degrees.
    :param float heading: Target heading, in degrees.
    :param float roll: Target roll, in degrees.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the angles are in. Defaults to the vessel's surface reference frame.
-   :param SpaceCenter.Vessel vessel: Vessel to rotate. Defaults to the active vessel.
+   :param SpaceCenter.ReferenceFrame or None reference_frame: Reference frame the angles are in. Defaults to the vessel's surface reference frame.
+   :param SpaceCenter.Vessel or None vessel: Vessel to rotate. Defaults to the active vessel.
    :Game Scenes: Flight
 
 
@@ -154,7 +154,7 @@ options.
 
 
 
-.. staticmethod:: set_direction(direction, roll, reference_frame, vessel)
+.. staticmethod:: set_direction(direction, roll, [reference_frame = None], [vessel = None])
 
    Point a vessel along the given direction in the given reference frame, and stop it
    rotating. This is :meth:`set_pitch_heading_roll` with a pointing vector instead
@@ -163,35 +163,35 @@ options.
 
    :param tuple direction: Direction to point the nose of the vessel in.
    :param float roll: Target roll, in degrees, or ``NaN`` to leave the roll uncontrolled.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the direction and roll are in. Defaults to the vessel's surface reference frame.
-   :param SpaceCenter.Vessel vessel: Vessel to rotate. Defaults to the active vessel.
+   :param SpaceCenter.ReferenceFrame or None reference_frame: Reference frame the direction and roll are in. Defaults to the vessel's surface reference frame.
+   :param SpaceCenter.Vessel or None vessel: Vessel to rotate. Defaults to the active vessel.
    :Game Scenes: Flight
 
 
 
 
 
-.. staticmethod:: apply_rotation(angle, axis, vessel)
+.. staticmethod:: apply_rotation(angle, axis, [vessel = None])
 
    Rotate a vessel about the given axis, in its own reference frame, by the given angle.
 
    :param float angle: Angle to rotate by, in degrees.
    :param tuple axis: Axis to rotate about.
-   :param SpaceCenter.Vessel vessel: Vessel to rotate. Defaults to the active vessel.
+   :param SpaceCenter.Vessel or None vessel: Vessel to rotate. Defaults to the active vessel.
    :Game Scenes: Flight
 
 
 
 
 
-.. staticmethod:: set_angular_velocity(angular_velocity, reference_frame, vessel)
+.. staticmethod:: set_angular_velocity(angular_velocity, [reference_frame = None], [vessel = None])
 
    Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
    zero vector to stop the vessel rotating.
 
    :param tuple angular_velocity: Angular velocity, in radians per second. The direction is the axis of rotation and the magnitude is the rate.
-   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the angular velocity is in. Defaults to the vessel's surface reference frame.
-   :param SpaceCenter.Vessel vessel: Vessel to rotate. Defaults to the active vessel.
+   :param SpaceCenter.ReferenceFrame or None reference_frame: Reference frame the angular velocity is in. Defaults to the vessel's surface reference frame.
+   :param SpaceCenter.Vessel or None vessel: Vessel to rotate. Defaults to the active vessel.
    :Game Scenes: Flight
 
 
@@ -241,23 +241,23 @@ options.
 
 
 
-.. staticmethod:: fill_all_resources(vessel)
+.. staticmethod:: fill_all_resources([vessel = None])
 
    Fill every resource tank on a vessel to its maximum capacity.
 
-   :param SpaceCenter.Vessel vessel: Vessel to fill. Defaults to the active vessel.
+   :param SpaceCenter.Vessel or None vessel: Vessel to fill. Defaults to the active vessel.
    :Game Scenes: Flight
 
 
 
 
 
-.. staticmethod:: fill_resources(resource_name, vessel)
+.. staticmethod:: fill_resources(resource_name, [vessel = None])
 
    Fill the tanks of a single resource on a vessel to their maximum capacity.
 
    :param str resource_name: Name of the resource to fill, for example ``"LiquidFuel"``.
-   :param SpaceCenter.Vessel vessel: Vessel to fill. Defaults to the active vessel.
+   :param SpaceCenter.Vessel or None vessel: Vessel to fill. Defaults to the active vessel.
    :Game Scenes: Flight
 
 

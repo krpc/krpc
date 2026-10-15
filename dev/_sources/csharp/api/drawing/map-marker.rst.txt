@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.Drawing
 
@@ -54,7 +54,7 @@ MapMarker
 
       :Game Scenes: Flight, Tracking Station
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the marker.
 
@@ -68,141 +68,141 @@ MapMarker
    The icon a :type:`MapMarker` is drawn with, from the game's own map icons.
 
 
-   .. value:: Generic
+   .. enumerator:: Generic
 
       A plain marker.
 
 
-   .. value:: CelestialBody
+   .. enumerator:: CelestialBody
 
       A celestial body.
 
 
-   .. value:: Apoapsis
+   .. enumerator:: Apoapsis
 
       An apoapsis.
 
 
-   .. value:: Periapsis
+   .. enumerator:: Periapsis
 
       A periapsis.
 
 
-   .. value:: AscendingNode
+   .. enumerator:: AscendingNode
 
       An ascending node.
 
 
-   .. value:: DescendingNode
+   .. enumerator:: DescendingNode
 
       A descending node.
 
 
-   .. value:: ManeuverNode
+   .. enumerator:: ManeuverNode
 
       A maneuver node.
 
 
-   .. value:: Encounter
+   .. enumerator:: Encounter
 
       An encounter with a sphere of influence.
 
 
-   .. value:: Escape
+   .. enumerator:: Escape
 
       An escape from a sphere of influence.
 
 
-   .. value:: Impact
+   .. enumerator:: Impact
 
       An impact with the surface.
 
 
-   .. value:: CloseApproach
+   .. enumerator:: CloseApproach
 
       A closest approach to a target.
 
 
-   .. value:: Intersect
+   .. enumerator:: Intersect
 
       An intersection with the orbit of a target.
 
 
-   .. value:: Ship
+   .. enumerator:: Ship
 
       A ship.
 
 
-   .. value:: Probe
+   .. enumerator:: Probe
 
       A probe.
 
 
-   .. value:: Relay
+   .. enumerator:: Relay
 
       A relay.
 
 
-   .. value:: Station
+   .. enumerator:: Station
 
       A station.
 
 
-   .. value:: Base
+   .. enumerator:: Base
 
       A base.
 
 
-   .. value:: Lander
+   .. enumerator:: Lander
 
       A lander.
 
 
-   .. value:: Rover
+   .. enumerator:: Rover
 
       A rover.
 
 
-   .. value:: Plane
+   .. enumerator:: Plane
 
       A plane.
 
 
-   .. value:: EVA
+   .. enumerator:: EVA
 
       A kerbal on EVA.
 
 
-   .. value:: Flag
+   .. enumerator:: Flag
 
       A flag.
 
 
-   .. value:: Debris
+   .. enumerator:: Debris
 
       Debris.
 
 
-   .. value:: SpaceObject
+   .. enumerator:: SpaceObject
 
       An asteroid or comet.
 
 
-   .. value:: DeployedScience
+   .. enumerator:: DeployedScience
 
       Deployed science equipment.
 
 
-   .. value:: LaunchSite
+   .. enumerator:: LaunchSite
 
       A launch site.
 
 
-   .. value:: Runway
+   .. enumerator:: Runway
 
       A runway.
 
 
-   .. value:: KSC
+   .. enumerator:: KSC
 
       The Kerbal Space Center.

@@ -106,7 +106,7 @@ SpaceCenter
 
    
 
-   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, std::optional<std::vector<std::string>> crew, bool recover = true, std::string flag_url = "")
+   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, std::optional<std::vector<std::string>> crew = std::optional<std::vector<std::string>>(), bool recover = true, std::string flag_url = "")
 
       Launch a vessel.
 

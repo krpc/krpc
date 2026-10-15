@@ -39,7 +39,7 @@ This service provides functionality to interact with
    only returns one of them.
 
    :param string name: Name of the alarm to search for.
-   :rtype: :class:`KerbalAlarmClock.Alarm`
+   :rtype: :class:`KerbalAlarmClock.Alarm` or ``Types.none``
 
 
 

@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -485,7 +485,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<Vessel> ActivateNextStage()
+   .. function:: System.Collections.Generic.IList<Vessel> ActivateNextStage()
 
       Activates the next stage. Equivalent to pressing the space bar in-game.
 
@@ -512,7 +512,7 @@ Control
 
          This is equivalent to locking the staging using Alt+L
 
-   .. method:: bool GetActionGroup(uint group)
+   .. function:: bool GetActionGroup(uint group)
 
       Returns ``true`` if the given action group is enabled.
 
@@ -522,7 +522,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. method:: void SetActionGroup(uint group, bool state)
+   .. function:: void SetActionGroup(uint group, bool state)
 
       Sets the state of the given action group.
 
@@ -533,7 +533,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. method:: void ToggleActionGroup(uint group)
+   .. function:: void ToggleActionGroup(uint group)
 
       Toggles the state of the given action group.
 
@@ -543,7 +543,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<ActionGroupAction> GetActionGroupActions(uint group)
+   .. function:: System.Collections.Generic.IList<ActionGroupAction> GetActionGroupActions(uint group)
 
       Returns a list of all the part actions that are assigned to the given action group.
       Each entry identifies the part, the part module, and the action's name and identifier.
@@ -562,7 +562,7 @@ Control
          When the Extended Action Groups mod is installed, the assignments are queried from
          the mod instead, so that actions assigned to its additional groups are included.
 
-   .. method:: Node AddNode(double ut, float prograde = 0.0f, float normal = 0.0f, float radial = 0.0f)
+   .. function:: Node AddNode(double ut, float prograde = 0.0f, float normal = 0.0f, float radial = 0.0f)
 
       Creates a maneuver node at the given universal time, and returns a
       :type:`Node` object that can be used to modify it.
@@ -584,7 +584,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. method:: void RemoveNodes()
+   .. function:: void RemoveNodes()
 
       Remove all maneuver nodes.
 
@@ -599,7 +599,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. method:: void Board()
+   .. function:: void Board()
 
       Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
       kerbal takes a seat in that part and its own vessel ceases to exist. If the
@@ -625,7 +625,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. method:: void GrabLadder()
+   .. function:: void GrabLadder()
 
       Take hold of the ladder the kerbal is standing at, as pressing the grab key
       in-game does. A kerbal can only take hold of a ladder it is already alongside;
@@ -641,7 +641,7 @@ Control
          Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
          within reach, or if the kerbal is doing something it cannot grab a ladder from.
 
-   .. method:: void ReleaseLadder()
+   .. function:: void ReleaseLadder()
 
       Let go of the ladder the kerbal is holding, as pressing the jump key in-game
       does. Does nothing if it is not holding one.
@@ -661,23 +661,27 @@ Control
    An action, belonging to a part module, that is assigned to an action group.
    Obtained by calling :meth:`Control.GetActionGroupActions`.
 
+   .. function:: ActionGroupAction(Part part, Module module, string name, string id)
 
-   .. property:: Part Part { get; set; }
+      Construct a ActionGroupAction from the values of its fields.
+
+
+   .. property:: Part Part { get; }
 
       The part that the action acts on.
 
-   .. property:: Module Module { get; set; }
+   .. property:: Module Module { get; }
 
       The part module that the action belongs to. Returns ``null`` for a
       part-level action that is not associated with a module. This only occurs when
       the Extended Action Groups mod is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
-   .. property:: string Name { get; set; }
+   .. property:: string Name { get; }
 
       The human-readable name of the action, as shown in the action group editor.
 
-   .. property:: string Id { get; set; }
+   .. property:: string Id { get; }
 
       The non-localized identifier for the action.
 
@@ -688,17 +692,17 @@ Control
    See :prop:`Control.State`.
 
 
-   .. value:: Full
+   .. enumerator:: Full
 
       Full controllable.
 
 
-   .. value:: Partial
+   .. enumerator:: Partial
 
       Partially controllable.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       Not controllable.
 
@@ -710,17 +714,17 @@ Control
    See :prop:`Control.Source`.
 
 
-   .. value:: Kerbal
+   .. enumerator:: Kerbal
 
       Vessel is controlled by a Kerbal.
 
 
-   .. value:: Probe
+   .. enumerator:: Probe
 
       Vessel is controlled by a probe core.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       Vessel is not controlled.
 
@@ -731,52 +735,52 @@ Control
    The behavior of the SAS auto-pilot. See :prop:`AutoPilot.SASMode`.
 
 
-   .. value:: StabilityAssist
+   .. enumerator:: StabilityAssist
 
       Stability assist mode. Dampen out any rotation.
 
 
-   .. value:: Maneuver
+   .. enumerator:: Maneuver
 
       Point in the burn direction of the next maneuver node.
 
 
-   .. value:: Prograde
+   .. enumerator:: Prograde
 
       Point in the prograde direction.
 
 
-   .. value:: Retrograde
+   .. enumerator:: Retrograde
 
       Point in the retrograde direction.
 
 
-   .. value:: Normal
+   .. enumerator:: Normal
 
       Point in the orbit normal direction.
 
 
-   .. value:: AntiNormal
+   .. enumerator:: AntiNormal
 
       Point in the orbit anti-normal direction.
 
 
-   .. value:: Radial
+   .. enumerator:: Radial
 
       Point in the orbit radial direction.
 
 
-   .. value:: AntiRadial
+   .. enumerator:: AntiRadial
 
       Point in the orbit anti-radial direction.
 
 
-   .. value:: Target
+   .. enumerator:: Target
 
       Point in the direction of the current target.
 
 
-   .. value:: AntiTarget
+   .. enumerator:: AntiTarget
 
       Point away from the current target.
 
@@ -788,17 +792,17 @@ Control
    See :prop:`Control.SpeedMode`.
 
 
-   .. value:: Orbit
+   .. enumerator:: Orbit
 
       Speed is relative to the vessel's orbit.
 
 
-   .. value:: Surface
+   .. enumerator:: Surface
 
       Speed is relative to the surface of the body being orbited.
 
 
-   .. value:: Target
+   .. enumerator:: Target
 
       Speed is relative to the current target.
 
@@ -809,11 +813,11 @@ Control
    See :prop:`Control.InputMode`.
 
 
-   .. value:: Additive
+   .. enumerator:: Additive
 
       Control inputs are added to the vessels current control inputs.
 
 
-   .. value:: Override
+   .. enumerator:: Override
 
       Control inputs (when they are non-zero) override the vessels current control inputs.

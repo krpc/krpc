@@ -17,7 +17,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Pi(krpc_connection_t connection, double * result)
+.. function:: krpc_error_t krpc_StdLib_Pi(krpc_connection_t connection, double * returnValue)
 
    The constant pi.
 
@@ -26,7 +26,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_E(krpc_connection_t connection, double * result)
+.. function:: krpc_error_t krpc_StdLib_E(krpc_connection_t connection, double * returnValue)
 
    The constant e, the base of the natural logarithm.
 
@@ -35,7 +35,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Abs(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Abs(krpc_connection_t connection, double * returnValue, double x)
 
    The absolute value of a number.
 
@@ -48,7 +48,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Sign(krpc_connection_t connection, int32_t * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Sign(krpc_connection_t connection, int32_t * returnValue, double x)
 
    The sign of a number: -1 if it is negative, 1 if it is positive,
    and 0 if it is zero or not a number.
@@ -62,7 +62,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_CopySign(krpc_connection_t connection, double * result, double x, double y)
+.. function:: krpc_error_t krpc_StdLib_CopySign(krpc_connection_t connection, double * returnValue, double x, double y)
 
    The magnitude of the first number with the sign of the second.
 
@@ -76,7 +76,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_IsNan(krpc_connection_t connection, bool * result, double x)
+.. function:: krpc_error_t krpc_StdLib_IsNan(krpc_connection_t connection, bool * returnValue, double x)
 
    Whether a number is not a number.
 
@@ -89,7 +89,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_IsFinite(krpc_connection_t connection, bool * result, double x)
+.. function:: krpc_error_t krpc_StdLib_IsFinite(krpc_connection_t connection, bool * returnValue, double x)
 
    Whether a number is neither infinite nor not a number.
 
@@ -102,7 +102,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Floor(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Floor(krpc_connection_t connection, double * returnValue, double x)
 
    The largest whole number less than or equal to the given number.
 
@@ -115,7 +115,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Ceiling(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Ceiling(krpc_connection_t connection, double * returnValue, double x)
 
    The smallest whole number greater than or equal to the given number.
 
@@ -128,7 +128,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Round(krpc_connection_t connection, double * result, double x, int32_t digits)
+.. function:: krpc_error_t krpc_StdLib_Round(krpc_connection_t connection, double * returnValue, double x, int32_t digits)
 
    The given number rounded to the given number of decimal places,
    with a halfway value rounded to the nearer even number.
@@ -147,7 +147,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_RoundHalfAwayFromZero(krpc_connection_t connection, double * result, double x, int32_t digits)
+.. function:: krpc_error_t krpc_StdLib_RoundHalfAwayFromZero(krpc_connection_t connection, double * returnValue, double x, int32_t digits)
 
    The given number rounded to the given number of decimal places,
    with a halfway value rounded away from zero.
@@ -166,7 +166,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_RoundHalfUp(krpc_connection_t connection, double * result, double x, int32_t digits)
+.. function:: krpc_error_t krpc_StdLib_RoundHalfUp(krpc_connection_t connection, double * returnValue, double x, int32_t digits)
 
    The given number rounded to the given number of decimal places,
    with a halfway value rounded toward positive infinity.
@@ -185,7 +185,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Sqrt(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Sqrt(krpc_connection_t connection, double * returnValue, double x)
 
    The square root of a number.
 
@@ -198,7 +198,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Hypot(krpc_connection_t connection, double * result, double x, double y)
+.. function:: krpc_error_t krpc_StdLib_Hypot(krpc_connection_t connection, double * returnValue, double x, double y)
 
    The length of the hypotenuse of a right triangle with the given sides.
 
@@ -212,7 +212,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Sin(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Sin(krpc_connection_t connection, double * returnValue, double x)
 
    The sine of an angle, in radians.
 
@@ -225,7 +225,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Cos(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Cos(krpc_connection_t connection, double * returnValue, double x)
 
    The cosine of an angle, in radians.
 
@@ -238,7 +238,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Tan(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Tan(krpc_connection_t connection, double * returnValue, double x)
 
    The tangent of an angle, in radians.
 
@@ -251,7 +251,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Asin(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Asin(krpc_connection_t connection, double * returnValue, double x)
 
    The angle, in radians, whose sine is the given number.
 
@@ -264,7 +264,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Acos(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Acos(krpc_connection_t connection, double * returnValue, double x)
 
    The angle, in radians, whose cosine is the given number.
 
@@ -277,7 +277,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Atan(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Atan(krpc_connection_t connection, double * returnValue, double x)
 
    The angle, in radians, whose tangent is the given number.
 
@@ -290,7 +290,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Atan2(krpc_connection_t connection, double * result, double y, double x)
+.. function:: krpc_error_t krpc_StdLib_Atan2(krpc_connection_t connection, double * returnValue, double y, double x)
 
    The angle, in radians, between the positive x axis and the point (x, y).
 
@@ -304,7 +304,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Log(krpc_connection_t connection, double * result, double x, double newBase)
+.. function:: krpc_error_t krpc_StdLib_Log(krpc_connection_t connection, double * returnValue, double x, double newBase)
 
    The logarithm of a number, natural unless another base is given.
 
@@ -318,7 +318,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Log10(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Log10(krpc_connection_t connection, double * returnValue, double x)
 
    The base 10 logarithm of a number.
 
@@ -331,7 +331,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Exp(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_Exp(krpc_connection_t connection, double * returnValue, double x)
 
    The number e raised to the given power.
 
@@ -344,7 +344,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Min(krpc_connection_t connection, double * result, double x, double y)
+.. function:: krpc_error_t krpc_StdLib_Min(krpc_connection_t connection, double * returnValue, double x, double y)
 
    The smaller of two numbers.
 
@@ -358,7 +358,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Max(krpc_connection_t connection, double * result, double x, double y)
+.. function:: krpc_error_t krpc_StdLib_Max(krpc_connection_t connection, double * returnValue, double x, double y)
 
    The larger of two numbers.
 
@@ -372,7 +372,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Clamp(krpc_connection_t connection, double * result, double x, double min, double max)
+.. function:: krpc_error_t krpc_StdLib_Clamp(krpc_connection_t connection, double * returnValue, double x, double min, double max)
 
    The given number limited to the given range.
 
@@ -391,7 +391,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_Lerp(krpc_connection_t connection, double * result, double a, double b, double t)
+.. function:: krpc_error_t krpc_StdLib_Lerp(krpc_connection_t connection, double * returnValue, double a, double b, double t)
 
    Linear interpolation between two numbers.
 
@@ -411,7 +411,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_InverseLerp(krpc_connection_t connection, double * result, double a, double b, double x)
+.. function:: krpc_error_t krpc_StdLib_InverseLerp(krpc_connection_t connection, double * returnValue, double a, double b, double x)
 
    The interpolation parameter of a number between two others,
    limited to the range 0 to 1.
@@ -431,7 +431,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_DegreesToRadians(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_DegreesToRadians(krpc_connection_t connection, double * returnValue, double x)
 
    The angle in radians of an angle in degrees.
 
@@ -444,7 +444,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_RadiansToDegrees(krpc_connection_t connection, double * result, double x)
+.. function:: krpc_error_t krpc_StdLib_RadiansToDegrees(krpc_connection_t connection, double * returnValue, double x)
 
    The angle in degrees of an angle in radians.
 
@@ -457,7 +457,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorAdd(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_VectorAdd(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
 
    The sum of two vectors.
 
@@ -471,7 +471,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorSubtract(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_VectorSubtract(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
 
    The difference of two vectors.
 
@@ -485,7 +485,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorScale(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * v, double scale)
+.. function:: krpc_error_t krpc_StdLib_VectorScale(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * v, double scale)
 
    A vector scaled by a number.
 
@@ -499,7 +499,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorDot(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_VectorDot(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
 
    The dot product of two vectors.
 
@@ -513,7 +513,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorCross(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_VectorCross(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
 
    The cross product of two vectors.
 
@@ -527,7 +527,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorMagnitude(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_VectorMagnitude(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_t * v)
 
    The magnitude (length) of a vector.
 
@@ -540,7 +540,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorNormalize(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_VectorNormalize(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * v)
 
    A vector scaled to a magnitude of 1.
 
@@ -557,7 +557,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorDistance(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_VectorDistance(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
 
    The distance between two positions.
 
@@ -571,7 +571,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorAngle(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_VectorAngle(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
 
    The angle between two vectors, in radians, between 0 and pi.
 
@@ -589,7 +589,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_VectorLerp(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v, double t)
+.. function:: krpc_error_t krpc_StdLib_VectorLerp(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v, double t)
 
    Linear interpolation between two vectors.
 
@@ -609,7 +609,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionMultiply(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r)
+.. function:: krpc_error_t krpc_StdLib_QuaternionMultiply(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r)
 
    The composition of two rotations: the rotation r followed by the
    rotation q.
@@ -628,7 +628,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionInverse(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, const krpc_tuple_double_double_double_double_t * q)
+.. function:: krpc_error_t krpc_StdLib_QuaternionInverse(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q)
 
    The inverse of a rotation.
 
@@ -645,7 +645,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionRotateVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_QuaternionRotateVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_t * v)
 
    A vector rotated by a rotation.
 
@@ -663,7 +663,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionFromAxisAngle(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, const krpc_tuple_double_double_double_t * axis, double angle)
+.. function:: krpc_error_t krpc_StdLib_QuaternionFromAxisAngle(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * axis, double angle)
 
    The rotation about an axis by an angle.
 
@@ -681,7 +681,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionToAxisAngle(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_double_t * result, const krpc_tuple_double_double_double_double_t * q)
+.. function:: krpc_error_t krpc_StdLib_QuaternionToAxisAngle(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q)
 
    The axis and angle of a rotation, with the angle in radians between 0 and pi.
 
@@ -699,7 +699,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionFromToRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+.. function:: krpc_error_t krpc_StdLib_QuaternionFromToRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
 
    The shortest rotation that takes one direction onto another.
 
@@ -718,7 +718,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionLookRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, const krpc_tuple_double_double_double_t * forward, const krpc_tuple_double_double_double_t * up)
+.. function:: krpc_error_t krpc_StdLib_QuaternionLookRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * forward, const krpc_tuple_double_double_double_t * up)
 
    The rotation that takes the z axis onto a forward direction, and the y axis
    toward an up direction.
@@ -738,7 +738,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionAngle(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r)
+.. function:: krpc_error_t krpc_StdLib_QuaternionAngle(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r)
 
    The angle of the rotation that takes one rotation to another,
    in radians, between 0 and pi.
@@ -757,7 +757,7 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionSlerp(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r, double t)
+.. function:: krpc_error_t krpc_StdLib_QuaternionSlerp(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r, double t)
 
    Spherical linear interpolation between two rotations.
 

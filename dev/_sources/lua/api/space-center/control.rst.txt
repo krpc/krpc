@@ -605,7 +605,7 @@ Control
       vessel is not a kerbal on EVA.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
    .. method:: board()
 
@@ -629,7 +629,7 @@ Control
       or the vessel is not a kerbal on EVA.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
    .. method:: grab_ladder()
 
@@ -675,7 +675,7 @@ Control
       the Extended Action Groups mod is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
-      :rtype: :class:`SpaceCenter.Module`
+      :rtype: :class:`SpaceCenter.Module` or ``Types.none``
 
    .. attribute:: name: string
 

@@ -1774,7 +1774,7 @@ or event evaluating it. Throws an exception if the service does not declare it.<
 <li><p><strong>body</strong> (<span><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a></span>) – The statement to evaluate.</p></li>
 <li><p><strong>service</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the service the exception is defined in.</p></li>
 <li><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the exception.</p></li>
-<li><p><strong>message</strong> (<span><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a></span>) – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code>) – A string variable assigned the exception’s message, or null.</p></li>
 <li><p><strong>handler</strong> (<span><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a></span>) – The statement evaluated when the exception is caught.</p></li>
 </ul>
 </dd>
@@ -1797,7 +1797,7 @@ handles any exception. Throws an exception if the service does not declare it.</
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>body</strong> (<span><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a></span>) – The statement to evaluate.</p></li>
-<li><p><strong>message</strong> (<span><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a></span>) – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code>) – A string variable assigned the exception’s message, or null.</p></li>
 <li><p><strong>handler</strong> (<span><a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.Expression</span></code></a></span>) – The statement evaluated when an exception is caught.</p></li>
 </ul>
 </dd>

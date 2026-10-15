@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.UI
 
@@ -57,7 +57,7 @@ Image
          an empty array if no picture has been set. A picture drawn with
          :meth:`Image.SetPixels` is not returned here either.
 
-   .. method:: void SetPixels(byte[] data, int width, int height)
+   .. function:: void SetPixels(byte[] data, int width, int height)
 
       Draw the picture from raw pixels rather than a file, so that a client can
       draw whatever it likes, a graph for instance, and redraw it as often as it
@@ -77,7 +77,7 @@ Image
          Redrawing at an unchanged size draws into the picture already there, so a
          picture redrawn every update does not build a new one each time.
 
-   .. method:: void UpdatePixels(byte[] data, int x, int y, int width, int height)
+   .. function:: void UpdatePixels(byte[] data, int x, int y, int width, int height)
 
       Redraw part of a picture drawn with :meth:`Image.SetPixels`: a block of the
       given size, with its top left corner x pixels in from the left edge and y
@@ -111,7 +111,7 @@ Image
 
       :Game Scenes: All
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the UI object.
 

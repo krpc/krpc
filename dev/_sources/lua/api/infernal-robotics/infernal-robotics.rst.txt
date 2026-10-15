@@ -55,7 +55,7 @@ This service provides functionality to interact with
 
    :param SpaceCenter.Vessel vessel: Vessel to check.
    :param string name: Name of servo group to find.
-   :rtype: :class:`InfernalRobotics.ServoGroup`
+   :rtype: :class:`InfernalRobotics.ServoGroup` or ``Types.none``
 
 
 
@@ -67,4 +67,4 @@ This service provides functionality to interact with
 
    :param SpaceCenter.Vessel vessel: Vessel to check.
    :param string name: Name of the servo to find.
-   :rtype: :class:`InfernalRobotics.Servo`
+   :rtype: :class:`InfernalRobotics.Servo` or ``Types.none``

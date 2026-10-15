@@ -342,7 +342,7 @@ Flight
 
       :Attribute: Read-only, cannot be set
       :returns: The position as a vector.
-      :rtype: Tuple
+      :rtype: Tuple or ``Types.none``
 
       .. note::
 
@@ -390,7 +390,7 @@ Flight
 
       :Attribute: Read-only, cannot be set
       :returns: The position as a vector.
-      :rtype: Tuple
+      :rtype: Tuple or ``Types.none``
 
       .. note::
 

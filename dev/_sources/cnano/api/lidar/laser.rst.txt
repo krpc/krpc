@@ -10,13 +10,13 @@ Laser
 
    A LaserDist laser.
 
-   .. function:: krpc_error_t krpc_LIDAR_Laser_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+   .. function:: krpc_error_t krpc_LIDAR_Laser_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_LIDAR_Laser_t instance)
 
       Get the part containing this LiDAR.
 
    
 
-   .. function:: krpc_error_t krpc_LIDAR_Laser_Cloud(krpc_connection_t connection, krpc_list_double_t * result)
+   .. function:: krpc_error_t krpc_LIDAR_Laser_Cloud(krpc_connection_t connection, krpc_list_double_t * returnValue, krpc_LIDAR_Laser_t instance)
 
       Get the point cloud from the LiDAR.
       Returns an empty list on failure.

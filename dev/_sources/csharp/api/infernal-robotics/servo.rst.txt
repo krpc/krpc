@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.InfernalRobotics
 
@@ -236,28 +236,28 @@ Servo
 
       :Game Scenes: Flight
 
-   .. method:: void MoveRight()
+   .. function:: void MoveRight()
 
       Moves the servo to the right.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MoveLeft()
+   .. function:: void MoveLeft()
 
       Moves the servo to the left.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MoveCenter()
+   .. function:: void MoveCenter()
 
       Moves the servo to the center.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MoveTo(float position, float speed)
+   .. function:: void MoveTo(float position, float speed)
 
       Moves the servo to *position* and sets the
       speed multiplier to *speed*.
@@ -269,14 +269,14 @@ Servo
 
       :Game Scenes: Flight
 
-   .. method:: void Stop()
+   .. function:: void Stop()
 
       Stops the servo.
 
 
       :Game Scenes: Flight
 
-   .. method:: void AddPreset(float position)
+   .. function:: void AddPreset(float position)
 
       Adds a preset position to the servo.
 
@@ -286,7 +286,7 @@ Servo
 
       :Game Scenes: Flight
 
-   .. method:: void RemovePresetAt(int index)
+   .. function:: void RemovePresetAt(int index)
 
       Removes the preset position at the given index.
 
@@ -296,7 +296,7 @@ Servo
 
       :Game Scenes: Flight
 
-   .. method:: void SortPresets()
+   .. function:: void SortPresets()
 
       Sorts the preset positions of the servo into ascending order.
 
@@ -310,11 +310,11 @@ Servo
    The mode a servo is operating in. See :prop:`Servo.Mode`.
 
 
-   .. value:: Servo
+   .. enumerator:: Servo
 
       The part acts as a servo, driving towards a target position.
 
 
-   .. value:: Rotor
+   .. enumerator:: Rotor
 
       The part acts as a rotor, spinning continuously.

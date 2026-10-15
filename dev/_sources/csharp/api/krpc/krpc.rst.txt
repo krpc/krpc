@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.KRPC
 
@@ -19,14 +19,14 @@ KRPC
 
    Main kRPC service, used by clients to interact with basic server functionality.
 
-   .. method:: byte[] GetClientID()
+   .. function:: byte[] GetClientID()
 
       Returns the identifier for the current client.
 
 
       :Game Scenes: All
 
-   .. method:: string GetClientName()
+   .. function:: string GetClientName()
 
       Returns the name of the current client.
       This is an empty string if the client has no name.
@@ -41,14 +41,14 @@ KRPC
 
       :Game Scenes: All
 
-   .. method:: KRPC.Schema.KRPC.Status GetStatus()
+   .. function:: KRPC.Schema.KRPC.Status GetStatus()
 
       Returns some information about the server, such as the version.
 
 
       :Game Scenes: All
 
-   .. method:: KRPC.Schema.KRPC.Services GetServices()
+   .. function:: KRPC.Schema.KRPC.Services GetServices()
 
       Returns information on all services, procedures, classes, properties etc. provided by the server.
       Can be used by client libraries to automatically create functionality such as stubs.
@@ -56,7 +56,7 @@ KRPC
 
       :Game Scenes: All
 
-   .. method:: KRPC.Schema.KRPC.Stream AddFunctionStream(Expression function)
+   .. function:: KRPC.Schema.KRPC.Stream AddFunctionStream(Expression function)
 
       Add a stream of the value a server side function computes on each update.
 
@@ -74,7 +74,7 @@ KRPC
          stream, including one for an object that is not loaded. A procedure that pauses
          execution to resume on a later tick produces an error on the stream.
 
-   .. method:: void HoldTick()
+   .. function:: void HoldTick()
 
       Hold the game on its current physics tick until :meth:`KRPC.ReleaseTick <KRPC.KRPC.ReleaseTick>` is called
       or the hold times out. Every call made in between is executed before the game
@@ -99,7 +99,7 @@ KRPC
          or warping. Stream updates are sent once the tick is released, so waiting for a
          stream or an event inside a hold waits out the timeout.
 
-   .. method:: void ReleaseTick()
+   .. function:: void ReleaseTick()
 
       Let the game move on from the tick that :meth:`KRPC.HoldTick <KRPC.KRPC.HoldTick>` held it on. Does
       nothing when no tick is held, which is the case once a hold has timed out.
@@ -107,7 +107,7 @@ KRPC
 
       :Game Scenes: All
 
-   .. method:: void NextTick()
+   .. function:: void NextTick()
 
       Let the game move on from the tick being held and hold the one after it, so that a
       program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
@@ -129,7 +129,7 @@ KRPC
          Every limit of :meth:`KRPC.HoldTick <KRPC.KRPC.HoldTick>` applies, the timeout included. A hold lost to
          the timeout is not reported, and the next call takes whatever tick it lands on.
 
-   .. method:: void CompileFunction(Expression function)
+   .. function:: void CompileFunction(Expression function)
 
       Compile a server side function, so that running, streaming or adding it as an
       event does not compile it.
@@ -146,7 +146,7 @@ KRPC
          Compiling a large function takes time on the game's main thread. Compiling it
          in advance keeps that time out of its first run.
 
-   .. method:: byte[] RunFunction(Expression function, System.Collections.Generic.IList<byte[]> arguments = {  })
+   .. function:: byte[] RunFunction(Expression function, System.Collections.Generic.IList<byte[]> arguments = null)
 
       Run a server side function once, within a single physics tick, and return
       the value it produces.
@@ -154,7 +154,7 @@ KRPC
       :parameters:
 
        * **function** -- The function to run.
-       * **arguments** -- The encoded arguments, one per parameter.
+       * **arguments** -- The encoded arguments, one per parameter. If null, defaults to ``new System.Collections.Generic.List<byte[]> { }``.
 
       :returns: The encoded value of the function, or no bytes for a function with no value.
       :Game Scenes: All
@@ -172,9 +172,9 @@ KRPC
       scene, or opens/closes the corresponding facility for the pseudo-scenes.
       Scene changes happen asynchronously: setting this property returns
       immediately, and clients should poll it until it reports the requested
-      scene. Setting it to :enum:`GameScene.Flight` resumes the save's
+      scene. Setting it to :value:`GameScene.Flight` resumes the save's
       active vessel, and fails if there is none. Moving between
-      :enum:`GameScene.EditorVAB` and :enum:`GameScene.EditorSPH`
+      :value:`GameScene.EditorVAB` and :value:`GameScene.EditorSPH`
       keeps the vessel that is being constructed, as the game's own switch
       editor button does. Leaving flight saves the game first, unless the game
       cannot be saved, e.g. while under acceleration.
@@ -205,55 +205,55 @@ KRPC
    The game scene. See :prop:`KRPC.GameScene <KRPC.KRPC.GameScene>`.
 
 
-   .. value:: SpaceCenter
+   .. enumerator:: SpaceCenter
 
       The game scene showing the Kerbal Space Center buildings.
 
 
-   .. value:: Flight
+   .. enumerator:: Flight
 
       The game scene showing a vessel in flight (or on the launchpad/runway).
 
 
-   .. value:: TrackingStation
+   .. enumerator:: TrackingStation
 
       The tracking station.
 
 
-   .. value:: EditorVAB
+   .. enumerator:: EditorVAB
 
       The Vehicle Assembly Building.
 
 
-   .. value:: EditorSPH
+   .. enumerator:: EditorSPH
 
       The Space Plane Hangar.
 
 
-   .. value:: MissionBuilder
+   .. enumerator:: MissionBuilder
 
       The mission builder.
 
 
-   .. value:: AstronautComplex
+   .. enumerator:: AstronautComplex
 
       The astronaut complex. This is a pseudo-scene, shown when the
       astronaut complex facility is open within the space center scene.
 
 
-   .. value:: MissionControl
+   .. enumerator:: MissionControl
 
       Mission control. This is a pseudo-scene, shown when the
       mission control facility is open within the space center scene.
 
 
-   .. value:: ResearchAndDevelopment
+   .. enumerator:: ResearchAndDevelopment
 
       Research and development. This is a pseudo-scene, shown when the
       research and development facility is open within the space center scene.
 
 
-   .. value:: Administration
+   .. enumerator:: Administration
 
       The administration facility. This is a pseudo-scene, shown when the
       administration facility is open within the space center scene.

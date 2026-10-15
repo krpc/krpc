@@ -17,13 +17,13 @@ Toggle
       :type:`krpc_UI_ToggleGroup_t` and they become radio buttons, as only one toggle in a
       group can be checked at a time.
 
-   .. function:: krpc_error_t krpc_UI_Toggle_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+   .. function:: krpc_error_t krpc_UI_Toggle_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_Toggle_t instance)
 
       The rect transform for the UI object.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Toggle_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+   .. function:: krpc_error_t krpc_UI_Toggle_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * returnValue, krpc_UI_Toggle_t instance)
 
       How much space the UI object asks a layout for.
 
@@ -34,8 +34,8 @@ Toggle
          Only has an effect when the object is in a panel that has a layout. A canvas is
          not inside a layout and does not have one.
 
-   .. function:: krpc_error_t krpc_UI_Toggle_Visible(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_UI_Toggle_set_Visible(bool value)
+   .. function:: krpc_error_t krpc_UI_Toggle_Visible(krpc_connection_t connection, bool * returnValue, krpc_UI_Toggle_t instance)
+   .. function:: krpc_error_t krpc_UI_Toggle_set_Visible(krpc_connection_t connection, krpc_UI_Toggle_t instance, bool value)
 
       Whether the UI object is visible.
 
@@ -48,14 +48,14 @@ Toggle
          be built with its parts visible, inside a panel that is not, and shown all at
          once by making that panel visible.
 
-   .. function:: krpc_error_t krpc_UI_Toggle_Text(krpc_connection_t connection, krpc_UI_Text_t * result)
+   .. function:: krpc_error_t krpc_UI_Toggle_Text(krpc_connection_t connection, krpc_UI_Text_t * returnValue, krpc_UI_Toggle_t instance)
 
       The text for the toggle.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Toggle_Checked(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_UI_Toggle_set_Checked(bool value)
+   .. function:: krpc_error_t krpc_UI_Toggle_Checked(krpc_connection_t connection, bool * returnValue, krpc_UI_Toggle_t instance)
+   .. function:: krpc_error_t krpc_UI_Toggle_set_Checked(krpc_connection_t connection, krpc_UI_Toggle_t instance, bool value)
 
       Whether the toggle is checked.
 
@@ -66,8 +66,8 @@ Toggle
          Checking a toggle that belongs to a :type:`krpc_UI_ToggleGroup_t` unchecks the rest
          of that group, whether or not it is on the screen.
 
-   .. function:: krpc_error_t krpc_UI_Toggle_Group(krpc_connection_t connection, krpc_UI_ToggleGroup_t * result)
-   .. function:: void krpc_UI_Toggle_set_Group(krpc_UI_ToggleGroup_t value)
+   .. function:: krpc_error_t krpc_UI_Toggle_Group(krpc_connection_t connection, krpc_UI_ToggleGroup_t * returnValue, krpc_UI_Toggle_t instance)
+   .. function:: krpc_error_t krpc_UI_Toggle_set_Group(krpc_connection_t connection, krpc_UI_Toggle_t instance, krpc_UI_ToggleGroup_t value)
 
       The group that the toggle belongs to, or ``nullptr`` if it does not belong to one.
 
@@ -79,8 +79,8 @@ Toggle
          toggles into radio buttons. A group does not have to contain the toggles, so
          they can be grouped independently of how they are laid out.
 
-   .. function:: krpc_error_t krpc_UI_Toggle_Changed(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_UI_Toggle_set_Changed(bool value)
+   .. function:: krpc_error_t krpc_UI_Toggle_Changed(krpc_connection_t connection, bool * returnValue, krpc_UI_Toggle_t instance)
+   .. function:: krpc_error_t krpc_UI_Toggle_set_Changed(krpc_connection_t connection, krpc_UI_Toggle_t instance, bool value)
 
       Whether the toggle has been changed.
 
@@ -92,8 +92,8 @@ Toggle
          client checks or unchecks it.
          A client script should reset the property to false in order to detect subsequent changes.
 
-   .. function:: krpc_error_t krpc_UI_Toggle_Interactable(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_UI_Toggle_set_Interactable(bool value)
+   .. function:: krpc_error_t krpc_UI_Toggle_Interactable(krpc_connection_t connection, bool * returnValue, krpc_UI_Toggle_t instance)
+   .. function:: krpc_error_t krpc_UI_Toggle_set_Interactable(krpc_connection_t connection, krpc_UI_Toggle_t instance, bool value)
 
       Whether the control responds to the user.
 
@@ -104,8 +104,8 @@ Toggle
          A control that is not interactable is drawn grayed out and ignores the user,
          but is still visible. Set its visibility to false to hide it instead.
 
-   .. function:: krpc_error_t krpc_UI_Toggle_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
-   .. function:: void krpc_UI_Toggle_set_Color(const krpc_tuple_double_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_UI_Toggle_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_UI_Toggle_t instance)
+   .. function:: krpc_error_t krpc_UI_Toggle_set_Color(krpc_connection_t connection, krpc_UI_Toggle_t instance, const krpc_tuple_double_double_double_double_t * value)
 
       The color the control is tinted with, as (red, green, blue, alpha). An alpha
       of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
@@ -122,14 +122,14 @@ Toggle
          handle of a slider. A control's label is tinted through the color of its
          text.
 
-   .. function:: krpc_error_t krpc_UI_Toggle_Tooltip(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_UI_Toggle_set_Tooltip(const char * value)
+   .. function:: krpc_error_t krpc_UI_Toggle_Tooltip(krpc_connection_t connection, char * * returnValue, krpc_UI_Toggle_t instance)
+   .. function:: krpc_error_t krpc_UI_Toggle_set_Tooltip(krpc_connection_t connection, krpc_UI_Toggle_t instance, const char * value)
 
       A short piece of text shown beside the pointer while it rests on the
       control. Empty, the default, shows nothing.
 
    
 
-   .. function:: krpc_error_t krpc_UI_Toggle_Remove(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_UI_Toggle_Remove(krpc_connection_t connection, krpc_UI_Toggle_t instance)
 
       Remove the UI object.

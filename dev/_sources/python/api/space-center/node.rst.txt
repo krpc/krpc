@@ -59,11 +59,11 @@ Node
       :rtype: float
       :Game Scenes: Flight
 
-   .. method:: burn_vector(reference_frame)
+   .. method:: burn_vector([reference_frame = None])
 
       Returns the burn vector for the maneuver node.
 
-      :param ReferenceFrame reference_frame: The reference frame that the returned vector is in. Defaults to :attr:`Vessel.orbital_reference_frame`.
+      :param ReferenceFrame or None reference_frame: The reference frame that the returned vector is in. Defaults to :attr:`Vessel.orbital_reference_frame`.
       :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
@@ -73,11 +73,11 @@ Node
 
          Does not change when executing the maneuver node. See :meth:`Node.remaining_burn_vector`.
 
-   .. method:: remaining_burn_vector(reference_frame)
+   .. method:: remaining_burn_vector([reference_frame = None])
 
       Returns the remaining burn vector for the maneuver node.
 
-      :param ReferenceFrame reference_frame: The reference frame that the returned vector is in. Defaults to :attr:`Vessel.orbital_reference_frame`.
+      :param ReferenceFrame or None reference_frame: The reference frame that the returned vector is in. Defaults to :attr:`Vessel.orbital_reference_frame`.
       :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight

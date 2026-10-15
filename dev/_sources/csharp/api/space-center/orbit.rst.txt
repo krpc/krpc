@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -12,7 +12,7 @@ Orbit
    :prop:`Vessel.Orbit`, or a celestial body, obtained by calling
    :prop:`CelestialBody.Orbit`.
 
-   .. method:: static Orbit CreateFromPositionAndVelocity(IConnection connection, CelestialBody body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, double ut, ReferenceFrame referenceFrame)
+   .. function:: static Orbit CreateFromPositionAndVelocity(IConnection connection, CelestialBody body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, double ut, ReferenceFrame referenceFrame = null)
 
       Create the orbit that passes through a given position at a given velocity.
       The orbit coasts freely under the gravity of the body being orbited, so it
@@ -49,7 +49,7 @@ Orbit
          that created it disconnects. Remove each one created by a script that creates
          them repeatedly, for example once per update.
 
-   .. method:: static Orbit CreateFromOrbitalElements(IConnection connection, CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+   .. function:: static Orbit CreateFromOrbitalElements(IConnection connection, CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
 
       Create the orbit with the given
       `orbital elements <https://en.wikipedia.org/wiki/Orbital_elements>`_
@@ -94,7 +94,7 @@ Orbit
          that created it disconnects. Remove each one created by a script that creates
          them repeatedly, for example once per update.
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the orbit, releasing the memory the server holds for it.
 
@@ -253,7 +253,7 @@ Orbit
 
          This is equal to :prop:`Orbit.Radius` minus the equatorial radius of the body.
 
-   .. method:: double RadiusAt(double ut)
+   .. function:: double RadiusAt(double ut)
 
       The orbital radius at the given time, in meters.
 
@@ -263,7 +263,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double RadiusAtTrueAnomaly(double trueAnomaly)
+   .. function:: double RadiusAtTrueAnomaly(double trueAnomaly)
 
       The orbital radius at the point in the orbit given by the true anomaly.
 
@@ -273,7 +273,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame = null)
 
       The position the orbit has reached at the current time, in the given reference
       frame.
@@ -285,7 +285,7 @@ Orbit
       :returns: The position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> PositionAt(double ut, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> PositionAt(double ut, ReferenceFrame referenceFrame = null)
 
       The position at a given time, in the specified reference frame.
 
@@ -297,7 +297,7 @@ Orbit
       :returns: The position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> PositionAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> PositionAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame = null)
 
       The position at the point in the orbit given by the true anomaly, in the specified
       reference frame.
@@ -310,7 +310,7 @@ Orbit
       :returns: The position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame = null)
 
       The velocity the orbit has reached at the current time, in the given reference
       frame.
@@ -322,7 +322,7 @@ Orbit
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> VelocityAt(double ut, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> VelocityAt(double ut, ReferenceFrame referenceFrame = null)
 
       The velocity at a given time, in the specified reference frame.
 
@@ -334,7 +334,7 @@ Orbit
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> VelocityAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> VelocityAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame = null)
 
       The velocity at the point in the orbit given by the true anomaly, in the specified
       reference frame.
@@ -358,7 +358,7 @@ Orbit
 
          This value will change over time if the orbit is elliptical.
 
-   .. method:: double SpeedAt(double ut)
+   .. function:: double SpeedAt(double ut)
 
       The orbital speed at the given time, in meters per second.
 
@@ -368,7 +368,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double SpeedAtRadius(double radius)
+   .. function:: double SpeedAtRadius(double radius)
 
       The orbital speed at the given orbital radius, in meters per second.
 
@@ -384,7 +384,7 @@ Orbit
          This is the vis-viva speed. A radius the orbit never reaches is accepted. On
          an ellipse the speed is ``NaN`` above twice the semi-major axis.
 
-   .. method:: double SpeedAtTrueAnomaly(double trueAnomaly)
+   .. function:: double SpeedAtTrueAnomaly(double trueAnomaly)
 
       The orbital speed at the point in the orbit given by the true anomaly, in meters
       per second.
@@ -497,7 +497,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double MeanAnomalyAtUT(double ut)
+   .. function:: double MeanAnomalyAtUT(double ut)
 
       The mean anomaly at the given time.
 
@@ -513,7 +513,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double EccentricAnomalyAtUT(double ut)
+   .. function:: double EccentricAnomalyAtUT(double ut)
 
       The eccentric anomaly at the given universal time.
 
@@ -529,7 +529,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double TrueAnomalyAtUT(double ut)
+   .. function:: double TrueAnomalyAtUT(double ut)
 
       The true anomaly at the given time.
 
@@ -539,7 +539,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double TrueAnomalyAtRadius(double radius)
+   .. function:: double TrueAnomalyAtRadius(double radius)
 
       The true anomaly at the given orbital radius.
 
@@ -549,7 +549,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double UTAtTrueAnomaly(double trueAnomaly)
+   .. function:: double UTAtTrueAnomaly(double trueAnomaly)
 
       The universal time, in seconds, corresponding to the given true anomaly.
 
@@ -559,7 +559,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double TrueAnomalyAtAN(Orbit target)
+   .. function:: double TrueAnomalyAtAN(Orbit target)
 
       The true anomaly of the ascending node with the given target orbit.
 
@@ -569,7 +569,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double TrueAnomalyAtDN(Orbit target)
+   .. function:: double TrueAnomalyAtDN(Orbit target)
 
       The true anomaly of the descending node with the given target orbit.
 
@@ -587,7 +587,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: double OrbitalSpeedAt(double ut)
+   .. function:: double OrbitalSpeedAt(double ut)
 
       .. warning:: Deprecated. Use :meth:`Orbit.SpeedAt` instead.
 
@@ -607,7 +607,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: static System.Tuple<double,double,double> ReferencePlaneNormal(IConnection connection, ReferenceFrame referenceFrame)
+   .. function:: static System.Tuple<double,double,double> ReferencePlaneNormal(IConnection connection, ReferenceFrame referenceFrame)
 
       The direction that is normal to the orbits reference plane,
       in the given reference frame.
@@ -620,7 +620,7 @@ Orbit
       :returns: The direction as a unit vector.
       :Game Scenes: All
 
-   .. method:: static System.Tuple<double,double,double> ReferencePlaneDirection(IConnection connection, ReferenceFrame referenceFrame)
+   .. function:: static System.Tuple<double,double,double> ReferencePlaneDirection(IConnection connection, ReferenceFrame referenceFrame)
 
       The direction from which the orbits longitude of ascending node is measured,
       in the given reference frame.
@@ -632,7 +632,7 @@ Orbit
       :returns: The direction as a unit vector.
       :Game Scenes: All
 
-   .. method:: double RelativeInclination(Orbit target)
+   .. function:: double RelativeInclination(Orbit target)
 
       Relative inclination of this orbit and the target orbit, in radians.
 
@@ -656,7 +656,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: ClosestApproach NextClosestApproach(Orbit target)
+   .. function:: ClosestApproach NextClosestApproach(Orbit target)
 
       The next closest approach to a target orbit.
 
@@ -666,7 +666,7 @@ Orbit
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<ClosestApproach> ClosestApproaches(Orbit target, int orbits)
+   .. function:: System.Collections.Generic.IList<ClosestApproach> ClosestApproaches(Orbit target, int orbits)
 
       A list of the closest approaches to a target orbit, one for each of the next
       *orbits* orbital periods.

@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.Drawing
 
@@ -53,7 +53,7 @@ NavballMarker
 
       :Game Scenes: Flight
 
-   .. method:: static System.Collections.Generic.IList<string> AvailableIcons(IConnection connection, )
+   .. function:: static System.Collections.Generic.IList<string> AvailableIcons(IConnection connection, )
 
       A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".
 
@@ -66,7 +66,7 @@ NavballMarker
 
       :Game Scenes: Flight
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the marker.
 

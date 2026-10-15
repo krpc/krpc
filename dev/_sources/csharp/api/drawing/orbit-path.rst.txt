@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.Drawing
 
@@ -117,7 +117,7 @@ OrbitPath
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the object.
 

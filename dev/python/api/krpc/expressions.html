@@ -1774,7 +1774,7 @@ or event evaluating it. Throws an exception if the service does not declare it.<
 <li><p><strong>body</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – The statement to evaluate.</p></li>
 <li><p><strong>service</strong> (<em>str</em>) – The name of the service the exception is defined in.</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – The name of the exception.</p></li>
-<li><p><strong>message</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a><em> or </em><em>None</em>) – A string variable assigned the exception’s message, or null.</p></li>
 <li><p><strong>handler</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – The statement evaluated when the exception is caught.</p></li>
 </ul>
 </dd>
@@ -1797,7 +1797,7 @@ handles any exception. Throws an exception if the service does not declare it.</
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>body</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – The statement to evaluate.</p></li>
-<li><p><strong>message</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – A string variable assigned the exception’s message, or null.</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a><em> or </em><em>None</em>) – A string variable assigned the exception’s message, or null.</p></li>
 <li><p><strong>handler</strong> (<a class="reference internal" href="#KRPC.Expression" title="KRPC.Expression"><em>Expression</em></a>) – The statement evaluated when an exception is caught.</p></li>
 </ul>
 </dd>

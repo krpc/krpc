@@ -18,13 +18,13 @@ Toggle Group
       grouped independently of how they are laid out. A column of radio buttons in a grid
       of them is one group, even though each row is laid out separately.
 
-   .. function:: krpc_error_t krpc_UI_ToggleGroup_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+   .. function:: krpc_error_t krpc_UI_ToggleGroup_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_ToggleGroup_t instance)
 
       The rect transform for the UI object.
 
    
 
-   .. function:: krpc_error_t krpc_UI_ToggleGroup_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+   .. function:: krpc_error_t krpc_UI_ToggleGroup_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * returnValue, krpc_UI_ToggleGroup_t instance)
 
       How much space the UI object asks a layout for.
 
@@ -35,8 +35,8 @@ Toggle Group
          Only has an effect when the object is in a panel that has a layout. A canvas is
          not inside a layout and does not have one.
 
-   .. function:: krpc_error_t krpc_UI_ToggleGroup_Visible(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_UI_ToggleGroup_set_Visible(bool value)
+   .. function:: krpc_error_t krpc_UI_ToggleGroup_Visible(krpc_connection_t connection, bool * returnValue, krpc_UI_ToggleGroup_t instance)
+   .. function:: krpc_error_t krpc_UI_ToggleGroup_set_Visible(krpc_connection_t connection, krpc_UI_ToggleGroup_t instance, bool value)
 
       Whether the UI object is visible.
 
@@ -49,14 +49,14 @@ Toggle Group
          be built with its parts visible, inside a panel that is not, and shown all at
          once by making that panel visible.
 
-   .. function:: krpc_error_t krpc_UI_ToggleGroup_Selected(krpc_connection_t connection, krpc_UI_Toggle_t * result)
+   .. function:: krpc_error_t krpc_UI_ToggleGroup_Selected(krpc_connection_t connection, krpc_UI_Toggle_t * returnValue, krpc_UI_ToggleGroup_t instance)
 
       The toggle in the group that is checked, or ``nullptr`` if none of them are.
 
    
 
-   .. function:: krpc_error_t krpc_UI_ToggleGroup_AllowSwitchOff(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_UI_ToggleGroup_set_AllowSwitchOff(bool value)
+   .. function:: krpc_error_t krpc_UI_ToggleGroup_AllowSwitchOff(krpc_connection_t connection, bool * returnValue, krpc_UI_ToggleGroup_t instance)
+   .. function:: krpc_error_t krpc_UI_ToggleGroup_set_AllowSwitchOff(krpc_connection_t connection, krpc_UI_ToggleGroup_t instance, bool value)
 
       Whether all of the toggles in the group are allowed to be unchecked at once.
 
@@ -69,6 +69,6 @@ Toggle Group
          :func:`krpc_UI_Toggle_Checked`, which is obeyed either way.
          A group starts out with no toggle checked either way.
 
-   .. function:: krpc_error_t krpc_UI_ToggleGroup_Remove(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_UI_ToggleGroup_Remove(krpc_connection_t connection, krpc_UI_ToggleGroup_t instance)
 
       Remove the UI object.

@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -19,7 +19,7 @@ Resources
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: System.Collections.Generic.IList<Resource> WithResource(string name)
+   .. function:: System.Collections.Generic.IList<Resource> WithResource(string name)
 
       All the individual resources with the given name that can be stored.
 
@@ -35,7 +35,7 @@ Resources
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: bool HasResource(string name)
+   .. function:: bool HasResource(string name)
 
       Check whether the named resource can be stored.
 
@@ -45,7 +45,7 @@ Resources
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: float Amount(string name)
+   .. function:: float Amount(string name)
 
       Returns the amount of a resource that is currently stored.
 
@@ -55,7 +55,7 @@ Resources
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: float Max(string name)
+   .. function:: float Max(string name)
 
       Returns the amount of a resource that can be stored.
 
@@ -65,7 +65,7 @@ Resources
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: static float Density(IConnection connection, string name)
+   .. function:: static float Density(IConnection connection, string name)
 
       Returns the density of a resource, in :math:`kg/l`.
 
@@ -75,7 +75,7 @@ Resources
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: static ResourceFlowMode FlowMode(IConnection connection, string name)
+   .. function:: static ResourceFlowMode FlowMode(IConnection connection, string name)
 
       Returns the flow mode of a resource.
 
@@ -152,7 +152,7 @@ Resources
 
    Transfer resources between parts.
 
-   .. method:: static ResourceTransfer Start(IConnection connection, Part fromPart, Part toPart, string resource, float maxAmount)
+   .. function:: static ResourceTransfer Start(IConnection connection, Part fromPart, Part toPart, string resource, float maxAmount)
 
       Start transferring a resource transfer between a pair of parts. The transfer will move
       at most *maxAmount* units of the resource, depending on how much of
@@ -179,7 +179,7 @@ Resources
          removed if the client that started it disconnects, or if the flight it runs in
          is left.
 
-   .. method:: void Cancel()
+   .. function:: void Cancel()
 
       Cancel the transfer. No more of the resource is moved and
       :prop:`ResourceTransfer.Complete` becomes true.
@@ -187,7 +187,7 @@ Resources
 
       :Game Scenes: All
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the transfer, releasing the memory the server holds for it. The
       transfer is canceled if it has not finished.
@@ -223,23 +223,23 @@ Resources
    The way in which a resource flows between parts. See :meth:`Resources.FlowMode`.
 
 
-   .. value:: Vessel
+   .. enumerator:: Vessel
 
       The resource flows to any part in the vessel. For example, electric charge.
 
 
-   .. value:: Stage
+   .. enumerator:: Stage
 
       The resource flows from parts in the first stage, followed by the second,
       and so on. For example, mono-propellant.
 
 
-   .. value:: Adjacent
+   .. enumerator:: Adjacent
 
       The resource flows between adjacent parts within the vessel. For example,
       liquid fuel or oxidizer.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       The resource does not flow. For example, solid fuel.

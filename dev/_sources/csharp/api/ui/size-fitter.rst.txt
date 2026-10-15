@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.UI
 
@@ -30,16 +30,16 @@ Size Fitter
    How a size fitter sizes a panel along one direction.
 
 
-   .. value:: Unconstrained
+   .. enumerator:: Unconstrained
 
       Leave the size alone.
 
 
-   .. value:: MinSize
+   .. enumerator:: MinSize
 
       Use the smallest size the contents will fit in.
 
 
-   .. value:: PreferredSize
+   .. enumerator:: PreferredSize
 
       Use the size the contents ask for.

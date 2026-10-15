@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.KRPC
 
@@ -55,7 +55,7 @@ assembled and run.
 
          Empty for a function that is not created with :meth:`Expression.Lambda`.
 
-   .. method:: static Expression ConstantDouble(IConnection connection, double value)
+   .. function:: static Expression ConstantDouble(IConnection connection, double value)
 
       A constant value of double precision floating point type.
 
@@ -65,7 +65,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantFloat(IConnection connection, float value)
+   .. function:: static Expression ConstantFloat(IConnection connection, float value)
 
       A constant value of single precision floating point type.
 
@@ -75,7 +75,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantInt(IConnection connection, int value)
+   .. function:: static Expression ConstantInt(IConnection connection, int value)
 
       A constant value of integer type.
 
@@ -85,7 +85,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantLong(IConnection connection, long value)
+   .. function:: static Expression ConstantLong(IConnection connection, long value)
 
       A constant value of long integer type.
 
@@ -95,7 +95,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantUInt(IConnection connection, uint value)
+   .. function:: static Expression ConstantUInt(IConnection connection, uint value)
 
       A constant value of unsigned integer type.
 
@@ -105,7 +105,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantULong(IConnection connection, ulong value)
+   .. function:: static Expression ConstantULong(IConnection connection, ulong value)
 
       A constant value of unsigned long integer type.
 
@@ -115,7 +115,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantBool(IConnection connection, bool value)
+   .. function:: static Expression ConstantBool(IConnection connection, bool value)
 
       A constant value of boolean type.
 
@@ -125,7 +125,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantString(IConnection connection, string value)
+   .. function:: static Expression ConstantString(IConnection connection, string value)
 
       A constant value of string type.
 
@@ -135,7 +135,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantBytes(IConnection connection, byte[] value)
+   .. function:: static Expression ConstantBytes(IConnection connection, byte[] value)
 
       A constant value of bytes type.
 
@@ -145,7 +145,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantEnum(IConnection connection, string service, string name, int value)
+   .. function:: static Expression ConstantEnum(IConnection connection, string service, string name, int value)
 
       A constant value of an enumeration a service defines.
 
@@ -157,7 +157,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConstantNull(IConnection connection, Type type)
+   .. function:: static Expression ConstantNull(IConnection connection, Type type)
 
       A null constant of the given type.
 
@@ -172,7 +172,7 @@ assembled and run.
 
          The type is made nullable, as by :meth:`Type.NullableType`.
 
-   .. method:: static Expression ConstantObject(IConnection connection, ulong value)
+   .. function:: static Expression ConstantObject(IConnection connection, ulong value)
 
       A constant object, an instance of a class a service defines.
 
@@ -187,7 +187,7 @@ assembled and run.
 
          The object is given by its object identifier.
 
-   .. method:: static Expression Call(IConnection connection, KRPC.Schema.KRPC.ProcedureCall call)
+   .. function:: static Expression Call(IConnection connection, KRPC.Schema.KRPC.ProcedureCall call)
 
       An RPC call.
 
@@ -205,7 +205,7 @@ assembled and run.
          evaluated for its effects, as a statement in a :meth:`Expression.Block`. A collection the
          procedure returns is copied, as a client would receive it.
 
-   .. method:: static Expression CallWithArguments(IConnection connection, KRPC.Schema.KRPC.ProcedureCall call, System.Collections.Generic.IDictionary<int,Expression> args)
+   .. function:: static Expression CallWithArguments(IConnection connection, KRPC.Schema.KRPC.ProcedureCall call, System.Collections.Generic.IDictionary<int,Expression> args)
 
       An RPC call, where some or all of the arguments are computed by expressions.
 
@@ -223,7 +223,7 @@ assembled and run.
          expression takes the argument encoded in the call, or the parameter's default. A
          collection the procedure returns is copied, as a client would receive it.
 
-   .. method:: static Expression Equal(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression Equal(IConnection connection, Expression arg0, Expression arg1)
 
       Equality comparison.
 
@@ -240,7 +240,7 @@ assembled and run.
          Collections, tuples, bytes and structures compare by their contents. Throws an
          exception if the operands are of unrelated types.
 
-   .. method:: static Expression NotEqual(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression NotEqual(IConnection connection, Expression arg0, Expression arg1)
 
       Inequality comparison.
 
@@ -257,7 +257,7 @@ assembled and run.
          Collections, tuples, bytes and structures compare by their contents. Throws an
          exception if the operands are of unrelated types.
 
-   .. method:: static Expression GreaterThan(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression GreaterThan(IConnection connection, Expression arg0, Expression arg1)
 
       Greater than numerical comparison.
 
@@ -268,7 +268,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression GreaterThanOrEqual(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression GreaterThanOrEqual(IConnection connection, Expression arg0, Expression arg1)
 
       Greater than or equal numerical comparison.
 
@@ -279,7 +279,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression LessThan(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression LessThan(IConnection connection, Expression arg0, Expression arg1)
 
       Less than numerical comparison.
 
@@ -290,7 +290,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression LessThanOrEqual(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression LessThanOrEqual(IConnection connection, Expression arg0, Expression arg1)
 
       Less than or equal numerical comparison.
 
@@ -301,7 +301,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression IsNull(IConnection connection, Expression value)
+   .. function:: static Expression IsNull(IConnection connection, Expression value)
 
       Whether a value is null. Throws an exception if the type of the value cannot be null.
 
@@ -311,7 +311,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression And(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression And(IConnection connection, Expression arg0, Expression arg1)
 
       Logical or bitwise and, which evaluates both operands.
 
@@ -322,7 +322,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression Or(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression Or(IConnection connection, Expression arg0, Expression arg1)
 
       Logical or bitwise or, which evaluates both operands.
 
@@ -333,7 +333,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConditionalAnd(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression ConditionalAnd(IConnection connection, Expression arg0, Expression arg1)
 
       Logical and, which evaluates the second operand only when the first is true.
 
@@ -344,7 +344,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ConditionalOr(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression ConditionalOr(IConnection connection, Expression arg0, Expression arg1)
 
       Logical or, which evaluates the second operand only when the first is false.
 
@@ -355,7 +355,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ExclusiveOr(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression ExclusiveOr(IConnection connection, Expression arg0, Expression arg1)
 
       Logical or bitwise exclusive or.
 
@@ -366,7 +366,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression Not(IConnection connection, Expression arg)
+   .. function:: static Expression Not(IConnection connection, Expression arg)
 
       Logical or bitwise negation.
 
@@ -376,7 +376,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression Negate(IConnection connection, Expression arg)
+   .. function:: static Expression Negate(IConnection connection, Expression arg)
 
       Numerical negation, which negates a uint as a long.
 
@@ -386,7 +386,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression Conditional(IConnection connection, Expression condition, Expression ifTrue, Expression ifFalse)
+   .. function:: static Expression Conditional(IConnection connection, Expression condition, Expression ifTrue, Expression ifFalse)
 
       The second argument if the condition is true, and the third argument otherwise.
 
@@ -403,7 +403,7 @@ assembled and run.
 
          Throws an exception if the two values have no common type.
 
-   .. method:: static Expression Add(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression Add(IConnection connection, Expression arg0, Expression arg1)
 
       Numerical addition.
 
@@ -414,7 +414,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression Subtract(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression Subtract(IConnection connection, Expression arg0, Expression arg1)
 
       Numerical subtraction.
 
@@ -425,7 +425,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression Multiply(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression Multiply(IConnection connection, Expression arg0, Expression arg1)
 
       Numerical multiplication.
 
@@ -436,7 +436,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression Divide(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression Divide(IConnection connection, Expression arg0, Expression arg1)
 
       Numerical division.
 
@@ -447,7 +447,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression Modulo(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression Modulo(IConnection connection, Expression arg0, Expression arg1)
 
       Numerical modulo operator.
 
@@ -459,7 +459,7 @@ assembled and run.
       :returns: The remainder of arg0 divided by arg1
       :Game Scenes: All
 
-   .. method:: static Expression Power(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression Power(IConnection connection, Expression arg0, Expression arg1)
 
       Numerical power operator.
 
@@ -471,7 +471,7 @@ assembled and run.
       :returns: arg0 raised to the power of arg1, at the common type of the operands
       :Game Scenes: All
 
-   .. method:: static Expression LeftShift(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression LeftShift(IConnection connection, Expression arg0, Expression arg1)
 
       Bitwise left shift.
 
@@ -488,7 +488,7 @@ assembled and run.
          Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
          for a 64-bit value.
 
-   .. method:: static Expression RightShift(IConnection connection, Expression arg0, Expression arg1)
+   .. function:: static Expression RightShift(IConnection connection, Expression arg0, Expression arg1)
 
       Bitwise right shift.
 
@@ -505,7 +505,7 @@ assembled and run.
          Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
          for a 64-bit value.
 
-   .. method:: static Expression Cast(IConnection connection, Expression arg, Type type)
+   .. function:: static Expression Cast(IConnection connection, Expression arg, Type type)
 
       A value cast to the given type.
 
@@ -521,7 +521,7 @@ assembled and run.
 
          A tuple or collection is cast element by element.
 
-   .. method:: static Expression Parameter(IConnection connection, string name, Type type)
+   .. function:: static Expression Parameter(IConnection connection, string name, Type type)
 
       A named parameter of a function.
 
@@ -539,7 +539,7 @@ assembled and run.
          A value is bound to it by name with :meth:`Expression.Invoke`, or by its position in
          the parameters of a :meth:`Expression.Lambda`.
 
-   .. method:: static Expression Lambda(IConnection connection, System.Collections.Generic.IList<Expression> parameters, Expression body)
+   .. function:: static Expression Lambda(IConnection connection, System.Collections.Generic.IList<Expression> parameters, Expression body)
 
       A function with the given parameters and body.
 
@@ -558,7 +558,7 @@ assembled and run.
          evaluated for its effects. A :meth:`Expression.Return` or :meth:`Expression.ReturnNothing`
          statement ends the evaluation.
 
-   .. method:: static Expression Invoke(IConnection connection, Expression function, System.Collections.Generic.IDictionary<string,Expression> args)
+   .. function:: static Expression Invoke(IConnection connection, Expression function, System.Collections.Generic.IDictionary<string,Expression> args)
 
       A function call.
 
@@ -570,7 +570,7 @@ assembled and run.
       :returns: A function call.
       :Game Scenes: All
 
-   .. method:: static Expression Block(IConnection connection, System.Collections.Generic.IList<Expression> statements)
+   .. function:: static Expression Block(IConnection connection, System.Collections.Generic.IList<Expression> statements)
 
       A block of statements, whose value is that of its last statement.
 
@@ -580,7 +580,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression BlockWithVariables(IConnection connection, System.Collections.Generic.IList<Expression> variables, System.Collections.Generic.IList<Expression> statements)
+   .. function:: static Expression BlockWithVariables(IConnection connection, System.Collections.Generic.IList<Expression> variables, System.Collections.Generic.IList<Expression> statements)
 
       A block of statements with local variables.
 
@@ -597,7 +597,7 @@ assembled and run.
          The value of the block is that of its last statement. The variables are in scope
          for the statements of the block, including within nested functions.
 
-   .. method:: static Expression Variable(IConnection connection, string name, Type type)
+   .. function:: static Expression Variable(IConnection connection, string name, Type type)
 
       A local variable, declared by :meth:`Expression.BlockWithVariables`.
 
@@ -609,7 +609,7 @@ assembled and run.
       :returns: A local variable.
       :Game Scenes: All
 
-   .. method:: static Expression StateVariable(IConnection connection, string name, Expression initialValue)
+   .. function:: static Expression StateVariable(IConnection connection, string name, Expression initialValue)
 
       A variable that keeps its value between evaluations of a function.
 
@@ -628,7 +628,7 @@ assembled and run.
          variable its type. The value belongs to the variable, so every function that
          contains it shares it.
 
-   .. method:: static Expression Assign(IConnection connection, Expression variable, Expression value)
+   .. function:: static Expression Assign(IConnection connection, Expression variable, Expression value)
 
       An assignment to a local variable, state variable or function parameter.
 
@@ -645,7 +645,7 @@ assembled and run.
          The value's type must be assignable to the variable's type. A numeric value of a
          different type is widened, and narrowing it requires a cast.
 
-   .. method:: static Expression IfThen(IConnection connection, Expression condition, Expression body)
+   .. function:: static Expression IfThen(IConnection connection, Expression condition, Expression body)
 
       An if statement, with no value.
 
@@ -661,7 +661,7 @@ assembled and run.
 
          Use :meth:`Expression.Conditional` for an if-then-else that produces a value.
 
-   .. method:: static Expression IfThenElse(IConnection connection, Expression condition, Expression body, Expression elseBody)
+   .. function:: static Expression IfThenElse(IConnection connection, Expression condition, Expression body, Expression elseBody)
 
       An if-else statement, with no value.
 
@@ -678,7 +678,7 @@ assembled and run.
 
          Use :meth:`Expression.Conditional` for an if-then-else that produces a value.
 
-   .. method:: static Expression While(IConnection connection, Expression condition, Expression body)
+   .. function:: static Expression While(IConnection connection, Expression condition, Expression body)
 
       A while loop, which evaluates the body while the condition is true.
 
@@ -694,7 +694,7 @@ assembled and run.
 
          A :meth:`Expression.Break` or :meth:`Expression.Continue` in the body applies to this loop.
 
-   .. method:: static Expression ForEach(IConnection connection, Expression variable, Expression collection, Expression body)
+   .. function:: static Expression ForEach(IConnection connection, Expression variable, Expression collection, Expression body)
 
       A loop that evaluates the body once for each value of a collection.
 
@@ -713,21 +713,21 @@ assembled and run.
          :meth:`Expression.BlockWithVariables`, or a parameter of an enclosing :meth:`Expression.Lambda`.
          A :meth:`Expression.Break` or :meth:`Expression.Continue` in the body applies to this loop.
 
-   .. method:: static Expression Break(IConnection connection, )
+   .. function:: static Expression Break(IConnection connection, )
 
       A break statement, which ends the enclosing loop.
 
 
       :Game Scenes: All
 
-   .. method:: static Expression Continue(IConnection connection, )
+   .. function:: static Expression Continue(IConnection connection, )
 
       A continue statement, which skips to the next iteration of the enclosing loop.
 
 
       :Game Scenes: All
 
-   .. method:: static Expression Return(IConnection connection, Expression value)
+   .. function:: static Expression Return(IConnection connection, Expression value)
 
       A return statement, which ends the enclosing function with a value.
 
@@ -737,14 +737,14 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression ReturnNothing(IConnection connection, )
+   .. function:: static Expression ReturnNothing(IConnection connection, )
 
       A return statement, which ends the enclosing function with no value.
 
 
       :Game Scenes: All
 
-   .. method:: static Expression Throw(IConnection connection, string service, string name, Expression message)
+   .. function:: static Expression Throw(IConnection connection, string service, string name, Expression message)
 
       A throw statement, which raises the named exception.
 
@@ -762,7 +762,7 @@ assembled and run.
          The client receives the exception as an error from the function, or from the stream
          or event evaluating it. Throws an exception if the service does not declare it.
 
-   .. method:: static Expression TryCatch(IConnection connection, Expression body, string service, string name, Expression message, Expression handler)
+   .. function:: static Expression TryCatch(IConnection connection, Expression body, string service, string name, Expression message, Expression handler)
 
       A try-catch statement that handles the named exception.
 
@@ -782,7 +782,7 @@ assembled and run.
          Only an exception a service declares can be named, and :meth:`Expression.TryCatchAll`
          handles any exception. Throws an exception if the service does not declare it.
 
-   .. method:: static Expression TryCatchAll(IConnection connection, Expression body, Expression message, Expression handler)
+   .. function:: static Expression TryCatchAll(IConnection connection, Expression body, Expression message, Expression handler)
 
       A try-catch statement that handles any exception.
 
@@ -794,7 +794,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression TryFinally(IConnection connection, Expression body, Expression finalizer)
+   .. function:: static Expression TryFinally(IConnection connection, Expression body, Expression finalizer)
 
       A try-finally statement.
 
@@ -811,7 +811,7 @@ assembled and run.
          The finalizer is evaluated after the body, whether or not the body raises an
          exception. A break, continue or return cannot leave the finalizer.
 
-   .. method:: static Expression CreateTuple(IConnection connection, System.Collections.Generic.IList<Expression> elements)
+   .. function:: static Expression CreateTuple(IConnection connection, System.Collections.Generic.IList<Expression> elements)
 
       A tuple of the given elements. Throws an exception if there are no elements or more
       than seven.
@@ -823,7 +823,7 @@ assembled and run.
       :returns: The tuple.
       :Game Scenes: All
 
-   .. method:: static Expression CreateStruct(IConnection connection, Type type, System.Collections.Generic.IList<Expression> fieldValues)
+   .. function:: static Expression CreateStruct(IConnection connection, Type type, System.Collections.Generic.IList<Expression> fieldValues)
 
       A structure with the given field values. Throws an exception if the field values do
       not match its fields.
@@ -836,7 +836,7 @@ assembled and run.
       :returns: The structure.
       :Game Scenes: All
 
-   .. method:: static Expression CreateList(IConnection connection, System.Collections.Generic.IList<Expression> values)
+   .. function:: static Expression CreateList(IConnection connection, System.Collections.Generic.IList<Expression> values)
 
       A list of the given values, with numbers widened to their common type. Throws an
       exception if there are no values.
@@ -848,7 +848,7 @@ assembled and run.
       :returns: The list.
       :Game Scenes: All
 
-   .. method:: static Expression CreateSet(IConnection connection, System.Collections.Generic.ISet<Expression> values)
+   .. function:: static Expression CreateSet(IConnection connection, System.Collections.Generic.ISet<Expression> values)
 
       A set of the given values, with numbers widened to their common type. Throws an
       exception if there are no values, or a value is null.
@@ -865,7 +865,7 @@ assembled and run.
 
          The values are evaluated in an unspecified order.
 
-   .. method:: static Expression CreateDictionary(IConnection connection, System.Collections.Generic.IList<Expression> keys, System.Collections.Generic.IList<Expression> values)
+   .. function:: static Expression CreateDictionary(IConnection connection, System.Collections.Generic.IList<Expression> keys, System.Collections.Generic.IList<Expression> values)
 
       A dictionary of the given keys and corresponding values, with numbers widened to
       their common type. Throws an exception if there are no keys, the counts differ, the
@@ -884,7 +884,7 @@ assembled and run.
 
          A repeated key takes the last of its values.
 
-   .. method:: static Expression CreateEmptyList(IConnection connection, Type valueType)
+   .. function:: static Expression CreateEmptyList(IConnection connection, Type valueType)
 
       An empty list of the given value type.
 
@@ -895,7 +895,7 @@ assembled and run.
       :returns: The empty list.
       :Game Scenes: All
 
-   .. method:: static Expression CreateEmptySet(IConnection connection, Type valueType)
+   .. function:: static Expression CreateEmptySet(IConnection connection, Type valueType)
 
       An empty set of the given value type. Throws an exception if the value type is
       nullable.
@@ -907,7 +907,7 @@ assembled and run.
       :returns: The empty set.
       :Game Scenes: All
 
-   .. method:: static Expression CreateEmptyDictionary(IConnection connection, Type keyType, Type valueType)
+   .. function:: static Expression CreateEmptyDictionary(IConnection connection, Type keyType, Type valueType)
 
       An empty dictionary of the given key and value types. Throws an exception if the
       key type is nullable or not a valid key type.
@@ -920,7 +920,7 @@ assembled and run.
       :returns: The empty dictionary.
       :Game Scenes: All
 
-   .. method:: static Expression Append(IConnection connection, Expression collection, Expression value)
+   .. function:: static Expression Append(IConnection connection, Expression collection, Expression value)
 
       A statement adding a value to a list or a set.
 
@@ -936,7 +936,7 @@ assembled and run.
 
          The value goes on the end of a list. A set holding the value is left unchanged.
 
-   .. method:: static Expression Set(IConnection connection, Expression collection, Expression index, Expression value)
+   .. function:: static Expression Set(IConnection connection, Expression collection, Expression index, Expression value)
 
       A statement setting an element of a list, or an entry of a dictionary.
 
@@ -954,7 +954,7 @@ assembled and run.
          A key the dictionary does not hold is added. Throws an exception if the index
          is out of range for the list.
 
-   .. method:: static Expression Remove(IConnection connection, Expression collection, Expression value)
+   .. function:: static Expression Remove(IConnection connection, Expression collection, Expression value)
 
       A removal of a value from a list or a set, or of an entry from a dictionary.
 
@@ -971,7 +971,7 @@ assembled and run.
 
          The first occurrence is removed from a list.
 
-   .. method:: static Expression RemoveAt(IConnection connection, Expression list, Expression index)
+   .. function:: static Expression RemoveAt(IConnection connection, Expression list, Expression index)
 
       A statement removing the element at an index of a list.
 
@@ -987,7 +987,7 @@ assembled and run.
 
          Throws an exception if the index is out of range.
 
-   .. method:: static Expression Clear(IConnection connection, Expression collection)
+   .. function:: static Expression Clear(IConnection connection, Expression collection)
 
       A statement removing every value from a list or a set, or every entry from a dictionary.
 
@@ -997,7 +997,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Expression DictionaryKeys(IConnection connection, Expression dictionary)
+   .. function:: static Expression DictionaryKeys(IConnection connection, Expression dictionary)
 
       The keys of a dictionary, as a list.
 
@@ -1014,7 +1014,7 @@ assembled and run.
          The collection operations take the keys of a dictionary from here, and its values
          from :meth:`Expression.DictionaryValues`.
 
-   .. method:: static Expression DictionaryValues(IConnection connection, Expression dictionary)
+   .. function:: static Expression DictionaryValues(IConnection connection, Expression dictionary)
 
       The values of a dictionary, as a list.
 
@@ -1025,7 +1025,7 @@ assembled and run.
       :returns: The values of the dictionary.
       :Game Scenes: All
 
-   .. method:: static Expression ToList(IConnection connection, Expression arg)
+   .. function:: static Expression ToList(IConnection connection, Expression arg)
 
       A collection as a list.
 
@@ -1036,7 +1036,7 @@ assembled and run.
       :returns: The collection as a list.
       :Game Scenes: All
 
-   .. method:: static Expression ToSet(IConnection connection, Expression arg)
+   .. function:: static Expression ToSet(IConnection connection, Expression arg)
 
       A collection as a set.
 
@@ -1052,7 +1052,7 @@ assembled and run.
 
          Throws an exception if a value is null.
 
-   .. method:: static Expression BuildDictionary(IConnection connection, Expression arg, Expression keyFunc, Expression valueFunc)
+   .. function:: static Expression BuildDictionary(IConnection connection, Expression arg, Expression keyFunc, Expression valueFunc)
 
       A dictionary built from a collection, with a key and a value computed from each
       element.
@@ -1071,7 +1071,7 @@ assembled and run.
 
          A repeated key takes the last of its values.
 
-   .. method:: static Expression Get(IConnection connection, Expression arg, Expression index)
+   .. function:: static Expression Get(IConnection connection, Expression arg, Expression index)
 
       An element of a tuple, list or dictionary.
 
@@ -1090,7 +1090,7 @@ assembled and run.
          dictionary a key. Throws an exception if the index is out of range or the key is
          missing, and for a tuple when the expression is created.
 
-   .. method:: static Expression GetField(IConnection connection, Expression arg, string name)
+   .. function:: static Expression GetField(IConnection connection, Expression arg, string name)
 
       The value of a field of a structure. Throws an exception if the value is not a
       structure, or has no field of the given name.
@@ -1103,7 +1103,7 @@ assembled and run.
       :returns: The value of the field.
       :Game Scenes: All
 
-   .. method:: static Expression ConvertToString(IConnection connection, Expression arg)
+   .. function:: static Expression ConvertToString(IConnection connection, Expression arg)
 
       The string representation of a value.
 
@@ -1121,7 +1121,7 @@ assembled and run.
          formats it, which for a collection is the name of its type. Throws an exception if
          the value is null.
 
-   .. method:: static Expression StringConcat(IConnection connection, System.Collections.Generic.IList<Expression> args)
+   .. function:: static Expression StringConcat(IConnection connection, System.Collections.Generic.IList<Expression> args)
 
       The concatenation of strings.
 
@@ -1137,7 +1137,7 @@ assembled and run.
 
          Use :meth:`Expression.ConvertToString` to convert other values to strings.
 
-   .. method:: static Expression StringLength(IConnection connection, Expression arg)
+   .. function:: static Expression StringLength(IConnection connection, Expression arg)
 
       The number of characters in a string.
 
@@ -1148,7 +1148,7 @@ assembled and run.
       :returns: The length of the string.
       :Game Scenes: All
 
-   .. method:: static Expression StringGet(IConnection connection, Expression arg, Expression index)
+   .. function:: static Expression StringGet(IConnection connection, Expression arg, Expression index)
 
       The character at the given position in a string, as a string of length one.
 
@@ -1165,7 +1165,7 @@ assembled and run.
 
          Throws an exception if the index is out of range.
 
-   .. method:: static Expression StringSubstring(IConnection connection, Expression arg, Expression start, Expression length)
+   .. function:: static Expression StringSubstring(IConnection connection, Expression arg, Expression start, Expression length)
 
       Part of a string.
 
@@ -1183,7 +1183,7 @@ assembled and run.
 
          Throws an exception if the start or the length is out of range.
 
-   .. method:: static Expression StringIndexOf(IConnection connection, Expression arg, Expression value)
+   .. function:: static Expression StringIndexOf(IConnection connection, Expression arg, Expression value)
 
       The position of the first occurrence of one string within another.
 
@@ -1195,7 +1195,7 @@ assembled and run.
       :returns: The position of the value, counting from zero, or -1 if it does not occur.
       :Game Scenes: All
 
-   .. method:: static Expression StringContains(IConnection connection, Expression arg, Expression value)
+   .. function:: static Expression StringContains(IConnection connection, Expression arg, Expression value)
 
       Whether one string occurs within another.
 
@@ -1207,7 +1207,7 @@ assembled and run.
       :returns: Whether the value occurs in the string.
       :Game Scenes: All
 
-   .. method:: static Expression StringStartsWith(IConnection connection, Expression arg, Expression value)
+   .. function:: static Expression StringStartsWith(IConnection connection, Expression arg, Expression value)
 
       Whether a string starts with another.
 
@@ -1219,7 +1219,7 @@ assembled and run.
       :returns: Whether the string starts with the value.
       :Game Scenes: All
 
-   .. method:: static Expression StringEndsWith(IConnection connection, Expression arg, Expression value)
+   .. function:: static Expression StringEndsWith(IConnection connection, Expression arg, Expression value)
 
       Whether a string ends with another.
 
@@ -1231,7 +1231,7 @@ assembled and run.
       :returns: Whether the string ends with the value.
       :Game Scenes: All
 
-   .. method:: static Expression StringToUpper(IConnection connection, Expression arg)
+   .. function:: static Expression StringToUpper(IConnection connection, Expression arg)
 
       A string in upper case, independently of the game's language.
 
@@ -1242,7 +1242,7 @@ assembled and run.
       :returns: The string in upper case.
       :Game Scenes: All
 
-   .. method:: static Expression StringToLower(IConnection connection, Expression arg)
+   .. function:: static Expression StringToLower(IConnection connection, Expression arg)
 
       A string in lower case, independently of the game's language.
 
@@ -1253,7 +1253,7 @@ assembled and run.
       :returns: The string in lower case.
       :Game Scenes: All
 
-   .. method:: static Expression StringTrim(IConnection connection, Expression arg)
+   .. function:: static Expression StringTrim(IConnection connection, Expression arg)
 
       A string with white space removed from both ends.
 
@@ -1264,7 +1264,7 @@ assembled and run.
       :returns: The trimmed string.
       :Game Scenes: All
 
-   .. method:: static Expression StringTrimStart(IConnection connection, Expression arg)
+   .. function:: static Expression StringTrimStart(IConnection connection, Expression arg)
 
       A string with white space removed from its start.
 
@@ -1275,7 +1275,7 @@ assembled and run.
       :returns: The trimmed string.
       :Game Scenes: All
 
-   .. method:: static Expression StringTrimEnd(IConnection connection, Expression arg)
+   .. function:: static Expression StringTrimEnd(IConnection connection, Expression arg)
 
       A string with white space removed from its end.
 
@@ -1286,7 +1286,7 @@ assembled and run.
       :returns: The trimmed string.
       :Game Scenes: All
 
-   .. method:: static Expression StringReplace(IConnection connection, Expression arg, Expression oldValue, Expression newValue)
+   .. function:: static Expression StringReplace(IConnection connection, Expression arg, Expression oldValue, Expression newValue)
 
       A string with every occurrence of one string replaced by another.
 
@@ -1304,7 +1304,7 @@ assembled and run.
 
          Throws an exception if the string to replace is empty.
 
-   .. method:: static Expression StringSplit(IConnection connection, Expression arg, Expression separator)
+   .. function:: static Expression StringSplit(IConnection connection, Expression arg, Expression separator)
 
       The parts of a string separated by another string.
 
@@ -1316,7 +1316,7 @@ assembled and run.
       :returns: The parts of the string.
       :Game Scenes: All
 
-   .. method:: static Expression StringJoin(IConnection connection, Expression separator, Expression values)
+   .. function:: static Expression StringJoin(IConnection connection, Expression separator, Expression values)
 
       Strings joined together, separated by another string.
 
@@ -1328,7 +1328,7 @@ assembled and run.
       :returns: The joined string.
       :Game Scenes: All
 
-   .. method:: static Expression Count(IConnection connection, Expression arg)
+   .. function:: static Expression Count(IConnection connection, Expression arg)
 
       The number of values in a collection.
 
@@ -1339,7 +1339,7 @@ assembled and run.
       :returns: The number of elements in the collection.
       :Game Scenes: All
 
-   .. method:: static Expression Sum(IConnection connection, Expression arg)
+   .. function:: static Expression Sum(IConnection connection, Expression arg)
 
       The sum of the values of a collection.
 
@@ -1350,7 +1350,7 @@ assembled and run.
       :returns: The sum of the elements in the collection.
       :Game Scenes: All
 
-   .. method:: static Expression Max(IConnection connection, Expression arg)
+   .. function:: static Expression Max(IConnection connection, Expression arg)
 
       The largest value of a collection.
 
@@ -1366,7 +1366,7 @@ assembled and run.
 
          Throws an exception if the collection is empty and its values are not nullable.
 
-   .. method:: static Expression Min(IConnection connection, Expression arg)
+   .. function:: static Expression Min(IConnection connection, Expression arg)
 
       The smallest value of a collection.
 
@@ -1382,7 +1382,7 @@ assembled and run.
 
          Throws an exception if the collection is empty and its values are not nullable.
 
-   .. method:: static Expression Average(IConnection connection, Expression arg)
+   .. function:: static Expression Average(IConnection connection, Expression arg)
 
       The average of the values of a collection.
 
@@ -1398,7 +1398,7 @@ assembled and run.
 
          Throws an exception if the collection is empty and its values are not nullable.
 
-   .. method:: static Expression Select(IConnection connection, Expression arg, Expression func)
+   .. function:: static Expression Select(IConnection connection, Expression arg, Expression func)
 
       The result of a function for each value of a collection.
 
@@ -1415,7 +1415,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression Where(IConnection connection, Expression arg, Expression func)
+   .. function:: static Expression Where(IConnection connection, Expression arg, Expression func)
 
       The values of a collection for which a predicate function returns true.
 
@@ -1432,7 +1432,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression SelectMany(IConnection connection, Expression arg, Expression func)
+   .. function:: static Expression SelectMany(IConnection connection, Expression arg, Expression func)
 
       The values of the collections a function returns for each value of a collection,
       flattened into one.
@@ -1450,7 +1450,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression Contains(IConnection connection, Expression arg, Expression value)
+   .. function:: static Expression Contains(IConnection connection, Expression arg, Expression value)
 
       Whether a collection contains a value.
 
@@ -1462,7 +1462,7 @@ assembled and run.
       :returns: Whether the collection contains the value.
       :Game Scenes: All
 
-   .. method:: static Expression ContainsKey(IConnection connection, Expression dictionary, Expression key)
+   .. function:: static Expression ContainsKey(IConnection connection, Expression dictionary, Expression key)
 
       Whether a dictionary contains a key.
 
@@ -1474,7 +1474,7 @@ assembled and run.
       :returns: Whether the dictionary contains the key.
       :Game Scenes: All
 
-   .. method:: static Expression Aggregate(IConnection connection, Expression arg, Expression func)
+   .. function:: static Expression Aggregate(IConnection connection, Expression arg, Expression func)
 
       The result of applying an accumulator function over a collection.
 
@@ -1491,7 +1491,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. method:: static Expression AggregateWithSeed(IConnection connection, Expression arg, Expression seed, Expression func)
+   .. function:: static Expression AggregateWithSeed(IConnection connection, Expression arg, Expression seed, Expression func)
 
       The result of applying an accumulator function over a collection, starting from a seed.
 
@@ -1509,7 +1509,7 @@ assembled and run.
 
          The seed widens to the type of the accumulated value, the function's result.
 
-   .. method:: static Expression Concat(IConnection connection, Expression arg1, Expression arg2)
+   .. function:: static Expression Concat(IConnection connection, Expression arg1, Expression arg2)
 
       The values of one collection followed by those of another.
 
@@ -1526,7 +1526,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression Skip(IConnection connection, Expression arg, Expression count)
+   .. function:: static Expression Skip(IConnection connection, Expression arg, Expression count)
 
       A collection without its first count values.
 
@@ -1543,7 +1543,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression Take(IConnection connection, Expression arg, Expression count)
+   .. function:: static Expression Take(IConnection connection, Expression arg, Expression count)
 
       The first count values of a collection.
 
@@ -1560,7 +1560,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression OrderBy(IConnection connection, Expression arg, Expression key)
+   .. function:: static Expression OrderBy(IConnection connection, Expression arg, Expression key)
 
       The values of a collection ordered by the key a function produces for each of them.
 
@@ -1577,7 +1577,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression All(IConnection connection, Expression arg, Expression predicate)
+   .. function:: static Expression All(IConnection connection, Expression arg, Expression predicate)
 
       Whether a predicate function returns true for every value of a collection.
 
@@ -1589,7 +1589,7 @@ assembled and run.
       :returns: Whether all items satisfy the predicate.
       :Game Scenes: All
 
-   .. method:: static Expression Any(IConnection connection, Expression arg, Expression predicate)
+   .. function:: static Expression Any(IConnection connection, Expression arg, Expression predicate)
 
       Whether a predicate function returns true for any value of a collection.
 
@@ -1601,7 +1601,7 @@ assembled and run.
       :returns: Whether any item satisfies the predicate.
       :Game Scenes: All
 
-   .. method:: static Expression First(IConnection connection, Expression arg)
+   .. function:: static Expression First(IConnection connection, Expression arg)
 
       The first value of a collection.
 
@@ -1617,7 +1617,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. method:: static Expression Last(IConnection connection, Expression arg)
+   .. function:: static Expression Last(IConnection connection, Expression arg)
 
       The last value of a collection.
 
@@ -1633,7 +1633,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. method:: static Expression ElementAt(IConnection connection, Expression arg, Expression index)
+   .. function:: static Expression ElementAt(IConnection connection, Expression arg, Expression index)
 
       The value at the given position in a collection.
 
@@ -1650,7 +1650,7 @@ assembled and run.
 
          Throws an exception if the index is out of range.
 
-   .. method:: static Expression MinBy(IConnection connection, Expression arg, Expression key)
+   .. function:: static Expression MinBy(IConnection connection, Expression arg, Expression key)
 
       The value of a collection with the smallest key.
 
@@ -1667,7 +1667,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. method:: static Expression MaxBy(IConnection connection, Expression arg, Expression key)
+   .. function:: static Expression MaxBy(IConnection connection, Expression arg, Expression key)
 
       The value of a collection with the largest key.
 
@@ -1684,7 +1684,7 @@ assembled and run.
 
          Throws an exception if the collection is empty.
 
-   .. method:: static Expression Distinct(IConnection connection, Expression arg)
+   .. function:: static Expression Distinct(IConnection connection, Expression arg)
 
       The values of a collection with duplicates removed, keeping the first
       occurrence of each.
@@ -1701,7 +1701,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression Reverse(IConnection connection, Expression arg)
+   .. function:: static Expression Reverse(IConnection connection, Expression arg)
 
       The values of a collection in the opposite order.
 
@@ -1717,7 +1717,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression Union(IConnection connection, Expression arg1, Expression arg2)
+   .. function:: static Expression Union(IConnection connection, Expression arg1, Expression arg2)
 
       The values in either of two collections, with duplicates removed.
 
@@ -1734,7 +1734,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression Intersect(IConnection connection, Expression arg1, Expression arg2)
+   .. function:: static Expression Intersect(IConnection connection, Expression arg1, Expression arg2)
 
       The values in both of two collections, with duplicates removed.
 
@@ -1751,7 +1751,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression Except(IConnection connection, Expression arg1, Expression arg2)
+   .. function:: static Expression Except(IConnection connection, Expression arg1, Expression arg2)
 
       The values of the first collection that are not in the second, with
       duplicates removed.
@@ -1769,7 +1769,7 @@ assembled and run.
 
          The result is lazily evaluated. :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression Zip(IConnection connection, Expression arg1, Expression arg2, Expression func)
+   .. function:: static Expression Zip(IConnection connection, Expression arg1, Expression arg2, Expression func)
 
       The results of a function applied to the values of two collections in pairs.
 
@@ -1788,7 +1788,7 @@ assembled and run.
          The result is as long as the shorter of the two collections. It is lazily
          evaluated, and :meth:`Expression.ToList` makes it concrete.
 
-   .. method:: static Expression GroupBy(IConnection connection, Expression arg, Expression key)
+   .. function:: static Expression GroupBy(IConnection connection, Expression arg, Expression key)
 
       The values of a collection grouped by the key a function produces for each of them.
 
@@ -1806,70 +1806,70 @@ assembled and run.
 
    The type of a value a procedure takes or returns.
 
-   .. method:: static Type Double(IConnection connection, )
+   .. function:: static Type Double(IConnection connection, )
 
       A double precision floating point number type.
 
 
       :Game Scenes: All
 
-   .. method:: static Type Float(IConnection connection, )
+   .. function:: static Type Float(IConnection connection, )
 
       A single precision floating point number type.
 
 
       :Game Scenes: All
 
-   .. method:: static Type Int(IConnection connection, )
+   .. function:: static Type Int(IConnection connection, )
 
       A signed 32-bit integer type.
 
 
       :Game Scenes: All
 
-   .. method:: static Type Long(IConnection connection, )
+   .. function:: static Type Long(IConnection connection, )
 
       A signed 64-bit integer type.
 
 
       :Game Scenes: All
 
-   .. method:: static Type UInt(IConnection connection, )
+   .. function:: static Type UInt(IConnection connection, )
 
       An unsigned 32-bit integer type.
 
 
       :Game Scenes: All
 
-   .. method:: static Type ULong(IConnection connection, )
+   .. function:: static Type ULong(IConnection connection, )
 
       An unsigned 64-bit integer type.
 
 
       :Game Scenes: All
 
-   .. method:: static Type Bool(IConnection connection, )
+   .. function:: static Type Bool(IConnection connection, )
 
       A boolean type.
 
 
       :Game Scenes: All
 
-   .. method:: static Type String(IConnection connection, )
+   .. function:: static Type String(IConnection connection, )
 
       A string type.
 
 
       :Game Scenes: All
 
-   .. method:: static Type Bytes(IConnection connection, )
+   .. function:: static Type Bytes(IConnection connection, )
 
       A byte sequence type.
 
 
       :Game Scenes: All
 
-   .. method:: static Type ClassType(IConnection connection, string service, string name)
+   .. function:: static Type ClassType(IConnection connection, string service, string name)
 
       The type of a class defined by a service.
 
@@ -1880,7 +1880,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Type EnumerationType(IConnection connection, string service, string name)
+   .. function:: static Type EnumerationType(IConnection connection, string service, string name)
 
       The type of an enumeration defined by a service.
 
@@ -1891,7 +1891,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Type StructType(IConnection connection, string service, string name)
+   .. function:: static Type StructType(IConnection connection, string service, string name)
 
       The type of a structure defined by a service.
 
@@ -1902,7 +1902,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Type TupleType(IConnection connection, System.Collections.Generic.IList<Type> valueTypes)
+   .. function:: static Type TupleType(IConnection connection, System.Collections.Generic.IList<Type> valueTypes)
 
       A tuple type. Throws an exception if there are no element types or more than seven.
 
@@ -1912,7 +1912,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Type ListType(IConnection connection, Type valueType)
+   .. function:: static Type ListType(IConnection connection, Type valueType)
 
       A list type.
 
@@ -1922,7 +1922,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Type SetType(IConnection connection, Type valueType)
+   .. function:: static Type SetType(IConnection connection, Type valueType)
 
       A set type. Throws an exception if the element type is nullable.
 
@@ -1932,7 +1932,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Type DictionaryType(IConnection connection, Type keyType, Type valueType)
+   .. function:: static Type DictionaryType(IConnection connection, Type keyType, Type valueType)
 
       A dictionary type. Throws an exception if the key type is nullable or not a valid
       key type.
@@ -1944,7 +1944,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. method:: static Type NullableType(IConnection connection, Type valueType)
+   .. function:: static Type NullableType(IConnection connection, Type valueType)
 
       A nullable type, holding a value of the given type or null.
 
@@ -2003,81 +2003,81 @@ assembled and run.
    The kind of a type, with the values of the communication protocol's type codes.
 
 
-   .. value:: Double
+   .. enumerator:: Double
 
       A double precision floating point number.
 
 
-   .. value:: Float
+   .. enumerator:: Float
 
       A single precision floating point number.
 
 
-   .. value:: SInt32
+   .. enumerator:: SInt32
 
       A signed 32-bit integer.
 
 
-   .. value:: SInt64
+   .. enumerator:: SInt64
 
       A signed 64-bit integer.
 
 
-   .. value:: UInt32
+   .. enumerator:: UInt32
 
       An unsigned 32-bit integer.
 
 
-   .. value:: UInt64
+   .. enumerator:: UInt64
 
       An unsigned 64-bit integer.
 
 
-   .. value:: Bool
+   .. enumerator:: Bool
 
       A boolean.
 
 
-   .. value:: String
+   .. enumerator:: String
 
       A string.
 
 
-   .. value:: Bytes
+   .. enumerator:: Bytes
 
       A sequence of bytes.
 
 
-   .. value:: Class
+   .. enumerator:: Class
 
       A class defined by a service.
 
 
-   .. value:: Enumeration
+   .. enumerator:: Enumeration
 
       An enumeration defined by a service.
 
 
-   .. value:: Struct
+   .. enumerator:: Struct
 
       A structure defined by a service.
 
 
-   .. value:: Tuple
+   .. enumerator:: Tuple
 
       A tuple, with the types of its values in :prop:`Type.Types`.
 
 
-   .. value:: List
+   .. enumerator:: List
 
       A list, with the type of its values in :prop:`Type.Types`.
 
 
-   .. value:: Set
+   .. enumerator:: Set
 
       A set, with the type of its values in :prop:`Type.Types`.
 
 
-   .. value:: Dictionary
+   .. enumerator:: Dictionary
 
       A dictionary, with the types of its keys and values in :prop:`Type.Types`.

@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -49,7 +49,7 @@ Node
 
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> BurnVector(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> BurnVector(ReferenceFrame referenceFrame = null)
 
       Returns the burn vector for the maneuver node.
 
@@ -65,7 +65,7 @@ Node
 
          Does not change when executing the maneuver node. See :meth:`Node.RemainingBurnVector`.
 
-   .. method:: System.Tuple<double,double,double> RemainingBurnVector(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> RemainingBurnVector(ReferenceFrame referenceFrame = null)
 
       Returns the remaining burn vector for the maneuver node.
 
@@ -99,7 +99,7 @@ Node
 
       :Game Scenes: Flight
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Removes the maneuver node.
 
@@ -132,7 +132,7 @@ Node
 
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position vector of the maneuver node in the given reference frame.
 
@@ -143,7 +143,7 @@ Node
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
 
       The rotation of the maneuver nodes burn.
 
@@ -154,7 +154,7 @@ Node
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
 
       The direction of the maneuver nodes burn.
 

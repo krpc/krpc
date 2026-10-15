@@ -231,7 +231,7 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_AddForce(krpc_connection_t connection, krpc_SpaceCenter_Force_t * result, krpc_SpaceCenter_Part_t part, const krpc_tuple_double_double_double_t * force, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+.. function:: krpc_error_t krpc_Debug_AddForce(krpc_connection_t connection, krpc_SpaceCenter_Force_t * returnValue, krpc_SpaceCenter_Part_t part, const krpc_tuple_double_double_double_t * force, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
    Exert a constant force on a part, acting at the given position.
 
@@ -303,8 +303,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_InfinitePropellant(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_InfinitePropellant(bool value)
+.. function:: krpc_error_t krpc_Debug_InfinitePropellant(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_InfinitePropellant(krpc_connection_t connection, bool value)
 
    Whether engines and RCS thrusters draw no propellant.
 
@@ -313,8 +313,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_InfiniteElectricity(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_InfiniteElectricity(bool value)
+.. function:: krpc_error_t krpc_Debug_InfiniteElectricity(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_InfiniteElectricity(krpc_connection_t connection, bool value)
 
    Whether parts draw no electric charge.
 
@@ -323,8 +323,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_NoCrashDamage(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_NoCrashDamage(bool value)
+.. function:: krpc_error_t krpc_Debug_NoCrashDamage(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_NoCrashDamage(krpc_connection_t connection, bool value)
 
    Whether parts survive collisions that would otherwise destroy them.
 
@@ -333,8 +333,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_UnbreakableJoints(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_UnbreakableJoints(bool value)
+.. function:: krpc_error_t krpc_Debug_UnbreakableJoints(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_UnbreakableJoints(krpc_connection_t connection, bool value)
 
    Whether the joints between parts are rigid and cannot break.
 
@@ -343,8 +343,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_IgnoreMaxTemperature(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_IgnoreMaxTemperature(bool value)
+.. function:: krpc_error_t krpc_Debug_IgnoreMaxTemperature(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_IgnoreMaxTemperature(krpc_connection_t connection, bool value)
 
    Whether parts survive temperatures above their maximum, instead of exploding.
 
@@ -353,8 +353,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_AllowPartClipping(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_AllowPartClipping(bool value)
+.. function:: krpc_error_t krpc_Debug_AllowPartClipping(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_AllowPartClipping(krpc_connection_t connection, bool value)
 
    Whether parts may be placed so that they intersect one another in the editor.
 
@@ -363,8 +363,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_NonStrictAttachmentOrientation(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_NonStrictAttachmentOrientation(bool value)
+.. function:: krpc_error_t krpc_Debug_NonStrictAttachmentOrientation(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_NonStrictAttachmentOrientation(krpc_connection_t connection, bool value)
 
    Whether parts may be attached in any orientation, rather than only the ones their
    attachment nodes allow.
@@ -374,8 +374,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_IgnoreKerbalInventoryLimits(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_IgnoreKerbalInventoryLimits(bool value)
+.. function:: krpc_error_t krpc_Debug_IgnoreKerbalInventoryLimits(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_IgnoreKerbalInventoryLimits(krpc_connection_t connection, bool value)
 
    Whether a kerbal's inventory may hold more than its slot and mass limits allow.
 
@@ -384,8 +384,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_IgnoreEVAConstructionMassLimit(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_IgnoreEVAConstructionMassLimit(bool value)
+.. function:: krpc_error_t krpc_Debug_IgnoreEVAConstructionMassLimit(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_IgnoreEVAConstructionMassLimit(krpc_connection_t connection, bool value)
 
    Whether EVA construction may move parts heavier than a kerbal can normally carry.
 
@@ -394,8 +394,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_IgnoreAgencyMindsetOnContracts(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_IgnoreAgencyMindsetOnContracts(bool value)
+.. function:: krpc_error_t krpc_Debug_IgnoreAgencyMindsetOnContracts(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_IgnoreAgencyMindsetOnContracts(krpc_connection_t connection, bool value)
 
    Whether contracts are offered regardless of the agency mindset that normally
    restricts which ones appear.
@@ -405,8 +405,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_PauseOnVesselUnpack(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_PauseOnVesselUnpack(bool value)
+.. function:: krpc_error_t krpc_Debug_PauseOnVesselUnpack(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_PauseOnVesselUnpack(krpc_connection_t connection, bool value)
 
    Whether the game pauses whenever a vessel comes off rails.
 
@@ -415,8 +415,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_BiomesVisible(krpc_connection_t connection, bool * result)
-.. function:: void krpc_Debug_set_BiomesVisible(bool value)
+.. function:: krpc_error_t krpc_Debug_BiomesVisible(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_BiomesVisible(krpc_connection_t connection, bool value)
 
    Whether biome boundaries are drawn on the surface of bodies.
 
@@ -425,8 +425,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_GravityMultiplier(krpc_connection_t connection, double * result)
-.. function:: void krpc_Debug_set_GravityMultiplier(double value)
+.. function:: krpc_error_t krpc_Debug_GravityMultiplier(krpc_connection_t connection, double * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_GravityMultiplier(krpc_connection_t connection, double value)
 
    Multiplier applied to the force of gravity on every vessel. 1 is normal gravity,
    0 is weightlessness.
@@ -436,8 +436,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_Funds(krpc_connection_t connection, double * result)
-.. function:: void krpc_Debug_set_Funds(double value)
+.. function:: krpc_error_t krpc_Debug_Funds(krpc_connection_t connection, double * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_Funds(krpc_connection_t connection, double value)
 
    The number of funds the player has. Only available in career mode.
 
@@ -446,8 +446,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_Science(krpc_connection_t connection, float * result)
-.. function:: void krpc_Debug_set_Science(float value)
+.. function:: krpc_error_t krpc_Debug_Science(krpc_connection_t connection, float * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_Science(krpc_connection_t connection, float value)
 
    The amount of science the player has. Only available in career and science mode.
 
@@ -456,8 +456,8 @@ options.
 
 
 
-.. function:: krpc_error_t krpc_Debug_Reputation(krpc_connection_t connection, float * result)
-.. function:: void krpc_Debug_set_Reputation(float value)
+.. function:: krpc_error_t krpc_Debug_Reputation(krpc_connection_t connection, float * returnValue)
+.. function:: krpc_error_t krpc_Debug_set_Reputation(krpc_connection_t connection, float value)
 
    The player's reputation. Only available in career mode.
 

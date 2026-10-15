@@ -704,9 +704,9 @@
                   
   <section id="stage">
 <span id="csharp-api-stage"></span><h1>Stage<a class="headerlink" href="#stage" title="Link to this heading">#</a></h1>
-<dl class="csharp class">
-<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.SpaceCenter.Stage">
-<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Stage</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.Stage" title="Link to this definition">#</a></dt>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.SpaceCenter.Stage">
+<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">Stage</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.Stage" title="Link to this definition">#</a></dt>
 <dd><p>A single stage of a vessel. Obtain activation (burn) stages from
 <code class="docutils literal notranslate"><span class="pre">Vessel.Stages</span></code> / <code class="docutils literal notranslate"><span class="pre">Vessel.StageAt</span></code>, and decouple stages from
 <code class="docutils literal notranslate"><span class="pre">Vessel.DecoupleStages</span></code> / <code class="docutils literal notranslate"><span class="pre">Vessel.DecoupleStageAt</span></code>.</p>
@@ -718,9 +718,9 @@ InvalidOperationException because stock delta-v data does not
 apply. Thrust is reported in newtons and masses in kilograms (stock values
 are converted from kilonewtons and tonnes).</p>
 </div>
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.Number">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">Number</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.Number" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.Number">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <span class="sig-name descname"><span class="pre">Number</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.Number" title="Link to this definition">#</a></dt>
 <dd><p>The stage number (activation stage for burn stages, decouple stage otherwise).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -729,9 +729,9 @@ are converted from kilonewtons and tonnes).</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.Parts">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="KRPC.Client.Services.SpaceCenter.Part class"><span class="pre">Part</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Parts</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.Parts" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.Parts">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="class: KRPC.Client.Services.SpaceCenter.Part"><span class="pre">Part</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Parts</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.Parts" title="Link to this definition">#</a></dt>
 <dd><p>The parts that belong to this stage.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -740,10 +740,10 @@ are converted from kilonewtons and tonnes).</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Stage.Resources">
-<a class="reference internal" href="resources.html#class-KRPC.Client.Services.SpaceCenter.Resources" title="KRPC.Client.Services.SpaceCenter.Resources class"><span class="pre">Resources</span></a> <span class="sig-name descname"><span class="pre">Resources</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <em><span class="pre">cumulative</span></em><em> <span class="pre">=</span> <span class="pre">true</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Stage.Resources" title="Link to this definition">#</a></dt>
-<dd><p>Returns a <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Stage.Resources" title="KRPC.Client.Services.SpaceCenter.Stage.Resources method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stage.Resources</span></code></a> object for this stage.</p>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Stage.Resources">
+<a class="reference internal" href="resources.html#class-KRPC.Client.Services.SpaceCenter.Resources" title="class: KRPC.Client.Services.SpaceCenter.Resources"><span class="pre">Resources</span></a> <span class="sig-name descname"><span class="pre">Resources</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <em><span class="pre">cumulative</span></em><em> <span class="pre">=</span> <span class="pre">true</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Stage.Resources" title="Link to this definition">#</a></dt>
+<dd><p>Returns a <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Stage.Resources" title="function: KRPC.Client.Services.SpaceCenter.Stage.Resources"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Stage.Resources</span></code></a> object for this stage.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -763,9 +763,9 @@ the C# <code class="docutils literal notranslate"><span class="pre">Resources()<
 </div>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.DeltaV">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">DeltaV</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.DeltaV" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.DeltaV">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">DeltaV</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.DeltaV" title="Link to this definition">#</a></dt>
 <dd><p>Delta-v for this stage in the current situation, in m/s.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -779,9 +779,9 @@ Calling this on a decouple stage raises an error.</p>
 </div>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.VacuumDeltaV">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">VacuumDeltaV</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.VacuumDeltaV" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.VacuumDeltaV">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">VacuumDeltaV</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.VacuumDeltaV" title="Link to this definition">#</a></dt>
 <dd><p>Vacuum delta-v for this stage, in m/s.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -790,9 +790,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelDeltaV">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">SeaLevelDeltaV</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelDeltaV" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelDeltaV">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">SeaLevelDeltaV</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelDeltaV" title="Link to this definition">#</a></dt>
 <dd><p>Sea-level delta-v for this stage, in m/s.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -801,9 +801,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.Thrust">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Thrust</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.Thrust" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.Thrust">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Thrust</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.Thrust" title="Link to this definition">#</a></dt>
 <dd><p>Thrust in the current situation, in newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -812,9 +812,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.VacuumThrust">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">VacuumThrust</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.VacuumThrust" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.VacuumThrust">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">VacuumThrust</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.VacuumThrust" title="Link to this definition">#</a></dt>
 <dd><p>Vacuum thrust, in newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -823,9 +823,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelThrust">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">SeaLevelThrust</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelThrust" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelThrust">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">SeaLevelThrust</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelThrust" title="Link to this definition">#</a></dt>
 <dd><p>Sea-level thrust, in newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -834,9 +834,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.TWR">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">TWR</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.TWR" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.TWR">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">TWR</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.TWR" title="Link to this definition">#</a></dt>
 <dd><p>Thrust-to-weight ratio in the current situation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -845,9 +845,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.VacuumTWR">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">VacuumTWR</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.VacuumTWR" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.VacuumTWR">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">VacuumTWR</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.VacuumTWR" title="Link to this definition">#</a></dt>
 <dd><p>Vacuum thrust-to-weight ratio.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -856,9 +856,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelTWR">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">SeaLevelTWR</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelTWR" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelTWR">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">SeaLevelTWR</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelTWR" title="Link to this definition">#</a></dt>
 <dd><p>Sea-level thrust-to-weight ratio.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -867,9 +867,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.SpecificImpulse">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">SpecificImpulse</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SpecificImpulse" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.SpecificImpulse">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">SpecificImpulse</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SpecificImpulse" title="Link to this definition">#</a></dt>
 <dd><p>Specific impulse in the current situation, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -878,9 +878,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.VacuumSpecificImpulse">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">VacuumSpecificImpulse</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.VacuumSpecificImpulse" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.VacuumSpecificImpulse">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">VacuumSpecificImpulse</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.VacuumSpecificImpulse" title="Link to this definition">#</a></dt>
 <dd><p>Vacuum specific impulse, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -889,9 +889,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelSpecificImpulse">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">SeaLevelSpecificImpulse</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelSpecificImpulse" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelSpecificImpulse">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">SeaLevelSpecificImpulse</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.SeaLevelSpecificImpulse" title="Link to this definition">#</a></dt>
 <dd><p>Sea-level specific impulse, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -900,9 +900,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.BurnTime">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">BurnTime</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.BurnTime" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.BurnTime">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">BurnTime</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.BurnTime" title="Link to this definition">#</a></dt>
 <dd><p>Burn time for this stage, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -911,9 +911,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.StartMass">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">StartMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.StartMass" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.StartMass">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">StartMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.StartMass" title="Link to this definition">#</a></dt>
 <dd><p>The mass of the vessel after the stage activates, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -922,9 +922,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.EndMass">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">EndMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.EndMass" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.EndMass">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">EndMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.EndMass" title="Link to this definition">#</a></dt>
 <dd><p>The mass of the vessel when the stage burns out, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -933,9 +933,9 @@ Calling this on a decouple stage raises an error.</p>
 </dl>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.DryMass">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">DryMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.DryMass" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.DryMass">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">DryMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.DryMass" title="Link to this definition">#</a></dt>
 <dd><p>The dry mass of the vessel after the stage activates, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -948,9 +948,9 @@ Calling this on a decouple stage raises an error.</p>
 </div>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Stage.FuelMass">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">FuelMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.FuelMass" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Stage.FuelMass">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">FuelMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Stage.FuelMass" title="Link to this definition">#</a></dt>
 <dd><p>The fuel mass of the vessel when the stage activates, in kg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -960,7 +960,7 @@ Calling this on a decouple stage raises an error.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Includes the fuel of all later stages, and the fuel left in the parts the stage
-decouples. The stage burns <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Stage.StartMass" title="KRPC.Client.Services.SpaceCenter.Stage.StartMass property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Stage.StartMass</span></code></a> minus <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Stage.EndMass" title="KRPC.Client.Services.SpaceCenter.Stage.EndMass property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Stage.EndMass</span></code></a>.</p>
+decouples. The stage burns <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Stage.StartMass" title="property: KRPC.Client.Services.SpaceCenter.Stage.StartMass"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Stage.StartMass</span></code></a> minus <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Stage.EndMass" title="property: KRPC.Client.Services.SpaceCenter.Stage.EndMass"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Stage.EndMass</span></code></a>.</p>
 </div>
 </dd></dl>
 

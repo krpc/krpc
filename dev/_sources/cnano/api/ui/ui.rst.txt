@@ -17,7 +17,7 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. function:: krpc_error_t krpc_UI_StockCanvas(krpc_connection_t connection, krpc_UI_Canvas_t * result)
+.. function:: krpc_error_t krpc_UI_StockCanvas(krpc_connection_t connection, krpc_UI_Canvas_t * returnValue)
 
    The stock UI canvas.
 
@@ -26,7 +26,7 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. function:: krpc_error_t krpc_UI_AddCanvas(krpc_connection_t connection, krpc_UI_Canvas_t * result)
+.. function:: krpc_error_t krpc_UI_AddCanvas(krpc_connection_t connection, krpc_UI_Canvas_t * returnValue)
 
    Add a new canvas.
 

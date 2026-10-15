@@ -10,32 +10,32 @@ Node
 
    Represents a maneuver node. Can be created using :func:`krpc_SpaceCenter_Control_AddNode`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_Prograde(krpc_connection_t connection, double * result)
-   .. function:: void krpc_SpaceCenter_Node_set_Prograde(double value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Prograde(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_set_Prograde(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 
       The magnitude of the maneuver nodes delta-v in the prograde direction,
       in meters per second.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_Normal(krpc_connection_t connection, double * result)
-   .. function:: void krpc_SpaceCenter_Node_set_Normal(double value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Normal(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_set_Normal(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 
       The magnitude of the maneuver nodes delta-v in the normal direction,
       in meters per second.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_Radial(krpc_connection_t connection, double * result)
-   .. function:: void krpc_SpaceCenter_Node_set_Radial(double value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Radial(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_set_Radial(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 
       The magnitude of the maneuver nodes delta-v in the radial direction,
       in meters per second.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_DeltaV(krpc_connection_t connection, double * result)
-   .. function:: void krpc_SpaceCenter_Node_set_DeltaV(double value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_DeltaV(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_set_DeltaV(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 
       The delta-v of the maneuver node, in meters per second.
 
@@ -46,14 +46,14 @@ Node
 
          Does not change when executing the maneuver node. See :func:`krpc_SpaceCenter_Node_RemainingDeltaV`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_RemainingDeltaV(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_RemainingDeltaV(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
 
       Gets the remaining delta-v of the maneuver node, in meters per second. Changes as the
       node is executed. This is equivalent to the delta-v reported in-game.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_BurnVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_BurnVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Node_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       Returns the burn vector for the maneuver node.
 
@@ -69,7 +69,7 @@ Node
 
          Does not change when executing the maneuver node. See :func:`krpc_SpaceCenter_Node_RemainingBurnVector`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_RemainingBurnVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_RemainingBurnVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Node_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       Returns the remaining burn vector for the maneuver node.
 
@@ -85,33 +85,33 @@ Node
 
          Changes as the maneuver node is executed. See :func:`krpc_SpaceCenter_Node_BurnVector`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_UT(krpc_connection_t connection, double * result)
-   .. function:: void krpc_SpaceCenter_Node_set_UT(double value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_UT(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_set_UT(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 
       The universal time at which the maneuver will occur, in seconds.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_TimeTo(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_TimeTo(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
 
       The time until the maneuver node will be encountered, in seconds.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_SpaceCenter_Node_t instance)
 
       The orbit that results from executing the maneuver node.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_Remove(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Remove(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance)
 
       Removes the maneuver node.
 
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_Node_t instance)
 
       The reference frame that is fixed relative to the maneuver node's burn.
 
@@ -121,7 +121,7 @@ Node
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_OrbitalReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_OrbitalReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_Node_t instance)
 
       The reference frame that is fixed relative to the maneuver node, and
       orientated with the orbital prograde/normal/radial directions of the
@@ -137,7 +137,7 @@ Node
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Node_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position vector of the maneuver node in the given reference frame.
 
@@ -148,7 +148,7 @@ Node
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_SpaceCenter_Node_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The rotation of the maneuver nodes burn.
 
@@ -159,7 +159,7 @@ Node
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Node_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Node_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The direction of the maneuver nodes burn.
 

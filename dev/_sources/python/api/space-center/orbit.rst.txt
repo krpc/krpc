@@ -12,7 +12,7 @@ Orbit
    :attr:`Vessel.orbit`, or a celestial body, obtained by calling
    :attr:`CelestialBody.orbit`.
 
-   .. staticmethod:: create_from_position_and_velocity(body, position, velocity, ut, reference_frame)
+   .. staticmethod:: create_from_position_and_velocity(body, position, velocity, ut, [reference_frame = None])
 
       Create the orbit that passes through a given position at a given velocity.
       The orbit coasts freely under the gravity of the body being orbited, so it
@@ -23,7 +23,7 @@ Orbit
       :param tuple position: The position, as a position vector.
       :param tuple velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.
       :param float ut: The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
-      :param ReferenceFrame reference_frame: The reference frame that *position* and *velocity* are in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of *body*.
+      :param ReferenceFrame or None reference_frame: The reference frame that *position* and *velocity* are in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of *body*.
       :rtype: :class:`Orbit`
    
 
@@ -277,64 +277,64 @@ Orbit
       :rtype: float
    
 
-   .. method:: position(reference_frame)
+   .. method:: position([reference_frame = None])
 
       The position the orbit has reached at the current time, in the given reference
       frame.
 
-      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :param ReferenceFrame or None reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
    
 
-   .. method:: position_at(ut, reference_frame)
+   .. method:: position_at(ut, [reference_frame = None])
 
       The position at a given time, in the specified reference frame.
 
       :param float ut: The universal time to measure the position at.
-      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :param ReferenceFrame or None reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
    
 
-   .. method:: position_at_true_anomaly(true_anomaly, reference_frame)
+   .. method:: position_at_true_anomaly(true_anomaly, [reference_frame = None])
 
       The position at the point in the orbit given by the true anomaly, in the specified
       reference frame.
 
       :param float true_anomaly: The true anomaly.
-      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :param ReferenceFrame or None reference_frame: The reference frame that the returned position vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
    
 
-   .. method:: velocity(reference_frame)
+   .. method:: velocity([reference_frame = None])
 
       The velocity the orbit has reached at the current time, in the given reference
       frame.
 
-      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :param ReferenceFrame or None reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :rtype: tuple(float, float, float)
    
 
-   .. method:: velocity_at(ut, reference_frame)
+   .. method:: velocity_at(ut, [reference_frame = None])
 
       The velocity at a given time, in the specified reference frame.
 
       :param float ut: The universal time to measure the velocity at.
-      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :param ReferenceFrame or None reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :rtype: tuple(float, float, float)
    
 
-   .. method:: velocity_at_true_anomaly(true_anomaly, reference_frame)
+   .. method:: velocity_at_true_anomaly(true_anomaly, [reference_frame = None])
 
       The velocity at the point in the orbit given by the true anomaly, in the specified
       reference frame.
 
       :param float true_anomaly: The true anomaly.
-      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
+      :param ReferenceFrame or None reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`CelestialBody.non_rotating_reference_frame` of :attr:`Orbit.body`.
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
       :rtype: tuple(float, float, float)
    

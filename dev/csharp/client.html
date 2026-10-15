@@ -715,7 +715,7 @@ should not be used with the client library. It is a modified version to work wit
 </section>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
-<p>To connect to a server, create a <a class="reference internal" href="#class-Connection" title="Connection class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Connection</span></code></a> object. All interaction with the server is done
+<p>To connect to a server, create a <a class="reference internal" href="#class-Connection" title="class: Connection"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Connection</span></code></a> object. All interaction with the server is done
 via this object. When constructed without any arguments, it will connect to the local machine on the
 default port numbers. You can specify different connection settings, and also a descriptive name for
 the connection, as follows:</p>
@@ -738,9 +738,9 @@ the connection, as follows:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="#class-Connection" title="Connection class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Connection</span></code></a> object needs to be disposed of correctly when finished with, so that the
+<p>The <a class="reference internal" href="#class-Connection" title="class: Connection"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Connection</span></code></a> object needs to be disposed of correctly when finished with, so that the
 network connection it manages can be released. This can be done with a <code class="docutils literal notranslate"><span class="pre">using</span></code> block (as in the
-example above) or by calling <a class="reference internal" href="#method-Connection.Dispose" title="Connection.Dispose method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Dispose</span></code></a> directly.</p>
+example above) or by calling <a class="reference internal" href="#function-Connection.Dispose" title="function: Connection.Dispose"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.Dispose</span></code></a> directly.</p>
 </section>
 <section id="calling-remote-procedures">
 <h2>Calling Remote Procedures<a class="headerlink" href="#calling-remote-procedures" title="Link to this heading">#</a></h2>
@@ -751,8 +751,8 @@ namespace <code class="docutils literal notranslate"><span class="pre">KRPC.Clie
 <p>To interact with a service, you must first instantiate it. You can then call its methods and
 properties to invoke remote procedures. The following example demonstrates how to do this. It
 instantiates the <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service and calls
-<a class="reference internal" href="api/space-center/space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.ActiveVessel" title="KRPC.Client.Services.SpaceCenter.SpaceCenter.ActiveVessel property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.SpaceCenter.ActiveVessel</span></code></a> to get an object representing the
-active vessel (of type <a class="reference internal" href="api/space-center/vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="KRPC.Client.Services.SpaceCenter.Vessel class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.Vessel</span></code></a>). It sets the name of the
+<a class="reference internal" href="api/space-center/space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.ActiveVessel" title="property: KRPC.Client.Services.SpaceCenter.SpaceCenter.ActiveVessel"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.SpaceCenter.ActiveVessel</span></code></a> to get an object representing the
+active vessel (of type <a class="reference internal" href="api/space-center/vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="class: KRPC.Client.Services.SpaceCenter.Vessel"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.Vessel</span></code></a>). It sets the name of the
 vessel and then prints out its altitude:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
@@ -778,7 +778,7 @@ behaves when a game is loaded or what it identifies is destroyed.</p>
 <section id="server-side-functions">
 <h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
 <p>A server side function is code that runs inside the game, on the server. Pass a lambda expression to
-<a class="reference internal" href="#method-Connection.Run" title="Connection.Run method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Run</span></code></a> to compile it into a server side function, run it once and return its value.
+<a class="reference internal" href="#function-Connection.Run" title="function: Connection.Run"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.Run</span></code></a> to compile it into a server side function, run it once and return its value.
 Every value it reads comes from the same physics tick. For example, the following reads the vessel’s
 altitude and speed together:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
@@ -849,19 +849,19 @@ closed.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>It calls <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> once at the start of the program to create the stream, and
+<p>It calls <a class="reference internal" href="#function-Connection.AddStream" title="function: Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> once at the start of the program to create the stream, and
 then repeatedly prints the position returned by the stream. The stream is automatically closed when
 the client disconnects.</p>
-<p>To stream a method call, pass <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> a lambda expression with no parameters
+<p>To stream a method call, pass <a class="reference internal" href="#function-Connection.AddStream" title="function: Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> a lambda expression with no parameters
 that makes the call. A single call with fixed arguments is streamed as that call. The instance it
 is made on is evaluated once, when the stream is created. For example,
 <code class="docutils literal notranslate"><span class="pre">vessel.Flight(frame).MeanAltitude</span></code> streams the <code class="docutils literal notranslate"><span class="pre">MeanAltitude</span></code> call.</p>
 <p>Any other lambda is compiled into a server side function, as
 <a class="reference internal" href="#csharp-client-compiling-lambdas"><span class="std std-ref">Compiling Server Side Functions</span></a> describes. A call with a remote procedure call in an
 argument is one of these, and the argument’s call is made on each update.</p>
-<p><a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> returns a stream object of type <a class="reference internal" href="#class-Stream" title="Stream class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent
-value of the stream can be obtained by calling <a class="reference internal" href="#method-Stream.Get" title="Stream.Get method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Get</span></code></a>. A stream can be stopped and
-removed from the server by calling <a class="reference internal" href="#method-Stream.Remove" title="Stream.Remove method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Remove</span></code></a> on the stream object. All of a client’s
+<p><a class="reference internal" href="#function-Connection.AddStream" title="function: Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> returns a stream object of type <a class="reference internal" href="#class-Stream" title="class: Stream"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent
+value of the stream can be obtained by calling <a class="reference internal" href="#function-Stream.Get" title="function: Stream.Get"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Stream.Get</span></code></a>. A stream can be stopped and
+removed from the server by calling <a class="reference internal" href="#function-Stream.Remove" title="function: Stream.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Stream.Remove</span></code></a> on the stream object. All of a client’s
 streams are automatically stopped when it disconnects.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -879,7 +879,7 @@ and <em>callbacks</em>.</p>
 stream changes. These can be used to block the current thread of execution until the value of the
 stream changes.</p>
 <p>The following example waits until the abort button is pressed in game, by waiting for the value of
-<a class="reference internal" href="api/space-center/control.html#property-KRPC.Client.Services.SpaceCenter.Control.Abort" title="KRPC.Client.Services.SpaceCenter.Control.Abort property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.Control.Abort</span></code></a> to change to true:</p>
+<a class="reference internal" href="api/space-center/control.html#property-KRPC.Client.Services.SpaceCenter.Control.Abort" title="property: KRPC.Client.Services.SpaceCenter.Control.Abort"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.Control.Abort</span></code></a> to change to true:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
@@ -911,7 +911,7 @@ whilst waiting.</p>
 changes. Callback functions should take a single argument, which is the new value of the stream, and
 should return nothing.</p>
 <p>For example the following program registers two callbacks that are invoked when the value of
-<a class="reference internal" href="api/space-center/control.html#property-KRPC.Client.Services.SpaceCenter.Control.Abort" title="KRPC.Client.Services.SpaceCenter.Control.Abort property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.Control.Abort</span></code></a> changes:</p>
+<a class="reference internal" href="api/space-center/control.html#property-KRPC.Client.Services.SpaceCenter.Control.Abort" title="property: KRPC.Client.Services.SpaceCenter.Control.Abort"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KRPC.Client.Services.SpaceCenter.Control.Abort</span></code></a> changes:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
@@ -989,12 +989,12 @@ holds the stream instead. It resumes once the object or scene is available.</p>
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a></p>
 </div>
-<p>To handle an ending in a callback, add an end callback with <a class="reference internal" href="#method-Stream.AddEndCallback" title="Stream.AddEndCallback method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.AddEndCallback</span></code></a>. It is
+<p>To handle an ending in a callback, add an end callback with <a class="reference internal" href="#function-Stream.AddEndCallback" title="function: Stream.AddEndCallback"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Stream.AddEndCallback</span></code></a>. It is
 called once, with the exception.</p>
 </section>
 <section id="streaming-server-side-functions">
 <h3>Streaming Server Side Functions<a class="headerlink" href="#streaming-server-side-functions" title="Link to this heading">#</a></h3>
-<p>Pass a lambda expression to <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> to stream its value, computed on the
+<p>Pass a lambda expression to <a class="reference internal" href="#function-Connection.AddStream" title="function: Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> to stream its value, computed on the
 server. The server evaluates the function on each stream update, within one physics tick. The value
 can be any type the server can send, including collections and objects. For example, the following
 streams the vessel’s altitude in kilometers:</p>
@@ -1019,7 +1019,7 @@ streams the vessel’s altitude in kilometers:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Given a function built with the expression API, <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> takes the type of
+<p>Given a function built with the expression API, <a class="reference internal" href="#function-Connection.AddStream" title="function: Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> takes the type of
 its value as a type parameter. The type must be able to hold the value, or <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> throws an
 <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>.</p>
 <p>A function stream or event ends at the first exception its function throws. This includes the
@@ -1044,8 +1044,8 @@ following event does not fire while the part is not loaded:</p>
 </section>
 <section id="events">
 <span id="csharp-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
-<p>Some procedures return event objects of type <a class="reference internal" href="#class-Event" title="Event class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Event</span></code></a>. These allow you to wait until an event
-occurs, by calling <a class="reference internal" href="#method-Event.Wait" title="Event.Wait method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Event.Wait</span></code></a>. Under the hood, these are implemented using streams and
+<p>Some procedures return event objects of type <a class="reference internal" href="#class-Event" title="class: Event"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Event</span></code></a>. These allow you to wait until an event
+occurs, by calling <a class="reference internal" href="#function-Event.Wait" title="function: Event.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Event.Wait</span></code></a>. Under the hood, these are implemented using streams and
 condition variables.</p>
 <p>A call to <code class="docutils literal notranslate"><span class="pre">Wait</span></code> returns straight away if the event has fired since the previous call on the same
 event object, so no firing is missed between two calls. Several firings between two calls make
@@ -1075,7 +1075,7 @@ triggers when <code class="docutils literal notranslate"><span class="pre">MeanA
 </pre></div>
 </div>
 <p>You can also build the event’s function with the <a class="reference internal" href="../tutorials/server-side-functions.html#server-side-functions-api"><span class="std std-ref">expression API</span></a>,
-and pass it to <a class="reference internal" href="#method-Connection.AddEvent" title="Connection.AddEvent method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddEvent</span></code></a>. <a class="reference internal" href="#method-Connection.GetCall" title="Connection.GetCall method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.GetCall</span></code></a> gives the call of a
+and pass it to <a class="reference internal" href="#function-Connection.AddEvent" title="function: Connection.AddEvent"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.AddEvent</span></code></a>. <a class="reference internal" href="#function-Connection.GetCall" title="function: Connection.GetCall"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.GetCall</span></code></a> gives the call of a
 procedure, for <code class="docutils literal notranslate"><span class="pre">Expression.Call</span></code>. The following builds the same event:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
@@ -1109,8 +1109,8 @@ procedure, for <code class="docutils literal notranslate"><span class="pre">Expr
 </section>
 <section id="compiling-server-side-functions">
 <span id="csharp-client-compiling-lambdas"></span><h2>Compiling Server Side Functions<a class="headerlink" href="#compiling-server-side-functions" title="Link to this heading">#</a></h2>
-<p>Pass a lambda expression to <a class="reference internal" href="#method-Connection.Compile" title="Connection.Compile method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> to compile it into a server side function.
-<a class="reference internal" href="#method-Connection.AddEvent" title="Connection.AddEvent method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddEvent</span></code></a>, <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> and <a class="reference internal" href="#method-Connection.Run" title="Connection.Run method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Run</span></code></a> take the
+<p>Pass a lambda expression to <a class="reference internal" href="#function-Connection.Compile" title="function: Connection.Compile"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> to compile it into a server side function.
+<a class="reference internal" href="#function-Connection.AddEvent" title="function: Connection.AddEvent"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.AddEvent</span></code></a>, <a class="reference internal" href="#function-Connection.AddStream" title="function: Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> and <a class="reference internal" href="#function-Connection.Run" title="function: Connection.Run"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.Run</span></code></a> take the
 result, and run it without compiling it again. The following compiles a function once, and runs it
 every second:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
@@ -1232,7 +1232,7 @@ interpolated string with <code class="docutils literal notranslate"><span class=
 <li><p><code class="docutils literal notranslate"><span class="pre">OrderBy</span></code> with a string key takes <code class="docutils literal notranslate"><span class="pre">StringComparer.Ordinal</span></code>.</p></li>
 </ul>
 <p>Integer arithmetic wraps around on overflow, so <code class="docutils literal notranslate"><span class="pre">checked</span></code> arithmetic is an error.</p>
-<p>A construct with no server side equivalent throws <a class="reference internal" href="#class-FunctionCompilationException" title="FunctionCompilationException class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> naming it.
+<p>A construct with no server side equivalent throws <a class="reference internal" href="#class-FunctionCompilationException" title="class: FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> naming it.
 Examples are <code class="docutils literal notranslate"><span class="pre">GroupBy</span></code>, <code class="docutils literal notranslate"><span class="pre">Aggregate</span></code>, <code class="docutils literal notranslate"><span class="pre">MinBy</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxBy</span></code> and a format specifier.</p>
 <p>A lambda that makes no remote procedure call is an error in an event or a stream, as its value is
 the same on every update. An <code class="docutils literal notranslate"><span class="pre">Action</span></code> lambda that makes no remote procedure call is an error in
@@ -1240,20 +1240,20 @@ the same on every update. An <code class="docutils literal notranslate"><span cl
 </section>
 <section id="client-api-reference">
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
-<dl class="csharp class">
-<dt class="sig sig-object csharp" id="class-IConnection">
-<span class="sig-name descname"><span class="pre">class</span> <span class="pre">IConnection</span></span><a class="headerlink" href="#class-IConnection" title="Link to this definition">#</a></dt>
-<dd><p>Interface implemented by the <a class="reference internal" href="#class-Connection" title="Connection class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Connection</span></code></a> class.</p>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-IConnection">
+<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">IConnection</span></span><a class="headerlink" href="#class-IConnection" title="Link to this definition">#</a></dt>
+<dd><p>Interface implemented by the <a class="reference internal" href="#class-Connection" title="class: Connection"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Connection</span></code></a> class.</p>
 </dd></dl>
 
-<dl class="csharp class">
-<dt class="sig sig-object csharp" id="class-Connection">
-<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Connection</span></span><a class="headerlink" href="#class-Connection" title="Link to this definition">#</a></dt>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-Connection">
+<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">Connection</span></span><a class="headerlink" href="#class-Connection" title="Link to this definition">#</a></dt>
 <dd><p>A connection to the kRPC server. All interaction with kRPC is performed via an instance of this
 class.</p>
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Connection.Connection">
-<span class="sig-name descname"><span class="pre">Connection</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">name</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.net.ipaddress" title="System.Net.IPAddress"><span class="pre">Net.IPAddress</span></a> <em><span class="pre">address</span></em><em> <span class="pre">=</span> <span class="pre">null</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">rpcPort</span></em><em> <span class="pre">=</span> <span class="pre">50000</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">streamPort</span></em><em> <span class="pre">=</span> <span class="pre">50001</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.timespan" title="System.TimeSpan"><span class="pre">TimeSpan</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">default</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Connection" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Connection.Connection">
+<span class="sig-name descname"><span class="pre">Connection</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">name</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Net.IPAddress" title="type: msdn ~&gt; System.Net.IPAddress"><span class="pre">IPAddress</span></a> <em><span class="pre">address</span></em><em> <span class="pre">=</span> <span class="pre">null</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <em><span class="pre">rpcPort</span></em><em> <span class="pre">=</span> <span class="pre">50000</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <em><span class="pre">streamPort</span></em><em> <span class="pre">=</span> <span class="pre">50001</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.TimeSpan" title="type: msdn ~&gt; System.TimeSpan"><span class="pre">TimeSpan</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">default</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.Connection" title="Link to this definition">#</a></dt>
 <dd><p>Connect to a kRPC server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1273,9 +1273,9 @@ it otherwise leaves the client waiting.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Connection.ConnectLocal">
-<em><span class="pre">static</span></em> <a class="reference internal" href="#class-Connection" title="Connection class"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">ConnectLocal</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">name</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">rpcPath</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">streamPath</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.ConnectLocal" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Connection.ConnectLocal">
+<span class="property"><span class="pre">static</span></span> <a class="reference internal" href="#class-Connection" title="class: Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">ConnectLocal</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">name</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">rpcPath</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">streamPath</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.ConnectLocal" title="Link to this definition">#</a></dt>
 <dd><p>Connect to a kRPC server running on the same machine, over unix domain sockets rather than
 TCP/IP. The connection behaves identically once established. Unix domain sockets are
 available on Linux, macOS, and Windows 10 1803 and Windows Server 2019 or later.</p>
@@ -1295,63 +1295,63 @@ does. Pass <code class="docutils literal notranslate"><span class="pre">null</sp
 </dl>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Connection.AddStream">
-<a class="reference internal" href="#class-Stream" title="Stream class"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AddStream</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><span class="pre">LambdaExpression</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.AddStream" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Connection.AddStream">
+<a class="reference internal" href="#class-Stream" title="class: Stream"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AddStream</span></span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.LambdaExpression" title="type: msdn ~&gt; System.Linq.Expressions.LambdaExpression"><span class="pre">LambdaExpression</span></a> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.AddStream" title="Link to this definition">#</a></dt>
 <dd><p>Create a stream from a lambda expression. A single remote procedure call with fixed
 arguments is streamed as that call. A cast of a call to a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service procedure is
 too, with the cast made on the client. Any other lambda is translated as
-<a class="reference internal" href="#method-Connection.Compile" title="Connection.Compile method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> translates it, on every call. Throws an <code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code> if
-<code class="docutils literal notranslate"><span class="pre">ReturnType</span></code> cannot hold the lambda’s value, and <a class="reference internal" href="#class-FunctionCompilationException" title="FunctionCompilationException class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if
+<a class="reference internal" href="#function-Connection.Compile" title="function: Connection.Compile"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> translates it, on every call. Throws an <code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code> if
+<code class="docutils literal notranslate"><span class="pre">ReturnType</span></code> cannot hold the lambda’s value, and <a class="reference internal" href="#class-FunctionCompilationException" title="class: FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if
 the lambda cannot be compiled.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp">
-<a class="reference internal" href="#class-Stream" title="Stream class"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AddStream</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em><span class="sig-paren">)</span></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs">
+<a class="reference internal" href="#class-Stream" title="class: Stream"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AddStream</span></span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em><span class="sig-paren">)</span></dt>
 <dd><p>Create a stream of the value of a server side function. Throws an
 <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code> if the function has no value or the type parameter cannot
 hold its value.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Connection.Compile">
-<a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <span class="sig-name descname"><span class="pre">Compile</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Func</span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Compile" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Connection.Compile">
+<a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <span class="sig-name descname"><span class="pre">Compile</span></span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Func-1" title="type: msdn ~&gt; System.Func"><span class="pre">Func</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.Compile" title="Link to this definition">#</a></dt>
 <dd><p>Compile a lambda expression into a server side function. Throws
-<a class="reference internal" href="#class-FunctionCompilationException" title="FunctionCompilationException class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot run on the server. Compiling
+<a class="reference internal" href="#class-FunctionCompilationException" title="class: FunctionCompilationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code></a> if the lambda cannot run on the server. Compiling
 makes a remote procedure call per node, so compile a function once and reuse it. The
 server compiles the function too, so its first run is as fast as later ones.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp">
-<a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <span class="sig-name descname"><span class="pre">Compile</span></span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Action</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs">
+<a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <span class="sig-name descname"><span class="pre">Compile</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
 <dd><p>Compile a lambda expression with no value into a server side function.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp">
-<a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <span class="sig-name descname"><span class="pre">Compile</span></span><span class="pre">&lt;T1,ReturnType&gt;</span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Func</span><span class="pre">&lt;</span><span class="pre">T1</span><span class="pre">,</span> <span class="pre">ReturnType</span><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs">
+<a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <span class="sig-name descname"><span class="pre">Compile</span></span><span class="pre">&lt;</span><span class="pre">T1</span><span class="pre">,</span> <span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Func-2" title="type: msdn ~&gt; System.Func"><span class="pre">Func</span></a><span class="pre">&lt;</span><span class="pre">T1</span><span class="pre">,</span> <span class="pre">ReturnType</span><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
 <dd><p>Compile a lambda expression with a parameter into a server side function. Overloads take
 up to four parameters, and a lambda with no value.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Connection.AddEvent">
-<a class="reference internal" href="#class-Event" title="Event class"><span class="pre">Event</span></a> <span class="sig-name descname"><span class="pre">AddEvent</span></span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Func</span><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.AddEvent" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Connection.AddEvent">
+<a class="reference internal" href="#class-Event" title="class: Event"><span class="pre">Event</span></a> <span class="sig-name descname"><span class="pre">AddEvent</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Func-1" title="type: msdn ~&gt; System.Func"><span class="pre">Func</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.AddEvent" title="Link to this definition">#</a></dt>
 <dd><p>Create an event from a lambda expression that evaluates to a boolean value. The lambda is
-translated as <a class="reference internal" href="#method-Connection.Compile" title="Connection.Compile method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> translates it, on every call.</p>
+translated as <a class="reference internal" href="#function-Connection.Compile" title="function: Connection.Compile"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> translates it, on every call.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp">
-<a class="reference internal" href="#class-Event" title="Event class"><span class="pre">Event</span></a> <span class="sig-name descname"><span class="pre">AddEvent</span></span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em><span class="sig-paren">)</span></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs">
+<a class="reference internal" href="#class-Event" title="class: Event"><span class="pre">Event</span></a> <span class="sig-name descname"><span class="pre">AddEvent</span></span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em><span class="sig-paren">)</span></dt>
 <dd><p>Create an event from a server side function that evaluates to a boolean value.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Connection.Run">
-<span class="pre">ReturnType</span> <span class="sig-name descname"><span class="pre">Run</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em>, <em><span class="pre">params</span></em> <span class="pre">object</span><span class="pre">[]</span> <em><span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Run" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Connection.Run">
+<span class="pre">ReturnType</span> <span class="sig-name descname"><span class="pre">Run</span></span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em>, <span class="property"><span class="pre">params</span></span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Object" title="type: msdn ~&gt; System.Object"><span class="pre">object</span></a><span class="pre">[]</span> <em><span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.Run" title="Link to this definition">#</a></dt>
 <dd><p>Run a server side function within a single physics tick, and return its value. The
 arguments are passed to the function’s parameters. Throws an
 <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code> if the function has no value or the type parameter cannot hold
@@ -1360,64 +1360,64 @@ cannot take its argument. A null result needs a reference type or a nullable val
 the type parameter.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp">
-<span class="pre">ReturnType</span> <span class="sig-name descname"><span class="pre">Run</span></span><span class="pre">&lt;ReturnType&gt;</span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Func</span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs">
+<span class="pre">ReturnType</span> <span class="sig-name descname"><span class="pre">Run</span></span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Func-1" title="type: msdn ~&gt; System.Func"><span class="pre">Func</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
 <dd><p>Run a lambda expression on the server within a single physics tick, and return its value.
-The lambda is translated as <a class="reference internal" href="#method-Connection.Compile" title="Connection.Compile method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> translates it, on every call.</p>
+The lambda is translated as <a class="reference internal" href="#function-Connection.Compile" title="function: Connection.Compile"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.Compile</span></code></a> translates it, on every call.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Run</span></span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em>, <em><span class="pre">params</span></em> <span class="pre">object</span><span class="pre">[]</span> <em><span class="pre">args</span></em><span class="sig-paren">)</span></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Run</span></span> <span class="sig-paren">(</span><a class="reference internal" href="api/krpc/expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">KRPC.Client.Services.KRPC.Expression</span></a> <em><span class="pre">function</span></em>, <span class="property"><span class="pre">params</span></span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Object" title="type: msdn ~&gt; System.Object"><span class="pre">object</span></a><span class="pre">[]</span> <em><span class="pre">args</span></em><span class="sig-paren">)</span></dt>
 <dd><p>Run a server side function with no value within a single physics tick. The arguments are
 passed to the function’s parameters.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Run</span></span> <span class="sig-paren">(</span><span class="pre">Expression</span><span class="pre">&lt;</span><span class="pre">Action</span><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Run</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.Expression-1" title="type: msdn ~&gt; System.Linq.Expressions.Expression"><span class="pre">Expression</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="pre">&gt;</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span></dt>
 <dd><p>Run a lambda expression with no value on the server within a single physics tick.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Connection.GetCall">
-<span class="pre">KRPC.Schema.KRPC.ProcedureCall</span> <span class="sig-name descname"><span class="pre">GetCall</span></span> <span class="sig-paren">(</span><span class="pre">LambdaExpression</span> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.GetCall" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Connection.GetCall">
+<span class="pre">KRPC.Schema.KRPC.ProcedureCall</span> <span class="sig-name descname"><span class="pre">GetCall</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Linq.Expressions.LambdaExpression" title="type: msdn ~&gt; System.Linq.Expressions.LambdaExpression"><span class="pre">LambdaExpression</span></a> <em><span class="pre">expression</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.GetCall" title="Link to this definition">#</a></dt>
 <dd><p>Returns the procedure call message for a lambda expression that makes a single call. The
 expression API’s <code class="docutils literal notranslate"><span class="pre">Expression.Call</span></code> takes it, as in <a class="reference internal" href="#csharp-client-events"><span class="std std-ref">Events</span></a>.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Connection.Dispose">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Dispose</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Dispose" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Connection.Dispose">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Dispose</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.Dispose" title="Link to this definition">#</a></dt>
 <dd><p>Closes the connection and frees the resources associated with it.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="csharp class">
-<dt class="sig sig-object csharp" id="class-FunctionCompilationException">
-<span class="sig-name descname"><span class="pre">class</span> <span class="pre">FunctionCompilationException</span></span><a class="headerlink" href="#class-FunctionCompilationException" title="Link to this definition">#</a></dt>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-FunctionCompilationException">
+<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">FunctionCompilationException</span></span><a class="headerlink" href="#class-FunctionCompilationException" title="Link to this definition">#</a></dt>
 <dd><p>Thrown when a lambda expression cannot be compiled into a server side function.</p>
 </dd></dl>
 
-<dl class="csharp class">
-<dt class="sig sig-object csharp" id="class-Stream">
-<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Stream&lt;ReturnType&gt;</span></span><a class="headerlink" href="#class-Stream" title="Link to this definition">#</a></dt>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-Stream">
+<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">Stream</span></span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span><a class="headerlink" href="#class-Stream" title="Link to this definition">#</a></dt>
 <dd><p>This class represents a stream. See <a class="reference internal" href="#csharp-client-streams"><span class="std std-ref">Streaming Data</span></a>.</p>
 <p>Stream objects implement <code class="docutils literal notranslate"><span class="pre">GetHashCode</span></code>, <code class="docutils literal notranslate"><span class="pre">Equals</span></code>, <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">!=</span></code> such
 that two stream objects are equal if they are bound to the same stream on the server. Each call
-to <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> creates a new stream, so two streams of the same call are not
+to <a class="reference internal" href="#function-Connection.AddStream" title="function: Connection.AddStream"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> creates a new stream, so two streams of the same call are not
 equal.</p>
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-Stream.Rate">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Rate</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Stream.Rate" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-Stream.Rate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Rate</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Stream.Rate" title="Link to this definition">#</a></dt>
 <dd><p>The update rate of the stream in Hertz. When set to zero, the rate is unlimited.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Stream.Get">
-<span class="pre">ReturnType</span> <span class="sig-name descname"><span class="pre">Get</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.Get" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Stream.Get">
+<span class="pre">ReturnType</span> <span class="sig-name descname"><span class="pre">Get</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-Stream.Get" title="Link to this definition">#</a></dt>
 <dd><p>Returns the most recent value for the stream, waiting for the first value if none has arrived
 yet. Throws the exception that ended the stream, if it has ended, such as an exception thrown
 by the remote procedure.</p>
@@ -1425,16 +1425,16 @@ by the remote procedure.</p>
 cannot hold.</p>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-Stream.Condition">
-<span class="pre">object</span> <span class="sig-name descname"><span class="pre">Condition</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Stream.Condition" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-Stream.Condition">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Object" title="type: msdn ~&gt; System.Object"><span class="pre">object</span></a> <span class="sig-name descname"><span class="pre">Condition</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Stream.Condition" title="Link to this definition">#</a></dt>
 <dd><p>A condition variable that is notified (using <code class="docutils literal notranslate"><span class="pre">Monitor.PulseAll</span></code>) whenever the value of the
 stream changes.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Stream.Wait">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Wait</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">-1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.Wait" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Stream.Wait">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Wait</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">-1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Stream.Wait" title="Link to this definition">#</a></dt>
 <dd><p>This method blocks until the value of the stream changes or the operation times out. Returns
 <code class="docutils literal notranslate"><span class="pre">true</span></code> if the value changed, and <code class="docutils literal notranslate"><span class="pre">false</span></code> on a timeout.</p>
 <p>The streams condition variable must be locked before calling this method.</p>
@@ -1443,9 +1443,9 @@ the operation. Throws the exception that ended the stream, if it ends before or 
 wait.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Stream.AddCallback">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">AddCallback</span></span> <span class="sig-paren">(</span><span class="pre">Action</span><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.AddCallback" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Stream.AddCallback">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <span class="sig-name descname"><span class="pre">AddCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action-1" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="pre">&lt;</span><span class="pre">ReturnType</span><span class="pre">&gt;</span> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Stream.AddCallback" title="Link to this definition">#</a></dt>
 <dd><p>Adds a callback function that is invoked whenever the value of the stream changes. The
 callback function should take one argument, which is passed the new value of the
 stream. If the stream already has a value, the callback is invoked with it straight away.
@@ -1459,54 +1459,54 @@ synchronization.</p>
 </div>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Stream.RemoveCallback">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.RemoveCallback" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Stream.RemoveCallback">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Stream.RemoveCallback" title="Link to this definition">#</a></dt>
 <dd><p>Removes a callback from the stream. The tag is the identifier returned when the callback was
 added.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Stream.AddEndCallback">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">AddEndCallback</span></span> <span class="sig-paren">(</span><span class="pre">Action</span><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.exception" title="System.Exception"><span class="pre">Exception</span></a><span class="pre">&gt;</span> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.AddEndCallback" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Stream.AddEndCallback">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <span class="sig-name descname"><span class="pre">AddEndCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action-1" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Exception" title="type: msdn ~&gt; System.Exception"><span class="pre">Exception</span></a><span class="pre">&gt;</span> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Stream.AddEndCallback" title="Link to this definition">#</a></dt>
 <dd><p>Adds a callback function that is invoked once when the stream ends. The callback function
 should take one argument, which is passed the exception that ended the stream. It is invoked
 straight away if the stream has already ended. Returns a unique identifier for the callback
 which can be used to remove it.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Stream.RemoveEndCallback">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveEndCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.RemoveEndCallback" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Stream.RemoveEndCallback">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveEndCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Stream.RemoveEndCallback" title="Link to this definition">#</a></dt>
 <dd><p>Removes an end callback from the stream. The tag is the identifier returned when the callback
 was added.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Stream.Remove">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Remove</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Stream.Remove" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Stream.Remove">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Remove</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-Stream.Remove" title="Link to this definition">#</a></dt>
 <dd><p>Removes the stream from the server. Other streams of the same call are not affected.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="csharp class">
-<dt class="sig sig-object csharp" id="class-Event">
-<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Event</span></span><a class="headerlink" href="#class-Event" title="Link to this definition">#</a></dt>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-Event">
+<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">Event</span></span><a class="headerlink" href="#class-Event" title="Link to this definition">#</a></dt>
 <dd><p>This class represents an event. See <a class="reference internal" href="#csharp-client-events"><span class="std std-ref">Events</span></a>. It is wrapper around a
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> that indicates when the event occurs.</p>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Stream</span></code></a> that indicates when the event occurs.</p>
 <p>Event objects implement <code class="docutils literal notranslate"><span class="pre">GetHashCode</span></code>, <code class="docutils literal notranslate"><span class="pre">Equals</span></code>, <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">operator</span> <span class="pre">!=</span></code> such
 that two event objects are equal if they are bound to the same underlying stream on the server.</p>
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-Event.Condition">
-<span class="pre">object</span> <span class="sig-name descname"><span class="pre">Condition</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Event.Condition" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-Event.Condition">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Object" title="type: msdn ~&gt; System.Object"><span class="pre">object</span></a> <span class="sig-name descname"><span class="pre">Condition</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Event.Condition" title="Link to this definition">#</a></dt>
 <dd><p>The condition variable that is notified (using <code class="docutils literal notranslate"><span class="pre">Monitor.PulseAll</span></code>) whenever the event
 occurs.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Event.Wait">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Wait</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">-1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.Wait" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Event.Wait">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Wait</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">-1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Event.Wait" title="Link to this definition">#</a></dt>
 <dd><p>This method blocks until the event occurs or the operation times out. It returns straight
 away if the event has occurred since the previous call on this event object. Returns <code class="docutils literal notranslate"><span class="pre">true</span></code>
 if the event occurred, and <code class="docutils literal notranslate"><span class="pre">false</span></code> on a timeout.</p>
@@ -1516,9 +1516,9 @@ the operation. Throws the exception that ended the event, if it ends before or d
 wait.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Event.AddCallback">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">AddCallback</span></span> <span class="sig-paren">(</span><span class="pre">Action</span> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.AddCallback" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Event.AddCallback">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <span class="sig-name descname"><span class="pre">AddCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Event.AddCallback" title="Link to this definition">#</a></dt>
 <dd><p>Adds a callback function that is invoked whenever the event occurs. The callback function
 should be a function that takes zero arguments. If the event has not ended and has fired
 since the last <code class="docutils literal notranslate"><span class="pre">Wait</span></code> on this event object returned and since its callbacks were last
@@ -1527,37 +1527,37 @@ invoke the callback. Returns a unique identifier for the callback which can be u
 remove it.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Event.RemoveCallback">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.RemoveCallback" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Event.RemoveCallback">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Event.RemoveCallback" title="Link to this definition">#</a></dt>
 <dd><p>Removes a callback from the event. The tag is the identifier returned when the callback was
 added.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Event.AddEndCallback">
-<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">AddEndCallback</span></span> <span class="sig-paren">(</span><span class="pre">Action</span><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.exception" title="System.Exception"><span class="pre">Exception</span></a><span class="pre">&gt;</span> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.AddEndCallback" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Event.AddEndCallback">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <span class="sig-name descname"><span class="pre">AddEndCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Action-1" title="type: msdn ~&gt; System.Action"><span class="pre">Action</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Exception" title="type: msdn ~&gt; System.Exception"><span class="pre">Exception</span></a><span class="pre">&gt;</span> <em><span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Event.AddEndCallback" title="Link to this definition">#</a></dt>
 <dd><p>Adds a callback function that is invoked once when the event ends, with the exception that
 ended it. It is invoked straight away if the event has already ended. Returns a unique
 identifier for the callback which can be used to remove it.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Event.RemoveEndCallback">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveEndCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.RemoveEndCallback" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Event.RemoveEndCallback">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveEndCallback</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <em><span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-Event.RemoveEndCallback" title="Link to this definition">#</a></dt>
 <dd><p>Removes an end callback from the event. The tag is the identifier returned when the callback
 was added.</p>
 </dd></dl>
 
-<dl class="csharp method">
-<dt class="sig sig-object csharp" id="method-Event.Remove">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Remove</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Event.Remove" title="Link to this definition">#</a></dt>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-Event.Remove">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Remove</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-Event.Remove" title="Link to this definition">#</a></dt>
 <dd><p>Removes the event from the server.</p>
 </dd></dl>
 
-<dl class="csharp property">
-<dt class="sig sig-object csharp" id="property-Event.Stream">
-<a class="reference internal" href="#class-Stream" title="Stream class"><span class="pre">Stream</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Stream</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Event.Stream" title="Link to this definition">#</a></dt>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-Event.Stream">
+<a class="reference internal" href="#class-Stream" title="class: Stream"><span class="pre">Stream</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Stream</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-Event.Stream" title="Link to this definition">#</a></dt>
 <dd><p>Returns the underlying stream for the event.</p>
 </dd></dl>
 

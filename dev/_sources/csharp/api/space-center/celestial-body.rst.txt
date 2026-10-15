@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -80,7 +80,7 @@ CelestialBody
 
       :Game Scenes: All
 
-   .. method:: double SurfaceHeight(double latitude, double longitude)
+   .. function:: double SurfaceHeight(double latitude, double longitude)
 
       The height of the surface relative to mean sea level, in meters,
       at the given position. When over water this is equal to 0.
@@ -92,7 +92,7 @@ CelestialBody
 
       :Game Scenes: All
 
-   .. method:: double BedrockHeight(double latitude, double longitude)
+   .. function:: double BedrockHeight(double latitude, double longitude)
 
       The height of the surface relative to mean sea level, in meters,
       at the given position. When over water, this is the height
@@ -105,7 +105,7 @@ CelestialBody
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> MSLPosition(double latitude, double longitude, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> MSLPosition(double latitude, double longitude, ReferenceFrame referenceFrame)
 
       The position at mean sea level at the given latitude and longitude,
       in the given reference frame.
@@ -119,7 +119,7 @@ CelestialBody
       :returns: Position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> SurfacePosition(double latitude, double longitude, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> SurfacePosition(double latitude, double longitude, ReferenceFrame referenceFrame)
 
       The position of the surface at the given latitude and longitude, in the given
       reference frame. When over water, this is the position of the surface of the water.
@@ -133,7 +133,7 @@ CelestialBody
       :returns: Position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> BedrockPosition(double latitude, double longitude, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> BedrockPosition(double latitude, double longitude, ReferenceFrame referenceFrame)
 
       The position of the surface at the given latitude and longitude, in the given
       reference frame. When over water, this is the position at the bottom of the sea-bed.
@@ -147,7 +147,7 @@ CelestialBody
       :returns: Position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> PositionAtAltitude(double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> PositionAtAltitude(double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
 
       The position at the given latitude, longitude and altitude, in the given reference frame.
 
@@ -161,7 +161,7 @@ CelestialBody
       :returns: Position as a vector.
       :Game Scenes: All
 
-   .. method:: ReferenceFrame SurfaceReferenceFrame(double latitude, double longitude, double altitude = 0.0)
+   .. function:: ReferenceFrame SurfaceReferenceFrame(double latitude, double longitude, double altitude = 0.0)
 
       Create a reference frame fixed to the surface at the given latitude and longitude.
 
@@ -185,7 +185,7 @@ CelestialBody
 
          Each call returns a new frame, as for :meth:`ReferenceFrame.CreateRelative`.
 
-   .. method:: System.Tuple<double,double,double> MSLNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> MSLNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
 
       The normal to the sphere at mean sea level, at the given latitude and longitude,
       in the given reference frame. This points straight up, away from the center of
@@ -200,7 +200,7 @@ CelestialBody
       :returns: The normal as a unit vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> SurfaceNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> SurfaceNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
 
       The normal to the surface at the given latitude and longitude, in the given reference
       frame. This describes the slope of the terrain, and is the normal of the surface of
@@ -215,7 +215,7 @@ CelestialBody
       :returns: The normal as a unit vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> BedrockNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> BedrockNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
 
       The normal to the surface at the given latitude and longitude, in the given reference
       frame. This describes the slope of the terrain, and is the normal of the sea-bed
@@ -230,7 +230,7 @@ CelestialBody
       :returns: The normal as a unit vector.
       :Game Scenes: All
 
-   .. method:: double AltitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+   .. function:: double AltitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
       The altitude, in meters, of the given position in the given reference frame.
 
@@ -241,7 +241,7 @@ CelestialBody
 
       :Game Scenes: All
 
-   .. method:: double LatitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+   .. function:: double LatitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
       The latitude of the given position, in the given reference frame.
 
@@ -252,7 +252,7 @@ CelestialBody
 
       :Game Scenes: All
 
-   .. method:: double LongitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+   .. function:: double LongitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
       The longitude of the given position, in the given reference frame.
 
@@ -306,7 +306,7 @@ CelestialBody
 
       :Game Scenes: All
 
-   .. method:: double AtmosphericDensityAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+   .. function:: double AtmosphericDensityAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
       The atmospheric density at the given position, in :math:`kg/m^3`,
       in the given reference frame.
@@ -324,7 +324,7 @@ CelestialBody
 
       :Game Scenes: All
 
-   .. method:: double TemperatureAt(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+   .. function:: double TemperatureAt(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
       The temperature on the body at the given position, in the given reference frame.
 
@@ -340,7 +340,7 @@ CelestialBody
 
          The atmospheric ephemeris is evaluated at the current universal time.
 
-   .. method:: double DensityAt(double altitude)
+   .. function:: double DensityAt(double altitude)
 
       Gets the air density, in :math:`kg/m^3`, for the specified
       altitude above sea level, in meters.
@@ -360,7 +360,7 @@ CelestialBody
          However, the difference is small for high altitudes, so it makes very little difference
          for trajectory prediction.
 
-   .. method:: double PressureAt(double altitude)
+   .. function:: double PressureAt(double altitude)
 
       Gets the static pressure, in Pascals, for the specified
       altitude above sea level, in meters.
@@ -382,7 +382,7 @@ CelestialBody
 
       :Game Scenes: All
 
-   .. method:: string BiomeAt(double latitude, double longitude)
+   .. function:: string BiomeAt(double latitude, double longitude)
 
       The biome at the given latitude and longitude, in degrees.
 
@@ -460,7 +460,7 @@ CelestialBody
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position of the center of the body, in the specified reference frame.
 
@@ -471,7 +471,7 @@ CelestialBody
       :returns: The position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
 
       The linear velocity of the body, in the specified reference frame.
 
@@ -482,7 +482,7 @@ CelestialBody
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
 
       The rotation of the body, in the specified reference frame.
 
@@ -493,7 +493,7 @@ CelestialBody
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
 
       The direction in which the north pole of the celestial body is pointing,
       in the specified reference frame.
@@ -505,7 +505,7 @@ CelestialBody
       :returns: The direction as a unit vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> AngularVelocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> AngularVelocity(ReferenceFrame referenceFrame)
 
       The angular velocity of the body in the specified reference frame.
 
