@@ -497,7 +497,7 @@
 
       :Game Scenes: All
 
-   .. function:: KRPC.Schema.KRPC.Event OnTimer(uint milliseconds, uint repeats = 1)
+   .. function:: KRPC.Client.Event OnTimer(uint milliseconds, uint repeats = 1)
 
 
 
@@ -508,7 +508,7 @@
 
       :Game Scenes: All
 
-   .. function:: KRPC.Schema.KRPC.Event OnTimerUsingLambda(uint milliseconds)
+   .. function:: KRPC.Client.Event OnTimerUsingLambda(uint milliseconds)
 
 
 
@@ -531,7 +531,7 @@
 
       :Game Scenes: All
 
-   .. function:: KRPC.Schema.KRPC.Event RemoveEventAfter(uint milliseconds)
+   .. function:: KRPC.Client.Event RemoveEventAfter(uint milliseconds)
 
 
 

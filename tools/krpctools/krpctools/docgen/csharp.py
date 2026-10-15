@@ -1,3 +1,4 @@
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -49,6 +50,8 @@ class CsharpDomain(Domain[CsharpLanguage]):
             return "void"
         if isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
+        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+            return "KRPC.Client.Event"
         if isinstance(typ, MessageType):
             return "KRPC.Schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):

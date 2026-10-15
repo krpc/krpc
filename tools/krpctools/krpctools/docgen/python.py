@@ -1,3 +1,4 @@
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -57,6 +58,8 @@ class PythonDomain(Domain[PythonLanguage]):
     def _type_description(self, typ):
         if isinstance(typ, ValueType):
             return self.language.parse_type(typ)
+        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+            return ":class:`krpc.event.Event`"
         if isinstance(typ, MessageType):
             return ":class:`krpc.schema.KRPC.%s`" % typ.python_type.__name__
         if isinstance(typ, ClassType):

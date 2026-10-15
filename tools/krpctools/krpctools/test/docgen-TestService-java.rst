@@ -370,7 +370,7 @@
 
    
 
-   .. method:: krpc.schema.KRPC.Event onTimer(int milliseconds, int repeats)
+   .. method:: krpc.client.Event onTimer(int milliseconds, int repeats)
 
 
 
@@ -378,7 +378,7 @@
       :param int repeats:
    
 
-   .. method:: krpc.schema.KRPC.Event onTimerUsingLambda(int milliseconds)
+   .. method:: krpc.client.Event onTimerUsingLambda(int milliseconds)
 
 
 
@@ -395,7 +395,7 @@
       :param TestClass obj:
    
 
-   .. method:: krpc.schema.KRPC.Event removeEventAfter(int milliseconds)
+   .. method:: krpc.client.Event removeEventAfter(int milliseconds)
 
 
 

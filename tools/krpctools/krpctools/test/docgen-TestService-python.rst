@@ -566,7 +566,7 @@ Service documentation string.
 
    :param int milliseconds:
    :param int repeats:
-   :rtype: :class:`krpc.schema.KRPC.Event`
+   :rtype: :class:`krpc.event.Event`
    
 
 
@@ -577,7 +577,7 @@ Service documentation string.
 
 
    :param int milliseconds:
-   :rtype: :class:`krpc.schema.KRPC.Event`
+   :rtype: :class:`krpc.event.Event`
    
 
 
@@ -602,7 +602,7 @@ Service documentation string.
 
 
    :param int milliseconds:
-   :rtype: :class:`krpc.schema.KRPC.Event`
+   :rtype: :class:`krpc.event.Event`
    
 
 
