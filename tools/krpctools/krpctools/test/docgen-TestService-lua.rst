@@ -229,8 +229,9 @@ Service documentation string.
 
 
 
-   :param number value:
-   :rtype: number
+   :param value:
+   :type value: number or ``Types.none``
+   :rtype: number or ``Types.none``
 
 
 
@@ -239,8 +240,9 @@ Service documentation string.
 
 
 
-   :param List l:
-   :rtype: List
+   :param l:
+   :type l: List or ``Types.none``
+   :rtype: List or ``Types.none``
 
 
 
@@ -249,8 +251,9 @@ Service documentation string.
 
 
 
-   :param string value:
-   :rtype: string
+   :param value:
+   :type value: string or ``Types.none``
+   :rtype: string or ``Types.none``
 
 
 
@@ -259,8 +262,9 @@ Service documentation string.
 
 
 
-   :param TestService.TestClass value:
-   :rtype: :class:`TestService.TestClass`
+   :param value:
+   :type value: :class:`TestService.TestClass` or ``Types.none``
+   :rtype: :class:`TestService.TestClass` or ``Types.none``
 
 
 
@@ -487,7 +491,7 @@ Service documentation string.
 
 
    :Attribute: Can be read or written
-   :rtype: :class:`TestService.TestClass`
+   :rtype: :class:`TestService.TestClass` or ``Types.none``
 
 
 
@@ -507,7 +511,7 @@ Service documentation string.
 
 
    :Attribute: Can be read or written
-   :rtype: :class:`TestService.TestClass`
+   :rtype: :class:`TestService.TestClass` or ``Types.none``
 
 
 
@@ -540,7 +544,8 @@ Service documentation string.
    :param string x:
    :param string y:
    :param string z:
-   :param TestService.TestClass obj:
+   :param obj:
+   :type obj: :class:`TestService.TestClass` or ``Types.none``
    :rtype: string
 
 
@@ -655,8 +660,9 @@ Service documentation string.
 
 
 
-   :param TestService.TestStruct x:
-   :rtype: :class:`TestService.TestStruct`
+   :param x:
+   :type x: :class:`TestService.TestStruct` or ``Types.none``
+   :rtype: :class:`TestService.TestStruct` or ``Types.none``
 
 
 
@@ -765,8 +771,9 @@ Service documentation string.
 
 
 
-      :param TestService.TestClass value:
-      :rtype: :class:`TestService.TestClass`
+      :param value:
+      :type value: :class:`TestService.TestClass` or ``Types.none``
+      :rtype: :class:`TestService.TestClass` or ``Types.none``
 
    .. method:: float_to_string(x)
 
@@ -793,13 +800,14 @@ Service documentation string.
 
 
       :Attribute: Can be read or written
-      :rtype: :class:`TestService.TestClass`
+      :rtype: :class:`TestService.TestClass` or ``Types.none``
 
    .. method:: object_to_string(other)
 
 
 
-      :param TestService.TestClass other:
+      :param other:
+      :type other: :class:`TestService.TestClass` or ``Types.none``
       :rtype: string
 
    .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = Types.none])
@@ -809,7 +817,8 @@ Service documentation string.
       :param string x:
       :param string y:
       :param string z:
-      :param TestService.TestClass obj:
+      :param obj:
+      :type obj: :class:`TestService.TestClass` or ``Types.none``
       :rtype: string
 
    .. staticmethod:: static_method([a = ''], [b = ''])
@@ -824,8 +833,9 @@ Service documentation string.
 
 
 
-      :param TestService.TestClass value:
-      :rtype: :class:`TestService.TestClass`
+      :param value:
+      :type value: :class:`TestService.TestClass` or ``Types.none``
+      :rtype: :class:`TestService.TestClass` or ``Types.none``
 
    .. attribute:: string_property_private_get: string
 
@@ -969,25 +979,25 @@ Service documentation string.
 
 
 
-      :rtype: number
+      :rtype: number or ``Types.none``
 
    .. attribute:: nullable_enum_field: TestService.TestEnum
 
 
 
-      :rtype: :class:`TestService.TestEnum`
+      :rtype: :class:`TestService.TestEnum` or ``Types.none``
 
    .. attribute:: nullable_string_field: string
 
 
 
-      :rtype: string
+      :rtype: string or ``Types.none``
 
    .. attribute:: nullable_object_field: TestService.TestClass
 
 
 
-      :rtype: :class:`TestService.TestClass`
+      :rtype: :class:`TestService.TestClass` or ``Types.none``
 
 
 .. class:: TestNestedNullableStruct

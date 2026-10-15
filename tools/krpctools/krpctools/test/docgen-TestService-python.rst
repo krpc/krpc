@@ -249,7 +249,7 @@ Service documentation string.
 
 
 
-   :param int value:
+   :param int or None value:
    :rtype: int or None
    
 
@@ -260,7 +260,7 @@ Service documentation string.
 
 
 
-   :param list l:
+   :param list or None l:
    :rtype: list(int) or None
    
 
@@ -271,7 +271,7 @@ Service documentation string.
 
 
 
-   :param str value:
+   :param str or None value:
    :rtype: str or None
    
 
@@ -282,7 +282,7 @@ Service documentation string.
 
 
 
-   :param TestClass value:
+   :param TestClass or None value:
    :rtype: :class:`TestClass` or None
    
 
@@ -590,7 +590,7 @@ Service documentation string.
    :param str x:
    :param str y:
    :param str z:
-   :param TestClass obj:
+   :param TestClass or None obj:
    :rtype: str
    
 
@@ -717,7 +717,7 @@ Service documentation string.
 
 
 
-   :param TestStruct x:
+   :param TestStruct or None x:
    :rtype: :class:`TestStruct` or None
    
 
@@ -838,7 +838,7 @@ Service documentation string.
 
 
 
-      :param TestClass value:
+      :param TestClass or None value:
       :rtype: :class:`TestClass` or None
    
 
@@ -877,7 +877,7 @@ Service documentation string.
 
 
 
-      :param TestClass other:
+      :param TestClass or None other:
       :rtype: str
    
 
@@ -888,7 +888,7 @@ Service documentation string.
       :param str x:
       :param str y:
       :param str z:
-      :param TestClass obj:
+      :param TestClass or None obj:
       :rtype: str
    
 
@@ -905,7 +905,7 @@ Service documentation string.
 
 
 
-      :param TestClass value:
+      :param TestClass or None value:
       :rtype: :class:`TestClass` or None
    
 

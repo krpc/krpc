@@ -40,6 +40,11 @@ class LuaDomain(Domain[LuaLanguage]):
         return ".. currentmodule:: %s" % name
 
     def type_description(self, typ):
+        description = self._type_description(typ)
+        # Lua writes a value that can be null as the type or Types.none
+        return "%s or ``Types.none``" % description if typ.nullable else description
+
+    def _type_description(self, typ):
         if isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
         if isinstance(typ, MessageType):

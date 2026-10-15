@@ -45,6 +45,10 @@ class PythonDomain(Domain[PythonLanguage]):
             return "%s_" % name
         return name
 
+    def parameter_type(self, typ):
+        name = super().parameter_type(typ)
+        return "%s or None" % name if typ.nullable else name
+
     def type_description(self, typ):
         description = self._type_description(typ)
         # Python writes a value that can be null as the type or None

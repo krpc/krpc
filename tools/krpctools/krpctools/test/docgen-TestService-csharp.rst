@@ -220,7 +220,7 @@
 
       :Game Scenes: All
 
-   .. function:: int EchoNullableInt(int value)
+   .. function:: int? EchoNullableInt(int? value)
 
 
 
@@ -620,7 +620,7 @@
 
       :Game Scenes: All
 
-   .. function:: TestStruct StructEchoNullable(TestStruct x)
+   .. function:: TestStruct? StructEchoNullable(TestStruct? x)
 
 
 

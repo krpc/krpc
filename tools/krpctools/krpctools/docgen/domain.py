@@ -32,10 +32,10 @@ class Domain(Generic[LanguageT]):
         return self.type_at_position(field.type)
 
     def return_type(self, typ):
-        return self.type(typ)
+        return self.type(typ) if typ is None else self.type_at_position(typ)
 
     def parameter_type(self, typ):
-        return self.type(typ)
+        return self.type_at_position(typ)
 
     def type_description(self, typ):
         return self.type(typ)

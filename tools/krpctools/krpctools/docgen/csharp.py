@@ -83,7 +83,11 @@ class CsharpDomain(Domain[CsharpLanguage]):
     def default_parameter_type(self, typ):
         """The type of a parameter that has a default value"""
         name = self.parameter_type(typ)
-        if isinstance(typ, StructType) and self.language.default_is_null(typ):
+        if (
+            isinstance(typ, StructType)
+            and self.language.default_is_null(typ)
+            and not name.endswith("?")
+        ):
             return name + "?"
         return name
 

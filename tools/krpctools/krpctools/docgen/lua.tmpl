@@ -51,7 +51,9 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters %}
-   :param {{ domain.parameter_type(p.type) }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   :param {% if not p.type.nullable %}{{ domain.parameter_type(p.type) }} {% endif %}{{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.type.nullable %}
+
+   :type {{ p.name | snakecase }}: {{ domain.type_description(p.type) }}{% endif %}
 
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
@@ -97,7 +99,9 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters[1:] %}
-   :param {{ domain.parameter_type(p.type) }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   :param {% if not p.type.nullable %}{{ domain.parameter_type(p.type) }} {% endif %}{{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.type.nullable %}
+
+   :type {{ p.name | snakecase }}: {{ domain.type_description(p.type) }}{% endif %}
 
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
@@ -122,7 +126,9 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters %}
-   :param {{ domain.parameter_type(p.type) }} {{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}
+   :param {% if not p.type.nullable %}{{ domain.parameter_type(p.type) }} {% endif %}{{ p.name | snakecase }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.type.nullable %}
+
+   :type {{ p.name | snakecase }}: {{ domain.type_description(p.type) }}{% endif %}
 
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}

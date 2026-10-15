@@ -165,11 +165,11 @@
       :param TestNestedNullableStruct value:
    
 
-   .. method:: int echoNullableInt(int value)
+   .. method:: Integer echoNullableInt(Integer value)
 
 
 
-      :param int value:
+      :param Integer value:
    
 
    .. method:: java.util.List<Integer> echoNullableList(java.util.List<Integer> l)
