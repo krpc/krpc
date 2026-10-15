@@ -1,4 +1,8 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Return `KRPC.Clients` as a list of `KRPC.ClientInfo` structures, in place of tuples
+  (#1148)
+- Add `StdLib.ColorRGB` and `StdLib.ColorRGBA`, the colors the SpaceCenter, Drawing and UI
+  services use (#1148)
 - Add `KRPC.GameStateLoads`, the number of game states that have finished loading (#1121)
 - **Breaking:** Remove `KRPC.CurrentGameScene`, replaced by `KRPC.GameScene` (#1140)
 - Extend `KRPC.Expression` to build server side functions, which the server evaluates
