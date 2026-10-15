@@ -1,14 +1,19 @@
 " clientgen tool "
 
 ClientgenInfo = provider(
-    doc = "The generated code of a service, and the path it is included by",
-    fields = ["service", "include"],
+    doc = "The generated code of a service, the path it is included by, and the " +
+          "definitions it was generated from",
+    fields = ["service", "include", "defs"],
 )
 
 def _impl(ctx):
     language = ctx.attr.language
     service = ctx.attr.service
-    defs = ctx.file.defs
+    defs = depset(
+        [ctx.file.defs],
+        transitive = [dep[ClientgenInfo].defs for dep in ctx.attr.deps],
+        order = "preorder",
+    )
     output = ctx.outputs.out
     includes = [
         "--include=%s=%s" % (dep[ClientgenInfo].service, dep[ClientgenInfo].include)
@@ -16,26 +21,27 @@ def _impl(ctx):
     ]
 
     ctx.actions.run(
-        inputs = [defs],
+        inputs = defs,
         outputs = [output],
         progress_message = "Generating %s code for %s service" % (language, service),
         executable = ctx.executable._clientgen,
-        arguments = [language, service, defs.path, "--output=%s" % output.path] + includes,
+        arguments = [language, service] + [f.path for f in defs.to_list()] +
+                    ["--output=%s" % output.path] + includes,
     )
 
     # The include path is relative to the package's include directory
     include = ctx.attr.out.name
     if include.startswith("include/"):
         include = include[len("include/"):]
-    return [ClientgenInfo(service = service, include = include)]
+    return [ClientgenInfo(service = service, include = include, defs = defs)]
 
 clientgen = rule(
     implementation = _impl,
     attrs = {
         "service": attr.string(mandatory = True),
         "defs": attr.label(allow_single_file = True),
-        # The generated code of the services whose types the service uses, which the
-        # generated code includes
+        # The generated code of the services whose types the service uses. The generated
+        # code includes it, and is generated from its definitions too.
         "deps": attr.label_list(providers = [ClientgenInfo]),
         "out": attr.output(mandatory = True),
         "language": attr.string(mandatory = True),
@@ -62,13 +68,14 @@ def _snake_case(name):
     return result.lower()
 
 # buildifier: disable=function-docstring
-def clientgen_csharp(name, service, defs, visibility = [], out = None):
+def clientgen_csharp(name, service, defs, out = None, deps = [], visibility = []):
     if out == None:
         out = "Services/%s.cs" % service
     clientgen(
         name = name,
         service = service,
         defs = defs,
+        deps = deps,
         out = out,
         language = "csharp",
         visibility = visibility,
@@ -88,13 +95,14 @@ def clientgen_cpp(name, service, defs, out = None, deps = []):
     )
 
 # buildifier: disable=function-docstring
-def clientgen_java(name, service, defs, out = None):
+def clientgen_java(name, service, defs, out = None, deps = []):
     if out == None:
         out = "services/%s.java" % service
     clientgen(
         name = name,
         service = service,
         defs = defs,
+        deps = deps,
         out = out,
         language = "java",
     )
@@ -113,13 +121,14 @@ def clientgen_cnano(name, service, defs, out = None, deps = []):
     )
 
 # buildifier: disable=function-docstring
-def clientgen_python(name, service, defs, out = None):
+def clientgen_python(name, service, defs, out = None, deps = []):
     if out == None:
         out = "krpc/services/%s.py" % service.lower()
     clientgen(
         name = name,
         service = service,
         defs = defs,
+        deps = deps,
         out = out,
         language = "python",
     )
