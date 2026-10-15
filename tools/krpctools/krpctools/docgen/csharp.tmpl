@@ -43,7 +43,7 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. method:: {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters) }})
+.. function:: {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters) }})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -86,7 +86,7 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters[1:]) }})
+.. function:: {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters[1:]) }})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -108,7 +108,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. method:: static {{ domain.return_type(x.return_type) }} {{ x.name }}(IConnection connection, {{ parameters(x.parameters) }})
+.. function:: static {{ domain.return_type(x.return_type) }} {{ x.name }}(IConnection connection, {{ parameters(x.parameters) }})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -143,7 +143,7 @@
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. value:: {{ value.name }}
+   .. enumerator:: {{ value.name }}
 
 {% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
 

@@ -1,4 +1,4 @@
-.. csharp:namespace:: KRPC.Client.Services.SpaceCenter
+.. cs:namespace:: KRPC.Client.Services.SpaceCenter
 .. cpp:namespace:: krpc::services::SpaceCenter
 .. java:package:: krpc.client.services.SpaceCenter
 .. lua:currentmodule:: SpaceCenter
@@ -176,24 +176,24 @@ kRPC provides the following reference frames:
 
    .. tab:: C#
 
-      * :csharp:prop:`Vessel.ReferenceFrame`
-      * :csharp:prop:`Vessel.OrbitalReferenceFrame`
-      * :csharp:prop:`Vessel.SurfaceReferenceFrame`
-      * :csharp:prop:`Vessel.SurfaceVelocityReferenceFrame`
-      * :csharp:prop:`Vessel.OrbitSpeedReferenceFrame`
-      * :csharp:prop:`Vessel.SurfaceSpeedReferenceFrame`
-      * :csharp:prop:`Vessel.TargetSpeedReferenceFrame`
-      * :csharp:prop:`CelestialBody.ReferenceFrame`
-      * :csharp:prop:`CelestialBody.NonRotatingReferenceFrame`
-      * :csharp:prop:`CelestialBody.OrbitalReferenceFrame`
-      * :csharp:prop:`Orbit.ReferenceFrame`
-      * :csharp:prop:`Orbit.OrbitalReferenceFrame`
-      * :csharp:prop:`Node.ReferenceFrame`
-      * :csharp:prop:`Node.OrbitalReferenceFrame`
-      * :csharp:prop:`Part.ReferenceFrame`
-      * :csharp:prop:`Part.CenterOfMassReferenceFrame`
-      * :csharp:prop:`DockingPort.ReferenceFrame`
-      * :csharp:prop:`Thruster.ThrustReferenceFrame`
+      * :cs:prop:`Vessel.ReferenceFrame`
+      * :cs:prop:`Vessel.OrbitalReferenceFrame`
+      * :cs:prop:`Vessel.SurfaceReferenceFrame`
+      * :cs:prop:`Vessel.SurfaceVelocityReferenceFrame`
+      * :cs:prop:`Vessel.OrbitSpeedReferenceFrame`
+      * :cs:prop:`Vessel.SurfaceSpeedReferenceFrame`
+      * :cs:prop:`Vessel.TargetSpeedReferenceFrame`
+      * :cs:prop:`CelestialBody.ReferenceFrame`
+      * :cs:prop:`CelestialBody.NonRotatingReferenceFrame`
+      * :cs:prop:`CelestialBody.OrbitalReferenceFrame`
+      * :cs:prop:`Orbit.ReferenceFrame`
+      * :cs:prop:`Orbit.OrbitalReferenceFrame`
+      * :cs:prop:`Node.ReferenceFrame`
+      * :cs:prop:`Node.OrbitalReferenceFrame`
+      * :cs:prop:`Part.ReferenceFrame`
+      * :cs:prop:`Part.CenterOfMassReferenceFrame`
+      * :cs:prop:`DockingPort.ReferenceFrame`
+      * :cs:prop:`Thruster.ThrustReferenceFrame`
 
    .. tab:: C++
 
@@ -350,10 +350,10 @@ velocities between the different reference frames:
 
    .. tab:: C#
 
-      * :csharp:meth:`SpaceCenter.TransformPosition`
-      * :csharp:meth:`SpaceCenter.TransformDirection`
-      * :csharp:meth:`SpaceCenter.TransformRotation`
-      * :csharp:meth:`SpaceCenter.TransformVelocity`
+      * :cs:meth:`SpaceCenter.TransformPosition`
+      * :cs:meth:`SpaceCenter.TransformDirection`
+      * :cs:meth:`SpaceCenter.TransformRotation`
+      * :cs:meth:`SpaceCenter.TransformVelocity`
 
    .. tab:: C++
 

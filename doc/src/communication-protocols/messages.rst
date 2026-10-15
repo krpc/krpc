@@ -413,16 +413,16 @@ The fields are:
 
 * ``procedures`` - A list of ``Procedure`` messages, one for each procedure defined by the service.
 
-* ``classes`` - A list of ``Class`` messages, one for each :csharp:attr:`KRPCClass` defined by the
+* ``classes`` - A list of ``Class`` messages, one for each :cs:attr:`KRPCClass` defined by the
   service.
 
-* ``enumerations`` - A list of ``Enumeration`` messages, one for each :csharp:attr:`KRPCEnum`
+* ``enumerations`` - A list of ``Enumeration`` messages, one for each :cs:attr:`KRPCEnum`
   defined by the service.
 
-* ``exceptions`` - A list of ``Exception`` messages, one for each :csharp:attr:`KRPCException`
+* ``exceptions`` - A list of ``Exception`` messages, one for each :cs:attr:`KRPCException`
   defined by the service.
 
-* ``structs`` - A list of ``Struct`` messages, one for each :csharp:attr:`KRPCStruct`
+* ``structs`` - A list of ``Struct`` messages, one for each :cs:attr:`KRPCStruct`
   defined by the service.
 
 * ``documentation`` - Documentation for the service, as `C# XML documentation`_.
@@ -432,8 +432,8 @@ The fields are:
 
 * ``deprecated_reason`` - If the service is deprecated, the reason for its deprecation. May be empty.
 
-.. note:: See the :ref:`extending` documentation for more details about :csharp:attr:`KRPCClass`,
-          :csharp:attr:`KRPCEnum`, :csharp:attr:`KRPCStruct` and :csharp:attr:`KRPCException`.
+.. note:: See the :ref:`extending` documentation for more details about :cs:attr:`KRPCClass`,
+          :cs:attr:`KRPCEnum`, :cs:attr:`KRPCStruct` and :cs:attr:`KRPCException`.
 
 Procedures
 ^^^^^^^^^^
@@ -515,7 +515,7 @@ The fields are:
 Classes
 ^^^^^^^
 
-Details about each :csharp:attr:`KRPCClass` are specified in a ``Class`` message, with the format:
+Details about each :cs:attr:`KRPCClass` are specified in a ``Class`` message, with the format:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
@@ -536,7 +536,7 @@ The fields are:
 Enumerations
 ^^^^^^^^^^^^
 
-Details about each :csharp:attr:`KRPCEnum` are specified in an ``Enumeration`` message, with the
+Details about each :cs:attr:`KRPCEnum` are specified in an ``Enumeration`` message, with the
 format:
 
 .. literalinclude:: /communication-protocols/krpc.proto
@@ -578,7 +578,7 @@ Structures
 
 A structure is a compound value with named fields, whose value on the wire is the values of those
 fields sent inline. A class sends an identifier for an object held on the server instead. Details
-about each :csharp:attr:`KRPCStruct` are specified in a ``Struct`` message, with the format:
+about each :cs:attr:`KRPCStruct` are specified in a ``Struct`` message, with the format:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
@@ -642,7 +642,7 @@ nothing about its fields.
 Exceptions
 ^^^^^^^^^^
 
-Details about each :csharp:attr:`KRPCException` are specified in an ``Exception`` message, with the
+Details about each :cs:attr:`KRPCException` are specified in an ``Exception`` message, with the
 format:
 
 .. literalinclude:: /communication-protocols/krpc.proto

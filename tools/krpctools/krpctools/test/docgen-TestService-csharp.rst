@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 
 .. namespace:: KRPC.Client.Services.TestService
@@ -8,7 +8,7 @@
 
    Service documentation string.
 
-   .. method:: string AddMultipleValues(float x, int y, long z)
+   .. function:: string AddMultipleValues(float x, int y, long z)
 
 
 
@@ -20,7 +20,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<TestClass> AddToObjectList(System.Collections.Generic.IList<TestClass> l, string value)
+   .. function:: System.Collections.Generic.IList<TestClass> AddToObjectList(System.Collections.Generic.IList<TestClass> l, string value)
 
 
 
@@ -31,7 +31,7 @@
 
       :Game Scenes: All
 
-   .. method:: int BlockingProcedure(int n, int sum = 0)
+   .. function:: int BlockingProcedure(int n, int sum = 0)
 
 
 
@@ -42,7 +42,7 @@
 
       :Game Scenes: All
 
-   .. method:: string BoolToString(bool value)
+   .. function:: string BoolToString(bool value)
 
 
 
@@ -52,7 +52,7 @@
 
       :Game Scenes: All
 
-   .. method:: string BytesToHexString(byte[] value)
+   .. function:: string BytesToHexString(byte[] value)
 
 
 
@@ -62,7 +62,7 @@
 
       :Game Scenes: All
 
-   .. method:: int Counter(string id = "", int divisor = 1)
+   .. function:: int Counter(string id = "", int divisor = 1)
 
 
 
@@ -73,7 +73,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestStruct CounterStruct(string id = "")
+   .. function:: TestStruct CounterStruct(string id = "")
 
       Returns a struct whose IntField counts the number of times it has been called,
       so that a stream on it changes on every update.
@@ -84,7 +84,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestClass CreateTestObject(string value)
+   .. function:: TestClass CreateTestObject(string value)
 
 
 
@@ -94,7 +94,7 @@
 
       :Game Scenes: All
 
-   .. method:: string DeprecatedProcedure(float value)
+   .. function:: string DeprecatedProcedure(float value)
 
       .. warning:: Deprecated. Use :meth:`TestService.FloatToString <TestService.TestService.FloatToString>` instead.
 
@@ -106,7 +106,7 @@
 
       :Game Scenes: All
 
-   .. method:: string DeprecatedProcedureNoMessage(float value)
+   .. function:: string DeprecatedProcedureNoMessage(float value)
 
       .. warning:: Deprecated.
 
@@ -126,7 +126,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IDictionary<int,bool> DictionaryDefault(System.Collections.Generic.IDictionary<int,bool> x = { 1: false, 2: true })
+   .. function:: System.Collections.Generic.IDictionary<int,bool> DictionaryDefault(System.Collections.Generic.IDictionary<int,bool> x = { 1: false, 2: true })
 
 
 
@@ -136,7 +136,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<double> DoubleSpecialDefaults(double nan = double.NaN, double infinity = double.PositiveInfinity, double negativeInfinity = double.NegativeInfinity, double maximum = double.MaxValue, double lowest = double.MinValue)
+   .. function:: System.Collections.Generic.IList<double> DoubleSpecialDefaults(double nan = double.NaN, double infinity = double.PositiveInfinity, double negativeInfinity = double.NegativeInfinity, double maximum = double.MaxValue, double lowest = double.MinValue)
 
       Procedure whose defaults are the special values of double.
 
@@ -150,7 +150,7 @@
 
       :Game Scenes: All
 
-   .. method:: string DoubleToString(double value)
+   .. function:: string DoubleToString(double value)
 
 
 
@@ -160,7 +160,7 @@
 
       :Game Scenes: All
 
-   .. method:: string DumpExpressionTree(KRPC.Expression expression)
+   .. function:: string DumpExpressionTree(KRPC.Expression expression)
 
       The expression tree of a function, as text.
 
@@ -170,7 +170,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IDictionary<string,TestClass> EchoDictionaryOfNullableObjects(System.Collections.Generic.IDictionary<string,TestClass> d)
+   .. function:: System.Collections.Generic.IDictionary<string,TestClass> EchoDictionaryOfNullableObjects(System.Collections.Generic.IDictionary<string,TestClass> d)
 
 
 
@@ -180,7 +180,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<int?> EchoListOfNullableInts(System.Collections.Generic.IList<int?> l)
+   .. function:: System.Collections.Generic.IList<int?> EchoListOfNullableInts(System.Collections.Generic.IList<int?> l)
 
 
 
@@ -190,7 +190,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<TestClass> EchoListOfNullableObjects(System.Collections.Generic.IList<TestClass> l)
+   .. function:: System.Collections.Generic.IList<TestClass> EchoListOfNullableObjects(System.Collections.Generic.IList<TestClass> l)
 
 
 
@@ -200,7 +200,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<System.Collections.Generic.IList<TestClass>> EchoNestedListOfNullableObjects(System.Collections.Generic.IList<System.Collections.Generic.IList<TestClass>> l)
+   .. function:: System.Collections.Generic.IList<System.Collections.Generic.IList<TestClass>> EchoNestedListOfNullableObjects(System.Collections.Generic.IList<System.Collections.Generic.IList<TestClass>> l)
 
 
 
@@ -210,7 +210,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestNestedNullableStruct EchoNestedNullableStruct(TestNestedNullableStruct value)
+   .. function:: TestNestedNullableStruct EchoNestedNullableStruct(TestNestedNullableStruct value)
 
 
 
@@ -220,7 +220,7 @@
 
       :Game Scenes: All
 
-   .. method:: int EchoNullableInt(int value)
+   .. function:: int EchoNullableInt(int value)
 
 
 
@@ -230,7 +230,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<int> EchoNullableList(System.Collections.Generic.IList<int> l)
+   .. function:: System.Collections.Generic.IList<int> EchoNullableList(System.Collections.Generic.IList<int> l)
 
 
 
@@ -240,7 +240,7 @@
 
       :Game Scenes: All
 
-   .. method:: string EchoNullableString(string value)
+   .. function:: string EchoNullableString(string value)
 
 
 
@@ -250,7 +250,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestClass EchoTestObject(TestClass value)
+   .. function:: TestClass EchoTestObject(TestClass value)
 
 
 
@@ -260,7 +260,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<int,TestClass> EchoTupleWithANullableObject(System.Tuple<int,TestClass> t)
+   .. function:: System.Tuple<int,TestClass> EchoTupleWithANullableObject(System.Tuple<int,TestClass> t)
 
 
 
@@ -270,7 +270,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<string> EmptyListDefault(System.Collections.Generic.IList<string> x = {  })
+   .. function:: System.Collections.Generic.IList<string> EmptyListDefault(System.Collections.Generic.IList<string> x = {  })
 
 
 
@@ -280,7 +280,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestEnum EnumDefaultArg(TestEnum x = TestEnum.ValueC)
+   .. function:: TestEnum EnumDefaultArg(TestEnum x = TestEnum.ValueC)
 
 
 
@@ -290,7 +290,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestEnum EnumEcho(TestEnum x)
+   .. function:: TestEnum EnumEcho(TestEnum x)
 
 
 
@@ -300,7 +300,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<TestEnum> EnumListDefault(System.Collections.Generic.IList<TestEnum> x = { TestEnum.ValueB, TestEnum.ValueC })
+   .. function:: System.Collections.Generic.IList<TestEnum> EnumListDefault(System.Collections.Generic.IList<TestEnum> x = { TestEnum.ValueB, TestEnum.ValueC })
 
 
 
@@ -310,14 +310,14 @@
 
       :Game Scenes: All
 
-   .. method:: TestEnum EnumReturn()
+   .. function:: TestEnum EnumReturn()
 
 
 
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<float> FloatSpecialDefaults(float nan = float.NaN, float infinity = float.PositiveInfinity, float negativeInfinity = float.NegativeInfinity, float maximum = float.MaxValue, float lowest = float.MinValue, float fraction = 0.1f)
+   .. function:: System.Collections.Generic.IList<float> FloatSpecialDefaults(float nan = float.NaN, float infinity = float.PositiveInfinity, float negativeInfinity = float.NegativeInfinity, float maximum = float.MaxValue, float lowest = float.MinValue, float fraction = 0.1f)
 
       Procedure whose defaults are the special values of float, plus a finite fraction
       that no float can hold exactly.
@@ -333,7 +333,7 @@
 
       :Game Scenes: All
 
-   .. method:: string FloatToString(float value)
+   .. function:: string FloatToString(float value)
 
       Procedure documentation string.
 
@@ -343,7 +343,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IDictionary<string,int> IncrementDictionary(System.Collections.Generic.IDictionary<string,int> d)
+   .. function:: System.Collections.Generic.IDictionary<string,int> IncrementDictionary(System.Collections.Generic.IDictionary<string,int> d)
 
 
 
@@ -353,7 +353,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<int> IncrementList(System.Collections.Generic.IList<int> l)
+   .. function:: System.Collections.Generic.IList<int> IncrementList(System.Collections.Generic.IList<int> l)
 
 
 
@@ -363,7 +363,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<TestStruct> IncrementListOfStructs(System.Collections.Generic.IList<TestStruct> l)
+   .. function:: System.Collections.Generic.IList<TestStruct> IncrementListOfStructs(System.Collections.Generic.IList<TestStruct> l)
 
 
 
@@ -373,7 +373,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IDictionary<string,System.Collections.Generic.IList<int>> IncrementNestedCollection(System.Collections.Generic.IDictionary<string,System.Collections.Generic.IList<int>> d)
+   .. function:: System.Collections.Generic.IDictionary<string,System.Collections.Generic.IList<int>> IncrementNestedCollection(System.Collections.Generic.IDictionary<string,System.Collections.Generic.IList<int>> d)
 
 
 
@@ -383,7 +383,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.ISet<int> IncrementSet(System.Collections.Generic.ISet<int> h)
+   .. function:: System.Collections.Generic.ISet<int> IncrementSet(System.Collections.Generic.ISet<int> h)
 
 
 
@@ -393,7 +393,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<int,long> IncrementTuple(System.Tuple<int,long> t)
+   .. function:: System.Tuple<int,long> IncrementTuple(System.Tuple<int,long> t)
 
 
 
@@ -403,7 +403,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<int> Int32SpecialDefaults(int maximum = int.MaxValue, int minimum = int.MinValue)
+   .. function:: System.Collections.Generic.IList<int> Int32SpecialDefaults(int maximum = int.MaxValue, int minimum = int.MinValue)
 
       Procedure whose defaults are the extremes of int.
 
@@ -414,7 +414,7 @@
 
       :Game Scenes: All
 
-   .. method:: string Int32ToString(int value)
+   .. function:: string Int32ToString(int value)
 
 
 
@@ -424,7 +424,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<long> Int64SpecialDefaults(long maximum = long.MaxValue, long minimum = long.MinValue)
+   .. function:: System.Collections.Generic.IList<long> Int64SpecialDefaults(long maximum = long.MaxValue, long minimum = long.MinValue)
 
       Procedure whose defaults are the extremes of long.
 
@@ -435,7 +435,7 @@
 
       :Game Scenes: All
 
-   .. method:: string Int64ToString(long value)
+   .. function:: string Int64ToString(long value)
 
 
 
@@ -445,7 +445,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<int> ListDefault(System.Collections.Generic.IList<int> x = { 1, 2, 3 })
+   .. function:: System.Collections.Generic.IList<int> ListDefault(System.Collections.Generic.IList<int> x = { 1, 2, 3 })
 
 
 
@@ -455,7 +455,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestNestedStruct NestedStructEcho(TestNestedStruct x)
+   .. function:: TestNestedStruct NestedStructEcho(TestNestedStruct x)
 
 
 
@@ -465,7 +465,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestClass NotNullableObject(TestClass value)
+   .. function:: TestClass NotNullableObject(TestClass value)
 
 
 
@@ -481,7 +481,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestNullableStruct NullableStructEcho(TestNullableStruct x)
+   .. function:: TestNullableStruct NullableStructEcho(TestNullableStruct x)
 
 
 
@@ -497,7 +497,7 @@
 
       :Game Scenes: All
 
-   .. method:: KRPC.Schema.KRPC.Event OnTimer(uint milliseconds, uint repeats = 1)
+   .. function:: KRPC.Schema.KRPC.Event OnTimer(uint milliseconds, uint repeats = 1)
 
 
 
@@ -508,7 +508,7 @@
 
       :Game Scenes: All
 
-   .. method:: KRPC.Schema.KRPC.Event OnTimerUsingLambda(uint milliseconds)
+   .. function:: KRPC.Schema.KRPC.Event OnTimerUsingLambda(uint milliseconds)
 
 
 
@@ -518,7 +518,7 @@
 
       :Game Scenes: All
 
-   .. method:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj)
+   .. function:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj)
 
 
 
@@ -531,7 +531,7 @@
 
       :Game Scenes: All
 
-   .. method:: KRPC.Schema.KRPC.Event RemoveEventAfter(uint milliseconds)
+   .. function:: KRPC.Schema.KRPC.Event RemoveEventAfter(uint milliseconds)
 
 
 
@@ -541,28 +541,28 @@
 
       :Game Scenes: All
 
-   .. method:: void ResetCustomExceptionLater()
+   .. function:: void ResetCustomExceptionLater()
 
 
 
 
       :Game Scenes: All
 
-   .. method:: void ResetInvalidOperationExceptionLater()
+   .. function:: void ResetInvalidOperationExceptionLater()
 
 
 
 
       :Game Scenes: All
 
-   .. method:: TestClass ReturnNullWhenNotAllowed()
+   .. function:: TestClass ReturnNullWhenNotAllowed()
 
 
 
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.ISet<int> SetDefault(System.Collections.Generic.ISet<int> x = { 1, 2, 3 })
+   .. function:: System.Collections.Generic.ISet<int> SetDefault(System.Collections.Generic.ISet<int> x = { 1, 2, 3 })
 
 
 
@@ -590,7 +590,7 @@
 
       :Game Scenes: All
 
-   .. method:: int StringToInt32(string value)
+   .. function:: int StringToInt32(string value)
 
 
 
@@ -600,7 +600,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestStruct StructDefault(TestStruct x = new TestStruct(42, "jeb", TestEnum.ValueB, { 1, 2, 3 }))
+   .. function:: TestStruct StructDefault(TestStruct x = new TestStruct(42, "jeb", TestEnum.ValueB, { 1, 2, 3 }))
 
 
 
@@ -610,7 +610,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestStruct StructEcho(TestStruct x)
+   .. function:: TestStruct StructEcho(TestStruct x)
 
 
 
@@ -620,7 +620,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestStruct StructEchoNullable(TestStruct x)
+   .. function:: TestStruct StructEchoNullable(TestStruct x)
 
 
 
@@ -630,14 +630,14 @@
 
       :Game Scenes: All
 
-   .. method:: int ThrowArgumentException()
+   .. function:: int ThrowArgumentException()
 
 
 
 
       :Game Scenes: All
 
-   .. method:: int ThrowArgumentNullException(string foo)
+   .. function:: int ThrowArgumentNullException(string foo)
 
 
 
@@ -647,7 +647,7 @@
 
       :Game Scenes: All
 
-   .. method:: int ThrowArgumentOutOfRangeException(int foo)
+   .. function:: int ThrowArgumentOutOfRangeException(int foo)
 
 
 
@@ -657,35 +657,35 @@
 
       :Game Scenes: All
 
-   .. method:: int ThrowCustomException()
+   .. function:: int ThrowCustomException()
 
 
 
 
       :Game Scenes: All
 
-   .. method:: int ThrowCustomExceptionLater()
+   .. function:: int ThrowCustomExceptionLater()
 
 
 
 
       :Game Scenes: All
 
-   .. method:: int ThrowInvalidOperationException()
+   .. function:: int ThrowInvalidOperationException()
 
 
 
 
       :Game Scenes: All
 
-   .. method:: int ThrowInvalidOperationExceptionLater()
+   .. function:: int ThrowInvalidOperationExceptionLater()
 
 
 
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<int,bool> TupleDefault(System.Tuple<int,bool> x = { 1, false })
+   .. function:: System.Tuple<int,bool> TupleDefault(System.Tuple<int,bool> x = { 1, false })
 
 
 
@@ -695,7 +695,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<uint> Uint32SpecialDefaults(uint maximum = uint.MaxValue)
+   .. function:: System.Collections.Generic.IList<uint> Uint32SpecialDefaults(uint maximum = uint.MaxValue)
 
       Procedure whose default is the largest uint.
 
@@ -705,7 +705,7 @@
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<ulong> Uint64SpecialDefaults(ulong maximum = ulong.MaxValue)
+   .. function:: System.Collections.Generic.IList<ulong> Uint64SpecialDefaults(ulong maximum = ulong.MaxValue)
 
       Procedure whose default is the largest ulong.
 
@@ -721,7 +721,7 @@
 
    Class documentation string.
 
-   .. method:: TestClass EchoNullableObject(TestClass value)
+   .. function:: TestClass EchoNullableObject(TestClass value)
 
 
 
@@ -731,7 +731,7 @@
 
       :Game Scenes: All
 
-   .. method:: string FloatToString(float x)
+   .. function:: string FloatToString(float x)
 
 
 
@@ -741,7 +741,7 @@
 
       :Game Scenes: All
 
-   .. method:: string GetValue()
+   .. function:: string GetValue()
 
       Method documentation string.
 
@@ -760,7 +760,7 @@
 
       :Game Scenes: All
 
-   .. method:: string ObjectToString(TestClass other)
+   .. function:: string ObjectToString(TestClass other)
 
 
 
@@ -770,7 +770,7 @@
 
       :Game Scenes: All
 
-   .. method:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj)
+   .. function:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj)
 
 
 
@@ -783,7 +783,7 @@
 
       :Game Scenes: All
 
-   .. method:: static string StaticMethod(IConnection connection, string a = "", string b = "")
+   .. function:: static string StaticMethod(IConnection connection, string a = "", string b = "")
 
 
 
@@ -794,7 +794,7 @@
 
       :Game Scenes: All
 
-   .. method:: static TestClass StaticNullableObject(IConnection connection, TestClass value)
+   .. function:: static TestClass StaticNullableObject(IConnection connection, TestClass value)
 
 
 
@@ -824,7 +824,7 @@
 
    Deprecated class documentation string.
 
-   .. method:: string DeprecatedMethod()
+   .. function:: string DeprecatedMethod()
 
       .. warning:: Deprecated. Use :meth:`TestClass.GetValue` instead.
 
@@ -840,17 +840,17 @@
    Enum documentation string.
 
 
-   .. value:: ValueA
+   .. enumerator:: ValueA
 
       Enum ValueA documentation string.
 
 
-   .. value:: ValueB
+   .. enumerator:: ValueB
 
       Enum ValueB documentation string.
 
 
-   .. value:: ValueC
+   .. enumerator:: ValueC
 
       Enum ValueC documentation string.
 
@@ -863,14 +863,14 @@
    Deprecated enum documentation string.
 
 
-   .. value:: ValueA
+   .. enumerator:: ValueA
 
       Deprecated enum ValueA documentation string.
 
 
-   .. value:: ValueB
+   .. enumerator:: ValueB
 
-      .. warning:: Deprecated. Use :enum:`DeprecatedEnum.ValueA` instead.
+      .. warning:: Deprecated. Use :value:`DeprecatedEnum.ValueA` instead.
 
       Deprecated enum ValueB documentation string.
 

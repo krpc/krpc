@@ -29,7 +29,7 @@ from .nodes import (
 class CsharpDomain(Domain[CsharpLanguage]):
     name = "csharp"
     prettyname = "C#"
-    sphinxname = "csharp"
+    sphinxname = "cs"
     highlight = "csharp"
     codeext = "cs"
     language = CsharpLanguage()
@@ -120,7 +120,7 @@ class CsharpDomain(Domain[CsharpLanguage]):
         if isinstance(obj, (Property, ClassProperty)):
             prefix = "prop"
         elif isinstance(obj, EnumerationValue):
-            prefix = "enum"
+            prefix = "value"
         elif isinstance(obj, StructField):
             prefix = "prop"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):

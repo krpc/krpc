@@ -28,7 +28,7 @@ extensions = [
     'sphinx.ext.extlinks',
     'sphinx_tabs.tabs',
     'sphinxcontrib.luadomain',
-    'sphinx_csharp.csharp',
+    'sphinx_csharp',
     'javasphinx'
 ]
 
@@ -196,20 +196,12 @@ nitpick_ignore = [
     ('c:identifier', 'krpc_dictionary_int32_object_t'),
     ('c:identifier', 'krpc_list_nullable_bytes_t'),
 
-    ('csharp:type', 'void'),
-    ('csharp:type', 'object'),
-    ('csharp:type', 'ReturnType'),
-    ('csharp:type', 'T1'),
-    ('csharp:type', 'LambdaExpression'),
-    ('csharp:type', 'Expression'),
-    ('csharp:type', 'Func'),
-    ('csharp:type', 'Action'),
-    ('csharp:type', 'Type'),
-    ('csharp:type', 'KRPC.Schema.KRPC.Event'),
-    ('csharp:type', 'KRPC.Schema.KRPC.ProcedureCall'),
-    ('csharp:type', 'KRPC.Schema.KRPC.Services'),
-    ('csharp:type', 'KRPC.Schema.KRPC.Status'),
-    ('csharp:type', 'KRPC.Schema.KRPC.Stream'),
+    ('cs:type', 'ReturnType'),
+    ('cs:type', 'KRPC.Schema.KRPC.Event'),
+    ('cs:type', 'KRPC.Schema.KRPC.ProcedureCall'),
+    ('cs:type', 'KRPC.Schema.KRPC.Services'),
+    ('cs:type', 'KRPC.Schema.KRPC.Status'),
+    ('cs:type', 'KRPC.Schema.KRPC.Stream'),
 
     ('cpp:identifier', 'int32_t'),
     ('cpp:identifier', 'int64_t'),
@@ -322,27 +314,6 @@ def setup(app):
                                         node, contnode)
 
     app.add_domain(KRPCPythonDomain, override=True)
-
-    # The C# domain has no struct directive, so a kRPC structure is described
-    # with one added here. It carries the keyword the generated client declares,
-    # and the type role resolves against it as it does against a class.
-    from sphinx import addnodes
-    from sphinx.domains import ObjType
-    from sphinx_csharp.csharp import (
-        CSharpClass, CSharpDomain, parse_type_signature)
-
-    class CSharpStruct(CSharpClass):
-        def handle_signature(self, sig, signode):
-            name = 'struct %s' % sig
-            signode += addnodes.desc_name(name, name)
-            return self.get_fullname(parse_type_signature(sig)[0])
-
-    class KRPCCSharpDomain(CSharpDomain):
-        object_types = dict(
-            CSharpDomain.object_types, struct=ObjType('struct', 'type'))
-        directives = dict(CSharpDomain.directives, struct=CSharpStruct)
-
-    app.add_domain(KRPCCSharpDomain, override=True)
 
     # A literalinclude that ends before the next section of a script, or starts
     # after the previous one, keeps the blank line between them. Blank lines at
