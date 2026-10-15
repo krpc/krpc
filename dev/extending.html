@@ -1770,18 +1770,19 @@ installed using pip:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>krpc-clientgen<span class="w"> </span>--help
 
 <span class="go">usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--ksp KSP]</span>
-<span class="go">                      [--output-defs OUTPUT_DEFS]</span>
-<span class="go">                      {cpp,csharp,java} service input [input ...]</span>
+<span class="go">                      [--include SERVICE=PATH] [--output-defs OUTPUT_DEFS]</span>
+<span class="go">                      language service input [input ...]</span>
 
 <span class="go">Generate client source code for kRPC services.</span>
 
 <span class="go">positional arguments:</span>
-<span class="go">  {cpp,csharp,java}     Language to generate</span>
+<span class="go">  language              Language to generate (cnano, cpp, csharp, java,</span>
+<span class="go">                        python) or path to generator</span>
 <span class="go">  service               Name of service to generate</span>
 <span class="go">  input                 Path to service definition JSON file or assembly</span>
 <span class="go">                        DLL(s)</span>
 
-<span class="go">optional arguments:</span>
+<span class="go">options:</span>
 <span class="go">  -h, --help            show this help message and exit</span>
 <span class="go">  -v, --version         show program's version number and exit</span>
 <span class="go">  -o OUTPUT, --output OUTPUT</span>
@@ -1789,8 +1790,13 @@ installed using pip:</p>
 <span class="go">                        source code to standard output.</span>
 <span class="go">  --ksp KSP             Path to Kerbal Space Program directory. Required when</span>
 <span class="go">                        reading from an assembly DLL(s)</span>
+<span class="go">  --include SERVICE=PATH</span>
+<span class="go">                        Include the generated code of another service, whose</span>
+<span class="go">                        types the service uses, from the given path. Required</span>
+<span class="go">                        by the C++ and C nano generators for each such</span>
+<span class="go">                        service.</span>
 <span class="go">  --output-defs OUTPUT_DEFS</span>
-<span class="go">                        When generting client code from a DLL, output the</span>
+<span class="go">                        When generating client code from a DLL, output the</span>
 <span class="go">                        service definitions to the given JSON file</span>
 </pre></div>
 </div>
@@ -1816,7 +1822,9 @@ path to the assembly containing the service and the path to write the generated 
 <p>For C++, run the following:</p>
 <p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--ksp=/path/to/ksp</span> <span class="pre">cpp</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span> <span class="pre">launch_control.hpp</span></code></p>
 <p>To then use the LaunchControl service from C++, you need to link your code against the C++ client
-library, and include <cite>launch_control.hpp</cite>.</p>
+library, and include <cite>launch_control.hpp</cite>. If the service uses types from another service, pass
+<code class="docutils literal notranslate"><span class="pre">--include</span></code> with the path of that service’s header, so that <cite>launch_control.hpp</cite> includes it,
+e.g. <code class="docutils literal notranslate"><span class="pre">--include=SpaceCenter=krpc/services/space_center.hpp</span></code>.</p>
 <p>For C#, run the following:</p>
 <p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span> <span class="pre">--ksp=/path/to/ksp</span> <span class="pre">csharp</span> <span class="pre">LaunchControl</span> <span class="pre">LaunchControl.dll</span> <span class="pre">LaunchControl.cs</span></code></p>
 <p>To then use the LaunchControl service from a C# client, you need to reference the <cite>KRPC.Client.dll</cite>

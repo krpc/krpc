@@ -395,6 +395,7 @@ C-nano client
 ^^^^^^^^^^^^^
 
 * :breaking:`Breaking` Rename ``dockingcamera.h`` to ``docking_camera.h`` (:issue:`1149`)
+* Include the header of every service a service header uses, so service headers can be included in any order (:issue:`1150`)
 * Update to protobuf v36.2 (:issue:`1139`)
 * Update to nanopb 0.4.9.2 (:issue:`1139`)
 * :breaking:`Breaking` Renumber the ``KRPC`` service's procedures, so a program built against an earlier version must be rebuilt (:issue:`1124`)
@@ -455,6 +456,7 @@ C# client
 C++ client
 ^^^^^^^^^^
 
+* Include the header of every service a service header uses, so service headers can be included in any order (:issue:`1150`)
 * Update to protobuf v36.2 (:issue:`1139`)
 * Update to ASIO 1.38.2 (:issue:`1139`)
 * Add ``krpc::run``, which runs a server side function within a single physics tick, passing it any arguments, and returns its value (:issue:`1129`)
@@ -598,6 +600,7 @@ Python client
 krpctools
 ^^^^^^^^^
 
+* :breaking:`Breaking` Require ``--include`` in ``krpc-clientgen`` for each service whose types a C++ or C nano service uses, giving the path of its header (:issue:`1150`)
 * :breaking:`Breaking` Run ``krpc-servicedefs`` and ``TestServer`` on the .NET 10 runtime, in place of .NET 8 (:issue:`1139`)
 * Generate python stubs that declare a service's classes, enumerations, structures and exceptions for type checkers (:issue:`1134`)
 * Fix ``krpc-clientgen`` failing to load a generator from a file (:issue:`1134`)

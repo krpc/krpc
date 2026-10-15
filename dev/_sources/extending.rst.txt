@@ -1039,18 +1039,19 @@ You can then run the script from the command line:
    $ krpc-clientgen --help
 
    usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--ksp KSP]
-                         [--output-defs OUTPUT_DEFS]
-                         {cpp,csharp,java} service input [input ...]
+                         [--include SERVICE=PATH] [--output-defs OUTPUT_DEFS]
+                         language service input [input ...]
 
    Generate client source code for kRPC services.
 
    positional arguments:
-     {cpp,csharp,java}     Language to generate
+     language              Language to generate (cnano, cpp, csharp, java,
+                           python) or path to generator
      service               Name of service to generate
      input                 Path to service definition JSON file or assembly
                            DLL(s)
 
-   optional arguments:
+   options:
      -h, --help            show this help message and exit
      -v, --version         show program's version number and exit
      -o OUTPUT, --output OUTPUT
@@ -1058,8 +1059,13 @@ You can then run the script from the command line:
                            source code to standard output.
      --ksp KSP             Path to Kerbal Space Program directory. Required when
                            reading from an assembly DLL(s)
+     --include SERVICE=PATH
+                           Include the generated code of another service, whose
+                           types the service uses, from the given path. Required
+                           by the C++ and C nano generators for each such
+                           service.
      --output-defs OUTPUT_DEFS
-                           When generting client code from a DLL, output the
+                           When generating client code from a DLL, output the
                            service definitions to the given JSON file
 
 Client code can be generated either directly from an assembly DLL containing the service, or from a
@@ -1091,7 +1097,9 @@ For C++, run the following:
 ``krpc-clientgen --ksp=/path/to/ksp cpp LaunchControl LaunchControl.dll launch_control.hpp``
 
 To then use the LaunchControl service from C++, you need to link your code against the C++ client
-library, and include `launch_control.hpp`.
+library, and include `launch_control.hpp`. If the service uses types from another service, pass
+``--include`` with the path of that service's header, so that `launch_control.hpp` includes it,
+e.g. ``--include=SpaceCenter=krpc/services/space_center.hpp``.
 
 For C#, run the following:
 

@@ -997,6 +997,7 @@
 <h3>C-nano client<a class="headerlink" href="#c-nano-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="changelog-marker breaking">Breaking</span> Rename <code class="docutils literal notranslate"><span class="pre">dockingcamera.h</span></code> to <code class="docutils literal notranslate"><span class="pre">docking_camera.h</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1149">#1149</a>)</p></li>
+<li><p>Include the header of every service a service header uses, so service headers can be included in any order (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1150">#1150</a>)</p></li>
 <li><p>Update to protobuf v36.2 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1139">#1139</a>)</p></li>
 <li><p>Update to nanopb 0.4.9.2 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1139">#1139</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Renumber the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service’s procedures, so a program built against an earlier version must be rebuilt (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1124">#1124</a>)</p></li>
@@ -1057,6 +1058,7 @@
 <section id="id1">
 <h3>C++ client<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Include the header of every service a service header uses, so service headers can be included in any order (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1150">#1150</a>)</p></li>
 <li><p>Update to protobuf v36.2 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1139">#1139</a>)</p></li>
 <li><p>Update to ASIO 1.38.2 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1139">#1139</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc::run</span></code>, which runs a server side function within a single physics tick, passing it any arguments, and returns its value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1129">#1129</a>)</p></li>
@@ -1200,6 +1202,7 @@
 <section id="krpctools">
 <h3>krpctools<a class="headerlink" href="#krpctools" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p><span class="changelog-marker breaking">Breaking</span> Require <code class="docutils literal notranslate"><span class="pre">--include</span></code> in <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code> for each service whose types a C++ or C nano service uses, giving the path of its header (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1150">#1150</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Run <code class="docutils literal notranslate"><span class="pre">krpc-servicedefs</span></code> and <code class="docutils literal notranslate"><span class="pre">TestServer</span></code> on the .NET 10 runtime, in place of .NET 8 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1139">#1139</a>)</p></li>
 <li><p>Generate python stubs that declare a service’s classes, enumerations, structures and exceptions for type checkers (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1134">#1134</a>)</p></li>
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code> failing to load a generator from a file (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1134">#1134</a>)</p></li>
