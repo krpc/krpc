@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGBA
 
 
 class TestButton(krpctest.TestCase):
@@ -39,7 +40,7 @@ class TestButton(krpctest.TestCase):
         # engaged autopilot, the way the game's own interfaces do.
         button = self.canvas.add_button("Foo")
         self.assertEqual((1, 1, 1, 1), button.color)
-        button.color = (0, 1, 0, 1)
+        button.color = ColorRGBA(0, 1, 0, 1)
         self.assertEqual((0, 1, 0, 1), button.color)
         button.remove()
 

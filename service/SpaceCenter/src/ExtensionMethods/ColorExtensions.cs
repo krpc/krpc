@@ -1,6 +1,5 @@
-using System;
+using KRPC.Service.StdLib;
 using UnityEngine;
-using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -10,21 +9,35 @@ namespace KRPC.SpaceCenter.ExtensionMethods
     public static class ColorExtensions
     {
         /// <summary>
-        /// Convert the color to an RGB triple.
+        /// Convert the color to its red, green and blue components.
         /// </summary>
-        public static Tuple3 ToTuple (this Color color)
+        public static ColorRGB ToColorRGB (this Color color)
         {
-            return new Tuple3 (color.r, color.g, color.b);
+            return new ColorRGB (color.r, color.g, color.b);
         }
 
         /// <summary>
-        /// Convert an RGB triple to a color.
+        /// Convert the color to its red, green, blue and alpha components.
         /// </summary>
-        public static Color ToColor (this Tuple3 tuple)
+        public static ColorRGBA ToColorRGBA (this Color color)
         {
-            if (tuple == null)
-                throw new ArgumentNullException (nameof (tuple));
-            return new Color ((float)tuple.Item1, (float)tuple.Item2, (float)tuple.Item3);
+            return new ColorRGBA (color.r, color.g, color.b, color.a);
+        }
+
+        /// <summary>
+        /// Convert red, green and blue components to an opaque color.
+        /// </summary>
+        public static Color ToColor (this ColorRGB color)
+        {
+            return new Color (color.R, color.G, color.B);
+        }
+
+        /// <summary>
+        /// Convert red, green, blue and alpha components to a color.
+        /// </summary>
+        public static Color ToColor (this ColorRGBA color)
+        {
+            return new Color (color.R, color.G, color.B, color.A);
         }
     }
 }

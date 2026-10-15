@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 
 
 class TestPartsLight(krpctest.TestCase):
@@ -34,16 +35,16 @@ class TestPartsLight(krpctest.TestCase):
         self.light.active = True
         while not self.light.active:
             self.wait()
-        self.light.color = (1, 0, 0)
+        self.light.color = ColorRGB(1, 0, 0)
         self.assertAlmostEqual((1, 0, 0), self.light.color)
         self.wait(0.2)
-        self.light.color = (0, 1, 0)
+        self.light.color = ColorRGB(0, 1, 0)
         self.assertAlmostEqual((0, 1, 0), self.light.color)
         self.wait(0.2)
-        self.light.color = (0, 0, 1)
+        self.light.color = ColorRGB(0, 0, 1)
         self.assertAlmostEqual((0, 0, 1), self.light.color)
         self.wait(0.2)
-        self.light.color = (1, 1, 1)
+        self.light.color = ColorRGB(1, 1, 1)
         self.assertEqual((1, 1, 1), self.light.color)
         self.light.active = False
         while self.light.active:

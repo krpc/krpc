@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using Tuple3 = System.Tuple<double, double, double>;
@@ -92,7 +93,7 @@ namespace KRPC.Drawing
             var lines = new List<Line> ();
             foreach (var axis in axes) {
                 var line = new Line (Vector3d.zero, axis.ToVector () * length, referenceFrame, visible);
-                line.Color = axis;
+                line.Color = new ColorRGB ((float)axis.Item1, (float)axis.Item2, (float)axis.Item3);
                 line.EndArrow = true;
                 lines.Add (line);
             }

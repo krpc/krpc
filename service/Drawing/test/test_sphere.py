@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 
 
 class TestSphere(krpctest.TestCase):
@@ -27,7 +28,7 @@ class TestSphere(krpctest.TestCase):
         sphere = self.drawing.add_sphere((0, 0, 0), 1, self.ref, False)
         sphere.center = (0, 10, 0)
         sphere.radius = 5
-        sphere.color = (0.2, 0.2, 0.5)
+        sphere.color = ColorRGB(0.2, 0.2, 0.5)
         sphere.visible = True
         self.wait_for_frame()
         self.assertEqual((0, 10, 0), sphere.center)

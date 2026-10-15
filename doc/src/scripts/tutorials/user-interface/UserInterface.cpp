@@ -2,6 +2,7 @@
 #include <thread>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <krpc/services/std_lib.hpp>
 #include <krpc/services/ui.hpp>
 
 int main() {
@@ -40,7 +41,7 @@ int main() {
 
   // Add some text displaying the total engine thrust
   auto text = panel.add_text("Thrust: 0 kN");
-  text.set_color(std::make_tuple(1, 1, 1, 1));
+  text.set_color(krpc::services::StdLib::ColorRGBA(1, 1, 1, 1));
   text.set_size(18);
 
   // Set up streams to monitor the button and the slider

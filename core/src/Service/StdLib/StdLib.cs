@@ -8,8 +8,8 @@ using Tuple4 = System.Tuple<double, double, double, double>;
 namespace KRPC.Service.StdLib
 {
     /// <summary>
-    /// A standard library of scalar mathematics, vector and quaternion operations, and
-    /// printing, for use within server side functions.
+    /// A standard library of mathematics and printing for server side functions, and of the
+    /// colors other services use.
     /// </summary>
     /// <remarks>
     /// Vectors are position and direction tuples, and rotations are unit quaternion tuples

@@ -4,6 +4,7 @@ import krpc.client.Stream;
 import krpc.client.StreamException;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Vessel;
+import krpc.client.services.StdLib;
 import krpc.client.services.UI;
 import krpc.client.services.UI.Button;
 import krpc.client.services.UI.Canvas;
@@ -14,7 +15,6 @@ import krpc.client.services.UI.Slider;
 import krpc.client.services.UI.Text;
 
 import org.javatuples.Pair;
-import org.javatuples.Quartet;
 
 import java.io.IOException;
 
@@ -57,7 +57,7 @@ public class UserInterface {
 
         // Add some text displaying the total engine thrust
         Text text = panel.addText("Thrust: 0 kN", true);
-        text.setColor(new Quartet<Double,Double,Double,Double>(1.0, 1.0, 1.0, 1.0));
+        text.setColor(new StdLib.ColorRGBA(1f, 1f, 1f, 1f));
         text.setSize(18);
 
         // Set up streams to monitor the button and the slider

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
@@ -39,7 +40,7 @@ namespace KRPC.Drawing
         Vector3d center;
         Vector3d size;
         QuaternionD rotation;
-        Tuple3 color;
+        ColorRGB color;
         float thickness;
 
         internal Box (Vector3d boxCenter, Vector3d boxSize, QuaternionD boxRotation, ReferenceFrame referenceFrame, bool visible)
@@ -65,7 +66,7 @@ namespace KRPC.Drawing
             rotation = boxRotation;
             ReferenceFrame = referenceFrame;
             Visible = visible;
-            Color = new Tuple3 (1, 1, 1);
+            Color = new ColorRGB (1, 1, 1);
             Thickness = 0.1f;
         }
 
@@ -146,7 +147,7 @@ namespace KRPC.Drawing
         /// The color of the edges.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 Color {
+        public ColorRGB Color {
             get { return color; }
             set {
                 CheckExists ();

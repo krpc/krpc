@@ -34,7 +34,7 @@ slider.layout_element.preferred_size = List{-1, 20}
 
 -- Add some text displaying the total engine thrust
 local text = panel:add_text("Thrust: 0 kN")
-text.color = List{1, 1, 1, 1}
+text.color = conn.std_lib.ColorRGBA(1, 1, 1, 1)
 text.size = 18
 
 local vessel = conn.space_center.active_vessel

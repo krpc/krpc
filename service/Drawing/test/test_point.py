@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 
 
 class TestPoint(krpctest.TestCase):
@@ -26,7 +27,7 @@ class TestPoint(krpctest.TestCase):
     def test_properties(self):
         point = self.drawing.add_point((0, 0, 0), self.ref, False)
         point.position = (0, 10, 0)
-        point.color = (1, 0, 0)
+        point.color = ColorRGB(1, 0, 0)
         point.size = 20
         point.visible = True
         self.wait_for_frame()

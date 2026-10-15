@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 
 
 class TestNavballMarker(krpctest.TestCase):
@@ -38,7 +39,7 @@ class TestNavballMarker(krpctest.TestCase):
 
     def test_color(self):
         marker = self.add_marker()
-        marker.color = (1, 0, 0)
+        marker.color = ColorRGB(1, 0, 0)
         self.assertEqual((1, 0, 0), marker.color)
         marker.remove()
 

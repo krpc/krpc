@@ -1,6 +1,7 @@
 using System;
 using KRPC.Client;
 using KRPC.Client.Services.SpaceCenter;
+using KRPC.Client.Services.StdLib;
 using KRPC.Client.Services.UI;
 
 class UserInterface
@@ -40,7 +41,7 @@ class UserInterface
 
         // Add some text displaying the total engine thrust
         var text = panel.AddText ("Thrust: 0 kN");
-        text.Color = Tuple.Create (1.0, 1.0, 1.0, 1.0);
+        text.Color = new ColorRGBA (1, 1, 1, 1);
         text.Size = 18;
 
         // Set up streams to monitor the button and the slider

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using KRPC.Utils;
@@ -38,7 +39,7 @@ namespace KRPC.Drawing
         // read again in the same frame reports it gone
         bool removed;
         Vector3d direction;
-        Tuple3 color;
+        ColorRGB color;
         string icon;
         float size;
         // The image the marker is showing in place of its icon
@@ -70,7 +71,7 @@ namespace KRPC.Drawing
             direction = markerDirection;
             ReferenceFrame = referenceFrame;
             Visible = visible;
-            Color = new Tuple3 (1, 1, 1);
+            Color = new ColorRGB (1, 1, 1);
             Icon = "default";
             Size = 1f;
             Addon.AddObject (this);
@@ -196,7 +197,7 @@ namespace KRPC.Drawing
         /// Set the color
         /// </summary>
         [KRPCProperty]
-        public Tuple3 Color {
+        public ColorRGB Color {
             get { return color; }
             set {
                 color = value;

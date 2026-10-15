@@ -3,6 +3,7 @@
 #include <thread>
 #include <krpc.hpp>
 #include <krpc/services/space_center.hpp>
+#include <krpc/services/std_lib.hpp>
 #include <krpc/services/ui.hpp>
 #include <krpc/services/drawing.hpp>
 
@@ -22,7 +23,7 @@ int main() {
     conn, kerbin, kerbin.equatorial_radius() + 250000, 0, 0, 0, 0, 0,
     space_center.ut());
   auto path = drawing.add_orbit(orbit);
-  path.set_color(std::make_tuple(0, 1, 0));
+  path.set_color(krpc::services::StdLib::ColorRGB(0, 1, 0));
   path.set_dashed(true);
   path.set_label("Target orbit");
 
@@ -34,7 +35,7 @@ int main() {
   // Draw a yellow arrow from the vessel, pointing prograde
   auto arrow = drawing.add_direction_from_com(
     std::make_tuple(0, 1, 0), vessel.orbital_reference_frame());
-  arrow.set_color(std::make_tuple(1, 1, 0));
+  arrow.set_color(krpc::services::StdLib::ColorRGB(1, 1, 0));
   arrow.set_end_arrow(true);
 
   // Label the arrow with the orbital speed of the vessel

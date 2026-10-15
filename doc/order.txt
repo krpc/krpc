@@ -271,6 +271,15 @@ StdLib.Print
 StdLib.AxisAngle
 StdLib.AxisAngle.Axis
 StdLib.AxisAngle.Angle
+StdLib.ColorRGB
+StdLib.ColorRGB.R
+StdLib.ColorRGB.G
+StdLib.ColorRGB.B
+StdLib.ColorRGBA
+StdLib.ColorRGBA.R
+StdLib.ColorRGBA.G
+StdLib.ColorRGBA.B
+StdLib.ColorRGBA.A
 SpaceCenter
 SpaceCenter.GameMode
 SpaceCenter.Expansions

@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 
 
 class TestLine(krpctest.TestCase):
@@ -44,7 +45,7 @@ class TestLine(krpctest.TestCase):
     def test_color(self):
         line = self.add_line()
         self.assertFalse(line.visible)
-        line.color = (1, 0, 0)
+        line.color = ColorRGB(1, 0, 0)
         line.visible = True
         self.assertTrue(line.visible)
         self.assertEqual((1, 0, 0), line.color)
@@ -53,13 +54,13 @@ class TestLine(krpctest.TestCase):
     def test_colors(self):
         line = self.add_line()
         self.assertEqual([(1, 1, 1)], line.colors)
-        line.colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+        line.colors = [ColorRGB(1, 0, 0), ColorRGB(0, 1, 0), ColorRGB(0, 0, 1)]
         line.end_arrow = True
         line.visible = True
         self.wait_for_frame()
         self.assertEqual([(1, 0, 0), (0, 1, 0), (0, 0, 1)], line.colors)
         self.assertEqual((1, 0, 0), line.color)
-        line.color = (0, 1, 1)
+        line.color = ColorRGB(0, 1, 1)
         self.assertEqual([(0, 1, 1)], line.colors)
         line.remove()
 

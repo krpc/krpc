@@ -35,7 +35,7 @@ slider.layout_element.preferred_size = (-1, 20)
 
 # Add some text displaying the total engine thrust
 text = panel.add_text("Thrust: 0 kN")
-text.color = (1, 1, 1, 1)
+text.color = conn.std_lib.ColorRGBA(1, 1, 1, 1)
 text.size = 18
 
 # Set up streams to monitor the button and the slider

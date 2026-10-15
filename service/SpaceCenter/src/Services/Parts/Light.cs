@@ -1,10 +1,10 @@
 using System;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using UnityEngine;
-using Tuple3 = System.Tuple<float, float, float>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -73,20 +73,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The color of the light, as an RGB triple.
+        /// The color of the light.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
-        public Tuple3 Color {
-            get { return new Tuple3 (InternalLight.lightR, InternalLight.lightG, InternalLight.lightB); }
+        public ColorRGB Color {
+            get { return new ColorRGB (InternalLight.lightR, InternalLight.lightG, InternalLight.lightB); }
             set {
-                if (value == null)
-                    throw new ArgumentNullException (nameof (Color));
-                InternalLight.lightR = value.Item1;
-                InternalLight.lightG = value.Item2;
-                InternalLight.lightB = value.Item3;
-                InternalLight.SetFlareColor(new Color(value.Item1, value.Item2, value.Item3));
+                InternalLight.lightR = value.R;
+                InternalLight.lightG = value.G;
+                InternalLight.lightB = value.B;
+                var color = value.ToColor ();
+                InternalLight.SetFlareColor (color);
                 foreach (var unityLight in InternalLight.lights)
-                    unityLight.color = new Color (value.Item1, value.Item2, value.Item3);
+                    unityLight.color = color;
             }
         }
 

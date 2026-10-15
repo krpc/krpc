@@ -9,6 +9,7 @@
 #endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
+#include <krpc_cnano/services/std_lib.h>
 #include <krpc_cnano/services/ui.h>
 #include <krpc_cnano/services/drawing.h>
 
@@ -39,7 +40,7 @@ int main() {
     conn, &orbit, kerbin, radius + 250000, 0, 0, 0, 0, 0, ut);
   krpc_Drawing_OrbitPath_t path;
   krpc_Drawing_AddOrbit(conn, &path, orbit, true);
-  krpc_tuple_double_double_double_t green = {0, 1, 0};
+  krpc_StdLib_ColorRGB_t green = {0, 1, 0};
   krpc_Drawing_OrbitPath_set_Color(conn, path, &green);
   krpc_Drawing_OrbitPath_set_Dashed(conn, path, true);
   krpc_Drawing_OrbitPath_set_Label(conn, path, "Target orbit");
@@ -58,7 +59,7 @@ int main() {
   krpc_tuple_double_double_double_t prograde = {0, 1, 0};
   krpc_Drawing_Line_t arrow;
   krpc_Drawing_AddDirectionFromCom(conn, &arrow, &prograde, orbital_ref, 10, true);
-  krpc_tuple_double_double_double_t yellow = {1, 1, 0};
+  krpc_StdLib_ColorRGB_t yellow = {1, 1, 0};
   krpc_Drawing_Line_set_Color(conn, arrow, &yellow);
   krpc_Drawing_Line_set_EndArrow(conn, arrow, true);
 

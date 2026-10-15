@@ -4,6 +4,7 @@ using System.Linq;
 using CompoundParts;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
 using KRPC.Utils;
@@ -177,11 +178,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The color used to highlight the part, as an RGB triple.
+        /// The color used to highlight the part.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public Tuple3 HighlightColor {
-            get { return InternalPart.highlightColor.ToTuple (); }
+        public ColorRGB HighlightColor {
+            get { return InternalPart.highlightColor.ToColorRGB (); }
             set { InternalPart.highlightColor = value.ToColor (); }
         }
 
