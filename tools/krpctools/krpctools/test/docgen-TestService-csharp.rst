@@ -518,7 +518,7 @@
 
       :Game Scenes: All
 
-   .. function:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj)
+   .. function:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj = null)
 
 
 
@@ -770,7 +770,7 @@
 
       :Game Scenes: All
 
-   .. function:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj)
+   .. function:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj = null)
 
 
 

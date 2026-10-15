@@ -583,7 +583,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
+.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
 
 
 
@@ -881,7 +881,7 @@ Service documentation string.
       :rtype: str
    
 
-   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
+   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
 
 
 

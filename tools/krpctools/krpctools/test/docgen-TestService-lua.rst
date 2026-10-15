@@ -533,7 +533,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
+.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = Types.none])
 
 
 
@@ -802,7 +802,7 @@ Service documentation string.
       :param TestService.TestClass other:
       :rtype: string
 
-   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
+   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = Types.none])
 
 
 
