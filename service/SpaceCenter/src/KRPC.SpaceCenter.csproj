@@ -198,6 +198,7 @@
     <Compile Include="Services\Parts\RoboticRotation.cs" />
     <Compile Include="Services\Parts\RoboticRotor.cs" />
     <Compile Include="Services\Parts\RoboticController.cs" />
+    <Compile Include="Services\Parts\RoboticAxis.cs" />
     <Compile Include="Services\Parts\ScienceData.cs" />
     <Compile Include="Services\Parts\ScienceSubject.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />

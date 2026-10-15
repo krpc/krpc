@@ -1397,6 +1397,9 @@ SpaceCenter.RoboticController.Axes
 SpaceCenter.RoboticController.AddAxis
 SpaceCenter.RoboticController.AddKeyFrame
 SpaceCenter.RoboticController.ClearAxis
+SpaceCenter.RoboticAxis
+SpaceCenter.RoboticAxis.Module
+SpaceCenter.RoboticAxis.FieldName
 SpaceCenter.RoboticHinge
 SpaceCenter.RoboticHinge.Part
 SpaceCenter.RoboticHinge.TargetAngle
