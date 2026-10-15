@@ -117,6 +117,7 @@
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\AutoPilotUpdateMode.cs" />
     <Compile Include="Services\AxisRange.cs" />
+    <Compile Include="Services\BoundingBox.cs" />
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\AltimeterMode.cs" />
     <Compile Include="Services\CameraMode.cs" />

@@ -619,13 +619,5 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 box.center + new Vector3 (box.extents.x, -box.extents.y, -box.extents.z)
             };
         }
-
-        /// <summary>
-        /// Convert an axis-aligned bounding box to its min and max positions as tuples.
-        /// </summary>
-        public static TupleT3 ToTuples (this Bounds bounds)
-        {
-            return new TupleT3 (bounds.min.ToTuple (), bounds.max.ToTuple ());
-        }
     }
 }

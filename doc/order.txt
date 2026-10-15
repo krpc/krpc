@@ -434,6 +434,9 @@ SpaceCenter.Vessel.AngularVelocity
 SpaceCenter.AxisRange
 SpaceCenter.AxisRange.Positive
 SpaceCenter.AxisRange.Negative
+SpaceCenter.BoundingBox
+SpaceCenter.BoundingBox.Min
+SpaceCenter.BoundingBox.Max
 SpaceCenter.VesselType
 SpaceCenter.VesselType.Base
 SpaceCenter.VesselType.Debris

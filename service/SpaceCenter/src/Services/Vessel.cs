@@ -9,7 +9,6 @@ using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
 using TupleV3 = System.Tuple<Vector3d, Vector3d>;
-using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 using System.Collections;
 
 namespace KRPC.SpaceCenter.Services
@@ -1227,18 +1226,17 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The axis-aligned bounding box of the vessel in the given reference frame.
         /// </summary>
-        /// <returns>The positions of the minimum and maximum vertices of the box,
-        /// as position vectors.</returns>
+        /// <returns>The positions of the minimum and maximum vertices of the box.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// position vectors are in.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
-        public TupleT3 BoundingBox (ReferenceFrame referenceFrame)
+        public BoundingBox BoundingBox (ReferenceFrame referenceFrame)
         {
             var parts = InternalVessel.parts;
             var bounds = parts [0].GetBounds (referenceFrame);
             for (int i = 1; i < parts.Count; i++)
                 bounds.Encapsulate (parts [i].GetBounds (referenceFrame));
-            return bounds.ToTuples ();
+            return new BoundingBox (bounds);
         }
 
         /// <summary>
