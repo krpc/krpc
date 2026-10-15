@@ -1,102 +1,65 @@
-using System.Linq;
-using KRPC.Service;
+using System;
 using KRPC.Service.Attributes;
-using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
     /// <summary>
     /// Obtained by calling <see cref="Experiment.Data"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class ScienceData : Equatable<ScienceData>, IGameObjectState
+    [KRPCStruct (Service = "SpaceCenter")]
+    public struct ScienceData
     {
-        readonly Part part;
-        ModuleRef experimentRef;
-        // The game's own record of the data. It is a plain object with nothing to identify
-        // it by, so it is held rather than found again. The game replaces it whenever it
-        // rebuilds the experiment, and this object is then reclaimed
-        readonly global::ScienceData data;
-
-        internal ScienceData (Part dataPart, ModuleScienceExperiment experimentModule, global::ScienceData scienceData)
+        internal ScienceData (global::Part part, global::ScienceData data) : this ()
         {
-            part = dataPart;
-            experimentRef = ModuleRef.ForModule (experimentModule);
-            data = scienceData;
+            DataAmount = data.dataAmount;
+            var subject = ResearchAndDevelopment.GetSubjectByID (data.subjectID);
+            if (subject == null)
+                return;
+            var gain = HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
+            ScienceValue = ResearchAndDevelopment.GetScienceValue (data.dataAmount, subject, 1) * gain;
+            TransmitValue = ComputeTransmitValue (part, data, subject, gain);
         }
 
-        ModuleScienceExperiment InternalExperiment {
-            get { return (ModuleScienceExperiment)experimentRef.Get (part.InternalPart); }
-        }
-
-        /// <summary>
-        /// The state of the record. It takes the state of the experiment holding it, and is
-        /// destroyed once a live experiment stops holding it.
-        /// </summary>
-        public GameObjectState GameObjectState {
-            get {
-                var state = experimentRef.StateOn (part);
-                if (state != GameObjectState.Live)
-                    return state;
-                var container = experimentRef.Find (part.InternalPart) as IScienceDataContainer;
-                return container != null && container.GetData ().Contains (data)
-                    ? GameObjectState.Live : GameObjectState.Destroyed;
-            }
-        }
-
-        /// <summary>
-        /// Returns true if the objects are equal.
-        /// </summary>
-        public override bool Equals (ScienceData other)
+        // The transmit value as ExperimentResultDialogPage computes it
+        static float ComputeTransmitValue (
+            global::Part part, global::ScienceData data, global::ScienceSubject subject, float gain)
         {
-            return !ReferenceEquals (other, null) && part == other.part &&
-            experimentRef == other.experimentRef && data == other.data;
+            var scienceValue = gain * ResearchAndDevelopment.GetScienceValue (
+                data.dataAmount, data.scienceValueRatio, subject, 1);
+            var transmitValue = gain * ResearchAndDevelopment.GetScienceValue (
+                data.dataAmount, data.scienceValueRatio, subject, data.baseTransmitValue);
+            if (scienceValue <= 0)
+                return transmitValue;
+            return Math.Min (transmitValue * (1 + CommNetBonus (part.vessel)), scienceValue);
         }
 
-        /// <summary>
-        /// Hash code for the object.
-        /// </summary>
-        public override int GetHashCode ()
+        // The bonus the signal strength of the vessel's control path adds to transmitted science
+        static float CommNetBonus (global::Vessel vessel)
         {
-            return Hash.Of (part).And (experimentRef).And (data);
+            if (!CommNet.CommNetScenario.CommNetEnabled || vessel == null || vessel.connection == null)
+                return 0;
+            var node = vessel.connection.Comm;
+            if (node == null || node.scienceCurve == null)
+                return 0;
+            return (float)node.scienceCurve.Evaluate (vessel.connection.ControlPath.signalStrength);
         }
 
         /// <summary>
         /// Data amount.
         /// </summary>
         [KRPCProperty]
-        public float DataAmount {
-            get { return data.dataAmount; }
-        }
+        public float DataAmount { get; set; }
 
         /// <summary>
         /// Science value.
         /// </summary>
         [KRPCProperty]
-        public float ScienceValue {
-            get {
-                var subject = ResearchAndDevelopment.GetSubjectByID (data.subjectID);
-                if (subject == null)
-                    return 0;
-                return ResearchAndDevelopment.GetScienceValue (data.dataAmount, subject, 1) * HighLogic.CurrentGame.Parameters.Career.ScienceGainMultiplier;
-            }
-        }
+        public float ScienceValue { get; set; }
 
         /// <summary>
         /// Transmit value.
         /// </summary>
         [KRPCProperty]
-        public float TransmitValue {
-            get {
-                // Use ExperimentResultDialogPage to compute the science value
-                ExperimentResultDialogPage page = new ExperimentResultDialogPage(
-                    InternalExperiment.part, data, data.baseTransmitValue, data.transmitBonus,
-                    false, string.Empty, false,
-                    new ScienceLabSearch(InternalExperiment.part.vessel, data),
-                    null, null, null, null);
-                return page.baseTransmitValue * page.TransmitBonus;
-            }
-        }
-
+        public float TransmitValue { get; set; }
     }
 }

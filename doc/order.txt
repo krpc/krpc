@@ -1227,6 +1227,7 @@ SpaceCenter.ScienceData.DataAmount
 SpaceCenter.ScienceData.ScienceValue
 SpaceCenter.ScienceData.TransmitValue
 SpaceCenter.ScienceSubject
+SpaceCenter.ScienceSubject.Id
 SpaceCenter.ScienceSubject.Title
 SpaceCenter.ScienceSubject.IsComplete
 SpaceCenter.ScienceSubject.Science

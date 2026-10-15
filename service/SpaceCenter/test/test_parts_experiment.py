@@ -36,6 +36,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertEqual(True, self.pod.available)
         self.assertEqual("LaunchPad", self.pod.biome)
         subject = self.pod.science_subject
+        self.assertEqual("crewReport@KerbinSrfLandedLaunchPad", subject.id)
         self.assertAlmostEqual(0, subject.science)
         self.assertAlmostEqual(1.5, subject.science_cap)
         self.assertFalse(subject.is_complete)
@@ -53,6 +54,7 @@ class TestPartsExperiment(krpctest.TestCase):
         self.assertFalse(self.goo.has_data)
         self.assertCountEqual([], self.goo.data)
         subject = self.goo.science_subject
+        self.assertEqual("mysteryGoo@KerbinSrfLandedLaunchPad", subject.id)
         self.assertAlmostEqual(0, subject.science)
         self.assertAlmostEqual(3.9, subject.science_cap, places=4)
         self.assertFalse(subject.is_complete)
