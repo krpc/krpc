@@ -61,6 +61,7 @@
     <Compile Include="LayoutElement.cs" />
     <Compile Include="MessagePosition.cs" />
     <Compile Include="Object.cs" />
+    <Compile Include="Padding.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="PanelStyle.cs" />
     <Compile Include="PressHandler.cs" />

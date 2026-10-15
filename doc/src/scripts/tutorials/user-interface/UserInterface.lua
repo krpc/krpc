@@ -19,7 +19,7 @@ rect.position = List{110-(screen_size[1]/2), 0}
 
 -- Lay the contents of the panel out in a column
 local layout = panel:add_vertical_layout()
-layout.padding = List{10, 10, 10, 10}
+layout.padding = conn.ui.Padding(10, 10, 10, 10)
 layout.spacing = 6
 
 -- Add a button to set the throttle to maximum, with a tooltip shown while the

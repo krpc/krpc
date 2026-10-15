@@ -42,7 +42,7 @@ public class UserInterface {
 
         // Lay the contents of the panel out in a column
         Layout layout = panel.addVerticalLayout();
-        layout.setPadding(new Quartet<Integer,Integer,Integer,Integer>(10, 10, 10, 10));
+        layout.setPadding(new UI.Padding(10, 10, 10, 10));
         layout.setSpacing(6);
 
         // Add a button to set the throttle to maximum, with a tooltip shown

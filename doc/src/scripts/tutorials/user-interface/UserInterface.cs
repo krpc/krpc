@@ -25,7 +25,7 @@ class UserInterface
 
         // Lay the contents of the panel out in a column
         var layout = panel.AddVerticalLayout ();
-        layout.Padding = Tuple.Create (10, 10, 10, 10);
+        layout.Padding = new Padding (10, 10, 10, 10);
         layout.Spacing = 6;
 
         // Add a button to set the throttle to maximum, with a tooltip shown

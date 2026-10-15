@@ -40,7 +40,7 @@ int main() {
   // Lay the contents of the panel out in a column
   krpc_UI_Layout_t layout;
   krpc_UI_Panel_AddVerticalLayout(conn, &layout, panel);
-  krpc_tuple_int32_int32_int32_int32_t padding = {10, 10, 10, 10};
+  krpc_UI_Padding_t padding = {10, 10, 10, 10};
   krpc_UI_Layout_set_Padding(conn, layout, &padding);
   krpc_UI_Layout_set_Spacing(conn, layout, 6);
 

@@ -25,7 +25,7 @@ int main() {
 
   // Lay the contents of the panel out in a column
   auto layout = panel.add_vertical_layout();
-  layout.set_padding(std::make_tuple(10, 10, 10, 10));
+  layout.set_padding(krpc::services::UI::Padding(10, 10, 10, 10));
   layout.set_spacing(6);
 
   // Add a button to set the throttle to maximum, with a tooltip shown while

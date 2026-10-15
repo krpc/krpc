@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.ui import Padding
 
 
 class TestLayout(krpctest.TestCase):
@@ -23,7 +24,7 @@ class TestLayout(krpctest.TestCase):
         layout = panel.add_horizontal_layout()
         self.assertIsNotNone(panel.layout)
         layout.spacing = 4
-        layout.padding = (1, 2, 3, 4)
+        layout.padding = Padding(1, 2, 3, 4)
         layout.child_alignment = self.anchor.middle_center
         self.assertEqual(4, layout.spacing)
         self.assertEqual((1, 2, 3, 4), layout.padding)
