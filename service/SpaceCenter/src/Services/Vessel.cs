@@ -817,8 +817,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableTorque {
-            get { return AvailableTorqueVectors.ToTuple (); }
+        public AxisRange AvailableTorque {
+            get { return new AxisRange (AvailableTorqueVectors); }
         }
 
         /// <summary>
@@ -828,8 +828,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableReactionWheelTorque {
-            get { return AvailableReactionWheelTorqueVectors.ToTuple (); }
+        public AxisRange AvailableReactionWheelTorque {
+            get { return new AxisRange (AvailableReactionWheelTorqueVectors); }
         }
 
         /// <summary>
@@ -839,8 +839,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableRCSTorque {
-            get { return AvailableRCSTorqueVectors.ToTuple (); }
+        public AxisRange AvailableRCSTorque {
+            get { return new AxisRange (AvailableRCSTorqueVectors); }
         }
 
         /// <summary>
@@ -850,8 +850,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the right, forward and bottom directions of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableRCSForce {
-            get { return AvailableRCSForceVectors.ToTuple (); }
+        public AxisRange AvailableRCSForce {
+            get { return new AxisRange (AvailableRCSForceVectors); }
         }
 
         /// <summary>
@@ -862,11 +862,11 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the right, forward and bottom directions of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableRCSAcceleration {
+        public AxisRange AvailableRCSAcceleration {
             get {
                 var mass = Mass;
                 var force = AvailableRCSForceVectors;
-                return new TupleV3 (force.Item1 / mass, force.Item2 / mass).ToTuple ();
+                return new AxisRange (new TupleV3 (force.Item1 / mass, force.Item2 / mass));
             }
         }
 
@@ -877,8 +877,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableEngineTorque {
-            get { return AvailableEngineTorqueVectors.ToTuple (); }
+        public AxisRange AvailableEngineTorque {
+            get { return new AxisRange (AvailableEngineTorqueVectors); }
         }
 
         /// <summary>
@@ -888,8 +888,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableControlSurfaceTorque {
-            get { return AvailableControlSurfaceTorqueVectors.ToTuple (); }
+        public AxisRange AvailableControlSurfaceTorque {
+            get { return new AxisRange (AvailableControlSurfaceTorqueVectors); }
         }
 
         /// <summary>
@@ -900,8 +900,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableOtherTorque {
-            get { return AvailableOtherTorqueVectors.ToTuple (); }
+        public AxisRange AvailableOtherTorque {
+            get { return new AxisRange (AvailableOtherTorqueVectors); }
         }
 
         /// <summary>
@@ -913,8 +913,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableAngularAcceleration {
-            get { return DivideByMomentOfInertia (AvailableTorqueVectors).ToTuple (); }
+        public AxisRange AvailableAngularAcceleration {
+            get { return new AxisRange (DivideByMomentOfInertia (AvailableTorqueVectors)); }
         }
 
         /// <summary>
@@ -926,8 +926,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableReactionWheelAngularAcceleration {
-            get { return DivideByMomentOfInertia (AvailableReactionWheelTorqueVectors).ToTuple (); }
+        public AxisRange AvailableReactionWheelAngularAcceleration {
+            get { return new AxisRange (DivideByMomentOfInertia (AvailableReactionWheelTorqueVectors)); }
         }
 
         /// <summary>
@@ -938,8 +938,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableRCSAngularAcceleration {
-            get { return DivideByMomentOfInertia (AvailableRCSTorqueVectors).ToTuple (); }
+        public AxisRange AvailableRCSAngularAcceleration {
+            get { return new AxisRange (DivideByMomentOfInertia (AvailableRCSTorqueVectors)); }
         }
 
         /// <summary>
@@ -951,8 +951,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableEngineAngularAcceleration {
-            get { return DivideByMomentOfInertia (AvailableEngineTorqueVectors).ToTuple (); }
+        public AxisRange AvailableEngineAngularAcceleration {
+            get { return new AxisRange (DivideByMomentOfInertia (AvailableEngineTorqueVectors)); }
         }
 
         /// <summary>
@@ -964,8 +964,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableControlSurfaceAngularAcceleration {
-            get { return DivideByMomentOfInertia (AvailableControlSurfaceTorqueVectors).ToTuple (); }
+        public AxisRange AvailableControlSurfaceAngularAcceleration {
+            get { return new AxisRange (DivideByMomentOfInertia (AvailableControlSurfaceTorqueVectors)); }
         }
 
         /// <summary>
@@ -977,8 +977,8 @@ namespace KRPC.SpaceCenter.Services
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
-        public TupleT3 AvailableOtherAngularAcceleration {
-            get { return DivideByMomentOfInertia (AvailableOtherTorqueVectors).ToTuple (); }
+        public AxisRange AvailableOtherAngularAcceleration {
+            get { return new AxisRange (DivideByMomentOfInertia (AvailableOtherTorqueVectors)); }
         }
 
         /// <summary>

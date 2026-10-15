@@ -8,7 +8,6 @@ using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
 using TupleV3 = System.Tuple<Vector3d, Vector3d>;
-using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -202,8 +201,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// can report the larger torque an override reaches.
         /// </remarks>
         [KRPCProperty]
-        public TupleT3 AvailableTorque {
-            get { return AvailableTorqueVectors.ToTuple (); }
+        public AxisRange AvailableTorque {
+            get { return new AxisRange (AvailableTorqueVectors); }
         }
 
         internal TupleV3 AvailableTorqueVectors {
@@ -226,8 +225,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// can report the larger force an override reaches.
         /// </remarks>
         [KRPCProperty]
-        public TupleT3 AvailableForce {
-            get { return AvailableForceVectors.ToTuple (); }
+        public AxisRange AvailableForce {
+            get { return new AxisRange (AvailableForceVectors); }
         }
 
         internal TupleV3 AvailableForceVectors {

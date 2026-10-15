@@ -431,6 +431,9 @@ SpaceCenter.Vessel.Velocity
 SpaceCenter.Vessel.Rotation
 SpaceCenter.Vessel.Direction
 SpaceCenter.Vessel.AngularVelocity
+SpaceCenter.AxisRange
+SpaceCenter.AxisRange.Positive
+SpaceCenter.AxisRange.Negative
 SpaceCenter.VesselType
 SpaceCenter.VesselType.Base
 SpaceCenter.VesselType.Debris
