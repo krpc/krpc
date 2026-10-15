@@ -27,6 +27,10 @@ KRPC.GameScene.ResearchAndDevelopment
 KRPC.GameScene.Administration
 KRPC.Paused
 KRPC.GameStateLoads
+KRPC.ClientInfo
+KRPC.ClientInfo.Id
+KRPC.ClientInfo.Name
+KRPC.ClientInfo.Address
 KRPC.Expression
 KRPC.Expression.ReturnType
 KRPC.Expression.HasReturnType

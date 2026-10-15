@@ -81,7 +81,7 @@ namespace KRPC.Test.Service.KRPC
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "get_Clients") {
-                    MessageAssert.HasReturnType (proc, typeof(IList<Tuple<byte[],string,string>>));
+                    MessageAssert.HasReturnType (proc, typeof(IList<global::KRPC.Service.KRPC.ClientInfo>));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "get_GameScene") {

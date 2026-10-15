@@ -145,12 +145,11 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// A list of RPC clients that are currently connected to the server.
-        /// Each entry in the list is a clients identifier, name and address.
+        /// The RPC clients that are currently connected to the server.
         /// </summary>
         [KRPCProperty]
-        public static IList<Tuple<byte[], string, string>> Clients {
-            get { return Core.Instance.RPCClients.Select (x => new Tuple<byte[], string, string> (x.Guid.ToByteArray (), x.Name, x.Address)).ToList (); }
+        public static IList<ClientInfo> Clients {
+            get { return Core.Instance.RPCClients.Select (x => new ClientInfo (x)).ToList (); }
         }
 
         /// <summary>
