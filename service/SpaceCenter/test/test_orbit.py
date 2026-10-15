@@ -13,10 +13,13 @@ class TestOrbit(krpctest.TestCase):
 
     def check_radius_and_speed(self, obj, orbit):
         # Compute position from orbital elements
+        ut = self.space_center.ut
         pos = compute_position(obj, orbit.body.non_rotating_reference_frame)
-        # Compute radius from position
+        # Compute radius from position, allowing for the motion while the RPCs ran
         radius = norm(pos) * 1000000
-        self.assertAlmostEqual(radius, orbit.radius, delta=1)
+        orbit_radius = orbit.radius
+        elapsed = self.space_center.ut - ut
+        self.assertAlmostEqual(radius, orbit_radius, delta=1 + orbit.speed * elapsed)
         # Compute speed from radius
         speed = math.sqrt(
             orbit.body.gravitational_parameter
@@ -36,33 +39,48 @@ class TestOrbit(krpctest.TestCase):
         diff = (angle - other_angle + math.pi) % (2 * math.pi) - math.pi
         self.assertAlmostEqual(0, diff, places=places)
 
-    def check_anomalies(self, obj, orbit):
-        g = self.space_center.g
+    @staticmethod
+    def mean_motion(orbit):
+        # KSP leaves the mass of the orbiting object out of the two-body problem
+        return math.sqrt(
+            orbit.body.gravitational_parameter / abs(orbit.semi_major_axis) ** 3
+        )
+
+    def check_time_to_soi_change(self, orbit):
+        ut = self.space_center.ut + orbit.time_to_soi_change
+        soi = orbit.body.sphere_of_influence
+        self.assertAlmostEqual(soi, orbit.radius_at(ut), delta=soi * 1e-4)
+
+    def check_anomalies(self, orbit):
         ut = self.space_center.ut
         mean_anomaly_at_epoch = orbit.mean_anomaly_at_epoch
         epoch = orbit.epoch
 
         # Compute mean anomaly using Kepler's equation
-        mean_anomaly = orbit.eccentric_anomaly - (
-            orbit.eccentricity * math.sin(orbit.eccentric_anomaly)
-        )
+        e = orbit.eccentricity
+        anomaly = orbit.eccentric_anomaly
+        if e < 1:
+            mean_anomaly = anomaly - e * math.sin(anomaly)
+        else:
+            mean_anomaly = e * math.sinh(anomaly) - anomaly
         self.check_angles_close(mean_anomaly, orbit.mean_anomaly)
 
         # Compute mean anomaly using mean motion and time since epoch
-        mean_motion = math.sqrt(
-            (g * (orbit.body.mass + obj.mass)) / (orbit.semi_major_axis**3)
-        )
+        mean_motion = self.mean_motion(orbit)
         delta_t = ut - epoch
         mean_anomaly = mean_anomaly_at_epoch + (mean_motion * delta_t)
         self.check_angles_close(mean_anomaly, orbit.mean_anomaly)
 
-    def check_time_to_apoapsis_and_periapsis(self, obj, orbit):
+    def check_time_to_apoapsis_and_periapsis(self, orbit):
         # Compute the time to apoapsis and periapsis using mean motion
-        g = self.space_center.g
-        mean_motion = math.sqrt(
-            (g * (orbit.body.mass + obj.mass)) / (orbit.semi_major_axis**3)
-        )
-        time_since_periapsis = orbit.mean_anomaly / mean_motion
+        time_since_periapsis = orbit.mean_anomaly / self.mean_motion(orbit)
+        if orbit.eccentricity >= 1:
+            # An open orbit has no apoapsis, and passes periapsis once
+            self.assertEqual(math.inf, orbit.time_to_apoapsis)
+            self.assertAlmostEqual(
+                -time_since_periapsis, orbit.time_to_periapsis, delta=2
+            )
+            return
         time_to_periapsis = orbit.period - time_since_periapsis
         time_to_apoapsis = (orbit.period / 2) - time_since_periapsis
         if time_to_apoapsis < 0:
@@ -86,13 +104,11 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(2246.1, orbit.speed, delta=1)
         self.check_radius_and_speed(vessel, orbit)
         self.check_specific_energy(orbit)
-        # self.check_time_to_apoapsis_and_periapsis(vessel, orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity, places=1)
         self.assertAlmostEqual(0, orbit.inclination, places=1)
-        # longitude_of_ascending_node and argument_of_periapsis are
+        # longitude_of_ascending_node, argument_of_periapsis and the anomalies are
         # degenerate for a circular equatorial orbit, so cannot be checked
-        # self.check_anomalies(vessel, orbit)
         self.assertIsNone(orbit.next_orbit)
 
     def test_vessel_orbiting_bop(self):
@@ -110,9 +126,9 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(
             sma * math.sqrt(1 - (ecc * ecc)), orbit.semi_minor_axis, delta=50
         )
-        # self.check_radius_and_speed(vessel, orbit)
-        self.check_time_to_apoapsis_and_periapsis(vessel, orbit)
-        # self.assertIsNaN(orbit.time_to_soi_change)
+        self.check_radius_and_speed(vessel, orbit)
+        self.check_time_to_apoapsis_and_periapsis(orbit)
+        self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(ecc, orbit.eccentricity, places=1)
         self.assertAlmostEqual(27 * (math.pi / 180), orbit.inclination, places=1)
         self.assertAlmostEqual(
@@ -124,8 +140,8 @@ class TestOrbit(krpctest.TestCase):
         # mean_anomaly_at_epoch and epoch cannot be checked against the values
         # passed to set_orbit, as KSP re-epochs the orbit every frame while the
         # vessel is under physics; check_anomalies verifies their consistency
-        self.check_anomalies(vessel, orbit)
-        # self.assertNone(orbit.next_orbit)
+        self.check_anomalies(orbit)
+        self.assertIsNone(orbit.next_orbit)
 
     def test_speed_at(self):
         """speed_at is the vis-viva speed at the radius the orbit has reached at
@@ -209,14 +225,14 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(
             sma * math.sqrt(1 - (ecc * ecc)), orbit.semi_minor_axis, delta=50
         )
-        # self.check_radius_and_speed(vessel, orbit)
-        # self.check_time_to_apoapsis_and_periapsis(vessel, orbit)
-        # self.assertAlmostEqual(17414, orbit.time_to_soi_change,delta=5)
+        self.check_radius_and_speed(vessel, orbit)
+        self.check_time_to_apoapsis_and_periapsis(orbit)
+        self.check_time_to_soi_change(orbit)
         self.assertAlmostEqual(ecc, orbit.eccentricity, places=1)
         self.assertAlmostEqual(0, orbit.inclination, places=1)
         # longitude_of_ascending_node and argument_of_periapsis are
         # degenerate for an equatorial orbit, so cannot be checked
-        # self.check_anomalies(vessel, orbit)
+        self.check_anomalies(orbit)
         self.assertIsNotNone(orbit.next_orbit)
 
         orbit = orbit.next_orbit
@@ -235,14 +251,14 @@ class TestOrbit(krpctest.TestCase):
         ecc = 3
         self.assertAlmostEqual(sma, orbit.semi_major_axis, delta=50)
         self.assertIsNaN(orbit.semi_minor_axis)
-        # self.check_radius_and_speed(vessel, orbit)
-        # self.check_time_to_apoapsis_and_periapsis(vessel, orbit)
-        # self.assertAlmostEqual(12884, orbit.time_to_soi_change, delta=5)
+        self.check_radius_and_speed(vessel, orbit)
+        self.check_time_to_apoapsis_and_periapsis(orbit)
+        self.check_time_to_soi_change(orbit)
         self.assertAlmostEqual(ecc, orbit.eccentricity, places=1)
         self.assertAlmostEqual(0, orbit.inclination, places=1)
         # longitude_of_ascending_node and argument_of_periapsis are
         # degenerate for an equatorial orbit, so cannot be checked
-        # self.check_anomalies(vessel, orbit)
+        self.check_anomalies(orbit)
         self.assertIsNotNone(orbit.next_orbit)
 
         orbit = orbit.next_orbit
@@ -266,13 +282,13 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(9284.50, orbit.speed, places=1)
         self.check_radius_and_speed(body, orbit)
         self.check_specific_energy(orbit)
-        # self.check_time_to_apoapsis_and_periapsis(body, orbit)
+        self.check_time_to_apoapsis_and_periapsis(orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity)
         self.assertAlmostEqual(0, orbit.inclination)
         self.assertAlmostEqual(0, orbit.longitude_of_ascending_node)
         self.assertAlmostEqual(0, orbit.argument_of_periapsis)
-        self.check_anomalies(body, orbit)
+        self.check_anomalies(orbit)
 
     def test_minmus_orbiting_kerbin(self):
         body = self.space_center.bodies["Minmus"]
@@ -288,13 +304,13 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual(274.1, orbit.speed, delta=0.5)
         self.check_radius_and_speed(body, orbit)
         self.check_specific_energy(orbit)
-        # self.check_time_to_apoapsis_and_periapsis(body, orbit)
+        self.check_time_to_apoapsis_and_periapsis(orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(0, orbit.eccentricity)
         self.assertAlmostEqual(6 * (math.pi / 180), orbit.inclination)
         self.assertAlmostEqual(78 * (math.pi / 180), orbit.longitude_of_ascending_node)
         self.assertAlmostEqual(38 * (math.pi / 180), orbit.argument_of_periapsis)
-        self.check_anomalies(body, orbit)
+        self.check_anomalies(orbit)
 
     def test_eeloo_orbiting_sun(self):
         body = self.space_center.bodies["Eeloo"]
@@ -308,14 +324,14 @@ class TestOrbit(krpctest.TestCase):
         ecc = 0.26
         self.assertAlmostEqual(sma, orbit.semi_major_axis)
         self.assertAlmostEqual(sma * math.sqrt(1 - (ecc * ecc)), orbit.semi_minor_axis)
-        # self.check_radius_and_speed(body, orbit)
-        # self.check_time_to_apoapsis_and_periapsis(body, orbit)
+        self.check_radius_and_speed(body, orbit)
+        self.check_time_to_apoapsis_and_periapsis(orbit)
         self.assertIsNaN(orbit.time_to_soi_change)
         self.assertAlmostEqual(ecc, orbit.eccentricity)
         self.assertAlmostEqual(6.15 * (math.pi / 180), orbit.inclination)
         self.assertAlmostEqual(50 * (math.pi / 180), orbit.longitude_of_ascending_node)
         self.assertAlmostEqual(260 * (math.pi / 180), orbit.argument_of_periapsis)
-        self.check_anomalies(body, orbit)
+        self.check_anomalies(orbit)
 
     def test_reference_plane(self):
         kerbin = self.space_center.bodies["Kerbin"]

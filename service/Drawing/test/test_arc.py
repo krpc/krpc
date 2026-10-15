@@ -37,7 +37,7 @@ class TestArc(krpctest.TestCase):
         arc.start_direction = (0, 0, 1)
         arc.angle = -0.5
         arc.radius = 2
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual((1, 1, 1), arc.center)
         self.assertEqual((0, 1, 0), arc.normal)
         self.assertEqual((0, 0, 1), arc.start_direction)
@@ -48,10 +48,10 @@ class TestArc(krpctest.TestCase):
     def test_large_angle(self):
         # An arc of more than a full turn is drawn as a circle
         arc = self.drawing.add_arc((0, 0, 0), (0, 0, 1), (1, 0, 0), 1e12, 10, self.ref)
-        self.wait()
+        self.wait_for_frame()
         self.assertAlmostEqual(1e12, arc.angle)
         arc.angle = -1e12
-        self.wait()
+        self.wait_for_frame()
         arc.remove()
 
     def test_invalid_plane(self):
@@ -100,7 +100,7 @@ class TestCircle(krpctest.TestCase):
         self.assertTrue(circle.visible)
         circle.end_arrow = True
         circle.normal = (1, 0, 0)
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual((1, 0, 0), circle.normal)
         circle.remove()
         self.assertRaises(self.destroyed, circle.remove)

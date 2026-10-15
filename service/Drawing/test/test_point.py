@@ -29,7 +29,7 @@ class TestPoint(krpctest.TestCase):
         point.color = (1, 0, 0)
         point.size = 20
         point.visible = True
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual((0, 10, 0), point.position)
         self.assertEqual((1, 0, 0), point.color)
         self.assertAlmostEqual(20, point.size)

@@ -349,7 +349,31 @@ class TestCase(AssertionsMixin):
     def wait(cls, timeout=0.1):
         time.sleep(timeout)
 
-    def wait_until(self, predicate, timeout=30, message=None, interval=0.1):
+    @classmethod
+    def wait_for_rest(cls, part, duration=1):
+        """Wait until part has had no airflow for duration seconds. A vessel sways
+        on the launchpad after it spawns, and passes through rest at each swing."""
+        rest_since = None
+
+        def at_rest():
+            nonlocal rest_since
+            if part.dynamic_pressure >= 0.0001:
+                rest_since = None
+                return False
+            if rest_since is None:
+                rest_since = time.time()
+            return time.time() - rest_since >= duration
+
+        cls.wait_until(at_rest, message="the vessel to come to rest")
+
+    @classmethod
+    def wait_for_frame(cls):
+        """Sleep for long enough that the game draws a frame at 10 fps or more, so its
+        rendering code runs on the state set before the call."""
+        cls.wait()
+
+    @classmethod
+    def wait_until(cls, predicate, timeout=30, message=None, interval=0.1):
         """Repeatedly call wait() until predicate() returns a truthy value, and
         return that value. Fail the test if timeout seconds elapse first.
         interval is the poll period, in seconds, passed to wait().
@@ -363,18 +387,19 @@ class TestCase(AssertionsMixin):
             if value:
                 return value
             if time.time() > deadline:
-                self.fail(
+                raise cls.failureException(
                     "Timed out after %gs waiting for %s"
                     % (timeout, message or "condition")
                 )
-            self.wait(interval)
+            cls.wait(interval)
 
-    def wait_while(self, predicate, timeout=30, message=None, interval=0.1):
+    @classmethod
+    def wait_while(cls, predicate, timeout=30, message=None, interval=0.1):
         """Repeatedly call wait() while predicate() returns a truthy value. Fail
         the test if timeout seconds elapse first. interval is the poll period,
         in seconds, passed to wait(). message should describe the state being
         waited for (i.e. the condition that ends the wait)."""
-        return self.wait_until(
+        return cls.wait_until(
             lambda: not predicate(),
             timeout=timeout,
             message=message,

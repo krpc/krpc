@@ -133,12 +133,27 @@ def compute_position(obj, ref):
     """Compute the objects position in the given
     reference frame (in Mm) from its orbital elements"""
     orbit = obj.orbit
-    major_axis = orbit.semi_major_axis / 1000000
-    minor_axis = orbit.semi_minor_axis / 1000000
+    semi_major_axis = orbit.semi_major_axis / 1000000
+    eccentricity = orbit.eccentricity
     eccentric_anomaly = orbit.eccentric_anomaly
 
-    x = major_axis * math.cos(eccentric_anomaly)
-    z = minor_axis * math.sin(eccentric_anomaly)
+    # Position in the orbital plane, relative to the focus, with periapsis along x.
+    # A hyperbolic orbit has a negative semi-major axis, and a hyperbolic eccentric
+    # anomaly.
+    if eccentricity < 1:
+        x = semi_major_axis * (math.cos(eccentric_anomaly) - eccentricity)
+        z = (
+            semi_major_axis
+            * math.sqrt(1 - eccentricity**2)
+            * math.sin(eccentric_anomaly)
+        )
+    else:
+        x = semi_major_axis * (math.cosh(eccentric_anomaly) - eccentricity)
+        z = (
+            -semi_major_axis
+            * math.sqrt(eccentricity**2 - 1)
+            * math.sinh(eccentric_anomaly)
+        )
     pos = (x, 0, z)
 
     angle = orbit.argument_of_periapsis

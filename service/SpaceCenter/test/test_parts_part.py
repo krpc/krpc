@@ -12,11 +12,9 @@ class TestPartsPart(krpctest.TestCase):
         if active_vessel is None or active_vessel.name != "Parts":
             cls.launch_vessel_from_vab("Parts")
             cls.remove_other_vessels()
-            # TODO: wait needed to allow dynamic
-            # pressure calculations to settle
-            cls.wait(3)
         cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
+        cls.wait_for_rest(cls.vessel.parts.root)
         cls.parts = cls.vessel.parts
         cls.far_available = cls.sc.far_available
 
@@ -790,6 +788,17 @@ class TestPartsPart(krpctest.TestCase):
         box = part.bounding_box(part.reference_frame)
         self.assertAlmostEqual((-0.495, -1.122, -0.569), box[0], places=2)
         self.assertAlmostEqual((0.495, 0.232, 0.679), box[1], places=2)
+
+    def test_tag(self):
+        part = self.parts.root
+        self.assertEqual("", part.tag)
+        self.addCleanup(setattr, part, "tag", "")
+        part.tag = "pod"
+        self.assertEqual("pod", part.tag)
+        self.assertEqual([part], self.parts.with_tag("pod"))
+        part.tag = ""
+        self.assertEqual("", part.tag)
+        self.assertEqual([], self.parts.with_tag("pod"))
 
     def test_highlighting(self):
         part = self.parts.with_name("Rockomax64.BW")[0]

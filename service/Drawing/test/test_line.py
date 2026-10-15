@@ -56,7 +56,7 @@ class TestLine(krpctest.TestCase):
         line.colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
         line.end_arrow = True
         line.visible = True
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual([(1, 0, 0), (0, 1, 0), (0, 0, 1)], line.colors)
         self.assertEqual((1, 0, 0), line.color)
         line.color = (0, 1, 1)
@@ -76,7 +76,7 @@ class TestLine(krpctest.TestCase):
         line.dashed = True
         line.end_arrow = True
         line.visible = True
-        self.wait()
+        self.wait_for_frame()
         self.assertTrue(line.dashed)
         line.remove()
 
@@ -85,7 +85,7 @@ class TestLine(krpctest.TestCase):
         self.assertEqual("", line.label)
         line.label = "Prograde"
         line.visible = True
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual("Prograde", line.label)
         line.remove()
         self.assertEqual("Prograde", line.label)
@@ -106,7 +106,7 @@ class TestLine(krpctest.TestCase):
         line.end_arrow = True
         line.arrow_size = 2.5
         line.visible = True
-        self.wait()
+        self.wait_for_frame()
         self.assertTrue(line.start_arrow)
         self.assertTrue(line.end_arrow)
         self.assertAlmostEqual(2.5, line.arrow_size)
@@ -115,7 +115,7 @@ class TestLine(krpctest.TestCase):
     def test_arrows_on_a_short_line(self):
         line = self.drawing.add_line((0, 0, 0), (0, 0.01, 0), self.ref)
         line.end_arrow = True
-        self.wait()
+        self.wait_for_frame()
         self.assertTrue(line.end_arrow)
         line.remove()
 

@@ -29,7 +29,7 @@ class TestSphere(krpctest.TestCase):
         sphere.radius = 5
         sphere.color = (0.2, 0.2, 0.5)
         sphere.visible = True
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual((0, 10, 0), sphere.center)
         self.assertAlmostEqual(5, sphere.radius)
         self.assertAlmostEqual((0.2, 0.2, 0.5), sphere.color)

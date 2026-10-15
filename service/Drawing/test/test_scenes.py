@@ -36,10 +36,10 @@ def draw_all(drawing, ref):
 def add_map_markers(test, drawing, ref):
     icons = drawing.MapMarkerIcon
     marker = drawing.add_map_marker((0, 0, 0), ref, icons.station, "Station")
-    test.wait()
+    test.wait_for_frame()
     for icon in (icons.apoapsis, icons.probe, icons.encounter, icons.ksc):
         marker.icon = icon
-        test.wait()
+        test.wait_for_frame()
         test.assertEqual(icon, marker.icon)
     test.assertEqual("Station", marker.caption)
     marker.remove()
@@ -67,7 +67,7 @@ class TestMapView(krpctest.TestCase):
             self.vessel.orbit.body.reference_frame,
         ):
             objects = draw_all(self.drawing, ref)
-            self.wait()
+            self.wait_for_frame()
             for obj in objects:
                 self.assertEqual(ref, obj.reference_frame)
                 self.assertTrue(obj.visible)
@@ -80,7 +80,7 @@ class TestMapView(krpctest.TestCase):
             assert orbit is not None
             path = self.drawing.add_orbit(orbit)
             path.end_arrow = True
-            self.wait()
+            self.wait_for_frame()
             self.assertEqual(orbit, path.orbit)
             path.remove()
 
@@ -89,18 +89,18 @@ class TestMapView(krpctest.TestCase):
 
     def test_switch_view(self):
         line = self.drawing.add_line((0, 0, 0), (0, 10, 0), self.vessel.reference_frame)
-        self.wait()
+        self.wait_for_frame()
         self.camera.mode = self.mode.automatic
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual((0, 10, 0), line.end)
         self.camera.mode = self.mode.map
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual((0, 10, 0), line.end)
         line.remove()
 
     def test_navball_marker(self):
         marker = self.drawing.add_navball_marker((0, 1, 0), self.vessel.reference_frame)
-        self.wait()
+        self.wait_for_frame()
         self.assertTrue(marker.visible)
         marker.remove()
 
@@ -121,7 +121,7 @@ class TestEditor(krpctest.TestCase):
 
     def test_draw(self):
         objects = draw_all(self.drawing, self.ref)
-        self.wait()
+        self.wait_for_frame()
         for obj in objects:
             self.assertEqual(self.ref, obj.reference_frame)
             self.assertTrue(obj.visible)
@@ -164,7 +164,7 @@ class TestTrackingStation(krpctest.TestCase):
 
     def test_draw(self):
         objects = draw_all(self.drawing, self.ref)
-        self.wait()
+        self.wait_for_frame()
         for obj in objects:
             self.assertEqual(self.ref, obj.reference_frame)
             self.assertTrue(obj.visible)
@@ -176,7 +176,7 @@ class TestTrackingStation(krpctest.TestCase):
         assert mun_orbit is not None
         path = self.drawing.add_orbit(mun_orbit)
         path.end_arrow = True
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual(mun_orbit, path.orbit)
         path.remove()
 

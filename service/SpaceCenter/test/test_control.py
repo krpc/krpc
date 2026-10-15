@@ -390,7 +390,6 @@ class TestControlStaging(krpctest.TestCase):
     def test_staging(self):
         for i in reversed(range(12)):
             self.assertEqual(i, self.control.current_stage)
-            self.wait(0.5)
             self.control.activate_next_stage()
         self.assertEqual(0, self.control.current_stage)
 
@@ -454,9 +453,10 @@ class TestControlRover(krpctest.TestCase):
         self.control.wheel_throttle = 0.0
         self.control.brakes = True
 
-        # Wait until the rover has stopped
-        while self.flight.horizontal_speed > 0.005:
-            self.wait()
+        self.wait_while(
+            lambda: self.flight.horizontal_speed > 0.005,
+            message="the rover to stop",
+        )
 
     def test_move_backward(self):
         self.control = self.space_center.active_vessel.control
@@ -483,9 +483,10 @@ class TestControlRover(krpctest.TestCase):
         self.control.wheel_throttle = 0.0
         self.control.brakes = True
 
-        # Wait until the rover has stopped
-        while self.flight.speed > 0.005:
-            self.wait()
+        self.wait_while(
+            lambda: self.flight.speed > 0.005,
+            message="the rover to stop",
+        )
 
     def test_steer_left(self):
         self.control = self.space_center.active_vessel.control
@@ -513,9 +514,10 @@ class TestControlRover(krpctest.TestCase):
         self.control.wheel_throttle = 0.0
         self.control.brakes = True
 
-        # Wait until the rover has stopped
-        while self.flight.speed > 0.01:
-            self.wait()
+        self.wait_while(
+            lambda: self.flight.speed > 0.01,
+            message="the rover to stop",
+        )
 
     def test_steer_right(self):
         self.control = self.space_center.active_vessel.control
@@ -543,9 +545,10 @@ class TestControlRover(krpctest.TestCase):
         self.control.wheel_throttle = 0.0
         self.control.brakes = True
 
-        # Wait until the rover has stopped
-        while self.flight.horizontal_speed > 0.01:
-            self.wait()
+        self.wait_while(
+            lambda: self.flight.horizontal_speed > 0.01,
+            message="the rover to stop",
+        )
 
 
 class TestControlProbe(krpctest.TestCase):
@@ -636,30 +639,39 @@ class TestControlCustomAxes(krpctest.TestCase):
         cls.sc = cls.connect().space_center
         # Decouple into two vessels, one active and one not
         next(iter(cls.sc.active_vessel.parts.docking_ports)).undock()
-        cls.wait(1)
         cls.active = cls.sc.active_vessel
         cls.other = next(v for v in cls.sc.vessels if v != cls.active)
+
+    def wait_for_axes(self, control, *values):
+        # The getter reads the flight control state, which picks up a new value on
+        # the next physics tick
+        names = ["custom_axis0%d" % i for i in range(1, len(values) + 1)]
+        self.wait_until(
+            lambda: all(
+                abs(getattr(control, name) - value) < 0.01
+                for name, value in zip(names, values)
+            ),
+            message="custom axes %s to read %s" % (names, values),
+        )
 
     def setUp(self):
         for vessel in (self.active, self.other):
             for i in range(1, 5):
                 setattr(vessel.control, "custom_axis0%d" % i, 0.0)
-        self.wait(1)
+        for vessel in (self.active, self.other):
+            self.wait_for_axes(vessel.control, 0, 0, 0, 0)
 
     def test_round_trip(self):
         self.active.control.custom_axis01 = 0.6
-        self.wait(1)
-        self.assertAlmostEqual(0.6, self.active.control.custom_axis01, places=2)
+        self.wait_for_axes(self.active.control, 0.6)
         self.active.control.custom_axis01 = -0.3
-        self.wait(1)
-        self.assertAlmostEqual(-0.3, self.active.control.custom_axis01, places=2)
+        self.wait_for_axes(self.active.control, -0.3)
 
     def test_applied_to_correct_vessel(self):
         # Setting a custom axis on the non-active vessel must apply to that
         # vessel, and must not affect the active vessel.
         self.other.control.custom_axis01 = 0.5
-        self.wait(1)
-        self.assertAlmostEqual(0.5, self.other.control.custom_axis01, places=2)
+        self.wait_for_axes(self.other.control, 0.5)
         self.assertAlmostEqual(0.0, self.active.control.custom_axis01, places=2)
 
     def test_axes_independent(self):
@@ -668,11 +680,7 @@ class TestControlCustomAxes(krpctest.TestCase):
         control.custom_axis02 = 0.2
         control.custom_axis03 = 0.3
         control.custom_axis04 = 0.4
-        self.wait(1)
-        self.assertAlmostEqual(0.1, control.custom_axis01, places=2)
-        self.assertAlmostEqual(0.2, control.custom_axis02, places=2)
-        self.assertAlmostEqual(0.3, control.custom_axis03, places=2)
-        self.assertAlmostEqual(0.4, control.custom_axis04, places=2)
+        self.wait_for_axes(control, 0.1, 0.2, 0.3, 0.4)
 
 
 if __name__ == "__main__":

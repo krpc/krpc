@@ -11,9 +11,8 @@ class TestPartsControlSurface(krpctest.TestCase):
             cls.new_save()
             cls.launch_vessel_from_vab("PartsControlSurface")
             cls.remove_other_vessels()
-            # TODO: wait needed to let available torque calculations settle
-            cls.wait(3)
         parts = cls.connect().space_center.active_vessel.parts
+        cls.wait_for_rest(parts.root)
         cls.ctrlsrf = parts.with_name("airlinerCtrlSrf")[0].control_surface
         cls.winglets = [x.control_surface for x in parts.with_name("winglet3")]
         cls.winglet = cls.winglets[0]

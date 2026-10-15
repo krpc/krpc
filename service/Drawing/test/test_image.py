@@ -63,12 +63,12 @@ class TestImage(krpctest.TestCase):
         marker = self.drawing.add_map_marker((0, 0, 0), self.ref)
         self.assertIsNone(marker.image)
         marker.image = image
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual(image, marker.image)
         marker.icon = self.drawing.MapMarkerIcon.probe
-        self.wait()
+        self.wait_for_frame()
         image.remove()
-        self.wait()
+        self.wait_for_frame()
         marker.image = None
         self.assertIsNone(marker.image)
         marker.remove()
@@ -78,12 +78,12 @@ class TestImage(krpctest.TestCase):
         marker = self.drawing.add_navball_marker((0, 1, 0), self.ref)
         self.assertIsNone(marker.image)
         marker.image = image
-        self.wait()
+        self.wait_for_frame()
         self.assertEqual(image, marker.image)
         marker.icon = "default"
-        self.wait()
+        self.wait_for_frame()
         marker.image = None
-        self.wait()
+        self.wait_for_frame()
         self.assertIsNone(marker.image)
         marker.remove()
         image.remove()
