@@ -653,8 +653,8 @@ class TestFlightAero(krpctest.TestCase):
         broadside = flight.simulate_aerodynamic_wrench_at(
             body, tuple(position), self.head_on_wind(ref), pitched, zero, ut
         )
-        self.assertGreater(norm(vector(broadside[0]) - vector(head_on[0])), 100)
-        self.assertGreater(norm(vector(broadside[1]) - vector(head_on[1])), 1)
+        self.assertGreater(norm(vector(broadside.force) - vector(head_on.force)), 100)
+        self.assertGreater(norm(vector(broadside.torque) - vector(head_on.torque)), 1)
 
 
 class TestFlightAeroFAR(TestFlightAero):

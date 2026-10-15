@@ -5,8 +5,6 @@ using UnityEngine;
 using Tuple2 = System.Tuple<double, double>;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
-using TupleV3 = System.Tuple<Vector3d, Vector3d>;
-using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -95,16 +93,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 m [1, 0], m [1, 1], m [1, 2],
                 m [2, 0], m [2, 1], m [2, 2]
             });
-        }
-
-        /// <summary>
-        /// Convert a pair of vectors to a pair of tuples
-        /// </summary>
-        public static TupleT3 ToTuple (this TupleV3 v)
-        {
-            if (v == null)
-                throw new ArgumentNullException (nameof (v));
-            return new TupleT3 (v.Item1.ToTuple (), v.Item2.ToTuple ());
         }
 
         /// <summary>

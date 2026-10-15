@@ -591,6 +591,9 @@ SpaceCenter.Flight.DragCoefficient
 SpaceCenter.Flight.LiftCoefficient
 SpaceCenter.Flight.BallisticCoefficient
 SpaceCenter.Flight.ThrustSpecificFuelConsumption
+SpaceCenter.Wrench
+SpaceCenter.Wrench.Force
+SpaceCenter.Wrench.Torque
 SpaceCenter.Orbit
 SpaceCenter.Orbit.CreateFromPositionAndVelocity
 SpaceCenter.Orbit.CreateFromOrbitalElements
@@ -1322,8 +1325,7 @@ SpaceCenter.RCS.AvailableTorque
 SpaceCenter.RCS.AvailableForce
 SpaceCenter.RCS.Force
 SpaceCenter.RCS.Torque
-SpaceCenter.RCS.OverrideForce
-SpaceCenter.RCS.OverrideTorque
+SpaceCenter.RCS.OverrideWrench
 SpaceCenter.RCS.AvailableThrust
 SpaceCenter.RCS.MaxThrust
 SpaceCenter.RCS.MaxVacuumThrust

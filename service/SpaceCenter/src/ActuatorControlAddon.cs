@@ -253,7 +253,7 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
-        /// The rotation demand as the module's own rotation input. RCS.OverrideTorque predicts
+        /// The rotation demand as the module's own rotation input. RCS.OverrideWrench predicts
         /// through the same mapping, so the prediction follows the override.
         /// </summary>
         internal static Vector3 RCSRotationInput (Vector3 rotation)
@@ -265,7 +265,7 @@ namespace KRPC.SpaceCenter
         /// The translation demand as the module's own linear input. ModuleRCS takes
         /// (-right, -forward, up) and thrusts along the negative of it, so the right, up and
         /// forward demand is negated and reordered to match the cooked control input.
-        /// RCS.OverrideForce predicts through the same mapping, so the prediction follows the
+        /// RCS.OverrideWrench predicts through the same mapping, so the prediction follows the
         /// override.
         /// </summary>
         internal static Vector3 RCSTranslationInput (Vector3 translation)
