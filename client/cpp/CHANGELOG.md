@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Include the header of every service a service header uses, so service headers can be
+  included in any order (#1150)
 - Update to protobuf v36.2 (#1139)
 - Update to ASIO 1.38.2 (#1139)
 - Add `krpc::run`, which runs a server side function within a single physics tick,
