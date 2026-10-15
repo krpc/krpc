@@ -14,8 +14,8 @@ from .generator import Generator
 class CsharpGenerator(Generator[CsharpLanguage]):
     language = CsharpLanguage()
 
-    def __init__(self, macro_template, service, definitions):
-        super().__init__(macro_template, service, definitions)
+    def __init__(self, macro_template, service, definitions, includes=None):
+        super().__init__(macro_template, service, definitions, includes)
         # The specs the generated stubs name, each held in a static field of its own
         self._type_specs = {}
 

@@ -57,13 +57,31 @@ def main():
         + "Required when reading from an assembly DLL(s)",
     )
     parser.add_argument(
+        "--include",
+        action="append",
+        default=[],
+        metavar="SERVICE=PATH",
+        help="Include the generated code of another service, whose types the service "
+        + "uses, from the given path. Required by the C++ and C nano generators for "
+        + "each such service.",
+    )
+    parser.add_argument(
         "--output-defs",
-        help="When generting client code from a DLL, "
+        help="When generating client code from a DLL, "
         + "output the service definitions to the given JSON file",
     )
     args = parser.parse_args()
 
     try:
+        includes = {}
+        for include in args.include:
+            service, sep, path = include.partition("=")
+            if not sep or not service or not path:
+                raise RuntimeError(
+                    "Invalid include '%s'. Expected SERVICE=PATH." % include
+                )
+            includes[service] = path
+
         # Check and expand input paths
         inputs = []
         for path in args.input:
@@ -128,7 +146,7 @@ def main():
 
         # Run the generator, over all of the definitions that were loaded: the requested
         # service is the one generated, but the types it refers to may be defined by any of them
-        g = generator(macro_template, args.service, Definitions(defs))
+        g = generator(macro_template, args.service, Definitions(defs), includes)
         if args.output:
             g.generate_file(args.output)
         else:

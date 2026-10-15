@@ -22,9 +22,10 @@ from .generator import Generator
 
 class CnanoGenerator(Generator[CnanoLanguage]):
     language = CnanoLanguage()
+    includes_services = True
 
-    def __init__(self, macro_template, service, definitions):
-        super().__init__(macro_template, service, definitions)
+    def __init__(self, macro_template, service, definitions, includes=None):
+        super().__init__(macro_template, service, definitions, includes)
         self._collection_types = set()
 
     def parse_name(self, name):

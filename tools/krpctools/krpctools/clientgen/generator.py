@@ -30,12 +30,16 @@ LanguageT = TypeVar("LanguageT", bound=Language)
 
 class Generator(Generic[LanguageT]):
     language: LanguageT
+    # Whether the generated code includes the code of the other services whose types it uses
+    includes_services = False
 
-    def __init__(self, macro_template, service, definitions):
+    def __init__(self, macro_template, service, definitions, includes=None):
         self._macro_template = macro_template
         self._service = service
         self._definitions = definitions
         self._defs = definitions.services[service]
+        # The path the generated code of another service is included by, keyed by service
+        self._includes = includes or {}
         # The registry every service in the definitions was registered in, so that a type
         # another service defines resolves to what that service defines it as
         self.types = definitions.types
@@ -121,6 +125,40 @@ class Generator(Generic[LanguageT]):
 
     def _get_defs(self, key):
         return self._defs.get(key, {}).items()
+
+    def referenced_services(self):
+        """The other services whose types the procedures and structures of the service use"""
+        services = set()
+
+        def add(typ):
+            if "service" in typ:
+                services.add(typ["service"])
+            for value_type in typ.get("types", []):
+                add(value_type)
+
+        for _, procedure in self._get_defs("procedures"):
+            for parameter in procedure["parameters"]:
+                add(parameter["type"])
+            if "return_type" in procedure:
+                add(procedure["return_type"])
+        for _, struct in self._get_defs("structs"):
+            for field in struct["fields"]:
+                add(field["type"])
+        services.discard(self._service)
+        return services
+
+    def includes(self):
+        """The include paths of the referenced services"""
+        if not self.includes_services:
+            return []
+        services = self.referenced_services()
+        for service in sorted(services):
+            if service not in self._includes:
+                raise RuntimeError(
+                    "%s uses the types of service %s, but its include path was not provided"
+                    % (self._service, service)
+                )
+        return sorted(self._includes[service] for service in services)
 
     def generate_context(self):
         context = {
@@ -372,6 +410,7 @@ class Generator(Generic[LanguageT]):
             cls["static_methods"] = sort_dict(cls["static_methods"])
             cls["properties"] = sort_dict(cls["properties"])
 
+        context["includes"] = self.includes()
         return context
 
     def as_type(self, type_info):

@@ -47,6 +47,18 @@ class TestClientGenCNano(ClientGenTestCase, unittest.TestCase):
             1, self.generate("ServiceA", defs).count("struct krpc_list_object_s {")
         )
 
+    def test_includes_the_services_it_uses(self):
+        # ServiceA uses an enumeration of ServiceB only
+        includes = {"ServiceB": "b/service_b.h", "ServiceC": "c/service_c.h"}
+        actual = self.generate("ServiceA", self.load("Ordering"), includes)
+        self.assertIn("#include <b/service_b.h>\n", actual)
+        self.assertNotIn("service_c", actual)
+
+    def test_service_whose_include_is_not_provided(self):
+        with self.assertRaises(RuntimeError) as cm:
+            self.generate("ServiceA", self.load("Ordering"), {})
+        self.assertIn("ServiceB", str(cm.exception))
+
 
 if __name__ == "__main__":
     unittest.main()
