@@ -74,24 +74,31 @@ clientgen_cnano(
     name = "services-drawing",
     defs = "//service/Drawing:ServiceDefinitions",
     service = "Drawing",
+    deps = [
+        ":services-spacecenter",
+        ":services-ui",
+    ],
 )
 
 clientgen_cnano(
     name = "services-infernalrobotics",
     defs = "//service/InfernalRobotics:ServiceDefinitions",
     service = "InfernalRobotics",
+    deps = [":services-spacecenter"],
 )
 
 clientgen_cnano(
     name = "services-kerbalalarmclock",
     defs = "//service/KerbalAlarmClock:ServiceDefinitions",
     service = "KerbalAlarmClock",
+    deps = [":services-spacecenter"],
 )
 
 clientgen_cnano(
     name = "services-remotetech",
     defs = "//service/RemoteTech:ServiceDefinitions",
     service = "RemoteTech",
+    deps = [":services-spacecenter"],
 )
 
 clientgen_cnano(
@@ -110,18 +117,21 @@ clientgen_cnano(
     name = "services-lidar",
     defs = "//service/LiDAR:ServiceDefinitions",
     service = "LIDAR",
+    deps = [":services-spacecenter"],
 )
 
 clientgen_cnano(
     name = "services-dockingcamera",
     defs = "//service/DockingCamera:ServiceDefinitions",
     service = "DockingCamera",
+    deps = [":services-spacecenter"],
 )
 
 clientgen_cnano(
     name = "services-debug",
     defs = "//service/Debug:ServiceDefinitions",
     service = "Debug",
+    deps = [":services-spacecenter"],
 )
 
 clientgen_cnano(
@@ -129,6 +139,7 @@ clientgen_cnano(
     out = "test/services/test_service.h",
     defs = "//tools/TestServer:ServiceDefinitions",
     service = "TestService",
+    deps = [":services-krpc"],
 )
 
 srcs = glob(["src/**/*.c"])
