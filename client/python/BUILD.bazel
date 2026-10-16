@@ -185,6 +185,7 @@ clientgen_python(
     name = "services-ui",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+    deps = [":services-stdlib"],
 )
 
 clientgen_python(

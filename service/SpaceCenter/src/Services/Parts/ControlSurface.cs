@@ -5,7 +5,6 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 using Tuple3 = System.Tuple<double, double, double>;
 using TupleV3 = System.Tuple<Vector3d, Vector3d>;
-using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -204,8 +203,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
-        public TupleT3 AvailableTorque {
-            get { return AvailableTorqueVectors.ToTuple (); }
+        public AxisRange AvailableTorque {
+            get { return new AxisRange (AvailableTorqueVectors); }
         }
 
         internal TupleV3 AvailableTorqueVectors {

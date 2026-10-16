@@ -146,6 +146,14 @@ class CnanoGenerator(Generator[CnanoLanguage]):
                 member["member"] = "e%d" % i
             result.update({"kind": "tuple", "value_types": members})
         elif isinstance(typ, StructType):
+            # The codec is generated in every header that uses the structure, from its fields
+            if not typ.has_fields:
+                service = typ.protobuf_type.service
+                raise RuntimeError(
+                    "%s uses the struct %s.%s, but the definitions for service %s were "
+                    "not provided"
+                    % (self.service_name, service, typ.protobuf_type.name, service)
+                )
             members = [self.parse_type_at_position(t) for t in typ.field_types]
             for name, member in zip(typ.field_names, members):
                 member["member"] = self.parse_name(snake_case(name))

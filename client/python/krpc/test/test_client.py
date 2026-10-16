@@ -23,6 +23,12 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRegex(status.version, r"^[0-9]+\.[0-9]+\.[0-9]+$")
         self.assertGreater(status.bytes_read, 0)
 
+    def test_clients(self) -> None:
+        client_id = self.conn.krpc.get_client_id()
+        client = next(x for x in self.conn.krpc.clients if x.id == client_id)
+        self.assertEqual("python_client_test", client.name)
+        self.assertIsInstance(client.address, str)
+
     @unittest.skipIf(
         os.getenv("RPC_PATH") is not None,
         "the server is listening on socket paths rather than on ports",
@@ -802,6 +808,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "paused",
                     "game_state_loads",
                     "clients",
+                    "ClientInfo",
                     "Expression",
                     "Type",
                     "TypeCode",

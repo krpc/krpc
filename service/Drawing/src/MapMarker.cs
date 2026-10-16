@@ -1,6 +1,7 @@
 using System;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using KRPC.Utils;
@@ -38,7 +39,7 @@ namespace KRPC.Drawing
             icon = markerIcon;
             Caption = caption;
             Visible = visible;
-            Color = new Tuple3 (1, 1, 1);
+            Color = new ColorRGB (1, 1, 1);
             node = MapNode.Create ("KRPC.Drawing.MapMarker", UnityEngine.Color.white, pixelSize, true, true, false);
             node.OnUpdatePosition += OnUpdatePosition;
             node.OnUpdateVisible += OnUpdateVisible;
@@ -322,6 +323,6 @@ namespace KRPC.Drawing
         /// The color of the marker.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 Color { get; set; }
+        public ColorRGB Color { get; set; }
     }
 }

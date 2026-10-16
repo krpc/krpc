@@ -34,6 +34,7 @@
     warp (#1145)
   - Fix `SpaceCenter.MaximumRailsWarpFactor` returning 0 when only warp factor 1 is
     allowed (#1145)
+  - **Breaking:** Make `SpaceCenter.LaunchSite` a structure (#1148)
 
 - Editor
   - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space plane
@@ -80,6 +81,13 @@
     before a load goes on working (#1051)
   - Renaming a kerbal destroys every object for them, which have to be obtained again under
     the new name (#1051)
+  - **Breaking:** Return the available torque, force and acceleration members of `Vessel`,
+    `ReactionWheel`, `ControlSurface`, `Engine` and `RCS` as a `SpaceCenter.AxisRange` structure,
+    in place of a pair of tuples (#1148)
+  - **Breaking:** Return `Vessel.BoundingBox` and `Part.BoundingBox` as a `SpaceCenter.BoundingBox`
+    structure, in place of a pair of tuples (#1148)
+  - **Breaking:** Replace `CareerLogFlights`, `CareerLogTypes` and `CareerLogTargets` with
+    `CrewMember.CareerLog`, a list of `SpaceCenter.FlightLogEntry` structures (#1148)
 
 - Staging
   - Fix stages from `Vessel.Stages`, `Vessel.StageAt`, `Vessel.DecoupleStages` and
@@ -175,6 +183,8 @@
     `Flight.SimulateAerodynamicWrenchAt` returning `NaN` with Ferram Aerospace Research
     installed when there is no relative airflow (#1032)
   - Fix `Flight.StallFraction` returning `NaN` for a vessel with no lifting surfaces (#1032)
+  - **Breaking:** Return `Flight.SimulateAerodynamicWrenchAt` as a `SpaceCenter.Wrench` structure,
+    in place of a pair of tuples (#1148)
 
 - Buoyancy
   - Add `Flight.Displacement`, `Flight.DisplacedVolume`, `Flight.SubmergedPortion`,
@@ -219,7 +229,7 @@
   - **Breaking:** `RCS.TranslationOverride` thrusts along the right, up and forward axes it
     documents (#1080)
   - Add `RCS.Force` and `RCS.Torque`, the force and torque a block is applying, and
-    `RCS.OverrideForce` and `RCS.OverrideTorque`, what a given demand would apply (#1080)
+    `RCS.OverrideWrench`, what a given demand would apply (#1080)
   - Add `Thruster.Thrust`, the thrust a single nozzle of an engine or RCS block is producing
     (#1080)
   - Fix `Engine.Thrusters` and `RCS.Thrusters` giving the same thrusters on a part that
@@ -270,15 +280,17 @@
   - Using a part of a vessel that the game has unloaded raises
     `KRPC.ObjectNotLoadedException` (#1051)
   - The fields, events and actions of a part module read the loaded game's module (#764)
-  - A `ScienceSubject` belongs to the game state it was read from, and using one after that
-    state has been replaced raises `KRPC.ObjectDestroyedException` (#771)
-  - Fix `Experiment.ScienceSubject` adding a new object for every read (#771)
-  - Fix `ScienceSubject.Science` and `ScienceSubject.ScienceCap` scaling by the science gain
-    multiplier that was in force when the object was read (#1051)
   - Make `ModuleRef` public, for a mod that exposes a part module as a class of its own
     service (#1077)
   - **Breaking:** Remove the string-dictionary `Module` field, event and action members,
     replaced by `Module.FieldList`, `Module.EventList` and `Module.ActionList` (#1140)
+  - **Breaking:** Make `SpaceCenter.ScienceSubject` and `SpaceCenter.ScienceData` structures
+    (#1148)
+  - Add `ScienceSubject.Id`, the identifier of a science subject (#1148)
+  - **Breaking:** Return `RoboticController.Axes` as a list of `SpaceCenter.RoboticAxis`
+    structures, in place of a list of name pairs (#1148)
+  - **Breaking:** Return and set `Part.HighlightColor` and `Light.Color` as a `StdLib.ColorRGB`
+    structure, in place of a tuple (#1148)
 
 - Resources
   - Add `ResourceTransfer.Cancel` to stop a transfer before it finishes (#1028)

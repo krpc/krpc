@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 
 
 class TestBox(krpctest.TestCase):
@@ -30,7 +31,7 @@ class TestBox(krpctest.TestCase):
         box.center = (0, 5, 0)
         box.size = (3, 10, 3)
         box.rotation = (0, 0.7071068, 0, 0.7071068)
-        box.color = (0, 1, 0)
+        box.color = ColorRGB(0, 1, 0)
         box.thickness = 0.5
         box.visible = True
         self.wait_for_frame()

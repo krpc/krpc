@@ -8,6 +8,7 @@ import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.CelestialBody;
 import krpc.client.services.SpaceCenter.Orbit;
 import krpc.client.services.SpaceCenter.Vessel;
+import krpc.client.services.StdLib;
 
 import org.javatuples.Triplet;
 
@@ -28,7 +29,7 @@ public class DrawingExample {
           connection, kerbin, kerbin.getEquatorialRadius() + 250000, 0, 0, 0, 0, 0,
           spaceCenter.getUT());
         OrbitPath path = drawing.addOrbit(orbit, true);
-        path.setColor(new Triplet<Double, Double, Double>(0.0, 1.0, 0.0));
+        path.setColor(new StdLib.ColorRGB(0f, 1f, 0f));
         path.setDashed(true);
         path.setLabel("Target orbit");
 
@@ -42,7 +43,7 @@ public class DrawingExample {
         Line arrow = drawing.addDirectionFromCom(
           new Triplet<Double, Double, Double>(0.0, 1.0, 0.0),
           vessel.getOrbitalReferenceFrame(), 10, true);
-        arrow.setColor(new Triplet<Double, Double, Double>(1.0, 1.0, 0.0));
+        arrow.setColor(new StdLib.ColorRGB(1f, 1f, 0f));
         arrow.setEndArrow(true);
 
         // Label the arrow with the orbital speed of the vessel

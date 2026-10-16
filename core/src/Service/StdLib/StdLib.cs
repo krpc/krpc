@@ -8,8 +8,8 @@ using Tuple4 = System.Tuple<double, double, double, double>;
 namespace KRPC.Service.StdLib
 {
     /// <summary>
-    /// A standard library of scalar mathematics, vector and quaternion operations, and
-    /// printing, for use within server side functions.
+    /// A standard library of mathematics and printing for server side functions, and of the
+    /// colors other services use.
     /// </summary>
     /// <remarks>
     /// Vectors are position and direction tuples, and rotations are unit quaternion tuples
@@ -671,15 +671,14 @@ namespace KRPC.Service.StdLib
         }
 
         /// <summary>
-        /// The axis and angle of a rotation, with the angle in radians between 0 and pi.
+        /// The axis and angle of a rotation.
         /// </summary>
         /// <remarks>
-        /// The axis is a unit vector, or zero for no rotation. Throws an exception if the
-        /// quaternion is zero.
+        /// Throws an exception if the quaternion is zero.
         /// </remarks>
         /// <param name="q">The rotation.</param>
         [KRPCProcedure]
-        public static Tuple<Tuple3, double> QuaternionToAxisAngle (Tuple4 q)
+        public static AxisAngle QuaternionToAxisAngle (Tuple4 q)
         {
             CheckNotZero (q, "Cannot compute the axis of a zero quaternion");
             var magnitude = Hypot (Hypot (q.Item1, q.Item2), Hypot (q.Item3, q.Item4));
@@ -687,9 +686,9 @@ namespace KRPC.Service.StdLib
             var vector = Divide (new Tuple3 (q.Item1, q.Item2, q.Item3), q.Item4 < 0 ? -magnitude : magnitude);
             var sinHalf = VectorMagnitude (vector);
             if (sinHalf <= 0)
-                return Tuple.Create (new Tuple3 (0, 0, 0), 0.0);
+                return new AxisAngle (new Tuple3 (0, 0, 0), 0);
             var angle = 2 * Math.Atan2 (sinHalf, Math.Abs (q.Item4) / magnitude);
-            return Tuple.Create (Divide (vector, sinHalf), angle);
+            return new AxisAngle (Divide (vector, sinHalf), angle);
         }
 
         /// <summary>

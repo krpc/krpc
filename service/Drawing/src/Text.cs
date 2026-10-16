@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using KRPC.UI.ExtensionMethods;
@@ -202,8 +203,8 @@ namespace KRPC.Drawing
         /// Set the color
         /// </summary>
         [KRPCProperty]
-        public Tuple3 Color {
-            get { return Mesh.color.ToTuple (); }
+        public ColorRGB Color {
+            get { return Mesh.color.ToColorRGB (); }
             set { Mesh.color = value.ToColor (); }
         }
     }

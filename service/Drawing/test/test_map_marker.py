@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 
 
 class TestMapMarker(krpctest.TestCase):
@@ -30,7 +31,7 @@ class TestMapMarker(krpctest.TestCase):
         )
         marker.position = (0, 10, 0)
         marker.caption = "Top"
-        marker.color = (1, 0, 0)
+        marker.color = ColorRGB(1, 0, 0)
         marker.visible = True
         self.wait_for_frame()
         self.assertEqual((0, 10, 0), marker.position)

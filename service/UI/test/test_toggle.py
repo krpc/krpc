@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGBA
 
 
 class TestToggle(krpctest.TestCase):
@@ -58,7 +59,7 @@ class TestToggle(krpctest.TestCase):
     def test_color(self):
         toggle = self.canvas.add_toggle("Foo")
         self.assertEqual((1, 1, 1, 1), toggle.color)
-        toggle.color = (1, 0, 0, 0.5)
+        toggle.color = ColorRGBA(1, 0, 0, 0.5)
         self.assertEqual((1, 0, 0, 0.5), toggle.color)
         toggle.remove()
 

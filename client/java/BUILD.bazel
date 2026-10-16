@@ -211,6 +211,7 @@ clientgen_java(
     name = "services-ui",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+    deps = [":services-stdlib"],
 )
 
 clientgen_java(

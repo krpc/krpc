@@ -208,7 +208,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<ScienceData> Data {
-            get { return InternalDataContainer.GetData().Select (data => new ScienceData (Part, InternalExperiment, data)).ToList (); }
+            get { return InternalDataContainer.GetData().Select (data => new ScienceData (Part.InternalPart, data)).ToList (); }
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// conditions. Returns <c>null</c> if the experiment is unavailable.
         /// </summary>
         [KRPCProperty]
-        public ScienceSubject ScienceSubject {
+        public ScienceSubject? ScienceSubject {
             get {
                 if (!Available)
                     return null;

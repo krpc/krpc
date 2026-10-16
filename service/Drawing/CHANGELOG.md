@@ -1,5 +1,6 @@
 ## [v0.7.0] - unreleased
 
+- **Breaking:** Return and set colors as a `StdLib.ColorRGB` structure, in place of a tuple (#1148)
 - Add `Drawing.AddPolyline`, `Drawing.AddCircle` and `Drawing.AddArc` (#1116)
 - Add `Drawing.AddOrbit`, which draws the path of an orbit (#1116)
 - Add `Drawing.AddPoint`, which draws a dot that keeps its size on screen (#1116)

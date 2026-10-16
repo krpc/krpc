@@ -2,6 +2,7 @@ using System;
 using KRPC.Client;
 using KRPC.Client.Services.Drawing;
 using KRPC.Client.Services.SpaceCenter;
+using KRPC.Client.Services.StdLib;
 
 class DrawingExample
 {
@@ -19,7 +20,7 @@ class DrawingExample
             conn, kerbin, kerbin.EquatorialRadius + 250000, 0, 0, 0, 0, 0,
             spaceCenter.UT);
         var path = drawing.AddOrbit (orbit);
-        path.Color = Tuple.Create (0.0, 1.0, 0.0);
+        path.Color = new ColorRGB (0, 1, 0);
         path.Dashed = true;
         path.Label = "Target orbit";
 
@@ -31,7 +32,7 @@ class DrawingExample
         // Draw a yellow arrow from the vessel, pointing prograde
         var arrow = drawing.AddDirectionFromCom (
             Tuple.Create (0.0, 1.0, 0.0), vessel.OrbitalReferenceFrame);
-        arrow.Color = Tuple.Create (1.0, 1.0, 0.0);
+        arrow.Color = new ColorRGB (1, 1, 0);
         arrow.EndArrow = true;
 
         // Label the arrow with the orbital speed of the vessel

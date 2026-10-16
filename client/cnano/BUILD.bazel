@@ -68,6 +68,7 @@ clientgen_cnano(
     name = "services-spacecenter",
     defs = "//service/SpaceCenter:ServiceDefinitions",
     service = "SpaceCenter",
+    deps = [":services-stdlib"],
 )
 
 clientgen_cnano(
@@ -76,6 +77,7 @@ clientgen_cnano(
     service = "Drawing",
     deps = [
         ":services-spacecenter",
+        ":services-stdlib",
         ":services-ui",
     ],
 )
@@ -105,6 +107,7 @@ clientgen_cnano(
     name = "services-ui",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+    deps = [":services-stdlib"],
 )
 
 clientgen_cnano(

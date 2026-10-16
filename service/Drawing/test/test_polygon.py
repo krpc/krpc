@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 
 
 class TestPolygon(krpctest.TestCase):
@@ -33,7 +34,7 @@ class TestPolygon(krpctest.TestCase):
     def test_color(self):
         polygon = self.add_polygon()
         self.assertFalse(polygon.visible)
-        polygon.color = (1, 0, 0)
+        polygon.color = ColorRGB(1, 0, 0)
         polygon.visible = True
         self.assertTrue(polygon.visible)
         self.assertEqual((1, 0, 0), polygon.color)

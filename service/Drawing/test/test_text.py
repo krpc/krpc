@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 
 
 class TestText(krpctest.TestCase):
@@ -49,7 +50,7 @@ class TestText(krpctest.TestCase):
         text.size = 20
         text.character_size = 2
         text.style = self.style.bold
-        text.color = (1, 0, 0)
+        text.color = ColorRGB(1, 0, 0)
         text.alignment = self.alignment.right
         text.line_spacing = 2
         text.anchor = self.anchor.upper_right

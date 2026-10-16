@@ -316,21 +316,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The flight IDs for each entry in the career flight log.
+        /// The entries in the crew member's career flight log.
         /// </summary>
         [KRPCProperty]
-        public IList<int> CareerLogFlights => InternalCrewMember.careerLog.Entries.Select((FlightLog.Entry entry) => entry.flight).ToList();
-
-        /// <summary>
-        /// The type for each entry in the career flight log.
-        /// </summary>
-        [KRPCProperty]
-        public IList<string> CareerLogTypes => InternalCrewMember.careerLog.Entries.Select((FlightLog.Entry entry) => entry.type).ToList();
-
-        /// <summary>
-        /// The body name for each entry in the career flight log.
-        /// </summary>
-        [KRPCProperty]
-        public IList<string> CareerLogTargets => InternalCrewMember.careerLog.Entries.Select((FlightLog.Entry entry) => entry.target).ToList();
+        public IList<FlightLogEntry> CareerLog {
+            get { return InternalCrewMember.careerLog.Entries.Select (entry => new FlightLogEntry (entry)).ToList (); }
+        }
     }
 }

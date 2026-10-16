@@ -8,7 +8,6 @@ using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
 using TupleV3 = System.Tuple<Vector3d, Vector3d>;
-using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -198,12 +197,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <remarks>
         /// Precision mode weakens the block, and the available torque follows it. A block
-        /// driven by <see cref="InputOverride"/> is exempt, so <see cref="OverrideTorque"/>
+        /// driven by <see cref="InputOverride"/> is exempt, so <see cref="OverrideWrench"/>
         /// can report the larger torque an override reaches.
         /// </remarks>
         [KRPCProperty]
-        public TupleT3 AvailableTorque {
-            get { return AvailableTorqueVectors.ToTuple (); }
+        public AxisRange AvailableTorque {
+            get { return new AxisRange (AvailableTorqueVectors); }
         }
 
         internal TupleV3 AvailableTorqueVectors {
@@ -222,12 +221,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <remarks>
         /// Precision mode weakens the block, and the available force follows it. A block
-        /// driven by <see cref="InputOverride"/> is exempt, so <see cref="OverrideForce"/>
+        /// driven by <see cref="InputOverride"/> is exempt, so <see cref="OverrideWrench"/>
         /// can report the larger force an override reaches.
         /// </remarks>
         [KRPCProperty]
-        public TupleT3 AvailableForce {
-            get { return AvailableForceVectors.ToTuple (); }
+        public AxisRange AvailableForce {
+            get { return new AxisRange (AvailableForceVectors); }
         }
 
         internal TupleV3 AvailableForceVectors {
@@ -259,43 +258,24 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The force the given demands would produce, in Newtons. The vector is in the
-        /// vessel's reference frame (<see cref="Vessel.ReferenceFrame"/>).
-        /// Returns zero if the RCS is inactive.
+        /// The force and torque the given demands would produce, in Newtons and Newton meters.
         /// </summary>
-        /// <returns>The force as a vector.</returns>
+        /// <returns>The force, and the torque about the vessel's center of mass, in the vessel's
+        /// reference frame (<see cref="Vessel.ReferenceFrame"/>), or zero if the RCS is
+        /// inactive.</returns>
         /// <param name="rotation">A rotation demand, as set by
         /// <see cref="RotationOverride"/>.</param>
         /// <param name="translation">A translation demand, as set by
         /// <see cref="TranslationOverride"/>.</param>
         /// <remarks>
-        /// The demands do not have to be applied. The prediction leaves out full thrust,
-        /// which <see cref="Force"/> includes.
+        /// The demands do not have to be applied. The prediction leaves out full thrust, which
+        /// <see cref="Force"/> and <see cref="Torque"/> include.
         /// </remarks>
         [KRPCMethod]
-        public Tuple3 OverrideForce (Tuple3 rotation, Tuple3 translation)
+        public Wrench OverrideWrench (Tuple3 rotation, Tuple3 translation)
         {
-            return DemandForceAndTorque (rotation, translation).Item1.ToTuple ();
-        }
-
-        /// <summary>
-        /// The torque the given demands would produce about the vessel's center of mass, in
-        /// Newton meters. The vector is in the vessel's reference frame
-        /// (<see cref="Vessel.ReferenceFrame"/>). Returns zero if the RCS is inactive.
-        /// </summary>
-        /// <returns>The torque as a vector.</returns>
-        /// <param name="rotation">A rotation demand, as set by
-        /// <see cref="RotationOverride"/>.</param>
-        /// <param name="translation">A translation demand, as set by
-        /// <see cref="TranslationOverride"/>.</param>
-        /// <remarks>
-        /// The demands do not have to be applied. The prediction leaves out full thrust,
-        /// which <see cref="Torque"/> includes.
-        /// </remarks>
-        [KRPCMethod]
-        public Tuple3 OverrideTorque (Tuple3 rotation, Tuple3 translation)
-        {
-            return DemandForceAndTorque (rotation, translation).Item2.ToTuple ();
+            var forceAndTorque = DemandForceAndTorque (rotation, translation);
+            return new Wrench (forceAndTorque.Item1, forceAndTorque.Item2);
         }
 
         /// <summary>

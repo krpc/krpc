@@ -20,7 +20,7 @@ rect.position = (110 - (screen_size[0] / 2), 0)
 
 # Lay the contents of the panel out in a column
 layout = panel.add_vertical_layout()
-layout.padding = (10, 10, 10, 10)
+layout.padding = conn.ui.Padding(10, 10, 10, 10)
 layout.spacing = 6
 
 # Add a button to set the throttle to maximum, with a tooltip shown while the
@@ -35,7 +35,7 @@ slider.layout_element.preferred_size = (-1, 20)
 
 # Add some text displaying the total engine thrust
 text = panel.add_text("Thrust: 0 kN")
-text.color = (1, 1, 1, 1)
+text.color = conn.std_lib.ColorRGBA(1, 1, 1, 1)
 text.size = 18
 
 # Set up streams to monitor the button and the slider

@@ -142,13 +142,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The axes for the controller.
         /// </summary>
         [KRPCMethod]
-        public IList<IList<string>> Axes()
+        public IList<RoboticAxis> Axes()
         {
-            var output = new List<IList<string>>();
+            var output = new List<RoboticAxis>();
             foreach (var axis in InternalController.ControlledAxes)
-            {
-                output.Add(new List<string>() { axis.Part.name, axis.AxisField.name });
-            }
+                output.Add(new RoboticAxis(axis));
             return output;
         }
 

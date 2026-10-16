@@ -283,8 +283,8 @@ namespace KRPC.Test.Service.StdLib
                 AssertVectorsEqual (new Tuple3 (0.6, 0, 0.8), StdLib.VectorNormalize (v));
                 Assert.AreEqual (Math.PI / 2, StdLib.VectorAngle (v, new Tuple3 (0, scale, 0)), 1e-10);
                 var axisAngle = StdLib.QuaternionToAxisAngle (new Tuple4 (scale, 0, 0, scale));
-                AssertVectorsEqual (new Tuple3 (1, 0, 0), axisAngle.Item1);
-                Assert.AreEqual (Math.PI / 2, axisAngle.Item2, 1e-10);
+                AssertVectorsEqual (new Tuple3 (1, 0, 0), axisAngle.Axis);
+                Assert.AreEqual (Math.PI / 2, axisAngle.Angle, 1e-10);
             }
         }
 
@@ -336,8 +336,8 @@ namespace KRPC.Test.Service.StdLib
             Assert.AreEqual (-1e-170, StdLib.QuaternionInverse (new Tuple4 (1e170, 0, 0, 0)).Item1, 1e-185);
             // A rotation whose half angle has a sine with no finite reciprocal
             var axisAngle = StdLib.QuaternionToAxisAngle (new Tuple4 (1e-310, 0, 0, 1));
-            AssertVectorsEqual (new Tuple3 (1, 0, 0), axisAngle.Item1);
-            Assert.AreEqual (2e-310, axisAngle.Item2, 1e-320);
+            AssertVectorsEqual (new Tuple3 (1, 0, 0), axisAngle.Axis);
+            Assert.AreEqual (2e-310, axisAngle.Angle, 1e-320);
         }
 
         [Test]
@@ -376,27 +376,27 @@ namespace KRPC.Test.Service.StdLib
             var axis = StdLib.VectorNormalize (new Tuple3 (1, 2, -2));
             var q = StdLib.QuaternionFromAxisAngle (axis, 1.2);
             var result = StdLib.QuaternionToAxisAngle (q);
-            AssertVectorsEqual (axis, result.Item1);
-            Assert.AreEqual (1.2, result.Item2, 1e-10);
+            AssertVectorsEqual (axis, result.Axis);
+            Assert.AreEqual (1.2, result.Angle, 1e-10);
 
             // The negated quaternion is the same rotation
             result = StdLib.QuaternionToAxisAngle (new Tuple4 (-q.Item1, -q.Item2, -q.Item3, -q.Item4));
-            AssertVectorsEqual (axis, result.Item1);
-            Assert.AreEqual (1.2, result.Item2, 1e-10);
+            AssertVectorsEqual (axis, result.Axis);
+            Assert.AreEqual (1.2, result.Angle, 1e-10);
 
             // A rotation past a half turn is the shorter one the other way round
             result = StdLib.QuaternionToAxisAngle (StdLib.QuaternionFromAxisAngle (axis, 1.5 * Math.PI));
-            AssertVectorsEqual (StdLib.VectorScale (axis, -1), result.Item1);
-            Assert.AreEqual (0.5 * Math.PI, result.Item2, 1e-10);
+            AssertVectorsEqual (StdLib.VectorScale (axis, -1), result.Axis);
+            Assert.AreEqual (0.5 * Math.PI, result.Angle, 1e-10);
 
             // A quaternion that is not unit length
             result = StdLib.QuaternionToAxisAngle (new Tuple4 (0, 0, 2, 2));
-            AssertVectorsEqual (new Tuple3 (0, 0, 1), result.Item1);
-            Assert.AreEqual (Math.PI / 2, result.Item2, 1e-10);
+            AssertVectorsEqual (new Tuple3 (0, 0, 1), result.Axis);
+            Assert.AreEqual (Math.PI / 2, result.Angle, 1e-10);
 
             result = StdLib.QuaternionToAxisAngle (new Tuple4 (0, 0, 0, 1));
-            AssertVectorsEqual (new Tuple3 (0, 0, 0), result.Item1);
-            Assert.AreEqual (0, result.Item2);
+            AssertVectorsEqual (new Tuple3 (0, 0, 0), result.Axis);
+            Assert.AreEqual (0, result.Angle);
         }
 
         [Test]
@@ -406,7 +406,7 @@ namespace KRPC.Test.Service.StdLib
             var v = new Tuple3 (-2, 0.5, 1);
             var q = StdLib.QuaternionFromToRotation (u, v);
             AssertVectorsEqual (StdLib.VectorNormalize (v), StdLib.VectorNormalize (StdLib.QuaternionRotateVector (q, u)));
-            Assert.AreEqual (StdLib.VectorAngle (u, v), StdLib.QuaternionToAxisAngle (q).Item2, 1e-10);
+            Assert.AreEqual (StdLib.VectorAngle (u, v), StdLib.QuaternionToAxisAngle (q).Angle, 1e-10);
 
             AssertQuaternionsEqual (new Tuple4 (0, 0, 0, 1), StdLib.QuaternionFromToRotation (u, StdLib.VectorScale (u, 2)));
 

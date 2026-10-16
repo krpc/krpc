@@ -188,7 +188,10 @@ class TestPartsRobotic(krpctest.TestCase):
         self.assertTrue(controller.add_axis(module, "targetAngle"))
         self.assertTrue(controller.has_part(hinge.part))
         self.assertTrue(controller.add_key_frame(module, "targetAngle", 0, 0))
-        self.assertIn("targetAngle", [axis[1] for axis in controller.axes()])
+        self.assertIn(
+            (module, "targetAngle"),
+            [(axis.module, axis.field_name) for axis in controller.axes()],
+        )
         self.assertTrue(controller.clear_axis(module, "targetAngle"))
 
         # The display name is not accepted

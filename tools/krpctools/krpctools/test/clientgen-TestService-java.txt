@@ -1032,12 +1032,12 @@ public class TestService {
                 return false;
             }
             DeprecatedStruct other = (DeprecatedStruct) obj;
-            return java.util.Objects.equals(this.value, other.value)                && java.util.Objects.equals(this.oldValue, other.oldValue);
+            return java.util.Objects.deepEquals(this.value, other.value)                && java.util.Objects.deepEquals(this.oldValue, other.oldValue);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Objects.hash(value, oldValue);
+            return java.util.Arrays.deepHashCode(new Object[] {value, oldValue});
         }
 
         /**
@@ -1113,12 +1113,12 @@ public class TestService {
                 return false;
             }
             TestNestedNullableStruct other = (TestNestedNullableStruct) obj;
-            return java.util.Objects.equals(this.listField, other.listField)                && java.util.Objects.equals(this.stringField, other.stringField);
+            return java.util.Objects.deepEquals(this.listField, other.listField)                && java.util.Objects.deepEquals(this.stringField, other.stringField);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Objects.hash(listField, stringField);
+            return java.util.Arrays.deepHashCode(new Object[] {listField, stringField});
         }
 
         /**
@@ -1215,12 +1215,12 @@ public class TestService {
                 return false;
             }
             TestStruct other = (TestStruct) obj;
-            return java.util.Objects.equals(this.intField, other.intField)                && java.util.Objects.equals(this.stringField, other.stringField)                && java.util.Objects.equals(this.enumField, other.enumField)                && java.util.Objects.equals(this.listField, other.listField);
+            return java.util.Objects.deepEquals(this.intField, other.intField)                && java.util.Objects.deepEquals(this.stringField, other.stringField)                && java.util.Objects.deepEquals(this.enumField, other.enumField)                && java.util.Objects.deepEquals(this.listField, other.listField);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Objects.hash(intField, stringField, enumField, listField);
+            return java.util.Arrays.deepHashCode(new Object[] {intField, stringField, enumField, listField});
         }
 
         /**
@@ -1313,12 +1313,12 @@ public class TestService {
                 return false;
             }
             TestNestedStruct other = (TestNestedStruct) obj;
-            return java.util.Objects.equals(this.structField, other.structField)                && java.util.Objects.equals(this.objectField, other.objectField)                && java.util.Objects.equals(this.stringField, other.stringField);
+            return java.util.Objects.deepEquals(this.structField, other.structField)                && java.util.Objects.deepEquals(this.objectField, other.objectField)                && java.util.Objects.deepEquals(this.stringField, other.stringField);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Objects.hash(structField, objectField, stringField);
+            return java.util.Arrays.deepHashCode(new Object[] {structField, objectField, stringField});
         }
 
         /**
@@ -1425,12 +1425,12 @@ public class TestService {
                 return false;
             }
             TestNullableStruct other = (TestNullableStruct) obj;
-            return java.util.Objects.equals(this.intField, other.intField)                && java.util.Objects.equals(this.nullableIntField, other.nullableIntField)                && java.util.Objects.equals(this.nullableEnumField, other.nullableEnumField)                && java.util.Objects.equals(this.nullableStringField, other.nullableStringField)                && java.util.Objects.equals(this.nullableObjectField, other.nullableObjectField);
+            return java.util.Objects.deepEquals(this.intField, other.intField)                && java.util.Objects.deepEquals(this.nullableIntField, other.nullableIntField)                && java.util.Objects.deepEquals(this.nullableEnumField, other.nullableEnumField)                && java.util.Objects.deepEquals(this.nullableStringField, other.nullableStringField)                && java.util.Objects.deepEquals(this.nullableObjectField, other.nullableObjectField);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Objects.hash(intField, nullableIntField, nullableEnumField, nullableStringField, nullableObjectField);
+            return java.util.Arrays.deepHashCode(new Object[] {intField, nullableIntField, nullableEnumField, nullableStringField, nullableObjectField});
         }
 
         /**

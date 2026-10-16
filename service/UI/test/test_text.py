@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGBA
 
 
 class TestText(krpctest.TestCase):
@@ -37,7 +38,7 @@ class TestText(krpctest.TestCase):
         text.font = font
         text.size = 20
         text.style = self.style.bold
-        text.color = (1, 0, 0, 0.5)
+        text.color = ColorRGBA(1, 0, 0, 0.5)
         text.alignment = self.anchor.upper_right
         text.line_spacing = 2
         self.assertEqual(font, text.font)

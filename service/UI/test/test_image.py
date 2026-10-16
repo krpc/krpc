@@ -2,6 +2,7 @@ import base64
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGBA
 
 # A 2x2 PNG, small enough to keep in the test rather than on disk.
 PNG = base64.b64decode(
@@ -28,7 +29,7 @@ class TestImage(krpctest.TestCase):
 
     def test_color(self):
         image = self.canvas.add_image()
-        image.color = (0, 1, 0, 1)
+        image.color = ColorRGBA(0, 1, 0, 1)
         self.assertEqual((0, 1, 0, 1), image.color)
         image.remove()
 

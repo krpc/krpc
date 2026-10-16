@@ -19,7 +19,7 @@ rect.position = List{110-(screen_size[1]/2), 0}
 
 -- Lay the contents of the panel out in a column
 local layout = panel:add_vertical_layout()
-layout.padding = List{10, 10, 10, 10}
+layout.padding = conn.ui.Padding(10, 10, 10, 10)
 layout.spacing = 6
 
 -- Add a button to set the throttle to maximum, with a tooltip shown while the
@@ -34,7 +34,7 @@ slider.layout_element.preferred_size = List{-1, 20}
 
 -- Add some text displaying the total engine thrust
 local text = panel:add_text("Thrust: 0 kN")
-text.color = List{1, 1, 1, 1}
+text.color = conn.std_lib.ColorRGBA(1, 1, 1, 1)
 text.size = 18
 
 local vessel = conn.space_center.active_vessel

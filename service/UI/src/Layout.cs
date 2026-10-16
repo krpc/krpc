@@ -7,7 +7,6 @@ using KRPC.Utils;
 using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 using UnityEngine;
 using Tuple2 = System.Tuple<double, double>;
-using Tuple4Int = System.Tuple<int, int, int, int>;
 
 namespace KRPC.UI
 {
@@ -108,22 +107,12 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// The gap left inside the edges of the panel, in whole pixels, as
-        /// (left, right, top, bottom).
+        /// The gap left inside the edges of the panel.
         /// </summary>
         [KRPCProperty]
-        public Tuple4Int Padding {
-            get {
-                var padding = Internal.padding;
-                return new Tuple4Int (
-                    padding.left, padding.right, padding.top, padding.bottom);
-            }
-            set {
-                if (value == null)
-                    throw new ArgumentNullException (nameof (value));
-                Internal.padding = new RectOffset (
-                    value.Item1, value.Item2, value.Item3, value.Item4);
-            }
+        public Padding Padding {
+            get { return new Padding (Internal.padding); }
+            set { Internal.padding = value.ToRectOffset (); }
         }
 
         /// <summary>

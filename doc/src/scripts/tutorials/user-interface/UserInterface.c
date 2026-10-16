@@ -8,6 +8,7 @@
 #endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
+#include <krpc_cnano/services/std_lib.h>
 #include <krpc_cnano/services/ui.h>
 
 int main() {
@@ -40,7 +41,7 @@ int main() {
   // Lay the contents of the panel out in a column
   krpc_UI_Layout_t layout;
   krpc_UI_Panel_AddVerticalLayout(conn, &layout, panel);
-  krpc_tuple_int32_int32_int32_int32_t padding = {10, 10, 10, 10};
+  krpc_UI_Padding_t padding = {10, 10, 10, 10};
   krpc_UI_Layout_set_Padding(conn, layout, &padding);
   krpc_UI_Layout_set_Spacing(conn, layout, 6);
 
@@ -65,7 +66,7 @@ int main() {
   // Add some text displaying the total engine thrust
   krpc_UI_Text_t text;
   krpc_UI_Panel_AddText(conn, &text, panel, "Thrust: 0 kN", true);
-  krpc_tuple_double_double_double_double_t color = {1, 1, 1, 1};
+  krpc_StdLib_ColorRGBA_t color = {1, 1, 1, 1};
   krpc_UI_Text_set_Color(conn, text, &color);
   krpc_UI_Text_set_Size(conn, text, 18);
 

@@ -11,7 +11,7 @@ local kerbin = space_center.bodies['Kerbin']
 local orbit = space_center.Orbit.create_from_orbital_elements(
   kerbin, kerbin.equatorial_radius + 250000, 0, 0, 0, 0, 0, space_center.ut)
 local path = drawing.add_orbit(orbit)
-path.color = List{0, 1, 0}
+path.color = conn.std_lib.ColorRGB(0, 1, 0)
 path.dashed = true
 path.label = 'Target orbit'
 
@@ -22,7 +22,7 @@ drawing.add_map_marker(
 
 -- Draw a yellow arrow from the vessel, pointing prograde
 local arrow = drawing.add_direction_from_com(List{0, 1, 0}, vessel.orbital_reference_frame)
-arrow.color = List{1, 1, 0}
+arrow.color = conn.std_lib.ColorRGB(1, 1, 0)
 arrow.end_arrow = true
 
 -- Label the arrow with the orbital speed of the vessel
