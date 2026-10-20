@@ -1086,12 +1086,14 @@ associated configuration node.</p>
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Part.setTag(String)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTag</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Part.setTag(String)" title="Link to this definition">#</a></dt>
 <dd><p>The name tag for the part. Can be set to a custom string using the
-in-game user interface.</p>
+in-game user interface. Throws an exception if no name tag part module is installed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This string is shared with
-<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>
-if it is installed.</p>
+<p>The name tag part module is provided by
+<a class="reference external" href="https://github.com/KSPModdingLibs/KSPCommunityPartModules">KSPCommunityPartModules</a>
+0.5 or later, or by
+<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>,
+which shares this string.</p>
 </div>
 </dd></dl>
 

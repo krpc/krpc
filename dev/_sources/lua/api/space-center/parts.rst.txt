@@ -333,16 +333,18 @@ Part
    .. attribute:: tag: string
 
       The name tag for the part. Can be set to a custom string using the
-      in-game user interface.
+      in-game user interface. Throws an exception if no name tag part module is installed.
 
       :Attribute: Can be read or written
       :rtype: string
 
       .. note::
 
-         This string is shared with
-         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
-         if it is installed.
+         The name tag part module is provided by
+         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
+         0.5 or later, or by
+         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_,
+         which shares this string.
 
    .. attribute:: flag_url: string
 

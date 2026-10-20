@@ -1071,12 +1071,14 @@ associated configuration node.</p>
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part7set_tagENSt6stringE">
 <span id="_CPPv3N4krpc8services11SpaceCenter4Part7set_tagENSt6stringE"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part7set_tagENSt6stringE"></span><span id="krpc::services::SpaceCenter::Part::set_tag__ss"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_tag</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part7set_tagENSt6stringE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The name tag for the part. Can be set to a custom string using the
-in-game user interface.</p>
+in-game user interface. Throws an exception if no name tag part module is installed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This string is shared with
-<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>
-if it is installed.</p>
+<p>The name tag part module is provided by
+<a class="reference external" href="https://github.com/KSPModdingLibs/KSPCommunityPartModules">KSPCommunityPartModules</a>
+0.5 or later, or by
+<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>,
+which shares this string.</p>
 </div>
 </dd></dl>
 

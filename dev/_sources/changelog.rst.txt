@@ -250,6 +250,8 @@ SpaceCenter service
 
 * Parts
 
+  * :breaking:`Breaking` Remove kRPC's own name tag part module. ``Part.Tag`` needs KSPCommunityPartModules 0.5 or later, or kOS, to provide one (:issue:`1155`)
+  * Warn in game when a save or craft has name tags that the installed mods cannot load (:issue:`1155`)
   * :breaking:`Breaking` ``RCS.TranslationOverride`` thrusts along the right, up and forward axes it documents (:issue:`1080`)
   * Add ``RCS.Force`` and ``RCS.Torque``, the force and torque a block is applying, and ``RCS.OverrideWrench``, what a given demand would apply (:issue:`1080`)
   * Add ``Thruster.Thrust``, the thrust a single nozzle of an engine or RCS block is producing (:issue:`1080`)
