@@ -1,66 +1,60 @@
 ## [v0.7.0] - unreleased
-- Include the header of every service a service header uses, so service headers can be
-  included in any order (#1150)
-- Update to protobuf v36.2 (#1139)
-- Update to ASIO 1.38.2 (#1139)
-- Add `krpc::run`, which runs a server side function within a single physics tick,
-  passing it any arguments, and returns its value (#1129)
-- Add `krpc::add_stream`, which streams the value of a server side function (#1129)
-- Add `krpc::add_event`, which creates an event from a server side function (#1129)
-- **Breaking:** Remove `Client::freeze_streams` and `Client::thaw_streams`. Calls made while
-  holding the tick with `KRPC::hold_tick` give values from one physics tick (#1118)
-- **Breaking:** Start a stream when it is added, removing `Stream::start` and `Event::start`
-  (#1122)
-- **Breaking:** Return a `krpc::Condition` from the `get_condition` methods and
-  `Client::get_stream_update_condition`, with locks over the re-entrant `krpc::RecursiveMutex`
-  (#1122)
-- Wait for a stream's first value when reading it (#1122)
-- Call a callback added to a stream that has a value with that value straight away (#1122)
-- End a stream on an error from the server, which every later read and `wait` throws (#1122)
-- End every stream with `krpc::ConnectionError` when the connection closes or fails (#1122)
-- Return `true` from `Stream::wait` and `Event::wait` on an update, and `false` on a timeout
-  (#1122)
-- Throw `krpc::StreamError` when reading or waiting on a removed stream or event (#1122)
-- Call a callback added to an event straight away for a firing not yet passed to a wait or
-  another callback (#1122)
-- Fix `Event::wait` missing a firing that arrived before it (#1122)
-- Add `add_end_callback` to streams and events, called with the exception that ends the stream
-  (#1122)
-- Fix the stream update thread spinning after the server closes the connection (#1122)
-- Fix the stream update thread ending the process on a message it cannot read, or on a
-  stream update callback that throws (#1122)
-- Fix two copies of a stream or event sharing one condition lock (#1122)
-- Fix streams using freed memory once the copy of the client that added them is destroyed
-  (#1122)
-- Fix a callback using freed memory once the stream or event it was added through is moved or
-  destroyed (#1122)
-- Fix a second removal of a stream removing a newer stream for the same call (#1122)
-- Fix a data race reading a stream's value while an update for it arrives (#1108)
-- Fix a stream of a value whose type a service defines, such as an enumeration or a structure,
-  failing to compile (#1094)
-- Support a nullable structure field, list element, tuple item and dictionary value (#1091)
-- Support structure types, a compound value with named fields a service defines, generated as
-  a `struct` with a constructor, equality, ordering and a `std::hash` over its fields (#1066)
-- Add `krpc::hash_value` and the `krpc::hash` function object, which hash any type the client
-  carries, so a tuple or a collection can key an unordered container (#1067)
-- **Breaking:** Support null for any nullable type, held as `std::optional`, changing
-  generated signatures (#1017)
-- Add `krpc::connect_local`, which connects to a server on the same machine over unix domain
-  sockets (#1065)
-- Add a `timeout` parameter to `krpc::connect`, bounding how long a connection is waited for
-  (#1065)
-- Fix a race between a stream update arriving and a stream update callback being added or
-  removed (#1090)
-- Fix a stream on a client with no stream connection crashing instead of throwing
-  `krpc::StreamError` (#1109)
-- Fix a removed stream returning the value it last received (#1090)
-- Fix a thread waiting on a stream being left blocked when the stream is removed (#1090)
-- Fix a service with a collection of enumerations in a procedure signature failing to
-  compile (#1044)
-- Fix `krpc::Connection::close` failing to link (#1065)
-- Reduce the cost of a remote procedure call, reusing the request and response messages and
-  parsing a response straight out of the read buffer (#1056)
-- Reduce the cost of a call that carries a collection (#1056)
+
+- Streams and events
+  - **Breaking:** Start a stream when it is added, removing `Stream::start` and `Event::start`
+    (#1122)
+  - **Breaking:** Remove `Client::freeze_streams` and `Client::thaw_streams`. Calls made while
+    holding the tick with `KRPC::hold_tick` give values from one physics tick (#1118)
+  - **Breaking:** Return a `krpc::Condition` from the `get_condition` methods and
+    `Client::get_stream_update_condition`, locked with a `krpc::RecursiveMutex` (#1122)
+  - Return `true` from `Stream::wait` and `Event::wait` on an update, and `false` on a timeout
+    (#1122)
+  - Wait for a stream's first value when reading it (#1122)
+  - End a stream on an error from the server, and every stream with `krpc::ConnectionError`
+    when the connection closes or fails (#1122)
+  - Throw `krpc::StreamError` when reading or waiting on a removed stream or event, or on a
+    client with no stream connection (#1122, #1109)
+  - Add `add_end_callback` to streams and events, called with the exception that ends the
+    stream (#1122)
+  - Call a callback added to a stream or event straight away for a value or firing already
+    received (#1122)
+  - Fix `Event::wait` missing an earlier firing, and a thread waiting on a stream staying
+    blocked when the stream is removed (#1122, #1090)
+  - Fix the stream update thread spinning after the server closes the connection, and ending the
+    process on a bad message or a throwing callback (#1122)
+  - Fix data races between a stream update and reading the value or changing the callbacks
+    (#1090, #1108)
+  - Fix use of freed memory by streams and callbacks once the client, stream or event they came
+    from is moved or destroyed (#1122)
+  - Fix two copies of a stream sharing one condition lock, a removed stream returning its last
+    value, and a second removal removing a newer stream (#1122, #1090)
+
+- Server side functions
+  - Add `krpc::run`, which runs a server side function within a single physics tick and returns
+    its value (#1129)
+  - Add `krpc::add_stream` and `krpc::add_event`, which stream a server side function and create
+    an event from one (#1129)
+
+- Types
+  - **Breaking:** Support null for any nullable type, held as `std::optional`, including a
+    structure field, list element, tuple item and dictionary value (#1017, #1091)
+  - Support structure types, generated as a `struct` with a constructor, equality, ordering and
+    a `std::hash` over its fields (#1066)
+  - Add `krpc::hash_value` and `krpc::hash`, which hash any type the client carries, so a tuple
+    or a collection can key an unordered container (#1067)
+  - Include the header of every service a service header uses, so service headers can be
+    included in any order (#1150)
+  - Fix a stream of an enumeration or structure, and a procedure with a collection of
+    enumerations, failing to compile (#1094, #1044)
+
+- Connections
+  - Add `krpc::connect_local`, which connects to a server on the same machine over a unix domain
+    socket (#1065)
+  - Add a `timeout` parameter to `krpc::connect`, bounding how long a connection is waited for
+    (#1065)
+  - Fix `krpc::Connection::close` failing to link (#1065)
+  - Reduce the cost of a remote procedure call, most for one that carries a collection (#1056)
+  - Update to protobuf v36.2 and ASIO 1.38.2 (#1139)
 
 ## [v0.6.0]
 - Update to protobuf v35.1 (#850)

@@ -1,14 +1,14 @@
 ## [v0.7.0] - unreleased
 
+- Look up a servo and a servo group on every call, so they keep working across a quickload and
+  raise `KRPC.ObjectDestroyedException` once their part or vessel is gone (#1051)
+- Renaming a servo group destroys its objects, which must be obtained again under the new name
+  (#1051)
+- Fix `Servo` and `ServoGroup` objects accumulating for the rest of the session, and comparing
+  unequal for the same servo or group (#1051)
+- Return the vessel the group was obtained for from `ServoGroup.Vessel` (#1051)
 - Fix a servo being listed more than once in a `ServoGroup` after switching to and from its
   vessel (#1154)
-- Fix `Servo` and `ServoGroup` objects accumulating for the rest of the session, and the same
-  servo or group obtained twice comparing unequal (#1051)
-- A servo and a servo group keep working across a quickload, and raise
-  `KRPC.ObjectDestroyedException` once the part or the vessel they belong to is gone (#1051)
-- Renaming a servo group destroys every object for it, and the group has to be obtained again
-  under the new name (#1051)
-- `ServoGroup.Vessel` is the vessel the group was obtained for (#1051)
 
 ## [v0.6.0]
 - Add to `Servo`: `UID`, `Mode` (with a new `ServoMode` enum), `TargetPosition`, `TargetSpeed`,

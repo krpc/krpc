@@ -1,336 +1,207 @@
 ## [v0.7.0] - unreleased
 
+- Object lifetime
+  - Look up the game object behind a vessel, crew member, part, part module, orbit, alarm,
+    contract, waypoint or communication link on every call, so it keeps working across a
+    quickload (#1051, #764, #885)
+  - Raise `KRPC.ObjectDestroyedException` for an object whose game object is gone, and
+    `KRPC.ObjectNotLoadedException` for a part of an unloaded vessel (#1051, #885)
+  - Renaming a kerbal destroys its objects, and loading a game replaces a vessel's maneuver
+    nodes (#1051)
+  - Fix decoupler, maneuver node and force objects accumulating for the rest of the session
+    (#1051, #771)
+  - Add `Orbit.Remove`, `ReferenceFrame.Remove` and `ResourceTransfer.Remove`, which free the
+    memory the server holds for an object (#1072)
+  - **Breaking:** Return a new frame from each call to `ReferenceFrame.CreateRelative` and
+    `CreateHybrid`, owned by the calling client (#1072)
+  - Throw an exception from `ReferenceFrame.CreateRelative` and `CreateHybrid` when given no
+    frame (#1072)
+
+- Structures
+  - **Breaking:** Return the available torque, force and acceleration members of `Vessel`,
+    `ReactionWheel`, `ControlSurface`, `Engine` and `RCS` as `AxisRange` structures (#1148)
+  - **Breaking:** Return `Vessel.BoundingBox`, `Part.BoundingBox`,
+    `Flight.SimulateAerodynamicWrenchAt` and `RoboticController.Axes` as `BoundingBox`,
+    `Wrench` and `RoboticAxis` structures (#1148)
+  - **Breaking:** Return and set `Part.HighlightColor` and `Light.Color` as `StdLib.ColorRGB`
+    structures (#1148)
+  - **Breaking:** Make `LaunchSite`, `ScienceSubject`, `ScienceData`, `ActionGroupAction` and
+    `CommNode` structures (#1148, #1132)
+  - **Breaking:** Replace `CareerLogFlights`, `CareerLogTypes` and `CareerLogTargets` with
+    `CrewMember.CareerLog`, a list of `FlightLogEntry` structures (#1148)
+  - Add `ScienceSubject.Id` (#1148)
+
 - Space center
-  - **Breaking:** `SpaceCenter.LaunchVessel` takes its `crew` parameter as an exact
-    instruction, and the parameter is optional again. A `null` crew uses the craft's default
-    assignments, an empty list launches with no crew, and a populated list seats the named
-    Kerbals in order (#1017)
-  - **Breaking:** `SpaceCenter.Parts.Controlling` returns `null` when the vessel has no
-    control point, rather than its root part (#1043)
-  - `SpaceCenter.Control.State`, `SpaceCenter.Control.Source` and the members of
-    `SpaceCenter.Comms` report no control and no communications for a vessel with no node in
-    the communication network, rather than throwing (#1043)
-  - `SpaceCenter.Control.Source` is `None` whenever `SpaceCenter.Control.State` is `None`
-    (#1043)
-  - `SpaceCenter.Control.State` and `SpaceCenter.Control.Source` are taken from the control
-    level that KSP gates a vessel's control on, rather than from its node in the communication
-    network (#1043)
-  - `SpaceCenter.Decoupler.Decouple` returns the separated vessel when it fires an
-    omni-decoupler such as a stack separator (#1043)
-  - Working with many stages, vessel resources, communication links or resource converters no
-    longer slows the server down (#1071)
-  - `SpaceCenter.RevertToLaunch` returns once the scene has reloaded, as `SpaceCenter.Load`
-    does. Vessel data read straight after the call is that of the reverted vessel (#1097)
-  - Setting `SpaceCenter.ActiveVessel` from the space center or tracking station keeps the
-    game's contracts (#1102)
-  - The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and
-    setting `SpaceCenter.Alarm.EventOffset`, change when the alarm goes off (#1114)
-  - Add `SpaceCenter.CanSave`, whether the game can be saved (#1117)
+  - **Breaking:** Make the `crew` parameter of `SpaceCenter.LaunchVessel` optional and exact.
+    `null` uses the craft's default crew, an empty list none, and a list seats the named Kerbals
+    in order (#1017)
   - **Breaking:** Remove `SpaceCenter.LoadSpaceCenter`, replaced by setting `KRPC.GameScene`
     (#1140)
-  - Allow the time warp RPCs in the space center and tracking station, apart from
-    `SpaceCenter.PhysicsWarpFactor` (#1145)
-  - `SpaceCenter.WarpTo` throws an exception if the game scene changes during the time
-    warp (#1145)
-  - Fix `SpaceCenter.MaximumRailsWarpFactor` returning 0 when only warp factor 1 is
-    allowed (#1145)
-  - **Breaking:** Make `SpaceCenter.LaunchSite` a structure (#1148)
+  - Add `SpaceCenter.CanSave`, whether the game can be saved (#1117)
+  - Return from `SpaceCenter.RevertToLaunch` once the scene has reloaded, as `SpaceCenter.Load`
+    does (#1097)
+  - Allow the time warp RPCs, apart from `PhysicsWarpFactor`, in the space center and tracking
+    station (#1145)
+  - Throw an exception from `SpaceCenter.WarpTo` if the game scene changes during the warp
+    (#1145)
+  - Fix `SpaceCenter.MaximumRailsWarpFactor` returning 0 when only warp factor 1 is allowed
+    (#1145)
+  - Fix setting `SpaceCenter.ActiveVessel` from the space center or tracking station clearing
+    the game's contracts (#1102)
+  - Fix the offset of an apoapsis, periapsis, SOI or maneuver node alarm, and
+    `Alarm.EventOffset`, leaving the alarm time unchanged (#1114)
+  - Fix many stages, vessel resources, communication links, resource converters or hybrid
+    reference frames slowing the server down (#1071)
 
 - Editor
-  - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space plane
-    hangar, for inspecting the vessel that is being constructed. `Editor.LoadVessel` loads a
-    craft file into the open editor (#1038)
-  - `Editor.LaunchVessel` launches the vessel that is being constructed, with the same crew,
-    recovery and mission flag options as `SpaceCenter.LaunchVessel` (#1038)
-  - `EditorVessel.Parts` gives the parts tree of the vessel under construction. The members of
-    `Part` and the part-type classes that describe the design are available (#1038)
-  - `EditorVessel.Stages`, `EditorVessel.StageAt`, `EditorVessel.DecoupleStages` and
-    `EditorVessel.DecoupleStageAt` give the vessel's stages, with the same figures that
-    `Stage` reports in flight (#1038)
-  - Add `EditorVessel.DeltaV`, `VacuumDeltaV`, `SeaLevelDeltaV` and `BurnTime` for the whole
-    vessel, and `EditorVessel.DeltaVReady`, which reports whether the figures are current
-    (#1038)
-  - `Editor.DeltaVBody`, `Editor.DeltaVAltitude` and `Editor.DeltaVSituation` set the
-    situation those figures assume (#1038)
-  - `EditorVessel.Resources`, `Part.Resources` and `Stage.Resources` report the resources the
-    vessel under construction can hold (#1038)
-  - A part of the vessel under construction raises `KRPC.ObjectDestroyedException` once it is
-    no longer in that vessel, and once the editor has loaded any vessel over it (#1051)
-  - Add `EditorVessel.Position`, `EditorVessel.MomentOfInertia` and
-    `EditorVessel.InertiaTensor`. `Part.MomentOfInertia` and `Part.InertiaTensor` are
-    available in the editor as well (#1059)
-  - `Part.Mass` and `Part.DryMass` no longer report 1000 kg for every part in the editor
-    (#1059)
-  - `Part.Position`, `Part.CenterOfMass`, `Part.ReferenceFrame` and
-    `Part.CenterOfMassReferenceFrame` are available in the editor (#1064)
-  - `Part.Direction`, `Part.Rotation` and `Part.BoundingBox` are available in the editor
+  - Add `SpaceCenter.Editor`, for the vessel under construction in the vehicle assembly
+    building and space plane hangar, with `Editor.LoadVessel` and `Editor.LaunchVessel` (#1038)
+  - Add `EditorVessel.Parts`, `Resources`, `Stages`, `StageAt`, `DecoupleStages` and
+    `DecoupleStageAt`, with the figures they give in flight (#1038)
+  - Add `EditorVessel.DeltaV`, `VacuumDeltaV`, `SeaLevelDeltaV`, `BurnTime` and `DeltaVReady`,
+    for a situation set with `Editor.DeltaVBody`, `DeltaVAltitude` and `DeltaVSituation` (#1038)
+  - Add `EditorVessel.Position`, `MomentOfInertia`, `InertiaTensor`, `ReferenceFrame`,
+    `SurfaceReferenceFrame`, `BoundingBox`, `Rotation` and `Direction`, as on `Vessel`
+    (#1059, #1153)
+  - Make the position, orientation, mass and inertia members of `Part` available in the editor
+    (#1059, #1064, #1153)
+  - Add `EditorVessel.Flight`, a `SimulatedFlight` for the vessel in a simulated attitude
     (#1153)
-  - Add `EditorVessel.ReferenceFrame`, `EditorVessel.SurfaceReferenceFrame`,
-    `EditorVessel.BoundingBox`, `EditorVessel.Rotation` and `EditorVessel.Direction`, as on
-    `Vessel` (#1153)
-  - Add `EditorVessel.Flight`, which returns a `SimulatedFlight` for the vessel in a
-    simulated attitude (#1153)
 
 - Vessels and crew
-  - `Vessel.InertiaTensor` is restricted to the flight scene, as `Vessel.MomentOfInertia`
-    already is. Outside flight it returned zeros (#1059)
-  - Add `CrewMember.EVA`, which sends a Kerbal outside through the hatch of the part it is in
-    and returns the vessel it becomes (#319)
-  - Add `Vessel.Terminate`, which removes a vessel and its parts from the game without
-    recovering anything (#1034)
-  - `Vessel.Recover` recovers non-active vessels without switching to the space center scene,
-    and the mission completion dialog is auto-closed (#1021)
-  - Add `Vessel.OrbitSpeedReferenceFrame`, `Vessel.SurfaceSpeedReferenceFrame` and
-    `Vessel.TargetSpeedReferenceFrame`, one per navball speed mode. The velocity of the vessel
-    in one of these is the velocity the navball shows in that mode (#1029)
-  - Using a vessel that no longer exists raises `KRPC.ObjectDestroyedException` (#1051)
-  - A `CrewMember` looks the kerbal up on the game's roster on every call, so one obtained
-    before a load goes on working (#1051)
-  - Renaming a kerbal destroys every object for them, which have to be obtained again under
-    the new name (#1051)
-  - **Breaking:** Return the available torque, force and acceleration members of `Vessel`,
-    `ReactionWheel`, `ControlSurface`, `Engine` and `RCS` as a `SpaceCenter.AxisRange` structure,
-    in place of a pair of tuples (#1148)
-  - **Breaking:** Return `Vessel.BoundingBox` and `Part.BoundingBox` as a `SpaceCenter.BoundingBox`
-    structure, in place of a pair of tuples (#1148)
-  - **Breaking:** Replace `CareerLogFlights`, `CareerLogTypes` and `CareerLogTargets` with
-    `CrewMember.CareerLog`, a list of `SpaceCenter.FlightLogEntry` structures (#1148)
+  - Add `Vessel.Terminate`, which removes a vessel without recovering it (#1034)
+  - Recover a vessel other than the active one with `Vessel.Recover` without switching to the
+    space center, and close the mission completion dialog (#1021)
+  - Add `Vessel.OrbitSpeedReferenceFrame`, `SurfaceSpeedReferenceFrame` and
+    `TargetSpeedReferenceFrame`, one per navball speed mode (#1029)
+  - Restrict `Vessel.InertiaTensor` to flight, as `Vessel.MomentOfInertia` is (#1059)
+
+- EVA
+  - Add `CrewMember.EVA`, which sends a Kerbal out through the hatch and returns its vessel
+    (#319)
+  - Drive a Kerbal on EVA with `Vessel.Control`. The translation inputs walk and fly the
+    jetpack, `Control.RCS` deploys it, and `Control.Lights` switches the helmet lamp (#319)
+  - Add `Control.Board`, `Airlock`, `GrabLadder`, `ReleaseLadder` and `Ladder`, for a Kerbal
+    on EVA (#319)
 
 - Staging
-  - Fix stages from `Vessel.Stages`, `Vessel.StageAt`, `Vessel.DecoupleStages` and
-    `Vessel.DecoupleStageAt` breaking after a Revert to Launch (#1023)
-  - The delta-v figures on `Vessel` and `Stage` ask the game to calculate them, so they are
-    available in flight without opening the game's own delta-v app first (#1076)
-  - Add `Vessel.RecalculateDeltaV`, which recalculates the figures and waits for them, and
-    `Vessel.DeltaVReady`, which reports whether they are current (#1076)
-  - Document that the `Stage` mass figures include all later stages (#1112)
   - **Breaking:** Remove `Parts.InStage`, `Parts.InDecoupleStage` and
     `Vessel.ResourcesInDecoupleStage`, replaced by `Vessel.StageAt` and `Vessel.DecoupleStageAt`
     (#1140)
+  - Calculate the delta-v figures of `Vessel` and `Stage` without the game's delta-v app open
+    (#1076)
+  - Add `Vessel.RecalculateDeltaV` and `Vessel.DeltaVReady` (#1076)
+  - Fix stages breaking after a revert to launch (#1023)
+  - Document that the `Stage` mass figures include all later stages (#1112)
 
 - Autopilot
-  - Setting `AutoPilot.TargetDirection` keeps the target roll, rather than clearing it (#1054)
-  - The auto-pilot's control loop runs at a defined point in the server's update, so a target
-    set during a tick is flown on that tick. `AutoPilot.UpdateMode` chooses that point (#1070)
-  - Fix an engaged auto-pilot failing on every physics tick once the vessel or part its
-    `AutoPilot.ReferenceFrame` is defined against is gone (#1070)
+  - Keep the target roll when setting `AutoPilot.TargetDirection` (#1054)
+  - Fly a target set during a tick on that tick, at the point in the update that
+    `AutoPilot.UpdateMode` chooses (#1070)
+  - Fix an engaged auto-pilot failing on every physics tick once the object its reference frame
+    is defined against is gone (#1070)
 
-- Orbits, nodes and bodies
-  - An `Orbit` reads the orbit of the vessel, celestial body or maneuver node it belongs to as
-    it is now, so it keeps working across a load (#764)
-  - A `ClosestApproach` is freed once either of the orbits it describes is gone (#1051)
-  - Add `CelestialBody.SurfaceNormal`, `CelestialBody.BedrockNormal` and
-    `CelestialBody.MSLNormal`, the slope of the terrain at a given latitude and longitude
-    (#1030)
-  - Add `CelestialBody.SurfaceReferenceFrame`, a reference frame fixed to the surface at a
-    given latitude and longitude (#1116)
-  - Fix `ClosestApproach.Velocity` and `ClosestApproach.TargetVelocity` being offset by the
-    velocity of the frame the active vessel's reference body moves in (#1047)
-  - Add `Orbit.CreateFromPositionAndVelocity` and `Orbit.CreateFromOrbitalElements`, which
-    build an orbit that coasts freely under gravity without an object in the game to
-    follow (#1046)
-  - Add `Orbit.ReferenceFrame` and `Orbit.OrbitalReferenceFrame`, centered on the point an
-    orbit has reached at the current time (#1046)
-  - Add `Orbit.Remove`, which releases the memory the server holds for a created orbit (#1072)
+- Orbits and bodies
   - **Breaking:** Fix `CelestialBody.BiomeAt` treating its latitude and longitude as radians.
     It takes degrees, as documented (#1099)
-  - **Breaking:** A `ClosestApproach` reads the two orbits as they are now, so its estimate
-    follows them as the game runs. Asking for the same approach again gives the same
-    object (#1072)
-  - Add `Orbit.VelocityAt`, giving the velocity at a given time in a given reference
-    frame (#1046)
-  - `Orbit.Epoch` is documented as the universal time at which the mean anomaly at epoch is
-    measured. It was described as the time since that point (#1046)
-  - Fix `Orbit.OrbitalSpeed`, which reported the speed the vessel had when it was last on
-    rails (#1086)
-  - Add `Orbit.SpeedAt` and `Orbit.SpecificEnergy`, the speed at a given universal time and
-    the specific orbital energy (#1086)
-  - **Breaking:** `Orbit.OrbitalSpeedAt` takes a universal time, in a parameter renamed from
-    `time` to `ut`. It took the time since the orbit's periapsis. Deprecated in favor of
-    `Orbit.SpeedAt` (#1086)
-  - **Deprecated:** `Orbit.OrbitalSpeed` and `Orbit.OrbitalEnergy`, superseded by
-    `Orbit.Speed` and `Orbit.SpecificEnergy` (#1086)
-  - Add `Orbit.Position` and `Orbit.Velocity`, the position and velocity the orbit has
-    reached at the current time (#1087)
-  - `Orbit.PositionAt` takes an optional reference frame, defaulting to the non-rotating
-    reference frame of the body being orbited (#1087)
-  - Add `Orbit.PositionAtTrueAnomaly`, `Orbit.VelocityAtTrueAnomaly`,
-    `Orbit.SpeedAtTrueAnomaly` and `Orbit.SpeedAtRadius` (#1087)
-  - Add `Orbit.Altitude`, `Orbit.MeanMotion`, `Orbit.SemiLatusRectum` and
-    `Orbit.SpecificAngularMomentum` (#1087)
-  - **Breaking:** Remove `Orbit.TimeOfClosestApproach`, `Orbit.DistanceAtClosestApproach` and
-    `Orbit.ListClosestApproaches`, replaced by `Orbit.NextClosestApproach` and
+  - **Breaking:** Take a universal time `ut` in `Orbit.OrbitalSpeedAt`, and deprecate it in
+    favor of `Orbit.SpeedAt` (#1086)
+  - **Breaking:** Remove `Orbit.TimeOfClosestApproach`, `DistanceAtClosestApproach` and
+    `ListClosestApproaches`, replaced by `Orbit.NextClosestApproach` and
     `Orbit.ClosestApproaches` (#1140)
-
-- Maneuver nodes
-  - Using a maneuver node that has been removed raises `KRPC.ObjectDestroyedException`.
-    Loading a game replaces the vessel's maneuver nodes (#1051)
-  - Fix removing a maneuver node leaking the object for the rest of the session (#771)
-
-- Reference frames
-  - Add `ReferenceFrame.Remove`, which releases the memory the server holds for a created
-    frame (#1072)
-  - `ReferenceFrame.CreateRelative` and `ReferenceFrame.CreateHybrid` return a new frame on
-    each call, which is the creating client's own to remove (#1072)
-  - `ReferenceFrame.CreateRelative` and `ReferenceFrame.CreateHybrid` raise an error when
-    given no frame to be defined against (#1072)
-  - Creating many hybrid reference frames no longer slows the server down (#1071)
-  - A reference frame taken from a docking port keeps working across a quickload (#885, #764)
+  - **Breaking:** Follow the two orbits in a `ClosestApproach` as the game runs, and return the
+    same object for the same approach (#1072)
+  - **Deprecated:** `Orbit.OrbitalSpeed` and `Orbit.OrbitalEnergy`, superseded by `Orbit.Speed`
+    and `Orbit.SpecificEnergy`, and fix `OrbitalSpeed` reporting a stale value (#1086)
+  - Add `Orbit.CreateFromPositionAndVelocity` and `Orbit.CreateFromOrbitalElements`, for an
+    orbit with no object in the game (#1046)
+  - Add `Orbit.Position`, `Velocity`, `Altitude`, `MeanMotion`, `SemiLatusRectum`,
+    `SpecificAngularMomentum`, `SpecificEnergy`, `ReferenceFrame` and `OrbitalReferenceFrame`
+    (#1046, #1086, #1087)
+  - Add `Orbit.VelocityAt`, `SpeedAt`, `PositionAtTrueAnomaly`, `VelocityAtTrueAnomaly`,
+    `SpeedAtTrueAnomaly` and `SpeedAtRadius`, and a reference frame to `Orbit.PositionAt`
+    (#1046, #1086, #1087)
+  - Document `Orbit.Epoch` as the universal time of the mean anomaly at epoch (#1046)
+  - Add `CelestialBody.SurfaceNormal`, `BedrockNormal` and `MSLNormal`, and
+    `Flight.SurfaceNormal`, the slope of the terrain (#1030)
+  - Add `CelestialBody.SurfaceReferenceFrame`, fixed to the surface at a latitude and longitude
+    (#1116)
+  - Fix `ClosestApproach.Velocity` and `TargetVelocity` being offset by the velocity of the
+    reference body's frame (#1047)
 
 - Flight and aerodynamics
-  - Add `Flight.SurfaceNormal`, the slope of the terrain under a vessel (#1030)
-  - Fix `Flight.AerodynamicForce` and `Flight.AerodynamicAcceleration` turning with the roll
-    of the vessel when Ferram Aerospace Research is installed (#1032)
-  - Add `Flight.SideForce`, the part of `Flight.AerodynamicForce` that acts across the air
-    stream and out of the vessel's side (#1032)
-  - Fix `Flight.Lift` and `Flight.LiftAcceleration` reporting a force scaled by the cosine
-    squared of the sideslip angle (#1032)
-  - `Flight.AerodynamicTorque` works with Ferram Aerospace Research installed (#1032)
-  - Fix `Flight.SimulateAerodynamicForceAt`, `Flight.SimulateAerodynamicTorqueAt` and
-    `Flight.SimulateAerodynamicWrenchAt` returning `NaN` with Ferram Aerospace Research
-    installed when there is no relative airflow (#1032)
+  - Add `Flight.SideForce`, the aerodynamic force across the air stream (#1032)
+  - Fix `Flight.Lift` and `LiftAcceleration` being scaled by the cosine squared of the sideslip
+    angle (#1032)
   - Fix `Flight.StallFraction` returning `NaN` for a vessel with no lifting surfaces (#1032)
-  - **Breaking:** Return `Flight.SimulateAerodynamicWrenchAt` as a `SpaceCenter.Wrench` structure,
-    in place of a pair of tuples (#1148)
+  - Fix `Flight.AerodynamicForce`, `AerodynamicAcceleration`, `AerodynamicTorque` and the
+    `Flight.Simulate` methods with Ferram Aerospace Research installed (#1032)
 
 - Buoyancy
-  - Add `Flight.Displacement`, `Flight.DisplacedVolume`, `Flight.SubmergedPortion`,
-    `Flight.CenterOfBuoyancy`, `Flight.BuoyantForce`, `Flight.BuoyantAcceleration`,
-    `Flight.Depth` and `Flight.SubmergedDynamicPressure`, for boats and submarines (#1103)
-  - Add `Part.Displacement`, `Part.DisplacedVolume`, `Part.BuoyancyMultiplier`,
-    `Part.CenterOfBuoyancy`, `Part.CenterOfDisplacement` and `Part.BuoyantForce` (#1103)
-  - Add `Part.Splashed`, `Part.SubmergedPortion`, `Part.Depth`, `Part.MinDepth`,
-    `Part.MaxDepth`, `Part.SubmergedDynamicPressure`, `Part.SubmergedDragMultiplier`,
-    `Part.SubmergedLiftMultiplier` and `Part.WaterAngularDragMultiplier` (#1103)
-  - Add `Part.BuoyantForceAt`, the buoyant force when
-    fully submerged in a fluid of a given density under a given gravity (#1103)
-  - Add `Flight.BuoyantTorque`, `Flight.FullySubmergedCenterOfBuoyancy`,
-    `Flight.BuoyantForceAt` and `Flight.BuoyantTorqueAt` (#1103)
-  - Add `SimulatedFlight.Displacement`, `SimulatedFlight.FullySubmergedCenterOfBuoyancy`,
-    `SimulatedFlight.BuoyantForceAt` and `SimulatedFlight.BuoyantTorqueAt`, so a hull can be
-    trimmed before launch (#1103)
-  - Add `Part.StaticPressure` and `Part.MaxPressure` (#1103)
-  - Fix `Flight.StaticPressure` and `CelestialBody.PressureAt` to include the water pressure
+  - Add the buoyancy of boats and submarines to `Flight`, such as `Displacement`,
+    `CenterOfBuoyancy`, `BuoyantForce`, `Depth` and `BuoyantForceAt` (#1103)
+  - Add the buoyancy of a part to `Part`, such as `Splashed`, `Displacement`, `BuoyantForce`,
+    `SubmergedPortion` and the water drag multipliers (#1103)
+  - Add `SimulatedFlight.Displacement`, `FullySubmergedCenterOfBuoyancy`, `BuoyantForceAt` and
+    `BuoyantTorqueAt`, for trimming a hull before launch (#1103)
+  - Add `CelestialBody.HasOcean`, `CelestialBody.OceanDensity`, `SpaceCenter.BuoyancyScalar`,
+    `Part.StaticPressure` and `Part.MaxPressure` (#1103)
+  - Fix `Flight.StaticPressure` and `CelestialBody.PressureAt` leaving out the water pressure
     below sea level (#1103)
-  - Add `CelestialBody.HasOcean` and `CelestialBody.OceanDensity` (#1103)
-  - Add `SpaceCenter.BuoyancyScalar`, the multiplier the game applies to every buoyant
-    force (#1103)
 
-- Control
-  - A Kerbal on EVA can be driven through `Vessel.Control`. The translation inputs walk it
-    about and fly its jetpack, `Control.RCS` deploys and stows the jetpack, and
-    `Control.Lights` switches the helmet lamp (#319)
-  - Add `Control.Board` and `Control.Airlock`, for the part whose hatch a Kerbal on EVA is
-    standing at, and `Control.GrabLadder`, `Control.ReleaseLadder` and `Control.Ladder` for
-    the ladder it is alongside (#319)
-  - Setting `Control.StageLock` leaves the in-game Alt+L shortcut in step with it (#1022)
-  - Add `Control.PrecisionMode`, the precision control mode that the Caps Lock key
-    toggles (#1082)
-  - Fix control inputs being applied twice each tick to a vessel with a RemoteTech flight
-    computer (#1093)
-  - Apply `Control.Throttle` on a RemoteTech vessel regardless of signal delay and
-    connection, matching the other control axes (#1093)
-  - **Breaking:** `SpaceCenter.ActionGroupAction` is a structure, so
-    `Control.GetActionGroupActions` sends every field of each action in one call (#1132)
+- Control and communications
+  - **Breaking:** Return `null` from `Parts.Controlling` when the vessel has no control point
+    (#1043)
+  - **Breaking:** Return `null` from `CommNode.Vessel` for a node that is not a vessel (#1132)
+  - Take `Control.State` and `Control.Source` from the control level KSP gates a vessel's
+    control on (#1043)
+  - Report no control and no communications from `Control` and `Comms` for a vessel outside
+    the communication network (#1043)
+  - Add `Control.PrecisionMode` (#1082)
+  - Keep the Alt+L shortcut in step with `Control.StageLock` (#1022)
+  - Fix control inputs being applied twice each tick with a RemoteTech flight computer, and
+    apply `Control.Throttle` regardless of signal delay (#1093)
+
+- Engines and RCS
+  - **Breaking:** Thrust `RCS.TranslationOverride` along the right, up and forward axes it
+    documents (#1080)
+  - Add `RCS.Force`, `RCS.Torque`, `RCS.OverrideWrench` and `Thruster.Thrust` (#1080)
+  - Account for precision mode in the available force and torque of `RCS` and `Vessel`, keeping
+    a block driven by `RCS.InputOverride` at full thrust (#1082)
+  - Count only the nozzles of an RCS part's selected variant (#1079)
+  - Fix `Engine.Thrusters` and `RCS.Thrusters` on a part with both modules, and after a
+    multi-mode engine switches mode (#1096)
+  - Fix `ReactionWheel.AvailableTorque` being scaled by the square of the authority limiter
+    with KSPCommunityFixes installed (#1042)
+  - Add support for [RealFuels](https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/),
+    with ignition, ullage and feed pressure members on `Engine` and boil-off on `Part` (#1039)
 
 - Parts
   - **Breaking:** Remove kRPC's own name tag part module. `Part.Tag` needs
     KSPCommunityPartModules 0.5 or later, or kOS, to provide one (#1155)
-  - Warn in game when a save or craft has name tags that the installed mods cannot load (#1155)
-  - **Breaking:** `RCS.TranslationOverride` thrusts along the right, up and forward axes it
-    documents (#1080)
-  - Add `RCS.Force` and `RCS.Torque`, the force and torque a block is applying, and
-    `RCS.OverrideWrench`, what a given demand would apply (#1080)
-  - Add `Thruster.Thrust`, the thrust a single nozzle of an engine or RCS block is producing
-    (#1080)
-  - Fix `Engine.Thrusters` and `RCS.Thrusters` giving the same thrusters on a part that
-    carries both an engine and an RCS module (#1096)
-  - Fix `Engine.Thrusters` on a multi-mode engine giving the previous mode's thrusters after a
-    mode switch (#1096)
-  - `RCS.AvailableForce` and `RCS.AvailableTorque`, and the vessel level force, torque and
-    acceleration properties that include them, account for precision mode (#1082)
-  - Precision mode leaves a block driven by `RCS.InputOverride` at full thrust (#1082)
-  - `RCS.Thrusters`, `RCS.AvailableForce` and `RCS.AvailableTorque` count only the nozzles of
-    the part's selected variant (#1079)
-  - Add `ControlSurface.DeployAngle`, `ControlSurface.MinDeployAngle` and
-    `ControlSurface.MaxDeployAngle` (#1088)
-  - Fix `ControlSurface.DeflectionOverride` leaving the deploy angle at the last deflection
-    command when it is released (#1088)
-  - `ControlSurface.Deployed` raises an error when set while
-    `ControlSurface.DeflectionOverride` is enabled, which holds the surface deployed. The
-    setting was discarded when the override was released (#1088)
-  - `Decoupler.IsOmniDecoupler` reports what the part is configured as for every decoupler,
-    including radial ones. It was false for all of them (#1048)
-  - A force added with `Part.AddForce` stops being applied, and is freed, once its part is
-    destroyed (#1051)
-  - `Force.Remove` leaves the object gone, so using one afterwards raises
-    `KRPC.ObjectDestroyedException` (#1051)
+  - **Breaking:** Remove the string-dictionary `Module` members, replaced by
+    `Module.FieldList`, `Module.EventList` and `Module.ActionList` (#1140)
   - **Deprecated:** `Part.AddForce` and `Part.InstantaneousForce`, superseded by
     `Debug.AddForce` and `Debug.InstantaneousForce` (#1146)
-  - `Part.BoundingBox` and `Vessel.BoundingBox` measure only the meshes of a part's own model,
-    leaving out physicsless child parts and objects another mod has attached (#1024)
-  - Computing a bounding box no longer duplicates the meshes of every part it measures (#1024)
-  - `Part.BoundingBox` and `Vessel.BoundingBox` include animated meshes, in their current pose,
-    such as the arm of a drill (#1153)
-  - Add support for [RealFuels](https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/),
-    reported by `SpaceCenter.RealFuelsAvailable`. On an engine it manages, `Engine.Ignitions`,
-    `Engine.IgnitionResources`, `Engine.HasUllage`, `Engine.PropellantStability`,
-    `Engine.PropellantReliability`, `Engine.PressureFed` and `Engine.HasFeedPressure` are
-    available; on a tank, `Part.HighlyPressurized` and `Part.BoiloffRate` (#1039)
-  - Fix `ReactionWheel.AvailableTorque`, and the vessel level torque properties that include
-    it, being scaled by the square of the wheel's authority limiter when KSPCommunityFixes is
-    installed (#1042)
-  - Fix `Decoupler` objects accumulating for the rest of the session, and the same decoupler
-    obtained twice comparing unequal (#1051)
-  - A `Decoupler` finds its part's decoupler module again on every call, so it keeps working
-    across a quickload (#1051)
-  - Using a part that has been destroyed raises `KRPC.ObjectDestroyedException` instead of
-    failing with a null reference (#885)
-  - Using a part module, or an object built on one such as `Engine` or `Parachute`, after its
-    part has been destroyed raises `KRPC.ObjectDestroyedException` (#885)
-  - Part modules, and the objects built on them, read the modules of the loaded game, so they
-    keep working across a quickload (#764)
-  - Using a part of a vessel that the game has unloaded raises
-    `KRPC.ObjectNotLoadedException` (#1051)
-  - The fields, events and actions of a part module read the loaded game's module (#764)
-  - Make `ModuleRef` public, for a mod that exposes a part module as a class of its own
-    service (#1077)
-  - **Breaking:** Remove the string-dictionary `Module` field, event and action members,
-    replaced by `Module.FieldList`, `Module.EventList` and `Module.ActionList` (#1140)
-  - **Breaking:** Make `SpaceCenter.ScienceSubject` and `SpaceCenter.ScienceData` structures
-    (#1148)
-  - Add `ScienceSubject.Id`, the identifier of a science subject (#1148)
-  - **Breaking:** Return `RoboticController.Axes` as a list of `SpaceCenter.RoboticAxis`
-    structures, in place of a list of name pairs (#1148)
-  - **Breaking:** Return and set `Part.HighlightColor` and `Light.Color` as a `StdLib.ColorRGB`
-    structure, in place of a tuple (#1148)
+  - Warn in game when a save or craft has name tags the installed mods cannot load (#1155)
+  - Add `ControlSurface.DeployAngle`, `MinDeployAngle` and `MaxDeployAngle` (#1088)
+  - Fix `ControlSurface.DeflectionOverride` leaving the deploy angle set when released, and
+    throw an exception from setting `Deployed` during an override (#1088)
+  - Measure only a part's own meshes in `Part.BoundingBox` and `Vessel.BoundingBox`, with
+    animated meshes in their current pose (#1024, #1153)
+  - Fix computing a bounding box duplicating the meshes of every part it measures (#1024)
+  - Fix `Decoupler.IsOmniDecoupler` being false for every decoupler (#1048)
+  - Return the separated vessel from `Decoupler.Decouple` for an omni-decoupler such as a stack
+    separator (#1043)
+  - Make `ModuleRef` public, for a mod that exposes a part module in its own service (#1077)
 
-- Resources
-  - Add `ResourceTransfer.Cancel` to stop a transfer before it finishes (#1028)
-  - Fix a resource transfer failing on every update, and never completing, once one of the
-    parts it runs between is destroyed (#1051)
-  - Add `ResourceTransfer.Remove`, which stops a transfer and releases the memory the server
-    holds for it (#1072)
-
-- Camera
-  - `Camera.NextCamera` and `Camera.PreviousCamera` move the IVA view between the crew of the
-    active vessel without dropping out of IVA mode (#1031)
-  - Setting `Camera.FocussedCrewMember` to the crew member already in view no longer switches
-    to the flight camera. Setting it to one who is not in view of a part interior raises an
-    error (#1031)
-  - `Camera.FocussedCrewMember` returns `null` when no crew member is in view (#1031)
-
-- Alarms, contracts and waypoints
-  - `SpaceCenter.Alarm`, `Contract`, `ContractParameter` and `Waypoint` objects look their
-    record up on every call, so they keep working when the game rebuilds it. One the game no
-    longer has raises `KRPC.ObjectDestroyedException` (#1051)
-
-- Communications
-  - A `CommLink` is identified by the two nodes it joins and reports the link between them as
-    it is now. One whose nodes are gone raises `KRPC.ObjectDestroyedException` (#1051)
-  - **Breaking:** `SpaceCenter.CommNode` is a structure, so `CommLink.Start` and `CommLink.End`
-    send every field of a node in one call (#1132)
-  - **Breaking:** `CommNode.Vessel` returns `null` for a node that is not a vessel (#1132)
+- Resources and camera
+  - Add `ResourceTransfer.Cancel` (#1028)
+  - Fix a resource transfer never completing once one of its parts is destroyed (#1051)
+  - Move the IVA view between crew with `Camera.NextCamera` and `Camera.PreviousCamera` (#1031)
+  - Return `null` from `Camera.FocussedCrewMember` when no crew member is in view (#1031)
+  - Fix setting `Camera.FocussedCrewMember` to the crew member in view switching to the flight
+    camera (#1031)
 
 ## [v0.6.0]
 

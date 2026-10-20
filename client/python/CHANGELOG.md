@@ -1,74 +1,63 @@
 ## [v0.7.0] - unreleased
-- **Breaking:** Rename the `LiDAR` service class to `LIDAR`, and `conn.li_dar` to `conn.lidar` in
-  a client without stubs (#1149)
-- Require protobuf 7.36.2 or later (#1139)
-- Fix type checkers skipping the code after a name the service defines, such as
-  `conn.space_center.ReferenceFrame` (#1134)
-- Fix type checkers typing a stream value as `object` (#1134)
-- Fix type checkers rejecting `stream_port=None` in `krpc.connect` (#1134)
-- **Breaking:** Start a stream when it is added, removing `Stream.start` and `Event.start`
-  (#1122)
-- Call a callback added to a stream that has a value with that value straight away (#1122)
-- Call a callback added to an event straight away for a firing not yet passed to a wait or
-  another callback (#1122)
-- Raise `StreamError` when reading or waiting on a removed stream or event (#1122)
-- End a stream on an error from the server, which every later read and `wait` raises (#1122)
-- End every stream with `ConnectionError` when the connection closes or fails, with the
-  failure as its cause (#1122, #315)
-- Return `True` from `Stream.wait` and `Event.wait` on an update, and `False` on a timeout
-  (#1122)
-- Fix `Event.wait` missing a firing that arrived before it (#1122)
-- Fix `Event.wait` waking only one of two threads waiting on one event (#1122)
-- Add `add_end_callback` to streams and events, called with the exception that ends the stream
-  (#1122)
-- Fix the stream update thread stopping on a value it cannot decode (#1122, #198)
-- Fix a second removal of a stream removing a newer stream for the same call (#1122)
-- Fix an error ending an event calling the event's callbacks (#1122)
-- **Breaking:** Raise `TypeError` for a null where a value is required, reported by any service,
-  in place of `RPCError` (#1124)
-- **Breaking:** Raise `KeyError` for a missing key, and `IndexError` for an index out of range,
-  reported by any service, in place of `RPCError` (#1124)
-- **Breaking:** Raise `ZeroDivisionError`, `NotImplementedError`, `TimeoutError` and
-  `OverflowError` for the matching errors reported by any service, such as `AutoPilot.wait`, in
-  place of `RPCError` (#1124)
-- Add `Client.compile`, which compiles a Python function or lambda into a server side
-  function (#1127)
-- Compile operators, comparisons, conditionals, comprehensions, f-strings, slices, string and
-  collection operations, and calls to a subset of the builtins and the `math` module (#1127)
-- Compile `print` to `StdLib.print`, which writes a line to the game's log (#1127)
-- Compile statements in a function with a body: `if`, `while`, `for`, `break`, `continue`,
-  `del`, `raise`, `try`/`except`/`finally`, local variables and functions, assignment to remote
-  properties and early `return` (#1127)
-- Compile a captured variable declared `nonlocal` to a state variable, which keeps its value
-  between runs of a compiled function (#1127)
-- Raise `FunctionCompilationError` naming an unsupported construct (#1127)
-- Add `Client.run`, which runs a server side function or a Python function, with arguments,
-  within a single physics tick and returns the value it produces (#1127)
-- Stream the value of a server side function or a Python function with `Client.add_stream`
-  and `Client.stream` (#1127)
-- Add `Client.add_event`, which creates an event from a server side function or a Python
-  function (#1127)
-- A dynamically created service escapes an enumeration member whose name is a python keyword,
-  such as `Class` to `class_`, matching the pre-generated stubs (#1094)
-- Support a nullable structure field, list element, tuple item and dictionary value, which is
-  `None` when absent (#1091)
-- A service with pre-generated stubs also gains the class members that only the server
-  declares (#1077)
-- Support structure types. A value is a named tuple, and a tuple or list with one element per
-  field is accepted where one is expected (#1066)
-- A service definition naming an unknown type skips the member that names it with a warning,
-  instead of failing to connect (#1066)
-- **Breaking:** Support `None` for any nullable type (#1017)
-- Fix a service failing to load when one of its procedures defaults to a member of an
-  enumeration from a service that had not been loaded yet (#1044)
-- Add `krpc.limits`, naming the extremes of the numeric types kRPC carries over the wire, such
-  as `krpc.limits.SINT32_MAX` (#1045)
-- Reduce the cost of a remote procedure call, caching type objects, dispatching on the type
-  code, and reading a response in one system call (#1056)
-- Add `krpc.connect_local`, which connects to a server on the same machine over a unix domain
-  socket (#1065)
-- Add a `timeout` parameter to `krpc.connect`, bounding how long a connection is waited for
-  (#1065)
+
+- Streams and events
+  - **Breaking:** Start a stream when it is added, removing `Stream.start` and `Event.start`
+    (#1122)
+  - Return `True` from `Stream.wait` and `Event.wait` on an update, and `False` on a timeout
+    (#1122)
+  - End a stream on an error from the server, and every stream with `ConnectionError` when the
+    connection closes or fails (#1122, #315)
+  - Raise `StreamError` when reading or waiting on a removed stream or event (#1122)
+  - Add `add_end_callback` to streams and events, called with the exception that ends the
+    stream (#1122)
+  - Call a callback added to a stream or event straight away for a value or firing already
+    received (#1122)
+  - Fix `Event.wait` missing an earlier firing, and waking only one of two waiting threads
+    (#1122)
+  - Fix the stream update thread stopping on a value it cannot decode (#1122, #198)
+  - Fix a second removal of a stream removing a newer stream for the same call, and an error
+    ending an event calling its callbacks (#1122)
+
+- Server side functions
+  - Add `Client.compile`, which compiles a Python function or lambda into a server side
+    function (#1127)
+  - Compile operators, comprehensions, f-strings, slices, `print`, a subset of the builtins and
+    the `math` module, and the statements of a function body (#1127)
+  - Compile a captured `nonlocal` variable to a state variable, which keeps its value between
+    runs (#1127)
+  - Raise `FunctionCompilationError` naming an unsupported construct (#1127)
+  - Add `Client.run` and `Client.add_event`, and stream a function with `Client.add_stream` and
+    `Client.stream` (#1127)
+
+- Types and errors
+  - **Breaking:** Raise the matching built-in exception, such as `TypeError`, `KeyError`,
+    `IndexError` or `TimeoutError`, for an error reported by any service, in place of
+    `RPCError` (#1124)
+  - **Breaking:** Support `None` for any nullable type, including a structure field, list
+    element, tuple item and dictionary value (#1017, #1091)
+  - **Breaking:** Rename the `LiDAR` service class to `LIDAR`, and `conn.li_dar` to
+    `conn.lidar` in a client without stubs (#1149)
+  - Support structure types as named tuples, accepting a tuple or list with one element per
+    field (#1066)
+  - Skip a service member naming an unknown type with a warning, and connect (#1066)
+  - Add the class members only the server declares to a service with pre-generated stubs
+    (#1077)
+  - Escape an enumeration member named after a keyword in a dynamically created service, such
+    as `Class` to `class_`, as the stubs do (#1094)
+  - Add `krpc.limits`, the extremes of the numeric types kRPC carries, such as
+    `krpc.limits.SINT32_MAX` (#1045)
+  - Fix a service failing to load when a default value names an enumeration of a service not
+    yet loaded (#1044)
+  - Fix type checkers skipping code after a name the service defines, typing a stream value as
+    `object`, and rejecting `stream_port=None` (#1134)
+
+- Connections
+  - Add `krpc.connect_local`, which connects to a server on the same machine over a unix domain
+    socket (#1065)
+  - Add a `timeout` parameter to `krpc.connect`, bounding how long a connection is waited for
+    (#1065)
+  - Reduce the cost of a remote procedure call (#1056)
+  - Require protobuf 7.36.2 or later (#1139)
 
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+ (#837)

@@ -1,28 +1,19 @@
 ## [v0.7.0] - unreleased
 
 - **Breaking:** Return and set colors as a `StdLib.ColorRGB` structure, in place of a tuple (#1148)
-- Add `Drawing.AddPolyline`, `Drawing.AddCircle` and `Drawing.AddArc` (#1116)
-- Add `Drawing.AddOrbit`, which draws the path of an orbit (#1116)
-- Add `Drawing.AddPoint`, which draws a dot that keeps its size on screen (#1116)
-- Add `Drawing.AddAxes`, which draws the axes of a reference frame (#1116)
-- Add arrow heads to lines, polygons and the new paths, with `StartArrow`, `EndArrow` and
-  `ArrowSize` (#1116)
-- Add `Text.FaceCamera`, which turns text to face the camera (#1116)
-- Add `Colors`, `Dashed` and `Label` to lines, polygons and the new paths (#1116)
-- Add `Drawing.AddBox` and `Drawing.AddSphere` (#1116)
-- Add `Drawing.AddMapMarker`, which draws a marker in the map view with one of the game's
-  own map icons (#1116)
-- Add `Drawing.AddImage`, which loads a PNG or JPEG image to draw map and navball markers
-  with (#1116)
-- Draw lines, polygons and text in the map view, the editor and the tracking station (#1115)
 - **Breaking:** Removing a drawing object another client created, or one the server no longer
   holds, reports that it is not among those this client created (#1072)
-- Line, polygon, text and navball marker objects raise `KRPC.ObjectDestroyedException` once
-  the object they draw is gone, and are freed (#1051)
-- A drawing object whose reference frame is defined against something the game has destroyed
-  is not drawn, rather than failing on every frame (#1051)
+- Add `Drawing.AddPolyline`, `AddCircle`, `AddArc`, `AddBox`, `AddSphere`, `AddPoint`, `AddAxes`
+  and `AddOrbit` (#1116)
+- Add `StartArrow`, `EndArrow`, `ArrowSize`, `Colors`, `Dashed` and `Label` to lines, polygons
+  and paths, and `Text.FaceCamera` (#1116)
+- Add `Drawing.AddMapMarker`, which draws one of the game's map icons in the map view, and
+  `Drawing.AddImage` for custom marker images (#1116)
 - Add `Drawing.AddNavballMarker`, which draws a marker on the navball pointing in a given
-  direction. Its icon, color and size can be changed (#1037)
+  direction (#1037)
+- Draw lines, polygons and text in the map view, the editor and the tracking station (#1115)
+- Raise `KRPC.ObjectDestroyedException` from a drawing object once the object it draws is gone,
+  and skip drawing one whose reference frame is gone (#1051)
 
 ## [v0.5.0]
 - Add `Drawing.AddDirectionFromCoM`

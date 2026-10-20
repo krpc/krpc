@@ -1,142 +1,92 @@
 ## [v0.7.0] - unreleased
-- **Breaking:** Return `KRPC.Clients` as a list of `KRPC.ClientInfo` structures, in place of tuples
-  (#1148)
-- Add `StdLib.ColorRGB` and `StdLib.ColorRGBA`, the colors the SpaceCenter, Drawing and UI
-  services use (#1148)
-- Add `KRPC.GameStateLoads`, the number of game states that have finished loading (#1121)
-- **Breaking:** Remove `KRPC.CurrentGameScene`, replaced by `KRPC.GameScene` (#1140)
-- Extend `KRPC.Expression` to build server side functions, which the server evaluates
-  (#503, #517, #521, #1124)
-- Allow a function to call a procedure that returns no value (#1124)
-- Add `KRPC.Expression.CallWithArguments`, which computes the arguments of a call (#1124)
-- Allow a function to raise and handle exceptions (#1124)
-- Add `KRPC.DivideByZeroException`, `KRPC.NotSupportedException`, `KRPC.TimeoutException` and
-  `KRPC.OverflowException`, raised for the matching errors by any service (#1124)
-- Add `KRPC.Error`, a general error a function can raise (#1124)
-- Allow a function to declare local variables, loop, branch, assign and return early (#1124)
-- Allow a function to work on strings (#1124)
-- Allow a function to select, reshape and combine collections, including the keys and values of
-  a dictionary (#1124)
-- Allow a function to change a list, set or dictionary (#1124)
-- Add `KRPC.Expression.CreateStruct`, `GetField`, `CreateEmptyList`, `CreateEmptySet` and
-  `CreateEmptyDictionary`, which build and read structures and empty collections (#1124)
-- Add `KRPC.Expression.ConstantLong`, `ConstantUInt`, `ConstantULong`, `ConstantBytes`,
-  `ConstantEnum`, `ConstantObject` and `ConstantNull` (#1124)
-- Add `KRPC.Expression.IsNull`, `Negate`, `Conditional`, `ConditionalAnd` and `ConditionalOr`
-  (#1124)
-- Track which values of a function can be null, and raise an error when a null reaches a value
-  whose type does not allow one (#1124)
-- Add `KRPC.NullReferenceException`, raised for a null by any service, and by a function when a
-  null reaches a value whose type does not allow one (#1124)
-- Allow a function to use nullable booleans and structures (#1124)
-- Add `KRPC.KeyNotFoundException`, raised for a missing key by any service, and by a function
-  reading a missing dictionary key (#1124)
-- Add `KRPC.IndexOutOfRangeException`, raised for an index out of range by any service, and by
-  a function indexing a list or string (#1124)
-- Add `KRPC.RunFunction`, which runs a server side function once within a single physics tick,
-  with arguments of the types `KRPC.Expression.ParameterTypes` gives (#1124)
-- Add `KRPC.CompileFunction`, which compiles a server side function before its first run
-  (#1124)
-- Add `KRPC.Expression.StateVariable`, a variable that keeps its value between evaluations of
-  a function (#1124)
-- Add `KRPC.AddFunctionStream`, which streams the value a server side function computes on each
-  update (#1124)
-- Add `KRPC.Expression.ReturnType` and `HasReturnType`, which report the type of the value a
-  function produces, and whether it produces one (#1124)
-- Add the `StdLib` service, a standard library of scalar mathematics and of vector and quaternion
-  operations over the tuples the SpaceCenter service uses (#1125)
-- Add `StdLib.Print`, which writes a line to the game's log, for debugging server side functions
-  (#1125)
-- Expand `KRPC.Type` to name every type a procedure takes or returns, including long, unsigned,
-  bytes, class, enumeration, structure and collection types, and a nullable form of any type
-  (#1124)
-- Add `KRPC.TypeCode`, and the `Code`, `Service`, `Name`, `Types` and `Nullable` properties of
-  `KRPC.Type`, which report what a type is (#1124)
-- Fix `KRPC.Expression.Count`, which failed for every collection a procedure returns (#1124)
-- Fix `KRPC.Expression.OrderBy` to order strings by character code on every system locale
-  (#1124)
-- Fix `KRPC.Expression.Equal` and `NotEqual`, which compared objects, tuples, bytes and
-  collections by reference (#1124)
-- Fix `KRPC.Expression.CreateSet` to compare bytes, collections and structures by content
-  (#1124)
-- Fix `KRPC.Expression.Contains` and `ToSet`, which compared objects, tuples, bytes and
-  collections by reference (#1124)
-- Fix `KRPC.Expression.And`, `Or`, `ExclusiveOr`, `LeftShift` and `RightShift` for operands of
-  different integer types (#1124)
-- Fix `KRPC.Expression.Divide` and `Modulo` to wrap for the smallest integer divided by -1
-  (#1124)
-- Fix `KRPC.Expression.Sum`, `Min`, `Max` and `Average` over unsigned and long integers, and
-  wrap `Sum` on overflow (#1124)
-- **Breaking:** Rename `KRPC.Expression.Function` to `KRPC.Expression.Lambda` (#1124)
-- **Breaking:** Renumber the procedures of the `KRPC` service, so a client that calls them by
-  id must use stubs generated for this version (#1124)
-- **Breaking:** Rename the parameter of `KRPC.AddEvent` from `expression` to `function` (#1124)
-- **Breaking:** Give `KRPC.Expression.Power` the common type of its operands, rather than the
-  type of the first (#1124)
-- **Breaking:** Require the index into a tuple given to `KRPC.Expression.Get` to be a constant
-  (#1124)
-- **Breaking:** Limit `KRPC.Expression.CreateTuple` to seven elements, the most a kRPC tuple
-  type can hold (#1124)
-- **Breaking:** Reject calls to `KRPC` service procedures in a function (#1124)
-- Widen a number, tuple or collection given to `KRPC.Expression.Invoke`, and convert each element
-  of a tuple or collection given to `KRPC.Expression.Cast` (#1124)
-- Widen the numbers given to `KRPC.Expression.CreateList`, `CreateSet` and `CreateDictionary` to
-  a common type (#1124)
-- Widen the values of the collections given to `KRPC.Expression.Concat` to a common type
-  (#1124)
-- Add `KRPC.ObjectNotLoadedException`, for an object that exists but is not loaded, such as a
-  part of an unloaded vessel (#1120)
-- **Breaking:** Throw `KRPC.UnsupportedSceneException` for a procedure called outside its game
-  scenes (#1119)
-- Hold a stream or event over an object that is not loaded, or a procedure not available in
-  the game scene, until it is available (#1122, #877)
-- **Breaking:** Create a new stream for every `KRPC.AddStream`, so removing one leaves the
-  others for the same call (#1122, #902)
-- **Breaking:** Start a stream when it is added, removing `KRPC.StartStream` and the `start`
-  argument of `KRPC.AddStream` (#1122)
-- Fix a failing stream or event, including one whose value fails to encode, stopping the other
-  streams (#1122)
-- Throw an exception when streaming a procedure that returns a stream or an event, or calling
-  one in an expression (#1122)
-- Fix an expression calling a failing procedure throwing a `NullReferenceException` in place of
-  the procedure's exception (#1122)
-- Add `KRPC.StreamRemovedException`, sent as the final result of a stream the server ends, such
-  as an event that has finished (#1122)
-- Ignore a call to `KRPC.SetStreamRate` for a stream that has ended (#1122)
-- Throw an exception from `KRPC.RemoveStream` for a stream id that was never issued (#1122)
-- Fix the server keeping memory for every stream ever sent on a connection (#1122)
-- Encode and decode values without reflection, cutting the server cost of a call that passes
-  or returns an object by about three quarters (#1091)
-- **Breaking:** Nullability is carried by `Type.nullable` at every position a value sits in,
-  replacing `Parameter.nullable` and `Procedure.return_is_nullable` (#1091)
-- A structure field can be nullable, declared by `Nullable` on its `KRPCProperty` attribute
-  or by a `Nullable<T>` field type (#1091)
-- A list element, a tuple item and a dictionary value can be nullable, declared by a
-  `Nullable<T>` type or by a path of positions on `KRPCNullable`, such as
-  `[KRPCNullable (Position.Element)]` (#1091)
-- Add extension members: a service can add methods and properties to a class belonging to
-  another service, declared as C# extension methods annotated with `KRPCMethod` or
-  `KRPCProperty` (#1077)
-- Add structure types: a compound value with named fields, declared with `KRPCStruct` on a C#
-  `struct` and sent to the client in full (#1066)
-- Add a communication protocol carrying protocol buffer messages over a unix domain socket,
-  for clients running on the same machine as the game (#1065)
-- Add `KRPC.HoldTick` and `KRPC.ReleaseTick`, which hold the game on its current physics tick
-  so a control loop can read, compute and write within one tick (#1070)
-- Add `KRPC.NextTick`, which releases the tick being held and holds the one after it (#1070)
-- Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports
-  are read and written on their own threads (#1035)
-- Add `KRPC.ObjectDestroyedException`, raised when the game object that an object refers to no
-  longer exists (#1051)
-- Objects whose game objects the game no longer has are removed from the object store when a
-  game state is loaded (#1051)
-- Fix one server stopping emptying the object store that every server shares, which
-  invalidated the objects held by clients of the servers still running (#1020)
-- Support for nullable values across all types (#1017)
-- **Breaking:** Null values are signaled by an `is_null` field rather than by an object id of
-  0. Class-typed arguments are no longer implicitly nullable (#1017)
-- Fix a request that names an object the server no longer has leaving the connection
-  stuck (#1019)
+
+- Server side functions
+  - Extend `KRPC.Expression` to build server side functions, which the server evaluates
+    (#503, #517, #521, #1124)
+  - Allow a function to declare local variables, loop, branch, assign, return early, raise and
+    handle exceptions, and call a procedure that returns no value (#1124)
+  - Allow a function to work on strings, nullable values, and lists, sets and dictionaries,
+    including changing them (#1124)
+  - Add `KRPC.RunFunction`, which runs a function once within a single physics tick, and
+    `KRPC.CompileFunction` and `KRPC.AddFunctionStream` (#1124)
+  - Add `KRPC.Expression.StateVariable`, a variable that keeps its value between evaluations of
+    a function (#1124)
+  - Add `KRPC.Expression.CallWithArguments`, `CreateStruct`, `GetField`, `IsNull`, `Negate`,
+    `Conditional`, `ConditionalAnd`, `ConditionalOr`, the empty collections and a constant for
+    every type (#1124)
+  - Add `KRPC.Expression.ReturnType` and `HasReturnType` (#1124)
+  - Add `KRPC.TypeCode` and the `Code`, `Service`, `Name`, `Types` and `Nullable` properties of
+    `KRPC.Type`, which names every type a procedure takes or returns (#1124)
+  - Add the `StdLib` service, of scalar mathematics and vector and quaternion operations, with
+    `StdLib.Print` for debugging a function (#1125)
+  - Widen numbers, tuples and collections to a common type in `KRPC.Expression.Invoke`, `Cast`,
+    `CreateList`, `CreateSet`, `CreateDictionary` and `Concat` (#1124)
+  - Fix `KRPC.Expression.Count` on a returned collection, and `OrderBy` ordering strings by the
+    system locale (#1124)
+  - Fix `KRPC.Expression.Equal`, `NotEqual`, `Contains`, `ToSet` and `CreateSet` comparing
+    objects, tuples, bytes and collections by reference (#1124)
+  - Fix the integer arithmetic of `KRPC.Expression` for mixed operand types, on overflow and for
+    the smallest integer divided by -1 (#1124)
+  - **Breaking:** Rename `KRPC.Expression.Function` to `Lambda`, and the parameter of
+    `KRPC.AddEvent` from `expression` to `function` (#1124)
+  - **Breaking:** Renumber the procedures of the `KRPC` service, so a client that calls them by
+    id must use stubs generated for this version (#1124)
+  - **Breaking:** Type `KRPC.Expression.Power` by both operands, require a constant index in
+    `Get`, limit `CreateTuple` to seven elements, and reject calls to `KRPC` procedures (#1124)
+
+- Errors
+  - Add `KRPC.NullReferenceException`, `KeyNotFoundException`, `IndexOutOfRangeException`,
+    `DivideByZeroException`, `NotSupportedException`, `TimeoutException` and
+    `OverflowException`, raised by any service and by a function (#1124)
+  - Add `KRPC.Error`, a general error a function can raise (#1124)
+  - Add `KRPC.ObjectDestroyedException`, for an object whose game object is gone, and
+    `KRPC.ObjectNotLoadedException`, for one that is not loaded (#1051, #1120)
+  - **Breaking:** Throw `KRPC.UnsupportedSceneException` for a procedure called outside its
+    game scenes (#1119)
+
+- Streams and events
+  - **Breaking:** Start a stream when it is added, removing `KRPC.StartStream` and the `start`
+    argument of `KRPC.AddStream` (#1122)
+  - **Breaking:** Create a new stream for every `KRPC.AddStream`, so removing one leaves the
+    others for the same call (#1122, #902)
+  - Hold a stream or event over an unloaded object, or a procedure unavailable in the game
+    scene, until it is available (#1122, #877)
+  - Add `KRPC.StreamRemovedException`, the final result of a stream the server ends (#1122)
+  - Throw an exception when streaming a procedure that returns a stream or event, and from
+    `KRPC.RemoveStream` for an unknown stream id (#1122)
+  - Fix a failing stream or event stopping the others, and the server keeping memory for every
+    stream sent on a connection (#1122)
+
+- Types and protocol
+  - **Breaking:** Support null for any nullable type, signaled by an `is_null` field. Class-typed
+    arguments are not implicitly nullable (#1017)
+  - **Breaking:** Carry nullability in `Type.nullable` at every position, replacing
+    `Parameter.nullable` and `Procedure.return_is_nullable` (#1091)
+  - **Breaking:** Return `KRPC.Clients` as a list of `KRPC.ClientInfo` structures (#1148)
+  - Allow a structure field, list element, tuple item and dictionary value to be nullable,
+    declared with `Nullable<T>` or `KRPCNullable` (#1091)
+  - Add structure types, a compound value with named fields, declared with `KRPCStruct` on a C#
+    `struct` (#1066)
+  - Add `StdLib.ColorRGB` and `StdLib.ColorRGBA`, the colors of the SpaceCenter, Drawing and UI
+    services (#1148)
+  - Add extension members, which a service declares on another service's class as C# extension
+    methods (#1077)
+  - Add a communication protocol over a unix domain socket, for clients on the same machine as
+    the game (#1065)
+  - Fix a serial connection freezing the game while it carries an RPC (#1035)
+  - Encode and decode values without reflection, cutting the server cost of a call that passes
+    or returns an object by about three quarters (#1091)
+
+- Game state
+  - **Breaking:** Remove `KRPC.CurrentGameScene`, replaced by `KRPC.GameScene` (#1140)
+  - Add `KRPC.HoldTick`, `KRPC.ReleaseTick` and `KRPC.NextTick`, which hold the game on one
+    physics tick so a control loop can read, compute and write within it (#1070)
+  - Add `KRPC.GameStateLoads`, the number of game states that have finished loading (#1121)
+  - Remove objects whose game objects are gone from the object store when a game state loads
+    (#1051)
+  - Fix one server stopping emptying the object store that every server shares (#1020)
+  - Fix a request naming an object the server no longer has leaving the connection stuck
+    (#1019)
 
 ## [v0.6.0]
 - Add `Version` property to `Core`, set by the server plugin on startup (#848)

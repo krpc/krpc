@@ -1,27 +1,22 @@
 ## [v0.7.0] - unreleased
-- **Breaking:** Rename `dockingcamera.h` to `docking_camera.h` (#1149)
-- Include the header of every service a service header uses, so service headers can be
-  included in any order (#1150)
-- Update to protobuf v36.2 (#1139)
-- Update to nanopb 0.4.9.2 (#1139)
+- **Breaking:** Support null for any nullable type. A nullable non-class return adds a
+  `bool* returnValueIsNull` out-parameter, and a nullable argument is a pointer (#1017)
 - **Breaking:** Renumber the `KRPC` service's procedures, so a program built against an
   earlier version must be rebuilt (#1124)
-- Support a nullable structure field, list element, tuple item and dictionary value, each
-  generated as a type holding the value beside a `bool` presence flag (#1091)
-- Support structure types, generated as a C struct with a member per field (#1066)
-- **Breaking:** Support null for any nullable type; a nullable non-class return adds a
-  `bool* returnValueIsNull` out-parameter and a nullable argument is a pointer (#1017)
-- Add `KRPC_COMMUNICATION_TCP`, building the library to communicate over TCP/IP. A connection
-  is opened with a `krpc_connection_config_t` in place of a port name (#1055)
-- Add a `tcp` feature to the vcpkg port; `vcpkg install "krpc-cnano[tcp]"` (#1055)
-- Add `KRPC_COMMUNICATION_LOCALSOCKET` and a `localsocket` vcpkg feature, building the library
-  to communicate over a unix domain socket (#1065)
+- **Breaking:** Rename `dockingcamera.h` to `docking_camera.h` (#1149)
+- Support structure types, as a C struct with a member per field, and nullable structure fields
+  and collection elements, as the value beside a `bool` presence flag (#1066, #1091)
+- Add `KRPC_COMMUNICATION_TCP` and `KRPC_COMMUNICATION_LOCALSOCKET`, with `tcp` and
+  `localsocket` vcpkg features, to communicate over TCP/IP or a unix domain socket
+  (#1055, #1065)
 - Add `KRPC_SINGLE_CONNECTION`, for a `KRPC_COMMUNICATION_CUSTOM` mechanism that opens its own
   connection to each server (#1055)
-- Reduce the cost of a remote procedure call, from tens of reads and writes to one write and
-  two reads (#1056)
-- Add `KRPC_BUFFER_SIZE`, how much of a message to hold in memory while it is sent or
-  received. Defaults to 1024 bytes, and to 128 on Arduino (#1056)
+- Reduce a remote procedure call from tens of reads and writes to one write and two reads (#1056)
+- Add `KRPC_BUFFER_SIZE`, how much of a message to hold in memory while it is sent or received,
+  1024 bytes by default and 128 on Arduino (#1056)
+- Include the header of every service a service header uses, so service headers can be included
+  in any order (#1150)
+- Update to protobuf v36.2 and nanopb 0.4.9.2 (#1139)
 
 ## [v0.6.0]
 - Distribute via vcpkg (#874)
