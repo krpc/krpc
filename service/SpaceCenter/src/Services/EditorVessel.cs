@@ -8,6 +8,7 @@ using KRPC.Utils;
 using UnityEngine;
 using Parts = KRPC.SpaceCenter.Services.Parts;
 using Tuple3 = System.Tuple<double, double, double>;
+using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -81,14 +82,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The dimensions of the vessel's bounding box, in meters.
-        /// </summary>
-        [KRPCProperty]
-        public Tuple3 Size {
-            get { return InternalShipConstruct.shipSize.ToTuple (); }
-        }
-
-        /// <summary>
         /// The total mass of the vessel, including resources and crew, in kg.
         /// </summary>
         [KRPCProperty]
@@ -114,28 +107,133 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The reference frame that is fixed relative to the vessel,
+        /// and orientated with the vessel.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the center of mass of the vessel.</description></item>
+        /// <item><description>The axes rotate with the vessel.</description></item>
+        /// <item><description>The x-axis points out to the right of the vessel.</description></item>
+        /// <item><description>The y-axis points in the forward direction of the vessel.</description></item>
+        /// <item><description>The z-axis points out of the bottom off the vessel.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// The axes are those of the root part. This is the frame
+        /// <see cref="Vessel.ReferenceFrame"/> gives at launch, with the root part as the
+        /// control point.
+        /// </remarks>
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return ReferenceFrame.EditorVessel (); }
+        }
+
+        /// <summary>
+        /// The reference frame that is fixed relative to the vessel,
+        /// and orientated with the vertical of the editor.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the center of mass of the vessel.</description></item>
+        /// <item><description>The axes are fixed in the editor.</description></item>
+        /// <item><description>The x-axis points upwards.</description></item>
+        /// <item><description>The y-axis and z-axis are horizontal.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// This is the vessel as it stands in the editor, and as it stands at launch. The
+        /// editor has no north or east, so the horizontal axes are fixed in the editor.
+        /// </remarks>
+        [KRPCProperty]
+        public ReferenceFrame SurfaceReferenceFrame {
+            get { return ReferenceFrame.EditorSurface (); }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="SimulatedFlight"/> object that can be used to simulate the
+        /// vessel in flight, in the specified reference frame.
+        /// </summary>
+        /// <param name="referenceFrame">
+        /// Reference frame. Defaults to the simulated surface reference frame
+        /// (<see cref="SimulatedFlight.SurfaceReferenceFrame"/>), and follows it when it is set.
+        /// </param>
+        /// <remarks>
+        /// Each call returns a new object, which is kept until the game leaves the editor.
+        /// </remarks>
+        [KRPCMethod]
+        public SimulatedFlight Flight (ReferenceFrame referenceFrame = null)
+        {
+            return new SimulatedFlight (referenceFrame);
+        }
+
+        /// <summary>
         /// The position of the center of mass of the vessel, in the given reference frame.
         /// </summary>
         /// <returns>The position as a vector.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// position vector is in.</param>
-        /// <remarks>
-        /// This is the editor scene's world-space center of mass expressed in
-        /// <paramref name="referenceFrame"/>. A part's
-        /// <see cref="Parts.Part.ReferenceFrame"/> reports the offset from that
-        /// part. A celestial body frame is not a position on that body: the
-        /// editor is not placed in the solar system the way a vessel in flight is.
-        /// </remarks>
         [KRPCMethod]
-        public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)
+        public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace (InternalShipConstruct.WorldCenterOfMass ()).ToTuple ();
         }
 
         /// <summary>
+        /// The axis-aligned bounding box of the vessel in the given reference frame.
+        /// </summary>
+        /// <returns>The positions of the minimum and maximum vertices of the box.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vectors are in.</param>
+        [KRPCMethod]
+        public BoundingBox BoundingBox (ReferenceFrame referenceFrame)
+        {
+            var parts = InternalShipConstruct.Parts;
+            if (parts.Count == 0)
+                throw new InvalidOperationException ("The editor vessel has no parts");
+            var bounds = parts [0].GetBounds (referenceFrame);
+            for (int i = 1; i < parts.Count; i++)
+                bounds.Encapsulate (parts [i].GetBounds (referenceFrame));
+            return new BoundingBox (bounds);
+        }
+
+        /// <summary>
+        /// The rotation of the vessel, in the given reference frame.
+        /// </summary>
+        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// rotation is in.</param>
+        [KRPCMethod]
+        public Tuple4 Rotation (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.RotationFromWorldSpace (VesselTransform.rotation).ToTuple ();
+        }
+
+        /// <summary>
+        /// The direction in which the vessel is pointing, in the given reference frame.
+        /// </summary>
+        /// <returns>The direction as a unit vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// direction is in.</param>
+        [KRPCMethod]
+        public Tuple3 Direction (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (VesselTransform.up).ToTuple ();
+        }
+
+        /// <summary>
+        /// The root part's reference transform, which gives the vessel its orientation.
+        /// </summary>
+        internal Transform VesselTransform {
+            get {
+                var transform = InternalShipConstruct.VesselTransform ();
+                if (transform == null)
+                    throw new InvalidOperationException ("The editor vessel has no parts");
+                return transform;
+            }
+        }
+
+        /// <summary>
         /// The moment of inertia of the vessel around its center of mass in <math>kg.m^2</math>.
-        /// The inertia values in the returned 3-tuple are around the pitch, roll and yaw
-        /// directions of the root part's reference transform respectively.
+        /// The inertia values in the returned 3-tuple are around the
+        /// pitch, roll and yaw directions respectively.
+        /// This corresponds to the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
@@ -143,9 +241,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The inertia tensor of the vessel around its center of mass, in the root
-        /// part's reference transform. Returns the 3x3 matrix as a list of elements,
-        /// in row-major order.
+        /// The inertia tensor of the vessel around its center of mass,
+        /// in the vessels reference frame (<see cref="ReferenceFrame"/>).
+        /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
         [KRPCProperty]
         public IList<double> InertiaTensor {
@@ -155,77 +253,6 @@ namespace KRPC.SpaceCenter.Services
         Matrix4x4 ComputeInertiaTensor ()
         {
             return InternalShipConstruct.ComputeInertiaTensor ().MultiplyScalar (1000f);
-        }
-
-        /// <summary>
-        /// The volume of water the vessel displaces when fully submerged, in
-        /// <math>m^3</math>.
-        /// </summary>
-        [KRPCProperty]
-        public double Displacement {
-            get { return InternalShipConstruct.Parts.Sum (StockBuoyancy.Displacement); }
-        }
-
-        /// <summary>
-        /// The point the buoyant force acts through with the vessel fully submerged.
-        /// Returns <c>null</c> if no part of the vessel displaces any water.
-        /// </summary>
-        /// <returns>The position as a vector.</returns>
-        /// <param name="referenceFrame">The reference frame that the returned
-        /// position vector is in.</param>
-        /// <remarks>
-        /// A hull at rest carries this on the same vertical line as
-        /// <see cref="CenterOfMass"/>. Compare the two in the same reference frame to see
-        /// which way an untrimmed hull will roll.
-        /// </remarks>
-        [KRPCMethod (Nullable = true)]
-        public Tuple3 CenterOfBuoyancy (ReferenceFrame referenceFrame)
-        {
-            var center = StockBuoyancy.FullySubmerged (InternalShipConstruct.Parts).CenterOfBuoyancy;
-            if (!center.HasValue)
-                return null;
-            return referenceFrame.PositionFromWorldSpace (center.Value).ToTuple ();
-        }
-
-        /// <summary>
-        /// The buoyant force on the vessel when fully submerged in a fluid of the given
-        /// density, in Newtons.
-        /// </summary>
-        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
-        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
-        /// <remarks>
-        /// Compare this with the vessel's weight to see whether the hull floats. It applies
-        /// <see cref="SpaceCenter.BuoyancyScalar"/> and each part's
-        /// <see cref="Parts.Part.BuoyancyMultiplier"/>, so the result is what the game would
-        /// do to the vessel.
-        /// </remarks>
-        [KRPCMethod]
-        public double BuoyantForceAt (double density, double gravity)
-        {
-            return InternalShipConstruct.Parts.Sum (
-                part => StockBuoyancy.BuoyantForceAt (part, density * 0.001d, gravity)) * 1000d;
-        }
-
-        /// <summary>
-        /// The torque the buoyant force exerts about the vessel's center of mass when fully
-        /// submerged in a fluid of the given density, under gravity acting down the editor.
-        /// </summary>
-        /// <returns>A vector pointing along the axis of the torque, with its magnitude
-        /// equal to the strength of the torque in newton-meters.</returns>
-        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
-        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
-        /// <param name="referenceFrame">The reference frame that the returned
-        /// torque vector is in.</param>
-        /// <remarks>
-        /// A hull trimmed level carries zero torque.
-        /// </remarks>
-        [KRPCMethod]
-        public Tuple3 BuoyantTorqueAt (double density, double gravity, ReferenceFrame referenceFrame)
-        {
-            var ship = InternalShipConstruct;
-            var torque = StockBuoyancy.FullySubmerged (ship.Parts).Torque (
-                density * 0.001d, gravity, Vector3d.down, ship.WorldCenterOfMass ());
-            return referenceFrame.DirectionFromWorldSpace (torque * 1000d).ToTuple ();
         }
 
         /// <summary>

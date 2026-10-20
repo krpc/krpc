@@ -242,6 +242,10 @@ namespace KRPC.SpaceCenter.Services
                     return InternalDockingPort.nodeTransform;
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldTransform;
+                case ReferenceFrameType.EditorVessel:
+                    return EditorVesselTransform;
+                case ReferenceFrameType.EditorSurface:
+                    throw new InvalidOperationException ("The editor surface does not have a transform");
                 case ReferenceFrameType.Relative:
                 case ReferenceFrameType.Hybrid:
                     throw new InvalidOperationException ("Transform not available for relative or hybrid frames");
@@ -275,6 +279,18 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The root part's reference transform of the vessel in the editor.
+        /// </summary>
+        static Transform EditorVesselTransform {
+            get {
+                var transform = EditorExtensions.GetShip ().VesselTransform ();
+                if (transform == null)
+                    throw new InvalidOperationException ("The editor vessel has no parts");
+                return transform;
+            }
+        }
+
+        /// <summary>
         /// The state of everything the frame is built from. A frame needs each of the
         /// vessel, part, maneuver node, thruster, orbit and other frames it is defined
         /// against, so it takes the least alive of their states. A frame defined against a
@@ -286,6 +302,8 @@ namespace KRPC.SpaceCenter.Services
                 if (removed)
                     return GameObjectState.Destroyed;
                 var state = GameObjectState.Live;
+                if (type == ReferenceFrameType.EditorVessel || type == ReferenceFrameType.EditorSurface)
+                    state = EditorExtensions.ShipState;
                 if (vesselId != Guid.Empty)
                     state = node == null
                         ? FlightGlobalsExtensions.VesselState (vesselId)
@@ -428,6 +446,16 @@ namespace KRPC.SpaceCenter.Services
         internal static ReferenceFrame Thrust (Thruster thruster)
         {
             return new ReferenceFrame (ReferenceFrameType.Thrust, part: thruster.Part.InternalPart, thruster: thruster);
+        }
+
+        internal static ReferenceFrame EditorVessel ()
+        {
+            return new ReferenceFrame (ReferenceFrameType.EditorVessel);
+        }
+
+        internal static ReferenceFrame EditorSurface ()
+        {
+            return new ReferenceFrame (ReferenceFrameType.EditorSurface);
         }
 
         static class VectorZero
@@ -629,6 +657,9 @@ namespace KRPC.SpaceCenter.Services
                     return InternalDockingPort.nodeTransform.position;
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldTransform.position;
+                case ReferenceFrameType.EditorVessel:
+                case ReferenceFrameType.EditorSurface:
+                    return EditorExtensions.GetShip ().WorldCenterOfMass ();
                 case ReferenceFrameType.Relative:
                     return parent.PositionToWorldSpace (relativePosition);
                 case ReferenceFrameType.Hybrid:
@@ -658,6 +689,8 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.PartCenterOfMass:
                     return ((QuaternionD)InternalPart.transform.rotation).Normalize ();
+                case ReferenceFrameType.EditorVessel:
+                    return ((QuaternionD)EditorVesselTransform.rotation).Normalize ();
                 case ReferenceFrameType.Hybrid:
                     return hybridRotation.Rotation;
                 case ReferenceFrameType.VesselSurfaceVelocity:
@@ -774,6 +807,11 @@ namespace KRPC.SpaceCenter.Services
                     return InternalDockingPort.nodeTransform.forward;
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldThrustDirection;
+                case ReferenceFrameType.EditorVessel:
+                    return EditorVesselTransform.up;
+                case ReferenceFrameType.EditorSurface:
+                    // Horizontal, so that the x-axis is the editor's vertical
+                    return Vector3d.forward;
                 case ReferenceFrameType.Relative:
                     return parent.DirectionToWorldSpace (relativeRotation * Vector3d.up);
                 case ReferenceFrameType.Hybrid:
@@ -854,6 +892,10 @@ namespace KRPC.SpaceCenter.Services
                     return -InternalDockingPort.nodeTransform.up;
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldThrustPerpendicularDirection;
+                case ReferenceFrameType.EditorVessel:
+                    return EditorVesselTransform.forward;
+                case ReferenceFrameType.EditorSurface:
+                    return Vector3d.right;
                 case ReferenceFrameType.Relative:
                     return parent.DirectionToWorldSpace (relativeRotation * Vector3d.forward);
                 case ReferenceFrameType.Hybrid:
@@ -910,6 +952,9 @@ namespace KRPC.SpaceCenter.Services
                     return InternalPart.vessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.DockingPort:
                     return InternalDockingPort.vessel.GetOrbit ().GetVel ();
+                case ReferenceFrameType.EditorVessel:
+                case ReferenceFrameType.EditorSurface:
+                    return Vector3d.zero;
                 case ReferenceFrameType.Relative:
                     return parent.VelocityToWorldSpace (relativePosition, relativeVelocity);
                 case ReferenceFrameType.Hybrid:
@@ -1041,6 +1086,9 @@ namespace KRPC.SpaceCenter.Services
                     return InternalDockingPort.vessel.WorldAngularVelocity ();
                 case ReferenceFrameType.Thrust:
                     return InternalPart.vessel.WorldAngularVelocity ();
+                case ReferenceFrameType.EditorVessel:
+                case ReferenceFrameType.EditorSurface:
+                    return Vector3d.zero;
                 case ReferenceFrameType.Relative:
                     return parent.AngularVelocityToWorldSpace (relativeAngularVelocity);
                 case ReferenceFrameType.Hybrid:

@@ -21,7 +21,12 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         parts = cls.vessel.parts
         cls.control = cls.vessel.control
         cls.drills = parts.resource_harvesters
-        cls.drill = parts.with_name("RadialDrill")[0].resource_harvester
+        cls.drill_part = parts.with_name("RadialDrill")[0]
+        cls.drill = cls.drill_part.resource_harvester
+
+    def drill_length(self):
+        lower, upper = self.drill_part.bounding_box(self.drill_part.reference_frame)
+        return max(b - a for a, b in zip(lower, upper))
 
     def check_inactive_properties(self):
         self.assertEqual(0, self.drill.thermal_efficiency)
@@ -34,6 +39,7 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
         self.check_inactive_properties()
+        retracted_length = self.drill_length()
 
         self.drill.deployed = True
         self.wait()
@@ -50,6 +56,8 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.assertTrue(self.drill.deployed)
         self.assertFalse(self.drill.active)
         self.check_inactive_properties()
+        # The bounding box follows the drill as it extends
+        self.assertGreater(self.drill_length(), retracted_length + 0.1)
 
         ore_before = self.vessel.resources.amount("Ore")
         self.drill.active = True
@@ -88,6 +96,7 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
         self.check_inactive_properties()
+        self.assertAlmostEqual(retracted_length, self.drill_length(), delta=0.05)
 
     def test_activate_when_not_deployed(self):
         self.assertFalse(self.drill.deployed)

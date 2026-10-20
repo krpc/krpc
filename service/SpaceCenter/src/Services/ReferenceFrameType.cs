@@ -93,6 +93,14 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         Thrust,
         /// <summary>
+        /// Centered on and rotating with the vessel in the editor.
+        /// </summary>
+        EditorVessel,
+        /// <summary>
+        /// Centered on the vessel in the editor and oriented with the editor's vertical.
+        /// </summary>
+        EditorSurface,
+        /// <summary>
         /// Centered and rotated by fixed quantities relative to another reference frame.
         /// </summary>
         Relative,

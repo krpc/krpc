@@ -215,6 +215,7 @@
     <Compile Include="Services\Resources.cs" />
     <Compile Include="Services\RosterStatus.cs" />
     <Compile Include="Services\SASMode.cs" />
+    <Compile Include="Services\SimulatedFlight.cs" />
     <Compile Include="Services\SpaceCenter.cs" />
     <Compile Include="Services\SpeedMode.cs" />
     <Compile Include="Services\SuitType.cs" />

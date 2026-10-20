@@ -13,8 +13,10 @@ Editor
           available in the editor. Those that need a vessel in flight or running physics,
           such as the thermal members, are restricted to the flight scene.
           {{ see('M:SpaceCenter.Part.Position') }}, {{ see('M:SpaceCenter.Part.CenterOfMass') }},
-          the part's reference frames, {{ see('M:SpaceCenter.Part.MomentOfInertia') }}
-          and {{ see('M:SpaceCenter.Part.InertiaTensor') }} are available.
+          {{ see('M:SpaceCenter.Part.Direction') }}, {{ see('M:SpaceCenter.Part.Rotation') }},
+          {{ see('M:SpaceCenter.Part.BoundingBox') }}, the part's reference frames,
+          {{ see('M:SpaceCenter.Part.MomentOfInertia') }} and
+          {{ see('M:SpaceCenter.Part.InertiaTensor') }} are available.
 {% endappend %}
 {% append services['SpaceCenter'].classes['EditorVessel'].members['Resources'] %}
 .. note:: This is a view of what the vessel can hold as designed. The flow-state
@@ -24,3 +26,4 @@ Editor
 {{ macros.class(services['SpaceCenter'].classes['Editor']) }}
 {{ macros.enumeration(services['SpaceCenter'].enumerations['DeltaVSituation']) }}
 {{ macros.class(services['SpaceCenter'].classes['EditorVessel']) }}
+{{ macros.class(services['SpaceCenter'].classes['SimulatedFlight']) }}

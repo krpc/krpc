@@ -167,6 +167,9 @@ class TestEditorObjectLifetimeOnLeaving(EditorObjectLifetimeTest):
         parts = self.editor.vessel.parts
         part = self.a_part("mk1-3pod")
         self.assertEqual("mk1-3pod", part.name)
+        frame = self.editor.vessel.reference_frame
+        flight = self.editor.vessel.flight()
+        self.assertEqual(3, len(flight.center_of_mass))
         before = self.conn.testing_tools.object_store_size
 
         self.leave_editor()
@@ -176,6 +179,14 @@ class TestEditorObjectLifetimeOnLeaving(EditorObjectLifetimeTest):
         # one again, so the objects are gone rather than dormant.
         self.assertRaises(self.destroyed, getattr, part, "name")
         self.assertRaises(self.destroyed, getattr, parts, "all")
+        self.assertRaises(self.destroyed, getattr, flight, "center_of_mass")
+        self.assertRaises(
+            self.destroyed,
+            self.space_center.transform_position,
+            (0, 0, 0),
+            frame,
+            frame,
+        )
 
 
 class TestEditorPartIdCollision(EditorObjectLifetimeTest):

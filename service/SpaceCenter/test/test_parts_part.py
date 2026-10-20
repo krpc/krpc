@@ -686,6 +686,11 @@ class TestPartsPart(krpctest.TestCase):
         ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.resource_harvester)
+        # The drill's model is a single skinned mesh
+        lower, upper = part.bounding_box(part.reference_frame)
+        for i in range(3):
+            self.assertGreater(upper[i] - lower[i], 0.3)
+            self.assertLess(upper[i] - lower[i], 2)
 
     def test_sensor(self):
         part = self.parts.with_name("sensorBarometer")[0]

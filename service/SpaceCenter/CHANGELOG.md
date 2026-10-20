@@ -56,13 +56,20 @@
     vessel under construction can hold (#1038)
   - A part of the vessel under construction raises `KRPC.ObjectDestroyedException` once it is
     no longer in that vessel, and once the editor has loaded any vessel over it (#1051)
-  - Add `EditorVessel.CenterOfMass`, `EditorVessel.MomentOfInertia` and
+  - Add `EditorVessel.Position`, `EditorVessel.MomentOfInertia` and
     `EditorVessel.InertiaTensor`. `Part.MomentOfInertia` and `Part.InertiaTensor` are
     available in the editor as well (#1059)
   - `Part.Mass` and `Part.DryMass` no longer report 1000 kg for every part in the editor
     (#1059)
   - `Part.Position`, `Part.CenterOfMass`, `Part.ReferenceFrame` and
     `Part.CenterOfMassReferenceFrame` are available in the editor (#1064)
+  - `Part.Direction`, `Part.Rotation` and `Part.BoundingBox` are available in the editor
+    (#1153)
+  - Add `EditorVessel.ReferenceFrame`, `EditorVessel.SurfaceReferenceFrame`,
+    `EditorVessel.BoundingBox`, `EditorVessel.Rotation` and `EditorVessel.Direction`, as on
+    `Vessel` (#1153)
+  - Add `EditorVessel.Flight`, which returns a `SimulatedFlight` for the vessel in a
+    simulated attitude (#1153)
 
 - Vessels and crew
   - `Vessel.InertiaTensor` is restricted to the flight scene, as `Vessel.MomentOfInertia`
@@ -195,12 +202,13 @@
   - Add `Part.Splashed`, `Part.SubmergedPortion`, `Part.Depth`, `Part.MinDepth`,
     `Part.MaxDepth`, `Part.SubmergedDynamicPressure`, `Part.SubmergedDragMultiplier`,
     `Part.SubmergedLiftMultiplier` and `Part.WaterAngularDragMultiplier` (#1103)
-  - Add `Part.BuoyantForceAt` and `EditorVessel.BuoyantForceAt`, the buoyant force when
+  - Add `Part.BuoyantForceAt`, the buoyant force when
     fully submerged in a fluid of a given density under a given gravity (#1103)
   - Add `Flight.BuoyantTorque`, `Flight.FullySubmergedCenterOfBuoyancy`,
     `Flight.BuoyantForceAt` and `Flight.BuoyantTorqueAt` (#1103)
-  - Add `EditorVessel.Displacement`, `EditorVessel.CenterOfBuoyancy` and
-    `EditorVessel.BuoyantTorqueAt`, so a hull can be trimmed before launch (#1103)
+  - Add `SimulatedFlight.Displacement`, `SimulatedFlight.FullySubmergedCenterOfBuoyancy`,
+    `SimulatedFlight.BuoyantForceAt` and `SimulatedFlight.BuoyantTorqueAt`, so a hull can be
+    trimmed before launch (#1103)
   - Add `Part.StaticPressure` and `Part.MaxPressure` (#1103)
   - Fix `Flight.StaticPressure` and `CelestialBody.PressureAt` to include the water pressure
     below sea level (#1103)
@@ -259,6 +267,8 @@
   - `Part.BoundingBox` and `Vessel.BoundingBox` measure only the meshes of a part's own model,
     leaving out physicsless child parts and objects another mod has attached (#1024)
   - Computing a bounding box no longer duplicates the meshes of every part it measures (#1024)
+  - `Part.BoundingBox` and `Vessel.BoundingBox` include animated meshes, in their current pose,
+    such as the arm of a drill (#1153)
   - Add support for [RealFuels](https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*),
     reported by `SpaceCenter.RealFuelsAvailable`. On an engine it manages, `Engine.Ignitions`,
     `Engine.IgnitionResources`, `Engine.HasUllage`, `Engine.PropellantStability`,

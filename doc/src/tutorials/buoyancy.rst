@@ -41,8 +41,6 @@ what the other two axes carry:
    :end-before: [/docs]
 
 :attr:`Flight.center_of_buoyancy` is ``None`` when no part of the vessel is in the water.
-The same pair is available in the editor as :meth:`EditorVessel.center_of_buoyancy` and
-:meth:`EditorVessel.center_of_mass`, so a hull can be trimmed before it is launched.
 
 The couple is also available as a torque about the center of mass. A hull trimmed level
 carries zero torque:
@@ -54,7 +52,23 @@ carries zero torque:
 
 :meth:`Flight.buoyant_torque_at` is the torque with the hull fully submerged. It holds
 steady while the hull rides the waves, where :attr:`Flight.buoyant_torque` follows the
-live waterline. :meth:`EditorVessel.buoyant_torque_at` gives the same figure in the editor.
+live waterline.
+
+In the Editor
+-------------
+
+A hull can be trimmed before it is launched. :meth:`EditorVessel.flight` returns a
+:class:`SimulatedFlight`, which has the fully submerged members of :class:`Flight`. Its
+:attr:`SimulatedFlight.surface_reference_frame` sets which way is up. Here a hull built
+nose-up in the vehicle assembly building is simulated floating on its bottom:
+
+.. literalinclude:: /scripts/tutorials/buoyancy/EditorTorque.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
+
+Gravity acts along the negative x axis of the surface reference frame. A frame created
+relative to :attr:`EditorVessel.reference_frame` follows the hull as it is edited.
 
 Submersion
 ----------

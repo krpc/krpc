@@ -1012,7 +1012,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// If the part has no visible model, the box has zero volume and is centered on
         /// the <see cref="CenterOfMass"/> of the part.
         /// </remarks>
-        [KRPCMethod (GameScene = GameScene.Flight)]
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
         public BoundingBox BoundingBox (ReferenceFrame referenceFrame)
         {
             return new BoundingBox (InternalPart.GetBounds (referenceFrame));
@@ -1024,7 +1024,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <returns>The direction as a unit vector.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// direction is in.</param>
-        [KRPCMethod (GameScene = GameScene.Flight)]
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             return referenceFrame.DirectionFromWorldSpace (InternalPart.transform.up).ToTuple ();
@@ -1050,7 +1050,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// rotation is in.</param>
-        [KRPCMethod (GameScene = GameScene.Flight)]
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             return referenceFrame.RotationFromWorldSpace (InternalPart.transform.rotation).ToTuple ();
@@ -1174,7 +1174,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The moment of inertia of the part in <math>kg.m^2</math> around its center of mass
-        /// in the parts reference frame (<see cref="ReferenceFrame"/>).
+        /// in the parts center of mass reference frame (<see cref="CenterOfMassReferenceFrame"/>).
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Tuple3 MomentOfInertia {
@@ -1182,8 +1182,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The inertia tensor of the part in the parts reference frame
-        /// (<see cref="ReferenceFrame"/>).
+        /// The inertia tensor of the part around its center of mass, in the parts center of
+        /// mass reference frame (<see cref="CenterOfMassReferenceFrame"/>).
         /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
