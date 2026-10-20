@@ -15,6 +15,8 @@ v0.7.0 - unreleased
 Core
 ^^^^
 
+* :breaking:`Breaking` Return ``KRPC.Clients`` as a list of ``KRPC.ClientInfo`` structures, in place of tuples (:issue:`1148`)
+* Add ``StdLib.ColorRGB`` and ``StdLib.ColorRGBA``, the colors the SpaceCenter, Drawing and UI services use (:issue:`1148`)
 * Add ``KRPC.GameStateLoads``, the number of game states that have finished loading (:issue:`1121`)
 * :breaking:`Breaking` Remove ``KRPC.CurrentGameScene``, replaced by ``KRPC.GameScene`` (:issue:`1140`)
 * Extend ``KRPC.Expression`` to build server side functions, which the server evaluates (:issue:`503`, :issue:`517`, :issue:`521`, :issue:`1124`)
@@ -128,6 +130,7 @@ SpaceCenter service
   * Allow the time warp RPCs in the space center and tracking station, apart from ``SpaceCenter.PhysicsWarpFactor`` (:issue:`1145`)
   * ``SpaceCenter.WarpTo`` throws an exception if the game scene changes during the time warp (:issue:`1145`)
   * Fix ``SpaceCenter.MaximumRailsWarpFactor`` returning 0 when only warp factor 1 is allowed (:issue:`1145`)
+  * :breaking:`Breaking` Make ``SpaceCenter.LaunchSite`` a structure (:issue:`1148`)
 
 * Editor
 
@@ -153,6 +156,9 @@ SpaceCenter service
   * Using a vessel that no longer exists raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
   * A ``CrewMember`` looks the kerbal up on the game's roster on every call, so one obtained before a load goes on working (:issue:`1051`)
   * Renaming a kerbal destroys every object for them, which have to be obtained again under the new name (:issue:`1051`)
+  * :breaking:`Breaking` Return the available torque, force and acceleration members of ``Vessel``, ``ReactionWheel``, ``ControlSurface``, ``Engine`` and ``RCS`` as a ``SpaceCenter.AxisRange`` structure, in place of a pair of tuples (:issue:`1148`)
+  * :breaking:`Breaking` Return ``Vessel.BoundingBox`` and ``Part.BoundingBox`` as a ``SpaceCenter.BoundingBox`` structure, in place of a pair of tuples (:issue:`1148`)
+  * :breaking:`Breaking` Replace ``CareerLogFlights``, ``CareerLogTypes`` and ``CareerLogTargets`` with ``CrewMember.CareerLog``, a list of ``SpaceCenter.FlightLogEntry`` structures (:issue:`1148`)
 
 * Staging
 
@@ -214,6 +220,7 @@ SpaceCenter service
   * ``Flight.AerodynamicTorque`` works with Ferram Aerospace Research installed (:issue:`1032`)
   * Fix ``Flight.SimulateAerodynamicForceAt``, ``Flight.SimulateAerodynamicTorqueAt`` and ``Flight.SimulateAerodynamicWrenchAt`` returning ``NaN`` with Ferram Aerospace Research installed when there is no relative airflow (:issue:`1032`)
   * Fix ``Flight.StallFraction`` returning ``NaN`` for a vessel with no lifting surfaces (:issue:`1032`)
+  * :breaking:`Breaking` Return ``Flight.SimulateAerodynamicWrenchAt`` as a ``SpaceCenter.Wrench`` structure, in place of a pair of tuples (:issue:`1148`)
 
 * Buoyancy
 
@@ -241,7 +248,7 @@ SpaceCenter service
 * Parts
 
   * :breaking:`Breaking` ``RCS.TranslationOverride`` thrusts along the right, up and forward axes it documents (:issue:`1080`)
-  * Add ``RCS.Force`` and ``RCS.Torque``, the force and torque a block is applying, and ``RCS.OverrideForce`` and ``RCS.OverrideTorque``, what a given demand would apply (:issue:`1080`)
+  * Add ``RCS.Force`` and ``RCS.Torque``, the force and torque a block is applying, and ``RCS.OverrideWrench``, what a given demand would apply (:issue:`1080`)
   * Add ``Thruster.Thrust``, the thrust a single nozzle of an engine or RCS block is producing (:issue:`1080`)
   * Fix ``Engine.Thrusters`` and ``RCS.Thrusters`` giving the same thrusters on a part that carries both an engine and an RCS module (:issue:`1096`)
   * Fix ``Engine.Thrusters`` on a multi-mode engine giving the previous mode's thrusters after a mode switch (:issue:`1096`)
@@ -266,11 +273,12 @@ SpaceCenter service
   * Part modules, and the objects built on them, read the modules of the loaded game, so they keep working across a quickload (:issue:`764`)
   * Using a part of a vessel that the game has unloaded raises ``KRPC.ObjectNotLoadedException`` (:issue:`1051`)
   * The fields, events and actions of a part module read the loaded game's module (:issue:`764`)
-  * A ``ScienceSubject`` belongs to the game state it was read from, and using one after that state has been replaced raises ``KRPC.ObjectDestroyedException`` (:issue:`771`)
-  * Fix ``Experiment.ScienceSubject`` adding a new object for every read (:issue:`771`)
-  * Fix ``ScienceSubject.Science`` and ``ScienceSubject.ScienceCap`` scaling by the science gain multiplier that was in force when the object was read (:issue:`1051`)
   * Make ``ModuleRef`` public, for a mod that exposes a part module as a class of its own service (:issue:`1077`)
   * :breaking:`Breaking` Remove the string-dictionary ``Module`` field, event and action members, replaced by ``Module.FieldList``, ``Module.EventList`` and ``Module.ActionList`` (:issue:`1140`)
+  * :breaking:`Breaking` Make ``SpaceCenter.ScienceSubject`` and ``SpaceCenter.ScienceData`` structures (:issue:`1148`)
+  * Add ``ScienceSubject.Id``, the identifier of a science subject (:issue:`1148`)
+  * :breaking:`Breaking` Return ``RoboticController.Axes`` as a list of ``SpaceCenter.RoboticAxis`` structures, in place of a list of name pairs (:issue:`1148`)
+  * :breaking:`Breaking` Return and set ``Part.HighlightColor`` and ``Light.Color`` as a ``StdLib.ColorRGB`` structure, in place of a tuple (:issue:`1148`)
 
 * Resources
 
@@ -299,6 +307,7 @@ SpaceCenter service
 Drawing service
 ^^^^^^^^^^^^^^^
 
+* :breaking:`Breaking` Return and set colors as a ``StdLib.ColorRGB`` structure, in place of a tuple (:issue:`1148`)
 * Add ``Drawing.AddPolyline``, ``Drawing.AddCircle`` and ``Drawing.AddArc`` (:issue:`1116`)
 * Add ``Drawing.AddOrbit``, which draws the path of an orbit (:issue:`1116`)
 * Add ``Drawing.AddPoint``, which draws a dot that keeps its size on screen (:issue:`1116`)
@@ -320,7 +329,7 @@ User Interface service
 ^^^^^^^^^^^^^^^^^^^^^^
 
 * :breaking:`Breaking` Removing a user interface element another client created, or one the server no longer holds, reports that it is not among those this client created (:issue:`1072`)
-* :breaking:`Breaking` Colors are given as ``(red, green, blue, alpha)`` rather than ``(red, green, blue)``, so an element can be drawn translucent. Affects ``Text.Color`` and the color of a ``UI.Message`` (:issue:`1040`)
+* :breaking:`Breaking` Return and set colors as a ``StdLib.ColorRGBA`` structure with an alpha component, in place of a ``(red, green, blue)`` tuple. Affects ``Text.Color`` and the color of a ``UI.Message`` (:issue:`1040`, :issue:`1148`)
 * :breaking:`Breaking` ``InputField.Changed`` is only set when the user types in the field (:issue:`1040`)
 * :breaking:`Breaking` User interface elements are drawn using the skin the game draws its own interface in, so the size and color that ``Text`` starts out with are not fixed values (:issue:`1040`)
 * :breaking:`Breaking` ``Visible`` is the element's own setting. An element is drawn when everything it is inside is visible as well, so an interface can be built inside a hidden panel and shown all at once (:issue:`1040`)
@@ -600,6 +609,7 @@ Python client
 krpctools
 ^^^^^^^^^
 
+* Read the definitions of several services in ``krpc-clientgen``, from JSON files alongside DLLs (:issue:`1148`)
 * :breaking:`Breaking` Require ``--include`` in ``krpc-clientgen`` for each service whose types a C++ or C nano service uses, giving the path of its header (:issue:`1150`)
 * :breaking:`Breaking` Run ``krpc-servicedefs`` and ``TestServer`` on the .NET 10 runtime, in place of .NET 8 (:issue:`1139`)
 * Generate python stubs that declare a service's classes, enumerations, structures and exceptions for type checkers (:issue:`1134`)

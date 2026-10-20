@@ -531,7 +531,7 @@ Flight
          the game applies each part's force to that part and propagates it through the joints
          rather than to the vessel as a rigid body.
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> simulateAerodynamicWrenchAt(CelestialBody body, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity, org.javatuples.Quartet<Double,Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> angularVelocity, double ut)
+   .. method:: Wrench simulateAerodynamicWrenchAt(CelestialBody body, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity, org.javatuples.Quartet<Double,Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> angularVelocity, double ut)
 
       Simulate and return the total aerodynamic force and torque acting on the vessel,
       if its center of mass were traveling with the given velocity, at the given position,
@@ -543,7 +543,7 @@ Flight
       :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: The orientation of the vessel, in reference frame :type:`ReferenceFrame`, in the same form as :meth:`Vessel.rotation(ReferenceFrame)`. Pass the vessel's current rotation to evaluate the wrench at its current orientation.
       :param org.javatuples.Triplet<Double,Double,Double> angularVelocity: The angular velocity of the vessel, in reference frame :type:`ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping force and torque. Pass a zero vector to evaluate the static wrench relative to the reference frame.
       :param double ut: The universal time used for the atmospheric ephemeris. It selects the body/Sun geometry used for temperature and density, but does not change or propagate :type:`ReferenceFrame` or any of the state arguments.
-      :returns: A pair containing the aerodynamic force in newtons followed by the aerodynamic torque in newton-meters about the vessel's center of mass. Both are vectors in reference frame :type:`ReferenceFrame`.
+      :returns: The aerodynamic force, and the aerodynamic torque about the vessel's center of mass. Both are vectors in reference frame :type:`ReferenceFrame`.
       :Game Scenes: Flight
 
 
@@ -784,3 +784,22 @@ Flight
       .. note::
 
          Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+
+
+.. type:: public class Wrench
+
+   A force and a torque that act together.
+
+   .. constructor:: public Wrench(org.javatuples.Triplet<Double,Double,Double> force, org.javatuples.Triplet<Double,Double,Double> torque)
+
+      Construct a Wrench from the values of its fields.
+
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getForce()
+
+      The force, in Newtons.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getTorque()
+
+      The torque, in Newton meters.

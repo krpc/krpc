@@ -733,9 +733,8 @@ This is an empty string if the client has no name.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.KRPC.Clients">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="pre">[]</span><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Clients</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.KRPC.Clients" title="Link to this definition">#</a></dt>
-<dd><p>A list of RPC clients that are currently connected to the server.
-Each entry in the list is a clients identifier, name and address.</p>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#struct-KRPC.Client.Services.KRPC.ClientInfo" title="struct: KRPC.Client.Services.KRPC.ClientInfo"><span class="pre">ClientInfo</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Clients</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.KRPC.Clients" title="Link to this definition">#</a></dt>
+<dd><p>The RPC clients that are currently connected to the server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -1007,6 +1006,40 @@ research and development facility is open within the space center scene.</p>
 <span class="sig-name descname"><span class="pre">Administration</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.Administration" title="Link to this definition">#</a></dt>
 <dd><p>The administration facility. This is a pseudo-scene, shown when the
 administration facility is open within the space center scene.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs struct">
+<dt class="sig sig-object cs" id="struct-KRPC.Client.Services.KRPC.ClientInfo">
+<span class="property"><span class="pre">struct</span> </span><span class="sig-name descname"><span class="pre">ClientInfo</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.KRPC.ClientInfo" title="Link to this definition">#</a></dt>
+<dd><p>A client connected to the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#property-KRPC.Client.Services.KRPC.KRPC.Clients" title="property: KRPC.Client.Services.KRPC.KRPC.Clients"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KRPC.Clients</span></code></a>.</p>
+</div>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo">
+<span class="sig-name descname"><span class="pre">ClientInfo</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="pre">[]</span> <em><span class="pre">id</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">name</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">address</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo" title="Link to this definition">#</a></dt>
+<dd><p>Construct a ClientInfo from the values of its fields.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ClientInfo.Id">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="pre">[]</span> <span class="sig-name descname"><span class="pre">Id</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ClientInfo.Id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of the client.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ClientInfo.Name">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <span class="sig-name descname"><span class="pre">Name</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ClientInfo.Name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the client, or an empty string if it has no name.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ClientInfo.Address">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <span class="sig-name descname"><span class="pre">Address</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ClientInfo.Address" title="Link to this definition">#</a></dt>
+<dd><p>The address of the client.</p>
 </dd></dl>
 
 </dd></dl>

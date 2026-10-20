@@ -530,8 +530,8 @@ Flight
       :param Tuple rotation: The orientation of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`, in the same form as :meth:`SpaceCenter.Vessel.rotation`. Pass the vessel's current rotation to evaluate the wrench at its current orientation.
       :param Tuple angular_velocity: The angular velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping force and torque. Pass a zero vector to evaluate the static wrench relative to the reference frame.
       :param number ut: The universal time used for the atmospheric ephemeris. It selects the body/Sun geometry used for temperature and density, but does not change or propagate :class:`SpaceCenter.ReferenceFrame` or any of the state arguments.
-      :returns: A pair containing the aerodynamic force in newtons followed by the aerodynamic torque in newton-meters about the vessel's center of mass. Both are vectors in reference frame :class:`SpaceCenter.ReferenceFrame`.
-      :rtype: Tuple
+      :returns: The aerodynamic force, and the aerodynamic torque about the vessel's center of mass. Both are vectors in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :rtype: :class:`SpaceCenter.Wrench`
 
       .. note::
 
@@ -761,3 +761,22 @@ Flight
       .. note::
 
          Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+
+
+
+.. class:: Wrench
+
+   A force and a torque that act together.
+
+
+   .. attribute:: force: Tuple
+
+      The force, in Newtons.
+
+      :rtype: Tuple
+
+   .. attribute:: torque: Tuple
+
+      The torque, in Newton meters.
+
+      :rtype: Tuple

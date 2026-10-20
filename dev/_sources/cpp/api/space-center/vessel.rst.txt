@@ -490,7 +490,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+   .. function:: AxisRange available_torque()
 
       The maximum torque that the vessel generates. Includes contributions from
       reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -500,7 +500,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_reaction_wheel_torque()
+   .. function:: AxisRange available_reaction_wheel_torque()
 
       The maximum torque that the currently active and powered reaction wheels can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -509,7 +509,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_rcs_torque()
+   .. function:: AxisRange available_rcs_torque()
 
       The maximum torque that the currently active RCS thrusters can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -518,7 +518,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_rcs_force()
+   .. function:: AxisRange available_rcs_force()
 
       The maximum force that the currently active RCS thrusters can generate.
       Returns the forces in :math:`N` along each of the coordinate axes of the
@@ -527,7 +527,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_rcs_acceleration()
+   .. function:: AxisRange available_rcs_acceleration()
 
       The maximum acceleration that the currently active RCS thrusters can generate.
       This is :func:`Vessel::available_rcs_force` divided by the vessel's :func:`Vessel::mass`.
@@ -537,7 +537,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_engine_torque()
+   .. function:: AxisRange available_engine_torque()
 
       The maximum torque that the currently active and gimballed engines can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -546,7 +546,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_control_surface_torque()
+   .. function:: AxisRange available_control_surface_torque()
 
       The maximum torque that the aerodynamic control surfaces can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -555,7 +555,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_other_torque()
+   .. function:: AxisRange available_other_torque()
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate.
@@ -565,7 +565,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_angular_acceleration()
+   .. function:: AxisRange available_angular_acceleration()
 
       The maximum angular acceleration that the vessel can generate. Includes contributions
       from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -576,7 +576,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_reaction_wheel_angular_acceleration()
+   .. function:: AxisRange available_reaction_wheel_angular_acceleration()
 
       The maximum angular acceleration that the currently active and powered reaction wheels
       can generate. This is :func:`Vessel::available_reaction_wheel_torque` divided by the vessel's
@@ -587,7 +587,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_rcs_angular_acceleration()
+   .. function:: AxisRange available_rcs_angular_acceleration()
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
       This is :func:`Vessel::available_rcs_torque` divided by the vessel's :func:`Vessel::moment_of_inertia`.
@@ -597,7 +597,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_engine_angular_acceleration()
+   .. function:: AxisRange available_engine_angular_acceleration()
 
       The maximum angular acceleration that the currently active and gimballed engines can
       generate. This is :func:`Vessel::available_engine_torque` divided by the vessel's
@@ -608,7 +608,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_control_surface_angular_acceleration()
+   .. function:: AxisRange available_control_surface_angular_acceleration()
 
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
       This is :func:`Vessel::available_control_surface_torque` divided by the vessel's
@@ -619,7 +619,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_other_angular_acceleration()
+   .. function:: AxisRange available_other_angular_acceleration()
 
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate. This is :func:`Vessel::available_other_torque` divided
@@ -812,7 +812,7 @@ Vessel
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> bounding_box(ReferenceFrame reference_frame)
+   .. function:: BoundingBox bounding_box(ReferenceFrame reference_frame)
 
       The axis-aligned bounding box of the vessel in the given reference frame.
 
@@ -820,7 +820,7 @@ Vessel
 
        * **reference_frame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame)
@@ -867,6 +867,37 @@ Vessel
       :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
       :Game Scenes: Flight
 
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: AxisRange
+
+   The largest value of a quantity, such as a torque or a force, in the positive and the
+   negative direction of each of three axes.
+
+
+   .. member:: std::tuple<double, double, double> positive
+
+      The value in the positive direction of each axis.
+
+   .. member:: std::tuple<double, double, double> negative
+
+      The value in the negative direction of each axis, which is zero or less.
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: BoundingBox
+
+   An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+
+   .. member:: std::tuple<double, double, double> min
+
+      The position of the minimum vertex of the box.
+
+   .. member:: std::tuple<double, double, double> max
+
+      The position of the maximum vertex of the box.
 
 
 .. namespace:: krpc::services::SpaceCenter
@@ -1118,24 +1149,33 @@ Vessel
 
    
 
-   .. function:: std::vector<int32_t> career_log_flights()
+   .. function:: std::vector<FlightLogEntry> career_log()
 
-      The flight IDs for each entry in the career flight log.
-
-   
-
-   .. function:: std::vector<std::string> career_log_types()
-
-      The type for each entry in the career flight log.
+      The entries in the crew member's career flight log.
 
    
 
-   .. function:: std::vector<std::string> career_log_targets()
 
-      The body name for each entry in the career flight log.
 
-   
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: FlightLogEntry
 
+   An entry in a crew member's career flight log.
+
+   .. note::
+
+      See :func:`CrewMember::career_log`.
+   .. member:: int32_t flight
+
+      The flight identifier of the entry.
+
+   .. member:: std::string type
+
+      The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+   .. member:: std::string target
+
+      The name of the body the entry is for.
 
 
 .. namespace:: krpc::services::SpaceCenter

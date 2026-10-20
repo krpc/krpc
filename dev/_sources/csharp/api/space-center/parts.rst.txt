@@ -347,9 +347,9 @@ Part
 
          The highlighting is removed when the client that enabled it disconnects.
 
-   .. property:: System.Tuple<double,double,double> HighlightColor { get; set; }
+   .. property:: StdLib.ColorRGB HighlightColor { get; set; }
 
-      The color used to highlight the part, as an RGB triple.
+      The color used to highlight the part.
 
       :Game Scenes: Flight
 
@@ -980,7 +980,7 @@ Part
       :returns: The position as a vector.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> BoundingBox(ReferenceFrame referenceFrame)
+   .. function:: BoundingBox BoundingBox(ReferenceFrame referenceFrame)
 
       The axis-aligned bounding box of the part in the given reference frame.
 
@@ -988,7 +988,7 @@ Part
 
        * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Flight
 
 
@@ -1983,7 +1983,7 @@ Control Surface
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The available torque, in Newton meters, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -2597,7 +2597,7 @@ Engine
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The available torque, in Newton meters, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -2871,7 +2871,7 @@ Experiment
 
       :Game Scenes: Flight
 
-   .. property:: ScienceSubject ScienceSubject { get; }
+   .. property:: ScienceSubject? ScienceSubject { get; }
 
       Containing information on the corresponding specific science result for the current
       conditions. Returns ``null`` if the experiment is unavailable.
@@ -2880,39 +2880,44 @@ Experiment
 
 
 
-.. class:: ScienceData
+.. struct:: ScienceData
 
    Obtained by calling :prop:`Experiment.Data`.
+
+   .. function:: ScienceData(float dataAmount, float scienceValue, float transmitValue)
+
+      Construct a ScienceData from the values of its fields.
+
 
    .. property:: float DataAmount { get; }
 
       Data amount.
 
-      :Game Scenes: Flight
-
    .. property:: float ScienceValue { get; }
 
       Science value.
-
-      :Game Scenes: Flight
 
    .. property:: float TransmitValue { get; }
 
       Transmit value.
 
-      :Game Scenes: Flight
 
-
-
-.. class:: ScienceSubject
+.. struct:: ScienceSubject
 
    Obtained by calling :prop:`Experiment.ScienceSubject`.
 
+   .. function:: ScienceSubject(string id, string title, bool isComplete, float science, float scienceCap, float dataScale, float subjectValue, float scientificValue)
+
+      Construct a ScienceSubject from the values of its fields.
+
+
+   .. property:: string Id { get; }
+
+      The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
+
    .. property:: string Title { get; }
 
-      Title of science subject, displayed in science archives
-
-      :Game Scenes: Flight
+      The title of the subject, as shown in the science archives.
 
    .. property:: bool IsComplete { get; }
 
@@ -2923,40 +2928,27 @@ Experiment
       has produced data, and how valuable it is, use :prop:`Experiment.HasData` and
       :prop:`ScienceData.TransmitValue`.
 
-      :Game Scenes: Flight
-
    .. property:: float Science { get; }
 
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-      :Game Scenes: Flight
-
    .. property:: float ScienceCap { get; }
 
       Total science allowable for this subject.
-
-      :Game Scenes: Flight
 
    .. property:: float DataScale { get; }
 
       Multiply science value by this to determine data amount in mits.
 
-      :Game Scenes: Flight
-
    .. property:: float SubjectValue { get; }
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
-
-      :Game Scenes: Flight
 
    .. property:: float ScientificValue { get; }
 
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
-
-      :Game Scenes: Flight
-
 
 
 Fairing
@@ -3118,9 +3110,9 @@ Light
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<float,float,float> Color { get; set; }
+   .. property:: StdLib.ColorRGB Color { get; set; }
 
-      The color of the light, as an RGB triple.
+      The color of the light.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -3582,7 +3574,7 @@ Reaction Wheel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The available torque, in Newton meters, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -3591,7 +3583,7 @@ Reaction Wheel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> MaxTorque { get; }
+   .. property:: AxisRange MaxTorque { get; }
 
       The maximum torque, in Newton meters, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
@@ -3774,7 +3766,7 @@ Robotic Controller
 
       :Game Scenes: Flight
 
-   .. function:: System.Collections.Generic.IList<System.Collections.Generic.IList<string>> Axes()
+   .. function:: System.Collections.Generic.IList<RoboticAxis> Axes()
 
       The axes for the controller.
 
@@ -3819,6 +3811,28 @@ Robotic Controller
       :returns: Returns ``true`` if the axis is cleared successfully.
       :Game Scenes: Flight
 
+
+
+.. struct:: RoboticAxis
+
+   An axis of a robotic controller.
+
+   .. note::
+
+      See :meth:`RoboticController.Axes`.
+
+   .. function:: RoboticAxis(Module module, string fieldName)
+
+      Construct a RoboticAxis from the values of its fields.
+
+
+   .. property:: Module Module { get; }
+
+      The part module the axis belongs to.
+
+   .. property:: string FieldName { get; }
+
+      The name of the field the axis controls.
 
 
 Robotic Hinge
@@ -4221,7 +4235,7 @@ RCS
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The available torque, in Newton meters, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -4234,10 +4248,10 @@ RCS
       .. note::
 
          Precision mode weakens the block, and the available torque follows it. A block
-         driven by :prop:`RCS.InputOverride` is exempt, so :meth:`RCS.OverrideTorque`
+         driven by :prop:`RCS.InputOverride` is exempt, so :meth:`RCS.OverrideWrench`
          can report the larger torque an override reaches.
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableForce { get; }
+   .. property:: AxisRange AvailableForce { get; }
 
       The available force, in Newtons, that can be produced by this RCS,
       in the positive and negative x, y and z axes of the vessel. These axes
@@ -4250,7 +4264,7 @@ RCS
       .. note::
 
          Precision mode weakens the block, and the available force follows it. A block
-         driven by :prop:`RCS.InputOverride` is exempt, so :meth:`RCS.OverrideForce`
+         driven by :prop:`RCS.InputOverride` is exempt, so :meth:`RCS.OverrideWrench`
          can report the larger force an override reaches.
 
    .. property:: System.Tuple<double,double,double> Force { get; }
@@ -4269,45 +4283,23 @@ RCS
 
       :Game Scenes: Flight
 
-   .. function:: System.Tuple<double,double,double> OverrideForce(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
+   .. function:: Wrench OverrideWrench(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
 
-      The force the given demands would produce, in Newtons. The vector is in the
-      vessel's reference frame (:prop:`Vessel.ReferenceFrame`).
-      Returns zero if the RCS is inactive.
+      The force and torque the given demands would produce, in Newtons and Newton meters.
 
       :parameters:
 
        * **rotation** -- A rotation demand, as set by :prop:`RCS.RotationOverride`.
        * **translation** -- A translation demand, as set by :prop:`RCS.TranslationOverride`.
 
-      :returns: The force as a vector.
+      :returns: The force, and the torque about the vessel's center of mass, in the vessel's reference frame (:prop:`Vessel.ReferenceFrame`), or zero if the RCS is inactive.
       :Game Scenes: Flight
 
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :prop:`RCS.Force` includes.
-
-   .. function:: System.Tuple<double,double,double> OverrideTorque(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
-
-      The torque the given demands would produce about the vessel's center of mass, in
-      Newton meters. The vector is in the vessel's reference frame
-      (:prop:`Vessel.ReferenceFrame`). Returns zero if the RCS is inactive.
-
-      :parameters:
-
-       * **rotation** -- A rotation demand, as set by :prop:`RCS.RotationOverride`.
-       * **translation** -- A translation demand, as set by :prop:`RCS.TranslationOverride`.
-
-      :returns: The torque as a vector.
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :prop:`RCS.Torque` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust, which
+         :prop:`RCS.Force` and :prop:`RCS.Torque` include.
 
    .. property:: float AvailableThrust { get; }
 

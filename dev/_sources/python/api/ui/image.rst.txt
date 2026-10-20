@@ -103,11 +103,10 @@ Image
    .. attribute:: color
 
       The color the image is tinted with, or the color of the rectangle when no
-      picture is set, as (red, green, blue, alpha). An alpha of 0 is fully
-      transparent and 1 is fully opaque.
+      picture is set.
 
       :Attribute: Can be read or written
-      :rtype: tuple(float, float, float, float)
+      :rtype: :class:`StdLib.ColorRGBA`
    
 
    .. method:: remove()

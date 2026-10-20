@@ -724,14 +724,13 @@ directions.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_Layout_t.krpc_UI_Layout_Padding">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Layout_Padding</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_int32_int32_int32_int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_Layout_t" title="krpc_UI_Layout_t"><span class="n"><span class="pre">krpc_UI_Layout_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Layout_t.krpc_UI_Layout_Padding" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Layout_Padding</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_Padding_t" title="krpc_UI_Padding_t"><span class="n"><span class="pre">krpc_UI_Padding_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_UI_Layout_t" title="krpc_UI_Layout_t"><span class="n"><span class="pre">krpc_UI_Layout_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Layout_t.krpc_UI_Layout_Padding" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_Layout_t.krpc_UI_Layout_set_Padding">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Layout_set_Padding</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_Layout_t" title="krpc_UI_Layout_t"><span class="n"><span class="pre">krpc_UI_Layout_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_int32_int32_int32_int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Layout_t.krpc_UI_Layout_set_Padding" title="Link to this definition">#</a><br /></dt>
-<dd><p>The gap left inside the edges of the panel, in whole pixels, as
-(left, right, top, bottom).</p>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Layout_set_Padding</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_UI_Layout_t" title="krpc_UI_Layout_t"><span class="n"><span class="pre">krpc_UI_Layout_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#c.krpc_UI_Padding_t" title="krpc_UI_Padding_t"><span class="n"><span class="pre">krpc_UI_Padding_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Layout_t.krpc_UI_Layout_set_Padding" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap left inside the edges of the panel.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -790,6 +789,40 @@ the constraint is <code class="xref c c-macro docutils literal notranslate"><spa
 <p class="admonition-title">Note</p>
 <p>Only applies to a grid layout. Throws an exception for the other layouts.</p>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_UI_Padding_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Padding_t</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap left inside each edge of a layout, in whole pixels.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_UI_Layout_Padding()</span></code>.</p>
+</div>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_UI_Padding_t.left">
+<span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">left</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.left" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap inside the left edge.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_UI_Padding_t.right">
+<span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">right</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.right" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap inside the right edge.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_UI_Padding_t.top">
+<span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">top</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.top" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap inside the top edge.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_UI_Padding_t.bottom">
+<span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bottom</span></span></span><a class="headerlink" href="#c.krpc_UI_Padding_t.bottom" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap inside the bottom edge.</p>
 </dd></dl>
 
 </dd></dl>

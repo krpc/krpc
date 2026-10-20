@@ -1278,8 +1278,8 @@ if it is installed.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.HighlightColor">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">HighlightColor</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.HighlightColor" title="Link to this definition">#</a></dt>
-<dd><p>The color used to highlight the part, as an RGB triple.</p>
+<a class="reference internal" href="../stdlib.html#struct-KRPC.Client.Services.StdLib.ColorRGB" title="struct: KRPC.Client.Services.StdLib.ColorRGB"><span class="pre">StdLib.ColorRGB</span></a> <span class="sig-name descname"><span class="pre">HighlightColor</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.HighlightColor" title="Link to this definition">#</a></dt>
+<dd><p>The color used to highlight the part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -2321,7 +2321,7 @@ If the part is physicsless in flight, this is equivalent to <a class="reference 
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Part.BoundingBox">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-2" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">BoundingBox</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Part.BoundingBox" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.BoundingBox" title="struct: KRPC.Client.Services.SpaceCenter.BoundingBox"><span class="pre">BoundingBox</span></a> <span class="sig-name descname"><span class="pre">BoundingBox</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Part.BoundingBox" title="Link to this definition">#</a></dt>
 <dd><p>The axis-aligned bounding box of the part in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2330,7 +2330,7 @@ If the part is physicsless in flight, this is equivalent to <a class="reference 
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box, as position vectors.</p>
+<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -3838,7 +3838,7 @@ value between -1 and 1, mapped onto the surface’s deploy angle range.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ControlSurface.AvailableTorque">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-2" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AvailableTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.AvailableTorque" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">AvailableTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.AvailableTorque" title="Link to this definition">#</a></dt>
 <dd><p>The available torque, in Newton meters, that can be produced by this control surface,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.</p>
@@ -4758,7 +4758,7 @@ returns the current actuation.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Engine.AvailableTorque">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-2" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AvailableTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Engine.AvailableTorque" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">AvailableTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Engine.AvailableTorque" title="Link to this definition">#</a></dt>
 <dd><p>The available torque, in Newton meters, that can be produced by this engine,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.
@@ -5173,7 +5173,7 @@ given specific impulse.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Experiment.Data">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.ScienceData" title="class: KRPC.Client.Services.SpaceCenter.ScienceData"><span class="pre">ScienceData</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Data</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Experiment.Data" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#struct-KRPC.Client.Services.SpaceCenter.ScienceData" title="struct: KRPC.Client.Services.SpaceCenter.ScienceData"><span class="pre">ScienceData</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Data</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Experiment.Data" title="Link to this definition">#</a></dt>
 <dd><p>The data contained in this experiment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -5206,7 +5206,7 @@ given specific impulse.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Experiment.ScienceSubject">
-<a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.ScienceSubject" title="class: KRPC.Client.Services.SpaceCenter.ScienceSubject"><span class="pre">ScienceSubject</span></a> <span class="sig-name descname"><span class="pre">ScienceSubject</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Experiment.ScienceSubject" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#struct-KRPC.Client.Services.SpaceCenter.ScienceSubject" title="struct: KRPC.Client.Services.SpaceCenter.ScienceSubject"><span class="pre">ScienceSubject</span></a><span class="pre">?</span> <span class="sig-name descname"><span class="pre">ScienceSubject</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Experiment.ScienceSubject" title="Link to this definition">#</a></dt>
 <dd><p>Containing information on the corresponding specific science result for the current
 conditions. Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if the experiment is unavailable.</p>
 <dl class="field-list simple">
@@ -5218,58 +5218,56 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 
 </dd></dl>
 
-<dl class="cs class">
-<dt class="sig sig-object cs" id="class-KRPC.Client.Services.SpaceCenter.ScienceData">
-<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">ScienceData</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.ScienceData" title="Link to this definition">#</a></dt>
+<dl class="cs struct">
+<dt class="sig sig-object cs" id="struct-KRPC.Client.Services.SpaceCenter.ScienceData">
+<span class="property"><span class="pre">struct</span> </span><span class="sig-name descname"><span class="pre">ScienceData</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.SpaceCenter.ScienceData" title="Link to this definition">#</a></dt>
 <dd><p>Obtained by calling <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Experiment.Data" title="property: KRPC.Client.Services.SpaceCenter.Experiment.Data"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Experiment.Data</span></code></a>.</p>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.ScienceData.ScienceData">
+<span class="sig-name descname"><span class="pre">ScienceData</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">dataAmount</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">scienceValue</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">transmitValue</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.ScienceData.ScienceData" title="Link to this definition">#</a></dt>
+<dd><p>Construct a ScienceData from the values of its fields.</p>
+</dd></dl>
+
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ScienceData.DataAmount">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">DataAmount</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceData.DataAmount" title="Link to this definition">#</a></dt>
 <dd><p>Data amount.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ScienceData.ScienceValue">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">ScienceValue</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceData.ScienceValue" title="Link to this definition">#</a></dt>
 <dd><p>Science value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ScienceData.TransmitValue">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">TransmitValue</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceData.TransmitValue" title="Link to this definition">#</a></dt>
 <dd><p>Transmit value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="cs class">
-<dt class="sig sig-object cs" id="class-KRPC.Client.Services.SpaceCenter.ScienceSubject">
-<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">ScienceSubject</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.ScienceSubject" title="Link to this definition">#</a></dt>
+<dl class="cs struct">
+<dt class="sig sig-object cs" id="struct-KRPC.Client.Services.SpaceCenter.ScienceSubject">
+<span class="property"><span class="pre">struct</span> </span><span class="sig-name descname"><span class="pre">ScienceSubject</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.SpaceCenter.ScienceSubject" title="Link to this definition">#</a></dt>
 <dd><p>Obtained by calling <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Experiment.ScienceSubject" title="property: KRPC.Client.Services.SpaceCenter.Experiment.ScienceSubject"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Experiment.ScienceSubject</span></code></a>.</p>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.ScienceSubject.ScienceSubject">
+<span class="sig-name descname"><span class="pre">ScienceSubject</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">id</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">title</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <em><span class="pre">isComplete</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">science</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">scienceCap</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">dataScale</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">subjectValue</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">scientificValue</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.ScienceSubject.ScienceSubject" title="Link to this definition">#</a></dt>
+<dd><p>Construct a ScienceSubject from the values of its fields.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ScienceSubject.Id">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <span class="sig-name descname"><span class="pre">Id</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceSubject.Id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of the subject, e.g. <code class="docutils literal notranslate"><span class="pre">crewReport&#64;KerbinSrfLandedLaunchPad</span></code>.</p>
+</dd></dl>
+
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ScienceSubject.Title">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <span class="sig-name descname"><span class="pre">Title</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceSubject.Title" title="Link to this definition">#</a></dt>
-<dd><p>Title of science subject, displayed in science archives</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
+<dd><p>The title of the subject, as shown in the science archives.</p>
 </dd></dl>
 
 <dl class="cs property">
@@ -5281,11 +5279,6 @@ only updated after transmission/recovery, this reflects fully mining the subject
 repeated experiments, not whether a single run has produced data. To check whether a run
 has produced data, and how valuable it is, use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Experiment.HasData" title="property: KRPC.Client.Services.SpaceCenter.Experiment.HasData"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Experiment.HasData</span></code></a> and
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.ScienceData.TransmitValue" title="property: KRPC.Client.Services.SpaceCenter.ScienceData.TransmitValue"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ScienceData.TransmitValue</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs property">
@@ -5293,44 +5286,24 @@ has produced data, and how valuable it is, use <a class="reference internal" hre
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Science</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceSubject.Science" title="Link to this definition">#</a></dt>
 <dd><p>Amount of science already earned from this subject, not updated until after
 transmission/recovery.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ScienceSubject.ScienceCap">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">ScienceCap</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceSubject.ScienceCap" title="Link to this definition">#</a></dt>
 <dd><p>Total science allowable for this subject.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ScienceSubject.DataScale">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">DataScale</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceSubject.DataScale" title="Link to this definition">#</a></dt>
 <dd><p>Multiply science value by this to determine data amount in mits.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ScienceSubject.SubjectValue">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">SubjectValue</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceSubject.SubjectValue" title="Link to this definition">#</a></dt>
 <dd><p>Multiplier for specific Celestial Body/Experiment Situation combination.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs property">
@@ -5338,11 +5311,6 @@ transmission/recovery.</p>
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">ScientificValue</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceSubject.ScientificValue" title="Link to this definition">#</a></dt>
 <dd><p>Diminishing value multiplier for decreasing the science value returned from repeated
 experiments.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -5585,8 +5553,8 @@ Returns an error if you try to deploy fixed landing gear.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Light.Color">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Color</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Light.Color" title="Link to this definition">#</a></dt>
-<dd><p>The color of the light, as an RGB triple.</p>
+<a class="reference internal" href="../stdlib.html#struct-KRPC.Client.Services.StdLib.ColorRGB" title="struct: KRPC.Client.Services.StdLib.ColorRGB"><span class="pre">StdLib.ColorRGB</span></a> <span class="sig-name descname"><span class="pre">Color</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Light.Color" title="Link to this definition">#</a></dt>
+<dd><p>The color of the light.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -6271,7 +6239,7 @@ retracting.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ReactionWheel.AvailableTorque">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-2" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AvailableTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ReactionWheel.AvailableTorque" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">AvailableTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ReactionWheel.AvailableTorque" title="Link to this definition">#</a></dt>
 <dd><p>The available torque, in Newton meters, that can be produced by this reaction wheel,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.
@@ -6285,7 +6253,7 @@ Returns zero if the reaction wheel is inactive or broken.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ReactionWheel.MaxTorque">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-2" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">MaxTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ReactionWheel.MaxTorque" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">MaxTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ReactionWheel.MaxTorque" title="Link to this definition">#</a></dt>
 <dd><p>The maximum torque, in Newton meters, that can be produced by this reaction wheel,
 when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
 These axes correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.</p>
@@ -6562,7 +6530,7 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.RoboticController.Axes">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Axes</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.RoboticController.Axes" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#struct-KRPC.Client.Services.SpaceCenter.RoboticAxis" title="struct: KRPC.Client.Services.SpaceCenter.RoboticAxis"><span class="pre">RoboticAxis</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Axes</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.RoboticController.Axes" title="Link to this definition">#</a></dt>
 <dd><p>The axes for the controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -6631,6 +6599,34 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs struct">
+<dt class="sig sig-object cs" id="struct-KRPC.Client.Services.SpaceCenter.RoboticAxis">
+<span class="property"><span class="pre">struct</span> </span><span class="sig-name descname"><span class="pre">RoboticAxis</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.SpaceCenter.RoboticAxis" title="Link to this definition">#</a></dt>
+<dd><p>An axis of a robotic controller.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.RoboticController.Axes" title="function: KRPC.Client.Services.SpaceCenter.RoboticController.Axes"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RoboticController.Axes</span></code></a>.</p>
+</div>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.RoboticAxis.RoboticAxis">
+<span class="sig-name descname"><span class="pre">RoboticAxis</span></span> <span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Module" title="class: KRPC.Client.Services.SpaceCenter.Module"><span class="pre">Module</span></a> <em><span class="pre">module</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">fieldName</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.RoboticAxis.RoboticAxis" title="Link to this definition">#</a></dt>
+<dd><p>Construct a RoboticAxis from the values of its fields.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.RoboticAxis.Module">
+<a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Module" title="class: KRPC.Client.Services.SpaceCenter.Module"><span class="pre">Module</span></a> <span class="sig-name descname"><span class="pre">Module</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticAxis.Module" title="Link to this definition">#</a></dt>
+<dd><p>The part module the axis belongs to.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.RoboticAxis.FieldName">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <span class="sig-name descname"><span class="pre">FieldName</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticAxis.FieldName" title="Link to this definition">#</a></dt>
+<dd><p>The name of the field the axis controls.</p>
 </dd></dl>
 
 </dd></dl>
@@ -7309,7 +7305,7 @@ and 1.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.RCS.AvailableTorque">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-2" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AvailableTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RCS.AvailableTorque" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">AvailableTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RCS.AvailableTorque" title="Link to this definition">#</a></dt>
 <dd><p>The available torque, in Newton meters, that can be produced by this RCS,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.
@@ -7322,14 +7318,14 @@ Returns zero if RCS is disable.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Precision mode weakens the block, and the available torque follows it. A block
-driven by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.InputOverride" title="property: KRPC.Client.Services.SpaceCenter.RCS.InputOverride"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.InputOverride</span></code></a> is exempt, so <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.RCS.OverrideTorque" title="function: KRPC.Client.Services.SpaceCenter.RCS.OverrideTorque"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RCS.OverrideTorque</span></code></a>
+driven by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.InputOverride" title="property: KRPC.Client.Services.SpaceCenter.RCS.InputOverride"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.InputOverride</span></code></a> is exempt, so <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.RCS.OverrideWrench" title="function: KRPC.Client.Services.SpaceCenter.RCS.OverrideWrench"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RCS.OverrideWrench</span></code></a>
 can report the larger torque an override reaches.</p>
 </div>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.RCS.AvailableForce">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-2" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">AvailableForce</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RCS.AvailableForce" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a> <span class="sig-name descname"><span class="pre">AvailableForce</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RCS.AvailableForce" title="Link to this definition">#</a></dt>
 <dd><p>The available force, in Newtons, that can be produced by this RCS,
 in the positive and negative x, y and z axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.
@@ -7342,7 +7338,7 @@ Returns zero if RCS is disabled.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Precision mode weakens the block, and the available force follows it. A block
-driven by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.InputOverride" title="property: KRPC.Client.Services.SpaceCenter.RCS.InputOverride"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.InputOverride</span></code></a> is exempt, so <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.RCS.OverrideForce" title="function: KRPC.Client.Services.SpaceCenter.RCS.OverrideForce"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RCS.OverrideForce</span></code></a>
+driven by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.InputOverride" title="property: KRPC.Client.Services.SpaceCenter.RCS.InputOverride"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.InputOverride</span></code></a> is exempt, so <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.RCS.OverrideWrench" title="function: KRPC.Client.Services.SpaceCenter.RCS.OverrideWrench"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">RCS.OverrideWrench</span></code></a>
 can report the larger force an override reaches.</p>
 </div>
 </dd></dl>
@@ -7374,11 +7370,9 @@ in Newton meters. The vector is in the vessel’s reference frame
 </dd></dl>
 
 <dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.RCS.OverrideForce">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">OverrideForce</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <em><span class="pre">rotation</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <em><span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.RCS.OverrideForce" title="Link to this definition">#</a></dt>
-<dd><p>The force the given demands would produce, in Newtons. The vector is in the
-vessel’s reference frame (<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>).
-Returns zero if the RCS is inactive.</p>
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.RCS.OverrideWrench">
+<a class="reference internal" href="flight.html#struct-KRPC.Client.Services.SpaceCenter.Wrench" title="struct: KRPC.Client.Services.SpaceCenter.Wrench"><span class="pre">Wrench</span></a> <span class="sig-name descname"><span class="pre">OverrideWrench</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <em><span class="pre">rotation</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <em><span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.RCS.OverrideWrench" title="Link to this definition">#</a></dt>
+<dd><p>The force and torque the given demands would produce, in Newtons and Newton meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -7387,7 +7381,7 @@ Returns zero if the RCS is inactive.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The force as a vector.</p>
+<dd class="field-even"><p>The force, and the torque about the vessel’s center of mass, in the vessel’s reference frame (<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>), or zero if the RCS is inactive.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -7395,35 +7389,8 @@ Returns zero if the RCS is inactive.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out full thrust,
-which <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Force" title="property: KRPC.Client.Services.SpaceCenter.RCS.Force"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.Force</span></code></a> includes.</p>
-</div>
-</dd></dl>
-
-<dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.RCS.OverrideTorque">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">OverrideTorque</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <em><span class="pre">rotation</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <em><span class="pre">translation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.RCS.OverrideTorque" title="Link to this definition">#</a></dt>
-<dd><p>The torque the given demands would produce about the vessel’s center of mass, in
-Newton meters. The vector is in the vessel’s reference frame
-(<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>). Returns zero if the RCS is inactive.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rotation</strong> – A rotation demand, as set by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.RotationOverride" title="property: KRPC.Client.Services.SpaceCenter.RCS.RotationOverride"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.RotationOverride</span></code></a>.</p></li>
-<li><p><strong>translation</strong> – A translation demand, as set by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.TranslationOverride" title="property: KRPC.Client.Services.SpaceCenter.RCS.TranslationOverride"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.TranslationOverride</span></code></a>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The torque as a vector.</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out full thrust,
-which <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Torque" title="property: KRPC.Client.Services.SpaceCenter.RCS.Torque"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.Torque</span></code></a> includes.</p>
+<p>The demands do not have to be applied. The prediction leaves out full thrust, which
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Force" title="property: KRPC.Client.Services.SpaceCenter.RCS.Force"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.Force</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Torque" title="property: KRPC.Client.Services.SpaceCenter.RCS.Torque"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">RCS.Torque</span></code></a> include.</p>
 </div>
 </dd></dl>
 

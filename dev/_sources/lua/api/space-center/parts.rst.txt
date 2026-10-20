@@ -362,12 +362,12 @@ Part
 
          The highlighting is removed when the client that enabled it disconnects.
 
-   .. attribute:: highlight_color: Tuple
+   .. attribute:: highlight_color: StdLib.ColorRGB
 
-      The color used to highlight the part, as an RGB triple.
+      The color used to highlight the part.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`StdLib.ColorRGB`
 
    .. attribute:: cost: number
 
@@ -1051,8 +1051,8 @@ Part
       The axis-aligned bounding box of the part in the given reference frame.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-      :rtype: Tuple
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :rtype: :class:`SpaceCenter.BoundingBox`
 
       .. note::
 
@@ -2033,14 +2033,14 @@ Control Surface
       :Attribute: Read-only, cannot be set
       :rtype: number
 
-   .. attribute:: available_torque: Tuple
+   .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The available torque, in Newton meters, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :attr:`SpaceCenter.Vessel.reference_frame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
 
 
@@ -2669,7 +2669,7 @@ Engine
       :Attribute: Can be read or written
       :rtype: Tuple
 
-   .. attribute:: available_torque: Tuple
+   .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The available torque, in Newton meters, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -2677,7 +2677,7 @@ Engine
       Returns zero if the engine is inactive, or not gimballed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: can_reverse_thrust: boolean
 
@@ -2965,7 +2965,7 @@ Experiment
       conditions. Returns ``nil`` if the experiment is unavailable.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ScienceSubject`
+      :rtype: :class:`SpaceCenter.ScienceSubject` or ``Types.none``
 
 
 
@@ -2973,38 +2973,41 @@ Experiment
 
    Obtained by calling :attr:`SpaceCenter.Experiment.data`.
 
+
    .. attribute:: data_amount: number
 
       Data amount.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: science_value: number
 
       Science value.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: transmit_value: number
 
       Transmit value.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
-
 
 
 .. class:: ScienceSubject
 
    Obtained by calling :attr:`SpaceCenter.Experiment.science_subject`.
 
+
+   .. attribute:: id: string
+
+      The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
+
+      :rtype: string
+
    .. attribute:: title: string
 
-      Title of science subject, displayed in science archives
+      The title of the subject, as shown in the science archives.
 
-      :Attribute: Read-only, cannot be set
       :rtype: string
 
    .. attribute:: is_complete: boolean
@@ -3016,7 +3019,6 @@ Experiment
       has produced data, and how valuable it is, use :attr:`SpaceCenter.Experiment.has_data` and
       :attr:`SpaceCenter.ScienceData.transmit_value`.
 
-      :Attribute: Read-only, cannot be set
       :rtype: boolean
 
    .. attribute:: science: number
@@ -3024,28 +3026,24 @@ Experiment
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: science_cap: number
 
       Total science allowable for this subject.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: data_scale: number
 
       Multiply science value by this to determine data amount in mits.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: subject_value: number
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: scientific_value: number
@@ -3053,9 +3051,7 @@ Experiment
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
-
 
 
 Fairing
@@ -3225,12 +3221,12 @@ Light
       :Attribute: Can be read or written
       :rtype: boolean
 
-   .. attribute:: color: Tuple
+   .. attribute:: color: StdLib.ColorRGB
 
-      The color of the light, as an RGB triple.
+      The color of the light.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`StdLib.ColorRGB`
 
    .. attribute:: blink: boolean
 
@@ -3682,7 +3678,7 @@ Reaction Wheel
       :Attribute: Read-only, cannot be set
       :rtype: boolean
 
-   .. attribute:: available_torque: Tuple
+   .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The available torque, in Newton meters, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -3690,16 +3686,16 @@ Reaction Wheel
       Returns zero if the reaction wheel is inactive or broken.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: max_torque: Tuple
+   .. attribute:: max_torque: SpaceCenter.AxisRange
 
       The maximum torque, in Newton meters, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :attr:`SpaceCenter.Vessel.reference_frame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: authority_limiter: number
 
@@ -3902,6 +3898,26 @@ Robotic Controller
       :returns: Returns ``True`` if the axis is cleared successfully.
       :rtype: boolean
 
+
+
+.. class:: RoboticAxis
+
+   An axis of a robotic controller.
+
+   .. note::
+
+      See :meth:`SpaceCenter.RoboticController.axes`.
+   .. attribute:: module: SpaceCenter.Module
+
+      The part module the axis belongs to.
+
+      :rtype: :class:`SpaceCenter.Module`
+
+   .. attribute:: field_name: string
+
+      The name of the field the axis controls.
+
+      :rtype: string
 
 
 Robotic Hinge
@@ -4348,7 +4364,7 @@ RCS
       :Attribute: Can be read or written
       :rtype: Tuple
 
-   .. attribute:: available_torque: Tuple
+   .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The available torque, in Newton meters, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -4356,15 +4372,15 @@ RCS
       Returns zero if RCS is disable.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
       .. note::
 
          Precision mode weakens the block, and the available torque follows it. A block
-         driven by :attr:`SpaceCenter.RCS.input_override` is exempt, so :meth:`SpaceCenter.RCS.override_torque`
+         driven by :attr:`SpaceCenter.RCS.input_override` is exempt, so :meth:`SpaceCenter.RCS.override_wrench`
          can report the larger torque an override reaches.
 
-   .. attribute:: available_force: Tuple
+   .. attribute:: available_force: SpaceCenter.AxisRange
 
       The available force, in Newtons, that can be produced by this RCS,
       in the positive and negative x, y and z axes of the vessel. These axes
@@ -4372,12 +4388,12 @@ RCS
       Returns zero if RCS is disabled.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
       .. note::
 
          Precision mode weakens the block, and the available force follows it. A block
-         driven by :attr:`SpaceCenter.RCS.input_override` is exempt, so :meth:`SpaceCenter.RCS.override_force`
+         driven by :attr:`SpaceCenter.RCS.input_override` is exempt, so :meth:`SpaceCenter.RCS.override_wrench`
          can report the larger force an override reaches.
 
    .. attribute:: force: Tuple
@@ -4398,37 +4414,19 @@ RCS
       :Attribute: Read-only, cannot be set
       :rtype: Tuple
 
-   .. method:: override_force(rotation, translation)
+   .. method:: override_wrench(rotation, translation)
 
-      The force the given demands would produce, in Newtons. The vector is in the
-      vessel's reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
-      Returns zero if the RCS is inactive.
+      The force and torque the given demands would produce, in Newtons and Newton meters.
 
       :param Tuple rotation: A rotation demand, as set by :attr:`SpaceCenter.RCS.rotation_override`.
       :param Tuple translation: A translation demand, as set by :attr:`SpaceCenter.RCS.translation_override`.
-      :returns: The force as a vector.
-      :rtype: Tuple
+      :returns: The force, and the torque about the vessel's center of mass, in the vessel's reference frame (:attr:`SpaceCenter.Vessel.reference_frame`), or zero if the RCS is inactive.
+      :rtype: :class:`SpaceCenter.Wrench`
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :attr:`SpaceCenter.RCS.force` includes.
-
-   .. method:: override_torque(rotation, translation)
-
-      The torque the given demands would produce about the vessel's center of mass, in
-      Newton meters. The vector is in the vessel's reference frame
-      (:attr:`SpaceCenter.Vessel.reference_frame`). Returns zero if the RCS is inactive.
-
-      :param Tuple rotation: A rotation demand, as set by :attr:`SpaceCenter.RCS.rotation_override`.
-      :param Tuple translation: A translation demand, as set by :attr:`SpaceCenter.RCS.translation_override`.
-      :returns: The torque as a vector.
-      :rtype: Tuple
-
-      .. note::
-
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :attr:`SpaceCenter.RCS.torque` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust, which
+         :attr:`SpaceCenter.RCS.force` and :attr:`SpaceCenter.RCS.torque` include.
 
    .. attribute:: available_thrust: number
 

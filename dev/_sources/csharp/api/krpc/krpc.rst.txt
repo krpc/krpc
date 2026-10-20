@@ -34,10 +34,9 @@ KRPC
 
       :Game Scenes: All
 
-   .. property:: System.Collections.Generic.IList<System.Tuple<byte[],string,string>> Clients { get; }
+   .. property:: System.Collections.Generic.IList<ClientInfo> Clients { get; }
 
-      A list of RPC clients that are currently connected to the server.
-      Each entry in the list is a clients identifier, name and address.
+      The RPC clients that are currently connected to the server.
 
       :Game Scenes: All
 
@@ -258,6 +257,32 @@ KRPC
       The administration facility. This is a pseudo-scene, shown when the
       administration facility is open within the space center scene.
 
+
+
+.. struct:: ClientInfo
+
+   A client connected to the server.
+
+   .. note::
+
+      See :prop:`KRPC.Clients <KRPC.KRPC.Clients>`.
+
+   .. function:: ClientInfo(byte[] id, string name, string address)
+
+      Construct a ClientInfo from the values of its fields.
+
+
+   .. property:: byte[] Id { get; }
+
+      The identifier of the client.
+
+   .. property:: string Name { get; }
+
+      The name of the client, or an empty string if it has no name.
+
+   .. property:: string Address { get; }
+
+      The address of the client.
 
 
 .. class:: InvalidOperationException

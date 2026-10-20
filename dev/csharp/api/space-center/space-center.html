@@ -779,7 +779,7 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;MakingHist
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.SpaceCenter.LaunchSites">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.LaunchSite" title="class: KRPC.Client.Services.SpaceCenter.LaunchSite"><span class="pre">LaunchSite</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">LaunchSites</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.LaunchSites" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#struct-KRPC.Client.Services.SpaceCenter.LaunchSite" title="struct: KRPC.Client.Services.SpaceCenter.LaunchSite"><span class="pre">LaunchSite</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">LaunchSites</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.LaunchSites" title="Link to this definition">#</a></dt>
 <dd><p>A list of available launch sites.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1773,42 +1773,33 @@ These may be combined with bitwise logic.</p>
 
 </dd></dl>
 
-<dl class="cs class">
-<dt class="sig sig-object cs" id="class-KRPC.Client.Services.SpaceCenter.LaunchSite">
-<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">LaunchSite</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.LaunchSite" title="Link to this definition">#</a></dt>
+<dl class="cs struct">
+<dt class="sig sig-object cs" id="struct-KRPC.Client.Services.SpaceCenter.LaunchSite">
+<span class="property"><span class="pre">struct</span> </span><span class="sig-name descname"><span class="pre">LaunchSite</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.SpaceCenter.LaunchSite" title="Link to this definition">#</a></dt>
 <dd><p>A place where craft can be launched from.
 More of these can be added with mods like Kerbal Konstructs.</p>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.LaunchSite.LaunchSite">
+<span class="sig-name descname"><span class="pre">LaunchSite</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">name</span></em>, <a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="class: KRPC.Client.Services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <em><span class="pre">body</span></em>, <a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.EditorFacility" title="enum: KRPC.Client.Services.SpaceCenter.EditorFacility"><span class="pre">EditorFacility</span></a> <em><span class="pre">editorFacility</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.LaunchSite.LaunchSite" title="Link to this definition">#</a></dt>
+<dd><p>Construct a LaunchSite from the values of its fields.</p>
+</dd></dl>
+
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.LaunchSite.Name">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <span class="sig-name descname"><span class="pre">Name</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.LaunchSite.Name" title="Link to this definition">#</a></dt>
 <dd><p>The name of the launch site.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.LaunchSite.Body">
 <a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="class: KRPC.Client.Services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">Body</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.LaunchSite.Body" title="Link to this definition">#</a></dt>
 <dd><p>The celestial body the launch site is on.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.LaunchSite.EditorFacility">
 <a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.EditorFacility" title="enum: KRPC.Client.Services.SpaceCenter.EditorFacility"><span class="pre">EditorFacility</span></a> <span class="sig-name descname"><span class="pre">EditorFacility</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.LaunchSite.EditorFacility" title="Link to this definition">#</a></dt>
 <dd><p>Which editor is normally used for this launch site.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>

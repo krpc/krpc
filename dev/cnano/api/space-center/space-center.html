@@ -751,7 +751,7 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;MakingHist
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_LaunchSites">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_LaunchSites</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_LaunchSites" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_LaunchSites</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_SpaceCenter_LaunchSite_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_LaunchSites" title="Link to this definition">#</a><br /></dt>
 <dd><p>A list of available launch sites.</p>
 </dd></dl>
 
@@ -1679,21 +1679,21 @@ These may be combined with bitwise logic.</p>
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_LaunchSite_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_LaunchSite_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>A place where craft can be launched from.
 More of these can be added with mods like Kerbal Konstructs.</p>
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_LaunchSite_t.krpc_SpaceCenter_LaunchSite_Name">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_LaunchSite_Name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_LaunchSite_t" title="krpc_SpaceCenter_LaunchSite_t"><span class="n"><span class="pre">krpc_SpaceCenter_LaunchSite_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_LaunchSite_t.krpc_SpaceCenter_LaunchSite_Name" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_LaunchSite_t.name">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_LaunchSite_t.name" title="Link to this definition">#</a><br /></dt>
 <dd><p>The name of the launch site.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_LaunchSite_t.krpc_SpaceCenter_LaunchSite_Body">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_LaunchSite_Body</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_LaunchSite_t" title="krpc_SpaceCenter_LaunchSite_t"><span class="n"><span class="pre">krpc_SpaceCenter_LaunchSite_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_LaunchSite_t.krpc_SpaceCenter_LaunchSite_Body" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_LaunchSite_t.body">
+<a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">body</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_LaunchSite_t.body" title="Link to this definition">#</a><br /></dt>
 <dd><p>The celestial body the launch site is on.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_LaunchSite_t.krpc_SpaceCenter_LaunchSite_EditorFacility">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_LaunchSite_EditorFacility</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorFacility_t" title="krpc_SpaceCenter_EditorFacility_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorFacility_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_LaunchSite_t" title="krpc_SpaceCenter_LaunchSite_t"><span class="n"><span class="pre">krpc_SpaceCenter_LaunchSite_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_LaunchSite_t.krpc_SpaceCenter_LaunchSite_EditorFacility" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_LaunchSite_t.editor_facility">
+<a class="reference internal" href="#c.krpc_SpaceCenter_EditorFacility_t" title="krpc_SpaceCenter_EditorFacility_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorFacility_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">editor_facility</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_LaunchSite_t.editor_facility" title="Link to this definition">#</a><br /></dt>
 <dd><p>Which editor is normally used for this launch site.</p>
 </dd></dl>
 
@@ -1703,7 +1703,7 @@ More of these can be added with mods like Kerbal Konstructs.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorFacility_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorFacility_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorFacility_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Editor facility.
-See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_LaunchSite_EditorFacility()</span></code>.</p>
+See <a class="reference internal" href="#c.krpc_SpaceCenter_LaunchSite_t.editor_facility" title="krpc_SpaceCenter_LaunchSite_t.editor_facility"><code class="xref c c-member docutils literal notranslate"><span class="pre">krpc_SpaceCenter_LaunchSite_t.editor_facility</span></code></a>.</p>
 <dl class="c macro">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorFacility_t.KRPC_SPACECENTER_EDITORFACILITY_VAB">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_EDITORFACILITY_VAB</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorFacility_t.KRPC_SPACECENTER_EDITORFACILITY_VAB" title="Link to this definition">#</a><br /></dt>

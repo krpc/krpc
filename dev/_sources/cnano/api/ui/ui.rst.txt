@@ -40,7 +40,7 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. function:: krpc_error_t krpc_UI_Message(krpc_connection_t connection, const char * content, float duration, krpc_UI_MessagePosition_t position, const krpc_tuple_double_double_double_double_t * color, float size)
+.. function:: krpc_error_t krpc_UI_Message(krpc_connection_t connection, const char * content, float duration, krpc_UI_MessagePosition_t position, const krpc_StdLib_ColorRGBA_t * color, float size)
 
    Display a message on the screen.
 
@@ -49,7 +49,7 @@ Provides functionality for drawing and interacting with in-game user interface e
     * **content** -- Message content.
     * **duration** -- Duration before the message disappears, in seconds.
     * **position** -- Position to display the message.
-    * **color** -- The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.
+    * **color** -- The color of the message.
     * **size** -- Size of the message, differs per position.
 
    

@@ -20,13 +20,12 @@ Layout
       :Attribute: Can be read or written
       :rtype: number
 
-   .. attribute:: padding: Tuple
+   .. attribute:: padding: UI.Padding
 
-      The gap left inside the edges of the panel, in whole pixels, as
-      (left, right, top, bottom).
+      The gap left inside the edges of the panel.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`UI.Padding`
 
    .. attribute:: child_alignment: UI.TextAnchor
 
@@ -70,6 +69,38 @@ Layout
 
          Only applies to a grid layout. Throws an exception for the other layouts.
 
+
+
+.. class:: Padding
+
+   The gap left inside each edge of a layout, in whole pixels.
+
+   .. note::
+
+      See :attr:`UI.Layout.padding`.
+   .. attribute:: left: number
+
+      The gap inside the left edge.
+
+      :rtype: number
+
+   .. attribute:: right: number
+
+      The gap inside the right edge.
+
+      :rtype: number
+
+   .. attribute:: top: number
+
+      The gap inside the top edge.
+
+      :rtype: number
+
+   .. attribute:: bottom: number
+
+      The gap inside the bottom edge.
+
+      :rtype: number
 
 
 .. class:: GridConstraint

@@ -52,7 +52,7 @@ Sphere
       The color of the object.
 
       :Attribute: Can be read or written
-      :rtype: tuple(float, float, float)
+      :rtype: :class:`StdLib.ColorRGB`
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. attribute:: material

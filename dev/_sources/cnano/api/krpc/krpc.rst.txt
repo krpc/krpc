@@ -39,10 +39,9 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_Clients(krpc_connection_t connection, krpc_list_tuple_bytes_string_string_t * returnValue)
+.. function:: krpc_error_t krpc_KRPC_Clients(krpc_connection_t connection, krpc_list_KRPC_ClientInfo_t * returnValue)
 
-   A list of RPC clients that are currently connected to the server.
-   Each entry in the list is a clients identifier, name and address.
+   The RPC clients that are currently connected to the server.
 
    
 
@@ -294,6 +293,26 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The administration facility. This is a pseudo-scene, shown when the
       administration facility is open within the space center scene.
 
+
+
+.. type:: krpc_KRPC_ClientInfo_t
+
+   A client connected to the server.
+
+   .. note::
+
+      See :func:`krpc_KRPC_Clients`.
+   .. member:: krpc_bytes_t id
+
+      The identifier of the client.
+
+   .. member:: char * name
+
+      The name of the client, or an empty string if it has no name.
+
+   .. member:: char * address
+
+      The address of the client.
 
 
 Exception class InvalidOperationException

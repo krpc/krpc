@@ -49,7 +49,7 @@ Provides functionality for drawing and interacting with in-game user interface e
    :param string content: Message content.
    :param number duration: Duration before the message disappears, in seconds.
    :param UI.MessagePosition position: Position to display the message.
-   :param Tuple color: The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.
+   :param StdLib.ColorRGBA color: The color of the message.
    :param number size: Size of the message, differs per position.
 
    .. note::

@@ -1779,8 +1779,9 @@ installed using pip:</p>
 <span class="go">  language              Language to generate (cnano, cpp, csharp, java,</span>
 <span class="go">                        python) or path to generator</span>
 <span class="go">  service               Name of service to generate</span>
-<span class="go">  input                 Path to service definition JSON file or assembly</span>
-<span class="go">                        DLL(s)</span>
+<span class="go">  input                 Path to service definition JSON file(s) or assembly</span>
+<span class="go">                        DLL(s). JSON files can give the definitions of the</span>
+<span class="go">                        services whose types a DLL's service uses.</span>
 
 <span class="go">options:</span>
 <span class="go">  -h, --help            show this help message and exit</span>
@@ -1809,6 +1810,8 @@ flag).</p>
 another service’s class is generated alongside that service’s assembly; see
 <a class="reference internal" href="#service-api-extension-members"><span class="std std-ref">Extending Other Services</span></a>.</p>
 </div>
+<p>A service that uses a structure from another service also needs the definitions of that service.
+Pass its JSON file from <code class="docutils literal notranslate"><span class="pre">GameData/kRPC</span></code> as another input, e.g. <code class="docutils literal notranslate"><span class="pre">KRPC.StdLib.json</span></code>.</p>
 <p>Generating client code from an assembly DLL requires a copy of Kerbal Space Program and a C# runtime
 to be available on the machine. In contrast, generating client code from a JSON file does not have
 these requirements and so is more portable.</p>

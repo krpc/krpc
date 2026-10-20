@@ -1113,13 +1113,13 @@ if it is installed.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_HighlightColor">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_HighlightColor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_HighlightColor" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_HighlightColor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="../stdlib.html#c.krpc_StdLib_ColorRGB_t" title="krpc_StdLib_ColorRGB_t"><span class="n"><span class="pre">krpc_StdLib_ColorRGB_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_HighlightColor" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_set_HighlightColor">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_set_HighlightColor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_set_HighlightColor" title="Link to this definition">#</a><br /></dt>
-<dd><p>The color used to highlight the part, as an RGB triple.</p>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_set_HighlightColor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#c.krpc_StdLib_ColorRGB_t" title="krpc_StdLib_ColorRGB_t"><span class="n"><span class="pre">krpc_StdLib_ColorRGB_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_set_HighlightColor" title="Link to this definition">#</a><br /></dt>
+<dd><p>The color used to highlight the part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1926,7 +1926,7 @@ If the part is physicsless in flight, this is equivalent to <a class="reference 
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BoundingBox">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_BoundingBox</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_tuple_double_double_double_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BoundingBox" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_BoundingBox</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_BoundingBox_t" title="krpc_SpaceCenter_BoundingBox_t"><span class="n"><span class="pre">krpc_SpaceCenter_BoundingBox_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_BoundingBox" title="Link to this definition">#</a><br /></dt>
 <dd><p>The axis-aligned bounding box of the part in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1935,7 +1935,7 @@ If the part is physicsless in flight, this is equivalent to <a class="reference 
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box, as position vectors.</p>
+<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -3355,7 +3355,7 @@ value between -1 and 1, mapped onto the surface’s deploy angle range.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_AvailableTorque">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_AvailableTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_tuple_double_double_double_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t" title="krpc_SpaceCenter_ControlSurface_t"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_AvailableTorque" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_AvailableTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_AxisRange_t" title="krpc_SpaceCenter_AxisRange_t"><span class="n"><span class="pre">krpc_SpaceCenter_AxisRange_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t" title="krpc_SpaceCenter_ControlSurface_t"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_AvailableTorque" title="Link to this definition">#</a><br /></dt>
 <dd><p>The available torque, in Newton meters, that can be produced by this control surface,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>.</p>
@@ -4340,7 +4340,7 @@ returns the current actuation.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_AvailableTorque">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_AvailableTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_tuple_double_double_double_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t" title="krpc_SpaceCenter_Engine_t"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_AvailableTorque" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_AvailableTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_AxisRange_t" title="krpc_SpaceCenter_AxisRange_t"><span class="n"><span class="pre">krpc_SpaceCenter_AxisRange_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t" title="krpc_SpaceCenter_Engine_t"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_AvailableTorque" title="Link to this definition">#</a><br /></dt>
 <dd><p>The available torque, in Newton meters, that can be produced by this engine,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>.
@@ -4760,7 +4760,7 @@ given specific impulse.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Experiment_t.krpc_SpaceCenter_Experiment_Data">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Experiment_Data</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Experiment_t" title="krpc_SpaceCenter_Experiment_t"><span class="n"><span class="pre">krpc_SpaceCenter_Experiment_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Experiment_t.krpc_SpaceCenter_Experiment_Data" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Experiment_Data</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_SpaceCenter_ScienceData_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Experiment_t" title="krpc_SpaceCenter_Experiment_t"><span class="n"><span class="pre">krpc_SpaceCenter_Experiment_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Experiment_t.krpc_SpaceCenter_Experiment_Data" title="Link to this definition">#</a><br /></dt>
 <dd><p>The data contained in this experiment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -4793,7 +4793,7 @@ given specific impulse.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Experiment_t.krpc_SpaceCenter_Experiment_ScienceSubject">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Experiment_ScienceSubject</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="krpc_SpaceCenter_ScienceSubject_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Experiment_t" title="krpc_SpaceCenter_Experiment_t"><span class="n"><span class="pre">krpc_SpaceCenter_Experiment_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Experiment_t.krpc_SpaceCenter_Experiment_ScienceSubject" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Experiment_ScienceSubject</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="krpc_SpaceCenter_ScienceSubject_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValueIsNull</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Experiment_t" title="krpc_SpaceCenter_Experiment_t"><span class="n"><span class="pre">krpc_SpaceCenter_Experiment_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Experiment_t.krpc_SpaceCenter_Experiment_ScienceSubject" title="Link to this definition">#</a><br /></dt>
 <dd><p>Containing information on the corresponding specific science result for the current
 conditions. Returns <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if the experiment is unavailable.</p>
 <dl class="field-list simple">
@@ -4809,37 +4809,22 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceData_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceData_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceData_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Obtained by calling <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Experiment_Data()</span></code>.</p>
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceData_t.krpc_SpaceCenter_ScienceData_DataAmount">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceData_DataAmount</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceData_t" title="krpc_SpaceCenter_ScienceData_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceData_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceData_t.krpc_SpaceCenter_ScienceData_DataAmount" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceData_t.data_amount">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">data_amount</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceData_t.data_amount" title="Link to this definition">#</a><br /></dt>
 <dd><p>Data amount.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceData_t.krpc_SpaceCenter_ScienceData_ScienceValue">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceData_ScienceValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceData_t" title="krpc_SpaceCenter_ScienceData_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceData_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceData_t.krpc_SpaceCenter_ScienceData_ScienceValue" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceData_t.science_value">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">science_value</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceData_t.science_value" title="Link to this definition">#</a><br /></dt>
 <dd><p>Science value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceData_t.krpc_SpaceCenter_ScienceData_TransmitValue">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceData_TransmitValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceData_t" title="krpc_SpaceCenter_ScienceData_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceData_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceData_t.krpc_SpaceCenter_ScienceData_TransmitValue" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceData_t.transmit_value">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transmit_value</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceData_t.transmit_value" title="Link to this definition">#</a><br /></dt>
 <dd><p>Transmit value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -4848,88 +4833,59 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Obtained by calling <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Experiment_ScienceSubject()</span></code>.</p>
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_Title">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_Title</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="krpc_SpaceCenter_ScienceSubject_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_Title" title="Link to this definition">#</a><br /></dt>
-<dd><p>Title of science subject, displayed in science archives</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.id">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">id</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.id" title="Link to this definition">#</a><br /></dt>
+<dd><p>The identifier of the subject, e.g. <code class="docutils literal notranslate"><span class="pre">crewReport&#64;KerbinSrfLandedLaunchPad</span></code>.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_IsComplete">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_IsComplete</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="krpc_SpaceCenter_ScienceSubject_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_IsComplete" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.title">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">title</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.title" title="Link to this definition">#</a><br /></dt>
+<dd><p>The title of the subject, as shown in the science archives.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.is_complete">
+<span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_complete</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.is_complete" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the subject has been fully researched. This is true once the science banked for
-the subject reaches the science cap. As the banked science (see <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_Science" title="krpc_SpaceCenter_ScienceSubject_Science"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ScienceSubject_Science()</span></code></a>) is
+the subject reaches the science cap. As the banked science (see <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t.science" title="krpc_SpaceCenter_ScienceSubject_t.science"><code class="xref c c-member docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ScienceSubject_t.science</span></code></a>) is
 only updated after transmission/recovery, this reflects fully mining the subject over
 repeated experiments, not whether a single run has produced data. To check whether a run
 has produced data, and how valuable it is, use <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Experiment_HasData()</span></code> and
-<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ScienceData_TransmitValue()</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
+<a class="reference internal" href="#c.krpc_SpaceCenter_ScienceData_t.transmit_value" title="krpc_SpaceCenter_ScienceData_t.transmit_value"><code class="xref c c-member docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ScienceData_t.transmit_value</span></code></a>.</p>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_Science">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_Science</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="krpc_SpaceCenter_ScienceSubject_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_Science" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.science">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">science</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.science" title="Link to this definition">#</a><br /></dt>
 <dd><p>Amount of science already earned from this subject, not updated until after
 transmission/recovery.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_ScienceCap">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_ScienceCap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="krpc_SpaceCenter_ScienceSubject_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_ScienceCap" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.science_cap">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">science_cap</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.science_cap" title="Link to this definition">#</a><br /></dt>
 <dd><p>Total science allowable for this subject.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_DataScale">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_DataScale</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="krpc_SpaceCenter_ScienceSubject_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_DataScale" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.data_scale">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">data_scale</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.data_scale" title="Link to this definition">#</a><br /></dt>
 <dd><p>Multiply science value by this to determine data amount in mits.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_SubjectValue">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_SubjectValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="krpc_SpaceCenter_ScienceSubject_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_SubjectValue" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.subject_value">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subject_value</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.subject_value" title="Link to this definition">#</a><br /></dt>
 <dd><p>Multiplier for specific Celestial Body/Experiment Situation combination.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_ScientificValue">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_ScientificValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ScienceSubject_t" title="krpc_SpaceCenter_ScienceSubject_t"><span class="n"><span class="pre">krpc_SpaceCenter_ScienceSubject_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.krpc_SpaceCenter_ScienceSubject_ScientificValue" title="Link to this definition">#</a><br /></dt>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ScienceSubject_t.scientific_value">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scientific_value</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ScienceSubject_t.scientific_value" title="Link to this definition">#</a><br /></dt>
 <dd><p>Diminishing value multiplier for decreasing the science value returned from repeated
 experiments.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -5187,13 +5143,13 @@ Returns an error if you try to deploy fixed landing gear.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Light_t.krpc_SpaceCenter_Light_Color">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Light_Color</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_float_float_float_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Light_t" title="krpc_SpaceCenter_Light_t"><span class="n"><span class="pre">krpc_SpaceCenter_Light_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Light_t.krpc_SpaceCenter_Light_Color" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Light_Color</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="../stdlib.html#c.krpc_StdLib_ColorRGB_t" title="krpc_StdLib_ColorRGB_t"><span class="n"><span class="pre">krpc_StdLib_ColorRGB_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Light_t" title="krpc_SpaceCenter_Light_t"><span class="n"><span class="pre">krpc_SpaceCenter_Light_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Light_t.krpc_SpaceCenter_Light_Color" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Light_t.krpc_SpaceCenter_Light_set_Color">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Light_set_Color</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Light_t" title="krpc_SpaceCenter_Light_t"><span class="n"><span class="pre">krpc_SpaceCenter_Light_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_float_float_float_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Light_t.krpc_SpaceCenter_Light_set_Color" title="Link to this definition">#</a><br /></dt>
-<dd><p>The color of the light, as an RGB triple.</p>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Light_set_Color</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Light_t" title="krpc_SpaceCenter_Light_t"><span class="n"><span class="pre">krpc_SpaceCenter_Light_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../stdlib.html#c.krpc_StdLib_ColorRGB_t" title="krpc_StdLib_ColorRGB_t"><span class="n"><span class="pre">krpc_StdLib_ColorRGB_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Light_t.krpc_SpaceCenter_Light_set_Color" title="Link to this definition">#</a><br /></dt>
+<dd><p>The color of the light.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -5918,7 +5874,7 @@ retracting.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ReactionWheel_t.krpc_SpaceCenter_ReactionWheel_AvailableTorque">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ReactionWheel_AvailableTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_tuple_double_double_double_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ReactionWheel_t" title="krpc_SpaceCenter_ReactionWheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReactionWheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ReactionWheel_t.krpc_SpaceCenter_ReactionWheel_AvailableTorque" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ReactionWheel_AvailableTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_AxisRange_t" title="krpc_SpaceCenter_AxisRange_t"><span class="n"><span class="pre">krpc_SpaceCenter_AxisRange_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ReactionWheel_t" title="krpc_SpaceCenter_ReactionWheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReactionWheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ReactionWheel_t.krpc_SpaceCenter_ReactionWheel_AvailableTorque" title="Link to this definition">#</a><br /></dt>
 <dd><p>The available torque, in Newton meters, that can be produced by this reaction wheel,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>.
@@ -5932,7 +5888,7 @@ Returns zero if the reaction wheel is inactive or broken.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ReactionWheel_t.krpc_SpaceCenter_ReactionWheel_MaxTorque">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ReactionWheel_MaxTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_tuple_double_double_double_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ReactionWheel_t" title="krpc_SpaceCenter_ReactionWheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReactionWheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ReactionWheel_t.krpc_SpaceCenter_ReactionWheel_MaxTorque" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ReactionWheel_MaxTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_AxisRange_t" title="krpc_SpaceCenter_AxisRange_t"><span class="n"><span class="pre">krpc_SpaceCenter_AxisRange_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ReactionWheel_t" title="krpc_SpaceCenter_ReactionWheel_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReactionWheel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ReactionWheel_t.krpc_SpaceCenter_ReactionWheel_MaxTorque" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum torque, in Newton meters, that can be produced by this reaction wheel,
 when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
 These axes correspond to the coordinate axes of the <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>.</p>
@@ -6234,7 +6190,7 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_RoboticController_t.krpc_SpaceCenter_RoboticController_Axes">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RoboticController_Axes</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_list_string_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_RoboticController_t" title="krpc_SpaceCenter_RoboticController_t"><span class="n"><span class="pre">krpc_SpaceCenter_RoboticController_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RoboticController_t.krpc_SpaceCenter_RoboticController_Axes" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RoboticController_Axes</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_SpaceCenter_RoboticAxis_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_RoboticController_t" title="krpc_SpaceCenter_RoboticController_t"><span class="n"><span class="pre">krpc_SpaceCenter_RoboticController_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RoboticController_t.krpc_SpaceCenter_RoboticController_Axes" title="Link to this definition">#</a><br /></dt>
 <dd><p>The axes for the controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -6303,6 +6259,28 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RoboticAxis_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RoboticAxis_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_RoboticAxis_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>An axis of a robotic controller.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RoboticController_Axes()</span></code>.</p>
+</div>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RoboticAxis_t.module">
+<a class="reference internal" href="#c.krpc_SpaceCenter_Module_t" title="krpc_SpaceCenter_Module_t"><span class="n"><span class="pre">krpc_SpaceCenter_Module_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">module</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_RoboticAxis_t.module" title="Link to this definition">#</a><br /></dt>
+<dd><p>The part module the axis belongs to.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RoboticAxis_t.field_name">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">field_name</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_RoboticAxis_t.field_name" title="Link to this definition">#</a><br /></dt>
+<dd><p>The name of the field the axis controls.</p>
 </dd></dl>
 
 </dd></dl>
@@ -7176,7 +7154,7 @@ and 1.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_AvailableTorque">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_AvailableTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_tuple_double_double_double_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t" title="krpc_SpaceCenter_RCS_t"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_AvailableTorque" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_AvailableTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_AxisRange_t" title="krpc_SpaceCenter_AxisRange_t"><span class="n"><span class="pre">krpc_SpaceCenter_AxisRange_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t" title="krpc_SpaceCenter_RCS_t"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_AvailableTorque" title="Link to this definition">#</a><br /></dt>
 <dd><p>The available torque, in Newton meters, that can be produced by this RCS,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>.
@@ -7189,14 +7167,14 @@ Returns zero if RCS is disable.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Precision mode weakens the block, and the available torque follows it. A block
-driven by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_InputOverride" title="krpc_SpaceCenter_RCS_InputOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_InputOverride()</span></code></a> is exempt, so <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideTorque" title="krpc_SpaceCenter_RCS_OverrideTorque"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_OverrideTorque()</span></code></a>
+driven by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_InputOverride" title="krpc_SpaceCenter_RCS_InputOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_InputOverride()</span></code></a> is exempt, so <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideWrench" title="krpc_SpaceCenter_RCS_OverrideWrench"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_OverrideWrench()</span></code></a>
 can report the larger torque an override reaches.</p>
 </div>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_AvailableForce">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_AvailableForce</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_tuple_double_double_double_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t" title="krpc_SpaceCenter_RCS_t"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_AvailableForce" title="Link to this definition">#</a><br /></dt>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_AvailableForce</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_AxisRange_t" title="krpc_SpaceCenter_AxisRange_t"><span class="n"><span class="pre">krpc_SpaceCenter_AxisRange_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t" title="krpc_SpaceCenter_RCS_t"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_AvailableForce" title="Link to this definition">#</a><br /></dt>
 <dd><p>The available force, in Newtons, that can be produced by this RCS,
 in the positive and negative x, y and z axes of the vessel. These axes
 correspond to the coordinate axes of the <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>.
@@ -7209,7 +7187,7 @@ Returns zero if RCS is disabled.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Precision mode weakens the block, and the available force follows it. A block
-driven by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_InputOverride" title="krpc_SpaceCenter_RCS_InputOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_InputOverride()</span></code></a> is exempt, so <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideForce" title="krpc_SpaceCenter_RCS_OverrideForce"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_OverrideForce()</span></code></a>
+driven by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_InputOverride" title="krpc_SpaceCenter_RCS_InputOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_InputOverride()</span></code></a> is exempt, so <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideWrench" title="krpc_SpaceCenter_RCS_OverrideWrench"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_OverrideWrench()</span></code></a>
 can report the larger force an override reaches.</p>
 </div>
 </dd></dl>
@@ -7241,11 +7219,9 @@ in Newton meters. The vector is in the vessel’s reference frame
 </dd></dl>
 
 <dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideForce">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_OverrideForce</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t" title="krpc_SpaceCenter_RCS_t"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rotation</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideForce" title="Link to this definition">#</a><br /></dt>
-<dd><p>The force the given demands would produce, in Newtons. The vector is in the
-vessel’s reference frame (<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>).
-Returns zero if the RCS is inactive.</p>
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideWrench">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_OverrideWrench</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="flight.html#c.krpc_SpaceCenter_Wrench_t" title="krpc_SpaceCenter_Wrench_t"><span class="n"><span class="pre">krpc_SpaceCenter_Wrench_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t" title="krpc_SpaceCenter_RCS_t"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rotation</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideWrench" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force and torque the given demands would produce, in Newtons and Newton meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -7254,7 +7230,7 @@ Returns zero if the RCS is inactive.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The force as a vector.</p>
+<dd class="field-even"><p>The force, and the torque about the vessel’s center of mass, in the vessel’s reference frame (<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>), or zero if the RCS is inactive.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -7262,35 +7238,8 @@ Returns zero if the RCS is inactive.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out full thrust,
-which <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Force" title="krpc_SpaceCenter_RCS_Force"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Force()</span></code></a> includes.</p>
-</div>
-</dd></dl>
-
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideTorque">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_OverrideTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t" title="krpc_SpaceCenter_RCS_t"><span class="n"><span class="pre">krpc_SpaceCenter_RCS_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rotation</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_OverrideTorque" title="Link to this definition">#</a><br /></dt>
-<dd><p>The torque the given demands would produce about the vessel’s center of mass, in
-Newton meters. The vector is in the vessel’s reference frame
-(<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code>). Returns zero if the RCS is inactive.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rotation</strong> – A rotation demand, as set by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_RotationOverride" title="krpc_SpaceCenter_RCS_RotationOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_RotationOverride()</span></code></a>.</p></li>
-<li><p><strong>translation</strong> – A translation demand, as set by <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_TranslationOverride" title="krpc_SpaceCenter_RCS_TranslationOverride"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_TranslationOverride()</span></code></a>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The torque as a vector.</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out full thrust,
-which <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Torque" title="krpc_SpaceCenter_RCS_Torque"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Torque()</span></code></a> includes.</p>
+<p>The demands do not have to be applied. The prediction leaves out full thrust, which
+<a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Force" title="krpc_SpaceCenter_RCS_Force"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Force()</span></code></a> and <a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Torque" title="krpc_SpaceCenter_RCS_Torque"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Torque()</span></code></a> include.</p>
 </div>
 </dd></dl>
 

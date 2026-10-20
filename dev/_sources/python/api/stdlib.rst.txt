@@ -8,8 +8,8 @@ Standard Library
 
 .. module:: StdLib
 
-A standard library of scalar mathematics, vector and quaternion operations, and
-printing, for use within server side functions.
+A standard library of mathematics and printing for server side functions, and of the
+colors other services use.
 
 .. note::
 
@@ -603,16 +603,15 @@ printing, for use within server side functions.
 
 .. staticmethod:: quaternion_to_axis_angle(q)
 
-   The axis and angle of a rotation, with the angle in radians between 0 and pi.
+   The axis and angle of a rotation.
 
    :param tuple q: The rotation.
-   :rtype: tuple(tuple(float, float, float), float)
+   :rtype: :class:`AxisAngle`
    
 
    .. note::
 
-      The axis is a unit vector, or zero for no rotation. Throws an exception if the
-      quaternion is zero.
+      Throws an exception if the quaternion is zero.
 
 
 
@@ -698,3 +697,82 @@ printing, for use within server side functions.
 
       A function evaluated by a stream or an event prints on every update. The message is
       written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+
+
+.. class:: AxisAngle(axis, angle)
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :meth:`quaternion_to_axis_angle`.
+   .. attribute:: axis
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+      :rtype: tuple(float, float, float)
+
+   .. attribute:: angle
+
+      The angle of the rotation, in radians between 0 and pi.
+
+      :rtype: float
+
+
+.. class:: ColorRGB(r, g, b)
+
+   A color, as red, green and blue components between 0 and 1.
+
+
+   .. attribute:: r
+
+      The red component.
+
+      :rtype: float
+
+   .. attribute:: g
+
+      The green component.
+
+      :rtype: float
+
+   .. attribute:: b
+
+      The blue component.
+
+      :rtype: float
+
+
+.. class:: ColorRGBA(r, g, b, a)
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+   .. attribute:: r
+
+      The red component.
+
+      :rtype: float
+
+   .. attribute:: g
+
+      The green component.
+
+      :rtype: float
+
+   .. attribute:: b
+
+      The blue component.
+
+      :rtype: float
+
+   .. attribute:: a
+
+      The alpha component.
+
+      :rtype: float

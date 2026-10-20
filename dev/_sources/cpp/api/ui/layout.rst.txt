@@ -20,11 +20,10 @@ Layout
 
    
 
-   .. function:: std::tuple<int32_t, int32_t, int32_t, int32_t> padding()
-   .. function:: void set_padding(std::tuple<int32_t, int32_t, int32_t, int32_t> value)
+   .. function:: Padding padding()
+   .. function:: void set_padding(Padding value)
 
-      The gap left inside the edges of the panel, in whole pixels, as
-      (left, right, top, bottom).
+      The gap left inside the edges of the panel.
 
    
 
@@ -70,6 +69,31 @@ Layout
 
          Only applies to a grid layout. Throws an exception for the other layouts.
 
+
+
+.. namespace:: krpc::services::UI
+.. struct:: Padding
+
+   The gap left inside each edge of a layout, in whole pixels.
+
+   .. note::
+
+      See :func:`Layout::padding`.
+   .. member:: int32_t left
+
+      The gap inside the left edge.
+
+   .. member:: int32_t right
+
+      The gap inside the right edge.
+
+   .. member:: int32_t top
+
+      The gap inside the top edge.
+
+   .. member:: int32_t bottom
+
+      The gap inside the bottom edge.
 
 
 .. namespace:: krpc::services::UI

@@ -489,7 +489,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The maximum torque that the vessel generates. Includes contributions from
       reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -499,7 +499,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableReactionWheelTorque { get; }
+   .. property:: AxisRange AvailableReactionWheelTorque { get; }
 
       The maximum torque that the currently active and powered reaction wheels can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -508,7 +508,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableRCSTorque { get; }
+   .. property:: AxisRange AvailableRCSTorque { get; }
 
       The maximum torque that the currently active RCS thrusters can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -517,7 +517,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableRCSForce { get; }
+   .. property:: AxisRange AvailableRCSForce { get; }
 
       The maximum force that the currently active RCS thrusters can generate.
       Returns the forces in :math:`N` along each of the coordinate axes of the
@@ -526,7 +526,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableRCSAcceleration { get; }
+   .. property:: AxisRange AvailableRCSAcceleration { get; }
 
       The maximum acceleration that the currently active RCS thrusters can generate.
       This is :prop:`Vessel.AvailableRCSForce` divided by the vessel's :prop:`Vessel.Mass`.
@@ -536,7 +536,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableEngineTorque { get; }
+   .. property:: AxisRange AvailableEngineTorque { get; }
 
       The maximum torque that the currently active and gimballed engines can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -545,7 +545,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableControlSurfaceTorque { get; }
+   .. property:: AxisRange AvailableControlSurfaceTorque { get; }
 
       The maximum torque that the aerodynamic control surfaces can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -554,7 +554,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableOtherTorque { get; }
+   .. property:: AxisRange AvailableOtherTorque { get; }
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate.
@@ -564,7 +564,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableAngularAcceleration { get; }
+   .. property:: AxisRange AvailableAngularAcceleration { get; }
 
       The maximum angular acceleration that the vessel can generate. Includes contributions
       from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -575,7 +575,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableReactionWheelAngularAcceleration { get; }
+   .. property:: AxisRange AvailableReactionWheelAngularAcceleration { get; }
 
       The maximum angular acceleration that the currently active and powered reaction wheels
       can generate. This is :prop:`Vessel.AvailableReactionWheelTorque` divided by the vessel's
@@ -586,7 +586,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableRCSAngularAcceleration { get; }
+   .. property:: AxisRange AvailableRCSAngularAcceleration { get; }
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
       This is :prop:`Vessel.AvailableRCSTorque` divided by the vessel's :prop:`Vessel.MomentOfInertia`.
@@ -596,7 +596,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableEngineAngularAcceleration { get; }
+   .. property:: AxisRange AvailableEngineAngularAcceleration { get; }
 
       The maximum angular acceleration that the currently active and gimballed engines can
       generate. This is :prop:`Vessel.AvailableEngineTorque` divided by the vessel's
@@ -607,7 +607,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableControlSurfaceAngularAcceleration { get; }
+   .. property:: AxisRange AvailableControlSurfaceAngularAcceleration { get; }
 
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
       This is :prop:`Vessel.AvailableControlSurfaceTorque` divided by the vessel's
@@ -618,7 +618,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableOtherAngularAcceleration { get; }
+   .. property:: AxisRange AvailableOtherAngularAcceleration { get; }
 
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate. This is :prop:`Vessel.AvailableOtherTorque` divided
@@ -811,7 +811,7 @@ Vessel
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. function:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> BoundingBox(ReferenceFrame referenceFrame)
+   .. function:: BoundingBox BoundingBox(ReferenceFrame referenceFrame)
 
       The axis-aligned bounding box of the vessel in the given reference frame.
 
@@ -819,7 +819,7 @@ Vessel
 
        * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Flight
 
    .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
@@ -866,6 +866,43 @@ Vessel
       :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
       :Game Scenes: Flight
 
+
+
+.. struct:: AxisRange
+
+   The largest value of a quantity, such as a torque or a force, in the positive and the
+   negative direction of each of three axes.
+
+   .. function:: AxisRange(System.Tuple<double,double,double> positive, System.Tuple<double,double,double> negative)
+
+      Construct a AxisRange from the values of its fields.
+
+
+   .. property:: System.Tuple<double,double,double> Positive { get; }
+
+      The value in the positive direction of each axis.
+
+   .. property:: System.Tuple<double,double,double> Negative { get; }
+
+      The value in the negative direction of each axis, which is zero or less.
+
+
+.. struct:: BoundingBox
+
+   An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+   .. function:: BoundingBox(System.Tuple<double,double,double> min, System.Tuple<double,double,double> max)
+
+      Construct a BoundingBox from the values of its fields.
+
+
+   .. property:: System.Tuple<double,double,double> Min { get; }
+
+      The position of the minimum vertex of the box.
+
+   .. property:: System.Tuple<double,double,double> Max { get; }
+
+      The position of the maximum vertex of the box.
 
 
 .. enum:: VesselType
@@ -1108,24 +1145,38 @@ Vessel
 
       :Game Scenes: All
 
-   .. property:: System.Collections.Generic.IList<int> CareerLogFlights { get; }
+   .. property:: System.Collections.Generic.IList<FlightLogEntry> CareerLog { get; }
 
-      The flight IDs for each entry in the career flight log.
-
-      :Game Scenes: All
-
-   .. property:: System.Collections.Generic.IList<string> CareerLogTypes { get; }
-
-      The type for each entry in the career flight log.
+      The entries in the crew member's career flight log.
 
       :Game Scenes: All
 
-   .. property:: System.Collections.Generic.IList<string> CareerLogTargets { get; }
 
-      The body name for each entry in the career flight log.
 
-      :Game Scenes: All
+.. struct:: FlightLogEntry
 
+   An entry in a crew member's career flight log.
+
+   .. note::
+
+      See :prop:`CrewMember.CareerLog`.
+
+   .. function:: FlightLogEntry(int flight, string type, string target)
+
+      Construct a FlightLogEntry from the values of its fields.
+
+
+   .. property:: int Flight { get; }
+
+      The flight identifier of the entry.
+
+   .. property:: string Type { get; }
+
+      The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+   .. property:: string Target { get; }
+
+      The name of the body the entry is for.
 
 
 .. enum:: CrewMemberType

@@ -52,7 +52,7 @@ OrbitPath
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. property:: System.Tuple<double,double,double> Color { get; set; }
+   .. property:: StdLib.ColorRGB Color { get; set; }
 
       The color of the path.
 
@@ -63,7 +63,7 @@ OrbitPath
 
          For a path drawn with more than one color, this is the color at its start.
 
-   .. property:: System.Collections.Generic.IList<System.Tuple<double,double,double>> Colors { get; set; }
+   .. property:: System.Collections.Generic.IList<StdLib.ColorRGB> Colors { get; set; }
 
       The colors of the path, blended evenly from its start to its end.
 

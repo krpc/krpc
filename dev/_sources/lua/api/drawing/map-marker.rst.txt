@@ -54,12 +54,12 @@ MapMarker
       :Attribute: Can be read or written
       :rtype: string
 
-   .. attribute:: color: Tuple
+   .. attribute:: color: StdLib.ColorRGB
 
       The color of the marker.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`StdLib.ColorRGB`
 
    .. method:: remove()
 

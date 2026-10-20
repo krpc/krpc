@@ -720,9 +720,8 @@ This is an empty string if the client has no name.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KRPC_Clients">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Clients</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_tuple_bytes_string_string_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Clients" title="Link to this definition">#</a><br /></dt>
-<dd><p>A list of RPC clients that are currently connected to the server.
-Each entry in the list is a clients identifier, name and address.</p>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_Clients</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_KRPC_ClientInfo_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_Clients" title="Link to this definition">#</a><br /></dt>
+<dd><p>The RPC clients that are currently connected to the server.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -948,6 +947,34 @@ research and development facility is open within the space center scene.</p>
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_KRPC_GAMESCENE_ADMINISTRATION</span></span></span><a class="headerlink" href="#c.krpc_KRPC_GameScene_t.KRPC_KRPC_GAMESCENE_ADMINISTRATION" title="Link to this definition">#</a><br /></dt>
 <dd><p>The administration facility. This is a pseudo-scene, shown when the
 administration facility is open within the space center scene.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ClientInfo_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_ClientInfo_t</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ClientInfo_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A client connected to the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#c.krpc_KRPC_Clients" title="krpc_KRPC_Clients"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Clients()</span></code></a>.</p>
+</div>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ClientInfo_t.id">
+<span class="n"><span class="pre">krpc_bytes_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">id</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ClientInfo_t.id" title="Link to this definition">#</a><br /></dt>
+<dd><p>The identifier of the client.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ClientInfo_t.name">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ClientInfo_t.name" title="Link to this definition">#</a><br /></dt>
+<dd><p>The name of the client, or an empty string if it has no name.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ClientInfo_t.address">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ClientInfo_t.address" title="Link to this definition">#</a><br /></dt>
+<dd><p>The address of the client.</p>
 </dd></dl>
 
 </dd></dl>

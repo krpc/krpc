@@ -66,7 +66,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. function:: krpc_error_t krpc_SpaceCenter_LaunchSites(krpc_connection_t connection, krpc_list_object_t * returnValue)
+.. function:: krpc_error_t krpc_SpaceCenter_LaunchSites(krpc_connection_t connection, krpc_list_SpaceCenter_LaunchSite_t * returnValue)
 
    A list of available launch sites.
 
@@ -948,30 +948,24 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_LaunchSite_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_LaunchSite_t instance)
+
+   .. member:: char * name
 
       The name of the launch site.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_LaunchSite_Body(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * returnValue, krpc_SpaceCenter_LaunchSite_t instance)
+   .. member:: krpc_SpaceCenter_CelestialBody_t body
 
       The celestial body the launch site is on.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_LaunchSite_EditorFacility(krpc_connection_t connection, krpc_SpaceCenter_EditorFacility_t * returnValue, krpc_SpaceCenter_LaunchSite_t instance)
+   .. member:: krpc_SpaceCenter_EditorFacility_t editor_facility
 
       Which editor is normally used for this launch site.
-
-   
-
 
 
 .. type:: krpc_SpaceCenter_EditorFacility_t
 
    Editor facility.
-   See :func:`krpc_SpaceCenter_LaunchSite_EditorFacility`.
+   See :member:`krpc_SpaceCenter_LaunchSite_t.editor_facility`.
 
 
    .. macro:: KRPC_SPACECENTER_EDITORFACILITY_VAB

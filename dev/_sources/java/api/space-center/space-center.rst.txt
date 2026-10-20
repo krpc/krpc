@@ -738,27 +738,22 @@ SpaceCenter
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
-   .. method:: String getName()
+   .. constructor:: public LaunchSite(String name, CelestialBody body, EditorFacility editorFacility)
 
+      Construct a LaunchSite from the values of its fields.
+
+
+   .. method:: String getName()
 
       The name of the launch site.
 
-   
-
    .. method:: CelestialBody getBody()
-
 
       The celestial body the launch site is on.
 
-   
-
    .. method:: EditorFacility getEditorFacility()
 
-
       Which editor is normally used for this launch site.
-
-   
-
 
 
 .. type:: public enum EditorFacility

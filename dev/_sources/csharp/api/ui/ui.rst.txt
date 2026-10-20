@@ -35,7 +35,7 @@ UI
 
          If you want to add UI elements to KSPs stock UI canvas, use :prop:`UI.StockCanvas <UI.UI.StockCanvas>`.
 
-   .. function:: void Message(string content, float duration = 1.0f, MessagePosition position = MessagePosition.TopCenter, System.Tuple<double,double,double,double> color = null, float size = 2e+01f)
+   .. function:: void Message(string content, float duration = 1.0f, MessagePosition position = MessagePosition.TopCenter, StdLib.ColorRGBA? color = null, float size = 2e+01f)
 
       Display a message on the screen.
 
@@ -44,7 +44,7 @@ UI
        * **content** -- Message content.
        * **duration** -- Duration before the message disappears, in seconds.
        * **position** -- Position to display the message.
-       * **color** -- The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque. If null, defaults to ``new System.Tuple<double,double,double,double>(1.0, 0.92, 0.016, 1.0)``.
+       * **color** -- The color of the message. If null, defaults to ``new StdLib.ColorRGBA(1.0f, 0.92f, 0.016f, 1.0f)``.
        * **size** -- Size of the message, differs per position.
 
       :Game Scenes: All

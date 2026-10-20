@@ -704,8 +704,8 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLibE">
 <span id="_CPPv3N4krpc8services6StdLibE"></span><span id="_CPPv2N4krpc8services6StdLibE"></span><span id="krpc::services::StdLib"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">StdLib</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Service</span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLibE" title="Link to this definition">#</a><br /></dt>
-<dd><p>A standard library of scalar mathematics, vector and quaternion operations, and
-printing, for use within server side functions.</p>
+<dd><p>A standard library of mathematics and printing for server side functions, and of the
+colors other services use.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Vectors are position and direction tuples, and rotations are unit quaternion tuples
@@ -1378,8 +1378,8 @@ rotation q.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib24quaternion_to_axis_angleENSt5tupleIddddEE">
-<span id="_CPPv3N4krpc8services6StdLib24quaternion_to_axis_angleENSt5tupleIddddEE"></span><span id="_CPPv2N4krpc8services6StdLib24quaternion_to_axis_angleENSt5tupleIddddEE"></span><span id="krpc::services::StdLib::quaternion_to_axis_angle__std::tuple:double.double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">quaternion_to_axis_angle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">q</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib24quaternion_to_axis_angleENSt5tupleIddddEE" title="Link to this definition">#</a><br /></dt>
-<dd><p>The axis and angle of a rotation, with the angle in radians between 0 and pi.</p>
+<span id="_CPPv3N4krpc8services6StdLib24quaternion_to_axis_angleENSt5tupleIddddEE"></span><span id="_CPPv2N4krpc8services6StdLib24quaternion_to_axis_angleENSt5tupleIddddEE"></span><span id="krpc::services::StdLib::quaternion_to_axis_angle__std::tuple:double.double.double.double:"></span><a class="reference internal" href="#_CPPv4N4krpc8services6StdLib9AxisAngleE" title="krpc::services::StdLib::AxisAngle"><span class="n"><span class="pre">AxisAngle</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">quaternion_to_axis_angle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">q</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib24quaternion_to_axis_angleENSt5tupleIddddEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The axis and angle of a rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1389,8 +1389,7 @@ rotation q.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The axis is a unit vector, or zero for no rotation. Throws an exception if the
-quaternion is zero.</p>
+<p>Throws an exception if the quaternion is zero.</p>
 </div>
 </dd></dl>
 
@@ -1488,6 +1487,86 @@ extrapolates. Throws an exception if either quaternion is zero.</p>
 <p>A function evaluated by a stream or an event prints on every update. The message is
 written at the Info level, so a server log level of Warning or Error hides it.</p>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib9AxisAngleE">
+<span id="_CPPv3N4krpc8services6StdLib9AxisAngleE"></span><span id="_CPPv2N4krpc8services6StdLib9AxisAngleE"></span><span id="krpc::services::StdLib::AxisAngle"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AxisAngle</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib9AxisAngleE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A rotation as an axis and an angle.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#_CPPv4N4krpc8services6StdLib24quaternion_to_axis_angleENSt5tupleIddddEE" title="krpc::services::StdLib::quaternion_to_axis_angle"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">quaternion_to_axis_angle()</span></code></a>.</p>
+</div>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib9AxisAngle4axisE">
+<span id="_CPPv3N4krpc8services6StdLib9AxisAngle4axisE"></span><span id="_CPPv2N4krpc8services6StdLib9AxisAngle4axisE"></span><span id="krpc::services::StdLib::AxisAngle::axis__std::tuple:double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">axis</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib9AxisAngle4axisE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The axis of the rotation, as a unit vector, or zero for no rotation.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib9AxisAngle5angleE">
+<span id="_CPPv3N4krpc8services6StdLib9AxisAngle5angleE"></span><span id="_CPPv2N4krpc8services6StdLib9AxisAngle5angleE"></span><span id="krpc::services::StdLib::AxisAngle::angle__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">angle</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib9AxisAngle5angleE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The angle of the rotation, in radians between 0 and pi.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib8ColorRGBE">
+<span id="_CPPv3N4krpc8services6StdLib8ColorRGBE"></span><span id="_CPPv2N4krpc8services6StdLib8ColorRGBE"></span><span id="krpc::services::StdLib::ColorRGB"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ColorRGB</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib8ColorRGBE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A color, as red, green and blue components between 0 and 1.</p>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib8ColorRGB1rE">
+<span id="_CPPv3N4krpc8services6StdLib8ColorRGB1rE"></span><span id="_CPPv2N4krpc8services6StdLib8ColorRGB1rE"></span><span id="krpc::services::StdLib::ColorRGB::r__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">r</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib8ColorRGB1rE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The red component.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib8ColorRGB1gE">
+<span id="_CPPv3N4krpc8services6StdLib8ColorRGB1gE"></span><span id="_CPPv2N4krpc8services6StdLib8ColorRGB1gE"></span><span id="krpc::services::StdLib::ColorRGB::g__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">g</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib8ColorRGB1gE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The green component.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib8ColorRGB1bE">
+<span id="_CPPv3N4krpc8services6StdLib8ColorRGB1bE"></span><span id="_CPPv2N4krpc8services6StdLib8ColorRGB1bE"></span><span id="krpc::services::StdLib::ColorRGB::b__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib8ColorRGB1bE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The blue component.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib9ColorRGBAE">
+<span id="_CPPv3N4krpc8services6StdLib9ColorRGBAE"></span><span id="_CPPv2N4krpc8services6StdLib9ColorRGBAE"></span><span id="krpc::services::StdLib::ColorRGBA"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ColorRGBA</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib9ColorRGBAE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A color, as red, green, blue and alpha components between 0 and 1.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An alpha of 0 is fully transparent and 1 is fully opaque.</p>
+</div>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib9ColorRGBA1rE">
+<span id="_CPPv3N4krpc8services6StdLib9ColorRGBA1rE"></span><span id="_CPPv2N4krpc8services6StdLib9ColorRGBA1rE"></span><span id="krpc::services::StdLib::ColorRGBA::r__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">r</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib9ColorRGBA1rE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The red component.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib9ColorRGBA1gE">
+<span id="_CPPv3N4krpc8services6StdLib9ColorRGBA1gE"></span><span id="_CPPv2N4krpc8services6StdLib9ColorRGBA1gE"></span><span id="krpc::services::StdLib::ColorRGBA::g__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">g</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib9ColorRGBA1gE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The green component.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib9ColorRGBA1bE">
+<span id="_CPPv3N4krpc8services6StdLib9ColorRGBA1bE"></span><span id="_CPPv2N4krpc8services6StdLib9ColorRGBA1bE"></span><span id="krpc::services::StdLib::ColorRGBA::b__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib9ColorRGBA1bE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The blue component.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services6StdLib9ColorRGBA1aE">
+<span id="_CPPv3N4krpc8services6StdLib9ColorRGBA1aE"></span><span id="_CPPv2N4krpc8services6StdLib9ColorRGBA1aE"></span><span id="krpc::services::StdLib::ColorRGBA::a__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">a</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services6StdLib9ColorRGBA1aE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The alpha component.</p>
 </dd></dl>
 
 </dd></dl>

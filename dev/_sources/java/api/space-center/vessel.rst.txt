@@ -503,7 +503,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
+   .. method:: AxisRange getAvailableTorque()
 
 
       The maximum torque that the vessel generates. Includes contributions from
@@ -514,7 +514,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableReactionWheelTorque()
+   .. method:: AxisRange getAvailableReactionWheelTorque()
 
 
       The maximum torque that the currently active and powered reaction wheels can generate.
@@ -524,7 +524,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableRCSTorque()
+   .. method:: AxisRange getAvailableRCSTorque()
 
 
       The maximum torque that the currently active RCS thrusters can generate.
@@ -534,7 +534,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableRCSForce()
+   .. method:: AxisRange getAvailableRCSForce()
 
 
       The maximum force that the currently active RCS thrusters can generate.
@@ -544,7 +544,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableRCSAcceleration()
+   .. method:: AxisRange getAvailableRCSAcceleration()
 
 
       The maximum acceleration that the currently active RCS thrusters can generate.
@@ -555,7 +555,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableEngineTorque()
+   .. method:: AxisRange getAvailableEngineTorque()
 
 
       The maximum torque that the currently active and gimballed engines can generate.
@@ -565,7 +565,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableControlSurfaceTorque()
+   .. method:: AxisRange getAvailableControlSurfaceTorque()
 
 
       The maximum torque that the aerodynamic control surfaces can generate.
@@ -575,7 +575,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableOtherTorque()
+   .. method:: AxisRange getAvailableOtherTorque()
 
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
@@ -586,7 +586,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableAngularAcceleration()
+   .. method:: AxisRange getAvailableAngularAcceleration()
 
 
       The maximum angular acceleration that the vessel can generate. Includes contributions
@@ -598,7 +598,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableReactionWheelAngularAcceleration()
+   .. method:: AxisRange getAvailableReactionWheelAngularAcceleration()
 
 
       The maximum angular acceleration that the currently active and powered reaction wheels
@@ -610,7 +610,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableRCSAngularAcceleration()
+   .. method:: AxisRange getAvailableRCSAngularAcceleration()
 
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
@@ -621,7 +621,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableEngineAngularAcceleration()
+   .. method:: AxisRange getAvailableEngineAngularAcceleration()
 
 
       The maximum angular acceleration that the currently active and gimballed engines can
@@ -633,7 +633,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableControlSurfaceAngularAcceleration()
+   .. method:: AxisRange getAvailableControlSurfaceAngularAcceleration()
 
 
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
@@ -645,7 +645,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableOtherAngularAcceleration()
+   .. method:: AxisRange getAvailableOtherAngularAcceleration()
 
 
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
@@ -843,12 +843,12 @@ Vessel
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> boundingBox(ReferenceFrame referenceFrame)
+   .. method:: BoundingBox boundingBox(ReferenceFrame referenceFrame)
 
       The axis-aligned bounding box of the vessel in the given reference frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vectors are in.
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
@@ -883,6 +883,43 @@ Vessel
       :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
       :Game Scenes: Flight
 
+
+
+.. type:: public class AxisRange
+
+   The largest value of a quantity, such as a torque or a force, in the positive and the
+   negative direction of each of three axes.
+
+   .. constructor:: public AxisRange(org.javatuples.Triplet<Double,Double,Double> positive, org.javatuples.Triplet<Double,Double,Double> negative)
+
+      Construct a AxisRange from the values of its fields.
+
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getPositive()
+
+      The value in the positive direction of each axis.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getNegative()
+
+      The value in the negative direction of each axis, which is zero or less.
+
+
+.. type:: public class BoundingBox
+
+   An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+   .. constructor:: public BoundingBox(org.javatuples.Triplet<Double,Double,Double> min, org.javatuples.Triplet<Double,Double,Double> max)
+
+      Construct a BoundingBox from the values of its fields.
+
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getMin()
+
+      The position of the minimum vertex of the box.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getMax()
+
+      The position of the maximum vertex of the box.
 
 
 .. type:: public enum VesselType
@@ -1144,27 +1181,39 @@ Vessel
 
    
 
-   .. method:: java.util.List<Integer> getCareerLogFlights()
+   .. method:: java.util.List<FlightLogEntry> getCareerLog()
 
 
-      The flight IDs for each entry in the career flight log.
-
-   
-
-   .. method:: java.util.List<String> getCareerLogTypes()
-
-
-      The type for each entry in the career flight log.
+      The entries in the crew member's career flight log.
 
    
 
-   .. method:: java.util.List<String> getCareerLogTargets()
 
 
-      The body name for each entry in the career flight log.
+.. type:: public class FlightLogEntry
 
-   
+   An entry in a crew member's career flight log.
 
+   .. note::
+
+      See :meth:`CrewMember.getCareerLog()`.
+
+   .. constructor:: public FlightLogEntry(int flight, String type, String target)
+
+      Construct a FlightLogEntry from the values of its fields.
+
+
+   .. method:: int getFlight()
+
+      The flight identifier of the entry.
+
+   .. method:: String getType()
+
+      The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+   .. method:: String getTarget()
+
+      The name of the body the entry is for.
 
 
 .. type:: public enum CrewMemberType

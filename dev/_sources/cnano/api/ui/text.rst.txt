@@ -90,11 +90,10 @@ Text
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_UI_Text_t instance)
-   .. function:: krpc_error_t krpc_UI_Text_set_Color(krpc_connection_t connection, krpc_UI_Text_t instance, const krpc_tuple_double_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_UI_Text_Color(krpc_connection_t connection, krpc_StdLib_ColorRGBA_t * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Color(krpc_connection_t connection, krpc_UI_Text_t instance, const krpc_StdLib_ColorRGBA_t * value)
 
-      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
-      fully transparent and 1 is fully opaque.
+      The color the text is drawn in.
 
    
 

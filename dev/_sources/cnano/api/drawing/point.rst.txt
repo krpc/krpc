@@ -32,8 +32,8 @@ Point
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Point_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_Point_t instance)
-   .. function:: krpc_error_t krpc_Drawing_Point_set_Color(krpc_connection_t connection, krpc_Drawing_Point_t instance, const krpc_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_Point_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_Drawing_Point_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Point_set_Color(krpc_connection_t connection, krpc_Drawing_Point_t instance, const krpc_StdLib_ColorRGB_t * value)
 
       The color of the object.
 

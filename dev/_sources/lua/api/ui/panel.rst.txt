@@ -38,14 +38,12 @@ Panel
       :Attribute: Can be read or written
       :rtype: :class:`UI.PanelStyle`
 
-   .. attribute:: color: Tuple
+   .. attribute:: color: StdLib.ColorRGBA
 
-      The color the background of the panel is tinted with, as
-      (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully
-      opaque.
+      The color the background of the panel is tinted with.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`StdLib.ColorRGBA`
 
       .. note::
 

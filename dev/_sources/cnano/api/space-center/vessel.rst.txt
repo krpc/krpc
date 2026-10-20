@@ -490,7 +490,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the vessel generates. Includes contributions from
       reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -500,7 +500,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableReactionWheelTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableReactionWheelTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the currently active and powered reaction wheels can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -509,7 +509,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the currently active RCS thrusters can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -518,7 +518,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSForce(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSForce(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum force that the currently active RCS thrusters can generate.
       Returns the forces in :math:`N` along each of the coordinate axes of the
@@ -527,7 +527,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum acceleration that the currently active RCS thrusters can generate.
       This is :func:`krpc_SpaceCenter_Vessel_AvailableRCSForce` divided by the vessel's :func:`krpc_SpaceCenter_Vessel_Mass`.
@@ -537,7 +537,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableEngineTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableEngineTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the currently active and gimballed engines can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -546,7 +546,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableControlSurfaceTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableControlSurfaceTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the aerodynamic control surfaces can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -555,7 +555,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableOtherTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableOtherTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate.
@@ -565,7 +565,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the vessel can generate. Includes contributions
       from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -576,7 +576,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableReactionWheelAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableReactionWheelAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the currently active and powered reaction wheels
       can generate. This is :func:`krpc_SpaceCenter_Vessel_AvailableReactionWheelTorque` divided by the vessel's
@@ -587,7 +587,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
       This is :func:`krpc_SpaceCenter_Vessel_AvailableRCSTorque` divided by the vessel's :func:`krpc_SpaceCenter_Vessel_MomentOfInertia`.
@@ -597,7 +597,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableEngineAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableEngineAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the currently active and gimballed engines can
       generate. This is :func:`krpc_SpaceCenter_Vessel_AvailableEngineTorque` divided by the vessel's
@@ -608,7 +608,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableControlSurfaceAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableControlSurfaceAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
       This is :func:`krpc_SpaceCenter_Vessel_AvailableControlSurfaceTorque` divided by the vessel's
@@ -619,7 +619,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableOtherAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableOtherAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate. This is :func:`krpc_SpaceCenter_Vessel_AvailableOtherTorque` divided
@@ -812,7 +812,7 @@ Vessel
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_BoundingBox(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_BoundingBox(krpc_connection_t connection, krpc_SpaceCenter_BoundingBox_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The axis-aligned bounding box of the vessel in the given reference frame.
 
@@ -820,7 +820,7 @@ Vessel
 
        * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
@@ -867,6 +867,35 @@ Vessel
       :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
       :Game Scenes: Flight
 
+
+
+.. type:: krpc_SpaceCenter_AxisRange_t
+
+   The largest value of a quantity, such as a torque or a force, in the positive and the
+   negative direction of each of three axes.
+
+
+   .. member:: krpc_tuple_double_double_double_t positive
+
+      The value in the positive direction of each axis.
+
+   .. member:: krpc_tuple_double_double_double_t negative
+
+      The value in the negative direction of each axis, which is zero or less.
+
+
+.. type:: krpc_SpaceCenter_BoundingBox_t
+
+   An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+
+   .. member:: krpc_tuple_double_double_double_t min
+
+      The position of the minimum vertex of the box.
+
+   .. member:: krpc_tuple_double_double_double_t max
+
+      The position of the maximum vertex of the box.
 
 
 .. type:: krpc_SpaceCenter_VesselType_t
@@ -1116,24 +1145,32 @@ Vessel
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_CareerLogFlights(krpc_connection_t connection, krpc_list_int32_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_CareerLog(krpc_connection_t connection, krpc_list_SpaceCenter_FlightLogEntry_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
 
-      The flight IDs for each entry in the career flight log.
-
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_CareerLogTypes(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
-
-      The type for each entry in the career flight log.
+      The entries in the crew member's career flight log.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_CareerLogTargets(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
 
-      The body name for each entry in the career flight log.
 
-   
+.. type:: krpc_SpaceCenter_FlightLogEntry_t
 
+   An entry in a crew member's career flight log.
+
+   .. note::
+
+      See :func:`krpc_SpaceCenter_CrewMember_CareerLog`.
+   .. member:: int32_t flight
+
+      The flight identifier of the entry.
+
+   .. member:: char * type
+
+      The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+   .. member:: char * target
+
+      The name of the body the entry is for.
 
 
 .. type:: krpc_SpaceCenter_CrewMemberType_t

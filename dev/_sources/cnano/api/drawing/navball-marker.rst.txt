@@ -36,8 +36,8 @@ NavballMarker
 
          A visible marker is still hidden while it is on the far side of the navball.
 
-   .. function:: krpc_error_t krpc_Drawing_NavballMarker_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_NavballMarker_t instance)
-   .. function:: krpc_error_t krpc_Drawing_NavballMarker_set_Color(krpc_connection_t connection, krpc_Drawing_NavballMarker_t instance, const krpc_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_Drawing_NavballMarker_t instance)
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_set_Color(krpc_connection_t connection, krpc_Drawing_NavballMarker_t instance, const krpc_StdLib_ColorRGB_t * value)
 
       Set the color
 

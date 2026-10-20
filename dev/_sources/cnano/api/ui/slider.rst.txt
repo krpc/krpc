@@ -91,12 +91,11 @@ Slider
          A control that is not interactable is drawn grayed out and ignores the user,
          but is still visible. Set its visibility to false to hide it instead.
 
-   .. function:: krpc_error_t krpc_UI_Slider_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_UI_Slider_t instance)
-   .. function:: krpc_error_t krpc_UI_Slider_set_Color(krpc_connection_t connection, krpc_UI_Slider_t instance, const krpc_tuple_double_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_UI_Slider_Color(krpc_connection_t connection, krpc_StdLib_ColorRGBA_t * returnValue, krpc_UI_Slider_t instance)
+   .. function:: krpc_error_t krpc_UI_Slider_set_Color(krpc_connection_t connection, krpc_UI_Slider_t instance, const krpc_StdLib_ColorRGBA_t * value)
 
-      The color the control is tinted with, as (red, green, blue, alpha). An alpha
-      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
-      the control drawn as the skin has it.
+      The color the control is tinted with. White, the default, leaves the control drawn
+      as the skin has it.
 
    
 

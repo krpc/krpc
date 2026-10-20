@@ -35,12 +35,12 @@ NavballMarker
 
          A visible marker is still hidden while it is on the far side of the navball.
 
-   .. attribute:: color: Tuple
+   .. attribute:: color: StdLib.ColorRGB
 
       Set the color
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`StdLib.ColorRGB`
 
    .. attribute:: icon: string
 

@@ -146,12 +146,11 @@ InputField
 
    .. attribute:: color
 
-      The color the control is tinted with, as (red, green, blue, alpha). An alpha
-      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
-      the control drawn as the skin has it.
+      The color the control is tinted with. White, the default, leaves the control drawn
+      as the skin has it.
 
       :Attribute: Can be read or written
-      :rtype: tuple(float, float, float, float)
+      :rtype: :class:`StdLib.ColorRGBA`
    
 
       .. note::

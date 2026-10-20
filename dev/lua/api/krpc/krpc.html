@@ -731,8 +731,7 @@ This is an empty string if the client has no name.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="KRPC.KRPC.clients">
 <span class="sig-name descname"><span class="pre">clients</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#KRPC.KRPC.clients" title="Link to this definition">#</a></dt>
-<dd><p>A list of RPC clients that are currently connected to the server.
-Each entry in the list is a clients identifier, name and address.</p>
+<dd><p>The RPC clients that are currently connected to the server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -998,6 +997,49 @@ research and development facility is open within the space center scene.</p>
 <span class="property"> </span><span class="sig-name descname"><span class="pre">administration</span></span><a class="headerlink" href="#KRPC.GameScene.administration" title="Link to this definition">#</a></dt>
 <dd><p>The administration facility. This is a pseudo-scene, shown when the
 administration facility is open within the space center scene.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="KRPC.ClientInfo">
+<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KRPC.</span></span><span class="sig-name descname"><span class="pre">ClientInfo</span></span><a class="headerlink" href="#KRPC.ClientInfo" title="Link to this definition">#</a></dt>
+<dd><p>A client connected to the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#KRPC.KRPC.clients" title="KRPC.KRPC.clients"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KRPC.clients</span></code></a>.</p>
+</div>
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="KRPC.KRPC.ClientInfo.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#KRPC.KRPC.ClientInfo.id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of the client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="KRPC.KRPC.ClientInfo.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#KRPC.KRPC.ClientInfo.name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the client, or an empty string if it has no name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="KRPC.KRPC.ClientInfo.address">
+<span class="sig-name descname"><span class="pre">address</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#KRPC.KRPC.ClientInfo.address" title="Link to this definition">#</a></dt>
+<dd><p>The address of the client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

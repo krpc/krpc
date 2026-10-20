@@ -701,8 +701,8 @@
                   
   <section id="standard-library">
 <h1>Standard Library<a class="headerlink" href="#standard-library" title="Link to this heading">#</a></h1>
-<p id="module-StdLib">A standard library of scalar mathematics, vector and quaternion operations, and
-printing, for use within server side functions.</p>
+<p id="module-StdLib">A standard library of mathematics and printing for server side functions, and of the
+colors other services use.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Vectors are position and direction tuples, and rotations are unit quaternion tuples
@@ -1475,19 +1475,18 @@ rotation q.</p>
 <dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="StdLib.quaternion_to_axis_angle">
 <span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">quaternion_to_axis_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">q</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StdLib.quaternion_to_axis_angle" title="Link to this definition">#</a></dt>
-<dd><p>The axis and angle of a rotation, with the angle in radians between 0 and pi.</p>
+<dd><p>The axis and angle of a rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>q</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The rotation.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+<dd class="field-even"><p><a class="reference internal" href="#StdLib.AxisAngle" title="StdLib.AxisAngle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.AxisAngle</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The axis is a unit vector, or zero for no rotation. Throws an exception if the
-quaternion is zero.</p>
+<p>Throws an exception if the quaternion is zero.</p>
 </div>
 </dd></dl>
 
@@ -1595,6 +1594,131 @@ extrapolates. Throws an exception if either quaternion is zero.</p>
 <p>A function evaluated by a stream or an event prints on every update. The message is
 written at the Info level, so a server log level of Warning or Error hides it.</p>
 </div>
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="StdLib.AxisAngle">
+<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">AxisAngle</span></span><a class="headerlink" href="#StdLib.AxisAngle" title="Link to this definition">#</a></dt>
+<dd><p>A rotation as an axis and an angle.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#StdLib.quaternion_to_axis_angle" title="StdLib.quaternion_to_axis_angle"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">StdLib.quaternion_to_axis_angle()</span></code></a>.</p>
+</div>
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="StdLib.StdLib.AxisAngle.axis">
+<span class="sig-name descname"><span class="pre">axis</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#StdLib.StdLib.AxisAngle.axis" title="Link to this definition">#</a></dt>
+<dd><p>The axis of the rotation, as a unit vector, or zero for no rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="StdLib.StdLib.AxisAngle.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.AxisAngle.angle" title="Link to this definition">#</a></dt>
+<dd><p>The angle of the rotation, in radians between 0 and pi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="StdLib.ColorRGB">
+<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">ColorRGB</span></span><a class="headerlink" href="#StdLib.ColorRGB" title="Link to this definition">#</a></dt>
+<dd><p>A color, as red, green and blue components between 0 and 1.</p>
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGB.r">
+<span class="sig-name descname"><span class="pre">r</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGB.r" title="Link to this definition">#</a></dt>
+<dd><p>The red component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGB.g">
+<span class="sig-name descname"><span class="pre">g</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGB.g" title="Link to this definition">#</a></dt>
+<dd><p>The green component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGB.b">
+<span class="sig-name descname"><span class="pre">b</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGB.b" title="Link to this definition">#</a></dt>
+<dd><p>The blue component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="StdLib.ColorRGBA">
+<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">StdLib.</span></span><span class="sig-name descname"><span class="pre">ColorRGBA</span></span><a class="headerlink" href="#StdLib.ColorRGBA" title="Link to this definition">#</a></dt>
+<dd><p>A color, as red, green, blue and alpha components between 0 and 1.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An alpha of 0 is fully transparent and 1 is fully opaque.</p>
+</div>
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGBA.r">
+<span class="sig-name descname"><span class="pre">r</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGBA.r" title="Link to this definition">#</a></dt>
+<dd><p>The red component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGBA.g">
+<span class="sig-name descname"><span class="pre">g</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGBA.g" title="Link to this definition">#</a></dt>
+<dd><p>The green component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGBA.b">
+<span class="sig-name descname"><span class="pre">b</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGBA.b" title="Link to this definition">#</a></dt>
+<dd><p>The blue component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="StdLib.StdLib.ColorRGBA.a">
+<span class="sig-name descname"><span class="pre">a</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#StdLib.StdLib.ColorRGBA.a" title="Link to this definition">#</a></dt>
+<dd><p>The alpha component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

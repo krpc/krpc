@@ -36,12 +36,10 @@ Panel
 
    
 
-   .. function:: krpc_error_t krpc_UI_Panel_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_UI_Panel_t instance)
-   .. function:: krpc_error_t krpc_UI_Panel_set_Color(krpc_connection_t connection, krpc_UI_Panel_t instance, const krpc_tuple_double_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_UI_Panel_Color(krpc_connection_t connection, krpc_StdLib_ColorRGBA_t * returnValue, krpc_UI_Panel_t instance)
+   .. function:: krpc_error_t krpc_UI_Panel_set_Color(krpc_connection_t connection, krpc_UI_Panel_t instance, const krpc_StdLib_ColorRGBA_t * value)
 
-      The color the background of the panel is tinted with, as
-      (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully
-      opaque.
+      The color the background of the panel is tinted with.
 
    
 

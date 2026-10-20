@@ -8,8 +8,8 @@ Standard Library
 
 .. type:: public class StdLib
 
-   A standard library of scalar mathematics, vector and quaternion operations, and
-   printing, for use within server side functions.
+   A standard library of mathematics and printing for server side functions, and of the
+   colors other services use.
 
    .. note::
 
@@ -419,17 +419,16 @@ Standard Library
 
          Throws an exception if the axis is zero.
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,Double> quaternionToAxisAngle(org.javatuples.Quartet<Double,Double,Double,Double> q)
+   .. method:: AxisAngle quaternionToAxisAngle(org.javatuples.Quartet<Double,Double,Double,Double> q)
 
-      The axis and angle of a rotation, with the angle in radians between 0 and pi.
+      The axis and angle of a rotation.
 
       :param org.javatuples.Quartet<Double,Double,Double,Double> q: The rotation.
    
 
       .. note::
 
-         The axis is a unit vector, or zero for no rotation. Throws an exception if the
-         quaternion is zero.
+         Throws an exception if the quaternion is zero.
 
    .. method:: org.javatuples.Quartet<Double,Double,Double,Double> quaternionFromToRotation(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v)
 
@@ -496,3 +495,78 @@ Standard Library
 
          A function evaluated by a stream or an event prints on every update. The message is
          written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+.. type:: public class AxisAngle
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :meth:`quaternionToAxisAngle(org.javatuples.Quartet<Double,Double,Double,Double>)`.
+
+   .. constructor:: public AxisAngle(org.javatuples.Triplet<Double,Double,Double> axis, double angle)
+
+      Construct a AxisAngle from the values of its fields.
+
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getAxis()
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+   .. method:: double getAngle()
+
+      The angle of the rotation, in radians between 0 and pi.
+
+
+.. type:: public class ColorRGB
+
+   A color, as red, green and blue components between 0 and 1.
+
+   .. constructor:: public ColorRGB(float r, float g, float b)
+
+      Construct a ColorRGB from the values of its fields.
+
+
+   .. method:: float getR()
+
+      The red component.
+
+   .. method:: float getG()
+
+      The green component.
+
+   .. method:: float getB()
+
+      The blue component.
+
+
+.. type:: public class ColorRGBA
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+
+   .. constructor:: public ColorRGBA(float r, float g, float b, float a)
+
+      Construct a ColorRGBA from the values of its fields.
+
+
+   .. method:: float getR()
+
+      The red component.
+
+   .. method:: float getG()
+
+      The green component.
+
+   .. method:: float getB()
+
+      The blue component.
+
+   .. method:: float getA()
+
+      The alpha component.

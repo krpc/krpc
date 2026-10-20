@@ -347,10 +347,10 @@ Part
 
          The highlighting is removed when the client that enabled it disconnects.
 
-   .. function:: std::tuple<double, double, double> highlight_color()
-   .. function:: void set_highlight_color(std::tuple<double, double, double> value)
+   .. function:: StdLib::ColorRGB highlight_color()
+   .. function:: void set_highlight_color(StdLib::ColorRGB value)
 
-      The color used to highlight the part, as an RGB triple.
+      The color used to highlight the part.
 
       :Game Scenes: Flight
 
@@ -971,7 +971,7 @@ Part
       :returns: The position as a vector.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> bounding_box(ReferenceFrame reference_frame)
+   .. function:: BoundingBox bounding_box(ReferenceFrame reference_frame)
 
       The axis-aligned bounding box of the part in the given reference frame.
 
@@ -979,7 +979,7 @@ Part
 
        * **reference_frame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Flight
 
 
@@ -1989,7 +1989,7 @@ Control Surface
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+   .. function:: AxisRange available_torque()
 
       The available torque, in Newton meters, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -2618,7 +2618,7 @@ Engine
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+   .. function:: AxisRange available_torque()
 
       The available torque, in Newton meters, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -2893,7 +2893,7 @@ Experiment
 
       :Game Scenes: Flight
 
-   .. function:: ScienceSubject science_subject()
+   .. function:: std::optional<ScienceSubject> science_subject()
 
       Containing information on the corresponding specific science result for the current
       conditions. Returns ``NULL`` if the experiment is unavailable.
@@ -2902,83 +2902,69 @@ Experiment
 
 
 
-.. class:: ScienceData
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: ScienceData
 
    Obtained by calling :func:`Experiment::data`.
 
-   .. function:: float data_amount()
+
+   .. member:: float data_amount
 
       Data amount.
 
-      :Game Scenes: Flight
-
-   .. function:: float science_value()
+   .. member:: float science_value
 
       Science value.
 
-      :Game Scenes: Flight
-
-   .. function:: float transmit_value()
+   .. member:: float transmit_value
 
       Transmit value.
 
-      :Game Scenes: Flight
 
-
-
-.. class:: ScienceSubject
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: ScienceSubject
 
    Obtained by calling :func:`Experiment::science_subject`.
 
-   .. function:: std::string title()
 
-      Title of science subject, displayed in science archives
+   .. member:: std::string id
 
-      :Game Scenes: Flight
+      The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
 
-   .. function:: bool is_complete()
+   .. member:: std::string title
+
+      The title of the subject, as shown in the science archives.
+
+   .. member:: bool is_complete
 
       Whether the subject has been fully researched. This is true once the science banked for
-      the subject reaches the science cap. As the banked science (see :func:`ScienceSubject::science`) is
+      the subject reaches the science cap. As the banked science (see :member:`ScienceSubject::science`) is
       only updated after transmission/recovery, this reflects fully mining the subject over
       repeated experiments, not whether a single run has produced data. To check whether a run
       has produced data, and how valuable it is, use :func:`Experiment::has_data` and
-      :func:`ScienceData::transmit_value`.
+      :member:`ScienceData::transmit_value`.
 
-      :Game Scenes: Flight
-
-   .. function:: float science()
+   .. member:: float science
 
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-      :Game Scenes: Flight
-
-   .. function:: float science_cap()
+   .. member:: float science_cap
 
       Total science allowable for this subject.
 
-      :Game Scenes: Flight
-
-   .. function:: float data_scale()
+   .. member:: float data_scale
 
       Multiply science value by this to determine data amount in mits.
 
-      :Game Scenes: Flight
-
-   .. function:: float subject_value()
+   .. member:: float subject_value
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
 
-      :Game Scenes: Flight
-
-   .. function:: float scientific_value()
+   .. member:: float scientific_value
 
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
-
-      :Game Scenes: Flight
-
 
 
 Fairing
@@ -3143,10 +3129,10 @@ Light
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<float, float, float> color()
-   .. function:: void set_color(std::tuple<float, float, float> value)
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
 
-      The color of the light, as an RGB triple.
+      The color of the light.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -3619,7 +3605,7 @@ Reaction Wheel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+   .. function:: AxisRange available_torque()
 
       The available torque, in Newton meters, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -3628,7 +3614,7 @@ Reaction Wheel
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> max_torque()
+   .. function:: AxisRange max_torque()
 
       The maximum torque, in Newton meters, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
@@ -3817,7 +3803,7 @@ Robotic Controller
 
       :Game Scenes: Flight
 
-   .. function:: std::vector<std::vector<std::string>> axes()
+   .. function:: std::vector<RoboticAxis> axes()
 
       The axes for the controller.
 
@@ -3862,6 +3848,23 @@ Robotic Controller
       :returns: Returns ``true`` if the axis is cleared successfully.
       :Game Scenes: Flight
 
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: RoboticAxis
+
+   An axis of a robotic controller.
+
+   .. note::
+
+      See :func:`RoboticController::axes`.
+   .. member:: Module module
+
+      The part module the axis belongs to.
+
+   .. member:: std::string field_name
+
+      The name of the field the axis controls.
 
 
 Robotic Hinge
@@ -4303,7 +4306,7 @@ RCS
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+   .. function:: AxisRange available_torque()
 
       The available torque, in Newton meters, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -4316,10 +4319,10 @@ RCS
       .. note::
 
          Precision mode weakens the block, and the available torque follows it. A block
-         driven by :func:`RCS::input_override` is exempt, so :func:`RCS::override_torque`
+         driven by :func:`RCS::input_override` is exempt, so :func:`RCS::override_wrench`
          can report the larger torque an override reaches.
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_force()
+   .. function:: AxisRange available_force()
 
       The available force, in Newtons, that can be produced by this RCS,
       in the positive and negative x, y and z axes of the vessel. These axes
@@ -4332,7 +4335,7 @@ RCS
       .. note::
 
          Precision mode weakens the block, and the available force follows it. A block
-         driven by :func:`RCS::input_override` is exempt, so :func:`RCS::override_force`
+         driven by :func:`RCS::input_override` is exempt, so :func:`RCS::override_wrench`
          can report the larger force an override reaches.
 
    .. function:: std::tuple<double, double, double> force()
@@ -4351,45 +4354,23 @@ RCS
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<double, double, double> override_force(std::tuple<double, double, double> rotation, std::tuple<double, double, double> translation)
+   .. function:: Wrench override_wrench(std::tuple<double, double, double> rotation, std::tuple<double, double, double> translation)
 
-      The force the given demands would produce, in Newtons. The vector is in the
-      vessel's reference frame (:func:`Vessel::reference_frame`).
-      Returns zero if the RCS is inactive.
+      The force and torque the given demands would produce, in Newtons and Newton meters.
 
       :Parameters:
 
        * **rotation** -- A rotation demand, as set by :func:`RCS::rotation_override`.
        * **translation** -- A translation demand, as set by :func:`RCS::translation_override`.
 
-      :returns: The force as a vector.
+      :returns: The force, and the torque about the vessel's center of mass, in the vessel's reference frame (:func:`Vessel::reference_frame`), or zero if the RCS is inactive.
       :Game Scenes: Flight
 
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :func:`RCS::force` includes.
-
-   .. function:: std::tuple<double, double, double> override_torque(std::tuple<double, double, double> rotation, std::tuple<double, double, double> translation)
-
-      The torque the given demands would produce about the vessel's center of mass, in
-      Newton meters. The vector is in the vessel's reference frame
-      (:func:`Vessel::reference_frame`). Returns zero if the RCS is inactive.
-
-      :Parameters:
-
-       * **rotation** -- A rotation demand, as set by :func:`RCS::rotation_override`.
-       * **translation** -- A translation demand, as set by :func:`RCS::translation_override`.
-
-      :returns: The torque as a vector.
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :func:`RCS::torque` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust, which
+         :func:`RCS::force` and :func:`RCS::torque` include.
 
    .. function:: float available_thrust()
 

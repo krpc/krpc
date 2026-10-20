@@ -94,8 +94,8 @@ Text
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: std::tuple<double, double, double> color()
-   .. function:: void set_color(std::tuple<double, double, double> value)
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
 
       Set the color
 

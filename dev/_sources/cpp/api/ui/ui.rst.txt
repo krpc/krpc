@@ -39,7 +39,7 @@ UI
 
          If you want to add UI elements to KSPs stock UI canvas, use :func:`stock_canvas`.
 
-   .. function:: void message(std::string content, float duration = 1.0f, MessagePosition position = MessagePosition::top_center, std::tuple<double, double, double, double> color = std::tuple<double, double, double, double>{1.0, 0.92, 0.016, 1.0}, float size = 2e+01f)
+   .. function:: void message(std::string content, float duration = 1.0f, MessagePosition position = MessagePosition::top_center, StdLib::ColorRGBA color = StdLib::ColorRGBA{1.0f, 0.92f, 0.016f, 1.0f}, float size = 2e+01f)
 
       Display a message on the screen.
 
@@ -48,7 +48,7 @@ UI
        * **content** -- Message content.
        * **duration** -- Duration before the message disappears, in seconds.
        * **position** -- Position to display the message.
-       * **color** -- The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.
+       * **color** -- The color of the message.
        * **size** -- Size of the message, differs per position.
 
    

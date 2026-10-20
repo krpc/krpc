@@ -768,36 +768,31 @@ SpaceCenter
 
 
 
-.. class:: LaunchSite
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: LaunchSite
 
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
-   .. function:: std::string name()
+
+   .. member:: std::string name
 
       The name of the launch site.
 
-   
-
-   .. function:: CelestialBody body()
+   .. member:: CelestialBody body
 
       The celestial body the launch site is on.
 
-   
-
-   .. function:: EditorFacility editor_facility()
+   .. member:: EditorFacility editor_facility
 
       Which editor is normally used for this launch site.
-
-   
-
 
 
 .. namespace:: krpc::services::SpaceCenter
 .. enum-struct:: EditorFacility
 
    Editor facility.
-   See :func:`LaunchSite::editor_facility`.
+   See :member:`LaunchSite::editor_facility`.
 
 
    .. enumerator:: vab

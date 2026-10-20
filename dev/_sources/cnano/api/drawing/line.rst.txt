@@ -38,8 +38,8 @@ Line
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Line_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_Line_t instance)
-   .. function:: krpc_error_t krpc_Drawing_Line_set_Color(krpc_connection_t connection, krpc_Drawing_Line_t instance, const krpc_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_Line_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_Drawing_Line_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Line_set_Color(krpc_connection_t connection, krpc_Drawing_Line_t instance, const krpc_StdLib_ColorRGB_t * value)
 
       The color of the path.
 
@@ -50,8 +50,8 @@ Line
 
          For a path drawn with more than one color, this is the color at its start.
 
-   .. function:: krpc_error_t krpc_Drawing_Line_Colors(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * returnValue, krpc_Drawing_Line_t instance)
-   .. function:: krpc_error_t krpc_Drawing_Line_set_Colors(krpc_connection_t connection, krpc_Drawing_Line_t instance, const krpc_list_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_Line_Colors(krpc_connection_t connection, krpc_list_StdLib_ColorRGB_t * returnValue, krpc_Drawing_Line_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Line_set_Colors(krpc_connection_t connection, krpc_Drawing_Line_t instance, const krpc_list_StdLib_ColorRGB_t * value)
 
       The colors of the path, blended evenly from its start to its end.
 

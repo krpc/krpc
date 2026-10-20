@@ -44,14 +44,14 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. staticmethod:: message(content, [duration = 1.0], [position = MessagePosition.top_center], [color = (1.0, 0.92, 0.016, 1.0)], [size = 2e+01])
+.. staticmethod:: message(content, [duration = 1.0], [position = MessagePosition.top_center], [color = StdLib.ColorRGBA(1.0, 0.92, 0.016, 1.0)], [size = 2e+01])
 
    Display a message on the screen.
 
    :param str content: Message content.
    :param float duration: Duration before the message disappears, in seconds.
    :param MessagePosition position: Position to display the message.
-   :param tuple color: The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.
+   :param StdLib.ColorRGBA color: The color of the message.
    :param float size: Size of the message, differs per position.
    
 

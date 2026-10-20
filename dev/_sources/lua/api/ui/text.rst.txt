@@ -93,13 +93,12 @@ Text
       :Attribute: Can be read or written
       :rtype: :class:`UI.FontStyle`
 
-   .. attribute:: color: Tuple
+   .. attribute:: color: StdLib.ColorRGBA
 
-      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
-      fully transparent and 1 is fully opaque.
+      The color the text is drawn in.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`StdLib.ColorRGBA`
 
    .. attribute:: alignment: UI.TextAnchor
 

@@ -557,7 +557,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_reaction_wheel_torque
@@ -568,7 +568,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_rcs_torque
@@ -579,7 +579,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_rcs_force
@@ -590,7 +590,7 @@ Vessel
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_rcs_acceleration
@@ -602,7 +602,7 @@ Vessel
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_engine_torque
@@ -613,7 +613,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_control_surface_torque
@@ -624,7 +624,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_other_torque
@@ -636,7 +636,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_angular_acceleration
@@ -649,7 +649,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_reaction_wheel_angular_acceleration
@@ -662,7 +662,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_rcs_angular_acceleration
@@ -674,7 +674,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_engine_angular_acceleration
@@ -687,7 +687,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_control_surface_angular_acceleration
@@ -700,7 +700,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: available_other_angular_acceleration
@@ -713,7 +713,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: reference_frame
@@ -915,8 +915,8 @@ Vessel
       The axis-aligned bounding box of the vessel in the given reference frame.
 
       :param ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :rtype: :class:`BoundingBox`
       :Game Scenes: Flight
 
    .. method:: velocity(reference_frame)
@@ -955,6 +955,43 @@ Vessel
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
 
+
+
+.. class:: AxisRange(positive, negative)
+
+   The largest value of a quantity, such as a torque or a force, in the positive and the
+   negative direction of each of three axes.
+
+
+   .. attribute:: positive
+
+      The value in the positive direction of each axis.
+
+      :rtype: tuple(float, float, float)
+
+   .. attribute:: negative
+
+      The value in the negative direction of each axis, which is zero or less.
+
+      :rtype: tuple(float, float, float)
+
+
+.. class:: BoundingBox(min, max)
+
+   An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+
+   .. attribute:: min
+
+      The position of the minimum vertex of the box.
+
+      :rtype: tuple(float, float, float)
+
+   .. attribute:: max
+
+      The position of the maximum vertex of the box.
+
+      :rtype: tuple(float, float, float)
 
 
 .. class:: VesselType
@@ -1223,30 +1260,40 @@ Vessel
       :rtype: :class:`SuitType`
    
 
-   .. attribute:: career_log_flights
+   .. attribute:: career_log
 
-      The flight IDs for each entry in the career flight log.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: list(int)
-   
-
-   .. attribute:: career_log_types
-
-      The type for each entry in the career flight log.
+      The entries in the crew member's career flight log.
 
       :Attribute: Read-only, cannot be set
-      :rtype: list(str)
+      :rtype: list(:class:`FlightLogEntry`)
    
 
-   .. attribute:: career_log_targets
 
-      The body name for each entry in the career flight log.
 
-      :Attribute: Read-only, cannot be set
-      :rtype: list(str)
-   
+.. class:: FlightLogEntry(flight, type, target)
 
+   An entry in a crew member's career flight log.
+
+   .. note::
+
+      See :attr:`CrewMember.career_log`.
+   .. attribute:: flight
+
+      The flight identifier of the entry.
+
+      :rtype: int
+
+   .. attribute:: type
+
+      The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+      :rtype: str
+
+   .. attribute:: target
+
+      The name of the body the entry is for.
+
+      :rtype: str
 
 
 .. class:: CrewMemberType

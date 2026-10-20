@@ -952,35 +952,29 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. class:: LaunchSite
+.. class:: LaunchSite(name, body, editor_facility)
 
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
+
 
    .. attribute:: name
 
       The name of the launch site.
 
-      :Attribute: Read-only, cannot be set
       :rtype: str
-   
 
    .. attribute:: body
 
       The celestial body the launch site is on.
 
-      :Attribute: Read-only, cannot be set
       :rtype: :class:`CelestialBody`
-   
 
    .. attribute:: editor_facility
 
       Which editor is normally used for this launch site.
 
-      :Attribute: Read-only, cannot be set
       :rtype: :class:`EditorFacility`
-   
-
 
 
 .. class:: EditorFacility

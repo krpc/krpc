@@ -368,11 +368,11 @@ Part
 
          The highlighting is removed when the client that enabled it disconnects.
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> getHighlightColor()
+   .. method:: StdLib.ColorRGB getHighlightColor()
 
-   .. method:: void setHighlightColor(org.javatuples.Triplet<Double,Double,Double> value)
+   .. method:: void setHighlightColor(StdLib.ColorRGB value)
 
-      The color used to highlight the part, as an RGB triple.
+      The color used to highlight the part.
 
       :Game Scenes: Flight
 
@@ -1061,12 +1061,12 @@ Part
       :returns: The position as a vector.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> boundingBox(ReferenceFrame referenceFrame)
+   .. method:: BoundingBox boundingBox(ReferenceFrame referenceFrame)
 
       The axis-aligned bounding box of the part in the given reference frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vectors are in.
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Flight
 
 
@@ -2088,7 +2088,7 @@ Control Surface
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
+   .. method:: AxisRange getAvailableTorque()
 
 
       The available torque, in Newton meters, that can be produced by this control surface,
@@ -2744,7 +2744,7 @@ Engine
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
+   .. method:: AxisRange getAvailableTorque()
 
 
       The available torque, in Newton meters, that can be produced by this engine,
@@ -3059,42 +3059,42 @@ Experiment
 
    Obtained by calling :meth:`Experiment.getData()`.
 
-   .. method:: float getDataAmount()
+   .. constructor:: public ScienceData(float dataAmount, float scienceValue, float transmitValue)
 
+      Construct a ScienceData from the values of its fields.
+
+
+   .. method:: float getDataAmount()
 
       Data amount.
 
-      :Game Scenes: Flight
-
    .. method:: float getScienceValue()
-
 
       Science value.
 
-      :Game Scenes: Flight
-
    .. method:: float getTransmitValue()
 
-
       Transmit value.
-
-      :Game Scenes: Flight
-
 
 
 .. type:: public class ScienceSubject
 
    Obtained by calling :meth:`Experiment.getScienceSubject()`.
 
+   .. constructor:: public ScienceSubject(String id, String title, boolean isComplete, float science, float scienceCap, float dataScale, float subjectValue, float scientificValue)
+
+      Construct a ScienceSubject from the values of its fields.
+
+
+   .. method:: String getId()
+
+      The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
+
    .. method:: String getTitle()
 
-
-      Title of science subject, displayed in science archives
-
-      :Game Scenes: Flight
+      The title of the subject, as shown in the science archives.
 
    .. method:: boolean getIsComplete()
-
 
       Whether the subject has been fully researched. This is true once the science banked for
       the subject reaches the science cap. As the banked science (see :meth:`ScienceSubject.getScience()`) is
@@ -3103,45 +3103,27 @@ Experiment
       has produced data, and how valuable it is, use :meth:`Experiment.getHasData()` and
       :meth:`ScienceData.getTransmitValue()`.
 
-      :Game Scenes: Flight
-
    .. method:: float getScience()
-
 
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-      :Game Scenes: Flight
-
    .. method:: float getScienceCap()
-
 
       Total science allowable for this subject.
 
-      :Game Scenes: Flight
-
    .. method:: float getDataScale()
-
 
       Multiply science value by this to determine data amount in mits.
 
-      :Game Scenes: Flight
-
    .. method:: float getSubjectValue()
-
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
 
-      :Game Scenes: Flight
-
    .. method:: float getScientificValue()
-
 
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
-
-      :Game Scenes: Flight
-
 
 
 Fairing
@@ -3319,11 +3301,11 @@ Light
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Triplet<Float,Float,Float> getColor()
+   .. method:: StdLib.ColorRGB getColor()
 
-   .. method:: void setColor(org.javatuples.Triplet<Float,Float,Float> value)
+   .. method:: void setColor(StdLib.ColorRGB value)
 
-      The color of the light, as an RGB triple.
+      The color of the light.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -3796,7 +3778,7 @@ Reaction Wheel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
+   .. method:: AxisRange getAvailableTorque()
 
 
       The available torque, in Newton meters, that can be produced by this reaction wheel,
@@ -3806,7 +3788,7 @@ Reaction Wheel
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getMaxTorque()
+   .. method:: AxisRange getMaxTorque()
 
 
       The maximum torque, in Newton meters, that can be produced by this reaction wheel,
@@ -3995,7 +3977,7 @@ Robotic Controller
       :param Part part:
       :Game Scenes: Flight
 
-   .. method:: java.util.List<java.util.List<String>> axes()
+   .. method:: java.util.List<RoboticAxis> axes()
 
       The axes for the controller.
 
@@ -4030,6 +4012,28 @@ Robotic Controller
       :returns: Returns ``true`` if the axis is cleared successfully.
       :Game Scenes: Flight
 
+
+
+.. type:: public class RoboticAxis
+
+   An axis of a robotic controller.
+
+   .. note::
+
+      See :meth:`RoboticController.axes()`.
+
+   .. constructor:: public RoboticAxis(Module module, String fieldName)
+
+      Construct a RoboticAxis from the values of its fields.
+
+
+   .. method:: Module getModule()
+
+      The part module the axis belongs to.
+
+   .. method:: String getFieldName()
+
+      The name of the field the axis controls.
 
 
 Robotic Hinge
@@ -4521,7 +4525,7 @@ RCS
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
+   .. method:: AxisRange getAvailableTorque()
 
 
       The available torque, in Newton meters, that can be produced by this RCS,
@@ -4535,10 +4539,10 @@ RCS
       .. note::
 
          Precision mode weakens the block, and the available torque follows it. A block
-         driven by :meth:`RCS.getInputOverride()` is exempt, so :meth:`RCS.overrideTorque(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)`
+         driven by :meth:`RCS.getInputOverride()` is exempt, so :meth:`RCS.overrideWrench(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)`
          can report the larger torque an override reaches.
 
-   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableForce()
+   .. method:: AxisRange getAvailableForce()
 
 
       The available force, in Newtons, that can be produced by this RCS,
@@ -4552,7 +4556,7 @@ RCS
       .. note::
 
          Precision mode weakens the block, and the available force follows it. A block
-         driven by :meth:`RCS.getInputOverride()` is exempt, so :meth:`RCS.overrideForce(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)`
+         driven by :meth:`RCS.getInputOverride()` is exempt, so :meth:`RCS.overrideWrench(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)`
          can report the larger force an override reaches.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getForce()
@@ -4573,39 +4577,20 @@ RCS
 
       :Game Scenes: Flight
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> overrideForce(org.javatuples.Triplet<Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> translation)
+   .. method:: Wrench overrideWrench(org.javatuples.Triplet<Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> translation)
 
-      The force the given demands would produce, in Newtons. The vector is in the
-      vessel's reference frame (:meth:`Vessel.getReferenceFrame()`).
-      Returns zero if the RCS is inactive.
+      The force and torque the given demands would produce, in Newtons and Newton meters.
 
       :param org.javatuples.Triplet<Double,Double,Double> rotation: A rotation demand, as set by :meth:`RCS.getRotationOverride()`.
       :param org.javatuples.Triplet<Double,Double,Double> translation: A translation demand, as set by :meth:`RCS.getTranslationOverride()`.
-      :returns: The force as a vector.
+      :returns: The force, and the torque about the vessel's center of mass, in the vessel's reference frame (:meth:`Vessel.getReferenceFrame()`), or zero if the RCS is inactive.
       :Game Scenes: Flight
 
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :meth:`RCS.getForce()` includes.
-
-   .. method:: org.javatuples.Triplet<Double,Double,Double> overrideTorque(org.javatuples.Triplet<Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> translation)
-
-      The torque the given demands would produce about the vessel's center of mass, in
-      Newton meters. The vector is in the vessel's reference frame
-      (:meth:`Vessel.getReferenceFrame()`). Returns zero if the RCS is inactive.
-
-      :param org.javatuples.Triplet<Double,Double,Double> rotation: A rotation demand, as set by :meth:`RCS.getRotationOverride()`.
-      :param org.javatuples.Triplet<Double,Double,Double> translation: A translation demand, as set by :meth:`RCS.getTranslationOverride()`.
-      :returns: The torque as a vector.
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :meth:`RCS.getTorque()` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust, which
+         :meth:`RCS.getForce()` and :meth:`RCS.getTorque()` include.
 
    .. method:: float getAvailableThrust()
 

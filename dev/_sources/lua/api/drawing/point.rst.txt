@@ -32,12 +32,12 @@ Point
       :Attribute: Can be read or written
       :rtype: boolean
 
-   .. attribute:: color: Tuple
+   .. attribute:: color: StdLib.ColorRGB
 
       The color of the object.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`StdLib.ColorRGB`
 
    .. attribute:: size: number
 

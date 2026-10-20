@@ -140,13 +140,12 @@ InputField
          A control that is not interactable is drawn grayed out and ignores the user,
          but is still visible. Set its visibility to false to hide it instead.
 
-   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getColor()
+   .. method:: StdLib.ColorRGBA getColor()
 
-   .. method:: void setColor(org.javatuples.Quartet<Double,Double,Double,Double> value)
+   .. method:: void setColor(StdLib.ColorRGBA value)
 
-      The color the control is tinted with, as (red, green, blue, alpha). An alpha
-      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
-      the control drawn as the skin has it.
+      The color the control is tinted with. White, the default, leaves the control drawn
+      as the skin has it.
 
    
 

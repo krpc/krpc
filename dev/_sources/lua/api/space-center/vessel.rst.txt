@@ -491,7 +491,7 @@ Vessel
       :Attribute: Read-only, cannot be set
       :rtype: List
 
-   .. attribute:: available_torque: Tuple
+   .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The maximum torque that the vessel generates. Includes contributions from
       reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -500,9 +500,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_reaction_wheel_torque: Tuple
+   .. attribute:: available_reaction_wheel_torque: SpaceCenter.AxisRange
 
       The maximum torque that the currently active and powered reaction wheels can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -510,9 +510,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_rcs_torque: Tuple
+   .. attribute:: available_rcs_torque: SpaceCenter.AxisRange
 
       The maximum torque that the currently active RCS thrusters can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -520,9 +520,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_rcs_force: Tuple
+   .. attribute:: available_rcs_force: SpaceCenter.AxisRange
 
       The maximum force that the currently active RCS thrusters can generate.
       Returns the forces in :math:`N` along each of the coordinate axes of the
@@ -530,9 +530,9 @@ Vessel
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_rcs_acceleration: Tuple
+   .. attribute:: available_rcs_acceleration: SpaceCenter.AxisRange
 
       The maximum acceleration that the currently active RCS thrusters can generate.
       This is :attr:`SpaceCenter.Vessel.available_rcs_force` divided by the vessel's :attr:`SpaceCenter.Vessel.mass`.
@@ -541,9 +541,9 @@ Vessel
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_engine_torque: Tuple
+   .. attribute:: available_engine_torque: SpaceCenter.AxisRange
 
       The maximum torque that the currently active and gimballed engines can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -551,9 +551,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_control_surface_torque: Tuple
+   .. attribute:: available_control_surface_torque: SpaceCenter.AxisRange
 
       The maximum torque that the aerodynamic control surfaces can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -561,9 +561,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_other_torque: Tuple
+   .. attribute:: available_other_torque: SpaceCenter.AxisRange
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate.
@@ -572,9 +572,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_angular_acceleration: Tuple
+   .. attribute:: available_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the vessel can generate. Includes contributions
       from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -584,9 +584,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_reaction_wheel_angular_acceleration: Tuple
+   .. attribute:: available_reaction_wheel_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the currently active and powered reaction wheels
       can generate. This is :attr:`SpaceCenter.Vessel.available_reaction_wheel_torque` divided by the vessel's
@@ -596,9 +596,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_rcs_angular_acceleration: Tuple
+   .. attribute:: available_rcs_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
       This is :attr:`SpaceCenter.Vessel.available_rcs_torque` divided by the vessel's :attr:`SpaceCenter.Vessel.moment_of_inertia`.
@@ -607,9 +607,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_engine_angular_acceleration: Tuple
+   .. attribute:: available_engine_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the currently active and gimballed engines can
       generate. This is :attr:`SpaceCenter.Vessel.available_engine_torque` divided by the vessel's
@@ -619,9 +619,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_control_surface_angular_acceleration: Tuple
+   .. attribute:: available_control_surface_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
       This is :attr:`SpaceCenter.Vessel.available_control_surface_torque` divided by the vessel's
@@ -631,9 +631,9 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_other_angular_acceleration: Tuple
+   .. attribute:: available_other_angular_acceleration: SpaceCenter.AxisRange
 
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate. This is :attr:`SpaceCenter.Vessel.available_other_torque` divided
@@ -643,7 +643,7 @@ Vessel
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
 
@@ -829,8 +829,8 @@ Vessel
       The axis-aligned bounding box of the vessel in the given reference frame.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-      :rtype: Tuple
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :rtype: :class:`SpaceCenter.BoundingBox`
 
    .. method:: velocity(reference_frame)
 
@@ -864,6 +864,43 @@ Vessel
       :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
       :rtype: Tuple
 
+
+
+.. class:: AxisRange
+
+   The largest value of a quantity, such as a torque or a force, in the positive and the
+   negative direction of each of three axes.
+
+
+   .. attribute:: positive: Tuple
+
+      The value in the positive direction of each axis.
+
+      :rtype: Tuple
+
+   .. attribute:: negative: Tuple
+
+      The value in the negative direction of each axis, which is zero or less.
+
+      :rtype: Tuple
+
+
+.. class:: BoundingBox
+
+   An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+
+   .. attribute:: min: Tuple
+
+      The position of the minimum vertex of the box.
+
+      :rtype: Tuple
+
+   .. attribute:: max: Tuple
+
+      The position of the maximum vertex of the box.
+
+      :rtype: Tuple
 
 
 .. class:: VesselType
@@ -1117,27 +1154,39 @@ Vessel
       :Attribute: Can be read or written
       :rtype: :class:`SpaceCenter.SuitType`
 
-   .. attribute:: career_log_flights: List
+   .. attribute:: career_log: List
 
-      The flight IDs for each entry in the career flight log.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: List
-
-   .. attribute:: career_log_types: List
-
-      The type for each entry in the career flight log.
+      The entries in the crew member's career flight log.
 
       :Attribute: Read-only, cannot be set
       :rtype: List
 
-   .. attribute:: career_log_targets: List
 
-      The body name for each entry in the career flight log.
 
-      :Attribute: Read-only, cannot be set
-      :rtype: List
+.. class:: FlightLogEntry
 
+   An entry in a crew member's career flight log.
+
+   .. note::
+
+      See :attr:`SpaceCenter.CrewMember.career_log`.
+   .. attribute:: flight: number
+
+      The flight identifier of the entry.
+
+      :rtype: number
+
+   .. attribute:: type: string
+
+      The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+      :rtype: string
+
+   .. attribute:: target: string
+
+      The name of the body the entry is for.
+
+      :rtype: string
 
 
 .. class:: CrewMemberType

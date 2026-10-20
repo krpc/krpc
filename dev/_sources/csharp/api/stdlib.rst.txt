@@ -8,8 +8,8 @@ Standard Library
 
 .. class:: StdLib
 
-   A standard library of scalar mathematics, vector and quaternion operations, and
-   printing, for use within server side functions.
+   A standard library of mathematics and printing for server side functions, and of the
+   colors other services use.
 
    .. note::
 
@@ -559,9 +559,9 @@ Standard Library
 
          Throws an exception if the axis is zero.
 
-   .. function:: System.Tuple<System.Tuple<double,double,double>,double> QuaternionToAxisAngle(System.Tuple<double,double,double,double> q)
+   .. function:: AxisAngle QuaternionToAxisAngle(System.Tuple<double,double,double,double> q)
 
-      The axis and angle of a rotation, with the angle in radians between 0 and pi.
+      The axis and angle of a rotation.
 
       :parameters:
 
@@ -572,8 +572,7 @@ Standard Library
 
       .. note::
 
-         The axis is a unit vector, or zero for no rotation. Throws an exception if the
-         quaternion is zero.
+         Throws an exception if the quaternion is zero.
 
    .. function:: System.Tuple<double,double,double,double> QuaternionFromToRotation(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
 
@@ -660,3 +659,78 @@ Standard Library
 
          A function evaluated by a stream or an event prints on every update. The message is
          written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+.. struct:: AxisAngle
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :meth:`StdLib.QuaternionToAxisAngle <StdLib.StdLib.QuaternionToAxisAngle>`.
+
+   .. function:: AxisAngle(System.Tuple<double,double,double> axis, double angle)
+
+      Construct a AxisAngle from the values of its fields.
+
+
+   .. property:: System.Tuple<double,double,double> Axis { get; }
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+   .. property:: double Angle { get; }
+
+      The angle of the rotation, in radians between 0 and pi.
+
+
+.. struct:: ColorRGB
+
+   A color, as red, green and blue components between 0 and 1.
+
+   .. function:: ColorRGB(float r, float g, float b)
+
+      Construct a ColorRGB from the values of its fields.
+
+
+   .. property:: float R { get; }
+
+      The red component.
+
+   .. property:: float G { get; }
+
+      The green component.
+
+   .. property:: float B { get; }
+
+      The blue component.
+
+
+.. struct:: ColorRGBA
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+
+   .. function:: ColorRGBA(float r, float g, float b, float a)
+
+      Construct a ColorRGBA from the values of its fields.
+
+
+   .. property:: float R { get; }
+
+      The red component.
+
+   .. property:: float G { get; }
+
+      The green component.
+
+   .. property:: float B { get; }
+
+      The blue component.
+
+   .. property:: float A { get; }
+
+      The alpha component.

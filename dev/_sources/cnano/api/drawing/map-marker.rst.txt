@@ -54,8 +54,8 @@ MapMarker
 
       :Game Scenes: Flight, Tracking Station
 
-   .. function:: krpc_error_t krpc_Drawing_MapMarker_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_Drawing_MapMarker_t instance)
-   .. function:: krpc_error_t krpc_Drawing_MapMarker_set_Color(krpc_connection_t connection, krpc_Drawing_MapMarker_t instance, const krpc_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_Drawing_MapMarker_t instance)
+   .. function:: krpc_error_t krpc_Drawing_MapMarker_set_Color(krpc_connection_t connection, krpc_Drawing_MapMarker_t instance, const krpc_StdLib_ColorRGB_t * value)
 
       The color of the marker.
 

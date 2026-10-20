@@ -45,8 +45,8 @@ Circle
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: std::tuple<double, double, double> color()
-   .. function:: void set_color(std::tuple<double, double, double> value)
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
 
       The color of the path.
 
@@ -57,8 +57,8 @@ Circle
 
          For a path drawn with more than one color, this is the color at its start.
 
-   .. function:: std::vector<std::tuple<double, double, double>> colors()
-   .. function:: void set_colors(std::vector<std::tuple<double, double, double>> value)
+   .. function:: std::vector<StdLib::ColorRGB> colors()
+   .. function:: void set_colors(std::vector<StdLib::ColorRGB> value)
 
       The colors of the path, blended evenly from its start to its end.
 

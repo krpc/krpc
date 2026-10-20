@@ -100,12 +100,11 @@ Image
          a file cannot be redrawn this way: the file contents a client reads back
          would no longer be what is on the screen.
 
-   .. function:: krpc_error_t krpc_UI_Image_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_UI_Image_t instance)
-   .. function:: krpc_error_t krpc_UI_Image_set_Color(krpc_connection_t connection, krpc_UI_Image_t instance, const krpc_tuple_double_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_UI_Image_Color(krpc_connection_t connection, krpc_StdLib_ColorRGBA_t * returnValue, krpc_UI_Image_t instance)
+   .. function:: krpc_error_t krpc_UI_Image_set_Color(krpc_connection_t connection, krpc_UI_Image_t instance, const krpc_StdLib_ColorRGBA_t * value)
 
       The color the image is tinted with, or the color of the rectangle when no
-      picture is set, as (red, green, blue, alpha). An alpha of 0 is fully
-      transparent and 1 is fully opaque.
+      picture is set.
 
    
 

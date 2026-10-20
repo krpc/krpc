@@ -54,8 +54,8 @@ MapMarker
 
       :Game Scenes: Flight, Tracking Station
 
-   .. function:: std::tuple<double, double, double> color()
-   .. function:: void set_color(std::tuple<double, double, double> value)
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
 
       The color of the marker.
 

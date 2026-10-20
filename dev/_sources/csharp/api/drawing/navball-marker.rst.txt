@@ -33,7 +33,7 @@ NavballMarker
 
          A visible marker is still hidden while it is on the far side of the navball.
 
-   .. property:: System.Tuple<double,double,double> Color { get; set; }
+   .. property:: StdLib.ColorRGB Color { get; set; }
 
       Set the color
 

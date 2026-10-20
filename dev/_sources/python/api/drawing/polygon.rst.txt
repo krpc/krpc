@@ -39,7 +39,7 @@ Polygon
       The color of the path.
 
       :Attribute: Can be read or written
-      :rtype: tuple(float, float, float)
+      :rtype: :class:`StdLib.ColorRGB`
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
 
@@ -52,7 +52,7 @@ Polygon
       The colors of the path, blended evenly from its start to its end.
 
       :Attribute: Can be read or written
-      :rtype: list(tuple(float, float, float))
+      :rtype: list(:class:`StdLib.ColorRGB`)
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
 

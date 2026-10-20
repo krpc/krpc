@@ -48,7 +48,7 @@ MapMarker
 
       :Game Scenes: Flight, Tracking Station
 
-   .. property:: System.Tuple<double,double,double> Color { get; set; }
+   .. property:: StdLib.ColorRGB Color { get; set; }
 
       The color of the marker.
 

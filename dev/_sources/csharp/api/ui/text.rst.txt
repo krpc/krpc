@@ -87,10 +87,9 @@ Text
 
       :Game Scenes: All
 
-   .. property:: System.Tuple<double,double,double,double> Color { get; set; }
+   .. property:: StdLib.ColorRGBA Color { get; set; }
 
-      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
-      fully transparent and 1 is fully opaque.
+      The color the text is drawn in.
 
       :Game Scenes: All
 

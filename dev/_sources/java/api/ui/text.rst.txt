@@ -99,12 +99,11 @@ Text
 
    
 
-   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getColor()
+   .. method:: StdLib.ColorRGBA getColor()
 
-   .. method:: void setColor(org.javatuples.Quartet<Double,Double,Double,Double> value)
+   .. method:: void setColor(StdLib.ColorRGBA value)
 
-      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
-      fully transparent and 1 is fully opaque.
+      The color the text is drawn in.
 
    
 

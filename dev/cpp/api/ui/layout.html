@@ -724,14 +724,13 @@ directions.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI6Layout7paddingEv">
-<span id="_CPPv3N4krpc8services2UI6Layout7paddingEv"></span><span id="_CPPv2N4krpc8services2UI6Layout7paddingEv"></span><span id="krpc::services::UI::Layout::padding"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">padding</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI6Layout7paddingEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services2UI6Layout7paddingEv"></span><span id="_CPPv2N4krpc8services2UI6Layout7paddingEv"></span><span id="krpc::services::UI::Layout::padding"></span><a class="reference internal" href="#_CPPv4N4krpc8services2UI7PaddingE" title="krpc::services::UI::Padding"><span class="n"><span class="pre">Padding</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">padding</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI6Layout7paddingEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI6Layout11set_paddingENSt5tupleI7int32_t7int32_t7int32_t7int32_tEE">
-<span id="_CPPv3N4krpc8services2UI6Layout11set_paddingENSt5tupleI7int32_t7int32_t7int32_t7int32_tEE"></span><span id="_CPPv2N4krpc8services2UI6Layout11set_paddingENSt5tupleI7int32_t7int32_t7int32_t7int32_tEE"></span><span id="krpc::services::UI::Layout::set_padding__std::tuple:int32_t.int32_t.int32_t.int32_t:"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_padding</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI6Layout11set_paddingENSt5tupleI7int32_t7int32_t7int32_t7int32_tEE" title="Link to this definition">#</a><br /></dt>
-<dd><p>The gap left inside the edges of the panel, in whole pixels, as
-(left, right, top, bottom).</p>
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI6Layout11set_paddingE7Padding">
+<span id="_CPPv3N4krpc8services2UI6Layout11set_paddingE7Padding"></span><span id="_CPPv2N4krpc8services2UI6Layout11set_paddingE7Padding"></span><span id="krpc::services::UI::Layout::set_padding__Padding"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_padding</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services2UI7PaddingE" title="krpc::services::UI::Padding"><span class="n"><span class="pre">Padding</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI6Layout11set_paddingE7Padding" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap left inside the edges of the panel.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -790,6 +789,40 @@ the constraint is <a class="reference internal" href="#_CPPv4N4krpc8services2UI1
 <p class="admonition-title">Note</p>
 <p>Only applies to a grid layout. Throws an exception for the other layouts.</p>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI7PaddingE">
+<span id="_CPPv3N4krpc8services2UI7PaddingE"></span><span id="_CPPv2N4krpc8services2UI7PaddingE"></span><span id="krpc::services::UI::Padding"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Padding</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI7PaddingE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap left inside each edge of a layout, in whole pixels.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#_CPPv4N4krpc8services2UI6Layout7paddingEv" title="krpc::services::UI::Layout::padding"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Layout::padding()</span></code></a>.</p>
+</div>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI7Padding4leftE">
+<span id="_CPPv3N4krpc8services2UI7Padding4leftE"></span><span id="_CPPv2N4krpc8services2UI7Padding4leftE"></span><span id="krpc::services::UI::Padding::left__int32_t"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">left</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI7Padding4leftE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap inside the left edge.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI7Padding5rightE">
+<span id="_CPPv3N4krpc8services2UI7Padding5rightE"></span><span id="_CPPv2N4krpc8services2UI7Padding5rightE"></span><span id="krpc::services::UI::Padding::right__int32_t"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">right</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI7Padding5rightE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap inside the right edge.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI7Padding3topE">
+<span id="_CPPv3N4krpc8services2UI7Padding3topE"></span><span id="_CPPv2N4krpc8services2UI7Padding3topE"></span><span id="krpc::services::UI::Padding::top__int32_t"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">top</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI7Padding3topE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap inside the top edge.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI7Padding6bottomE">
+<span id="_CPPv3N4krpc8services2UI7Padding6bottomE"></span><span id="_CPPv2N4krpc8services2UI7Padding6bottomE"></span><span id="krpc::services::UI::Padding::bottom__int32_t"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bottom</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI7Padding6bottomE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The gap inside the bottom edge.</p>
 </dd></dl>
 
 </dd></dl>

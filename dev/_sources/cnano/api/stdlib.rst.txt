@@ -6,8 +6,8 @@ Standard Library
 ================
 
 
-A standard library of scalar mathematics, vector and quaternion operations, and
-printing, for use within server side functions.
+A standard library of mathematics and printing for server side functions, and of the
+colors other services use.
 
 .. note::
 
@@ -681,9 +681,9 @@ printing, for use within server side functions.
 
 
 
-.. function:: krpc_error_t krpc_StdLib_QuaternionToAxisAngle(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q)
+.. function:: krpc_error_t krpc_StdLib_QuaternionToAxisAngle(krpc_connection_t connection, krpc_StdLib_AxisAngle_t * returnValue, const krpc_tuple_double_double_double_double_t * q)
 
-   The axis and angle of a rotation, with the angle in radians between 0 and pi.
+   The axis and angle of a rotation.
 
    :Parameters:
 
@@ -693,8 +693,7 @@ printing, for use within server side functions.
 
    .. note::
 
-      The axis is a unit vector, or zero for no rotation. Throws an exception if the
-      quaternion is zero.
+      Throws an exception if the quaternion is zero.
 
 
 
@@ -791,3 +790,64 @@ printing, for use within server side functions.
 
       A function evaluated by a stream or an event prints on every update. The message is
       written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+
+
+.. type:: krpc_StdLib_AxisAngle_t
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :func:`krpc_StdLib_QuaternionToAxisAngle`.
+   .. member:: krpc_tuple_double_double_double_t axis
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+   .. member:: double angle
+
+      The angle of the rotation, in radians between 0 and pi.
+
+
+.. type:: krpc_StdLib_ColorRGB_t
+
+   A color, as red, green and blue components between 0 and 1.
+
+
+   .. member:: float r
+
+      The red component.
+
+   .. member:: float g
+
+      The green component.
+
+   .. member:: float b
+
+      The blue component.
+
+
+.. type:: krpc_StdLib_ColorRGBA_t
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+   .. member:: float r
+
+      The red component.
+
+   .. member:: float g
+
+      The green component.
+
+   .. member:: float b
+
+      The blue component.
+
+   .. member:: float a
+
+      The alpha component.

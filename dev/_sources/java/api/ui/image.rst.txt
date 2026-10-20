@@ -98,13 +98,12 @@ Image
          a file cannot be redrawn this way: the file contents a client reads back
          would no longer be what is on the screen.
 
-   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getColor()
+   .. method:: StdLib.ColorRGBA getColor()
 
-   .. method:: void setColor(org.javatuples.Quartet<Double,Double,Double,Double> value)
+   .. method:: void setColor(StdLib.ColorRGBA value)
 
       The color the image is tinted with, or the color of the rectangle when no
-      picture is set, as (red, green, blue, alpha). An alpha of 0 is fully
-      transparent and 1 is fully opaque.
+      picture is set.
 
    
 

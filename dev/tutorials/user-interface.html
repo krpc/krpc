@@ -634,6 +634,7 @@ is shown while the mouse rests on the button.</p>
 <span class="cp">#endif</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/std_lib.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/ui.h&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -666,7 +667,7 @@ is shown while the mouse rests on the button.</p>
 <span class="w">  </span><span class="c1">// Lay the contents of the panel out in a column</span>
 <span class="w">  </span><span class="n">krpc_UI_Layout_t</span><span class="w"> </span><span class="n">layout</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_UI_Panel_AddVerticalLayout</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layout</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_tuple_int32_int32_int32_int32_t</span><span class="w"> </span><span class="n">padding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_UI_Padding_t</span><span class="w"> </span><span class="n">padding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">};</span>
 <span class="w">  </span><span class="n">krpc_UI_Layout_set_Padding</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">layout</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">padding</span><span class="p">);</span>
 <span class="w">  </span><span class="n">krpc_UI_Layout_set_Spacing</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">layout</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
 
@@ -691,7 +692,7 @@ is shown while the mouse rests on the button.</p>
 <span class="w">  </span><span class="c1">// Add some text displaying the total engine thrust</span>
 <span class="w">  </span><span class="n">krpc_UI_Text_t</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_UI_Panel_AddText</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="s">"Thrust: 0 kN"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_tuple_double_double_double_double_t</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_StdLib_ColorRGBA_t</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">};</span>
 <span class="w">  </span><span class="n">krpc_UI_Text_set_Color</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">color</span><span class="p">);</span>
 <span class="w">  </span><span class="n">krpc_UI_Text_set_Size</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="mi">18</span><span class="p">);</span>
 
@@ -736,6 +737,7 @@ is shown while the mouse rests on the button.</p>
 </div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.StdLib</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.UI</span><span class="p">;</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">UserInterface</span>
@@ -760,7 +762,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="w">        </span><span class="c1">// Lay the contents of the panel out in a column</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">AddVerticalLayout</span><span class="w"> </span><span class="p">();</span>
-<span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Padding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tuple</span><span class="p">.</span><span class="n">Create</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Padding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Padding</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
 <span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="n">Spacing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">// Add a button to set the throttle to maximum, with a tooltip shown</span>
@@ -775,7 +777,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="w">        </span><span class="c1">// Add some text displaying the total engine thrust</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">AddText</span><span class="w"> </span><span class="p">(</span><span class="s">"Thrust: 0 kN"</span><span class="p">);</span>
-<span class="w">        </span><span class="n">text</span><span class="p">.</span><span class="n">Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tuple</span><span class="p">.</span><span class="n">Create</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">text</span><span class="p">.</span><span class="n">Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ColorRGBA</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
 <span class="w">        </span><span class="n">text</span><span class="p">.</span><span class="n">Size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">// Set up streams to monitor the button and the slider</span>
@@ -810,6 +812,7 @@ is shown while the mouse rests on the button.</p>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/std_lib.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/ui.hpp&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -833,7 +836,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="w">  </span><span class="c1">// Lay the contents of the panel out in a column</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">add_vertical_layout</span><span class="p">();</span>
-<span class="w">  </span><span class="n">layout</span><span class="p">.</span><span class="n">set_padding</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">));</span>
+<span class="w">  </span><span class="n">layout</span><span class="p">.</span><span class="n">set_padding</span><span class="p">(</span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">UI</span><span class="o">::</span><span class="n">Padding</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">));</span>
 <span class="w">  </span><span class="n">layout</span><span class="p">.</span><span class="n">set_spacing</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// Add a button to set the throttle to maximum, with a tooltip shown while</span>
@@ -848,7 +851,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="w">  </span><span class="c1">// Add some text displaying the total engine thrust</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="n">add_text</span><span class="p">(</span><span class="s">"Thrust: 0 kN"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">text</span><span class="p">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+<span class="w">  </span><span class="n">text</span><span class="p">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">StdLib</span><span class="o">::</span><span class="n">ColorRGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
 <span class="w">  </span><span class="n">text</span><span class="p">.</span><span class="n">set_size</span><span class="p">(</span><span class="mi">18</span><span class="p">);</span>
 
 <span class="w">  </span><span class="c1">// Set up streams to monitor the button and the slider</span>
@@ -884,6 +887,7 @@ is shown while the mouse rests on the button.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.StdLib</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.UI</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.UI.Button</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.UI.Canvas</span><span class="p">;</span>
@@ -894,7 +898,6 @@ is shown while the mouse rests on the button.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.UI.Text</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">org.javatuples.Pair</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">org.javatuples.Quartet</span><span class="p">;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
 
@@ -922,7 +925,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="w">        </span><span class="c1">// Lay the contents of the panel out in a column</span>
 <span class="w">        </span><span class="n">Layout</span><span class="w"> </span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="na">addVerticalLayout</span><span class="p">();</span>
-<span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="na">setPadding</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Quartet</span><span class="o">&lt;</span><span class="n">Integer</span><span class="p">,</span><span class="n">Integer</span><span class="p">,</span><span class="n">Integer</span><span class="p">,</span><span class="n">Integer</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">));</span>
+<span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="na">setPadding</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">UI</span><span class="p">.</span><span class="na">Padding</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">));</span>
 <span class="w">        </span><span class="n">layout</span><span class="p">.</span><span class="na">setSpacing</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Add a button to set the throttle to maximum, with a tooltip shown</span>
@@ -937,7 +940,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="w">        </span><span class="c1">// Add some text displaying the total engine thrust</span>
 <span class="w">        </span><span class="n">Text</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">panel</span><span class="p">.</span><span class="na">addText</span><span class="p">(</span><span class="s">"Thrust: 0 kN"</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
-<span class="w">        </span><span class="n">text</span><span class="p">.</span><span class="na">setColor</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Quartet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">));</span>
+<span class="w">        </span><span class="n">text</span><span class="p">.</span><span class="na">setColor</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">StdLib</span><span class="p">.</span><span class="na">ColorRGBA</span><span class="p">(</span><span class="mf">1f</span><span class="p">,</span><span class="w"> </span><span class="mf">1f</span><span class="p">,</span><span class="w"> </span><span class="mf">1f</span><span class="p">,</span><span class="w"> </span><span class="mf">1f</span><span class="p">));</span>
 <span class="w">        </span><span class="n">text</span><span class="p">.</span><span class="na">setSize</span><span class="p">(</span><span class="mi">18</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Set up streams to monitor the button and the slider</span>
@@ -989,7 +992,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="c1">-- Lay the contents of the panel out in a column</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">panel</span><span class="p">:</span><span class="nf">add_vertical_layout</span><span class="p">()</span>
-<span class="nv">layout</span><span class="p">.</span><span class="py">padding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">List</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">}</span>
+<span class="nv">layout</span><span class="p">.</span><span class="py">padding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">ui</span><span class="p">.</span><span class="nf">Padding</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
 <span class="nv">layout</span><span class="p">.</span><span class="py">spacing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span>
 
 <span class="c1">-- Add a button to set the throttle to maximum, with a tooltip shown while the</span>
@@ -1004,7 +1007,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="c1">-- Add some text displaying the total engine thrust</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">panel</span><span class="p">:</span><span class="nf">add_text</span><span class="p">(</span><span class="s2">"Thrust: 0 kN"</span><span class="p">)</span>
-<span class="nv">text</span><span class="p">.</span><span class="py">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">List</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<span class="nv">text</span><span class="p">.</span><span class="py">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">std_lib</span><span class="p">.</span><span class="nf">ColorRGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
 <span class="nv">text</span><span class="p">.</span><span class="py">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span>
 
 <span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
@@ -1051,7 +1054,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="c1"># Lay the contents of the panel out in a column</span>
 <span class="n">layout</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_vertical_layout</span><span class="p">()</span>
-<span class="n">layout</span><span class="o">.</span><span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">layout</span><span class="o">.</span><span class="n">padding</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">Padding</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">layout</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="mi">6</span>
 
 <span class="c1"># Add a button to set the throttle to maximum, with a tooltip shown while the</span>
@@ -1066,7 +1069,7 @@ is shown while the mouse rests on the button.</p>
 
 <span class="c1"># Add some text displaying the total engine thrust</span>
 <span class="n">text</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s2">"Thrust: 0 kN"</span><span class="p">)</span>
-<span class="n">text</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">text</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">std_lib</span><span class="o">.</span><span class="n">ColorRGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">text</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">18</span>
 
 <span class="c1"># Set up streams to monitor the button and the slider</span>

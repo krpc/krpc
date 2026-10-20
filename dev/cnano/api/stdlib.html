@@ -701,8 +701,8 @@
                   
   <section id="standard-library">
 <h1>Standard Library<a class="headerlink" href="#standard-library" title="Link to this heading">#</a></h1>
-<p>A standard library of scalar mathematics, vector and quaternion operations, and
-printing, for use within server side functions.</p>
+<p>A standard library of mathematics and printing for server side functions, and of the
+colors other services use.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Vectors are position and direction tuples, and rotations are unit quaternion tuples
@@ -1369,8 +1369,8 @@ rotation q.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_StdLib_QuaternionToAxisAngle">
-<a class="reference internal" href="../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_StdLib_QuaternionToAxisAngle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">q</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_StdLib_QuaternionToAxisAngle" title="Link to this definition">#</a><br /></dt>
-<dd><p>The axis and angle of a rotation, with the angle in radians between 0 and pi.</p>
+<a class="reference internal" href="../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_StdLib_QuaternionToAxisAngle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_StdLib_AxisAngle_t" title="krpc_StdLib_AxisAngle_t"><span class="n"><span class="pre">krpc_StdLib_AxisAngle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">q</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_StdLib_QuaternionToAxisAngle" title="Link to this definition">#</a><br /></dt>
+<dd><p>The axis and angle of a rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1380,8 +1380,7 @@ rotation q.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The axis is a unit vector, or zero for no rotation. Throws an exception if the
-quaternion is zero.</p>
+<p>Throws an exception if the quaternion is zero.</p>
 </div>
 </dd></dl>
 
@@ -1479,6 +1478,86 @@ extrapolates. Throws an exception if either quaternion is zero.</p>
 <p>A function evaluated by a stream or an event prints on every update. The message is
 written at the Info level, so a server log level of Warning or Error hides it.</p>
 </div>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_StdLib_AxisAngle_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_StdLib_AxisAngle_t</span></span></span><a class="headerlink" href="#c.krpc_StdLib_AxisAngle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A rotation as an axis and an angle.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#c.krpc_StdLib_QuaternionToAxisAngle" title="krpc_StdLib_QuaternionToAxisAngle"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_StdLib_QuaternionToAxisAngle()</span></code></a>.</p>
+</div>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_StdLib_AxisAngle_t.axis">
+<span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">axis</span></span></span><a class="headerlink" href="#c.krpc_StdLib_AxisAngle_t.axis" title="Link to this definition">#</a><br /></dt>
+<dd><p>The axis of the rotation, as a unit vector, or zero for no rotation.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_StdLib_AxisAngle_t.angle">
+<span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">angle</span></span></span><a class="headerlink" href="#c.krpc_StdLib_AxisAngle_t.angle" title="Link to this definition">#</a><br /></dt>
+<dd><p>The angle of the rotation, in radians between 0 and pi.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_StdLib_ColorRGB_t</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A color, as red, green and blue components between 0 and 1.</p>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.r">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">r</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.r" title="Link to this definition">#</a><br /></dt>
+<dd><p>The red component.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.g">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">g</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.g" title="Link to this definition">#</a><br /></dt>
+<dd><p>The green component.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGB_t.b">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGB_t.b" title="Link to this definition">#</a><br /></dt>
+<dd><p>The blue component.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_StdLib_ColorRGBA_t</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A color, as red, green, blue and alpha components between 0 and 1.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An alpha of 0 is fully transparent and 1 is fully opaque.</p>
+</div>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.r">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">r</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.r" title="Link to this definition">#</a><br /></dt>
+<dd><p>The red component.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.g">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">g</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.g" title="Link to this definition">#</a><br /></dt>
+<dd><p>The green component.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.b">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.b" title="Link to this definition">#</a><br /></dt>
+<dd><p>The blue component.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_StdLib_ColorRGBA_t.a">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">a</span></span></span><a class="headerlink" href="#c.krpc_StdLib_ColorRGBA_t.a" title="Link to this definition">#</a><br /></dt>
+<dd><p>The alpha component.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>

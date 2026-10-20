@@ -407,10 +407,10 @@ Part
 
    .. attribute:: highlight_color
 
-      The color used to highlight the part, as an RGB triple.
+      The color used to highlight the part.
 
       :Attribute: Can be read or written
-      :rtype: tuple(float, float, float)
+      :rtype: :class:`StdLib.ColorRGB`
       :Game Scenes: Flight
 
    .. attribute:: cost
@@ -1183,8 +1183,8 @@ Part
       The axis-aligned bounding box of the part in the given reference frame.
 
       :param ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :rtype: :class:`BoundingBox`
       :Game Scenes: Flight
 
 
@@ -2279,7 +2279,7 @@ Control Surface
       correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
 
@@ -2981,7 +2981,7 @@ Engine
       Returns zero if the engine is inactive, or not gimballed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: can_reverse_thrust
@@ -3310,52 +3310,51 @@ Experiment
       conditions. Returns ``None`` if the experiment is unavailable.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ScienceSubject`
+      :rtype: :class:`ScienceSubject` or None
       :Game Scenes: Flight
 
 
 
-.. class:: ScienceData
+.. class:: ScienceData(data_amount, science_value, transmit_value)
 
    Obtained by calling :attr:`Experiment.data`.
+
 
    .. attribute:: data_amount
 
       Data amount.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-      :Game Scenes: Flight
 
    .. attribute:: science_value
 
       Science value.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-      :Game Scenes: Flight
 
    .. attribute:: transmit_value
 
       Transmit value.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-      :Game Scenes: Flight
 
 
-
-.. class:: ScienceSubject
+.. class:: ScienceSubject(id, title, is_complete, science, science_cap, data_scale, subject_value, scientific_value)
 
    Obtained by calling :attr:`Experiment.science_subject`.
 
+
+   .. attribute:: id
+
+      The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
+
+      :rtype: str
+
    .. attribute:: title
 
-      Title of science subject, displayed in science archives
+      The title of the subject, as shown in the science archives.
 
-      :Attribute: Read-only, cannot be set
       :rtype: str
-      :Game Scenes: Flight
 
    .. attribute:: is_complete
 
@@ -3366,52 +3365,39 @@ Experiment
       has produced data, and how valuable it is, use :attr:`Experiment.has_data` and
       :attr:`ScienceData.transmit_value`.
 
-      :Attribute: Read-only, cannot be set
       :rtype: bool
-      :Game Scenes: Flight
 
    .. attribute:: science
 
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-      :Game Scenes: Flight
 
    .. attribute:: science_cap
 
       Total science allowable for this subject.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-      :Game Scenes: Flight
 
    .. attribute:: data_scale
 
       Multiply science value by this to determine data amount in mits.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-      :Game Scenes: Flight
 
    .. attribute:: subject_value
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-      :Game Scenes: Flight
 
    .. attribute:: scientific_value
 
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-      :Game Scenes: Flight
-
 
 
 Fairing
@@ -3603,10 +3589,10 @@ Light
 
    .. attribute:: color
 
-      The color of the light, as an RGB triple.
+      The color of the light.
 
       :Attribute: Can be read or written
-      :rtype: tuple(float, float, float)
+      :rtype: :class:`StdLib.ColorRGB`
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: blink
@@ -4114,7 +4100,7 @@ Reaction Wheel
       Returns zero if the reaction wheel is inactive or broken.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
    .. attribute:: max_torque
@@ -4124,7 +4110,7 @@ Reaction Wheel
       These axes correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: authority_limiter
@@ -4321,7 +4307,7 @@ Robotic Controller
 
       The axes for the controller.
 
-      :rtype: list(list(str))
+      :rtype: list(:class:`RoboticAxis`)
       :Game Scenes: Flight
 
    .. method:: add_axis(module, field_name)
@@ -4356,6 +4342,26 @@ Robotic Controller
       :rtype: bool
       :Game Scenes: Flight
 
+
+
+.. class:: RoboticAxis(module, field_name)
+
+   An axis of a robotic controller.
+
+   .. note::
+
+      See :meth:`RoboticController.axes`.
+   .. attribute:: module
+
+      The part module the axis belongs to.
+
+      :rtype: :class:`Module`
+
+   .. attribute:: field_name
+
+      The name of the field the axis controls.
+
+      :rtype: str
 
 
 Robotic Hinge
@@ -4869,14 +4875,14 @@ RCS
       Returns zero if RCS is disable.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
 
       .. note::
 
          Precision mode weakens the block, and the available torque follows it. A block
-         driven by :attr:`RCS.input_override` is exempt, so :meth:`RCS.override_torque`
+         driven by :attr:`RCS.input_override` is exempt, so :meth:`RCS.override_wrench`
          can report the larger torque an override reaches.
 
    .. attribute:: available_force
@@ -4887,14 +4893,14 @@ RCS
       Returns zero if RCS is disabled.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :rtype: :class:`AxisRange`
       :Game Scenes: Flight
 
 
       .. note::
 
          Precision mode weakens the block, and the available force follows it. A block
-         driven by :attr:`RCS.input_override` is exempt, so :meth:`RCS.override_force`
+         driven by :attr:`RCS.input_override` is exempt, so :meth:`RCS.override_wrench`
          can report the larger force an override reaches.
 
    .. attribute:: force
@@ -4917,41 +4923,21 @@ RCS
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
 
-   .. method:: override_force(rotation, translation)
+   .. method:: override_wrench(rotation, translation)
 
-      The force the given demands would produce, in Newtons. The vector is in the
-      vessel's reference frame (:attr:`Vessel.reference_frame`).
-      Returns zero if the RCS is inactive.
+      The force and torque the given demands would produce, in Newtons and Newton meters.
 
       :param tuple rotation: A rotation demand, as set by :attr:`RCS.rotation_override`.
       :param tuple translation: A translation demand, as set by :attr:`RCS.translation_override`.
-      :returns: The force as a vector.
-      :rtype: tuple(float, float, float)
+      :returns: The force, and the torque about the vessel's center of mass, in the vessel's reference frame (:attr:`Vessel.reference_frame`), or zero if the RCS is inactive.
+      :rtype: :class:`Wrench`
       :Game Scenes: Flight
 
 
       .. note::
 
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :attr:`RCS.force` includes.
-
-   .. method:: override_torque(rotation, translation)
-
-      The torque the given demands would produce about the vessel's center of mass, in
-      Newton meters. The vector is in the vessel's reference frame
-      (:attr:`Vessel.reference_frame`). Returns zero if the RCS is inactive.
-
-      :param tuple rotation: A rotation demand, as set by :attr:`RCS.rotation_override`.
-      :param tuple translation: A translation demand, as set by :attr:`RCS.translation_override`.
-      :returns: The torque as a vector.
-      :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
-
-
-      .. note::
-
-         The demands do not have to be applied. The prediction leaves out full thrust,
-         which :attr:`RCS.torque` includes.
+         The demands do not have to be applied. The prediction leaves out full thrust, which
+         :attr:`RCS.force` and :attr:`RCS.torque` include.
 
    .. attribute:: available_thrust
 

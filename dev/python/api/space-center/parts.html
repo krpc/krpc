@@ -1398,13 +1398,13 @@ if it is installed.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Part.highlight_color">
 <span class="sig-name descname"><span class="pre">highlight_color</span></span><a class="headerlink" href="#SpaceCenter.Part.highlight_color" title="Link to this definition">#</a></dt>
-<dd><p>The color used to highlight the part, as an RGB triple.</p>
+<dd><p>The color used to highlight the part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(float, float, float)</p>
+<dd class="field-even"><p><a class="reference internal" href="../stdlib.html#StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref py py-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -2779,10 +2779,10 @@ If the part is physicsless in flight, this is equivalent to <a class="reference 
 <dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the returned position vectors are in.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box, as position vectors.</p>
+<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>tuple(tuple(float, float, float), tuple(float, float, float))</p>
+<dd class="field-odd"><p><a class="reference internal" href="vessel.html#SpaceCenter.BoundingBox" title="SpaceCenter.BoundingBox"><code class="xref py py-class docutils literal notranslate"><span class="pre">BoundingBox</span></code></a></p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>Flight</p>
@@ -4606,7 +4606,7 @@ correspond to the coordinate axes of the <a class="reference internal" href="ves
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(tuple(float, float, float), tuple(float, float, float))</p>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.AxisRange" title="SpaceCenter.AxisRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">AxisRange</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -5839,7 +5839,7 @@ Returns zero if the engine is inactive, or not gimballed.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(tuple(float, float, float), tuple(float, float, float))</p>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.AxisRange" title="SpaceCenter.AxisRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">AxisRange</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -6471,7 +6471,7 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.ScienceSubject" title="SpaceCenter.ScienceSubject"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScienceSubject</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.ScienceSubject" title="SpaceCenter.ScienceSubject"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScienceSubject</span></code></a> or None</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -6483,21 +6483,15 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 
 <dl class="py class">
 <dt class="sig sig-object py" id="SpaceCenter.ScienceData">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ScienceData</span></span><a class="headerlink" href="#SpaceCenter.ScienceData" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ScienceData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_amount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">science_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transmit_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ScienceData" title="Link to this definition">#</a></dt>
 <dd><p>Obtained by calling <a class="reference internal" href="#SpaceCenter.Experiment.data" title="SpaceCenter.Experiment.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.data</span></code></a>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.ScienceData.data_amount">
 <span class="sig-name descname"><span class="pre">data_amount</span></span><a class="headerlink" href="#SpaceCenter.ScienceData.data_amount" title="Link to this definition">#</a></dt>
 <dd><p>Data amount.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6507,14 +6501,8 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 <span class="sig-name descname"><span class="pre">science_value</span></span><a class="headerlink" href="#SpaceCenter.ScienceData.science_value" title="Link to this definition">#</a></dt>
 <dd><p>Science value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6524,14 +6512,8 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 <span class="sig-name descname"><span class="pre">transmit_value</span></span><a class="headerlink" href="#SpaceCenter.ScienceData.transmit_value" title="Link to this definition">#</a></dt>
 <dd><p>Transmit value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6540,21 +6522,26 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 
 <dl class="py class">
 <dt class="sig sig-object py" id="SpaceCenter.ScienceSubject">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ScienceSubject</span></span><a class="headerlink" href="#SpaceCenter.ScienceSubject" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ScienceSubject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_complete</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">science</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">science_cap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scientific_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ScienceSubject" title="Link to this definition">#</a></dt>
 <dd><p>Obtained by calling <a class="reference internal" href="#SpaceCenter.Experiment.science_subject" title="SpaceCenter.Experiment.science_subject"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.science_subject</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.ScienceSubject.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#SpaceCenter.ScienceSubject.id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of the subject, e.g. <code class="docutils literal notranslate"><span class="pre">crewReport&#64;KerbinSrfLandedLaunchPad</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.ScienceSubject.title">
 <span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#SpaceCenter.ScienceSubject.title" title="Link to this definition">#</a></dt>
-<dd><p>Title of science subject, displayed in science archives</p>
+<dd><p>The title of the subject, as shown in the science archives.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6569,14 +6556,8 @@ repeated experiments, not whether a single run has produced data. To check wheth
 has produced data, and how valuable it is, use <a class="reference internal" href="#SpaceCenter.Experiment.has_data" title="SpaceCenter.Experiment.has_data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.has_data</span></code></a> and
 <a class="reference internal" href="#SpaceCenter.ScienceData.transmit_value" title="SpaceCenter.ScienceData.transmit_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ScienceData.transmit_value</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6587,14 +6568,8 @@ has produced data, and how valuable it is, use <a class="reference internal" hre
 <dd><p>Amount of science already earned from this subject, not updated until after
 transmission/recovery.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6604,14 +6579,8 @@ transmission/recovery.</p>
 <span class="sig-name descname"><span class="pre">science_cap</span></span><a class="headerlink" href="#SpaceCenter.ScienceSubject.science_cap" title="Link to this definition">#</a></dt>
 <dd><p>Total science allowable for this subject.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6621,14 +6590,8 @@ transmission/recovery.</p>
 <span class="sig-name descname"><span class="pre">data_scale</span></span><a class="headerlink" href="#SpaceCenter.ScienceSubject.data_scale" title="Link to this definition">#</a></dt>
 <dd><p>Multiply science value by this to determine data amount in mits.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6638,14 +6601,8 @@ transmission/recovery.</p>
 <span class="sig-name descname"><span class="pre">subject_value</span></span><a class="headerlink" href="#SpaceCenter.ScienceSubject.subject_value" title="Link to this definition">#</a></dt>
 <dd><p>Multiplier for specific Celestial Body/Experiment Situation combination.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6656,14 +6613,8 @@ transmission/recovery.</p>
 <dd><p>Diminishing value multiplier for decreasing the science value returned from repeated
 experiments.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attribute<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Read-only, cannot be set</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6999,13 +6950,13 @@ Returns an error if you try to deploy fixed landing gear.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Light.color">
 <span class="sig-name descname"><span class="pre">color</span></span><a class="headerlink" href="#SpaceCenter.Light.color" title="Link to this definition">#</a></dt>
-<dd><p>The color of the light, as an RGB triple.</p>
+<dd><p>The color of the light.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(float, float, float)</p>
+<dd class="field-even"><p><a class="reference internal" href="../stdlib.html#StdLib.ColorRGB" title="StdLib.ColorRGB"><code class="xref py py-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -7882,7 +7833,7 @@ Returns zero if the reaction wheel is inactive or broken.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(tuple(float, float, float), tuple(float, float, float))</p>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.AxisRange" title="SpaceCenter.AxisRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">AxisRange</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -7901,7 +7852,7 @@ These axes correspond to the coordinate axes of the <a class="reference internal
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(tuple(float, float, float), tuple(float, float, float))</p>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.AxisRange" title="SpaceCenter.AxisRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">AxisRange</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -8269,7 +8220,7 @@ See <a class="reference internal" href="#SpaceCenter.ResourceDrain.drain_mode" t
 <dd><p>The axes for the controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list(list(str))</p>
+<dd class="field-odd"><p>list(<a class="reference internal" href="#SpaceCenter.RoboticAxis" title="SpaceCenter.RoboticAxis"><code class="xref py py-class docutils literal notranslate"><span class="pre">RoboticAxis</span></code></a>)</p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>Flight</p>
@@ -8344,6 +8295,38 @@ See <a class="reference internal" href="#SpaceCenter.ResourceDrain.drain_mode" t
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.RoboticAxis">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">RoboticAxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RoboticAxis" title="Link to this definition">#</a></dt>
+<dd><p>An axis of a robotic controller.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#SpaceCenter.RoboticController.axes" title="SpaceCenter.RoboticController.axes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RoboticController.axes()</span></code></a>.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.RoboticAxis.module">
+<span class="sig-name descname"><span class="pre">module</span></span><a class="headerlink" href="#SpaceCenter.RoboticAxis.module" title="Link to this definition">#</a></dt>
+<dd><p>The part module the axis belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.RoboticAxis.field_name">
+<span class="sig-name descname"><span class="pre">field_name</span></span><a class="headerlink" href="#SpaceCenter.RoboticAxis.field_name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the field the axis controls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -9352,7 +9335,7 @@ Returns zero if RCS is disable.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(tuple(float, float, float), tuple(float, float, float))</p>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.AxisRange" title="SpaceCenter.AxisRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">AxisRange</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -9361,7 +9344,7 @@ Returns zero if RCS is disable.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Precision mode weakens the block, and the available torque follows it. A block
-driven by <a class="reference internal" href="#SpaceCenter.RCS.input_override" title="SpaceCenter.RCS.input_override"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.input_override</span></code></a> is exempt, so <a class="reference internal" href="#SpaceCenter.RCS.override_torque" title="SpaceCenter.RCS.override_torque"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RCS.override_torque()</span></code></a>
+driven by <a class="reference internal" href="#SpaceCenter.RCS.input_override" title="SpaceCenter.RCS.input_override"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.input_override</span></code></a> is exempt, so <a class="reference internal" href="#SpaceCenter.RCS.override_wrench" title="SpaceCenter.RCS.override_wrench"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RCS.override_wrench()</span></code></a>
 can report the larger torque an override reaches.</p>
 </div>
 </dd></dl>
@@ -9378,7 +9361,7 @@ Returns zero if RCS is disabled.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(tuple(float, float, float), tuple(float, float, float))</p>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.AxisRange" title="SpaceCenter.AxisRange"><code class="xref py py-class docutils literal notranslate"><span class="pre">AxisRange</span></code></a></p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -9387,7 +9370,7 @@ Returns zero if RCS is disabled.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Precision mode weakens the block, and the available force follows it. A block
-driven by <a class="reference internal" href="#SpaceCenter.RCS.input_override" title="SpaceCenter.RCS.input_override"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.input_override</span></code></a> is exempt, so <a class="reference internal" href="#SpaceCenter.RCS.override_force" title="SpaceCenter.RCS.override_force"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RCS.override_force()</span></code></a>
+driven by <a class="reference internal" href="#SpaceCenter.RCS.input_override" title="SpaceCenter.RCS.input_override"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.input_override</span></code></a> is exempt, so <a class="reference internal" href="#SpaceCenter.RCS.override_wrench" title="SpaceCenter.RCS.override_wrench"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RCS.override_wrench()</span></code></a>
 can report the larger force an override reaches.</p>
 </div>
 </dd></dl>
@@ -9431,11 +9414,9 @@ in Newton meters. The vector is in the vessel’s reference frame
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.RCS.override_force">
-<span class="sig-name descname"><span class="pre">override_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RCS.override_force" title="Link to this definition">#</a></dt>
-<dd><p>The force the given demands would produce, in Newtons. The vector is in the
-vessel’s reference frame (<a class="reference internal" href="vessel.html#SpaceCenter.Vessel.reference_frame" title="SpaceCenter.Vessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.reference_frame</span></code></a>).
-Returns zero if the RCS is inactive.</p>
+<dt class="sig sig-object py" id="SpaceCenter.RCS.override_wrench">
+<span class="sig-name descname"><span class="pre">override_wrench</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RCS.override_wrench" title="Link to this definition">#</a></dt>
+<dd><p>The force and torque the given demands would produce, in Newtons and Newton meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -9444,10 +9425,10 @@ Returns zero if the RCS is inactive.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The force as a vector.</p>
+<dd class="field-even"><p>The force, and the torque about the vessel’s center of mass, in the vessel’s reference frame (<a class="reference internal" href="vessel.html#SpaceCenter.Vessel.reference_frame" title="SpaceCenter.Vessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.reference_frame</span></code></a>), or zero if the RCS is inactive.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>tuple(float, float, float)</p>
+<dd class="field-odd"><p><a class="reference internal" href="flight.html#SpaceCenter.Wrench" title="SpaceCenter.Wrench"><code class="xref py py-class docutils literal notranslate"><span class="pre">Wrench</span></code></a></p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>Flight</p>
@@ -9455,38 +9436,8 @@ Returns zero if the RCS is inactive.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out full thrust,
-which <a class="reference internal" href="#SpaceCenter.RCS.force" title="SpaceCenter.RCS.force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.force</span></code></a> includes.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.RCS.override_torque">
-<span class="sig-name descname"><span class="pre">override_torque</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RCS.override_torque" title="Link to this definition">#</a></dt>
-<dd><p>The torque the given demands would produce about the vessel’s center of mass, in
-Newton meters. The vector is in the vessel’s reference frame
-(<a class="reference internal" href="vessel.html#SpaceCenter.Vessel.reference_frame" title="SpaceCenter.Vessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.reference_frame</span></code></a>). Returns zero if the RCS is inactive.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rotation</strong> (<em>tuple</em>) – A rotation demand, as set by <a class="reference internal" href="#SpaceCenter.RCS.rotation_override" title="SpaceCenter.RCS.rotation_override"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.rotation_override</span></code></a>.</p></li>
-<li><p><strong>translation</strong> (<em>tuple</em>) – A translation demand, as set by <a class="reference internal" href="#SpaceCenter.RCS.translation_override" title="SpaceCenter.RCS.translation_override"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.translation_override</span></code></a>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The torque as a vector.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>tuple(float, float, float)</p>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The demands do not have to be applied. The prediction leaves out full thrust,
-which <a class="reference internal" href="#SpaceCenter.RCS.torque" title="SpaceCenter.RCS.torque"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.torque</span></code></a> includes.</p>
+<p>The demands do not have to be applied. The prediction leaves out full thrust, which
+<a class="reference internal" href="#SpaceCenter.RCS.force" title="SpaceCenter.RCS.force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.force</span></code></a> and <a class="reference internal" href="#SpaceCenter.RCS.torque" title="SpaceCenter.RCS.torque"><code class="xref py py-attr docutils literal notranslate"><span class="pre">RCS.torque</span></code></a> include.</p>
 </div>
 </dd></dl>
 

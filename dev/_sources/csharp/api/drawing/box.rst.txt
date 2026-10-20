@@ -40,7 +40,7 @@ Box
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. property:: System.Tuple<double,double,double> Color { get; set; }
+   .. property:: StdLib.ColorRGB Color { get; set; }
 
       The color of the edges.
 

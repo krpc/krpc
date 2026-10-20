@@ -756,29 +756,27 @@ SpaceCenter
 
 
 
-.. class:: LaunchSite
+.. struct:: LaunchSite
 
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
+
+   .. function:: LaunchSite(string name, CelestialBody body, EditorFacility editorFacility)
+
+      Construct a LaunchSite from the values of its fields.
+
 
    .. property:: string Name { get; }
 
       The name of the launch site.
 
-      :Game Scenes: All
-
    .. property:: CelestialBody Body { get; }
 
       The celestial body the launch site is on.
 
-      :Game Scenes: All
-
    .. property:: EditorFacility EditorFacility { get; }
 
       Which editor is normally used for this launch site.
-
-      :Game Scenes: All
-
 
 
 .. enum:: EditorFacility

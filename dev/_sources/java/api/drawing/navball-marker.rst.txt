@@ -39,9 +39,9 @@ NavballMarker
 
          A visible marker is still hidden while it is on the far side of the navball.
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> getColor()
+   .. method:: StdLib.ColorRGB getColor()
 
-   .. method:: void setColor(org.javatuples.Triplet<Double,Double,Double> value)
+   .. method:: void setColor(StdLib.ColorRGB value)
 
       Set the color
 

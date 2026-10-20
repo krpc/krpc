@@ -90,11 +90,10 @@ Text
 
    
 
-   .. function:: std::tuple<double, double, double, double> color()
-   .. function:: void set_color(std::tuple<double, double, double, double> value)
+   .. function:: StdLib::ColorRGBA color()
+   .. function:: void set_color(StdLib::ColorRGBA value)
 
-      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
-      fully transparent and 1 is fully opaque.
+      The color the text is drawn in.
 
    
 
