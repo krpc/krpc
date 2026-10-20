@@ -251,14 +251,52 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 var geometry = mesh.sharedMesh;
                 if (geometry == null)
                     continue;
-                var vertices = geometry.bounds.ToVertices ();
-                for (int j = 0; j < vertices.Length; j++) {
-                    // mesh space -> world space -> reference frame space
-                    var vertex = referenceFrame.PositionFromWorldSpace (mesh.transform.TransformPoint (vertices [j]));
-                    bounds.Encapsulate (vertex);
-                }
+                Encapsulate (ref bounds, referenceFrame, mesh.transform.localToWorldMatrix, geometry.bounds);
+            }
+            // An animated model is a skinned mesh, which has a renderer and no mesh filter.
+            // Its mesh is baked in its current pose
+            var skinnedMeshes = part.FindModelComponents<SkinnedMeshRenderer> ();
+            for (int i = 0; i < skinnedMeshes.Count; i++) {
+                var mesh = skinnedMeshes [i];
+                if (!mesh.gameObject.activeInHierarchy || mesh.sharedMesh == null ||
+                    mesh.sharedMesh.vertexCount == 0)
+                    continue;
+                var baked = BakedBounds (mesh);
+                var transform = mesh.transform;
+                // The baked vertices already carry the renderer's scale
+                var toWorld = Matrix4x4.TRS (transform.position, transform.rotation, Vector3.one);
+                Encapsulate (ref bounds, referenceFrame, toWorld, baked);
             }
             return bounds;
+        }
+
+        // The mesh skinned meshes are baked into, reused to save allocating one per call
+        static Mesh bakedMesh;
+        static readonly List<Vector3> bakedVertices = new List<Vector3> ();
+
+        /// <summary>
+        /// The bounds of a skinned mesh in its current pose, in the space of its renderer.
+        /// </summary>
+        static Bounds BakedBounds (SkinnedMeshRenderer renderer)
+        {
+            if (bakedMesh == null)
+                bakedMesh = new Mesh ();
+            renderer.BakeMesh (bakedMesh);
+            bakedMesh.GetVertices (bakedVertices);
+            var bounds = new Bounds (bakedVertices [0], Vector3.zero);
+            for (int i = 1; i < bakedVertices.Count; i++)
+                bounds.Encapsulate (bakedVertices [i]);
+            return bounds;
+        }
+
+        static void Encapsulate (ref Bounds bounds, ReferenceFrame referenceFrame, Matrix4x4 toWorld, Bounds meshBounds)
+        {
+            var vertices = meshBounds.ToVertices ();
+            for (int i = 0; i < vertices.Length; i++) {
+                // mesh space -> world space -> reference frame space
+                var vertex = referenceFrame.PositionFromWorldSpace (toWorld.MultiplyPoint3x4 (vertices [i]));
+                bounds.Encapsulate (vertex);
+            }
         }
     }
 }
