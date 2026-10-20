@@ -130,22 +130,28 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The name tag for the part. Can be set to a custom string using the
-        /// in-game user interface.
+        /// in-game user interface. Throws an exception if no name tag part module is installed.
         /// </summary>
         /// <remarks>
-        /// This string is shared with
-        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>
-        /// if it is installed.
+        /// The name tag part module is provided by
+        /// <a href="https://github.com/KSPModdingLibs/KSPCommunityPartModules">KSPCommunityPartModules</a>
+        /// 0.5 or later, or by
+        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>,
+        /// which shares this string.
         /// </remarks>
         [KRPCProperty]
         public string Tag {
+            get { return NameTag.Get (TagModule); }
+            set { NameTag.Set (TagModule, value); }
+        }
+
+        PartModule TagModule {
             get {
-                var module = InternalPart.Module ("KOSNameTag");
-                return (string)module.GetType ().GetField ("nameTag").GetValue (module);
-            }
-            set {
-                var module = InternalPart.Module ("KOSNameTag");
-                module.GetType ().GetField ("nameTag").SetValue (module, value);
+                var module = NameTag.Module (InternalPart);
+                if (module == null)
+                    throw new InvalidOperationException (
+                        "Part has no name tag module. Install KSPCommunityPartModules 0.5 or later, or kOS.");
+                return module;
             }
         }
 

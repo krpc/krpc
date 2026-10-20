@@ -68,7 +68,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleLiftingSurface",
             "ModuleRCSFX",
             "ModuleInventoryPart",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.extend(["FARBasicDragModel", "FARControlSys"])
@@ -144,7 +143,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleDataTransmitter",
             "ModuleDeployableAntenna",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -175,7 +173,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleCargoBay",
             "ModuleConductionMultiplier",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -203,7 +200,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleControlSurface", "ModuleCargoPart", "KOSNameTag"]
+        modules = ["ModuleControlSurface", "ModuleCargoPart"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -238,7 +235,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleTestSubject",
             "ModuleToggleCrossfeed",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -272,7 +268,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleDockingNode",
             "ModuleColorChanger",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -306,7 +301,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleSurfaceFX",
             "ModuleTestSubject",
             "ModulePartVariants",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -338,7 +332,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleScienceExperiment",
             "ModuleAnimateGeneric",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -371,7 +364,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleStructuralNodeToggle",
             "ModulePartVariants",
             "ModuleCargoPart",
-            "KOSNameTag",
         ] + ["ModuleStructuralNode"] * 12
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -400,7 +392,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleResourceIntake", "ModuleCargoPart", "KOSNameTag"]
+        modules = ["ModuleResourceIntake", "ModuleCargoPart"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -435,7 +427,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleWheelLock",
             "ModuleWheelSuspension",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -466,7 +457,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["LaunchClamp", "ModuleGenerator", "ModuleTestSubject", "KOSNameTag"]
+        modules = ["LaunchClamp", "ModuleGenerator", "ModuleTestSubject"]
         actual_modules = [x.name for x in part.modules]
         if "ModuleRTAntennaPassive" in actual_modules:
             actual_modules.remove("ModuleRTAntennaPassive")
@@ -494,7 +485,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleLight", "KOSNameTag"]
+        modules = ["ModuleLight"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -528,7 +519,6 @@ class TestPartsPart(krpctest.TestCase):
                 "ModuleParachute",
                 "ModuleTestSubject",
                 "ModuleCargoPart",
-                "KOSNameTag",
             ],
             [x.name for x in part.modules],
         )
@@ -559,7 +549,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleActiveRadiator",
             "ModuleDeployableRadiator",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.radiator)
@@ -590,7 +579,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleRCSFX",
             "ModulePartVariants",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.rcs)
@@ -619,7 +607,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleReactionWheel", "ModuleCargoPart", "KOSNameTag"]
+        modules = ["ModuleReactionWheel", "ModuleCargoPart"]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.reaction_wheel)
 
@@ -648,7 +636,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleAnimationGroup",
             "ModuleCoreHeat",
             "ModuleOverheatDisplay",
-            "KOSNameTag",
         ] + ["ModuleResourceConverter"] * 4
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.resource_converter)
@@ -682,7 +669,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleOverheatDisplay",
             "ModuleResourceHarvester",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         self.assertCountEqual(modules, [x.name for x in part.modules])
         self.assertIsNotNone(part.resource_harvester)
@@ -717,7 +703,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleEnviroSensor",
             "ModuleScienceExperiment",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -745,7 +730,7 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["ModuleDeployableSolarPanel", "ModuleCargoPart", "KOSNameTag"]
+        modules = ["ModuleDeployableSolarPanel", "ModuleCargoPart"]
         if self.far_available:
             modules.append("FARBasicDragModel")
         self.assertCountEqual(modules, [x.name for x in part.modules])
@@ -785,7 +770,6 @@ class TestPartsPart(krpctest.TestCase):
             "ModuleDragModifier",
             "ModuleDragModifier",
             "ModuleCargoPart",
-            "KOSNameTag",
         ]
         if self.far_available:
             modules.append("FARBasicDragModel")
@@ -794,17 +778,6 @@ class TestPartsPart(krpctest.TestCase):
         box = part.bounding_box(part.reference_frame)
         self.assertAlmostEqual((-0.495, -1.122, -0.569), box[0], places=2)
         self.assertAlmostEqual((0.495, 0.232, 0.679), box[1], places=2)
-
-    def test_tag(self):
-        part = self.parts.root
-        self.assertEqual("", part.tag)
-        self.addCleanup(setattr, part, "tag", "")
-        part.tag = "pod"
-        self.assertEqual("pod", part.tag)
-        self.assertEqual([part], self.parts.with_tag("pod"))
-        part.tag = ""
-        self.assertEqual("", part.tag)
-        self.assertEqual([], self.parts.with_tag("pod"))
 
     def test_highlighting(self):
         part = self.parts.with_name("Rockomax64.BW")[0]

@@ -60,6 +60,22 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// The version of a loaded plugin assembly, from its KSPAssembly attribute, as
+        /// "major.minor". Empty if the assembly is not loaded. Used by the test framework to
+        /// detect mods that add no part, service or part module of their own (e.g.
+        /// KSPCommunityPartModules, whose versions differ in the modules they define).
+        /// </summary>
+        /// <param name="name">The assembly name, e.g. "KSPCommunityPartModules".</param>
+        [KRPCProcedure]
+        public static string AssemblyVersion (string name)
+        {
+            foreach (var assembly in AssemblyLoader.loadedAssemblies)
+                if (assembly.name == name)
+                    return assembly.versionMajor + "." + assembly.versionMinor;
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Quit the game, closing Kerbal Space Program and returning to the desktop.
         /// Works from any scene, including in-flight, and skips the confirmation dialog
         /// that the main-menu quit button normally shows.

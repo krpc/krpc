@@ -682,3 +682,29 @@ http_archive(
     sha256 = "e6c264137c391bd96b2cdd996b163ec4d7f200eccee0b2555edaf8bae19db2ed",
     url = "https://github.com/UmbraSpaceIndustries/CommunityResourcePack/releases/download/v112.0.1/CommunityResourcePack_112.0.1.zip",
 )
+
+# KSPCommunityPartModules provides ModuleNameTag, the name tag part module that
+# SpaceCenter's Part.Tag uses when kOS is not installed. 0.4.0 predates ModuleNameTag, and
+# is installed to test that kRPC still loads with it, alone and alongside kOS. Both need
+# Harmony.
+http_archive(
+    name = "kspcommunitypartmodules",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/KSPCommunityPartModules/**']), visibility = ['//visibility:public'])",
+    sha256 = "609fc54396af08399a37f9126f3839e898e5cfed688a49e0cdb3c5ee52dba294",
+    url = "https://github.com/KSPModdingLibs/KSPCommunityPartModules/releases/download/v0.5.1/KSPCommunityPartModules-v0.5.1.zip",
+)
+
+http_archive(
+    name = "kspcommunitypartmodules_0_4",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/KSPCommunityPartModules/**']), visibility = ['//visibility:public'])",
+    sha256 = "bb1f98cdbc4e641bc21fa37b7859ddae76d93b1b14e700766a29ca6e7de3c809",
+    url = "https://github.com/KSPModdingLibs/KSPCommunityPartModules/releases/download/v0.4.0/KSPCommunityPartModules-v0.4.0.zip",
+)
+
+# kOS adds its own KOSNameTag part module to every part, which Part.Tag shares.
+http_archive(
+    name = "kos",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/kOS/**']), visibility = ['//visibility:public'])",
+    sha256 = "d61eb36652ff94e793e280d5afb49b22abe70451638ed0ac6d2850483d8a3574",
+    url = "https://github.com/KSP-KOS/KOS/releases/download/1.6.0.1/KOS-1.6.0.1.zip",
+)

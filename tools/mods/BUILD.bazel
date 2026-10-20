@@ -27,6 +27,11 @@
 #                        + GameData/SolverEngines, GameData/ROUtils, GameData/000_SerializationFix,
 #                          GameData/CommunityResourcePack, GameData/KSPCommunityFixes (deps),
 #                          GameData/000_Harmony (dep, shared with RealChute, AGExt and FAR)
+#   KSPCommunityPartModules     -> GameData/KSPCommunityPartModules (0.5.1)
+#                                  + GameData/000_Harmony (dep)
+#   KSPCommunityPartModules-0.4 -> GameData/KSPCommunityPartModules (0.4.0)
+#                                  + GameData/000_Harmony (dep)
+#   kOS                         -> GameData/kOS
 # tools/krpctest mirrors this registry on the Python side.
 
 filegroup(
@@ -169,5 +174,23 @@ filegroup(
 filegroup(
     name = "community_resource_pack",
     srcs = ["@community_resource_pack//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "kspcommunitypartmodules",
+    srcs = ["@kspcommunitypartmodules//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "kspcommunitypartmodules_0_4",
+    srcs = ["@kspcommunitypartmodules_0_4//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "kos",
+    srcs = ["@kos//:gamedata"],
     visibility = ["//visibility:public"],
 )

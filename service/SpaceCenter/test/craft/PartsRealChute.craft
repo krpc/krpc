@@ -325,7 +325,7 @@ PART
 	}
 	MODULE
 	{
-		name = KOSNameTag
+		name = ModuleNameTag
 		isEnabled = True
 		nameTag = 
 		stagingEnabled = True
@@ -652,7 +652,7 @@ PART
 	}
 	MODULE
 	{
-		name = KOSNameTag
+		name = ModuleNameTag
 		isEnabled = True
 		nameTag = 
 		stagingEnabled = True
