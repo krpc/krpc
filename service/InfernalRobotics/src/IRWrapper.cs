@@ -387,9 +387,13 @@ namespace KRPC.InfernalRobotics
 					return listToReturn;
 
 				try {
-					//iterate each "value" in the dictionary
-					foreach(var item in (IList)actualServos)
-						listToReturn.Add(new IRServo (item));
+					// Skip a servo listed twice through a duplicate groupName token
+					var seen = new HashSet<IServo> ();
+					foreach(var item in (IList)actualServos) {
+						var servo = new IRServo (item);
+						if (seen.Add (servo))
+							listToReturn.Add(servo);
+					}
 				} catch (Exception ex) {
 					LogFormatted("Error extracting from actualServos: {0}", ex.Message);
 				}
@@ -903,10 +907,12 @@ namespace KRPC.InfernalRobotics
 		{
 			if (EnsureReady ()) {
 				var fromController = new List<IServo> ();
+				var seen = new HashSet<IServo> ();
 				foreach (var group in IRController.ServoGroups)
 					if (group.Vessel != null && group.Vessel.id == vessel.id)
 						foreach (var servo in group.Servos)
-							fromController.Add (servo);
+							if (seen.Add (servo))
+								fromController.Add (servo);
 				if (fromController.Count > 0)
 					return fromController;
 			}
@@ -960,9 +966,15 @@ namespace KRPC.InfernalRobotics
 				var raw = GroupNameField != null ? GroupNameField.GetValue (servo) as string : null;
 				if (string.IsNullOrEmpty (raw))
 					continue;
+				// IR appends another token to groupName on every vessel activation, without
+				// removing the previous one. We keep the first token per group, as the fix in
+				// https://github.com/meirumeiru/InfernalRobotics/pull/5 does.
+				var servoGroups = new HashSet<string> ();
 				foreach (var membership in raw.Split ('|')) {
 					var parts = membership.Split (';');
 					var name = parts [0];
+					if (!servoGroups.Add (name))
+						continue;
 					int index;
 					if (parts.Length < 2 || !int.TryParse (parts [1], out index))
 						index = int.MaxValue;
