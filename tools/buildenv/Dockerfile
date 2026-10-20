@@ -69,18 +69,6 @@ RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr
     libc++-23-dev libc++abi-23-dev libclang-rt-23-dev libunwind-23-dev && \
     apt-get clean
 
-# Install buildifier. Go is needed only to compile it -- the binary that comes
-# out carries its own runtime -- so the toolchain, the checkout and the module
-# cache go again in the same layer rather than riding along in the image.
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends golang && \
-    git clone https://github.com/bazelbuild/buildtools.git --depth 1 --branch v10.1.0 && \
-    (cd buildtools/buildifier; GOBIN=/usr/local/bin go install) && \
-    apt-get purge -y golang golang-go golang-src && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf buildtools /root/go
-
 # Install ASIO
 RUN apt-get update && \
     apt-get install -y libasio-dev && \

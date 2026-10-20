@@ -31,7 +31,7 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
    `bazel test //...` does not work.
  * `bazel build //...` — **the second gate**: `//:test` does not build every target. Its log must
    be clean, build progress messages only, with no warnings or other output.
- * `//:lint` — Python, C++, C, Java, Lua (luacheck, `.luacheckrc`), doc lint.
+ * `//:lint` — Python, C++, C, Java, Lua (luacheck, `.luacheckrc`), Bazel (buildifier), doc lint.
  * `//core:test`, `//client/python:test`, … — one package, when iterating.
  * `//doc:spelling` — American-English gate; `//doc:check-documented` — every RPC documented.
  * `//:csproj-test` — `.csproj` file-list check.
