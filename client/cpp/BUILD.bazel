@@ -67,6 +67,7 @@ clientgen_cpp(
     name = "services-spacecenter",
     defs = "//service/SpaceCenter:ServiceDefinitions",
     service = "SpaceCenter",
+    deps = [":services-stdlib"],
 )
 
 clientgen_cpp(
@@ -75,6 +76,7 @@ clientgen_cpp(
     service = "Drawing",
     deps = [
         ":services-spacecenter",
+        ":services-stdlib",
         ":services-ui",
     ],
 )
@@ -104,6 +106,7 @@ clientgen_cpp(
     name = "services-ui",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+    deps = [":services-stdlib"],
 )
 
 clientgen_cpp(

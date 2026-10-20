@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.UI.ExtensionMethods;
 using UnityEngine;
-using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.UI
 {
@@ -127,12 +128,11 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
-        /// fully transparent and 1 is fully opaque.
+        /// The color the text is drawn in.
         /// </summary>
         [KRPCProperty]
-        public Tuple4 Color {
-            get { return Internal.color.ToRgbaTuple (); }
+        public ColorRGBA Color {
+            get { return Internal.color.ToColorRGBA (); }
             set { Internal.color = value.ToColor (); }
         }
     }

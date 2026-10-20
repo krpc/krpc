@@ -217,6 +217,10 @@ class TestVessel(krpctest.TestCase):
         crew_member.experience
         crew_member.badass
         crew_member.veteran
+        for entry in crew_member.career_log:
+            self.assertIsInstance(entry.flight, int)
+            self.assertIsInstance(entry.type, str)
+            self.assertIsInstance(entry.target, str)
 
 
 class TestVesselEngines(krpctest.TestCase):

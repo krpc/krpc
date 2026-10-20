@@ -128,6 +128,7 @@
     <Compile Include="Service\KRPC\ArgumentException.cs" />
     <Compile Include="Service\KRPC\ArgumentNullException.cs" />
     <Compile Include="Service\KRPC\ArgumentOutOfRangeException.cs" />
+    <Compile Include="Service\KRPC\ClientInfo.cs" />
     <Compile Include="Service\KRPC\DivideByZeroException.cs" />
     <Compile Include="Service\KRPC\Error.cs" />
     <Compile Include="Service\KRPC\Expression.Collections.cs" />
@@ -195,6 +196,9 @@
     <Compile Include="Service\Scanner\StructSignature.cs" />
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Services.cs" />
+    <Compile Include="Service\StdLib\AxisAngle.cs" />
+    <Compile Include="Service\StdLib\ColorRGB.cs" />
+    <Compile Include="Service\StdLib\ColorRGBA.cs" />
     <Compile Include="Service\StdLib\DecimalRounding.cs" />
     <Compile Include="Service\StdLib\StdLib.cs" />
     <Compile Include="Service\Stream.cs" />

@@ -501,7 +501,8 @@ function TestClient:test_krpc_service_members()
   table.sort(members)
   luaunit.assertEquals(
     members,
-    {'Expression',
+    {'ClientInfo',
+     'Expression',
      'GameScene',
      'Type',
      'TypeCode',

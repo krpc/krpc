@@ -59,6 +59,27 @@ class TestClientGenCNano(ClientGenTestCase, unittest.TestCase):
             self.generate("ServiceA", self.load("Ordering"), {})
         self.assertIn("ServiceB", str(cm.exception))
 
+    def test_struct_of_a_service_that_is_not_defined(self):
+        # The codec of a structure is generated from its fields, which are in the definitions
+        # of the service that defines it
+        thing = {"code": "STRUCT", "service": "ServiceB", "name": "Thing"}
+        procedure = {
+            "id": 1,
+            "parameters": [{"name": "thing", "type": thing}],
+            "documentation": "",
+        }
+        service = {
+            "id": 1,
+            "documentation": "",
+            "procedures": {"Frob": procedure},
+            "classes": {},
+            "enumerations": {},
+            "exceptions": {},
+        }
+        with self.assertRaises(RuntimeError) as cm:
+            self.generate("ServiceA", {"ServiceA": service})
+        self.assertIn("ServiceB.Thing", str(cm.exception))
+
 
 if __name__ == "__main__":
     unittest.main()

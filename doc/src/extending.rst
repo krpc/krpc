@@ -1048,8 +1048,9 @@ You can then run the script from the command line:
      language              Language to generate (cnano, cpp, csharp, java,
                            python) or path to generator
      service               Name of service to generate
-     input                 Path to service definition JSON file or assembly
-                           DLL(s)
+     input                 Path to service definition JSON file(s) or assembly
+                           DLL(s). JSON files can give the definitions of the
+                           services whose types a DLL's service uses.
 
    options:
      -h, --help            show this help message and exit
@@ -1077,6 +1078,9 @@ flag).
    Pass every assembly that declares part of the service. A mod adding an extension member to
    another service's class is generated alongside that service's assembly; see
    :ref:`service-api-extension-members`.
+
+A service that uses a structure from another service also needs the definitions of that service.
+Pass its JSON file from ``GameData/kRPC`` as another input, e.g. ``KRPC.StdLib.json``.
 
 Generating client code from an assembly DLL requires a copy of Kerbal Space Program and a C# runtime
 to be available on the machine. In contrast, generating client code from a JSON file does not have

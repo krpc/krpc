@@ -2,9 +2,9 @@
 
 - **Breaking:** Removing a user interface element another client created, or one the server no
   longer holds, reports that it is not among those this client created (#1072)
-- **Breaking:** Colors are given as `(red, green, blue, alpha)` rather than
-  `(red, green, blue)`, so an element can be drawn translucent. Affects `Text.Color` and the
-  color of a `UI.Message` (#1040)
+- **Breaking:** Return and set colors as a `StdLib.ColorRGBA` structure with an alpha component, in
+  place of a `(red, green, blue)` tuple. Affects `Text.Color` and the color of a `UI.Message`
+  (#1040, #1148)
 - **Breaking:** `InputField.Changed` is only set when the user types in the field (#1040)
 - **Breaking:** User interface elements are drawn using the skin the game draws its own
   interface in, so the size and color that `Text` starts out with are not fixed values (#1040)

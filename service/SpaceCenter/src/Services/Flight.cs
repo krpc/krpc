@@ -8,7 +8,6 @@ using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
-using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -1024,9 +1023,9 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="ut">The universal time used for the atmospheric ephemeris. It
         /// selects the body/Sun geometry used for temperature and density, but does not
         /// change or propagate <see cref="ReferenceFrame"/> or any of the state arguments.</param>
-        /// <returns>A pair containing the aerodynamic force in newtons followed by the
-        /// aerodynamic torque in newton-meters about the vessel's center of mass. Both are
-        /// vectors in reference frame <see cref="ReferenceFrame"/>.</returns>
+        /// <returns>The aerodynamic force, and the aerodynamic torque about the vessel's
+        /// center of mass. Both are vectors in reference frame
+        /// <see cref="ReferenceFrame"/>.</returns>
         /// <remarks>
         /// The position and velocity describe the hypothetical center-of-mass state. The
         /// position, velocity, rotation and angular velocity arguments, and both returned
@@ -1040,7 +1039,7 @@ namespace KRPC.SpaceCenter.Services
         /// is installed the angular velocity and <paramref name="ut"/> arguments are ignored.
         /// </remarks>
         [KRPCMethod]
-        public TupleT3 SimulateAerodynamicWrenchAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity, double ut)
+        public Wrench SimulateAerodynamicWrenchAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity, double ut)
         {
             var vessel = InternalVessel;
             var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
@@ -1076,9 +1075,9 @@ namespace KRPC.SpaceCenter.Services
                     torque = delta * (Vector3d)farTorque * 1000d;
                 }
             }
-            return new TupleT3(
-                referenceFrame.DirectionFromWorldSpace(force).ToTuple(),
-                referenceFrame.DirectionFromWorldSpace(torque).ToTuple());
+            return new Wrench(
+                referenceFrame.DirectionFromWorldSpace(force),
+                referenceFrame.DirectionFromWorldSpace(torque));
         }
 
         /// <summary>
@@ -1122,7 +1121,7 @@ namespace KRPC.SpaceCenter.Services
         {
             return SimulateAerodynamicWrenchAt(
                 body, position, velocity, rotation, angularVelocity,
-                Planetarium.GetUniversalTime()).Item2;
+                Planetarium.GetUniversalTime()).Torque;
         }
 
         /// <summary>

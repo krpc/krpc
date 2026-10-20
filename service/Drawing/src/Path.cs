@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using UnityEngine;
-using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.Drawing
 {
@@ -35,7 +35,7 @@ namespace KRPC.Drawing
         readonly List<Vector3> points = new List<Vector3> ();
         Material headMaterial;
         string labelText = string.Empty;
-        IList<Tuple3> colors;
+        IList<ColorRGB> colors;
         float thickness;
         float arrowSize = 1f;
 
@@ -59,7 +59,7 @@ namespace KRPC.Drawing
             labelRenderer = labelObject.GetComponent<MeshRenderer> ();
             labelRenderer.material = label.font.material;
             labelRenderer.enabled = false;
-            Color = new Tuple3 (1, 1, 1);
+            Color = new ColorRGB (1, 1, 1);
             Thickness = 0.1f;
         }
 
@@ -187,7 +187,7 @@ namespace KRPC.Drawing
             return 2f * arrowWidth * arrowSize * thickness * View.SizeAt (tip);
         }
 
-        void DrawHead (LineRenderer head, Vector3 headBase, Vector3 tip, float length, Tuple3 color)
+        void DrawHead (LineRenderer head, Vector3 headBase, Vector3 tip, float length, ColorRGB color)
         {
             head.gameObject.layer = View.Layer;
             // A head is drawn solid, so it has a material of its own without the dash texture
@@ -308,7 +308,7 @@ namespace KRPC.Drawing
         /// For a path drawn with more than one color, this is the color at its start.
         /// </remarks>
         [KRPCProperty]
-        public Tuple3 Color {
+        public ColorRGB Color {
             get { return colors [0]; }
             set { Colors = new [] { value }; }
         }
@@ -320,7 +320,7 @@ namespace KRPC.Drawing
         /// Throws an exception if the list is empty or holds more than 8 colors.
         /// </remarks>
         [KRPCProperty]
-        public IList<Tuple3> Colors {
+        public IList<ColorRGB> Colors {
             get { return colors; }
             set {
                 if (value.Count == 0 || value.Count > maxColors)

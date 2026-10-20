@@ -1,8 +1,8 @@
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
-using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.Drawing
 {
@@ -16,7 +16,7 @@ namespace KRPC.Drawing
         readonly MeshRenderer renderer;
         // A copy of the sphere mesh, colored through its vertices as a line is
         readonly Mesh mesh;
-        Tuple3 color;
+        ColorRGB color;
 
         /// <summary>
         /// Create a sphere.
@@ -30,7 +30,7 @@ namespace KRPC.Drawing
             SpherePosition = spherePosition;
             ReferenceFrame = referenceFrame;
             Visible = visible;
-            Color = new Tuple3 (1, 1, 1);
+            Color = new ColorRGB (1, 1, 1);
         }
 
         // The mesh of the game's built in sphere, which has a diameter of one
@@ -97,7 +97,7 @@ namespace KRPC.Drawing
         /// The color of the object.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 Color {
+        public ColorRGB Color {
             get { return color; }
             set {
                 CheckExists ();

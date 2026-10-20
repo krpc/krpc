@@ -1,9 +1,10 @@
 using System.Globalization;
 using KRPC.Service;
 using KRPC.Service.Attributes;
+using KRPC.Service.StdLib;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.UI.ExtensionMethods;
 using UnityEngine;
-using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.UI
 {
@@ -27,7 +28,7 @@ namespace KRPC.UI
     {
         public static object Create()
         {
-            return new Tuple4(1, 0.92, 0.016, 1);
+            return new ColorRGBA(1, 0.92f, 0.016f, 1);
         }
     }
 
@@ -73,16 +74,13 @@ namespace KRPC.UI
         /// <param name="duration">Duration before the message disappears, in seconds.</param>
         /// <param name="position">Position to display the message.</param>
         /// <param name="size">Size of the message, differs per position.</param>
-        /// <param name="color">
-        /// The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully
-        /// transparent and 1 is fully opaque.
-        /// </param>
+        /// <param name="color">The color of the message.</param>
         [KRPCProcedure]
         public static void Message(
             string content,
             [KRPCDefaultValue(typeof(CreateDefaultDuration))] float duration,
             [KRPCDefaultValue(typeof(CreateDefaultPosition))] MessagePosition position,
-            [KRPCDefaultValue(typeof(CreateDefaultColor))] Tuple4 color,
+            [KRPCDefaultValue(typeof(CreateDefaultColor))] ColorRGBA color,
             float size = 20)
         {
             var htmlColor = "#" + ColorUtility.ToHtmlStringRGBA(color.ToColor());

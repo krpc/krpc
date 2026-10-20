@@ -1,7 +1,7 @@
 using KRPC.Service.Attributes;
-using KRPC.UI.ExtensionMethods;
+using KRPC.Service.StdLib;
+using KRPC.SpaceCenter.ExtensionMethods;
 using UnityEngine;
-using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.UI
 {
@@ -50,9 +50,8 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// The color the control is tinted with, as (red, green, blue, alpha). An alpha
-        /// of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
-        /// the control drawn as the skin has it.
+        /// The color the control is tinted with. White, the default, leaves the control drawn
+        /// as the skin has it.
         /// </summary>
         /// <remarks>
         /// The tint multiplies the sprite the control is drawn with, in every state, so
@@ -63,8 +62,8 @@ namespace KRPC.UI
         /// text.
         /// </remarks>
         [KRPCProperty]
-        public Tuple4 Color {
-            get { return CheckedSelectable.targetGraphic.color.ToRgbaTuple (); }
+        public ColorRGBA Color {
+            get { return CheckedSelectable.targetGraphic.color.ToColorRGBA (); }
             set { CheckedSelectable.targetGraphic.color = value.ToColor (); }
         }
 

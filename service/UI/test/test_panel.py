@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGBA
 
 
 class TestPanel(krpctest.TestCase):
@@ -64,10 +65,10 @@ class TestPanel(krpctest.TestCase):
 
     def test_color(self):
         panel = self.canvas.add_panel()
-        panel.color = (1, 0, 0, 1)
+        panel.color = ColorRGBA(1, 0, 0, 1)
         self.assertEqual((1, 0, 0, 1), panel.color)
         # A panel can be seen through, which is what the alpha channel is mainly here for.
-        panel.color = (1, 0, 0, 0.25)
+        panel.color = ColorRGBA(1, 0, 0, 0.25)
         self.assertEqual((1, 0, 0, 0.25), panel.color)
         panel.remove()
 

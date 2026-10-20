@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Read the definitions of several services in `krpc-clientgen`, from JSON files alongside DLLs
+  (#1148)
 - **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C
   nano service uses, giving the path of its header (#1150)
 - **Breaking:** Run `krpc-servicedefs` and `TestServer` on the .NET 10 runtime, in place of

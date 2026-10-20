@@ -116,6 +116,8 @@
     <Compile Include="Services\AlarmWarpAction.cs" />
     <Compile Include="Services\AutoPilot.cs" />
     <Compile Include="Services\AutoPilotUpdateMode.cs" />
+    <Compile Include="Services\AxisRange.cs" />
+    <Compile Include="Services\BoundingBox.cs" />
     <Compile Include="Services\Camera.cs" />
     <Compile Include="Services\AltimeterMode.cs" />
     <Compile Include="Services\CameraMode.cs" />
@@ -144,6 +146,7 @@
     <Compile Include="Services\EditorVessel.cs" />
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\FlightDeltaV.cs" />
+    <Compile Include="Services\FlightLogEntry.cs" />
     <Compile Include="Services\GameMode.cs" />
     <Compile Include="Services\MapFilterType.cs" />
     <Compile Include="Services\MitigationMode.cs" />
@@ -195,6 +198,7 @@
     <Compile Include="Services\Parts\RoboticRotation.cs" />
     <Compile Include="Services\Parts\RoboticRotor.cs" />
     <Compile Include="Services\Parts\RoboticController.cs" />
+    <Compile Include="Services\Parts\RoboticAxis.cs" />
     <Compile Include="Services\Parts\ScienceData.cs" />
     <Compile Include="Services\Parts\ScienceSubject.cs" />
     <Compile Include="Services\Parts\Sensor.cs" />
@@ -221,5 +225,6 @@
     <Compile Include="Services\WarpMode.cs" />
     <Compile Include="Services\Waypoint.cs" />
     <Compile Include="Services\WaypointManager.cs" />
+    <Compile Include="Services\Wrench.cs" />
   </ItemGroup>
 </Project>

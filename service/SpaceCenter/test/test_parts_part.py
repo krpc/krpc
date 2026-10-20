@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpc.services.stdlib import ColorRGB
 from krpctest.geometry import norm
 
 
@@ -805,7 +806,7 @@ class TestPartsPart(krpctest.TestCase):
         init_color = part.highlight_color
         self.assertEqual((0, 1, 0), init_color)
         self.assertFalse(part.highlighted)
-        colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
+        colors = [ColorRGB(1, 0, 0), ColorRGB(0, 1, 0), ColorRGB(0, 0, 1)]
         for color in colors:
             part.highlight_color = color
             part.highlighted = True

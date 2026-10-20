@@ -166,6 +166,7 @@ clientgen_csharp(
     name = "services-ui",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+    deps = [":services-stdlib"],
 )
 
 clientgen_csharp(

@@ -43,7 +43,9 @@ def main():
     parser.add_argument(
         "input",
         nargs="+",
-        help="Path to service definition JSON file or assembly DLL(s)",
+        help="Path to service definition JSON file(s) or assembly DLL(s). "
+        + "JSON files can give the definitions of the services whose types a DLL's "
+        + "service uses.",
     )
     parser.add_argument(
         "-o",
@@ -91,38 +93,35 @@ def main():
             inputs.append(path)
 
         # Get service defs
-        if len(inputs) == 1 and inputs[0].endswith(".json"):
-            # From JSON file
-            with builtins.open(inputs[0], encoding="utf-8") as fp:
-                defs = json.load(fp)
-            if args.output_defs:
-                sys.stderr.write(
-                    "Warning: Ignoring --output-defs as the definitions "
-                    + "have been loaded from an existing JSON file.\n"
-                )
-
-        elif all(path.endswith(".dll") for path in inputs):
+        others = [path for path in inputs if not path.endswith((".json", ".dll"))]
+        if others:
+            raise RuntimeError(
+                "Failed to read service definitions from '%s'. "
+                "Expected JSON files or assembly DLLs." % "','".join(others)
+            )
+        dlls = [path for path in inputs if path.endswith(".dll")]
+        defs = {}
+        # From JSON files, holding the service or the services its types come from
+        for path in inputs:
+            if path.endswith(".json"):
+                with builtins.open(path, encoding="utf-8") as fp:
+                    defs.update(json.load(fp))
+        if dlls:
             # From assembly DLLs
             if not args.ksp:
                 raise RuntimeError(
                     "KSP directory not set. You must pass --ksp when "
                     + "generating code from an assembly DLL."
                 )
-            defs = servicedefs(args.ksp, args.service, inputs)
+            dll_defs = servicedefs(args.ksp, args.service, dlls)
             if args.output_defs:
                 with builtins.open(args.output_defs, "w", encoding="utf-8") as fp:
-                    fp.write(defs)
-            defs = json.loads(defs)
-
-        else:
-            # No valid inputs found
-            raise RuntimeError(
-                (
-                    "Failed to read service definitions from '%s'. "
-                    + "Expected a single JSON file, or one or more "
-                    + "assembly DLLs."
-                )
-                % "','".join(inputs)
+                    fp.write(dll_defs)
+            defs.update(json.loads(dll_defs))
+        elif args.output_defs:
+            sys.stderr.write(
+                "Warning: Ignoring --output-defs as the definitions "
+                + "have been loaded from an existing JSON file.\n"
             )
 
         # Check loaded definitions
