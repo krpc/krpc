@@ -15,9 +15,9 @@ exports_files([
 
 readme_text = """Documentation: https://krpc.github.io/krpc
 
-Forum release thread: http://forum.kerbalspaceprogram.com/index.php?/topic/130742-105-krpc-remote-control-your-ships-using-python-c-c-lua-v021-10th-feb-2016/
+Forum release thread: https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/
 
-Forum development thread: http://forum.kerbalspaceprogram.com/threads/69313
+Forum development thread: https://forum.kerbalspaceprogram.com/topic/62902-18x-to-112x-krpc-remote-procedure-call-server-v051-2nd-march-2023/
 
 """
 
@@ -300,6 +300,7 @@ test_suite(
         "//client/python:lint",
         "//client/serialio:lint",
         "//client/websockets:lint",
+        "//doc:linkcheck",
         "//doc:lint",
         "//service/Debug:lint",
         "//service/Drawing:lint",

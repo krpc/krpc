@@ -736,7 +736,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the engine is managed by
-        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*">RealFuels</a>.
+        /// <a href="https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/">RealFuels</a>.
         /// The remaining properties in this section are only available when it is.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]

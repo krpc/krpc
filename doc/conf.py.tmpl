@@ -122,7 +122,7 @@ spelling_ignore_contributor_names = False
 spelling_exclude_patterns = ['changelog.rst']
 
 javadoc_url_map = {
-    'org.javatuples' : ('http://www.javatuples.org/apidocs/', 'javadoc')
+    'org.javatuples' : ('https://javadoc.io/static/org.javatuples/javatuples/1.2/', 'javadoc')
 }
 
 add_module_names = False
@@ -146,6 +146,17 @@ extlinks = {
 }
 
 sphinx_tabs_disable_tab_closing = True
+
+# The forum and CurseForge reject requests from scripts. The wiki serves its
+# anchors to browsers only. javasphinx links a nested generic type to a page
+# named after the whole type, e.g. Triplet<Double,Double,Double>.html.
+linkcheck_ignore = [
+    r'https://forum\.kerbalspaceprogram\.com/',
+    r'https://www\.curseforge\.com/',
+    r'.*/org/javatuples/.*<',
+]
+linkcheck_anchors_ignore_for_url = [r'https://wiki\.kerbalspaceprogram\.com/']
+linkcheck_retries = 3
 
 nitpick_ignore_regex = [
     ('c:func', '.+'),
@@ -330,3 +341,14 @@ def setup(app):
                 block[:] = [nodes.Text(text)]
 
     app.connect('doctree-read', trim_blank_lines)
+
+    # The link checker follows source-tree links on main, as the release tag
+    # does not exist until the release is made
+    def check_source_links_on_main(app, uri):
+        for kind in ('tree', 'blob'):
+            tagged = f'https://github.com/krpc/krpc/{kind}/{github_ref}/'
+            if uri.startswith(tagged):
+                return f'https://github.com/krpc/krpc/{kind}/main/' + uri[len(tagged):]
+        return None
+
+    app.connect('linkcheck-process-uri', check_source_links_on_main)

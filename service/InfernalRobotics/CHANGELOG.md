@@ -47,4 +47,4 @@
 - Rename `ControlGroup` to `ServoGroup`
 
 ## [v0.1.9]
-- Initial version - API for InfernalRobotics (http://forum.kerbalspaceprogram.com/threads/116064)
+- Initial version - API for InfernalRobotics

@@ -26,4 +26,4 @@
 - Service now available in all game scenes (#135)
 
 ## [v0.1.9]
-- Initial version - API for Kerbal Alarm Clock (http://forum.kerbalspaceprogram.com/threads/24786)
+- Initial version - API for Kerbal Alarm Clock
