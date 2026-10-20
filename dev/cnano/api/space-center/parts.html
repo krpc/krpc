@@ -1938,7 +1938,7 @@ If the part is physicsless in flight, this is equivalent to <a class="reference 
 <dd class="field-even"><p>The positions of the minimum and maximum vertices of the box.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1964,7 +1964,7 @@ the <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCen
 <dd class="field-even"><p>The direction as a unit vector.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2002,7 +2002,7 @@ the <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCen
 <dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2128,7 +2128,7 @@ it are reported by <a class="reference internal" href="#c.krpc_SpaceCenter_Part_
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_MomentOfInertia">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_MomentOfInertia</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_MomentOfInertia" title="Link to this definition">#</a><br /></dt>
 <dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(kg.m^2\)</span> around its center of mass
-in the parts reference frame (<a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_ReferenceFrame" title="krpc_SpaceCenter_Part_ReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_ReferenceFrame()</span></code></a>).</p>
+in the parts center of mass reference frame (<a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_CenterOfMassReferenceFrame" title="krpc_SpaceCenter_Part_CenterOfMassReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_CenterOfMassReferenceFrame()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -2139,8 +2139,8 @@ in the parts reference frame (<a class="reference internal" href="#c.krpc_SpaceC
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_InertiaTensor">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Part_InertiaTensor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_InertiaTensor" title="Link to this definition">#</a><br /></dt>
-<dd><p>The inertia tensor of the part in the parts reference frame
-(<a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_ReferenceFrame" title="krpc_SpaceCenter_Part_ReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_ReferenceFrame()</span></code></a>).
+<dd><p>The inertia tensor of the part around its center of mass, in the parts center of
+mass reference frame (<a class="reference internal" href="#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_CenterOfMassReferenceFrame" title="krpc_SpaceCenter_Part_CenterOfMassReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_CenterOfMassReferenceFrame()</span></code></a>).
 Returns the 3x3 matrix as a list of elements, in row-major order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>

@@ -186,13 +186,6 @@ Editor
          designed in. A vessel moved from the vehicle assembly building to the space
          plane hangar reports the space plane hangar.
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> getSize()
-
-
-      The dimensions of the vessel's bounding box, in meters.
-
-      :Game Scenes: Editor Vab, Editor Sph
-
    .. method:: float getMass()
 
 
@@ -207,7 +200,79 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> centerOfMass(ReferenceFrame referenceFrame)
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getMomentOfInertia()
+
+
+      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The inertia values in the returned 3-tuple are around the
+      pitch, roll and yaw directions respectively.
+      This corresponds to the vessels reference frame (:meth:`EditorVessel.getReferenceFrame()`).
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: java.util.List<Double> getInertiaTensor()
+
+
+      The inertia tensor of the vessel around its center of mass,
+      in the vessels reference frame (:meth:`EditorVessel.getReferenceFrame()`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vessel.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes rotate with the vessel.
+      * The x-axis points out to the right of the vessel.
+      * The y-axis points in the forward direction of the vessel.
+      * The z-axis points out of the bottom off the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The axes are those of the root part. This is the frame
+         :meth:`Vessel.getReferenceFrame()` gives at launch, with the root part as the
+         control point.
+
+   .. method:: ReferenceFrame getSurfaceReferenceFrame()
+
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vertical of the editor.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are fixed in the editor.
+      * The x-axis points upwards.
+      * The y-axis and z-axis are horizontal.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the vessel as it stands in the editor, and as it stands at launch. The
+         editor has no north or east, so the horizontal axes are fixed in the editor.
+
+   .. method:: SimulatedFlight flight(ReferenceFrame referenceFrame)
+
+      Returns a :type:`SimulatedFlight` object that can be used to simulate the
+      vessel in flight, in the specified reference frame.
+
+      :param ReferenceFrame referenceFrame: Reference frame. Defaults to the simulated surface reference frame (:meth:`SimulatedFlight.getSurfaceReferenceFrame()`), and follows it when it is set.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each call returns a new object, which is kept until the game leaves the editor.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
 
       The position of the center of mass of the vessel, in the given reference frame.
 
@@ -215,89 +280,29 @@ Editor
       :returns: The position as a vector.
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. method:: BoundingBox boundingBox(ReferenceFrame referenceFrame)
 
-      .. note::
+      The axis-aligned bounding box of the vessel in the given reference frame.
 
-         This is the editor scene's world-space center of mass expressed in
-         *referenceFrame*. A part's
-         :meth:`Part.getReferenceFrame()` reports the offset from that
-         part. A celestial body frame is not a position on that body: the
-         editor is not placed in the solar system the way a vessel in flight is.
-
-   .. method:: org.javatuples.Triplet<Double,Double,Double> getMomentOfInertia()
-
-
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
-      The inertia values in the returned 3-tuple are around the pitch, roll and yaw
-      directions of the root part's reference transform respectively.
-
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vectors are in.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. method:: java.util.List<Double> getInertiaTensor()
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
 
+      The rotation of the vessel, in the given reference frame.
 
-      The inertia tensor of the vessel around its center of mass, in the root
-      part's reference transform. Returns the 3x3 matrix as a list of elements,
-      in row-major order.
-
+      :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. method:: double getDisplacement()
+   .. method:: org.javatuples.Triplet<Double,Double,Double> direction(ReferenceFrame referenceFrame)
 
+      The direction in which the vessel is pointing, in the given reference frame.
 
-      The volume of water the vessel displaces when fully submerged, in
-      :math:`m^3`.
-
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
       :Game Scenes: Editor Vab, Editor Sph
-
-   .. method:: org.javatuples.Triplet<Double,Double,Double> centerOfBuoyancy(ReferenceFrame referenceFrame)
-
-      The point the buoyant force acts through with the vessel fully submerged.
-      Returns ``null`` if no part of the vessel displaces any water.
-
-      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
-      :returns: The position as a vector.
-      :Game Scenes: Editor Vab, Editor Sph
-
-
-      .. note::
-
-         A hull at rest carries this on the same vertical line as
-         :meth:`EditorVessel.centerOfMass(ReferenceFrame)`. Compare the two in the same reference frame to see
-         which way an untrimmed hull will roll.
-
-   .. method:: double buoyantForceAt(double density, double gravity)
-
-      The buoyant force on the vessel when fully submerged in a fluid of the given
-      density, in Newtons.
-
-      :param double density: The density of the fluid, in :math:`kg/m^3`.
-      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
-      :Game Scenes: Editor Vab, Editor Sph
-
-
-      .. note::
-
-         Compare this with the vessel's weight to see whether the hull floats. It applies
-         :meth:`getBuoyancyScalar()` and each part's
-         :meth:`Part.getBuoyancyMultiplier()`, so the result is what the game would
-         do to the vessel.
-
-   .. method:: org.javatuples.Triplet<Double,Double,Double> buoyantTorqueAt(double density, double gravity, ReferenceFrame referenceFrame)
-
-      The torque the buoyant force exerts about the vessel's center of mass when fully
-      submerged in a fluid of the given density, under gravity acting down the editor.
-
-      :param double density: The density of the fluid, in :math:`kg/m^3`.
-      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
-      :param ReferenceFrame referenceFrame: The reference frame that the returned torque vector is in.
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
-      :Game Scenes: Editor Vab, Editor Sph
-
-
-      .. note::
-
-         A hull trimmed level carries zero torque.
 
    .. method:: float getCost()
 
@@ -326,8 +331,10 @@ Editor
                 available in the editor. Those that need a vessel in flight or running physics,
                 such as the thermal members, are restricted to the flight scene.
                 :meth:`Part.position(ReferenceFrame)`, :meth:`Part.centerOfMass(ReferenceFrame)`,
-                the part's reference frames, :meth:`Part.getMomentOfInertia()`
-                and :meth:`Part.getInertiaTensor()` are available.
+                :meth:`Part.direction(ReferenceFrame)`, :meth:`Part.rotation(ReferenceFrame)`,
+                :meth:`Part.boundingBox(ReferenceFrame)`, the part's reference frames,
+                :meth:`Part.getMomentOfInertia()` and
+                :meth:`Part.getInertiaTensor()` are available.
 
    .. method:: Resources getResources()
 
@@ -419,4 +426,136 @@ Editor
 
       Total burn time for the vessel, in seconds.
 
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+
+.. type:: public class SimulatedFlight
+
+   Used to simulate the vessel in the editor in flight. The counterpart of
+   :type:`Flight`. All of the information returned by this class is given in
+   the reference frame passed to :meth:`EditorVessel.flight(ReferenceFrame)`, or in
+   :meth:`SimulatedFlight.getSurfaceReferenceFrame()` if none was passed.
+   Obtained by calling :meth:`EditorVessel.flight(ReferenceFrame)`.
+
+   .. note::
+
+      The simulated attitude is set by :meth:`SimulatedFlight.getSurfaceReferenceFrame()`, and belongs to
+      this object. The vessel is read from the editor on each call, so the object follows
+      every edit.
+
+   .. method:: ReferenceFrame getSurfaceReferenceFrame()
+
+   .. method:: void setSurfaceReferenceFrame(ReferenceFrame value)
+
+      The reference frame of the surface the vessel is simulated over. Its x-axis
+      points upwards, and gravity acts along the negative x-axis. Defaults to
+      :meth:`EditorVessel.getSurfaceReferenceFrame()`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Only the rotation of the frame is used. A frame created relative to
+         :meth:`EditorVessel.getReferenceFrame()` follows the vessel as it is edited.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getCenterOfMass()
+
+
+      The position of the center of mass of the vessel,
+      in the reference frame :type:`ReferenceFrame`
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getRotation()
+
+
+      The rotation of the vessel, in the reference frame :type:`ReferenceFrame`
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getDirection()
+
+
+      The direction that the vessel is pointing in,
+      in the reference frame :type:`ReferenceFrame`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: float getPitch()
+
+
+      The pitch of the vessel relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :meth:`SimulatedFlight.getRotation()` or
+         :meth:`SimulatedFlight.getDirection()`.
+
+   .. method:: float getRoll()
+
+
+      The roll of the vessel relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :meth:`SimulatedFlight.getRotation()`.
+
+   .. method:: double getDisplacement()
+
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getFullySubmergedCenterOfBuoyancy()
+
+
+      The point the buoyant force acts through with the vessel fully submerged, in
+      reference frame :type:`ReferenceFrame`. Returns ``null`` if no part of
+      the vessel displaces any water.
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :meth:`SimulatedFlight.getCenterOfMass()`.
+
+   .. method:: double buoyantForceAt(double density, double gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :param double density: The density of the fluid, in :math:`kg/m^3`.
+      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> buoyantTorqueAt(double density, double gravity)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, in reference frame
+      :type:`ReferenceFrame`. Gravity acts along the negative x-axis of
+      :meth:`SimulatedFlight.getSurfaceReferenceFrame()`.
+
+      :param double density: The density of the fluid, in :math:`kg/m^3`.
+      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
       :Game Scenes: Editor Vab, Editor Sph

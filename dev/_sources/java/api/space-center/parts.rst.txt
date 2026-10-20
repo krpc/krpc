@@ -1067,7 +1067,7 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vectors are in.
       :returns: The positions of the minimum and maximum vertices of the box.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -1083,7 +1083,7 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
 
@@ -1099,7 +1099,7 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> lift(ReferenceFrame referenceFrame)
 
@@ -1171,15 +1171,15 @@ Part
 
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
-      in the parts reference frame (:meth:`Part.getReferenceFrame()`).
+      in the parts center of mass reference frame (:meth:`Part.getCenterOfMassReferenceFrame()`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: java.util.List<Double> getInertiaTensor()
 
 
-      The inertia tensor of the part in the parts reference frame
-      (:meth:`Part.getReferenceFrame()`).
+      The inertia tensor of the part around its center of mass, in the parts center of
+      mass reference frame (:meth:`Part.getCenterOfMassReferenceFrame()`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph

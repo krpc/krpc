@@ -1150,15 +1150,15 @@ Part
    .. attribute:: moment_of_inertia: Tuple
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
-      in the parts reference frame (:attr:`SpaceCenter.Part.reference_frame`).
+      in the parts center of mass reference frame (:attr:`SpaceCenter.Part.center_of_mass_reference_frame`).
 
       :Attribute: Read-only, cannot be set
       :rtype: Tuple
 
    .. attribute:: inertia_tensor: List
 
-      The inertia tensor of the part in the parts reference frame
-      (:attr:`SpaceCenter.Part.reference_frame`).
+      The inertia tensor of the part around its center of mass, in the parts center of
+      mass reference frame (:attr:`SpaceCenter.Part.center_of_mass_reference_frame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
       :Attribute: Read-only, cannot be set

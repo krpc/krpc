@@ -2848,7 +2848,7 @@ it are reported by <a class="reference internal" href="#SpaceCenter.SpaceCenter.
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Part.moment_of_inertia">
 <span class="sig-name descname"><span class="pre">moment_of_inertia</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Part.moment_of_inertia" title="Link to this definition">#</a></dt>
 <dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(kg.m^2\)</span> around its center of mass
-in the parts reference frame (<a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.reference_frame" title="SpaceCenter.SpaceCenter.Part.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.reference_frame</span></code></a>).</p>
+in the parts center of mass reference frame (<a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.center_of_mass_reference_frame" title="SpaceCenter.SpaceCenter.Part.center_of_mass_reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.center_of_mass_reference_frame</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -2862,8 +2862,8 @@ in the parts reference frame (<a class="reference internal" href="#SpaceCenter.S
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Part.inertia_tensor">
 <span class="sig-name descname"><span class="pre">inertia_tensor</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Part.inertia_tensor" title="Link to this definition">#</a></dt>
-<dd><p>The inertia tensor of the part in the parts reference frame
-(<a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.reference_frame" title="SpaceCenter.SpaceCenter.Part.reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.reference_frame</span></code></a>).
+<dd><p>The inertia tensor of the part around its center of mass, in the parts center of
+mass reference frame (<a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.center_of_mass_reference_frame" title="SpaceCenter.SpaceCenter.Part.center_of_mass_reference_frame"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.center_of_mass_reference_frame</span></code></a>).
 Returns the 3x3 matrix as a list of elements, in row-major order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>

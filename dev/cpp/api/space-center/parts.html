@@ -1938,7 +1938,7 @@ If the part is physicsless in flight, this is equivalent to <a class="reference 
 <dd class="field-even"><p>The positions of the minimum and maximum vertices of the box.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -1964,7 +1964,7 @@ the <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part
 <dd class="field-even"><p>The direction as a unit vector.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2002,7 +2002,7 @@ the <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part
 <dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2128,7 +2128,7 @@ it are reported by <a class="reference internal" href="#_CPPv4N4krpc8services11S
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part17moment_of_inertiaEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter4Part17moment_of_inertiaEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part17moment_of_inertiaEv"></span><span id="krpc::services::SpaceCenter::Part::moment_of_inertia"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">moment_of_inertia</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part17moment_of_inertiaEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(kg.m^2\)</span> around its center of mass
-in the parts reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part15reference_frameEv" title="krpc::services::SpaceCenter::Part::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::reference_frame()</span></code></a>).</p>
+in the parts center of mass reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part30center_of_mass_reference_frameEv" title="krpc::services::SpaceCenter::Part::center_of_mass_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::center_of_mass_reference_frame()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -2139,8 +2139,8 @@ in the parts reference frame (<a class="reference internal" href="#_CPPv4N4krpc8
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter4Part14inertia_tensorEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter4Part14inertia_tensorEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter4Part14inertia_tensorEv"></span><span id="krpc::services::SpaceCenter::Part::inertia_tensor"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inertia_tensor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter4Part14inertia_tensorEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The inertia tensor of the part in the parts reference frame
-(<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part15reference_frameEv" title="krpc::services::SpaceCenter::Part::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::reference_frame()</span></code></a>).
+<dd><p>The inertia tensor of the part around its center of mass, in the parts center of
+mass reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part30center_of_mass_reference_frameEv" title="krpc::services::SpaceCenter::Part::center_of_mass_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::center_of_mass_reference_frame()</span></code></a>).
 Returns the 3x3 matrix as a list of elements, in row-major order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>

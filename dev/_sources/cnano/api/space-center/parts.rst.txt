@@ -980,7 +980,7 @@ Part
        * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
       :returns: The positions of the minimum and maximum vertices of the box.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -999,7 +999,7 @@ Part
        * **referenceFrame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Part_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -1021,7 +1021,7 @@ Part
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Lift(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Part_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -1107,14 +1107,14 @@ Part
    .. function:: krpc_error_t krpc_SpaceCenter_Part_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Part_t instance)
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
-      in the parts reference frame (:func:`krpc_SpaceCenter_Part_ReferenceFrame`).
+      in the parts center of mass reference frame (:func:`krpc_SpaceCenter_Part_CenterOfMassReferenceFrame`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * returnValue, krpc_SpaceCenter_Part_t instance)
 
-      The inertia tensor of the part in the parts reference frame
-      (:func:`krpc_SpaceCenter_Part_ReferenceFrame`).
+      The inertia tensor of the part around its center of mass, in the parts center of
+      mass reference frame (:func:`krpc_SpaceCenter_Part_CenterOfMassReferenceFrame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph

@@ -184,12 +184,6 @@ Editor
          designed in. A vessel moved from the vehicle assembly building to the space
          plane hangar reports the space plane hangar.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Size(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
-
-      The dimensions of the vessel's bounding box, in meters.
-
-      :Game Scenes: Editor Vab, Editor Sph
-
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Mass(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
       The total mass of the vessel, including resources and crew, in kg.
@@ -202,7 +196,78 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CenterOfMass(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
+
+      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The inertia values in the returned 3-tuple are around the
+      pitch, roll and yaw directions respectively.
+      This corresponds to the vessels reference frame (:func:`krpc_SpaceCenter_EditorVessel_ReferenceFrame`).
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
+
+      The inertia tensor of the vessel around its center of mass,
+      in the vessels reference frame (:func:`krpc_SpaceCenter_EditorVessel_ReferenceFrame`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vessel.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes rotate with the vessel.
+      * The x-axis points out to the right of the vessel.
+      * The y-axis points in the forward direction of the vessel.
+      * The z-axis points out of the bottom off the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The axes are those of the root part. This is the frame
+         :func:`krpc_SpaceCenter_Vessel_ReferenceFrame` gives at launch, with the root part as the
+         control point.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_SurfaceReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vertical of the editor.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are fixed in the editor.
+      * The x-axis points upwards.
+      * The y-axis and z-axis are horizontal.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the vessel as it stands in the editor, and as it stands at launch. The
+         editor has no north or east, so the horizontal axes are fixed in the editor.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Flight(krpc_connection_t connection, krpc_SpaceCenter_SimulatedFlight_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      Returns a :type:`krpc_SpaceCenter_SimulatedFlight_t` object that can be used to simulate the
+      vessel in flight, in the specified reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- Reference frame. Defaults to the simulated surface reference frame (:func:`krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame`), and follows it when it is set.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each call returns a new object, which is kept until the game leaves the editor.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position of the center of mass of the vessel, in the given reference frame.
 
@@ -213,95 +278,38 @@ Editor
       :returns: The position as a vector.
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BoundingBox(krpc_connection_t connection, krpc_SpaceCenter_BoundingBox_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
-      .. note::
-
-         This is the editor scene's world-space center of mass expressed in
-         *referenceFrame*. A part's
-         :func:`krpc_SpaceCenter_Part_ReferenceFrame` reports the offset from that
-         part. A celestial body frame is not a position on that body: the
-         editor is not placed in the solar system the way a vessel in flight is.
-
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
-
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
-      The inertia values in the returned 3-tuple are around the pitch, roll and yaw
-      directions of the root part's reference transform respectively.
-
-      :Game Scenes: Editor Vab, Editor Sph
-
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
-
-      The inertia tensor of the vessel around its center of mass, in the root
-      part's reference transform. Returns the 3x3 matrix as a list of elements,
-      in row-major order.
-
-      :Game Scenes: Editor Vab, Editor Sph
-
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Displacement(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
-
-      The volume of water the vessel displaces when fully submerged, in
-      :math:`m^3`.
-
-      :Game Scenes: Editor Vab, Editor Sph
-
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CenterOfBuoyancy(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_EditorVessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
-
-      The point the buoyant force acts through with the vessel fully submerged.
-      Returns ``nullptr`` if no part of the vessel displaces any water.
+      The axis-aligned bounding box of the vessel in the given reference frame.
 
       :Parameters:
 
-       * **referenceFrame** -- The reference frame that the returned position vector is in.
+       * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The position as a vector.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
-      .. note::
-
-         A hull at rest carries this on the same vertical line as
-         :func:`krpc_SpaceCenter_EditorVessel_CenterOfMass`. Compare the two in the same reference frame to see
-         which way an untrimmed hull will roll.
-
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BuoyantForceAt(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_EditorVessel_t instance, double density, double gravity)
-
-      The buoyant force on the vessel when fully submerged in a fluid of the given
-      density, in Newtons.
+      The rotation of the vessel, in the given reference frame.
 
       :Parameters:
 
-       * **density** -- The density of the fluid, in :math:`kg/m^3`.
-       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+       * **referenceFrame** -- The reference frame that the returned rotation is in.
 
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
-      .. note::
-
-         Compare this with the vessel's weight to see whether the hull floats. It applies
-         :func:`krpc_SpaceCenter_BuoyancyScalar` and each part's
-         :func:`krpc_SpaceCenter_Part_BuoyancyMultiplier`, so the result is what the game would
-         do to the vessel.
-
-   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BuoyantTorqueAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance, double density, double gravity, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
-
-      The torque the buoyant force exerts about the vessel's center of mass when fully
-      submerged in a fluid of the given density, under gravity acting down the editor.
+      The direction in which the vessel is pointing, in the given reference frame.
 
       :Parameters:
 
-       * **density** -- The density of the fluid, in :math:`kg/m^3`.
-       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
-       * **referenceFrame** -- The reference frame that the returned torque vector is in.
+       * **referenceFrame** -- The reference frame that the returned direction is in.
 
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :returns: The direction as a unit vector.
       :Game Scenes: Editor Vab, Editor Sph
-
-
-      .. note::
-
-         A hull trimmed level carries zero torque.
 
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Cost(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
@@ -327,8 +335,10 @@ Editor
                 available in the editor. Those that need a vessel in flight or running physics,
                 such as the thermal members, are restricted to the flight scene.
                 :func:`krpc_SpaceCenter_Part_Position`, :func:`krpc_SpaceCenter_Part_CenterOfMass`,
-                the part's reference frames, :func:`krpc_SpaceCenter_Part_MomentOfInertia`
-                and :func:`krpc_SpaceCenter_Part_InertiaTensor` are available.
+                :func:`krpc_SpaceCenter_Part_Direction`, :func:`krpc_SpaceCenter_Part_Rotation`,
+                :func:`krpc_SpaceCenter_Part_BoundingBox`, the part's reference frames,
+                :func:`krpc_SpaceCenter_Part_MomentOfInertia` and
+                :func:`krpc_SpaceCenter_Part_InertiaTensor` are available.
 
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * returnValue, krpc_SpaceCenter_EditorVessel_t instance)
 
@@ -418,4 +428,134 @@ Editor
 
       Total burn time for the vessel, in seconds.
 
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+
+.. type:: krpc_SpaceCenter_SimulatedFlight_t
+
+   Used to simulate the vessel in the editor in flight. The counterpart of
+   :type:`krpc_SpaceCenter_Flight_t`. All of the information returned by this class is given in
+   the reference frame passed to :func:`krpc_SpaceCenter_EditorVessel_Flight`, or in
+   :func:`krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame` if none was passed.
+   Obtained by calling :func:`krpc_SpaceCenter_EditorVessel_Flight`.
+
+   .. note::
+
+      The simulated attitude is set by :func:`krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame`, and belongs to
+      this object. The vessel is read from the editor on each call, so the object follows
+      every edit.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_set_SurfaceReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_SimulatedFlight_t instance, krpc_SpaceCenter_ReferenceFrame_t value)
+
+      The reference frame of the surface the vessel is simulated over. Its x-axis
+      points upwards, and gravity acts along the negative x-axis. Defaults to
+      :func:`krpc_SpaceCenter_EditorVessel_SurfaceReferenceFrame`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Only the rotation of the frame is used. A frame created relative to
+         :func:`krpc_SpaceCenter_EditorVessel_ReferenceFrame` follows the vessel as it is edited.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_CenterOfMass(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance)
+
+      The position of the center of mass of the vessel,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance)
+
+      The rotation of the vessel, in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance)
+
+      The direction that the vessel is pointing in,
+      in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_Pitch(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance)
+
+      The pitch of the vessel relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :func:`krpc_SpaceCenter_SimulatedFlight_Rotation` or
+         :func:`krpc_SpaceCenter_SimulatedFlight_Direction`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_Roll(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance)
+
+      The roll of the vessel relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :func:`krpc_SpaceCenter_SimulatedFlight_Rotation`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_Displacement(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance)
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_FullySubmergedCenterOfBuoyancy(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_SimulatedFlight_t instance)
+
+      The point the buoyant force acts through with the vessel fully submerged, in
+      reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`. Returns ``nullptr`` if no part of
+      the vessel displaces any water.
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :func:`krpc_SpaceCenter_SimulatedFlight_CenterOfMass`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_BuoyantForceAt(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance, double density, double gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :Parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SimulatedFlight_BuoyantTorqueAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_SimulatedFlight_t instance, double density, double gravity)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, in reference frame
+      :type:`krpc_SpaceCenter_ReferenceFrame_t`. Gravity acts along the negative x-axis of
+      :func:`krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame`.
+
+      :Parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
       :Game Scenes: Editor Vab, Editor Sph

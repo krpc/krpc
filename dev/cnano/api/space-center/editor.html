@@ -951,17 +951,6 @@ plane hangar reports the space plane hangar.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Size">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_Size</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Size" title="Link to this definition">#</a><br /></dt>
-<dd><p>The dimensions of the vessel’s bounding box, in meters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Mass">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_Mass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Mass" title="Link to this definition">#</a><br /></dt>
 <dd><p>The total mass of the vessel, including resources and crew, in kg.</p>
@@ -984,8 +973,104 @@ plane hangar reports the space plane hangar.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CenterOfMass">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_CenterOfMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CenterOfMass" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_MomentOfInertia">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_MomentOfInertia</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_MomentOfInertia" title="Link to this definition">#</a><br /></dt>
+<dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(kg.m^2\)</span>.
+The inertia values in the returned 3-tuple are around the
+pitch, roll and yaw directions respectively.
+This corresponds to the vessels reference frame (<a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_ReferenceFrame" title="krpc_SpaceCenter_EditorVessel_ReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_EditorVessel_ReferenceFrame()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_InertiaTensor">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_InertiaTensor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_InertiaTensor" title="Link to this definition">#</a><br /></dt>
+<dd><p>The inertia tensor of the vessel around its center of mass,
+in the vessels reference frame (<a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_ReferenceFrame" title="krpc_SpaceCenter_EditorVessel_ReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_EditorVessel_ReferenceFrame()</span></code></a>).
+Returns the 3x3 matrix as a list of elements, in row-major order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_ReferenceFrame">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_ReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that is fixed relative to the vessel,
+and orientated with the vessel.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes rotate with the vessel.</p></li>
+<li><p>The x-axis points out to the right of the vessel.</p></li>
+<li><p>The y-axis points in the forward direction of the vessel.</p></li>
+<li><p>The z-axis points out of the bottom off the vessel.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The axes are those of the root part. This is the frame
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ReferenceFrame()</span></code> gives at launch, with the root part as the
+control point.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_SurfaceReferenceFrame">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_SurfaceReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_SurfaceReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that is fixed relative to the vessel,
+and orientated with the vertical of the editor.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are fixed in the editor.</p></li>
+<li><p>The x-axis points upwards.</p></li>
+<li><p>The y-axis and z-axis are horizontal.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the vessel as it stands in the editor, and as it stands at launch. The
+editor has no north or east, so the horizontal axes are fixed in the editor.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Flight">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_Flight</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Flight" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns a <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></code></a> object that can be used to simulate the
+vessel in flight, in the specified reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – Reference frame. Defaults to the simulated surface reference frame (<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame()</span></code>), and follows it when it is set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call returns a new object, which is kept until the game leaves the editor.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Position">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_Position</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Position" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1000,129 +1085,63 @@ plane hangar reports the space plane hangar.</p>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This is the editor scene’s world-space center of mass expressed in
-<em>referenceFrame</em>. A part’s
-<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_ReferenceFrame()</span></code> reports the offset from that
-part. A celestial body frame is not a position on that body: the
-editor is not placed in the solar system the way a vessel in flight is.</p>
-</div>
 </dd></dl>
 
 <dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_MomentOfInertia">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_MomentOfInertia</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_MomentOfInertia" title="Link to this definition">#</a><br /></dt>
-<dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(kg.m^2\)</span>.
-The inertia values in the returned 3-tuple are around the pitch, roll and yaw
-directions of the root part’s reference transform respectively.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_InertiaTensor">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_InertiaTensor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_InertiaTensor" title="Link to this definition">#</a><br /></dt>
-<dd><p>The inertia tensor of the vessel around its center of mass, in the root
-part’s reference transform. Returns the 3x3 matrix as a list of elements,
-in row-major order.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Displacement">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_Displacement</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Displacement" title="Link to this definition">#</a><br /></dt>
-<dd><p>The volume of water the vessel displaces when fully submerged, in
-<span class="math notranslate nohighlight">\(m^3\)</span>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CenterOfBuoyancy">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_CenterOfBuoyancy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValueIsNull</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CenterOfBuoyancy" title="Link to this definition">#</a><br /></dt>
-<dd><p>The point the buoyant force acts through with the vessel fully submerged.
-Returns <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if no part of the vessel displaces any water.</p>
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_BoundingBox">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_BoundingBox</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_BoundingBox_t" title="krpc_SpaceCenter_BoundingBox_t"><span class="n"><span class="pre">krpc_SpaceCenter_BoundingBox_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_BoundingBox" title="Link to this definition">#</a><br /></dt>
+<dd><p>The axis-aligned bounding box of the vessel in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vector is in.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vectors are in.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The position as a vector.</p>
+<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A hull at rest carries this on the same vertical line as
-<a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CenterOfMass" title="krpc_SpaceCenter_EditorVessel_CenterOfMass"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_EditorVessel_CenterOfMass()</span></code></a>. Compare the two in the same reference frame to see
-which way an untrimmed hull will roll.</p>
-</div>
 </dd></dl>
 
 <dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_BuoyantForceAt">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_BuoyantForceAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">density</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">gravity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_BuoyantForceAt" title="Link to this definition">#</a><br /></dt>
-<dd><p>The buoyant force on the vessel when fully submerged in a fluid of the given
-density, in Newtons.</p>
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Rotation">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_Rotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Rotation" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rotation of the vessel, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Compare this with the vessel’s weight to see whether the hull floats. It applies
-<a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_BuoyancyScalar" title="krpc_SpaceCenter_BuoyancyScalar"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_BuoyancyScalar()</span></code></a> and each part’s
-<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_BuoyancyMultiplier()</span></code>, so the result is what the game would
-do to the vessel.</p>
-</div>
-</dd></dl>
-
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_BuoyantTorqueAt">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_BuoyantTorqueAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">density</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">gravity</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_BuoyantTorqueAt" title="Link to this definition">#</a><br /></dt>
-<dd><p>The torque the buoyant force exerts about the vessel’s center of mass when fully
-submerged in a fluid of the given density, under gravity acting down the editor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
-<li><p><strong>referenceFrame</strong> – The reference frame that the returned torque vector is in.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned rotation is in.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A hull trimmed level carries zero torque.</p>
-</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Direction">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_Direction</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Direction" title="Link to this definition">#</a><br /></dt>
+<dd><p>The direction in which the vessel is pointing, in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned direction is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direction as a unit vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="c function">
@@ -1163,8 +1182,10 @@ that make up the vessel.</p>
 available in the editor. Those that need a vessel in flight or running physics,
 such as the thermal members, are restricted to the flight scene.
 <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Position()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_CenterOfMass()</span></code>,
-the part’s reference frames, <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_MomentOfInertia()</span></code>
-and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_InertiaTensor()</span></code> are available.</p>
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Direction()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Rotation()</span></code>,
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_BoundingBox()</span></code>, the part’s reference frames,
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_MomentOfInertia()</span></code> and
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_InertiaTensor()</span></code> are available.</p>
 </div>
 </dd></dl>
 
@@ -1304,6 +1325,198 @@ assumes, in m/s. See <code class="xref c c-func docutils literal notranslate"><s
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_BurnTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_EditorVessel_t" title="krpc_SpaceCenter_EditorVessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_BurnTime" title="Link to this definition">#</a><br /></dt>
 <dd><p>Total burn time for the vessel, in seconds.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Used to simulate the vessel in the editor in flight. The counterpart of
+<a class="reference internal" href="flight.html#c.krpc_SpaceCenter_Flight_t" title="krpc_SpaceCenter_Flight_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_t</span></code></a>. All of the information returned by this class is given in
+the reference frame passed to <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_EditorVessel_Flight()</span></code>, or in
+<a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame" title="krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame()</span></code></a> if none was passed.
+Obtained by calling <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_EditorVessel_Flight()</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The simulated attitude is set by <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame" title="krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame()</span></code></a>, and belongs to
+this object. The vessel is read from the editor on each call, so the object follows
+every edit.</p>
+</div>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_set_SurfaceReferenceFrame">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_set_SurfaceReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_set_SurfaceReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame of the surface the vessel is simulated over. Its x-axis
+points upwards, and gravity acts along the negative x-axis. Defaults to
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_EditorVessel_SurfaceReferenceFrame()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the rotation of the frame is used. A frame created relative to
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_EditorVessel_ReferenceFrame()</span></code> follows the vessel as it is edited.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_CenterOfMass">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_CenterOfMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_CenterOfMass" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the center of mass of the vessel,
+in the reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The position as a vector.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Rotation">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_Rotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Rotation" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rotation of the vessel, in the reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Direction">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_Direction</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Direction" title="Link to this definition">#</a><br /></dt>
+<dd><p>The direction that the vessel is pointing in,
+in the reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The direction as a unit vector.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Pitch">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_Pitch</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Pitch" title="Link to this definition">#</a><br /></dt>
+<dd><p>The pitch of the vessel relative to the horizon, in degrees.
+A value between -90° and +90°.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+near -90° or +90°). For an always-defined attitude use <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Rotation" title="krpc_SpaceCenter_SimulatedFlight_Rotation"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SimulatedFlight_Rotation()</span></code></a> or
+<a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Direction" title="krpc_SpaceCenter_SimulatedFlight_Direction"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SimulatedFlight_Direction()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Roll">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_Roll</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Roll" title="Link to this definition">#</a><br /></dt>
+<dd><p>The roll of the vessel relative to the horizon, in degrees.
+A value between -180° and +180°.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+near -90° or +90°). For an always-defined attitude use <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Rotation" title="krpc_SpaceCenter_SimulatedFlight_Rotation"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SimulatedFlight_Rotation()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Displacement">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_Displacement</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_Displacement" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume of water the vessel displaces when fully submerged, in
+<span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_FullySubmergedCenterOfBuoyancy">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_FullySubmergedCenterOfBuoyancy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValueIsNull</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_FullySubmergedCenterOfBuoyancy" title="Link to this definition">#</a><br /></dt>
+<dd><p>The point the buoyant force acts through with the vessel fully submerged, in
+reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>. Returns <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if no part of
+the vessel displaces any water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The position as a vector.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A hull at rest carries this on the same vertical line as
+<a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_CenterOfMass" title="krpc_SpaceCenter_SimulatedFlight_CenterOfMass"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SimulatedFlight_CenterOfMass()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_BuoyantForceAt">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_BuoyantForceAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">density</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">gravity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_BuoyantForceAt" title="Link to this definition">#</a><br /></dt>
+<dd><p>The buoyant force on the vessel when fully submerged in a fluid of the given
+density, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_BuoyantTorqueAt">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_BuoyantTorqueAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t" title="krpc_SpaceCenter_SimulatedFlight_t"><span class="n"><span class="pre">krpc_SpaceCenter_SimulatedFlight_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">density</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">gravity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_BuoyantTorqueAt" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque the buoyant force exerts about the vessel’s center of mass when fully
+submerged in a fluid of the given density, in reference frame
+<a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>. Gravity acts along the negative x-axis of
+<a class="reference internal" href="#c.krpc_SpaceCenter_SimulatedFlight_t.krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame" title="krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_SimulatedFlight_SurfaceReferenceFrame()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+</dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
 </dd>

@@ -926,17 +926,6 @@ plane hangar reports the space plane hangar.</p>
 </dd></dl>
 
 <dl class="cs property">
-<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.Size">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Size</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.Size" title="Link to this definition">#</a></dt>
-<dd><p>The dimensions of the vessel’s bounding box, in meters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.Mass">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Mass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.Mass" title="Link to this definition">#</a></dt>
 <dd><p>The total mass of the vessel, including resources and crew, in kg.</p>
@@ -958,9 +947,105 @@ plane hangar reports the space plane hangar.</p>
 </dl>
 </dd></dl>
 
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.MomentOfInertia">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">MomentOfInertia</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.MomentOfInertia" title="Link to this definition">#</a></dt>
+<dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(kg.m^2\)</span>.
+The inertia values in the returned 3-tuple are around the
+pitch, roll and yaw directions respectively.
+This corresponds to the vessels reference frame (<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.EditorVessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">EditorVessel.ReferenceFrame</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.InertiaTensor">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">InertiaTensor</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.InertiaTensor" title="Link to this definition">#</a></dt>
+<dd><p>The inertia tensor of the vessel around its center of mass,
+in the vessels reference frame (<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.EditorVessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">EditorVessel.ReferenceFrame</span></code></a>).
+Returns the 3x3 matrix as a list of elements, in row-major order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.ReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">ReferenceFrame</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.ReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that is fixed relative to the vessel,
+and orientated with the vessel.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes rotate with the vessel.</p></li>
+<li><p>The x-axis points out to the right of the vessel.</p></li>
+<li><p>The y-axis points in the forward direction of the vessel.</p></li>
+<li><p>The z-axis points out of the bottom off the vessel.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The axes are those of the root part. This is the frame
+<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a> gives at launch, with the root part as the
+control point.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.SurfaceReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">SurfaceReferenceFrame</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.SurfaceReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that is fixed relative to the vessel,
+and orientated with the vertical of the editor.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are fixed in the editor.</p></li>
+<li><p>The x-axis points upwards.</p></li>
+<li><p>The y-axis and z-axis are horizontal.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the vessel as it stands in the editor, and as it stands at launch. The
+editor has no north or east, so the horizontal axes are fixed in the editor.</p>
+</div>
+</dd></dl>
+
 <dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfMass">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">CenterOfMass</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfMass" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.EditorVessel.Flight">
+<a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.SimulatedFlight" title="class: KRPC.Client.Services.SpaceCenter.SimulatedFlight"><span class="pre">SimulatedFlight</span></a> <span class="sig-name descname"><span class="pre">Flight</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><em> <span class="pre">=</span> <span class="pre">null</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.Flight" title="Link to this definition">#</a></dt>
+<dd><p>Returns a <a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.SimulatedFlight" title="class: KRPC.Client.Services.SpaceCenter.SimulatedFlight"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">SimulatedFlight</span></code></a> object that can be used to simulate the
+vessel in flight, in the specified reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – Reference frame. Defaults to the simulated surface reference frame (<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SimulatedFlight.SurfaceReferenceFrame</span></code></a>), and follows it when it is set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call returns a new object, which is kept until the game leaves the editor.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.EditorVessel.Position">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Position</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.Position" title="Link to this definition">#</a></dt>
 <dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -975,129 +1060,63 @@ plane hangar reports the space plane hangar.</p>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This is the editor scene’s world-space center of mass expressed in
-<em>referenceFrame</em>. A part’s
-<a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Part.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.ReferenceFrame</span></code></a> reports the offset from that
-part. A celestial body frame is not a position on that body: the
-editor is not placed in the solar system the way a vessel in flight is.</p>
-</div>
-</dd></dl>
-
-<dl class="cs property">
-<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.MomentOfInertia">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">MomentOfInertia</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.MomentOfInertia" title="Link to this definition">#</a></dt>
-<dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(kg.m^2\)</span>.
-The inertia values in the returned 3-tuple are around the pitch, roll and yaw
-directions of the root part’s reference transform respectively.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cs property">
-<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.InertiaTensor">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">InertiaTensor</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.InertiaTensor" title="Link to this definition">#</a></dt>
-<dd><p>The inertia tensor of the vessel around its center of mass, in the root
-part’s reference transform. Returns the 3x3 matrix as a list of elements,
-in row-major order.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cs property">
-<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.EditorVessel.Displacement">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <span class="sig-name descname"><span class="pre">Displacement</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.Displacement" title="Link to this definition">#</a></dt>
-<dd><p>The volume of water the vessel displaces when fully submerged, in
-<span class="math notranslate nohighlight">\(m^3\)</span>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfBuoyancy">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">CenterOfBuoyancy</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfBuoyancy" title="Link to this definition">#</a></dt>
-<dd><p>The point the buoyant force acts through with the vessel fully submerged.
-Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if no part of the vessel displaces any water.</p>
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.EditorVessel.BoundingBox">
+<a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.BoundingBox" title="struct: KRPC.Client.Services.SpaceCenter.BoundingBox"><span class="pre">BoundingBox</span></a> <span class="sig-name descname"><span class="pre">BoundingBox</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.BoundingBox" title="Link to this definition">#</a></dt>
+<dd><p>The axis-aligned bounding box of the vessel in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vector is in.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vectors are in.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The position as a vector.</p>
+<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A hull at rest carries this on the same vertical line as
-<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfMass" title="function: KRPC.Client.Services.SpaceCenter.EditorVessel.CenterOfMass"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">EditorVessel.CenterOfMass</span></code></a>. Compare the two in the same reference frame to see
-which way an untrimmed hull will roll.</p>
-</div>
 </dd></dl>
 
 <dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.EditorVessel.BuoyantForceAt">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <span class="sig-name descname"><span class="pre">BuoyantForceAt</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">density</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">gravity</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.BuoyantForceAt" title="Link to this definition">#</a></dt>
-<dd><p>The buoyant force on the vessel when fully submerged in a fluid of the given
-density, in Newtons.</p>
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.EditorVessel.Rotation">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-4" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Rotation</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.Rotation" title="Link to this definition">#</a></dt>
+<dd><p>The rotation of the vessel, in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Editor Vab, Editor Sph</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Compare this with the vessel’s weight to see whether the hull floats. It applies
-<a class="reference internal" href="space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.BuoyancyScalar" title="property: KRPC.Client.Services.SpaceCenter.SpaceCenter.BuoyancyScalar"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SpaceCenter.BuoyancyScalar</span></code></a> and each part’s
-<a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.BuoyancyMultiplier" title="property: KRPC.Client.Services.SpaceCenter.Part.BuoyancyMultiplier"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.BuoyancyMultiplier</span></code></a>, so the result is what the game would
-do to the vessel.</p>
-</div>
-</dd></dl>
-
-<dl class="cs function">
-<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.EditorVessel.BuoyantTorqueAt">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">BuoyantTorqueAt</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">density</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">gravity</span></em>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.BuoyantTorqueAt" title="Link to this definition">#</a></dt>
-<dd><p>The torque the buoyant force exerts about the vessel’s center of mass when fully
-submerged in a fluid of the given density, under gravity acting down the editor.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
-<li><p><strong>referenceFrame</strong> – The reference frame that the returned torque vector is in.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned rotation is in.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A hull trimmed level carries zero torque.</p>
-</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.EditorVessel.Direction">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Direction</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.Direction" title="Link to this definition">#</a></dt>
+<dd><p>The direction in which the vessel is pointing, in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned direction is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direction as a unit vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cs property">
@@ -1138,8 +1157,10 @@ that make up the vessel.</p>
 available in the editor. Those that need a vessel in flight or running physics,
 such as the thermal members, are restricted to the flight scene.
 <a class="reference internal" href="parts.html#function-KRPC.Client.Services.SpaceCenter.Part.Position" title="function: KRPC.Client.Services.SpaceCenter.Part.Position"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Part.Position</span></code></a>, <a class="reference internal" href="parts.html#function-KRPC.Client.Services.SpaceCenter.Part.CenterOfMass" title="function: KRPC.Client.Services.SpaceCenter.Part.CenterOfMass"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Part.CenterOfMass</span></code></a>,
-the part’s reference frames, <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia" title="property: KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.MomentOfInertia</span></code></a>
-and <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.InertiaTensor" title="property: KRPC.Client.Services.SpaceCenter.Part.InertiaTensor"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.InertiaTensor</span></code></a> are available.</p>
+<a class="reference internal" href="parts.html#function-KRPC.Client.Services.SpaceCenter.Part.Direction" title="function: KRPC.Client.Services.SpaceCenter.Part.Direction"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Part.Direction</span></code></a>, <a class="reference internal" href="parts.html#function-KRPC.Client.Services.SpaceCenter.Part.Rotation" title="function: KRPC.Client.Services.SpaceCenter.Part.Rotation"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Part.Rotation</span></code></a>,
+<a class="reference internal" href="parts.html#function-KRPC.Client.Services.SpaceCenter.Part.BoundingBox" title="function: KRPC.Client.Services.SpaceCenter.Part.BoundingBox"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Part.BoundingBox</span></code></a>, the part’s reference frames,
+<a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia" title="property: KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.MomentOfInertia</span></code></a> and
+<a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.InertiaTensor" title="property: KRPC.Client.Services.SpaceCenter.Part.InertiaTensor"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.InertiaTensor</span></code></a> are available.</p>
 </div>
 </dd></dl>
 
@@ -1279,6 +1300,193 @@ assumes, in m/s. See <a class="reference internal" href="#property-KRPC.Client.S
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">BurnTime</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.BurnTime" title="Link to this definition">#</a></dt>
 <dd><p>Total burn time for the vessel, in seconds.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.SpaceCenter.SimulatedFlight">
+<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">SimulatedFlight</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.SimulatedFlight" title="Link to this definition">#</a></dt>
+<dd><p>Used to simulate the vessel in the editor in flight. The counterpart of
+<a class="reference internal" href="flight.html#class-KRPC.Client.Services.SpaceCenter.Flight" title="class: KRPC.Client.Services.SpaceCenter.Flight"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Flight</span></code></a>. All of the information returned by this class is given in
+the reference frame passed to <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.Flight" title="function: KRPC.Client.Services.SpaceCenter.EditorVessel.Flight"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">EditorVessel.Flight</span></code></a>, or in
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SimulatedFlight.SurfaceReferenceFrame</span></code></a> if none was passed.
+Obtained by calling <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.EditorVessel.Flight" title="function: KRPC.Client.Services.SpaceCenter.EditorVessel.Flight"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">EditorVessel.Flight</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The simulated attitude is set by <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SimulatedFlight.SurfaceReferenceFrame</span></code></a>, and belongs to
+this object. The vessel is read from the editor on each call, so the object follows
+every edit.</p>
+</div>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">SurfaceReferenceFrame</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame of the surface the vessel is simulated over. Its x-axis
+points upwards, and gravity acts along the negative x-axis. Defaults to
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.SurfaceReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.EditorVessel.SurfaceReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">EditorVessel.SurfaceReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the rotation of the frame is used. A frame created relative to
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.EditorVessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.EditorVessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">EditorVessel.ReferenceFrame</span></code></a> follows the vessel as it is edited.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.CenterOfMass">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">CenterOfMass</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.CenterOfMass" title="Link to this definition">#</a></dt>
+<dd><p>The position of the center of mass of the vessel,
+in the reference frame <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The position as a vector.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Rotation">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-4" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Rotation</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Rotation" title="Link to this definition">#</a></dt>
+<dd><p>The rotation of the vessel, in the reference frame <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Direction">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Direction</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Direction" title="Link to this definition">#</a></dt>
+<dd><p>The direction that the vessel is pointing in,
+in the reference frame <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The direction as a unit vector.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Pitch">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Pitch</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Pitch" title="Link to this definition">#</a></dt>
+<dd><p>The pitch of the vessel relative to the horizon, in degrees.
+A value between -90° and +90°.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+near -90° or +90°). For an always-defined attitude use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Rotation" title="property: KRPC.Client.Services.SpaceCenter.SimulatedFlight.Rotation"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SimulatedFlight.Rotation</span></code></a> or
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Direction" title="property: KRPC.Client.Services.SpaceCenter.SimulatedFlight.Direction"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SimulatedFlight.Direction</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Roll">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Roll</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Roll" title="Link to this definition">#</a></dt>
+<dd><p>The roll of the vessel relative to the horizon, in degrees.
+A value between -180° and +180°.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+near -90° or +90°). For an always-defined attitude use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Rotation" title="property: KRPC.Client.Services.SpaceCenter.SimulatedFlight.Rotation"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SimulatedFlight.Rotation</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Displacement">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <span class="sig-name descname"><span class="pre">Displacement</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.Displacement" title="Link to this definition">#</a></dt>
+<dd><p>The volume of water the vessel displaces when fully submerged, in
+<span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.FullySubmergedCenterOfBuoyancy">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">FullySubmergedCenterOfBuoyancy</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.FullySubmergedCenterOfBuoyancy" title="Link to this definition">#</a></dt>
+<dd><p>The point the buoyant force acts through with the vessel fully submerged, in
+reference frame <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>. Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> if no part of
+the vessel displaces any water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The position as a vector.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A hull at rest carries this on the same vertical line as
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.CenterOfMass" title="property: KRPC.Client.Services.SpaceCenter.SimulatedFlight.CenterOfMass"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SimulatedFlight.CenterOfMass</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.SimulatedFlight.BuoyantForceAt">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <span class="sig-name descname"><span class="pre">BuoyantForceAt</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">density</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">gravity</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.SimulatedFlight.BuoyantForceAt" title="Link to this definition">#</a></dt>
+<dd><p>The buoyant force on the vessel when fully submerged in a fluid of the given
+density, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.SimulatedFlight.BuoyantTorqueAt">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">,</span> <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">BuoyantTorqueAt</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">density</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">gravity</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.SimulatedFlight.BuoyantTorqueAt" title="Link to this definition">#</a></dt>
+<dd><p>The torque the buoyant force exerts about the vessel’s center of mass when fully
+submerged in a fluid of the given density, in reference frame
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>. Gravity acts along the negative x-axis of
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.SimulatedFlight.SurfaceReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SimulatedFlight.SurfaceReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+</dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
 </dd>

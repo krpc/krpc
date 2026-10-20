@@ -189,14 +189,6 @@ Editor
          designed in. A vessel moved from the vehicle assembly building to the space
          plane hangar reports the space plane hangar.
 
-   .. attribute:: size
-
-      The dimensions of the vessel's bounding box, in meters.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: tuple(float, float, float)
-      :Game Scenes: Editor Vab, Editor Sph
-
    .. attribute:: mass
 
       The total mass of the vessel, including resources and crew, in kg.
@@ -213,7 +205,84 @@ Editor
       :rtype: float
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. method:: center_of_mass(reference_frame)
+   .. attribute:: moment_of_inertia
+
+      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The inertia values in the returned 3-tuple are around the
+      pitch, roll and yaw directions respectively.
+      This corresponds to the vessels reference frame (:attr:`EditorVessel.reference_frame`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. attribute:: inertia_tensor
+
+      The inertia tensor of the vessel around its center of mass,
+      in the vessels reference frame (:attr:`EditorVessel.reference_frame`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(float)
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. attribute:: reference_frame
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vessel.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes rotate with the vessel.
+      * The x-axis points out to the right of the vessel.
+      * The y-axis points in the forward direction of the vessel.
+      * The z-axis points out of the bottom off the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The axes are those of the root part. This is the frame
+         :attr:`Vessel.reference_frame` gives at launch, with the root part as the
+         control point.
+
+   .. attribute:: surface_reference_frame
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vertical of the editor.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are fixed in the editor.
+      * The x-axis points upwards.
+      * The y-axis and z-axis are horizontal.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the vessel as it stands in the editor, and as it stands at launch. The
+         editor has no north or east, so the horizontal axes are fixed in the editor.
+
+   .. method:: flight([reference_frame = None])
+
+      Returns a :class:`SimulatedFlight` object that can be used to simulate the
+      vessel in flight, in the specified reference frame.
+
+      :param ReferenceFrame or None reference_frame: Reference frame. Defaults to the simulated surface reference frame (:attr:`SimulatedFlight.surface_reference_frame`), and follows it when it is set.
+      :rtype: :class:`SimulatedFlight`
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each call returns a new object, which is kept until the game leaves the editor.
+
+   .. method:: position(reference_frame)
 
       The position of the center of mass of the vessel, in the given reference frame.
 
@@ -222,95 +291,32 @@ Editor
       :rtype: tuple(float, float, float)
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. method:: bounding_box(reference_frame)
 
-      .. note::
+      The axis-aligned bounding box of the vessel in the given reference frame.
 
-         This is the editor scene's world-space center of mass expressed in
-         *reference_frame*. A part's
-         :attr:`Part.reference_frame` reports the offset from that
-         part. A celestial body frame is not a position on that body: the
-         editor is not placed in the solar system the way a vessel in flight is.
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :rtype: :class:`BoundingBox`
+      :Game Scenes: Editor Vab, Editor Sph
 
-   .. attribute:: moment_of_inertia
+   .. method:: rotation(reference_frame)
 
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
-      The inertia values in the returned 3-tuple are around the pitch, roll and yaw
-      directions of the root part's reference transform respectively.
+      The rotation of the vessel, in the given reference frame.
 
-      :Attribute: Read-only, cannot be set
+      :param ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :rtype: tuple(float, float, float, float)
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: direction(reference_frame)
+
+      The direction in which the vessel is pointing, in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
       :rtype: tuple(float, float, float)
       :Game Scenes: Editor Vab, Editor Sph
-
-   .. attribute:: inertia_tensor
-
-      The inertia tensor of the vessel around its center of mass, in the root
-      part's reference transform. Returns the 3x3 matrix as a list of elements,
-      in row-major order.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: list(float)
-      :Game Scenes: Editor Vab, Editor Sph
-
-   .. attribute:: displacement
-
-      The volume of water the vessel displaces when fully submerged, in
-      :math:`m^3`.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: float
-      :Game Scenes: Editor Vab, Editor Sph
-
-   .. method:: center_of_buoyancy(reference_frame)
-
-      The point the buoyant force acts through with the vessel fully submerged.
-      Returns ``None`` if no part of the vessel displaces any water.
-
-      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
-      :returns: The position as a vector.
-      :rtype: tuple(float, float, float) or None
-      :Game Scenes: Editor Vab, Editor Sph
-
-
-      .. note::
-
-         A hull at rest carries this on the same vertical line as
-         :meth:`EditorVessel.center_of_mass`. Compare the two in the same reference frame to see
-         which way an untrimmed hull will roll.
-
-   .. method:: buoyant_force_at(density, gravity)
-
-      The buoyant force on the vessel when fully submerged in a fluid of the given
-      density, in Newtons.
-
-      :param float density: The density of the fluid, in :math:`kg/m^3`.
-      :param float gravity: The acceleration due to gravity, in :math:`m/s^2`.
-      :rtype: float
-      :Game Scenes: Editor Vab, Editor Sph
-
-
-      .. note::
-
-         Compare this with the vessel's weight to see whether the hull floats. It applies
-         :attr:`buoyancy_scalar` and each part's
-         :attr:`Part.buoyancy_multiplier`, so the result is what the game would
-         do to the vessel.
-
-   .. method:: buoyant_torque_at(density, gravity, reference_frame)
-
-      The torque the buoyant force exerts about the vessel's center of mass when fully
-      submerged in a fluid of the given density, under gravity acting down the editor.
-
-      :param float density: The density of the fluid, in :math:`kg/m^3`.
-      :param float gravity: The acceleration due to gravity, in :math:`m/s^2`.
-      :param ReferenceFrame reference_frame: The reference frame that the returned torque vector is in.
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
-      :rtype: tuple(float, float, float)
-      :Game Scenes: Editor Vab, Editor Sph
-
-
-      .. note::
-
-         A hull trimmed level carries zero torque.
 
    .. attribute:: cost
 
@@ -342,8 +348,10 @@ Editor
                 available in the editor. Those that need a vessel in flight or running physics,
                 such as the thermal members, are restricted to the flight scene.
                 :meth:`Part.position`, :meth:`Part.center_of_mass`,
-                the part's reference frames, :attr:`Part.moment_of_inertia`
-                and :attr:`Part.inertia_tensor` are available.
+                :meth:`Part.direction`, :meth:`Part.rotation`,
+                :meth:`Part.bounding_box`, the part's reference frames,
+                :attr:`Part.moment_of_inertia` and
+                :attr:`Part.inertia_tensor` are available.
 
    .. attribute:: resources
 
@@ -445,4 +453,145 @@ Editor
 
       :Attribute: Read-only, cannot be set
       :rtype: float
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+
+.. class:: SimulatedFlight
+
+   Used to simulate the vessel in the editor in flight. The counterpart of
+   :class:`Flight`. All of the information returned by this class is given in
+   the reference frame passed to :meth:`EditorVessel.flight`, or in
+   :attr:`SimulatedFlight.surface_reference_frame` if none was passed.
+   Obtained by calling :meth:`EditorVessel.flight`.
+
+   .. note::
+
+      The simulated attitude is set by :attr:`SimulatedFlight.surface_reference_frame`, and belongs to
+      this object. The vessel is read from the editor on each call, so the object follows
+      every edit.
+
+   .. attribute:: surface_reference_frame
+
+      The reference frame of the surface the vessel is simulated over. Its x-axis
+      points upwards, and gravity acts along the negative x-axis. Defaults to
+      :attr:`EditorVessel.surface_reference_frame`.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Only the rotation of the frame is used. A frame created relative to
+         :attr:`EditorVessel.reference_frame` follows the vessel as it is edited.
+
+   .. attribute:: center_of_mass
+
+      The position of the center of mass of the vessel,
+      in the reference frame :class:`ReferenceFrame`
+
+      :Attribute: Read-only, cannot be set
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. attribute:: rotation
+
+      The rotation of the vessel, in the reference frame :class:`ReferenceFrame`
+
+      :Attribute: Read-only, cannot be set
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :rtype: tuple(float, float, float, float)
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. attribute:: direction
+
+      The direction that the vessel is pointing in,
+      in the reference frame :class:`ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The direction as a unit vector.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. attribute:: pitch
+
+      The pitch of the vessel relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :attr:`SimulatedFlight.rotation` or
+         :attr:`SimulatedFlight.direction`.
+
+   .. attribute:: roll
+
+      The roll of the vessel relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :attr:`SimulatedFlight.rotation`.
+
+   .. attribute:: displacement
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. attribute:: fully_submerged_center_of_buoyancy
+
+      The point the buoyant force acts through with the vessel fully submerged, in
+      reference frame :class:`ReferenceFrame`. Returns ``None`` if no part of
+      the vessel displaces any water.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float) or None
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :attr:`SimulatedFlight.center_of_mass`.
+
+   .. method:: buoyant_force_at(density, gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :param float density: The density of the fluid, in :math:`kg/m^3`.
+      :param float gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :rtype: float
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: buoyant_torque_at(density, gravity)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, in reference frame
+      :class:`ReferenceFrame`. Gravity acts along the negative x-axis of
+      :attr:`SimulatedFlight.surface_reference_frame`.
+
+      :param float density: The density of the fluid, in :math:`kg/m^3`.
+      :param float gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :rtype: tuple(float, float, float)
       :Game Scenes: Editor Vab, Editor Sph

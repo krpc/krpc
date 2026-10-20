@@ -179,12 +179,6 @@ Editor
          designed in. A vessel moved from the vehicle assembly building to the space
          plane hangar reports the space plane hangar.
 
-   .. property:: System.Tuple<double,double,double> Size { get; }
-
-      The dimensions of the vessel's bounding box, in meters.
-
-      :Game Scenes: Editor Vab, Editor Sph
-
    .. property:: float Mass { get; }
 
       The total mass of the vessel, including resources and crew, in kg.
@@ -197,7 +191,78 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
-   .. function:: System.Tuple<double,double,double> CenterOfMass(ReferenceFrame referenceFrame)
+   .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
+
+      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The inertia values in the returned 3-tuple are around the
+      pitch, roll and yaw directions respectively.
+      This corresponds to the vessels reference frame (:prop:`EditorVessel.ReferenceFrame`).
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: System.Collections.Generic.IList<double> InertiaTensor { get; }
+
+      The inertia tensor of the vessel around its center of mass,
+      in the vessels reference frame (:prop:`EditorVessel.ReferenceFrame`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: ReferenceFrame ReferenceFrame { get; }
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vessel.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes rotate with the vessel.
+      * The x-axis points out to the right of the vessel.
+      * The y-axis points in the forward direction of the vessel.
+      * The z-axis points out of the bottom off the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The axes are those of the root part. This is the frame
+         :prop:`Vessel.ReferenceFrame` gives at launch, with the root part as the
+         control point.
+
+   .. property:: ReferenceFrame SurfaceReferenceFrame { get; }
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vertical of the editor.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are fixed in the editor.
+      * The x-axis points upwards.
+      * The y-axis and z-axis are horizontal.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the vessel as it stands in the editor, and as it stands at launch. The
+         editor has no north or east, so the horizontal axes are fixed in the editor.
+
+   .. function:: SimulatedFlight Flight(ReferenceFrame referenceFrame = null)
+
+      Returns a :type:`SimulatedFlight` object that can be used to simulate the
+      vessel in flight, in the specified reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- Reference frame. Defaults to the simulated surface reference frame (:prop:`SimulatedFlight.SurfaceReferenceFrame`), and follows it when it is set.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each call returns a new object, which is kept until the game leaves the editor.
+
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position of the center of mass of the vessel, in the given reference frame.
 
@@ -208,95 +273,38 @@ Editor
       :returns: The position as a vector.
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. function:: BoundingBox BoundingBox(ReferenceFrame referenceFrame)
 
-      .. note::
-
-         This is the editor scene's world-space center of mass expressed in
-         *referenceFrame*. A part's
-         :prop:`Part.ReferenceFrame` reports the offset from that
-         part. A celestial body frame is not a position on that body: the
-         editor is not placed in the solar system the way a vessel in flight is.
-
-   .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
-
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
-      The inertia values in the returned 3-tuple are around the pitch, roll and yaw
-      directions of the root part's reference transform respectively.
-
-      :Game Scenes: Editor Vab, Editor Sph
-
-   .. property:: System.Collections.Generic.IList<double> InertiaTensor { get; }
-
-      The inertia tensor of the vessel around its center of mass, in the root
-      part's reference transform. Returns the 3x3 matrix as a list of elements,
-      in row-major order.
-
-      :Game Scenes: Editor Vab, Editor Sph
-
-   .. property:: double Displacement { get; }
-
-      The volume of water the vessel displaces when fully submerged, in
-      :math:`m^3`.
-
-      :Game Scenes: Editor Vab, Editor Sph
-
-   .. function:: System.Tuple<double,double,double> CenterOfBuoyancy(ReferenceFrame referenceFrame)
-
-      The point the buoyant force acts through with the vessel fully submerged.
-      Returns ``null`` if no part of the vessel displaces any water.
+      The axis-aligned bounding box of the vessel in the given reference frame.
 
       :parameters:
 
-       * **referenceFrame** -- The reference frame that the returned position vector is in.
+       * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The position as a vector.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
 
-      .. note::
-
-         A hull at rest carries this on the same vertical line as
-         :meth:`EditorVessel.CenterOfMass`. Compare the two in the same reference frame to see
-         which way an untrimmed hull will roll.
-
-   .. function:: double BuoyantForceAt(double density, double gravity)
-
-      The buoyant force on the vessel when fully submerged in a fluid of the given
-      density, in Newtons.
+      The rotation of the vessel, in the given reference frame.
 
       :parameters:
 
-       * **density** -- The density of the fluid, in :math:`kg/m^3`.
-       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+       * **referenceFrame** -- The reference frame that the returned rotation is in.
 
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
 
-      .. note::
-
-         Compare this with the vessel's weight to see whether the hull floats. It applies
-         :prop:`SpaceCenter.BuoyancyScalar <SpaceCenter.SpaceCenter.BuoyancyScalar>` and each part's
-         :prop:`Part.BuoyancyMultiplier`, so the result is what the game would
-         do to the vessel.
-
-   .. function:: System.Tuple<double,double,double> BuoyantTorqueAt(double density, double gravity, ReferenceFrame referenceFrame)
-
-      The torque the buoyant force exerts about the vessel's center of mass when fully
-      submerged in a fluid of the given density, under gravity acting down the editor.
+      The direction in which the vessel is pointing, in the given reference frame.
 
       :parameters:
 
-       * **density** -- The density of the fluid, in :math:`kg/m^3`.
-       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
-       * **referenceFrame** -- The reference frame that the returned torque vector is in.
+       * **referenceFrame** -- The reference frame that the returned direction is in.
 
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :returns: The direction as a unit vector.
       :Game Scenes: Editor Vab, Editor Sph
-
-
-      .. note::
-
-         A hull trimmed level carries zero torque.
 
    .. property:: float Cost { get; }
 
@@ -322,8 +330,10 @@ Editor
                 available in the editor. Those that need a vessel in flight or running physics,
                 such as the thermal members, are restricted to the flight scene.
                 :meth:`Part.Position`, :meth:`Part.CenterOfMass`,
-                the part's reference frames, :prop:`Part.MomentOfInertia`
-                and :prop:`Part.InertiaTensor` are available.
+                :meth:`Part.Direction`, :meth:`Part.Rotation`,
+                :meth:`Part.BoundingBox`, the part's reference frames,
+                :prop:`Part.MomentOfInertia` and
+                :prop:`Part.InertiaTensor` are available.
 
    .. property:: Resources Resources { get; }
 
@@ -413,4 +423,133 @@ Editor
 
       Total burn time for the vessel, in seconds.
 
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+
+.. class:: SimulatedFlight
+
+   Used to simulate the vessel in the editor in flight. The counterpart of
+   :type:`Flight`. All of the information returned by this class is given in
+   the reference frame passed to :meth:`EditorVessel.Flight`, or in
+   :prop:`SimulatedFlight.SurfaceReferenceFrame` if none was passed.
+   Obtained by calling :meth:`EditorVessel.Flight`.
+
+   .. note::
+
+      The simulated attitude is set by :prop:`SimulatedFlight.SurfaceReferenceFrame`, and belongs to
+      this object. The vessel is read from the editor on each call, so the object follows
+      every edit.
+
+   .. property:: ReferenceFrame SurfaceReferenceFrame { get; set; }
+
+      The reference frame of the surface the vessel is simulated over. Its x-axis
+      points upwards, and gravity acts along the negative x-axis. Defaults to
+      :prop:`EditorVessel.SurfaceReferenceFrame`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Only the rotation of the frame is used. A frame created relative to
+         :prop:`EditorVessel.ReferenceFrame` follows the vessel as it is edited.
+
+   .. property:: System.Tuple<double,double,double> CenterOfMass { get; }
+
+      The position of the center of mass of the vessel,
+      in the reference frame :type:`ReferenceFrame`
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double,double> Rotation { get; }
+
+      The rotation of the vessel, in the reference frame :type:`ReferenceFrame`
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double> Direction { get; }
+
+      The direction that the vessel is pointing in,
+      in the reference frame :type:`ReferenceFrame`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: float Pitch { get; }
+
+      The pitch of the vessel relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :prop:`SimulatedFlight.Rotation` or
+         :prop:`SimulatedFlight.Direction`.
+
+   .. property:: float Roll { get; }
+
+      The roll of the vessel relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :prop:`SimulatedFlight.Rotation`.
+
+   .. property:: double Displacement { get; }
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: System.Tuple<double,double,double> FullySubmergedCenterOfBuoyancy { get; }
+
+      The point the buoyant force acts through with the vessel fully submerged, in
+      reference frame :type:`ReferenceFrame`. Returns ``null`` if no part of
+      the vessel displaces any water.
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :prop:`SimulatedFlight.CenterOfMass`.
+
+   .. function:: double BuoyantForceAt(double density, double gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: System.Tuple<double,double,double> BuoyantTorqueAt(double density, double gravity)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, in reference frame
+      :type:`ReferenceFrame`. Gravity acts along the negative x-axis of
+      :prop:`SimulatedFlight.SurfaceReferenceFrame`.
+
+      :parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
       :Game Scenes: Editor Vab, Editor Sph

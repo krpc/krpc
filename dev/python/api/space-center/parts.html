@@ -2785,7 +2785,7 @@ If the part is physicsless in flight, this is equivalent to <a class="reference 
 <dd class="field-odd"><p><a class="reference internal" href="vessel.html#SpaceCenter.BoundingBox" title="SpaceCenter.BoundingBox"><code class="xref py py-class docutils literal notranslate"><span class="pre">BoundingBox</span></code></a></p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -2812,7 +2812,7 @@ the <a class="reference internal" href="#SpaceCenter.Part.center_of_mass" title=
 <dd class="field-odd"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2852,7 +2852,7 @@ the <a class="reference internal" href="#SpaceCenter.Part.center_of_mass" title=
 <dd class="field-odd"><p>tuple(float, float, float, float)</p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2983,7 +2983,7 @@ it are reported by <a class="reference internal" href="#SpaceCenter.Part.submerg
 <dt class="sig sig-object py" id="SpaceCenter.Part.moment_of_inertia">
 <span class="sig-name descname"><span class="pre">moment_of_inertia</span></span><a class="headerlink" href="#SpaceCenter.Part.moment_of_inertia" title="Link to this definition">#</a></dt>
 <dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(kg.m^2\)</span> around its center of mass
-in the parts reference frame (<a class="reference internal" href="#SpaceCenter.Part.reference_frame" title="SpaceCenter.Part.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.reference_frame</span></code></a>).</p>
+in the parts center of mass reference frame (<a class="reference internal" href="#SpaceCenter.Part.center_of_mass_reference_frame" title="SpaceCenter.Part.center_of_mass_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.center_of_mass_reference_frame</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -3000,8 +3000,8 @@ in the parts reference frame (<a class="reference internal" href="#SpaceCenter.P
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Part.inertia_tensor">
 <span class="sig-name descname"><span class="pre">inertia_tensor</span></span><a class="headerlink" href="#SpaceCenter.Part.inertia_tensor" title="Link to this definition">#</a></dt>
-<dd><p>The inertia tensor of the part in the parts reference frame
-(<a class="reference internal" href="#SpaceCenter.Part.reference_frame" title="SpaceCenter.Part.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.reference_frame</span></code></a>).
+<dd><p>The inertia tensor of the part around its center of mass, in the parts center of
+mass reference frame (<a class="reference internal" href="#SpaceCenter.Part.center_of_mass_reference_frame" title="SpaceCenter.Part.center_of_mass_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.center_of_mass_reference_frame</span></code></a>).
 Returns the 3x3 matrix as a list of elements, in row-major order.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>

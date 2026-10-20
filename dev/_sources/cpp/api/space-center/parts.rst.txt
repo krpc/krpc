@@ -980,7 +980,7 @@ Part
        * **reference_frame** -- The reference frame that the returned position vectors are in.
 
       :returns: The positions of the minimum and maximum vertices of the box.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -999,7 +999,7 @@ Part
        * **reference_frame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame)
 
@@ -1021,7 +1021,7 @@ Part
        * **reference_frame** -- The reference frame that the returned rotation is in.
 
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::tuple<double, double, double> lift(ReferenceFrame reference_frame)
 
@@ -1107,14 +1107,14 @@ Part
    .. function:: std::tuple<double, double, double> moment_of_inertia()
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
-      in the parts reference frame (:func:`Part::reference_frame`).
+      in the parts center of mass reference frame (:func:`Part::center_of_mass_reference_frame`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::vector<double> inertia_tensor()
 
-      The inertia tensor of the part in the parts reference frame
-      (:func:`Part::reference_frame`).
+      The inertia tensor of the part around its center of mass, in the parts center of
+      mass reference frame (:func:`Part::center_of_mass_reference_frame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph

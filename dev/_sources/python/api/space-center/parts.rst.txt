@@ -1185,7 +1185,7 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
       :returns: The positions of the minimum and maximum vertices of the box.
       :rtype: :class:`BoundingBox`
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -1202,7 +1202,7 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
       :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: velocity(reference_frame)
 
@@ -1220,7 +1220,7 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :rtype: tuple(float, float, float, float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: lift(reference_frame)
 
@@ -1296,7 +1296,7 @@ Part
    .. attribute:: moment_of_inertia
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
-      in the parts reference frame (:attr:`Part.reference_frame`).
+      in the parts center of mass reference frame (:attr:`Part.center_of_mass_reference_frame`).
 
       :Attribute: Read-only, cannot be set
       :rtype: tuple(float, float, float)
@@ -1304,8 +1304,8 @@ Part
 
    .. attribute:: inertia_tensor
 
-      The inertia tensor of the part in the parts reference frame
-      (:attr:`Part.reference_frame`).
+      The inertia tensor of the part around its center of mass, in the parts center of
+      mass reference frame (:attr:`Part.center_of_mass_reference_frame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
       :Attribute: Read-only, cannot be set

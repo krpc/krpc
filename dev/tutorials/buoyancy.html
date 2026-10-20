@@ -648,9 +648,7 @@ what the other two axes carry:</p>
 <span class="n">center_of_mass</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">center_of_mass</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.center_of_buoyancy" title="SpaceCenter.Flight.center_of_buoyancy"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.center_of_buoyancy</span></code></a> is <code class="docutils literal notranslate"><span class="pre">None</span></code> when no part of the vessel is in the water.
-The same pair is available in the editor as <a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.EditorVessel.center_of_buoyancy" title="SpaceCenter.EditorVessel.center_of_buoyancy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EditorVessel.center_of_buoyancy()</span></code></a> and
-<a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.EditorVessel.center_of_mass" title="SpaceCenter.EditorVessel.center_of_mass"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EditorVessel.center_of_mass()</span></code></a>, so a hull can be trimmed before it is launched.</p>
+<p><a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.center_of_buoyancy" title="SpaceCenter.Flight.center_of_buoyancy"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.center_of_buoyancy</span></code></a> is <code class="docutils literal notranslate"><span class="pre">None</span></code> when no part of the vessel is in the water.</p>
 <p>The couple is also available as a torque about the center of mass. A hull trimmed level
 carries zero torque:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">torque</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">buoyant_torque_at</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">ocean_density</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">surface_gravity</span><span class="p">)</span>
@@ -658,7 +656,26 @@ carries zero torque:</p>
 </div>
 <p><a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.buoyant_torque_at" title="SpaceCenter.Flight.buoyant_torque_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Flight.buoyant_torque_at()</span></code></a> is the torque with the hull fully submerged. It holds
 steady while the hull rides the waves, where <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.buoyant_torque" title="SpaceCenter.Flight.buoyant_torque"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.buoyant_torque</span></code></a> follows the
-live waterline. <a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.EditorVessel.buoyant_torque_at" title="SpaceCenter.EditorVessel.buoyant_torque_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EditorVessel.buoyant_torque_at()</span></code></a> gives the same figure in the editor.</p>
+live waterline.</p>
+</section>
+<section id="in-the-editor">
+<h2>In the Editor<a class="headerlink" href="#in-the-editor" title="Link to this heading">#</a></h2>
+<p>A hull can be trimmed before it is launched. <a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.EditorVessel.flight" title="SpaceCenter.EditorVessel.flight"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EditorVessel.flight()</span></code></a> returns a
+<a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.SimulatedFlight" title="SpaceCenter.SimulatedFlight"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimulatedFlight</span></code></a>, which has the fully submerged members of <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight" title="SpaceCenter.Flight"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flight</span></code></a>. Its
+<a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.SimulatedFlight.surface_reference_frame" title="SpaceCenter.SimulatedFlight.surface_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">SimulatedFlight.surface_reference_frame</span></code></a> sets which way is up. Here a hull built
+nose-up in the vehicle assembly building is simulated floating on its bottom:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">editor</span><span class="o">.</span><span class="n">vessel</span>
+<span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)</span>
+<span class="c1"># The vessel frame's z axis points out of the bottom, so up is its -z axis</span>
+<span class="n">side</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">flight</span><span class="o">.</span><span class="n">surface_reference_frame</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">ReferenceFrame</span><span class="o">.</span><span class="n">create_relative</span><span class="p">(</span>
+    <span class="n">vessel</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">side</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">side</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">torque</span> <span class="o">=</span> <span class="n">flight</span><span class="o">.</span><span class="n">buoyant_torque_at</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">ocean_density</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">surface_gravity</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Gravity acts along the negative x axis of the surface reference frame. A frame created
+relative to <a class="reference internal" href="../python/api/space-center/editor.html#SpaceCenter.EditorVessel.reference_frame" title="SpaceCenter.EditorVessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">EditorVessel.reference_frame</span></code></a> follows the hull as it is edited.</p>
 </section>
 <section id="submersion">
 <h2>Submersion<a class="headerlink" href="#submersion" title="Link to this heading">#</a></h2>
@@ -788,6 +805,7 @@ sits from its center of mass:</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trim">Trim</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-the-editor">In the Editor</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submersion">Submersion</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pressure">Pressure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
