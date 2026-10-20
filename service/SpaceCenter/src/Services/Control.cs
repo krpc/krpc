@@ -799,7 +799,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="group">
         /// A number between 0 and 9 inclusive,
-        /// or between 0 and 250 inclusive when the <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.
+        /// or between 0 and 250 inclusive when the <a href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.
         /// </param>
         [KRPCMethod]
         public bool GetActionGroup (uint group)
@@ -821,7 +821,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="group">
         /// A number between 0 and 9 inclusive,
-        /// or between 0 and 250 inclusive when the <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.
+        /// or between 0 and 250 inclusive when the <a href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.
         /// </param>
         /// <param name="state"></param>
         [KRPCMethod]
@@ -844,7 +844,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="group">
         /// A number between 0 and 9 inclusive,
-        /// or between 0 and 250 inclusive when the <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.
+        /// or between 0 and 250 inclusive when the <a href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.
         /// </param>
         [KRPCMethod]
         public void ToggleActionGroup (uint group)
@@ -868,7 +868,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="group">
         /// A number between 0 and 9 inclusive,
-        /// or between 0 and 250 inclusive when the <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.
+        /// or between 0 and 250 inclusive when the <a href="https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.
         /// </param>
         /// <remarks>
         /// For stock action groups, the assignments are read from each part action directly.

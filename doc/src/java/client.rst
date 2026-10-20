@@ -12,9 +12,9 @@ Getting Started
 ---------------
 
 The kRPC client library depends on the `protobuf
-<https://github.com/google/protobuf/tree/master/java>`_ and `javatuples
-<http://www.javatuples.org>`_ libraries. A prebuilt jar for protobuf is available via `Maven
-<http://search.maven.org/#search|ga|1|g%3A%22com.google.protobuf%22%20a%3A%22protobuf-java%22>`_.
+<https://github.com/protocolbuffers/protobuf/tree/main/java>`_ and `javatuples
+<https://github.com/arxila/javatuples>`_ libraries. A prebuilt jar for protobuf is available via `Maven
+<https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java>`_.
 
 The following example program connects to the server, queries it for its version and prints it out:
 

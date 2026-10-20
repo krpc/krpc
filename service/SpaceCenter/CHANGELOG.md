@@ -272,7 +272,7 @@
   - Computing a bounding box no longer duplicates the meshes of every part it measures (#1024)
   - `Part.BoundingBox` and `Vessel.BoundingBox` include animated meshes, in their current pose,
     such as the arm of a drill (#1153)
-  - Add support for [RealFuels](https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*),
+  - Add support for [RealFuels](https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/),
     reported by `SpaceCenter.RealFuelsAvailable`. On an engine it manages, `Engine.Ignitions`,
     `Engine.IgnitionResources`, `Engine.HasUllage`, `Engine.PropellantStability`,
     `Engine.PropellantReliability`, `Engine.PressureFed` and `Engine.HasFeedPressure` are

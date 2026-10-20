@@ -136,7 +136,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The name tag part module is provided by
         /// <a href="https://github.com/KSPModdingLibs/KSPCommunityPartModules">KSPCommunityPartModules</a>
         /// 0.5 or later, or by
-        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>,
+        /// <a href="https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/">kOS</a>,
         /// which shares this string.
         /// </remarks>
         [KRPCProperty]
@@ -1335,7 +1335,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the part is a fuel tank managed by
-        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*">RealFuels</a>.
+        /// <a href="https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/">RealFuels</a>.
         /// The remaining properties in this section are only available when it is.
         /// </summary>
         [KRPCProperty]

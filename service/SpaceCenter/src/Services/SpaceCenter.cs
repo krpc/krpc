@@ -1145,7 +1145,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a> is installed.
+        /// Whether <a href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a> is installed.
         /// </summary>
         [KRPCProperty]
         public static bool FARAvailable {
@@ -1153,7 +1153,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Whether <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*">RealFuels</a> is installed.
+        /// Whether <a href="https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/">RealFuels</a> is installed.
         /// </summary>
         [KRPCProperty]
         public static bool RealFuelsAvailable {

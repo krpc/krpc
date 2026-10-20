@@ -7,7 +7,7 @@ the game, and comes with client libraries for many popular languages.
 
  * [Web Documentation](https://krpc.github.io/krpc)
  * [PDF Documentation](https://github.com/krpc/krpc/releases)
- * [Forum release thread](http://forum.kerbalspaceprogram.com/index.php?/topic/130742-105-krpc-remote-control-your-ships-using-python-c-c-lua-v021-10th-feb-2016/)
+ * [Forum release thread](https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/)
  * [Discord](https://discord.gg/bXuaTrj)
 
 ## Contributing
@@ -19,7 +19,7 @@ Contributions to kRPC are very welcome. [Please refer to this guide.](Contributi
  * [Development Guide](Development-Guide.md) for information on the project structure, compiling the code and the various tools.
  * [Release guide](Release-Guide.md) for project maintainers to do releases.
  * See the #devchat channels on Discord for informal dev discussions
- * [Forum development thread](https://forum.kerbalspaceprogram.com/index.php?/topic/62902-14113x122-krpc-remote-procedure-call-server-v045-17th-march-2018/)
+ * [Forum development thread](https://forum.kerbalspaceprogram.com/topic/62902-18x-to-112x-krpc-remote-procedure-call-server-v051-2nd-march-2023/)
 
 ## KSP2
 
