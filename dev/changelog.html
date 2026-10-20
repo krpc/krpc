@@ -969,6 +969,7 @@
 <section id="infernalrobotics-service">
 <h3>InfernalRobotics service<a class="headerlink" href="#infernalrobotics-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fix a servo being listed more than once in a <code class="docutils literal notranslate"><span class="pre">ServoGroup</span></code> after switching to and from its vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1154">#1154</a>)</p></li>
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">Servo</span></code> and <code class="docutils literal notranslate"><span class="pre">ServoGroup</span></code> objects accumulating for the rest of the session, and the same servo or group obtained twice comparing unequal (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
 <li><p>A servo and a servo group keep working across a quickload, and raise <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> once the part or the vessel they belong to is gone (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>
 <li><p>Renaming a servo group destroys every object for it, and the group has to be obtained again under the new name (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1051">#1051</a>)</p></li>

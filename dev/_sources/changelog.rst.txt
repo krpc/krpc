@@ -367,6 +367,7 @@ User Interface service
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+* Fix a servo being listed more than once in a ``ServoGroup`` after switching to and from its vessel (:issue:`1154`)
 * Fix ``Servo`` and ``ServoGroup`` objects accumulating for the rest of the session, and the same servo or group obtained twice comparing unequal (:issue:`1051`)
 * A servo and a servo group keep working across a quickload, and raise ``KRPC.ObjectDestroyedException`` once the part or the vessel they belong to is gone (:issue:`1051`)
 * Renaming a servo group destroys every object for it, and the group has to be obtained again under the new name (:issue:`1051`)
