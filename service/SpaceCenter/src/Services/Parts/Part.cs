@@ -1174,7 +1174,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The moment of inertia of the part in <math>kg.m^2</math> around its center of mass
-        /// in the parts reference frame (<see cref="ReferenceFrame"/>).
+        /// in the parts center of mass reference frame (<see cref="CenterOfMassReferenceFrame"/>).
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Tuple3 MomentOfInertia {
@@ -1182,8 +1182,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The inertia tensor of the part in the parts reference frame
-        /// (<see cref="ReferenceFrame"/>).
+        /// The inertia tensor of the part around its center of mass, in the parts center of
+        /// mass reference frame (<see cref="CenterOfMassReferenceFrame"/>).
         /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
