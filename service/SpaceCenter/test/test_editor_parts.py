@@ -156,7 +156,7 @@ class TestEditorParts(krpctest.TestCase):
         root = self.parts.root
         frame = root.reference_frame
         origin = root.position(frame)
-        com = vessel.center_of_mass(frame)
+        com = vessel.position(frame)
         self.assertAlmostEqual((0, 0, 0), origin, places=3)
         self.assertGreater(norm(com), 0.01)
 

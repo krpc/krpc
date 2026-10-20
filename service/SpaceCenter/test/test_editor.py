@@ -1,6 +1,8 @@
+import math
 import unittest
 
 import krpctest
+from krpctest.geometry import norm
 
 
 class TestEditor(krpctest.TestCase):
@@ -24,7 +26,8 @@ class TestEditor(krpctest.TestCase):
         self.assertGreater(vessel.mass, vessel.dry_mass)
         self.assertGreater(vessel.cost, 0)
         self.assertEqual(3, vessel.crew_capacity)
-        self.assertGreater(min(vessel.size), 0)
+        box = vessel.bounding_box(vessel.reference_frame)
+        self.assertGreater(min(b - a for a, b in zip(*box)), 0)
 
     def test_mass_properties(self):
         vessel = self.space_center.editor.vessel
@@ -36,6 +39,98 @@ class TestEditor(krpctest.TestCase):
         self.assertAlmostEqual(moi[0], tensor[0], delta=1)
         self.assertAlmostEqual(moi[1], tensor[4], delta=1)
         self.assertAlmostEqual(moi[2], tensor[8], delta=1)
+
+    def test_reference_frame(self):
+        vessel = self.space_center.editor.vessel
+        frame = vessel.reference_frame
+        self.assertAlmostEqual((0, 0, 0), vessel.position(frame), places=3)
+        self.assertAlmostEqual((0, 1, 0), vessel.direction(frame), places=3)
+        rotation = vessel.rotation(frame)
+        self.assertAlmostEqual(1, abs(rotation[3]), places=3)
+        # The bounding box surrounds the center of mass
+        lower, upper = vessel.bounding_box(frame)
+        for i in range(3):
+            self.assertLess(lower[i], 0)
+            self.assertGreater(upper[i], 0)
+
+    def test_reference_frame_is_root_part(self):
+        # The vessel frame has the root part's axes, offset to the center of mass
+        vessel = self.space_center.editor.vessel
+        root = vessel.parts.root
+        frame = vessel.reference_frame
+        root_frame = root.reference_frame
+        self.assertGreater(norm(vessel.position(root_frame)), 0.01)
+        self.assertAlmostEqual(root.direction(frame), vessel.direction(frame), places=3)
+        self.assertAlmostEqual(
+            vessel.position(root_frame),
+            self.space_center.transform_position((0, 0, 0), frame, root_frame),
+            places=3,
+        )
+
+    def test_surface_reference_frame(self):
+        # Staging is a vertical stack, so it points up the editor
+        vessel = self.space_center.editor.vessel
+        frame = vessel.surface_reference_frame
+        self.assertAlmostEqual((0, 0, 0), vessel.position(frame), places=3)
+        self.assertAlmostEqual((1, 0, 0), vessel.direction(frame), places=3)
+
+    def test_simulated_flight(self):
+        vessel = self.space_center.editor.vessel
+        flight = vessel.flight()
+        self.assertAlmostEqual((0, 0, 0), flight.center_of_mass, places=3)
+        self.assertAlmostEqual((1, 0, 0), flight.direction, places=3)
+        self.assertAlmostEqual(90, flight.pitch, places=1)
+        self.assertEqual(vessel.surface_reference_frame, flight.surface_reference_frame)
+        frame_flight = vessel.flight(vessel.reference_frame)
+        self.assertAlmostEqual((0, 1, 0), frame_flight.direction, places=3)
+        self.assertNotEqual(flight, vessel.flight())
+
+    def test_simulated_flight_attitude(self):
+        vessel = self.space_center.editor.vessel
+        flight = vessel.flight()
+        other = vessel.flight()
+        # Lay the stack on its side: the simulated up is the vessel's -z axis
+        side = math.sqrt(0.5)
+        surface = self.space_center.ReferenceFrame.create_relative(
+            vessel.reference_frame, rotation=(0, side, 0, side)
+        )
+        try:
+            self.assertAlmostEqual(
+                (0, 0, -1),
+                self.space_center.transform_direction(
+                    (1, 0, 0), surface, vessel.reference_frame
+                ),
+                places=3,
+            )
+            fixed = vessel.flight(vessel.reference_frame)
+            flight.surface_reference_frame = surface
+            fixed.surface_reference_frame = surface
+            self.assertEqual(surface, flight.surface_reference_frame)
+            # The default output frame follows the simulated surface, so the vessel
+            # reads as flying level
+            self.assertAlmostEqual(0, flight.pitch, delta=0.1)
+            self.assertAlmostEqual(0, flight.direction[0], places=3)
+            self.assertAlmostEqual((0, 0, 0), flight.center_of_mass, places=3)
+            # A given output frame does not move with the simulated surface
+            self.assertAlmostEqual((0, 1, 0), fixed.direction, places=3)
+            # Each object holds its own attitude
+            self.assertAlmostEqual(90, other.pitch, places=1)
+            self.assertAlmostEqual((1, 0, 0), other.direction, places=3)
+        finally:
+            surface.remove()
+        self.assertRaises(
+            self.connect().krpc.ObjectDestroyedException, getattr, flight, "pitch"
+        )
+
+    def test_reference_frame_survives_load_vessel(self):
+        editor = self.space_center.editor
+        frame = editor.vessel.reference_frame
+        self._stage_craft("Parts", "VAB", None)
+        try:
+            editor.load_vessel("VAB", "Parts")
+            self.assertAlmostEqual((0, 0, 0), editor.vessel.position(frame), places=3)
+        finally:
+            editor.load_vessel("VAB", "Staging")
 
     def test_name_and_description(self):
         vessel = self.space_center.editor.vessel
@@ -161,8 +256,10 @@ class TestEditorLaunchVessel(krpctest.TestCase):
         mass = editor_vessel.mass
         moi = editor_vessel.moment_of_inertia
         root = editor_vessel.parts.root
-        com = editor_vessel.center_of_mass(root.reference_frame)
+        com = editor_vessel.position(root.reference_frame)
         part_com = root.center_of_mass(root.reference_frame)
+        direction = editor_vessel.direction(editor_vessel.surface_reference_frame)
+        box = editor_vessel.bounding_box(editor_vessel.reference_frame)
         self.space_center.editor.launch_vessel("LaunchPad")
         flight = self.space_center.active_vessel
         self.assertEqual(craft, flight.name)
@@ -180,6 +277,19 @@ class TestEditorLaunchVessel(krpctest.TestCase):
         for i in range(3):
             self.assertAlmostEqual(com[i], flight_com[i], delta=0.5)
             self.assertAlmostEqual(part_com[i], flight_part_com[i], delta=0.2)
+        # The vessel stands on the pad as it stood in the editor
+        flight_direction = flight.direction(flight.surface_reference_frame)
+        self.assertAlmostEqual(direction[0], flight_direction[0], delta=0.01)
+        # The control point is the root part, so the vessel frames match. A rover's
+        # box changes by a few percent on the pad
+        flight_box = flight.bounding_box(flight.reference_frame)
+        for i in range(3):
+            size = box[1][i] - box[0][i]
+            self.assertAlmostEqual(
+                size,
+                flight_box[1][i] - flight_box[0][i],
+                delta=max(size * 0.1, 0.1),
+            )
 
 
 if __name__ == "__main__":

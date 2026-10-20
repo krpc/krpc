@@ -1,3 +1,4 @@
+import math
 import time
 import unittest
 
@@ -295,9 +296,10 @@ class TestEditorBuoyancy(krpctest.TestCase):
 
     def test_vessel_displacement(self):
         vessel = self.space_center.editor.vessel
-        self.assertGreater(vessel.displacement, 0)
+        flight = vessel.flight()
+        self.assertGreater(flight.displacement, 0)
         total = sum(part.displacement for part in vessel.parts.all)
-        self.assertAlmostEqual(total, vessel.displacement, delta=1e-6)
+        self.assertAlmostEqual(total, flight.displacement, delta=1e-6)
 
     def test_vessel_buoyant_force_at(self):
         vessel = self.space_center.editor.vessel
@@ -306,7 +308,7 @@ class TestEditorBuoyancy(krpctest.TestCase):
         total = sum(
             part.buoyant_force_at(density, gravity) for part in vessel.parts.all
         )
-        force = vessel.buoyant_force_at(density, gravity)
+        force = vessel.flight().buoyant_force_at(density, gravity)
         self.assertGreater(force, 0)
         self.assertAlmostEqual(total, force, delta=force * 1e-6)
         # The hull floats, which is what the readout is consulted for
@@ -315,7 +317,8 @@ class TestEditorBuoyancy(krpctest.TestCase):
     def test_vessel_center_of_buoyancy(self):
         vessel = self.space_center.editor.vessel
         frame = vessel.parts.root.reference_frame
-        center_of_buoyancy = vessel.center_of_buoyancy(frame)
+        flight = vessel.flight(frame)
+        center_of_buoyancy = flight.fully_submerged_center_of_buoyancy
         assert center_of_buoyancy is not None
         self.assertEqual(3, len(center_of_buoyancy))
         # It sits on the stack, within its length of the root part
@@ -333,9 +336,7 @@ class TestEditorBuoyancy(krpctest.TestCase):
             tuple(x / total for x in weighted), center_of_buoyancy, places=3
         )
         # A distinct point from the center of mass, which is what a hull is trimmed against
-        self.assertGreater(
-            distance(center_of_buoyancy, vessel.center_of_mass(frame)), 0
-        )
+        self.assertGreater(distance(center_of_buoyancy, flight.center_of_mass), 0)
 
     def test_vessel_buoyant_torque_at(self):
         vessel = self.space_center.editor.vessel
@@ -343,16 +344,41 @@ class TestEditorBuoyancy(krpctest.TestCase):
         gravity = self.kerbin.surface_gravity
         # The craft is an unrotated vertical stack, so the root part's y axis is up
         frame = vessel.parts.root.reference_frame
-        force = vessel.buoyant_force_at(density, gravity)
-        lever = vector(vessel.center_of_buoyancy(frame)) - vector(
-            vessel.center_of_mass(frame)
+        flight = vessel.flight(frame)
+        force = flight.buoyant_force_at(density, gravity)
+        lever = vector(flight.fully_submerged_center_of_buoyancy) - vector(
+            flight.center_of_mass
         )
         expected = cross(lever, (0, force, 0))
         self.assertAlmostEqual(
-            expected,
-            vessel.buoyant_torque_at(density, gravity, frame),
-            delta=force * 1e-4,
+            expected, flight.buoyant_torque_at(density, gravity), delta=force * 1e-4
         )
+
+    def test_vessel_buoyant_torque_at_simulated_attitude(self):
+        vessel = self.space_center.editor.vessel
+        density = self.kerbin.ocean_density
+        gravity = self.kerbin.surface_gravity
+        frame = vessel.parts.root.reference_frame
+        flight = vessel.flight(frame)
+        # Lay the stack on its side: the simulated up is the vessel's -z axis
+        side = math.sqrt(0.5)
+        surface = self.space_center.ReferenceFrame.create_relative(
+            vessel.reference_frame, rotation=(0, side, 0, side)
+        )
+        try:
+            flight.surface_reference_frame = surface
+            up = self.space_center.transform_direction((1, 0, 0), surface, frame)
+            force = flight.buoyant_force_at(density, gravity)
+            lever = vector(flight.fully_submerged_center_of_buoyancy) - vector(
+                flight.center_of_mass
+            )
+            expected = cross(lever, vector(up) * force)
+            torque = flight.buoyant_torque_at(density, gravity)
+            self.assertAlmostEqual(expected, torque, delta=force * 1e-4)
+            # Off the vertical the lever has a horizontal part, so the hull turns
+            self.assertGreater(norm(vector(torque)), 0)
+        finally:
+            surface.remove()
 
     def test_part_members(self):
         for part in self.space_center.editor.vessel.parts.all:
@@ -400,11 +426,12 @@ class TestEditorBuoyancyMatchesFlight(krpctest.TestCase):
         self.assertTrue(
             any("parachute" in part.name for part in editor_vessel.parts.all)
         )
-        editor_total = editor_vessel.displacement
+        editor_flight = editor_vessel.flight()
+        editor_total = editor_flight.displacement
         kerbin = self.space_center.bodies["Kerbin"]
         density = kerbin.ocean_density
         gravity = kerbin.surface_gravity
-        editor_force = editor_vessel.buoyant_force_at(density, gravity)
+        editor_force = editor_flight.buoyant_force_at(density, gravity)
         editor_parts = sorted(part.displacement for part in editor_vessel.parts.all)
         self.space_center.editor.launch_vessel("LaunchPad")
         flight_vessel = self.space_center.active_vessel
