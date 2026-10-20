@@ -300,6 +300,7 @@ test_suite(
         "//client/python:lint",
         "//client/serialio:lint",
         "//client/websockets:lint",
+        "//doc:linkcheck",
         "//doc:lint",
         "//service/Debug:lint",
         "//service/Drawing:lint",

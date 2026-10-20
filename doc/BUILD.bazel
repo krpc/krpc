@@ -258,7 +258,7 @@ test_suite(
         ":check-scripts-pyright",
         ":lint",
         ":spelling",
-    ],  # ':linkcheck'
+    ],
 )
 
 # Type-check the Python example scripts against the typed client generated from
