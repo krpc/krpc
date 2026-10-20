@@ -113,9 +113,28 @@ class TestEditorParts(krpctest.TestCase):
         ):
             self.assertRaises(RuntimeError, getattr, part, name)
         self.assertRaises(RuntimeError, getattr, self.parts, "controlling")
-        self.assertRaises(RuntimeError, part.bounding_box, part.reference_frame)
-        self.assertRaises(RuntimeError, part.direction, part.reference_frame)
         self.assertRaises(RuntimeError, part.velocity, part.reference_frame)
+
+    def test_orientation(self):
+        root = self.parts.root
+        frame = root.reference_frame
+        self.assertAlmostEqual((0, 1, 0), root.direction(frame), places=3)
+        self.assertAlmostEqual(1, abs(root.rotation(frame)[3]), places=3)
+
+    def test_bounding_box(self):
+        # The box is taken from the part's meshes and seeded with its center of mass,
+        # so it surrounds that point and is the size of one part
+        for part in self.parts.all:
+            frame = part.reference_frame
+            lower, upper = part.bounding_box(frame)
+            center_of_mass = part.center_of_mass(frame)
+            for i in range(3):
+                self.assertLessEqual(lower[i], center_of_mass[i])
+                self.assertGreaterEqual(upper[i], center_of_mass[i])
+                self.assertLess(upper[i] - lower[i], 20)
+            self.assertGreater(
+                max(b - a for a, b in zip(lower, upper)), 0.01, msg=part.name
+            )
 
     def test_position(self):
         root = self.parts.root

@@ -235,7 +235,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </remarks>
         public static Bounds GetBounds (this Part part, ReferenceFrame referenceFrame)
         {
-            var bounds = new Bounds (referenceFrame.PositionFromWorldSpace (part.WCoM), Vector3.zero);
+            // Only the flight physics sets WCoM
+            var seed = HighLogic.LoadedSceneIsEditor ? part.CenterOfMass () : (Vector3d)part.WCoM;
+            var bounds = new Bounds (referenceFrame.PositionFromWorldSpace (seed), Vector3.zero);
             // Only the part's own model, the same subtree KSP measures a part against. The
             // whole part transform also holds the models of physicsless child parts, which
             // hang off it, and any object a mod parents to the part
