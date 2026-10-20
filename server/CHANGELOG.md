@@ -1,25 +1,21 @@
 ## [v0.7.0] - unreleased
-- Fix the error from a call that waits on the game being reported as `Exception has been
-  thrown by the target of an invocation` (#1083)
+- **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum (#1048)
+- Add the local socket protocol to the server window. It opens no network port (#1065)
 - Add the `TickHoldTimeout` setting, which bounds how long a client may hold the game on one
   physics tick (#1070)
-- The server updates before the game collects control inputs, so a control input takes effect
-  on the tick the call is made in (#1070)
-- **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum (#1048)
-- Servers can use the local socket protocol, chosen in the server window like any other. No
-  network port is opened (#1065)
-- Fix the end of a long serial port name being neither visible nor editable in the server
-  window (#1065)
-- The server is stopped whenever no game is loaded, so a client is disconnected when the
-  player quits to the main menu (#1041)
-- Fix setting `KRPC.GameScene` from one editor straight to the other leaving the flight camera
-  unable to follow a vessel for the rest of the session (#1038)
-- Fix setting `KRPC.GameScene` back to flight failing with a null reference error, after it
-  was used to leave flight (#1117)
-- Save the game when setting `KRPC.GameScene` leaves flight, unless the game cannot be
-  saved (#1117)
-- Sweep objects whose game objects no longer exist out of the object store when the game
-  loads, changes scene or destroys a part or a vessel (#1051)
+- Update the server before the game collects control inputs, so a control input takes effect on
+  the tick of its call (#1070)
+- Stop the server whenever no game is loaded, disconnecting clients when the player quits to the
+  main menu (#1041)
+- Save the game when setting `KRPC.GameScene` leaves flight, unless the game cannot be saved
+  (#1117)
+- Remove objects whose game objects are gone from the object store when the game loads, changes
+  scene or destroys a part or vessel (#1051)
+- Fix setting `KRPC.GameScene` from one editor to the other, or back to flight, breaking the
+  flight camera or failing with a null reference (#1038, #1117)
+- Fix the error from a call that waits on the game being reported as `Exception has been thrown
+  by the target of an invocation` (#1083)
+- Fix the end of a long serial port name being hidden in the server window (#1065)
 
 ## [v0.6.0]
 - Fix server version reported to clients (read from `KRPC.dll` not `KRPC.Core.dll`) (#848)

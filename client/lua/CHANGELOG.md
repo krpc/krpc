@@ -1,28 +1,23 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** Support `Types.none` for any nullable type, including a structure field, list
+  element, tuple item and dictionary value (#1017, #1091)
+- **Breaking:** Return messages, such as the server status, as plain tables (#1142)
 - **Breaking:** Rename `conn.li_dar` to `conn.lidar`, for the `LIDAR` service (#1149)
-- Support a nullable structure field, list element, tuple item and dictionary value, which is
-  `Types.none` when absent (#1091)
-- Support structure types, built from their field values in order and giving them named
-  access (#1066)
-- A service definition naming an unknown type skips the member that names it with a warning,
-  instead of failing to connect (#1066)
-- **Breaking:** Support `Types.none` for any nullable type (#1017)
+- Support Lua 5.3 and 5.4, where 64-bit values decode to exact integers (#1142)
+- Depend on `lua-protobuf` in place of `protobuf`, and require luasocket 3.0 or later
+  (#1142, #1060)
 - Add `krpc.connect_local`, which connects to a server on the same machine over a unix domain
   socket, on Linux and macOS (#1065)
-- Fix a service failing to load when one of its procedures defaults to a member of an
-  enumeration from a service that had not been loaded yet (#1044)
-- Add `krpc.limits`, naming the extremes of the numeric types kRPC carries over the wire, such
-  as `krpc.limits.SINT32_MAX` (#1045)
-- Reduce the cost of a remote procedure call, writing and reading messages as bytes rather
-  than as protocol buffer messages (#1056)
-- Require luasocket 3.0 or later (#1060)
-- Fix a type occasionally being built a second time, leaving an enumeration or class type in a
-  service unusable (#1068)
-- Fix the client assigning global variables, such as `data` and `typ`, which clashed with a
-  script's own (#1142)
-- Support Lua 5.3 and 5.4, where 64-bit values decode to exact integers (#1142)
-- Depend on `lua-protobuf` in place of `protobuf` (#1142)
-- **Breaking:** Return messages, such as the server status, as plain tables (#1142)
+- Support structure types, built from their field values in order with named access (#1066)
+- Skip a service member naming an unknown type with a warning, and connect (#1066)
+- Add `krpc.limits`, the extremes of the numeric types kRPC carries, such as
+  `krpc.limits.SINT32_MAX` (#1045)
+- Reduce the cost of a remote procedure call (#1056)
+- Fix a service failing to load when a default value names an enumeration of a service not yet
+  loaded (#1044)
+- Fix a type occasionally being built twice, leaving an enumeration or class type unusable
+  (#1068)
+- Fix the client assigning global variables, such as `data` and `typ` (#1142)
 
 ## [v0.6.0]
 - Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor` (#850)

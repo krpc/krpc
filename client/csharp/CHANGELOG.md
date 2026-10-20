@@ -1,67 +1,61 @@
 ## [v0.7.0] - unreleased
-- Update to Google.Protobuf 3.36.2 (#1139)
-- **Breaking:** Start a stream when it is added, removing `Stream.Start` and `Event.Start`
-  (#1122)
-- Wait for a stream's first value in `Stream.Get` (#1122)
-- Call a callback added to a stream that has a value with that value straight away (#1122)
-- Call a callback added to an event straight away for a firing not yet passed to a wait or
-  another callback (#1122)
-- **Breaking:** Add an `IConnection.Invoke` overload taking the return type, which a class
-  implementing `IConnection` must provide (#1122)
-- Throw `InvalidOperationException` when reading or waiting on a removed stream or event (#1122)
-- End a stream on an error from the server, which every later `Get` and `Wait` throws (#1122)
-- End every stream with `ConnectionException` when the connection closes or fails (#1122)
-- **Breaking:** Return `true` from `Stream.Wait` and `Event.Wait` on an update, and `false` on
-  a timeout (#1122)
-- Fix `Event.Wait` missing a firing that arrived before it (#1122)
-- Fix `Event.Wait` waking only one of two threads waiting on one event (#1122)
-- Add `AddEndCallback` to streams and events, called with the exception that ends the stream
-  (#1122)
-- Fix the stream update thread ending the process on a value it cannot decode or a message it
-  cannot parse (#1122)
-- Fix a second removal of a stream removing a newer stream for the same call (#1122)
-- Fix stream callbacks throwing an `InvalidCastException` on an error from the server (#1122)
-- Throw `InvalidOperationException` from `AddStream` on a connection with no stream server
-  (#1122)
-- **Breaking:** Throw `NullReferenceException` for a null where a value is required, reported
-  by any service, in place of `RPCException` (#1124)
-- **Breaking:** Throw `KeyNotFoundException` for a missing key, and `IndexOutOfRangeException`
-  for an index out of range, reported by any service, in place of `RPCException` (#1124)
-- **Breaking:** Throw `DivideByZeroException`, `NotSupportedException`, `TimeoutException` and
-  `OverflowException` for the matching errors reported by any service, such as `AutoPilot.Wait`,
-  in place of `RPCException` (#1124)
-- Add `Connection.Compile`, which compiles a lambda into a server side function (#1128)
-- Compile operators, conditionals, casts, `System.Math` methods, string operations, collection,
-  tuple and structure constructors, and the common LINQ operators in a lambda (#1128)
-- Compile `Console.WriteLine` to `StdLib.Print`, which writes a line to the game's log (#1128)
-- Throw `FunctionCompilationException` naming a construct a compiled lambda cannot contain,
-  including a call that depends on the current culture (#1128)
-- Add `Connection.Run`, which runs a server side function or a lambda within a single
-  physics tick, passing it any arguments, and returns its value (#1128)
-- Add a `Connection.AddStream<T>` overload taking a server side function (#1128)
-- Add `Connection.AddEvent`, which creates an event from a lambda or a server side function
-  (#1128)
-- Compile a lambda passed to `AddStream` other than a single call, so a stream can compute a
-  value (#1128)
-- **Breaking:** Evaluate the remote calls in the arguments of a call passed to `AddStream` on
-  every update, not once when the stream is created (#1128)
-- Throw `InvalidOperationException` from `Stream.Get` for a null value the stream's type cannot
-  hold (#1128)
-- Support a nullable structure field, list element, tuple item and dictionary value; a
-  value-typed one uses the nullable form (`int?`) (#1091)
-- Support structure types, a compound value with named fields a service defines, generated as
-  a `struct` with a constructor, `IEquatable`, `IComparable` and the comparison operators over
-  its fields (#1066)
-- **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
-  form (`int?`) (#1017)
-- Add `Connection.ConnectLocal`, which connects to a server on the same machine over unix
-  domain sockets (#1065)
-- Add a `timeout` parameter to the `Connection` constructor, bounding how long a connection is
-  waited for (#1065)
-- Reduce the cost of a remote procedure call, encoding and decoding without a protobuf stream
-  and parsing a response straight out of the read buffer (#1056)
-- Reduce the cost of a call that returns a collection or an object (#1056)
-- Fix an `ArgumentException` from the server carrying its message as the parameter name (#1111)
+
+- Streams and events
+  - **Breaking:** Start a stream when it is added, removing `Stream.Start` and `Event.Start`
+    (#1122)
+  - **Breaking:** Return `true` from `Stream.Wait` and `Event.Wait` on an update, and `false` on
+    a timeout (#1122)
+  - **Breaking:** Add an `IConnection.Invoke` overload taking the return type, which a class
+    implementing `IConnection` must provide (#1122)
+  - Wait for a stream's first value in `Stream.Get` (#1122)
+  - End a stream on an error from the server, and every stream with `ConnectionException` when
+    the connection closes or fails (#1122)
+  - Throw `InvalidOperationException` when reading or waiting on a removed stream or event, and
+    from `AddStream` on a connection with no stream server (#1122)
+  - Add `AddEndCallback` to streams and events, called with the exception that ends the stream
+    (#1122)
+  - Call a callback added to a stream or event straight away for a value or firing already
+    received (#1122)
+  - Fix `Event.Wait` missing an earlier firing, and waking only one of two waiting threads
+    (#1122)
+  - Fix the stream update thread ending the process on a value it cannot decode or a message it
+    cannot parse (#1122)
+  - Fix a second removal of a stream removing a newer stream for the same call, and stream
+    callbacks throwing `InvalidCastException` on an error from the server (#1122)
+
+- Server side functions
+  - Add `Connection.Compile`, which compiles a lambda into a server side function (#1128)
+  - Compile operators, conditionals, casts, `System.Math`, string operations, collection, tuple
+    and structure constructors, `Console.WriteLine` and the common LINQ operators (#1128)
+  - Throw `FunctionCompilationException` naming a construct a lambda cannot contain, including
+    a call that depends on the current culture (#1128)
+  - Add `Connection.Run` and `Connection.AddEvent`, and a `Connection.AddStream<T>` overload
+    taking a server side function (#1128)
+  - **Breaking:** Compile a lambda given to `AddStream`, so the remote calls in its arguments
+    are evaluated on every update (#1128)
+
+- Types and errors
+  - **Breaking:** Throw the matching .NET exception, such as `NullReferenceException`,
+    `KeyNotFoundException` or `TimeoutException`, for an error reported by any service, in place
+    of `RPCException` (#1124)
+  - **Breaking:** Support `null` for any nullable type, including a structure field, list
+    element, tuple item and dictionary value. Value types use the nullable form (`int?`)
+    (#1017, #1091)
+  - Throw `InvalidOperationException` from `Stream.Get` for a null value the stream's type
+    cannot hold (#1128)
+  - Support structure types, generated as a `struct` with a constructor, equality and ordering
+    over its fields (#1066)
+  - Fix an `ArgumentException` from the server carrying its message as the parameter name
+    (#1111)
+
+- Connections
+  - Add `Connection.ConnectLocal`, which connects to a server on the same machine over a unix
+    domain socket (#1065)
+  - Add a `timeout` parameter to the `Connection` constructor, bounding how long a connection is
+    waited for (#1065)
+  - Reduce the cost of a remote procedure call, most for one that returns a collection or an
+    object (#1056)
+  - Update to Google.Protobuf 3.36.2 (#1139)
 
 ## [v0.6.0]
 - **Breaking:** Requires .NET Framework 4.7.2 or later (#948)

@@ -1,47 +1,31 @@
 ## [v0.7.0] - unreleased
-- Read the definitions of several services in `krpc-clientgen`, from JSON files alongside DLLs
-  (#1148)
 - **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C
   nano service uses, giving the path of its header (#1150)
-- **Breaking:** Run `krpc-servicedefs` and `TestServer` on the .NET 10 runtime, in place of
-  .NET 8 (#1139)
-- Generate python stubs that declare a service's classes, enumerations, structures and
-  exceptions for type checkers (#1134)
-- Fix `krpc-clientgen` failing to load a generator from a file (#1134)
 - **Breaking:** Generate C# and C++ stubs that mark the calls returning a stream or an event,
   which need a v0.7.0 client (#1122)
+- **Breaking:** Construct a generator module given to `krpc-clientgen` by path with the
+  definitions of every loaded service (#1044)
+- **Breaking:** Run `krpc-servicedefs` and `TestServer` on the .NET 10 runtime, in place of
+  .NET 8 (#1139)
+- Generate and document the structure types and nullable values a service defines, for every
+  client (#1066, #1017, #1091)
+- Read the definitions of several services in `krpc-clientgen`, from JSON files alongside DLLs
+  (#1148)
+- Generate python stubs that declare a service's classes, enumerations, structures and
+  exceptions for type checkers (#1134)
+- Allow NaN, the infinities and the numeric extremes as parameter default values, named as the
+  target language names them (#1045)
+- Generate an enumeration default value as the member it names, and report an undeclared one
+  with its service, procedure and parameter (#1044)
+- Fix default values containing an enumeration failing to generate, and Lua and C++
+  documentation writing default values in the wrong syntax (#1044)
+- Fix a 32-bit float default value being written in full, so `0.1f` read as
+  `0.10000000149011612` (#1045)
+- Fix the escaping of member names that are keywords in the generated Python, C++ and Java code
+  and documentation (#1094)
 - Fix the python stubs for a service that names a type the KRPC service defines failing to
-  import (#1094)
-- Fix a generated python exception type not naming the service and class it was built from
-  (#1094)
-- Fix a python documentation reference to a member whose name is a keyword naming the
-  unescaped form (#1094)
-- Fix C++ documentation escaping a keyword member name twice in a declaration and not at all
-  in a cross reference (#1094)
-- Fix a generated Java enumeration member carrying an escaping suffix, such as `DOUBLE__` in
-  place of `DOUBLE` (#1094)
-- Generate and document the nullable structure fields and collection elements a service
-  defines, for every client (#1091)
-- Generate and document the structure types a service defines, for every client (#1066)
-- **Breaking:** A generator module given to `krpc-clientgen` by path is constructed with the
-  definitions of every service that was loaded, rather than those of the single service it
-  generates (#1044)
-- Support for nullable values across all types (#1017)
-- Generate an enumeration default value as the member it names, instead of a cast of its
-  integer value (#1044)
-- Fix generating a default value whose type contains an enumeration, such as a list of them,
-  failing (#1044)
-- Fix Lua documentation writing default values in Python's syntax rather than Lua's (#1044)
-- Fix C++ documentation writing a collection default value as a constructor call rather than a
-  braced initializer list (#1044)
-- A default value naming an undeclared enumeration value is reported naming the service,
-  procedure and parameter it came from (#1044)
-- The special values of the numeric types - NaN, the infinities and the extremes of the
-  integer and floating point ranges - can be used as parameter default values. Generated code
-  and documentation name them as the target language does, such as `double.NaN` in C#. Python
-  and Lua name the new `krpc.limits` constants (#1045)
-- Fix a 32-bit float default value being written as the full decimal expansion of the double
-  it widens to, so `0.1f` read as `0.10000000149011612` (#1045)
+  import, and its exception types naming no service (#1094)
+- Fix `krpc-clientgen` failing to load a generator from a file (#1134)
 
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+

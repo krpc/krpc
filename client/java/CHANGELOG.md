@@ -1,47 +1,46 @@
 ## [v0.7.0] - unreleased
-- Update to protobuf-java 4.36.2 (#1139)
-- **Breaking:** Throw `NullPointerException` for a null where a value is required, reported by
-  any service, in place of `RPCException` (#1124)
-- **Breaking:** Throw `NoSuchElementException` for a missing key, and `IndexOutOfBoundsException`
-  for an index out of range, reported by any service, in place of `RPCException` (#1124)
-- **Breaking:** Throw `ArithmeticException` for a division by zero or an overflow, and
-  `UnsupportedOperationException` for an unsupported operation, reported by any service, in place
-  of `RPCException` (#1124)
-- Add `Connection.run`, which runs a server side function within a single physics tick,
-  passing it any arguments, and returns its value (#1129)
-- Add a `Connection.addStream` overload taking a server side function (#1129)
-- Add `Connection.addEvent`, which creates an event from a server side function (#1129)
-- Make `RemoteObject.id` public, for passing to `Expression.constantObject` (#1129)
-- **Breaking:** Start a stream when it is added, removing `Stream.start`,
-  `Stream.startAndWait` and `Event.start` (#1122)
-- Wait for a stream's first value in `Stream.get` (#1122)
-- Call a callback added to a stream that has a value with that value straight away (#1122)
-- Call a callback added to an event straight away for a firing not yet passed to a wait or
-  another callback (#1122)
-- Throw `StreamException` when reading or waiting on a removed stream or event (#1122)
-- End a stream on an error from the server, which every later `get` and wait throws (#1122)
-- End every stream with a `StreamException` when the connection closes or fails (#1122)
-- **Breaking:** Return `true` from `Stream.waitForUpdateWithTimeout` and
-  `Event.waitForWithTimeout` on an update, and `false` on a timeout (#1122)
-- Fix `Event.waitFor` missing a firing that arrived before it (#1122)
-- Fix `Event.waitFor` waking only one of two threads waiting on one event (#1122)
-- Add `addEndCallback` to streams and events, called with the exception that ends the stream
-  (#1122)
-- Fix the stream update thread stopping on a value it cannot decode (#1122)
-- Fix a second removal of a stream removing a newer stream for the same call (#1122)
-- Fix an error ending a stream throwing a `ClassCastException` in its callbacks (#1122)
-- Support a nullable structure field, list element, tuple item and dictionary value, held as
-  the boxed type (`Integer`, `Double`, …) where the value is a primitive (#1091)
-- Support structure types, a compound value with named fields a service defines, generated as
-  a class with a constructor, getters, `equals`, `hashCode` and `Comparable` over its
-  fields (#1066)
-- **Breaking:** Requires Java 17 or later, up from Java 9, for unix domain sockets (#1065)
-- **Breaking:** Support `null` for any nullable type; nullable value types use the boxed type
-  (`Integer`, `Double`, …) (#1017)
-- Add `Connection.newLocalInstance`, which connects to a server on the same machine over unix
-  domain sockets (#1065)
-- Add `Connection.newInstance` overloads taking a `timeout`, bounding how long a connection is
-  waited for (#1065)
+
+- Streams and events
+  - **Breaking:** Start a stream when it is added, removing `Stream.start`,
+    `Stream.startAndWait` and `Event.start` (#1122)
+  - **Breaking:** Return `true` from `Stream.waitForUpdateWithTimeout` and
+    `Event.waitForWithTimeout` on an update, and `false` on a timeout (#1122)
+  - Wait for a stream's first value in `Stream.get` (#1122)
+  - End a stream on an error from the server, and every stream with a `StreamException` when
+    the connection closes or fails (#1122)
+  - Throw `StreamException` when reading or waiting on a removed stream or event (#1122)
+  - Add `addEndCallback` to streams and events, called with the exception that ends the stream
+    (#1122)
+  - Call a callback added to a stream or event straight away for a value or firing already
+    received (#1122)
+  - Fix `Event.waitFor` missing an earlier firing, and waking only one of two waiting threads
+    (#1122)
+  - Fix the stream update thread stopping on a value it cannot decode (#1122)
+  - Fix a second removal of a stream removing a newer stream for the same call, and an error
+    ending a stream throwing `ClassCastException` in its callbacks (#1122)
+
+- Server side functions
+  - Add `Connection.run` and `Connection.addEvent`, and a `Connection.addStream` overload
+    taking a server side function (#1129)
+  - Make `RemoteObject.id` public, for passing to `Expression.constantObject` (#1129)
+
+- Types and errors
+  - **Breaking:** Throw the matching Java exception, such as `NullPointerException`,
+    `NoSuchElementException` or `ArithmeticException`, for an error reported by any service, in
+    place of `RPCException` (#1124)
+  - **Breaking:** Support `null` for any nullable type, including a structure field, list
+    element, tuple item and dictionary value. Primitives use the boxed type (`Integer`, ...)
+    (#1017, #1091)
+  - Support structure types, generated as a class with a constructor, getters, `equals`,
+    `hashCode` and `Comparable` over its fields (#1066)
+
+- Connections
+  - **Breaking:** Require Java 17 or later, for unix domain sockets (#1065)
+  - Add `Connection.newLocalInstance`, which connects to a server on the same machine over a
+    unix domain socket (#1065)
+  - Add `Connection.newInstance` overloads taking a `timeout`, bounding how long a connection
+    is waited for (#1065)
+  - Update to protobuf-java 4.36.2 (#1139)
 
 ## [v0.6.0]
 - Update to protobuf v4.35.1, guava 33.4.8-jre, antlr4-runtime 4.13.2 (#850)
