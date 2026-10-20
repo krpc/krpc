@@ -1,5 +1,7 @@
 ## [v0.7.0] - unreleased
 
+- Fix a servo being listed more than once in a `ServoGroup` after switching to and from its
+  vessel (#1154)
 - Fix `Servo` and `ServoGroup` objects accumulating for the rest of the session, and the same
   servo or group obtained twice comparing unequal (#1051)
 - A servo and a servo group keep working across a quickload, and raise
