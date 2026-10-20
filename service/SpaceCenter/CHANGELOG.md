@@ -234,6 +234,9 @@
     `Control.GetActionGroupActions` sends every field of each action in one call (#1132)
 
 - Parts
+  - **Breaking:** Remove kRPC's own name tag part module. `Part.Tag` needs
+    KSPCommunityPartModules 0.5 or later, or kOS, to provide one (#1155)
+  - Warn in game when a save or craft has name tags that the installed mods cannot load (#1155)
   - **Breaking:** `RCS.TranslationOverride` thrusts along the right, up and forward axes it
     documents (#1080)
   - Add `RCS.Force` and `RCS.Torque`, the force and torque a block is applying, and
