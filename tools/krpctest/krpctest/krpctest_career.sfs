@@ -1617,7 +1617,7 @@ GAME
         }
         MODULE
         {
-          name = KOSNameTag
+          name = ModuleNameTag
           isEnabled = True
           nameTag =
           stagingEnabled = True

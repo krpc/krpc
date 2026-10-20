@@ -71,6 +71,15 @@ MODS = {
         ("harmony", "000_Harmony"),
         ("community_resource_pack", "CommunityResourcePack"),
     ],
+    "KSPCommunityPartModules": [
+        ("kspcommunitypartmodules", "KSPCommunityPartModules"),
+        ("harmony", "000_Harmony"),
+    ],
+    "KSPCommunityPartModules-0.4": [
+        ("kspcommunitypartmodules_0_4", "KSPCommunityPartModules"),
+        ("harmony", "000_Harmony"),
+    ],
+    "kOS": [("kos", "kOS")],
 }
 
 # All managed GameData subdirs, every one a candidate for removal during reconcile.

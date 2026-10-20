@@ -46,6 +46,7 @@ _MOD_SERVICES = {
 _MOD_PARTS = {
     "RealChute": "RC.stack",
     "DMagic": "dmagicSensorTest",
+    "kOS": "kOSMachine1m",
 }
 
 # Some mods add no part and no service, but patch a part module onto existing parts (Action
@@ -63,6 +64,14 @@ _MOD_MODULES = {
 _MOD_FLAGS = {
     "FAR": ("space_center", "far_available"),
     "RealFuels": ("space_center", "real_fuels_available"),
+}
+
+# Some mods are told apart only by the version of their plugin assembly (KSPCommunityPartModules
+# 0.4 predates the name tag module that 0.5 adds). Detect these by the "major.minor" version of
+# the loaded assembly, given as an (assembly, version) pair.
+_MOD_ASSEMBLIES = {
+    "KSPCommunityPartModules": ("KSPCommunityPartModules", "0.5"),
+    "KSPCommunityPartModules-0.4": ("KSPCommunityPartModules", "0.4"),
 }
 
 # The KSP process this test run launched, or None if KSP was started externally (a
@@ -149,11 +158,22 @@ def _installed_mods(conn):
         for name, (service, flag) in _MOD_FLAGS.items()
         if getattr(getattr(conn, service), flag)
     }
+    installed |= {
+        name
+        for name, (assembly, version) in _MOD_ASSEMBLIES.items()
+        if conn.testing_tools.assembly_version(assembly) == version
+    }
     return installed
 
 
 def _validate_mods(required):
-    known = set(_MOD_SERVICES) | set(_MOD_PARTS) | set(_MOD_MODULES) | set(_MOD_FLAGS)
+    known = (
+        set(_MOD_SERVICES)
+        | set(_MOD_PARTS)
+        | set(_MOD_MODULES)
+        | set(_MOD_FLAGS)
+        | set(_MOD_ASSEMBLIES)
+    )
     unknown = set(required) - known
     if unknown:
         raise ValueError(
