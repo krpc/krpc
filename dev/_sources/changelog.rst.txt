@@ -15,298 +15,222 @@ v0.7.0 - unreleased
 Core
 ^^^^
 
-* :breaking:`Breaking` Return ``KRPC.Clients`` as a list of ``KRPC.ClientInfo`` structures, in place of tuples (:issue:`1148`)
-* Add ``StdLib.ColorRGB`` and ``StdLib.ColorRGBA``, the colors the SpaceCenter, Drawing and UI services use (:issue:`1148`)
-* Add ``KRPC.GameStateLoads``, the number of game states that have finished loading (:issue:`1121`)
-* :breaking:`Breaking` Remove ``KRPC.CurrentGameScene``, replaced by ``KRPC.GameScene`` (:issue:`1140`)
-* Extend ``KRPC.Expression`` to build server side functions, which the server evaluates (:issue:`503`, :issue:`517`, :issue:`521`, :issue:`1124`)
-* Allow a function to call a procedure that returns no value (:issue:`1124`)
-* Add ``KRPC.Expression.CallWithArguments``, which computes the arguments of a call (:issue:`1124`)
-* Allow a function to raise and handle exceptions (:issue:`1124`)
-* Add ``KRPC.DivideByZeroException``, ``KRPC.NotSupportedException``, ``KRPC.TimeoutException`` and ``KRPC.OverflowException``, raised for the matching errors by any service (:issue:`1124`)
-* Add ``KRPC.Error``, a general error a function can raise (:issue:`1124`)
-* Allow a function to declare local variables, loop, branch, assign and return early (:issue:`1124`)
-* Allow a function to work on strings (:issue:`1124`)
-* Allow a function to select, reshape and combine collections, including the keys and values of a dictionary (:issue:`1124`)
-* Allow a function to change a list, set or dictionary (:issue:`1124`)
-* Add ``KRPC.Expression.CreateStruct``, ``GetField``, ``CreateEmptyList``, ``CreateEmptySet`` and ``CreateEmptyDictionary``, which build and read structures and empty collections (:issue:`1124`)
-* Add ``KRPC.Expression.ConstantLong``, ``ConstantUInt``, ``ConstantULong``, ``ConstantBytes``, ``ConstantEnum``, ``ConstantObject`` and ``ConstantNull`` (:issue:`1124`)
-* Add ``KRPC.Expression.IsNull``, ``Negate``, ``Conditional``, ``ConditionalAnd`` and ``ConditionalOr`` (:issue:`1124`)
-* Track which values of a function can be null, and raise an error when a null reaches a value whose type does not allow one (:issue:`1124`)
-* Add ``KRPC.NullReferenceException``, raised for a null by any service, and by a function when a null reaches a value whose type does not allow one (:issue:`1124`)
-* Allow a function to use nullable booleans and structures (:issue:`1124`)
-* Add ``KRPC.KeyNotFoundException``, raised for a missing key by any service, and by a function reading a missing dictionary key (:issue:`1124`)
-* Add ``KRPC.IndexOutOfRangeException``, raised for an index out of range by any service, and by a function indexing a list or string (:issue:`1124`)
-* Add ``KRPC.RunFunction``, which runs a server side function once within a single physics tick, with arguments of the types ``KRPC.Expression.ParameterTypes`` gives (:issue:`1124`)
-* Add ``KRPC.CompileFunction``, which compiles a server side function before its first run (:issue:`1124`)
-* Add ``KRPC.Expression.StateVariable``, a variable that keeps its value between evaluations of a function (:issue:`1124`)
-* Add ``KRPC.AddFunctionStream``, which streams the value a server side function computes on each update (:issue:`1124`)
-* Add ``KRPC.Expression.ReturnType`` and ``HasReturnType``, which report the type of the value a function produces, and whether it produces one (:issue:`1124`)
-* Add the ``StdLib`` service, a standard library of scalar mathematics and of vector and quaternion operations over the tuples the SpaceCenter service uses (:issue:`1125`)
-* Add ``StdLib.Print``, which writes a line to the game's log, for debugging server side functions (:issue:`1125`)
-* Expand ``KRPC.Type`` to name every type a procedure takes or returns, including long, unsigned, bytes, class, enumeration, structure and collection types, and a nullable form of any type (:issue:`1124`)
-* Add ``KRPC.TypeCode``, and the ``Code``, ``Service``, ``Name``, ``Types`` and ``Nullable`` properties of ``KRPC.Type``, which report what a type is (:issue:`1124`)
-* Fix ``KRPC.Expression.Count``, which failed for every collection a procedure returns (:issue:`1124`)
-* Fix ``KRPC.Expression.OrderBy`` to order strings by character code on every system locale (:issue:`1124`)
-* Fix ``KRPC.Expression.Equal`` and ``NotEqual``, which compared objects, tuples, bytes and collections by reference (:issue:`1124`)
-* Fix ``KRPC.Expression.CreateSet`` to compare bytes, collections and structures by content (:issue:`1124`)
-* Fix ``KRPC.Expression.Contains`` and ``ToSet``, which compared objects, tuples, bytes and collections by reference (:issue:`1124`)
-* Fix ``KRPC.Expression.And``, ``Or``, ``ExclusiveOr``, ``LeftShift`` and ``RightShift`` for operands of different integer types (:issue:`1124`)
-* Fix ``KRPC.Expression.Divide`` and ``Modulo`` to wrap for the smallest integer divided by -1 (:issue:`1124`)
-* Fix ``KRPC.Expression.Sum``, ``Min``, ``Max`` and ``Average`` over unsigned and long integers, and wrap ``Sum`` on overflow (:issue:`1124`)
-* :breaking:`Breaking` Rename ``KRPC.Expression.Function`` to ``KRPC.Expression.Lambda`` (:issue:`1124`)
-* :breaking:`Breaking` Renumber the procedures of the ``KRPC`` service, so a client that calls them by id must use stubs generated for this version (:issue:`1124`)
-* :breaking:`Breaking` Rename the parameter of ``KRPC.AddEvent`` from ``expression`` to ``function`` (:issue:`1124`)
-* :breaking:`Breaking` Give ``KRPC.Expression.Power`` the common type of its operands, rather than the type of the first (:issue:`1124`)
-* :breaking:`Breaking` Require the index into a tuple given to ``KRPC.Expression.Get`` to be a constant (:issue:`1124`)
-* :breaking:`Breaking` Limit ``KRPC.Expression.CreateTuple`` to seven elements, the most a kRPC tuple type can hold (:issue:`1124`)
-* :breaking:`Breaking` Reject calls to ``KRPC`` service procedures in a function (:issue:`1124`)
-* Widen a number, tuple or collection given to ``KRPC.Expression.Invoke``, and convert each element of a tuple or collection given to ``KRPC.Expression.Cast`` (:issue:`1124`)
-* Widen the numbers given to ``KRPC.Expression.CreateList``, ``CreateSet`` and ``CreateDictionary`` to a common type (:issue:`1124`)
-* Widen the values of the collections given to ``KRPC.Expression.Concat`` to a common type (:issue:`1124`)
-* Add ``KRPC.ObjectNotLoadedException``, for an object that exists but is not loaded, such as a part of an unloaded vessel (:issue:`1120`)
-* :breaking:`Breaking` Throw ``KRPC.UnsupportedSceneException`` for a procedure called outside its game scenes (:issue:`1119`)
-* Hold a stream or event over an object that is not loaded, or a procedure not available in the game scene, until it is available (:issue:`1122`, :issue:`877`)
-* :breaking:`Breaking` Create a new stream for every ``KRPC.AddStream``, so removing one leaves the others for the same call (:issue:`1122`, :issue:`902`)
-* :breaking:`Breaking` Start a stream when it is added, removing ``KRPC.StartStream`` and the ``start`` argument of ``KRPC.AddStream`` (:issue:`1122`)
-* Fix a failing stream or event, including one whose value fails to encode, stopping the other streams (:issue:`1122`)
-* Throw an exception when streaming a procedure that returns a stream or an event, or calling one in an expression (:issue:`1122`)
-* Fix an expression calling a failing procedure throwing a ``NullReferenceException`` in place of the procedure's exception (:issue:`1122`)
-* Add ``KRPC.StreamRemovedException``, sent as the final result of a stream the server ends, such as an event that has finished (:issue:`1122`)
-* Ignore a call to ``KRPC.SetStreamRate`` for a stream that has ended (:issue:`1122`)
-* Throw an exception from ``KRPC.RemoveStream`` for a stream id that was never issued (:issue:`1122`)
-* Fix the server keeping memory for every stream ever sent on a connection (:issue:`1122`)
-* Encode and decode values without reflection, cutting the server cost of a call that passes or returns an object by about three quarters (:issue:`1091`)
-* :breaking:`Breaking` Nullability is carried by ``Type.nullable`` at every position a value sits in, replacing ``Parameter.nullable`` and ``Procedure.return_is_nullable`` (:issue:`1091`)
-* A structure field can be nullable, declared by ``Nullable`` on its ``KRPCProperty`` attribute or by a ``Nullable<T>`` field type (:issue:`1091`)
-* A list element, a tuple item and a dictionary value can be nullable, declared by a ``Nullable<T>`` type or by a path of positions on ``KRPCNullable``, such as ``[KRPCNullable (Position.Element)]`` (:issue:`1091`)
-* Add extension members: a service can add methods and properties to a class belonging to another service, declared as C# extension methods annotated with ``KRPCMethod`` or ``KRPCProperty`` (:issue:`1077`)
-* Add structure types: a compound value with named fields, declared with ``KRPCStruct`` on a C# ``struct`` and sent to the client in full (:issue:`1066`)
-* Add a communication protocol carrying protocol buffer messages over a unix domain socket, for clients running on the same machine as the game (:issue:`1065`)
-* Add ``KRPC.HoldTick`` and ``KRPC.ReleaseTick``, which hold the game on its current physics tick so a control loop can read, compute and write within one tick (:issue:`1070`)
-* Add ``KRPC.NextTick``, which releases the tick being held and holds the one after it (:issue:`1070`)
-* Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are read and written on their own threads (:issue:`1035`)
-* Add ``KRPC.ObjectDestroyedException``, raised when the game object that an object refers to no longer exists (:issue:`1051`)
-* Objects whose game objects the game no longer has are removed from the object store when a game state is loaded (:issue:`1051`)
-* Fix one server stopping emptying the object store that every server shares, which invalidated the objects held by clients of the servers still running (:issue:`1020`)
-* Support for nullable values across all types (:issue:`1017`)
-* :breaking:`Breaking` Null values are signaled by an ``is_null`` field rather than by an object id of 0. Class-typed arguments are no longer implicitly nullable (:issue:`1017`)
-* Fix a request that names an object the server no longer has leaving the connection stuck (:issue:`1019`)
+* Server side functions
+
+  * Extend ``KRPC.Expression`` to build server side functions, which the server evaluates (:issue:`503`, :issue:`517`, :issue:`521`, :issue:`1124`)
+  * Allow a function to declare local variables, loop, branch, assign, return early, raise and handle exceptions, and call a procedure that returns no value (:issue:`1124`)
+  * Allow a function to work on strings, nullable values, and lists, sets and dictionaries, including changing them (:issue:`1124`)
+  * Add ``KRPC.RunFunction``, which runs a function once within a single physics tick, and ``KRPC.CompileFunction`` and ``KRPC.AddFunctionStream`` (:issue:`1124`)
+  * Add ``KRPC.Expression.StateVariable``, a variable that keeps its value between evaluations of a function (:issue:`1124`)
+  * Add ``KRPC.Expression.CallWithArguments``, ``CreateStruct``, ``GetField``, ``IsNull``, ``Negate``, ``Conditional``, ``ConditionalAnd``, ``ConditionalOr``, the empty collections and a constant for every type (:issue:`1124`)
+  * Add ``KRPC.Expression.ReturnType`` and ``HasReturnType`` (:issue:`1124`)
+  * Add ``KRPC.TypeCode`` and the ``Code``, ``Service``, ``Name``, ``Types`` and ``Nullable`` properties of ``KRPC.Type``, which names every type a procedure takes or returns (:issue:`1124`)
+  * Add the ``StdLib`` service, of scalar mathematics and vector and quaternion operations, with ``StdLib.Print`` for debugging a function (:issue:`1125`)
+  * Widen numbers, tuples and collections to a common type in ``KRPC.Expression.Invoke``, ``Cast``, ``CreateList``, ``CreateSet``, ``CreateDictionary`` and ``Concat`` (:issue:`1124`)
+  * Fix ``KRPC.Expression.Count`` on a returned collection, and ``OrderBy`` ordering strings by the system locale (:issue:`1124`)
+  * Fix ``KRPC.Expression.Equal``, ``NotEqual``, ``Contains``, ``ToSet`` and ``CreateSet`` comparing objects, tuples, bytes and collections by reference (:issue:`1124`)
+  * Fix the integer arithmetic of ``KRPC.Expression`` for mixed operand types, on overflow and for the smallest integer divided by -1 (:issue:`1124`)
+  * :breaking:`Breaking` Rename ``KRPC.Expression.Function`` to ``Lambda``, and the parameter of ``KRPC.AddEvent`` from ``expression`` to ``function`` (:issue:`1124`)
+  * :breaking:`Breaking` Renumber the procedures of the ``KRPC`` service, so a client that calls them by id must use stubs generated for this version (:issue:`1124`)
+  * :breaking:`Breaking` Type ``KRPC.Expression.Power`` by both operands, require a constant index in ``Get``, limit ``CreateTuple`` to seven elements, and reject calls to ``KRPC`` procedures (:issue:`1124`)
+
+* Errors
+
+  * Add ``KRPC.NullReferenceException``, ``KeyNotFoundException``, ``IndexOutOfRangeException``, ``DivideByZeroException``, ``NotSupportedException``, ``TimeoutException`` and ``OverflowException``, raised by any service and by a function (:issue:`1124`)
+  * Add ``KRPC.Error``, a general error a function can raise (:issue:`1124`)
+  * Add ``KRPC.ObjectDestroyedException``, for an object whose game object is gone, and ``KRPC.ObjectNotLoadedException``, for one that is not loaded (:issue:`1051`, :issue:`1120`)
+  * :breaking:`Breaking` Throw ``KRPC.UnsupportedSceneException`` for a procedure called outside its game scenes (:issue:`1119`)
+
+* Streams and events
+
+  * :breaking:`Breaking` Start a stream when it is added, removing ``KRPC.StartStream`` and the ``start`` argument of ``KRPC.AddStream`` (:issue:`1122`)
+  * :breaking:`Breaking` Create a new stream for every ``KRPC.AddStream``, so removing one leaves the others for the same call (:issue:`1122`, :issue:`902`)
+  * Hold a stream or event over an unloaded object, or a procedure unavailable in the game scene, until it is available (:issue:`1122`, :issue:`877`)
+  * Add ``KRPC.StreamRemovedException``, the final result of a stream the server ends (:issue:`1122`)
+  * Throw an exception when streaming a procedure that returns a stream or event, and from ``KRPC.RemoveStream`` for an unknown stream id (:issue:`1122`)
+  * Fix a failing stream or event stopping the others, and the server keeping memory for every stream sent on a connection (:issue:`1122`)
+
+* Types and protocol
+
+  * :breaking:`Breaking` Support null for any nullable type, signaled by an ``is_null`` field. Class-typed arguments are not implicitly nullable (:issue:`1017`)
+  * :breaking:`Breaking` Carry nullability in ``Type.nullable`` at every position, replacing ``Parameter.nullable`` and ``Procedure.return_is_nullable`` (:issue:`1091`)
+  * :breaking:`Breaking` Return ``KRPC.Clients`` as a list of ``KRPC.ClientInfo`` structures (:issue:`1148`)
+  * Allow a structure field, list element, tuple item and dictionary value to be nullable, declared with ``Nullable<T>`` or ``KRPCNullable`` (:issue:`1091`)
+  * Add structure types, a compound value with named fields, declared with ``KRPCStruct`` on a C# ``struct`` (:issue:`1066`)
+  * Add ``StdLib.ColorRGB`` and ``StdLib.ColorRGBA``, the colors of the SpaceCenter, Drawing and UI services (:issue:`1148`)
+  * Add extension members, which a service declares on another service's class as C# extension methods (:issue:`1077`)
+  * Add a communication protocol over a unix domain socket, for clients on the same machine as the game (:issue:`1065`)
+  * Fix a serial connection freezing the game while it carries an RPC (:issue:`1035`)
+  * Encode and decode values without reflection, cutting the server cost of a call that passes or returns an object by about three quarters (:issue:`1091`)
+
+* Game state
+
+  * :breaking:`Breaking` Remove ``KRPC.CurrentGameScene``, replaced by ``KRPC.GameScene`` (:issue:`1140`)
+  * Add ``KRPC.HoldTick``, ``KRPC.ReleaseTick`` and ``KRPC.NextTick``, which hold the game on one physics tick so a control loop can read, compute and write within it (:issue:`1070`)
+  * Add ``KRPC.GameStateLoads``, the number of game states that have finished loading (:issue:`1121`)
+  * Remove objects whose game objects are gone from the object store when a game state loads (:issue:`1051`)
+  * Fix one server stopping emptying the object store that every server shares (:issue:`1020`)
+  * Fix a request naming an object the server no longer has leaving the connection stuck (:issue:`1019`)
+
 
 
 Server
 ^^^^^^
 
-* Fix the error from a call that waits on the game being reported as ``Exception has been thrown by the target of an invocation`` (:issue:`1083`)
-* Add the ``TickHoldTimeout`` setting, which bounds how long a client may hold the game on one physics tick (:issue:`1070`)
-* The server updates before the game collects control inputs, so a control input takes effect on the tick the call is made in (:issue:`1070`)
 * :breaking:`Breaking` KSP 1.12.5 is the minimum supported version, matching the maximum (:issue:`1048`)
-* Servers can use the local socket protocol, chosen in the server window like any other. No network port is opened (:issue:`1065`)
-* Fix the end of a long serial port name being neither visible nor editable in the server window (:issue:`1065`)
-* The server is stopped whenever no game is loaded, so a client is disconnected when the player quits to the main menu (:issue:`1041`)
-* Fix setting ``KRPC.GameScene`` from one editor straight to the other leaving the flight camera unable to follow a vessel for the rest of the session (:issue:`1038`)
-* Fix setting ``KRPC.GameScene`` back to flight failing with a null reference error, after it was used to leave flight (:issue:`1117`)
+* Add the local socket protocol to the server window. It opens no network port (:issue:`1065`)
+* Add the ``TickHoldTimeout`` setting, which bounds how long a client may hold the game on one physics tick (:issue:`1070`)
+* Update the server before the game collects control inputs, so a control input takes effect on the tick of its call (:issue:`1070`)
+* Stop the server whenever no game is loaded, disconnecting clients when the player quits to the main menu (:issue:`1041`)
 * Save the game when setting ``KRPC.GameScene`` leaves flight, unless the game cannot be saved (:issue:`1117`)
-* Sweep objects whose game objects no longer exist out of the object store when the game loads, changes scene or destroys a part or a vessel (:issue:`1051`)
+* Remove objects whose game objects are gone from the object store when the game loads, changes scene or destroys a part or vessel (:issue:`1051`)
+* Fix setting ``KRPC.GameScene`` from one editor to the other, or back to flight, breaking the flight camera or failing with a null reference (:issue:`1038`, :issue:`1117`)
+* Fix the error from a call that waits on the game being reported as ``Exception has been thrown by the target of an invocation`` (:issue:`1083`)
+* Fix the end of a long serial port name being hidden in the server window (:issue:`1065`)
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
+* Object lifetime
+
+  * Look up the game object behind a vessel, crew member, part, part module, orbit, alarm, contract, waypoint or communication link on every call, so it keeps working across a quickload (:issue:`1051`, :issue:`764`, :issue:`885`)
+  * Raise ``KRPC.ObjectDestroyedException`` for an object whose game object is gone, and ``KRPC.ObjectNotLoadedException`` for a part of an unloaded vessel (:issue:`1051`, :issue:`885`)
+  * Renaming a kerbal destroys its objects, and loading a game replaces a vessel's maneuver nodes (:issue:`1051`)
+  * Fix decoupler, maneuver node and force objects accumulating for the rest of the session (:issue:`1051`, :issue:`771`)
+  * Add ``Orbit.Remove``, ``ReferenceFrame.Remove`` and ``ResourceTransfer.Remove``, which free the memory the server holds for an object (:issue:`1072`)
+  * :breaking:`Breaking` Return a new frame from each call to ``ReferenceFrame.CreateRelative`` and ``CreateHybrid``, owned by the calling client (:issue:`1072`)
+  * Throw an exception from ``ReferenceFrame.CreateRelative`` and ``CreateHybrid`` when given no frame (:issue:`1072`)
+
+* Structures
+
+  * :breaking:`Breaking` Return the available torque, force and acceleration members of ``Vessel``, ``ReactionWheel``, ``ControlSurface``, ``Engine`` and ``RCS`` as ``AxisRange`` structures (:issue:`1148`)
+  * :breaking:`Breaking` Return ``Vessel.BoundingBox``, ``Part.BoundingBox``, ``Flight.SimulateAerodynamicWrenchAt`` and ``RoboticController.Axes`` as ``BoundingBox``, ``Wrench`` and ``RoboticAxis`` structures (:issue:`1148`)
+  * :breaking:`Breaking` Return and set ``Part.HighlightColor`` and ``Light.Color`` as ``StdLib.ColorRGB`` structures (:issue:`1148`)
+  * :breaking:`Breaking` Make ``LaunchSite``, ``ScienceSubject``, ``ScienceData``, ``ActionGroupAction`` and ``CommNode`` structures (:issue:`1148`, :issue:`1132`)
+  * :breaking:`Breaking` Replace ``CareerLogFlights``, ``CareerLogTypes`` and ``CareerLogTargets`` with ``CrewMember.CareerLog``, a list of ``FlightLogEntry`` structures (:issue:`1148`)
+  * Add ``ScienceSubject.Id`` (:issue:`1148`)
+
 * Space center
 
-  * :breaking:`Breaking` ``SpaceCenter.LaunchVessel`` takes its ``crew`` parameter as an exact instruction, and the parameter is optional again. A ``null`` crew uses the craft's default assignments, an empty list launches with no crew, and a populated list seats the named Kerbals in order (:issue:`1017`)
-  * :breaking:`Breaking` ``SpaceCenter.Parts.Controlling`` returns ``null`` when the vessel has no control point, rather than its root part (:issue:`1043`)
-  * ``SpaceCenter.Control.State``, ``SpaceCenter.Control.Source`` and the members of ``SpaceCenter.Comms`` report no control and no communications for a vessel with no node in the communication network, rather than throwing (:issue:`1043`)
-  * ``SpaceCenter.Control.Source`` is ``None`` whenever ``SpaceCenter.Control.State`` is ``None`` (:issue:`1043`)
-  * ``SpaceCenter.Control.State`` and ``SpaceCenter.Control.Source`` are taken from the control level that KSP gates a vessel's control on, rather than from its node in the communication network (:issue:`1043`)
-  * ``SpaceCenter.Decoupler.Decouple`` returns the separated vessel when it fires an omni-decoupler such as a stack separator (:issue:`1043`)
-  * Working with many stages, vessel resources, communication links or resource converters no longer slows the server down (:issue:`1071`)
-  * ``SpaceCenter.RevertToLaunch`` returns once the scene has reloaded, as ``SpaceCenter.Load`` does. Vessel data read straight after the call is that of the reverted vessel (:issue:`1097`)
-  * Setting ``SpaceCenter.ActiveVessel`` from the space center or tracking station keeps the game's contracts (:issue:`1102`)
-  * The offset given when adding an apoapsis, periapsis, SOI or maneuver node alarm, and setting ``SpaceCenter.Alarm.EventOffset``, change when the alarm goes off (:issue:`1114`)
-  * Add ``SpaceCenter.CanSave``, whether the game can be saved (:issue:`1117`)
+  * :breaking:`Breaking` Make the ``crew`` parameter of ``SpaceCenter.LaunchVessel`` optional and exact. ``null`` uses the craft's default crew, an empty list none, and a list seats the named Kerbals in order (:issue:`1017`)
   * :breaking:`Breaking` Remove ``SpaceCenter.LoadSpaceCenter``, replaced by setting ``KRPC.GameScene`` (:issue:`1140`)
-  * Allow the time warp RPCs in the space center and tracking station, apart from ``SpaceCenter.PhysicsWarpFactor`` (:issue:`1145`)
-  * ``SpaceCenter.WarpTo`` throws an exception if the game scene changes during the time warp (:issue:`1145`)
+  * Add ``SpaceCenter.CanSave``, whether the game can be saved (:issue:`1117`)
+  * Return from ``SpaceCenter.RevertToLaunch`` once the scene has reloaded, as ``SpaceCenter.Load`` does (:issue:`1097`)
+  * Allow the time warp RPCs, apart from ``PhysicsWarpFactor``, in the space center and tracking station (:issue:`1145`)
+  * Throw an exception from ``SpaceCenter.WarpTo`` if the game scene changes during the warp (:issue:`1145`)
   * Fix ``SpaceCenter.MaximumRailsWarpFactor`` returning 0 when only warp factor 1 is allowed (:issue:`1145`)
-  * :breaking:`Breaking` Make ``SpaceCenter.LaunchSite`` a structure (:issue:`1148`)
+  * Fix setting ``SpaceCenter.ActiveVessel`` from the space center or tracking station clearing the game's contracts (:issue:`1102`)
+  * Fix the offset of an apoapsis, periapsis, SOI or maneuver node alarm, and ``Alarm.EventOffset``, leaving the alarm time unchanged (:issue:`1114`)
+  * Fix many stages, vessel resources, communication links, resource converters or hybrid reference frames slowing the server down (:issue:`1071`)
 
 * Editor
 
-  * Add ``SpaceCenter.Editor``, available in the vehicle assembly building and the space plane hangar, for inspecting the vessel that is being constructed. ``Editor.LoadVessel`` loads a craft file into the open editor (:issue:`1038`)
-  * ``Editor.LaunchVessel`` launches the vessel that is being constructed, with the same crew, recovery and mission flag options as ``SpaceCenter.LaunchVessel`` (:issue:`1038`)
-  * ``EditorVessel.Parts`` gives the parts tree of the vessel under construction. The members of ``Part`` and the part-type classes that describe the design are available (:issue:`1038`)
-  * ``EditorVessel.Stages``, ``EditorVessel.StageAt``, ``EditorVessel.DecoupleStages`` and ``EditorVessel.DecoupleStageAt`` give the vessel's stages, with the same figures that ``Stage`` reports in flight (:issue:`1038`)
-  * Add ``EditorVessel.DeltaV``, ``VacuumDeltaV``, ``SeaLevelDeltaV`` and ``BurnTime`` for the whole vessel, and ``EditorVessel.DeltaVReady``, which reports whether the figures are current (:issue:`1038`)
-  * ``Editor.DeltaVBody``, ``Editor.DeltaVAltitude`` and ``Editor.DeltaVSituation`` set the situation those figures assume (:issue:`1038`)
-  * ``EditorVessel.Resources``, ``Part.Resources`` and ``Stage.Resources`` report the resources the vessel under construction can hold (:issue:`1038`)
-  * A part of the vessel under construction raises ``KRPC.ObjectDestroyedException`` once it is no longer in that vessel, and once the editor has loaded any vessel over it (:issue:`1051`)
-  * Add ``EditorVessel.Position``, ``EditorVessel.MomentOfInertia`` and ``EditorVessel.InertiaTensor``. ``Part.MomentOfInertia`` and ``Part.InertiaTensor`` are available in the editor as well (:issue:`1059`)
-  * ``Part.Mass`` and ``Part.DryMass`` no longer report 1000 kg for every part in the editor (:issue:`1059`)
-  * ``Part.Position``, ``Part.CenterOfMass``, ``Part.ReferenceFrame`` and ``Part.CenterOfMassReferenceFrame`` are available in the editor (:issue:`1064`)
-  * ``Part.Direction``, ``Part.Rotation`` and ``Part.BoundingBox`` are available in the editor (:issue:`1153`)
-  * Add ``EditorVessel.ReferenceFrame``, ``EditorVessel.SurfaceReferenceFrame``, ``EditorVessel.BoundingBox``, ``EditorVessel.Rotation`` and ``EditorVessel.Direction``, as on ``Vessel`` (:issue:`1153`)
-  * Add ``EditorVessel.Flight``, which returns a ``SimulatedFlight`` for the vessel in a simulated attitude (:issue:`1153`)
+  * Add ``SpaceCenter.Editor``, for the vessel under construction in the vehicle assembly building and space plane hangar, with ``Editor.LoadVessel`` and ``Editor.LaunchVessel`` (:issue:`1038`)
+  * Add ``EditorVessel.Parts``, ``Resources``, ``Stages``, ``StageAt``, ``DecoupleStages`` and ``DecoupleStageAt``, with the figures they give in flight (:issue:`1038`)
+  * Add ``EditorVessel.DeltaV``, ``VacuumDeltaV``, ``SeaLevelDeltaV``, ``BurnTime`` and ``DeltaVReady``, for a situation set with ``Editor.DeltaVBody``, ``DeltaVAltitude`` and ``DeltaVSituation`` (:issue:`1038`)
+  * Add ``EditorVessel.Position``, ``MomentOfInertia``, ``InertiaTensor``, ``ReferenceFrame``, ``SurfaceReferenceFrame``, ``BoundingBox``, ``Rotation`` and ``Direction``, as on ``Vessel`` (:issue:`1059`, :issue:`1153`)
+  * Make the position, orientation, mass and inertia members of ``Part`` available in the editor (:issue:`1059`, :issue:`1064`, :issue:`1153`)
+  * Add ``EditorVessel.Flight``, a ``SimulatedFlight`` for the vessel in a simulated attitude (:issue:`1153`)
 
 * Vessels and crew
 
-  * ``Vessel.InertiaTensor`` is restricted to the flight scene, as ``Vessel.MomentOfInertia`` already is. Outside flight it returned zeros (:issue:`1059`)
-  * Add ``CrewMember.EVA``, which sends a Kerbal outside through the hatch of the part it is in and returns the vessel it becomes (:issue:`319`)
-  * Add ``Vessel.Terminate``, which removes a vessel and its parts from the game without recovering anything (:issue:`1034`)
-  * ``Vessel.Recover`` recovers non-active vessels without switching to the space center scene, and the mission completion dialog is auto-closed (:issue:`1021`)
-  * Add ``Vessel.OrbitSpeedReferenceFrame``, ``Vessel.SurfaceSpeedReferenceFrame`` and ``Vessel.TargetSpeedReferenceFrame``, one per navball speed mode. The velocity of the vessel in one of these is the velocity the navball shows in that mode (:issue:`1029`)
-  * Using a vessel that no longer exists raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
-  * A ``CrewMember`` looks the kerbal up on the game's roster on every call, so one obtained before a load goes on working (:issue:`1051`)
-  * Renaming a kerbal destroys every object for them, which have to be obtained again under the new name (:issue:`1051`)
-  * :breaking:`Breaking` Return the available torque, force and acceleration members of ``Vessel``, ``ReactionWheel``, ``ControlSurface``, ``Engine`` and ``RCS`` as a ``SpaceCenter.AxisRange`` structure, in place of a pair of tuples (:issue:`1148`)
-  * :breaking:`Breaking` Return ``Vessel.BoundingBox`` and ``Part.BoundingBox`` as a ``SpaceCenter.BoundingBox`` structure, in place of a pair of tuples (:issue:`1148`)
-  * :breaking:`Breaking` Replace ``CareerLogFlights``, ``CareerLogTypes`` and ``CareerLogTargets`` with ``CrewMember.CareerLog``, a list of ``SpaceCenter.FlightLogEntry`` structures (:issue:`1148`)
+  * Add ``Vessel.Terminate``, which removes a vessel without recovering it (:issue:`1034`)
+  * Recover a vessel other than the active one with ``Vessel.Recover`` without switching to the space center, and close the mission completion dialog (:issue:`1021`)
+  * Add ``Vessel.OrbitSpeedReferenceFrame``, ``SurfaceSpeedReferenceFrame`` and ``TargetSpeedReferenceFrame``, one per navball speed mode (:issue:`1029`)
+  * Restrict ``Vessel.InertiaTensor`` to flight, as ``Vessel.MomentOfInertia`` is (:issue:`1059`)
+
+* EVA
+
+  * Add ``CrewMember.EVA``, which sends a Kerbal out through the hatch and returns its vessel (:issue:`319`)
+  * Drive a Kerbal on EVA with ``Vessel.Control``. The translation inputs walk and fly the jetpack, ``Control.RCS`` deploys it, and ``Control.Lights`` switches the helmet lamp (:issue:`319`)
+  * Add ``Control.Board``, ``Airlock``, ``GrabLadder``, ``ReleaseLadder`` and ``Ladder``, for a Kerbal on EVA (:issue:`319`)
 
 * Staging
 
-  * Fix stages from ``Vessel.Stages``, ``Vessel.StageAt``, ``Vessel.DecoupleStages`` and ``Vessel.DecoupleStageAt`` breaking after a Revert to Launch (:issue:`1023`)
-  * The delta-v figures on ``Vessel`` and ``Stage`` ask the game to calculate them, so they are available in flight without opening the game's own delta-v app first (:issue:`1076`)
-  * Add ``Vessel.RecalculateDeltaV``, which recalculates the figures and waits for them, and ``Vessel.DeltaVReady``, which reports whether they are current (:issue:`1076`)
-  * Document that the ``Stage`` mass figures include all later stages (:issue:`1112`)
   * :breaking:`Breaking` Remove ``Parts.InStage``, ``Parts.InDecoupleStage`` and ``Vessel.ResourcesInDecoupleStage``, replaced by ``Vessel.StageAt`` and ``Vessel.DecoupleStageAt`` (:issue:`1140`)
+  * Calculate the delta-v figures of ``Vessel`` and ``Stage`` without the game's delta-v app open (:issue:`1076`)
+  * Add ``Vessel.RecalculateDeltaV`` and ``Vessel.DeltaVReady`` (:issue:`1076`)
+  * Fix stages breaking after a revert to launch (:issue:`1023`)
+  * Document that the ``Stage`` mass figures include all later stages (:issue:`1112`)
 
 * Autopilot
 
-  * Setting ``AutoPilot.TargetDirection`` keeps the target roll, rather than clearing it (:issue:`1054`)
-  * The auto-pilot's control loop runs at a defined point in the server's update, so a target set during a tick is flown on that tick. ``AutoPilot.UpdateMode`` chooses that point (:issue:`1070`)
-  * Fix an engaged auto-pilot failing on every physics tick once the vessel or part its ``AutoPilot.ReferenceFrame`` is defined against is gone (:issue:`1070`)
+  * Keep the target roll when setting ``AutoPilot.TargetDirection`` (:issue:`1054`)
+  * Fly a target set during a tick on that tick, at the point in the update that ``AutoPilot.UpdateMode`` chooses (:issue:`1070`)
+  * Fix an engaged auto-pilot failing on every physics tick once the object its reference frame is defined against is gone (:issue:`1070`)
 
-* Orbits, nodes and bodies
+* Orbits and bodies
 
-  * An ``Orbit`` reads the orbit of the vessel, celestial body or maneuver node it belongs to as it is now, so it keeps working across a load (:issue:`764`)
-  * A ``ClosestApproach`` is freed once either of the orbits it describes is gone (:issue:`1051`)
-  * Add ``CelestialBody.SurfaceNormal``, ``CelestialBody.BedrockNormal`` and ``CelestialBody.MSLNormal``, the slope of the terrain at a given latitude and longitude (:issue:`1030`)
-  * Add ``CelestialBody.SurfaceReferenceFrame``, a reference frame fixed to the surface at a given latitude and longitude (:issue:`1116`)
-  * Fix ``ClosestApproach.Velocity`` and ``ClosestApproach.TargetVelocity`` being offset by the velocity of the frame the active vessel's reference body moves in (:issue:`1047`)
-  * Add ``Orbit.CreateFromPositionAndVelocity`` and ``Orbit.CreateFromOrbitalElements``, which build an orbit that coasts freely under gravity without an object in the game to follow (:issue:`1046`)
-  * Add ``Orbit.ReferenceFrame`` and ``Orbit.OrbitalReferenceFrame``, centered on the point an orbit has reached at the current time (:issue:`1046`)
-  * Add ``Orbit.Remove``, which releases the memory the server holds for a created orbit (:issue:`1072`)
   * :breaking:`Breaking` Fix ``CelestialBody.BiomeAt`` treating its latitude and longitude as radians. It takes degrees, as documented (:issue:`1099`)
-  * :breaking:`Breaking` A ``ClosestApproach`` reads the two orbits as they are now, so its estimate follows them as the game runs. Asking for the same approach again gives the same object (:issue:`1072`)
-  * Add ``Orbit.VelocityAt``, giving the velocity at a given time in a given reference frame (:issue:`1046`)
-  * ``Orbit.Epoch`` is documented as the universal time at which the mean anomaly at epoch is measured. It was described as the time since that point (:issue:`1046`)
-  * Fix ``Orbit.OrbitalSpeed``, which reported the speed the vessel had when it was last on rails (:issue:`1086`)
-  * Add ``Orbit.SpeedAt`` and ``Orbit.SpecificEnergy``, the speed at a given universal time and the specific orbital energy (:issue:`1086`)
-  * :breaking:`Breaking` ``Orbit.OrbitalSpeedAt`` takes a universal time, in a parameter renamed from ``time`` to ``ut``. It took the time since the orbit's periapsis. Deprecated in favor of ``Orbit.SpeedAt`` (:issue:`1086`)
-  * :deprecated:`Deprecated` ``Orbit.OrbitalSpeed`` and ``Orbit.OrbitalEnergy``, superseded by ``Orbit.Speed`` and ``Orbit.SpecificEnergy`` (:issue:`1086`)
-  * Add ``Orbit.Position`` and ``Orbit.Velocity``, the position and velocity the orbit has reached at the current time (:issue:`1087`)
-  * ``Orbit.PositionAt`` takes an optional reference frame, defaulting to the non-rotating reference frame of the body being orbited (:issue:`1087`)
-  * Add ``Orbit.PositionAtTrueAnomaly``, ``Orbit.VelocityAtTrueAnomaly``, ``Orbit.SpeedAtTrueAnomaly`` and ``Orbit.SpeedAtRadius`` (:issue:`1087`)
-  * Add ``Orbit.Altitude``, ``Orbit.MeanMotion``, ``Orbit.SemiLatusRectum`` and ``Orbit.SpecificAngularMomentum`` (:issue:`1087`)
-  * :breaking:`Breaking` Remove ``Orbit.TimeOfClosestApproach``, ``Orbit.DistanceAtClosestApproach`` and ``Orbit.ListClosestApproaches``, replaced by ``Orbit.NextClosestApproach`` and ``Orbit.ClosestApproaches`` (:issue:`1140`)
-
-* Maneuver nodes
-
-  * Using a maneuver node that has been removed raises ``KRPC.ObjectDestroyedException``. Loading a game replaces the vessel's maneuver nodes (:issue:`1051`)
-  * Fix removing a maneuver node leaking the object for the rest of the session (:issue:`771`)
-
-* Reference frames
-
-  * Add ``ReferenceFrame.Remove``, which releases the memory the server holds for a created frame (:issue:`1072`)
-  * ``ReferenceFrame.CreateRelative`` and ``ReferenceFrame.CreateHybrid`` return a new frame on each call, which is the creating client's own to remove (:issue:`1072`)
-  * ``ReferenceFrame.CreateRelative`` and ``ReferenceFrame.CreateHybrid`` raise an error when given no frame to be defined against (:issue:`1072`)
-  * Creating many hybrid reference frames no longer slows the server down (:issue:`1071`)
-  * A reference frame taken from a docking port keeps working across a quickload (:issue:`885`, :issue:`764`)
+  * :breaking:`Breaking` Take a universal time ``ut`` in ``Orbit.OrbitalSpeedAt``, and deprecate it in favor of ``Orbit.SpeedAt`` (:issue:`1086`)
+  * :breaking:`Breaking` Remove ``Orbit.TimeOfClosestApproach``, ``DistanceAtClosestApproach`` and ``ListClosestApproaches``, replaced by ``Orbit.NextClosestApproach`` and ``Orbit.ClosestApproaches`` (:issue:`1140`)
+  * :breaking:`Breaking` Follow the two orbits in a ``ClosestApproach`` as the game runs, and return the same object for the same approach (:issue:`1072`)
+  * :deprecated:`Deprecated` ``Orbit.OrbitalSpeed`` and ``Orbit.OrbitalEnergy``, superseded by ``Orbit.Speed`` and ``Orbit.SpecificEnergy``, and fix ``OrbitalSpeed`` reporting a stale value (:issue:`1086`)
+  * Add ``Orbit.CreateFromPositionAndVelocity`` and ``Orbit.CreateFromOrbitalElements``, for an orbit with no object in the game (:issue:`1046`)
+  * Add ``Orbit.Position``, ``Velocity``, ``Altitude``, ``MeanMotion``, ``SemiLatusRectum``, ``SpecificAngularMomentum``, ``SpecificEnergy``, ``ReferenceFrame`` and ``OrbitalReferenceFrame`` (:issue:`1046`, :issue:`1086`, :issue:`1087`)
+  * Add ``Orbit.VelocityAt``, ``SpeedAt``, ``PositionAtTrueAnomaly``, ``VelocityAtTrueAnomaly``, ``SpeedAtTrueAnomaly`` and ``SpeedAtRadius``, and a reference frame to ``Orbit.PositionAt`` (:issue:`1046`, :issue:`1086`, :issue:`1087`)
+  * Document ``Orbit.Epoch`` as the universal time of the mean anomaly at epoch (:issue:`1046`)
+  * Add ``CelestialBody.SurfaceNormal``, ``BedrockNormal`` and ``MSLNormal``, and ``Flight.SurfaceNormal``, the slope of the terrain (:issue:`1030`)
+  * Add ``CelestialBody.SurfaceReferenceFrame``, fixed to the surface at a latitude and longitude (:issue:`1116`)
+  * Fix ``ClosestApproach.Velocity`` and ``TargetVelocity`` being offset by the velocity of the reference body's frame (:issue:`1047`)
 
 * Flight and aerodynamics
 
-  * Add ``Flight.SurfaceNormal``, the slope of the terrain under a vessel (:issue:`1030`)
-  * Fix ``Flight.AerodynamicForce`` and ``Flight.AerodynamicAcceleration`` turning with the roll of the vessel when Ferram Aerospace Research is installed (:issue:`1032`)
-  * Add ``Flight.SideForce``, the part of ``Flight.AerodynamicForce`` that acts across the air stream and out of the vessel's side (:issue:`1032`)
-  * Fix ``Flight.Lift`` and ``Flight.LiftAcceleration`` reporting a force scaled by the cosine squared of the sideslip angle (:issue:`1032`)
-  * ``Flight.AerodynamicTorque`` works with Ferram Aerospace Research installed (:issue:`1032`)
-  * Fix ``Flight.SimulateAerodynamicForceAt``, ``Flight.SimulateAerodynamicTorqueAt`` and ``Flight.SimulateAerodynamicWrenchAt`` returning ``NaN`` with Ferram Aerospace Research installed when there is no relative airflow (:issue:`1032`)
+  * Add ``Flight.SideForce``, the aerodynamic force across the air stream (:issue:`1032`)
+  * Fix ``Flight.Lift`` and ``LiftAcceleration`` being scaled by the cosine squared of the sideslip angle (:issue:`1032`)
   * Fix ``Flight.StallFraction`` returning ``NaN`` for a vessel with no lifting surfaces (:issue:`1032`)
-  * :breaking:`Breaking` Return ``Flight.SimulateAerodynamicWrenchAt`` as a ``SpaceCenter.Wrench`` structure, in place of a pair of tuples (:issue:`1148`)
+  * Fix ``Flight.AerodynamicForce``, ``AerodynamicAcceleration``, ``AerodynamicTorque`` and the ``Flight.Simulate`` methods with Ferram Aerospace Research installed (:issue:`1032`)
 
 * Buoyancy
 
-  * Add ``Flight.Displacement``, ``Flight.DisplacedVolume``, ``Flight.SubmergedPortion``, ``Flight.CenterOfBuoyancy``, ``Flight.BuoyantForce``, ``Flight.BuoyantAcceleration``, ``Flight.Depth`` and ``Flight.SubmergedDynamicPressure``, for boats and submarines (:issue:`1103`)
-  * Add ``Part.Displacement``, ``Part.DisplacedVolume``, ``Part.BuoyancyMultiplier``, ``Part.CenterOfBuoyancy``, ``Part.CenterOfDisplacement`` and ``Part.BuoyantForce`` (:issue:`1103`)
-  * Add ``Part.Splashed``, ``Part.SubmergedPortion``, ``Part.Depth``, ``Part.MinDepth``, ``Part.MaxDepth``, ``Part.SubmergedDynamicPressure``, ``Part.SubmergedDragMultiplier``, ``Part.SubmergedLiftMultiplier`` and ``Part.WaterAngularDragMultiplier`` (:issue:`1103`)
-  * Add ``Part.BuoyantForceAt``, the buoyant force when fully submerged in a fluid of a given density under a given gravity (:issue:`1103`)
-  * Add ``Flight.BuoyantTorque``, ``Flight.FullySubmergedCenterOfBuoyancy``, ``Flight.BuoyantForceAt`` and ``Flight.BuoyantTorqueAt`` (:issue:`1103`)
-  * Add ``SimulatedFlight.Displacement``, ``SimulatedFlight.FullySubmergedCenterOfBuoyancy``, ``SimulatedFlight.BuoyantForceAt`` and ``SimulatedFlight.BuoyantTorqueAt``, so a hull can be trimmed before launch (:issue:`1103`)
-  * Add ``Part.StaticPressure`` and ``Part.MaxPressure`` (:issue:`1103`)
-  * Fix ``Flight.StaticPressure`` and ``CelestialBody.PressureAt`` to include the water pressure below sea level (:issue:`1103`)
-  * Add ``CelestialBody.HasOcean`` and ``CelestialBody.OceanDensity`` (:issue:`1103`)
-  * Add ``SpaceCenter.BuoyancyScalar``, the multiplier the game applies to every buoyant force (:issue:`1103`)
+  * Add the buoyancy of boats and submarines to ``Flight``, such as ``Displacement``, ``CenterOfBuoyancy``, ``BuoyantForce``, ``Depth`` and ``BuoyantForceAt`` (:issue:`1103`)
+  * Add the buoyancy of a part to ``Part``, such as ``Splashed``, ``Displacement``, ``BuoyantForce``, ``SubmergedPortion`` and the water drag multipliers (:issue:`1103`)
+  * Add ``SimulatedFlight.Displacement``, ``FullySubmergedCenterOfBuoyancy``, ``BuoyantForceAt`` and ``BuoyantTorqueAt``, for trimming a hull before launch (:issue:`1103`)
+  * Add ``CelestialBody.HasOcean``, ``CelestialBody.OceanDensity``, ``SpaceCenter.BuoyancyScalar``, ``Part.StaticPressure`` and ``Part.MaxPressure`` (:issue:`1103`)
+  * Fix ``Flight.StaticPressure`` and ``CelestialBody.PressureAt`` leaving out the water pressure below sea level (:issue:`1103`)
 
-* Control
+* Control and communications
 
-  * A Kerbal on EVA can be driven through ``Vessel.Control``. The translation inputs walk it about and fly its jetpack, ``Control.RCS`` deploys and stows the jetpack, and ``Control.Lights`` switches the helmet lamp (:issue:`319`)
-  * Add ``Control.Board`` and ``Control.Airlock``, for the part whose hatch a Kerbal on EVA is standing at, and ``Control.GrabLadder``, ``Control.ReleaseLadder`` and ``Control.Ladder`` for the ladder it is alongside (:issue:`319`)
-  * Setting ``Control.StageLock`` leaves the in-game Alt+L shortcut in step with it (:issue:`1022`)
-  * Add ``Control.PrecisionMode``, the precision control mode that the Caps Lock key toggles (:issue:`1082`)
-  * Fix control inputs being applied twice each tick to a vessel with a RemoteTech flight computer (:issue:`1093`)
-  * Apply ``Control.Throttle`` on a RemoteTech vessel regardless of signal delay and connection, matching the other control axes (:issue:`1093`)
-  * :breaking:`Breaking` ``SpaceCenter.ActionGroupAction`` is a structure, so ``Control.GetActionGroupActions`` sends every field of each action in one call (:issue:`1132`)
+  * :breaking:`Breaking` Return ``null`` from ``Parts.Controlling`` when the vessel has no control point (:issue:`1043`)
+  * :breaking:`Breaking` Return ``null`` from ``CommNode.Vessel`` for a node that is not a vessel (:issue:`1132`)
+  * Take ``Control.State`` and ``Control.Source`` from the control level KSP gates a vessel's control on (:issue:`1043`)
+  * Report no control and no communications from ``Control`` and ``Comms`` for a vessel outside the communication network (:issue:`1043`)
+  * Add ``Control.PrecisionMode`` (:issue:`1082`)
+  * Keep the Alt+L shortcut in step with ``Control.StageLock`` (:issue:`1022`)
+  * Fix control inputs being applied twice each tick with a RemoteTech flight computer, and apply ``Control.Throttle`` regardless of signal delay (:issue:`1093`)
+
+* Engines and RCS
+
+  * :breaking:`Breaking` Thrust ``RCS.TranslationOverride`` along the right, up and forward axes it documents (:issue:`1080`)
+  * Add ``RCS.Force``, ``RCS.Torque``, ``RCS.OverrideWrench`` and ``Thruster.Thrust`` (:issue:`1080`)
+  * Account for precision mode in the available force and torque of ``RCS`` and ``Vessel``, keeping a block driven by ``RCS.InputOverride`` at full thrust (:issue:`1082`)
+  * Count only the nozzles of an RCS part's selected variant (:issue:`1079`)
+  * Fix ``Engine.Thrusters`` and ``RCS.Thrusters`` on a part with both modules, and after a multi-mode engine switches mode (:issue:`1096`)
+  * Fix ``ReactionWheel.AvailableTorque`` being scaled by the square of the authority limiter with KSPCommunityFixes installed (:issue:`1042`)
+  * Add support for [RealFuels](https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/), with ignition, ullage and feed pressure members on ``Engine`` and boil-off on ``Part`` (:issue:`1039`)
 
 * Parts
 
   * :breaking:`Breaking` Remove kRPC's own name tag part module. ``Part.Tag`` needs KSPCommunityPartModules 0.5 or later, or kOS, to provide one (:issue:`1155`)
-  * Warn in game when a save or craft has name tags that the installed mods cannot load (:issue:`1155`)
-  * :breaking:`Breaking` ``RCS.TranslationOverride`` thrusts along the right, up and forward axes it documents (:issue:`1080`)
-  * Add ``RCS.Force`` and ``RCS.Torque``, the force and torque a block is applying, and ``RCS.OverrideWrench``, what a given demand would apply (:issue:`1080`)
-  * Add ``Thruster.Thrust``, the thrust a single nozzle of an engine or RCS block is producing (:issue:`1080`)
-  * Fix ``Engine.Thrusters`` and ``RCS.Thrusters`` giving the same thrusters on a part that carries both an engine and an RCS module (:issue:`1096`)
-  * Fix ``Engine.Thrusters`` on a multi-mode engine giving the previous mode's thrusters after a mode switch (:issue:`1096`)
-  * ``RCS.AvailableForce`` and ``RCS.AvailableTorque``, and the vessel level force, torque and acceleration properties that include them, account for precision mode (:issue:`1082`)
-  * Precision mode leaves a block driven by ``RCS.InputOverride`` at full thrust (:issue:`1082`)
-  * ``RCS.Thrusters``, ``RCS.AvailableForce`` and ``RCS.AvailableTorque`` count only the nozzles of the part's selected variant (:issue:`1079`)
-  * Add ``ControlSurface.DeployAngle``, ``ControlSurface.MinDeployAngle`` and ``ControlSurface.MaxDeployAngle`` (:issue:`1088`)
-  * Fix ``ControlSurface.DeflectionOverride`` leaving the deploy angle at the last deflection command when it is released (:issue:`1088`)
-  * ``ControlSurface.Deployed`` raises an error when set while ``ControlSurface.DeflectionOverride`` is enabled, which holds the surface deployed. The setting was discarded when the override was released (:issue:`1088`)
-  * ``Decoupler.IsOmniDecoupler`` reports what the part is configured as for every decoupler, including radial ones. It was false for all of them (:issue:`1048`)
-  * A force added with ``Part.AddForce`` stops being applied, and is freed, once its part is destroyed (:issue:`1051`)
-  * ``Force.Remove`` leaves the object gone, so using one afterwards raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
+  * :breaking:`Breaking` Remove the string-dictionary ``Module`` members, replaced by ``Module.FieldList``, ``Module.EventList`` and ``Module.ActionList`` (:issue:`1140`)
   * :deprecated:`Deprecated` ``Part.AddForce`` and ``Part.InstantaneousForce``, superseded by ``Debug.AddForce`` and ``Debug.InstantaneousForce`` (:issue:`1146`)
-  * ``Part.BoundingBox`` and ``Vessel.BoundingBox`` measure only the meshes of a part's own model, leaving out physicsless child parts and objects another mod has attached (:issue:`1024`)
-  * Computing a bounding box no longer duplicates the meshes of every part it measures (:issue:`1024`)
-  * ``Part.BoundingBox`` and ``Vessel.BoundingBox`` include animated meshes, in their current pose, such as the arm of a drill (:issue:`1153`)
-  * Add support for [RealFuels](https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/), reported by ``SpaceCenter.RealFuelsAvailable``. On an engine it manages, ``Engine.Ignitions``, ``Engine.IgnitionResources``, ``Engine.HasUllage``, ``Engine.PropellantStability``, ``Engine.PropellantReliability``, ``Engine.PressureFed`` and ``Engine.HasFeedPressure`` are available; on a tank, ``Part.HighlyPressurized`` and ``Part.BoiloffRate`` (:issue:`1039`)
-  * Fix ``ReactionWheel.AvailableTorque``, and the vessel level torque properties that include it, being scaled by the square of the wheel's authority limiter when KSPCommunityFixes is installed (:issue:`1042`)
-  * Fix ``Decoupler`` objects accumulating for the rest of the session, and the same decoupler obtained twice comparing unequal (:issue:`1051`)
-  * A ``Decoupler`` finds its part's decoupler module again on every call, so it keeps working across a quickload (:issue:`1051`)
-  * Using a part that has been destroyed raises ``KRPC.ObjectDestroyedException`` instead of failing with a null reference (:issue:`885`)
-  * Using a part module, or an object built on one such as ``Engine`` or ``Parachute``, after its part has been destroyed raises ``KRPC.ObjectDestroyedException`` (:issue:`885`)
-  * Part modules, and the objects built on them, read the modules of the loaded game, so they keep working across a quickload (:issue:`764`)
-  * Using a part of a vessel that the game has unloaded raises ``KRPC.ObjectNotLoadedException`` (:issue:`1051`)
-  * The fields, events and actions of a part module read the loaded game's module (:issue:`764`)
-  * Make ``ModuleRef`` public, for a mod that exposes a part module as a class of its own service (:issue:`1077`)
-  * :breaking:`Breaking` Remove the string-dictionary ``Module`` field, event and action members, replaced by ``Module.FieldList``, ``Module.EventList`` and ``Module.ActionList`` (:issue:`1140`)
-  * :breaking:`Breaking` Make ``SpaceCenter.ScienceSubject`` and ``SpaceCenter.ScienceData`` structures (:issue:`1148`)
-  * Add ``ScienceSubject.Id``, the identifier of a science subject (:issue:`1148`)
-  * :breaking:`Breaking` Return ``RoboticController.Axes`` as a list of ``SpaceCenter.RoboticAxis`` structures, in place of a list of name pairs (:issue:`1148`)
-  * :breaking:`Breaking` Return and set ``Part.HighlightColor`` and ``Light.Color`` as a ``StdLib.ColorRGB`` structure, in place of a tuple (:issue:`1148`)
+  * Warn in game when a save or craft has name tags the installed mods cannot load (:issue:`1155`)
+  * Add ``ControlSurface.DeployAngle``, ``MinDeployAngle`` and ``MaxDeployAngle`` (:issue:`1088`)
+  * Fix ``ControlSurface.DeflectionOverride`` leaving the deploy angle set when released, and throw an exception from setting ``Deployed`` during an override (:issue:`1088`)
+  * Measure only a part's own meshes in ``Part.BoundingBox`` and ``Vessel.BoundingBox``, with animated meshes in their current pose (:issue:`1024`, :issue:`1153`)
+  * Fix computing a bounding box duplicating the meshes of every part it measures (:issue:`1024`)
+  * Fix ``Decoupler.IsOmniDecoupler`` being false for every decoupler (:issue:`1048`)
+  * Return the separated vessel from ``Decoupler.Decouple`` for an omni-decoupler such as a stack separator (:issue:`1043`)
+  * Make ``ModuleRef`` public, for a mod that exposes a part module in its own service (:issue:`1077`)
 
-* Resources
+* Resources and camera
 
-  * Add ``ResourceTransfer.Cancel`` to stop a transfer before it finishes (:issue:`1028`)
-  * Fix a resource transfer failing on every update, and never completing, once one of the parts it runs between is destroyed (:issue:`1051`)
-  * Add ``ResourceTransfer.Remove``, which stops a transfer and releases the memory the server holds for it (:issue:`1072`)
-
-* Camera
-
-  * ``Camera.NextCamera`` and ``Camera.PreviousCamera`` move the IVA view between the crew of the active vessel without dropping out of IVA mode (:issue:`1031`)
-  * Setting ``Camera.FocussedCrewMember`` to the crew member already in view no longer switches to the flight camera. Setting it to one who is not in view of a part interior raises an error (:issue:`1031`)
-  * ``Camera.FocussedCrewMember`` returns ``null`` when no crew member is in view (:issue:`1031`)
-
-* Alarms, contracts and waypoints
-
-  * ``SpaceCenter.Alarm``, ``Contract``, ``ContractParameter`` and ``Waypoint`` objects look their record up on every call, so they keep working when the game rebuilds it. One the game no longer has raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
-
-* Communications
-
-  * A ``CommLink`` is identified by the two nodes it joins and reports the link between them as it is now. One whose nodes are gone raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
-  * :breaking:`Breaking` ``SpaceCenter.CommNode`` is a structure, so ``CommLink.Start`` and ``CommLink.End`` send every field of a node in one call (:issue:`1132`)
-  * :breaking:`Breaking` ``CommNode.Vessel`` returns ``null`` for a node that is not a vessel (:issue:`1132`)
+  * Add ``ResourceTransfer.Cancel`` (:issue:`1028`)
+  * Fix a resource transfer never completing once one of its parts is destroyed (:issue:`1051`)
+  * Move the IVA view between crew with ``Camera.NextCamera`` and ``Camera.PreviousCamera`` (:issue:`1031`)
+  * Return ``null`` from ``Camera.FocussedCrewMember`` when no crew member is in view (:issue:`1031`)
+  * Fix setting ``Camera.FocussedCrewMember`` to the crew member in view switching to the flight camera (:issue:`1031`)
 
 
 
@@ -314,66 +238,57 @@ Drawing service
 ^^^^^^^^^^^^^^^
 
 * :breaking:`Breaking` Return and set colors as a ``StdLib.ColorRGB`` structure, in place of a tuple (:issue:`1148`)
-* Add ``Drawing.AddPolyline``, ``Drawing.AddCircle`` and ``Drawing.AddArc`` (:issue:`1116`)
-* Add ``Drawing.AddOrbit``, which draws the path of an orbit (:issue:`1116`)
-* Add ``Drawing.AddPoint``, which draws a dot that keeps its size on screen (:issue:`1116`)
-* Add ``Drawing.AddAxes``, which draws the axes of a reference frame (:issue:`1116`)
-* Add arrow heads to lines, polygons and the new paths, with ``StartArrow``, ``EndArrow`` and ``ArrowSize`` (:issue:`1116`)
-* Add ``Text.FaceCamera``, which turns text to face the camera (:issue:`1116`)
-* Add ``Colors``, ``Dashed`` and ``Label`` to lines, polygons and the new paths (:issue:`1116`)
-* Add ``Drawing.AddBox`` and ``Drawing.AddSphere`` (:issue:`1116`)
-* Add ``Drawing.AddMapMarker``, which draws a marker in the map view with one of the game's own map icons (:issue:`1116`)
-* Add ``Drawing.AddImage``, which loads a PNG or JPEG image to draw map and navball markers with (:issue:`1116`)
-* Draw lines, polygons and text in the map view, the editor and the tracking station (:issue:`1115`)
 * :breaking:`Breaking` Removing a drawing object another client created, or one the server no longer holds, reports that it is not among those this client created (:issue:`1072`)
-* Line, polygon, text and navball marker objects raise ``KRPC.ObjectDestroyedException`` once the object they draw is gone, and are freed (:issue:`1051`)
-* A drawing object whose reference frame is defined against something the game has destroyed is not drawn, rather than failing on every frame (:issue:`1051`)
-* Add ``Drawing.AddNavballMarker``, which draws a marker on the navball pointing in a given direction. Its icon, color and size can be changed (:issue:`1037`)
+* Add ``Drawing.AddPolyline``, ``AddCircle``, ``AddArc``, ``AddBox``, ``AddSphere``, ``AddPoint``, ``AddAxes`` and ``AddOrbit`` (:issue:`1116`)
+* Add ``StartArrow``, ``EndArrow``, ``ArrowSize``, ``Colors``, ``Dashed`` and ``Label`` to lines, polygons and paths, and ``Text.FaceCamera`` (:issue:`1116`)
+* Add ``Drawing.AddMapMarker``, which draws one of the game's map icons in the map view, and ``Drawing.AddImage`` for custom marker images (:issue:`1116`)
+* Add ``Drawing.AddNavballMarker``, which draws a marker on the navball pointing in a given direction (:issue:`1037`)
+* Draw lines, polygons and text in the map view, the editor and the tracking station (:issue:`1115`)
+* Raise ``KRPC.ObjectDestroyedException`` from a drawing object once the object it draws is gone, and skip drawing one whose reference frame is gone (:issue:`1051`)
 
 
 User Interface service
 ^^^^^^^^^^^^^^^^^^^^^^
 
-* :breaking:`Breaking` Removing a user interface element another client created, or one the server no longer holds, reports that it is not among those this client created (:issue:`1072`)
-* :breaking:`Breaking` Return and set colors as a ``StdLib.ColorRGBA`` structure with an alpha component, in place of a ``(red, green, blue)`` tuple. Affects ``Text.Color`` and the color of a ``UI.Message`` (:issue:`1040`, :issue:`1148`)
-* :breaking:`Breaking` ``InputField.Changed`` is only set when the user types in the field (:issue:`1040`)
-* :breaking:`Breaking` User interface elements are drawn using the skin the game draws its own interface in, so the size and color that ``Text`` starts out with are not fixed values (:issue:`1040`)
-* :breaking:`Breaking` ``Visible`` is the element's own setting. An element is drawn when everything it is inside is visible as well, so an interface can be built inside a hidden panel and shown all at once (:issue:`1040`)
-* User interface elements can be created in every game scene (:issue:`1040`)
-* User interface elements are removed when the game scene changes (:issue:`1040`)
-* Add ``Interactable`` to every control, to gray one out and stop it responding to the user (:issue:`1040`)
-* Add ``Toggle``, a check box, and ``ToggleGroup``, which makes a set of toggles behave as radio buttons. A group refers to its toggles rather than containing them (:issue:`1040`)
-* Add ``Layout`` to arrange the contents of a ``Panel`` in a row, a column or a grid. ``Panel.AddHorizontalLayout``, ``Panel.AddVerticalLayout`` and ``Panel.AddGridLayout`` create one (:issue:`1040`)
-* Add ``Slider``, ``Dropdown`` and ``Image``. An image shows the contents of a PNG or JPEG file, or a plain colored rectangle (:issue:`1040`)
-* Add ``Panel.Style``, to draw a panel as a box rather than a window, and ``Panel.Color`` (:issue:`1040`)
-* Add ``Panel.Draggable``, so a panel can be moved by the user and used as a window (:issue:`1040`)
-* Add ``ScrollView``, a view onto a panel larger than the space available for it (:issue:`1040`)
-* Add ``LayoutElement``, for how much space a user interface object asks a layout for, and ``Panel.SizeFitter``, for sizing a panel to fit what it contains (:issue:`1040`)
-* Add ``InputField.Placeholder``, the hint drawn in an input field while it is empty (:issue:`1040`)
-* Add ``InputField.ContentType``, filtering what the user can type into a field as they type it, along with ``InputField.CharacterLimit`` and ``InputField.ReadOnly`` (:issue:`1040`)
-* Add ``Color`` to every control, tinting the sprite it is drawn with (:issue:`1040`)
-* Add ``Tooltip`` to every control, a short piece of text shown beside the pointer while it rests on the control (:issue:`1040`)
-* Add ``Panel.BringToFront``, to draw a panel in front of the elements beside it. A draggable panel also brings itself to the front when the user presses it (:issue:`1040`)
-* ``AddSlider`` can create a vertical slider, running from bottom to top (:issue:`1040`)
-* Add ``Button.Pressed``, true while the user is holding the button down (:issue:`1040`)
-* Add ``Text.WordWrap``, so a value label can be kept to one line (:issue:`1040`)
-* Add ``Image.SetPixels``, drawing a picture from raw pixels rather than a file. ``Image.UpdatePixels`` redraws a block of the picture and leaves the rest (:issue:`1040`)
-* Two user interface objects that refer to the same element compare equal (:issue:`1040`)
-* A canvas added with ``UI.AddCanvas`` follows the interface scale the player has set, as the stock canvas does (:issue:`1040`)
-* Fix ``Text.Font`` making a font of its own every time it is set, and leaving it behind when the label went. A font of a given name is made once and shared (:issue:`1040`)
-* A user interface object raises ``KRPC.ObjectDestroyedException`` once its element is gone, which removing it, ``UI.Clear``, the client that made it disconnecting and changing scene all do (:issue:`1051`)
-* ``RectTransform``, ``Layout``, ``LayoutElement`` and ``SizeFitter`` do the same once the element they were taken from is gone, and are dropped with it (:issue:`1051`)
-* Fix ``RectTransform`` objects accumulating for the rest of the session. Reading the same one twice gives the same object (:issue:`1051`)
+* Breaking changes
+
+  * :breaking:`Breaking` Return and set colors as a ``StdLib.ColorRGBA`` structure with an alpha component, for ``Text.Color`` and the color of a ``UI.Message`` (:issue:`1040`, :issue:`1148`)
+  * :breaking:`Breaking` Draw user interface elements with the game's own skin, so ``Text`` starts out with the game's size and color (:issue:`1040`)
+  * :breaking:`Breaking` Make ``Visible`` the element's own setting. An element is drawn when everything it is inside is visible too (:issue:`1040`)
+  * :breaking:`Breaking` Set ``InputField.Changed`` only when the user types in the field (:issue:`1040`)
+  * :breaking:`Breaking` Removing an element another client created, or one the server no longer holds, reports that it is not among those this client created (:issue:`1072`)
+
+* Elements
+
+  * Add ``Toggle``, a check box, and ``ToggleGroup``, which makes a set of toggles behave as radio buttons (:issue:`1040`)
+  * Add ``Slider``, horizontal or vertical, and ``Dropdown`` (:issue:`1040`)
+  * Add ``Image``, showing a PNG or JPEG file, a plain colored rectangle, or raw pixels from ``Image.SetPixels`` and ``Image.UpdatePixels`` (:issue:`1040`)
+  * Add ``ScrollView``, a view onto a panel larger than the space available for it (:issue:`1040`)
+  * Add ``Layout`` to arrange the contents of a ``Panel`` in a row, column or grid, with ``LayoutElement`` and ``Panel.SizeFitter`` for sizing (:issue:`1040`)
+
+* Properties and behavior
+
+  * Create user interface elements in every game scene, and remove them when the scene changes (:issue:`1040`)
+  * Add ``Interactable``, ``Color`` and ``Tooltip`` to every control (:issue:`1040`)
+  * Add ``Panel.Style``, ``Panel.Color``, ``Panel.Draggable`` and ``Panel.BringToFront``, to use a panel as a movable window (:issue:`1040`)
+  * Add ``InputField.Placeholder``, ``ContentType``, ``CharacterLimit`` and ``ReadOnly`` (:issue:`1040`)
+  * Add ``Button.Pressed``, true while the user holds the button down, and ``Text.WordWrap`` (:issue:`1040`)
+  * Scale a canvas added with ``UI.AddCanvas`` by the player's interface scale, as the stock canvas is (:issue:`1040`)
+  * Compare two user interface objects for the same element equal (:issue:`1040`)
+  * Raise ``KRPC.ObjectDestroyedException`` from a user interface object, ``RectTransform``, ``Layout``, ``LayoutElement`` or ``SizeFitter`` once its element is gone (:issue:`1051`)
+  * Fix ``Text.Font`` creating a font on every set and leaking it (:issue:`1040`)
+  * Fix ``RectTransform`` objects accumulating for the rest of the session (:issue:`1051`)
+
 
 
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+* Look up a servo and a servo group on every call, so they keep working across a quickload and raise ``KRPC.ObjectDestroyedException`` once their part or vessel is gone (:issue:`1051`)
+* Renaming a servo group destroys its objects, which must be obtained again under the new name (:issue:`1051`)
+* Fix ``Servo`` and ``ServoGroup`` objects accumulating for the rest of the session, and comparing unequal for the same servo or group (:issue:`1051`)
+* Return the vessel the group was obtained for from ``ServoGroup.Vessel`` (:issue:`1051`)
 * Fix a servo being listed more than once in a ``ServoGroup`` after switching to and from its vessel (:issue:`1154`)
-* Fix ``Servo`` and ``ServoGroup`` objects accumulating for the rest of the session, and the same servo or group obtained twice comparing unequal (:issue:`1051`)
-* A servo and a servo group keep working across a quickload, and raise ``KRPC.ObjectDestroyedException`` once the part or the vessel they belong to is gone (:issue:`1051`)
-* Renaming a servo group destroys every object for it, and the group has to be obtained again under the new name (:issue:`1051`)
-* ``ServoGroup.Vessel`` is the vessel the group was obtained for (:issue:`1051`)
 
 
 KerbalAlarmClock service
@@ -410,234 +325,219 @@ Debug service
 C-nano client
 ^^^^^^^^^^^^^
 
-* :breaking:`Breaking` Rename ``dockingcamera.h`` to ``docking_camera.h`` (:issue:`1149`)
-* Include the header of every service a service header uses, so service headers can be included in any order (:issue:`1150`)
-* Update to protobuf v36.2 (:issue:`1139`)
-* Update to nanopb 0.4.9.2 (:issue:`1139`)
+* :breaking:`Breaking` Support null for any nullable type. A nullable non-class return adds a ``bool* returnValueIsNull`` out-parameter, and a nullable argument is a pointer (:issue:`1017`)
 * :breaking:`Breaking` Renumber the ``KRPC`` service's procedures, so a program built against an earlier version must be rebuilt (:issue:`1124`)
-* Support a nullable structure field, list element, tuple item and dictionary value, each generated as a type holding the value beside a ``bool`` presence flag (:issue:`1091`)
-* Support structure types, generated as a C struct with a member per field (:issue:`1066`)
-* :breaking:`Breaking` Support null for any nullable type; a nullable non-class return adds a ``bool* returnValueIsNull`` out-parameter and a nullable argument is a pointer (:issue:`1017`)
-* Add ``KRPC_COMMUNICATION_TCP``, building the library to communicate over TCP/IP. A connection is opened with a ``krpc_connection_config_t`` in place of a port name (:issue:`1055`)
-* Add a ``tcp`` feature to the vcpkg port; ``vcpkg install "krpc-cnano[tcp]"`` (:issue:`1055`)
-* Add ``KRPC_COMMUNICATION_LOCALSOCKET`` and a ``localsocket`` vcpkg feature, building the library to communicate over a unix domain socket (:issue:`1065`)
+* :breaking:`Breaking` Rename ``dockingcamera.h`` to ``docking_camera.h`` (:issue:`1149`)
+* Support structure types, as a C struct with a member per field, and nullable structure fields and collection elements, as the value beside a ``bool`` presence flag (:issue:`1066`, :issue:`1091`)
+* Add ``KRPC_COMMUNICATION_TCP`` and ``KRPC_COMMUNICATION_LOCALSOCKET``, with ``tcp`` and ``localsocket`` vcpkg features, to communicate over TCP/IP or a unix domain socket (:issue:`1055`, :issue:`1065`)
 * Add ``KRPC_SINGLE_CONNECTION``, for a ``KRPC_COMMUNICATION_CUSTOM`` mechanism that opens its own connection to each server (:issue:`1055`)
-* Reduce the cost of a remote procedure call, from tens of reads and writes to one write and two reads (:issue:`1056`)
-* Add ``KRPC_BUFFER_SIZE``, how much of a message to hold in memory while it is sent or received. Defaults to 1024 bytes, and to 128 on Arduino (:issue:`1056`)
+* Reduce a remote procedure call from tens of reads and writes to one write and two reads (:issue:`1056`)
+* Add ``KRPC_BUFFER_SIZE``, how much of a message to hold in memory while it is sent or received, 1024 bytes by default and 128 on Arduino (:issue:`1056`)
+* Include the header of every service a service header uses, so service headers can be included in any order (:issue:`1150`)
+* Update to protobuf v36.2 and nanopb 0.4.9.2 (:issue:`1139`)
 
 
 C# client
 ^^^^^^^^^
 
-* Update to Google.Protobuf 3.36.2 (:issue:`1139`)
-* :breaking:`Breaking` Start a stream when it is added, removing ``Stream.Start`` and ``Event.Start`` (:issue:`1122`)
-* Wait for a stream's first value in ``Stream.Get`` (:issue:`1122`)
-* Call a callback added to a stream that has a value with that value straight away (:issue:`1122`)
-* Call a callback added to an event straight away for a firing not yet passed to a wait or another callback (:issue:`1122`)
-* :breaking:`Breaking` Add an ``IConnection.Invoke`` overload taking the return type, which a class implementing ``IConnection`` must provide (:issue:`1122`)
-* Throw ``InvalidOperationException`` when reading or waiting on a removed stream or event (:issue:`1122`)
-* End a stream on an error from the server, which every later ``Get`` and ``Wait`` throws (:issue:`1122`)
-* End every stream with ``ConnectionException`` when the connection closes or fails (:issue:`1122`)
-* :breaking:`Breaking` Return ``true`` from ``Stream.Wait`` and ``Event.Wait`` on an update, and ``false`` on a timeout (:issue:`1122`)
-* Fix ``Event.Wait`` missing a firing that arrived before it (:issue:`1122`)
-* Fix ``Event.Wait`` waking only one of two threads waiting on one event (:issue:`1122`)
-* Add ``AddEndCallback`` to streams and events, called with the exception that ends the stream (:issue:`1122`)
-* Fix the stream update thread ending the process on a value it cannot decode or a message it cannot parse (:issue:`1122`)
-* Fix a second removal of a stream removing a newer stream for the same call (:issue:`1122`)
-* Fix stream callbacks throwing an ``InvalidCastException`` on an error from the server (:issue:`1122`)
-* Throw ``InvalidOperationException`` from ``AddStream`` on a connection with no stream server (:issue:`1122`)
-* :breaking:`Breaking` Throw ``NullReferenceException`` for a null where a value is required, reported by any service, in place of ``RPCException`` (:issue:`1124`)
-* :breaking:`Breaking` Throw ``KeyNotFoundException`` for a missing key, and ``IndexOutOfRangeException`` for an index out of range, reported by any service, in place of ``RPCException`` (:issue:`1124`)
-* :breaking:`Breaking` Throw ``DivideByZeroException``, ``NotSupportedException``, ``TimeoutException`` and ``OverflowException`` for the matching errors reported by any service, such as ``AutoPilot.Wait``, in place of ``RPCException`` (:issue:`1124`)
-* Add ``Connection.Compile``, which compiles a lambda into a server side function (:issue:`1128`)
-* Compile operators, conditionals, casts, ``System.Math`` methods, string operations, collection, tuple and structure constructors, and the common LINQ operators in a lambda (:issue:`1128`)
-* Compile ``Console.WriteLine`` to ``StdLib.Print``, which writes a line to the game's log (:issue:`1128`)
-* Throw ``FunctionCompilationException`` naming a construct a compiled lambda cannot contain, including a call that depends on the current culture (:issue:`1128`)
-* Add ``Connection.Run``, which runs a server side function or a lambda within a single physics tick, passing it any arguments, and returns its value (:issue:`1128`)
-* Add a ``Connection.AddStream<T>`` overload taking a server side function (:issue:`1128`)
-* Add ``Connection.AddEvent``, which creates an event from a lambda or a server side function (:issue:`1128`)
-* Compile a lambda passed to ``AddStream`` other than a single call, so a stream can compute a value (:issue:`1128`)
-* :breaking:`Breaking` Evaluate the remote calls in the arguments of a call passed to ``AddStream`` on every update, not once when the stream is created (:issue:`1128`)
-* Throw ``InvalidOperationException`` from ``Stream.Get`` for a null value the stream's type cannot hold (:issue:`1128`)
-* Support a nullable structure field, list element, tuple item and dictionary value; a value-typed one uses the nullable form (``int?``) (:issue:`1091`)
-* Support structure types, a compound value with named fields a service defines, generated as a ``struct`` with a constructor, ``IEquatable``, ``IComparable`` and the comparison operators over its fields (:issue:`1066`)
-* :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the nullable form (``int?``) (:issue:`1017`)
-* Add ``Connection.ConnectLocal``, which connects to a server on the same machine over unix domain sockets (:issue:`1065`)
-* Add a ``timeout`` parameter to the ``Connection`` constructor, bounding how long a connection is waited for (:issue:`1065`)
-* Reduce the cost of a remote procedure call, encoding and decoding without a protobuf stream and parsing a response straight out of the read buffer (:issue:`1056`)
-* Reduce the cost of a call that returns a collection or an object (:issue:`1056`)
-* Fix an ``ArgumentException`` from the server carrying its message as the parameter name (:issue:`1111`)
+* Streams and events
+
+  * :breaking:`Breaking` Start a stream when it is added, removing ``Stream.Start`` and ``Event.Start`` (:issue:`1122`)
+  * :breaking:`Breaking` Return ``true`` from ``Stream.Wait`` and ``Event.Wait`` on an update, and ``false`` on a timeout (:issue:`1122`)
+  * :breaking:`Breaking` Add an ``IConnection.Invoke`` overload taking the return type, which a class implementing ``IConnection`` must provide (:issue:`1122`)
+  * Wait for a stream's first value in ``Stream.Get`` (:issue:`1122`)
+  * End a stream on an error from the server, and every stream with ``ConnectionException`` when the connection closes or fails (:issue:`1122`)
+  * Throw ``InvalidOperationException`` when reading or waiting on a removed stream or event, and from ``AddStream`` on a connection with no stream server (:issue:`1122`)
+  * Add ``AddEndCallback`` to streams and events, called with the exception that ends the stream (:issue:`1122`)
+  * Call a callback added to a stream or event straight away for a value or firing already received (:issue:`1122`)
+  * Fix ``Event.Wait`` missing an earlier firing, and waking only one of two waiting threads (:issue:`1122`)
+  * Fix the stream update thread ending the process on a value it cannot decode or a message it cannot parse (:issue:`1122`)
+  * Fix a second removal of a stream removing a newer stream for the same call, and stream callbacks throwing ``InvalidCastException`` on an error from the server (:issue:`1122`)
+
+* Server side functions
+
+  * Add ``Connection.Compile``, which compiles a lambda into a server side function (:issue:`1128`)
+  * Compile operators, conditionals, casts, ``System.Math``, string operations, collection, tuple and structure constructors, ``Console.WriteLine`` and the common LINQ operators (:issue:`1128`)
+  * Throw ``FunctionCompilationException`` naming a construct a lambda cannot contain, including a call that depends on the current culture (:issue:`1128`)
+  * Add ``Connection.Run`` and ``Connection.AddEvent``, and a ``Connection.AddStream<T>`` overload taking a server side function (:issue:`1128`)
+  * :breaking:`Breaking` Compile a lambda given to ``AddStream``, so the remote calls in its arguments are evaluated on every update (:issue:`1128`)
+
+* Types and errors
+
+  * :breaking:`Breaking` Throw the matching .NET exception, such as ``NullReferenceException``, ``KeyNotFoundException`` or ``TimeoutException``, for an error reported by any service, in place of ``RPCException`` (:issue:`1124`)
+  * :breaking:`Breaking` Support ``null`` for any nullable type, including a structure field, list element, tuple item and dictionary value. Value types use the nullable form (``int?``) (:issue:`1017`, :issue:`1091`)
+  * Throw ``InvalidOperationException`` from ``Stream.Get`` for a null value the stream's type cannot hold (:issue:`1128`)
+  * Support structure types, generated as a ``struct`` with a constructor, equality and ordering over its fields (:issue:`1066`)
+  * Fix an ``ArgumentException`` from the server carrying its message as the parameter name (:issue:`1111`)
+
+* Connections
+
+  * Add ``Connection.ConnectLocal``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
+  * Add a ``timeout`` parameter to the ``Connection`` constructor, bounding how long a connection is waited for (:issue:`1065`)
+  * Reduce the cost of a remote procedure call, most for one that returns a collection or an object (:issue:`1056`)
+  * Update to Google.Protobuf 3.36.2 (:issue:`1139`)
+
 
 
 C++ client
 ^^^^^^^^^^
 
-* Include the header of every service a service header uses, so service headers can be included in any order (:issue:`1150`)
-* Update to protobuf v36.2 (:issue:`1139`)
-* Update to ASIO 1.38.2 (:issue:`1139`)
-* Add ``krpc::run``, which runs a server side function within a single physics tick, passing it any arguments, and returns its value (:issue:`1129`)
-* Add ``krpc::add_stream``, which streams the value of a server side function (:issue:`1129`)
-* Add ``krpc::add_event``, which creates an event from a server side function (:issue:`1129`)
-* :breaking:`Breaking` Remove ``Client::freeze_streams`` and ``Client::thaw_streams``. Calls made while holding the tick with ``KRPC::hold_tick`` give values from one physics tick (:issue:`1118`)
-* :breaking:`Breaking` Start a stream when it is added, removing ``Stream::start`` and ``Event::start`` (:issue:`1122`)
-* :breaking:`Breaking` Return a ``krpc::Condition`` from the ``get_condition`` methods and ``Client::get_stream_update_condition``, with locks over the re-entrant ``krpc::RecursiveMutex`` (:issue:`1122`)
-* Wait for a stream's first value when reading it (:issue:`1122`)
-* Call a callback added to a stream that has a value with that value straight away (:issue:`1122`)
-* End a stream on an error from the server, which every later read and ``wait`` throws (:issue:`1122`)
-* End every stream with ``krpc::ConnectionError`` when the connection closes or fails (:issue:`1122`)
-* Return ``true`` from ``Stream::wait`` and ``Event::wait`` on an update, and ``false`` on a timeout (:issue:`1122`)
-* Throw ``krpc::StreamError`` when reading or waiting on a removed stream or event (:issue:`1122`)
-* Call a callback added to an event straight away for a firing not yet passed to a wait or another callback (:issue:`1122`)
-* Fix ``Event::wait`` missing a firing that arrived before it (:issue:`1122`)
-* Add ``add_end_callback`` to streams and events, called with the exception that ends the stream (:issue:`1122`)
-* Fix the stream update thread spinning after the server closes the connection (:issue:`1122`)
-* Fix the stream update thread ending the process on a message it cannot read, or on a stream update callback that throws (:issue:`1122`)
-* Fix two copies of a stream or event sharing one condition lock (:issue:`1122`)
-* Fix streams using freed memory once the copy of the client that added them is destroyed (:issue:`1122`)
-* Fix a callback using freed memory once the stream or event it was added through is moved or destroyed (:issue:`1122`)
-* Fix a second removal of a stream removing a newer stream for the same call (:issue:`1122`)
-* Fix a data race reading a stream's value while an update for it arrives (:issue:`1108`)
-* Fix a stream of a value whose type a service defines, such as an enumeration or a structure, failing to compile (:issue:`1094`)
-* Support a nullable structure field, list element, tuple item and dictionary value (:issue:`1091`)
-* Support structure types, a compound value with named fields a service defines, generated as a ``struct`` with a constructor, equality, ordering and a ``std::hash`` over its fields (:issue:`1066`)
-* Add ``krpc::hash_value`` and the ``krpc::hash`` function object, which hash any type the client carries, so a tuple or a collection can key an unordered container (:issue:`1067`)
-* :breaking:`Breaking` Support null for any nullable type, held as ``std::optional``, changing generated signatures (:issue:`1017`)
-* Add ``krpc::connect_local``, which connects to a server on the same machine over unix domain sockets (:issue:`1065`)
-* Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for (:issue:`1065`)
-* Fix a race between a stream update arriving and a stream update callback being added or removed (:issue:`1090`)
-* Fix a stream on a client with no stream connection crashing instead of throwing ``krpc::StreamError`` (:issue:`1109`)
-* Fix a removed stream returning the value it last received (:issue:`1090`)
-* Fix a thread waiting on a stream being left blocked when the stream is removed (:issue:`1090`)
-* Fix a service with a collection of enumerations in a procedure signature failing to compile (:issue:`1044`)
-* Fix ``krpc::Connection::close`` failing to link (:issue:`1065`)
-* Reduce the cost of a remote procedure call, reusing the request and response messages and parsing a response straight out of the read buffer (:issue:`1056`)
-* Reduce the cost of a call that carries a collection (:issue:`1056`)
+* Streams and events
+
+  * :breaking:`Breaking` Start a stream when it is added, removing ``Stream::start`` and ``Event::start`` (:issue:`1122`)
+  * :breaking:`Breaking` Remove ``Client::freeze_streams`` and ``Client::thaw_streams``. Calls made while holding the tick with ``KRPC::hold_tick`` give values from one physics tick (:issue:`1118`)
+  * :breaking:`Breaking` Return a ``krpc::Condition`` from the ``get_condition`` methods and ``Client::get_stream_update_condition``, locked with a ``krpc::RecursiveMutex`` (:issue:`1122`)
+  * Return ``true`` from ``Stream::wait`` and ``Event::wait`` on an update, and ``false`` on a timeout (:issue:`1122`)
+  * Wait for a stream's first value when reading it (:issue:`1122`)
+  * End a stream on an error from the server, and every stream with ``krpc::ConnectionError`` when the connection closes or fails (:issue:`1122`)
+  * Throw ``krpc::StreamError`` when reading or waiting on a removed stream or event, or on a client with no stream connection (:issue:`1122`, :issue:`1109`)
+  * Add ``add_end_callback`` to streams and events, called with the exception that ends the stream (:issue:`1122`)
+  * Call a callback added to a stream or event straight away for a value or firing already received (:issue:`1122`)
+  * Fix ``Event::wait`` missing an earlier firing, and a thread waiting on a stream staying blocked when the stream is removed (:issue:`1122`, :issue:`1090`)
+  * Fix the stream update thread spinning after the server closes the connection, and ending the process on a bad message or a throwing callback (:issue:`1122`)
+  * Fix data races between a stream update and reading the value or changing the callbacks (:issue:`1090`, :issue:`1108`)
+  * Fix use of freed memory by streams and callbacks once the client, stream or event they came from is moved or destroyed (:issue:`1122`)
+  * Fix two copies of a stream sharing one condition lock, a removed stream returning its last value, and a second removal removing a newer stream (:issue:`1122`, :issue:`1090`)
+
+* Server side functions
+
+  * Add ``krpc::run``, which runs a server side function within a single physics tick and returns its value (:issue:`1129`)
+  * Add ``krpc::add_stream`` and ``krpc::add_event``, which stream a server side function and create an event from one (:issue:`1129`)
+
+* Types
+
+  * :breaking:`Breaking` Support null for any nullable type, held as ``std::optional``, including a structure field, list element, tuple item and dictionary value (:issue:`1017`, :issue:`1091`)
+  * Support structure types, generated as a ``struct`` with a constructor, equality, ordering and a ``std::hash`` over its fields (:issue:`1066`)
+  * Add ``krpc::hash_value`` and ``krpc::hash``, which hash any type the client carries, so a tuple or a collection can key an unordered container (:issue:`1067`)
+  * Include the header of every service a service header uses, so service headers can be included in any order (:issue:`1150`)
+  * Fix a stream of an enumeration or structure, and a procedure with a collection of enumerations, failing to compile (:issue:`1094`, :issue:`1044`)
+
+* Connections
+
+  * Add ``krpc::connect_local``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
+  * Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for (:issue:`1065`)
+  * Fix ``krpc::Connection::close`` failing to link (:issue:`1065`)
+  * Reduce the cost of a remote procedure call, most for one that carries a collection (:issue:`1056`)
+  * Update to protobuf v36.2 and ASIO 1.38.2 (:issue:`1139`)
+
 
 
 Java client
 ^^^^^^^^^^^
 
-* Update to protobuf-java 4.36.2 (:issue:`1139`)
-* :breaking:`Breaking` Throw ``NullPointerException`` for a null where a value is required, reported by any service, in place of ``RPCException`` (:issue:`1124`)
-* :breaking:`Breaking` Throw ``NoSuchElementException`` for a missing key, and ``IndexOutOfBoundsException`` for an index out of range, reported by any service, in place of ``RPCException`` (:issue:`1124`)
-* :breaking:`Breaking` Throw ``ArithmeticException`` for a division by zero or an overflow, and ``UnsupportedOperationException`` for an unsupported operation, reported by any service, in place of ``RPCException`` (:issue:`1124`)
-* Add ``Connection.run``, which runs a server side function within a single physics tick, passing it any arguments, and returns its value (:issue:`1129`)
-* Add a ``Connection.addStream`` overload taking a server side function (:issue:`1129`)
-* Add ``Connection.addEvent``, which creates an event from a server side function (:issue:`1129`)
-* Make ``RemoteObject.id`` public, for passing to ``Expression.constantObject`` (:issue:`1129`)
-* :breaking:`Breaking` Start a stream when it is added, removing ``Stream.start``, ``Stream.startAndWait`` and ``Event.start`` (:issue:`1122`)
-* Wait for a stream's first value in ``Stream.get`` (:issue:`1122`)
-* Call a callback added to a stream that has a value with that value straight away (:issue:`1122`)
-* Call a callback added to an event straight away for a firing not yet passed to a wait or another callback (:issue:`1122`)
-* Throw ``StreamException`` when reading or waiting on a removed stream or event (:issue:`1122`)
-* End a stream on an error from the server, which every later ``get`` and wait throws (:issue:`1122`)
-* End every stream with a ``StreamException`` when the connection closes or fails (:issue:`1122`)
-* :breaking:`Breaking` Return ``true`` from ``Stream.waitForUpdateWithTimeout`` and ``Event.waitForWithTimeout`` on an update, and ``false`` on a timeout (:issue:`1122`)
-* Fix ``Event.waitFor`` missing a firing that arrived before it (:issue:`1122`)
-* Fix ``Event.waitFor`` waking only one of two threads waiting on one event (:issue:`1122`)
-* Add ``addEndCallback`` to streams and events, called with the exception that ends the stream (:issue:`1122`)
-* Fix the stream update thread stopping on a value it cannot decode (:issue:`1122`)
-* Fix a second removal of a stream removing a newer stream for the same call (:issue:`1122`)
-* Fix an error ending a stream throwing a ``ClassCastException`` in its callbacks (:issue:`1122`)
-* Support a nullable structure field, list element, tuple item and dictionary value, held as the boxed type (``Integer``, ``Double``, …) where the value is a primitive (:issue:`1091`)
-* Support structure types, a compound value with named fields a service defines, generated as a class with a constructor, getters, ``equals``, ``hashCode`` and ``Comparable`` over its fields (:issue:`1066`)
-* :breaking:`Breaking` Requires Java 17 or later, up from Java 9, for unix domain sockets (:issue:`1065`)
-* :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the boxed type (``Integer``, ``Double``, …) (:issue:`1017`)
-* Add ``Connection.newLocalInstance``, which connects to a server on the same machine over unix domain sockets (:issue:`1065`)
-* Add ``Connection.newInstance`` overloads taking a ``timeout``, bounding how long a connection is waited for (:issue:`1065`)
+* Streams and events
+
+  * :breaking:`Breaking` Start a stream when it is added, removing ``Stream.start``, ``Stream.startAndWait`` and ``Event.start`` (:issue:`1122`)
+  * :breaking:`Breaking` Return ``true`` from ``Stream.waitForUpdateWithTimeout`` and ``Event.waitForWithTimeout`` on an update, and ``false`` on a timeout (:issue:`1122`)
+  * Wait for a stream's first value in ``Stream.get`` (:issue:`1122`)
+  * End a stream on an error from the server, and every stream with a ``StreamException`` when the connection closes or fails (:issue:`1122`)
+  * Throw ``StreamException`` when reading or waiting on a removed stream or event (:issue:`1122`)
+  * Add ``addEndCallback`` to streams and events, called with the exception that ends the stream (:issue:`1122`)
+  * Call a callback added to a stream or event straight away for a value or firing already received (:issue:`1122`)
+  * Fix ``Event.waitFor`` missing an earlier firing, and waking only one of two waiting threads (:issue:`1122`)
+  * Fix the stream update thread stopping on a value it cannot decode (:issue:`1122`)
+  * Fix a second removal of a stream removing a newer stream for the same call, and an error ending a stream throwing ``ClassCastException`` in its callbacks (:issue:`1122`)
+
+* Server side functions
+
+  * Add ``Connection.run`` and ``Connection.addEvent``, and a ``Connection.addStream`` overload taking a server side function (:issue:`1129`)
+  * Make ``RemoteObject.id`` public, for passing to ``Expression.constantObject`` (:issue:`1129`)
+
+* Types and errors
+
+  * :breaking:`Breaking` Throw the matching Java exception, such as ``NullPointerException``, ``NoSuchElementException`` or ``ArithmeticException``, for an error reported by any service, in place of ``RPCException`` (:issue:`1124`)
+  * :breaking:`Breaking` Support ``null`` for any nullable type, including a structure field, list element, tuple item and dictionary value. Primitives use the boxed type (``Integer``, ...) (:issue:`1017`, :issue:`1091`)
+  * Support structure types, generated as a class with a constructor, getters, ``equals``, ``hashCode`` and ``Comparable`` over its fields (:issue:`1066`)
+
+* Connections
+
+  * :breaking:`Breaking` Require Java 17 or later, for unix domain sockets (:issue:`1065`)
+  * Add ``Connection.newLocalInstance``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
+  * Add ``Connection.newInstance`` overloads taking a ``timeout``, bounding how long a connection is waited for (:issue:`1065`)
+  * Update to protobuf-java 4.36.2 (:issue:`1139`)
+
 
 
 Lua client
 ^^^^^^^^^^
 
-* :breaking:`Breaking` Rename ``conn.li_dar`` to ``conn.lidar``, for the ``LIDAR`` service (:issue:`1149`)
-* Support a nullable structure field, list element, tuple item and dictionary value, which is ``Types.none`` when absent (:issue:`1091`)
-* Support structure types, built from their field values in order and giving them named access (:issue:`1066`)
-* A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (:issue:`1066`)
-* :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
-* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket, on Linux and macOS (:issue:`1065`)
-* Fix a service failing to load when one of its procedures defaults to a member of an enumeration from a service that had not been loaded yet (:issue:`1044`)
-* Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` (:issue:`1045`)
-* Reduce the cost of a remote procedure call, writing and reading messages as bytes rather than as protocol buffer messages (:issue:`1056`)
-* Require luasocket 3.0 or later (:issue:`1060`)
-* Fix a type occasionally being built a second time, leaving an enumeration or class type in a service unusable (:issue:`1068`)
-* Fix the client assigning global variables, such as ``data`` and ``typ``, which clashed with a script's own (:issue:`1142`)
-* Support Lua 5.3 and 5.4, where 64-bit values decode to exact integers (:issue:`1142`)
-* Depend on ``lua-protobuf`` in place of ``protobuf`` (:issue:`1142`)
+* :breaking:`Breaking` Support ``Types.none`` for any nullable type, including a structure field, list element, tuple item and dictionary value (:issue:`1017`, :issue:`1091`)
 * :breaking:`Breaking` Return messages, such as the server status, as plain tables (:issue:`1142`)
+* :breaking:`Breaking` Rename ``conn.li_dar`` to ``conn.lidar``, for the ``LIDAR`` service (:issue:`1149`)
+* Support Lua 5.3 and 5.4, where 64-bit values decode to exact integers (:issue:`1142`)
+* Depend on ``lua-protobuf`` in place of ``protobuf``, and require luasocket 3.0 or later (:issue:`1142`, :issue:`1060`)
+* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket, on Linux and macOS (:issue:`1065`)
+* Support structure types, built from their field values in order with named access (:issue:`1066`)
+* Skip a service member naming an unknown type with a warning, and connect (:issue:`1066`)
+* Add ``krpc.limits``, the extremes of the numeric types kRPC carries, such as ``krpc.limits.SINT32_MAX`` (:issue:`1045`)
+* Reduce the cost of a remote procedure call (:issue:`1056`)
+* Fix a service failing to load when a default value names an enumeration of a service not yet loaded (:issue:`1044`)
+* Fix a type occasionally being built twice, leaving an enumeration or class type unusable (:issue:`1068`)
+* Fix the client assigning global variables, such as ``data`` and ``typ`` (:issue:`1142`)
 
 
 Python client
 ^^^^^^^^^^^^^
 
-* :breaking:`Breaking` Rename the ``LiDAR`` service class to ``LIDAR``, and ``conn.li_dar`` to ``conn.lidar`` in a client without stubs (:issue:`1149`)
-* Require protobuf 7.36.2 or later (:issue:`1139`)
-* Fix type checkers skipping the code after a name the service defines, such as ``conn.space_center.ReferenceFrame`` (:issue:`1134`)
-* Fix type checkers typing a stream value as ``object`` (:issue:`1134`)
-* Fix type checkers rejecting ``stream_port=None`` in ``krpc.connect`` (:issue:`1134`)
-* :breaking:`Breaking` Start a stream when it is added, removing ``Stream.start`` and ``Event.start`` (:issue:`1122`)
-* Call a callback added to a stream that has a value with that value straight away (:issue:`1122`)
-* Call a callback added to an event straight away for a firing not yet passed to a wait or another callback (:issue:`1122`)
-* Raise ``StreamError`` when reading or waiting on a removed stream or event (:issue:`1122`)
-* End a stream on an error from the server, which every later read and ``wait`` raises (:issue:`1122`)
-* End every stream with ``ConnectionError`` when the connection closes or fails, with the failure as its cause (:issue:`1122`, :issue:`315`)
-* Return ``True`` from ``Stream.wait`` and ``Event.wait`` on an update, and ``False`` on a timeout (:issue:`1122`)
-* Fix ``Event.wait`` missing a firing that arrived before it (:issue:`1122`)
-* Fix ``Event.wait`` waking only one of two threads waiting on one event (:issue:`1122`)
-* Add ``add_end_callback`` to streams and events, called with the exception that ends the stream (:issue:`1122`)
-* Fix the stream update thread stopping on a value it cannot decode (:issue:`1122`, :issue:`198`)
-* Fix a second removal of a stream removing a newer stream for the same call (:issue:`1122`)
-* Fix an error ending an event calling the event's callbacks (:issue:`1122`)
-* :breaking:`Breaking` Raise ``TypeError`` for a null where a value is required, reported by any service, in place of ``RPCError`` (:issue:`1124`)
-* :breaking:`Breaking` Raise ``KeyError`` for a missing key, and ``IndexError`` for an index out of range, reported by any service, in place of ``RPCError`` (:issue:`1124`)
-* :breaking:`Breaking` Raise ``ZeroDivisionError``, ``NotImplementedError``, ``TimeoutError`` and ``OverflowError`` for the matching errors reported by any service, such as ``AutoPilot.wait``, in place of ``RPCError`` (:issue:`1124`)
-* Add ``Client.compile``, which compiles a Python function or lambda into a server side function (:issue:`1127`)
-* Compile operators, comparisons, conditionals, comprehensions, f-strings, slices, string and collection operations, and calls to a subset of the builtins and the ``math`` module (:issue:`1127`)
-* Compile ``print`` to ``StdLib.print``, which writes a line to the game's log (:issue:`1127`)
-* Compile statements in a function with a body: ``if``, ``while``, ``for``, ``break``, ``continue``, ``del``, ``raise``, ``try``/``except``/``finally``, local variables and functions, assignment to remote properties and early ``return`` (:issue:`1127`)
-* Compile a captured variable declared ``nonlocal`` to a state variable, which keeps its value between runs of a compiled function (:issue:`1127`)
-* Raise ``FunctionCompilationError`` naming an unsupported construct (:issue:`1127`)
-* Add ``Client.run``, which runs a server side function or a Python function, with arguments, within a single physics tick and returns the value it produces (:issue:`1127`)
-* Stream the value of a server side function or a Python function with ``Client.add_stream`` and ``Client.stream`` (:issue:`1127`)
-* Add ``Client.add_event``, which creates an event from a server side function or a Python function (:issue:`1127`)
-* A dynamically created service escapes an enumeration member whose name is a python keyword, such as ``Class`` to ``class_``, matching the pre-generated stubs (:issue:`1094`)
-* Support a nullable structure field, list element, tuple item and dictionary value, which is ``None`` when absent (:issue:`1091`)
-* A service with pre-generated stubs also gains the class members that only the server declares (:issue:`1077`)
-* Support structure types. A value is a named tuple, and a tuple or list with one element per field is accepted where one is expected (:issue:`1066`)
-* A service definition naming an unknown type skips the member that names it with a warning, instead of failing to connect (:issue:`1066`)
-* :breaking:`Breaking` Support ``None`` for any nullable type (:issue:`1017`)
-* Fix a service failing to load when one of its procedures defaults to a member of an enumeration from a service that had not been loaded yet (:issue:`1044`)
-* Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` (:issue:`1045`)
-* Reduce the cost of a remote procedure call, caching type objects, dispatching on the type code, and reading a response in one system call (:issue:`1056`)
-* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
-* Add a ``timeout`` parameter to ``krpc.connect``, bounding how long a connection is waited for (:issue:`1065`)
+* Streams and events
+
+  * :breaking:`Breaking` Start a stream when it is added, removing ``Stream.start`` and ``Event.start`` (:issue:`1122`)
+  * Return ``True`` from ``Stream.wait`` and ``Event.wait`` on an update, and ``False`` on a timeout (:issue:`1122`)
+  * End a stream on an error from the server, and every stream with ``ConnectionError`` when the connection closes or fails (:issue:`1122`, :issue:`315`)
+  * Raise ``StreamError`` when reading or waiting on a removed stream or event (:issue:`1122`)
+  * Add ``add_end_callback`` to streams and events, called with the exception that ends the stream (:issue:`1122`)
+  * Call a callback added to a stream or event straight away for a value or firing already received (:issue:`1122`)
+  * Fix ``Event.wait`` missing an earlier firing, and waking only one of two waiting threads (:issue:`1122`)
+  * Fix the stream update thread stopping on a value it cannot decode (:issue:`1122`, :issue:`198`)
+  * Fix a second removal of a stream removing a newer stream for the same call, and an error ending an event calling its callbacks (:issue:`1122`)
+
+* Server side functions
+
+  * Add ``Client.compile``, which compiles a Python function or lambda into a server side function (:issue:`1127`)
+  * Compile operators, comprehensions, f-strings, slices, ``print``, a subset of the builtins and the ``math`` module, and the statements of a function body (:issue:`1127`)
+  * Compile a captured ``nonlocal`` variable to a state variable, which keeps its value between runs (:issue:`1127`)
+  * Raise ``FunctionCompilationError`` naming an unsupported construct (:issue:`1127`)
+  * Add ``Client.run`` and ``Client.add_event``, and stream a function with ``Client.add_stream`` and ``Client.stream`` (:issue:`1127`)
+
+* Types and errors
+
+  * :breaking:`Breaking` Raise the matching built-in exception, such as ``TypeError``, ``KeyError``, ``IndexError`` or ``TimeoutError``, for an error reported by any service, in place of ``RPCError`` (:issue:`1124`)
+  * :breaking:`Breaking` Support ``None`` for any nullable type, including a structure field, list element, tuple item and dictionary value (:issue:`1017`, :issue:`1091`)
+  * :breaking:`Breaking` Rename the ``LiDAR`` service class to ``LIDAR``, and ``conn.li_dar`` to ``conn.lidar`` in a client without stubs (:issue:`1149`)
+  * Support structure types as named tuples, accepting a tuple or list with one element per field (:issue:`1066`)
+  * Skip a service member naming an unknown type with a warning, and connect (:issue:`1066`)
+  * Add the class members only the server declares to a service with pre-generated stubs (:issue:`1077`)
+  * Escape an enumeration member named after a keyword in a dynamically created service, such as ``Class`` to ``class_``, as the stubs do (:issue:`1094`)
+  * Add ``krpc.limits``, the extremes of the numeric types kRPC carries, such as ``krpc.limits.SINT32_MAX`` (:issue:`1045`)
+  * Fix a service failing to load when a default value names an enumeration of a service not yet loaded (:issue:`1044`)
+  * Fix type checkers skipping code after a name the service defines, typing a stream value as ``object``, and rejecting ``stream_port=None`` (:issue:`1134`)
+
+* Connections
+
+  * Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
+  * Add a ``timeout`` parameter to ``krpc.connect``, bounding how long a connection is waited for (:issue:`1065`)
+  * Reduce the cost of a remote procedure call (:issue:`1056`)
+  * Require protobuf 7.36.2 or later (:issue:`1139`)
+
 
 
 krpctools
 ^^^^^^^^^
 
-* Read the definitions of several services in ``krpc-clientgen``, from JSON files alongside DLLs (:issue:`1148`)
 * :breaking:`Breaking` Require ``--include`` in ``krpc-clientgen`` for each service whose types a C++ or C nano service uses, giving the path of its header (:issue:`1150`)
-* :breaking:`Breaking` Run ``krpc-servicedefs`` and ``TestServer`` on the .NET 10 runtime, in place of .NET 8 (:issue:`1139`)
-* Generate python stubs that declare a service's classes, enumerations, structures and exceptions for type checkers (:issue:`1134`)
-* Fix ``krpc-clientgen`` failing to load a generator from a file (:issue:`1134`)
 * :breaking:`Breaking` Generate C# and C++ stubs that mark the calls returning a stream or an event, which need a v0.7.0 client (:issue:`1122`)
-* Fix the python stubs for a service that names a type the KRPC service defines failing to import (:issue:`1094`)
-* Fix a generated python exception type not naming the service and class it was built from (:issue:`1094`)
-* Fix a python documentation reference to a member whose name is a keyword naming the unescaped form (:issue:`1094`)
-* Fix C++ documentation escaping a keyword member name twice in a declaration and not at all in a cross reference (:issue:`1094`)
-* Fix a generated Java enumeration member carrying an escaping suffix, such as ``DOUBLE__`` in place of ``DOUBLE`` (:issue:`1094`)
-* Generate and document the nullable structure fields and collection elements a service defines, for every client (:issue:`1091`)
-* Generate and document the structure types a service defines, for every client (:issue:`1066`)
-* :breaking:`Breaking` A generator module given to ``krpc-clientgen`` by path is constructed with the definitions of every service that was loaded, rather than those of the single service it generates (:issue:`1044`)
-* Support for nullable values across all types (:issue:`1017`)
-* Generate an enumeration default value as the member it names, instead of a cast of its integer value (:issue:`1044`)
-* Fix generating a default value whose type contains an enumeration, such as a list of them, failing (:issue:`1044`)
-* Fix Lua documentation writing default values in Python's syntax rather than Lua's (:issue:`1044`)
-* Fix C++ documentation writing a collection default value as a constructor call rather than a braced initializer list (:issue:`1044`)
-* A default value naming an undeclared enumeration value is reported naming the service, procedure and parameter it came from (:issue:`1044`)
-* The special values of the numeric types - NaN, the infinities and the extremes of the integer and floating point ranges - can be used as parameter default values. Generated code and documentation name them as the target language does, such as ``double.NaN`` in C#. Python and Lua name the new ``krpc.limits`` constants (:issue:`1045`)
-* Fix a 32-bit float default value being written as the full decimal expansion of the double it widens to, so ``0.1f`` read as ``0.10000000149011612`` (:issue:`1045`)
+* :breaking:`Breaking` Construct a generator module given to ``krpc-clientgen`` by path with the definitions of every loaded service (:issue:`1044`)
+* :breaking:`Breaking` Run ``krpc-servicedefs`` and ``TestServer`` on the .NET 10 runtime, in place of .NET 8 (:issue:`1139`)
+* Generate and document the structure types and nullable values a service defines, for every client (:issue:`1066`, :issue:`1017`, :issue:`1091`)
+* Read the definitions of several services in ``krpc-clientgen``, from JSON files alongside DLLs (:issue:`1148`)
+* Generate python stubs that declare a service's classes, enumerations, structures and exceptions for type checkers (:issue:`1134`)
+* Allow NaN, the infinities and the numeric extremes as parameter default values, named as the target language names them (:issue:`1045`)
+* Generate an enumeration default value as the member it names, and report an undeclared one with its service, procedure and parameter (:issue:`1044`)
+* Fix default values containing an enumeration failing to generate, and Lua and C++ documentation writing default values in the wrong syntax (:issue:`1044`)
+* Fix a 32-bit float default value being written in full, so ``0.1f`` read as ``0.10000000149011612`` (:issue:`1045`)
+* Fix the escaping of member names that are keywords in the generated Python, C++ and Java code and documentation (:issue:`1094`)
+* Fix the python stubs for a service that names a type the KRPC service defines failing to import, and its exception types naming no service (:issue:`1094`)
+* Fix ``krpc-clientgen`` failing to load a generator from a file (:issue:`1134`)
 
 
 v0.6.0
