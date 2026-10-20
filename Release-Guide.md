@@ -18,10 +18,12 @@ the fork the first time if it does not exist.
 
 ## 1. Prepare
 
-1. Bump `version` in `config.bzl`, make sure every component with user-facing changes has a
-   `## [x.y.z] - unreleased` section in its `CHANGELOG.md` (components without user-facing changes
-   get no section and are omitted from the release notes), and commit and push to `main`. `30-tag.py`
-   drops the ` - unreleased` suffix as part of tagging.
+1. Check that `version` in `config.bzl` is the version being released. Between releases it names
+   the version being worked towards, set by `80-bump-version.py` at the end of the last release.
+   Make sure every component with user-facing changes has a `## [vx.y.z] - unreleased` section in
+   its `CHANGELOG.md`, and push any fixes to `main`. Components without user-facing changes get no
+   section and are omitted from the release notes. `30-tag.py` drops the ` - unreleased` suffix as
+   part of tagging.
 2. `tools/release/10-preflight.py` — checks the tree is clean and in sync with `origin/main`,
    reports which components have changelog sections for the new version, and checks the needed
    tools are installed and every credential is present. Read-only, so run it as often as you like.
@@ -77,3 +79,9 @@ not landed within the wait (inflation can lag by a few hours), re-run the step l
     * Update the forum release and development threads, and post an update notice to the release
       thread.
     * Post on Discord and Reddit.
+
+## 6. Start the next version
+
+18. `tools/release/80-bump-version.py` - sets `version` in `config.bzl` to the next version to
+    work towards, then commits and pushes to `main`. Builds from `main` are then stamped as
+    pre-releases of that version.
