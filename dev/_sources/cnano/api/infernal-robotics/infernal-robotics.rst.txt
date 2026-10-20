@@ -7,7 +7,7 @@ InfernalRobotics
 
 
 This service provides functionality to interact with
-`Infernal Robotics <https://forum.kerbalspaceprogram.com/index.php?/topic/184787-infernal-robotics-next/>`_.
+`Infernal Robotics <https://forum.kerbalspaceprogram.com/topic/184787-infernal-robotics-next/>`_.
 
 
 .. function:: krpc_error_t krpc_InfernalRobotics_Available(krpc_connection_t connection, bool * returnValue)

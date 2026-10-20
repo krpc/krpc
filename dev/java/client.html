@@ -706,7 +706,7 @@
 It requires Java 17 or later.</p>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
-<p>The kRPC client library depends on the <a class="reference external" href="https://github.com/google/protobuf/tree/master/java">protobuf</a> and <a class="reference external" href="http://www.javatuples.org">javatuples</a> libraries. A prebuilt jar for protobuf is available via <a class="reference external" href="http://search.maven.org/#search|ga|1|g%3A%22com.google.protobuf%22%20a%3A%22protobuf-java%22">Maven</a>.</p>
+<p>The kRPC client library depends on the <a class="reference external" href="https://github.com/protocolbuffers/protobuf/tree/main/java">protobuf</a> and <a class="reference external" href="https://github.com/arxila/javatuples">javatuples</a> libraries. A prebuilt jar for protobuf is available via <a class="reference external" href="https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java">Maven</a>.</p>
 <p>The following example program connects to the server, queries it for its version and prints it out:</p>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
@@ -726,7 +726,7 @@ It requires Java 17 or later.</p>
 </div>
 <p>To compile this program using javac on the command line, save the source as <code class="docutils literal notranslate"><span class="pre">Example.java</span></code> and run
 the following:</p>
-<pre class="literal-block">javac -cp krpc-java-0.7.0-848-c9d067e.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java</pre>
+<pre class="literal-block">javac -cp krpc-java-0.7.0-851-907f0f0.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java</pre>
 <p>Note that you may need to change the paths to the JAR files.</p>
 <section id="connecting-to-the-server">
 <h3>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h3>

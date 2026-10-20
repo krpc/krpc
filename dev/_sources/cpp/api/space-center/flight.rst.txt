@@ -490,7 +490,7 @@ Flight
 
          The position, velocity, rotation and angular velocity arguments, and the returned
          torque, are all expressed in reference frame :class:`ReferenceFrame`. When
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_
          is installed the angular velocity argument is ignored.
          Atmospheric temperature and density are evaluated at the current universal time.
 
@@ -529,7 +529,7 @@ Flight
 
          This is an instantaneous rigid-body result based on the vessel's current parts,
          drag cubes and control-surface state. When
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_
          is installed the angular velocity and *ut* arguments are ignored.
 
    .. function:: std::tuple<double, double, double> lift()
@@ -625,7 +625,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. function:: float true_air_speed()
 
@@ -685,7 +685,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. function:: float drag_coefficient()
 
@@ -697,7 +697,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. function:: float lift_coefficient()
 
@@ -709,7 +709,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. function:: float ballistic_coefficient()
 
@@ -720,7 +720,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. function:: float thrust_specific_fuel_consumption()
 
@@ -734,7 +734,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
 
 

@@ -22,4 +22,4 @@ out the signal delay to the active vessel.
 
 .. literalinclude:: /scripts/api/remote-tech/RemoteTechExample.c
 
-.. _RemoteTech: https://forum.kerbalspaceprogram.com/index.php?/topic/139167-13-remotetech-v188-2017-09-03/
+.. _RemoteTech: https://forum.kerbalspaceprogram.com/topic/139167-111-remotetech-v199-2020-12-19/

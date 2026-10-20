@@ -23,4 +23,4 @@ servos to the right for 1 second.
 
 .. literalinclude:: /scripts/api/infernal-robotics/InfernalRoboticsExample.lua
 
-.. _Infernal Robotics Next: https://forum.kerbalspaceprogram.com/index.php?/topic/170898-wip-infernal-robotics-next/
+.. _Infernal Robotics Next: https://forum.kerbalspaceprogram.com/topic/170898-wip-infernal-robotics-next/

@@ -543,21 +543,21 @@ Control
 
       Returns ``True`` if the given action group is enabled.
 
-      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
       :rtype: boolean
 
    .. method:: set_action_group(group, state)
 
       Sets the state of the given action group.
 
-      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
       :param boolean state:
 
    .. method:: toggle_action_group(group)
 
       Toggles the state of the given action group.
 
-      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
    .. method:: get_action_group_actions(group)
 
@@ -565,7 +565,7 @@ Control
       Each entry identifies the part, the part module, and the action's name and identifier.
       Returns an empty list if no actions are assigned to the group.
 
-      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
       :rtype: List
 
       .. note::

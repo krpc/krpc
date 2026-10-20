@@ -383,7 +383,7 @@ Part
          The name tag part module is provided by
          `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
          0.5 or later, or by
-         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_,
+         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
          which shares this string.
 
    .. attribute:: flag_url
@@ -1414,7 +1414,7 @@ Part
    .. attribute:: has_real_fuels_tank
 
       Whether the part is a fuel tank managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_.
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
       The remaining properties in this section are only available when it is.
 
       :Attribute: Read-only, cannot be set
@@ -3021,7 +3021,7 @@ Engine
    .. attribute:: has_real_fuels
 
       Whether the engine is managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_.
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
       The remaining properties in this section are only available when it is.
 
       :Attribute: Read-only, cannot be set

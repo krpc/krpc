@@ -604,7 +604,7 @@ Control
 
       Returns ``True`` if the given action group is enabled.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
       :rtype: bool
       :Game Scenes: Flight
 
@@ -612,7 +612,7 @@ Control
 
       Sets the state of the given action group.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
       :param bool state:
       :Game Scenes: Flight
 
@@ -620,7 +620,7 @@ Control
 
       Toggles the state of the given action group.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
       :Game Scenes: Flight
 
    .. method:: get_action_group_actions(group)
@@ -629,7 +629,7 @@ Control
       Each entry identifies the part, the part module, and the action's name and identifier.
       Returns an empty list if no actions are assigned to the group.
 
-      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param int group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
       :rtype: list(:class:`ActionGroupAction`)
       :Game Scenes: Flight
 

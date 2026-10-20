@@ -559,7 +559,7 @@ Control
 
       :Parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       :Game Scenes: Flight
 
@@ -569,7 +569,7 @@ Control
 
       :Parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
 
       :Game Scenes: Flight
@@ -580,7 +580,7 @@ Control
 
       :Parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       :Game Scenes: Flight
 
@@ -592,7 +592,7 @@ Control
 
       :Parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       :Game Scenes: Flight
 

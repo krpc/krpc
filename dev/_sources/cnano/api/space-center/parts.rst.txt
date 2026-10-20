@@ -327,7 +327,7 @@ Part
          The name tag part module is provided by
          `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
          0.5 or later, or by
-         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_,
+         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
          which shares this string.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_FlagURL(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Part_t instance)
@@ -1218,7 +1218,7 @@ Part
    .. function:: krpc_error_t krpc_SpaceCenter_Part_HasRealFuelsTank(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Part_t instance)
 
       Whether the part is a fuel tank managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_.
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
       The remaining properties in this section are only available when it is.
 
    
@@ -2658,7 +2658,7 @@ Engine
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_HasRealFuels(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Engine_t instance)
 
       Whether the engine is managed by
-      `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_.
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
       The remaining properties in this section are only available when it is.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
