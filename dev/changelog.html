@@ -971,6 +971,7 @@
 <li><p>Throw <code class="docutils literal notranslate"><span class="pre">FunctionCompilationException</span></code> naming a construct a lambda cannot contain, including a call that depends on the current culture (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1128">#1128</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">Connection.Run</span></code> and <code class="docutils literal notranslate"><span class="pre">Connection.AddEvent</span></code>, and a <code class="docutils literal notranslate"><span class="pre">Connection.AddStream&lt;T&gt;</span></code> overload taking a server side function (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1128">#1128</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Compile a lambda given to <code class="docutils literal notranslate"><span class="pre">AddStream</span></code>, so the remote calls in its arguments are evaluated on every update (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1128">#1128</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Replace <code class="docutils literal notranslate"><span class="pre">RemoteObject.id</span></code> with <code class="docutils literal notranslate"><span class="pre">RemoteObject.GetObjectId</span></code>, which returns the id of a remote object for <code class="docutils literal notranslate"><span class="pre">Expression.ConstantObject</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1160">#1160</a>)</p></li>
 </ul>
 </li>
 <li><p>Types and errors</p>
@@ -1017,6 +1018,7 @@
 <ul>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc::run</span></code>, which runs a server side function within a single physics tick and returns its value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1129">#1129</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc::add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">krpc::add_event</span></code>, which stream a server side function and create an event from one (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1129">#1129</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc::get_object_id</span></code>, which returns the id of a remote object for <code class="docutils literal notranslate"><span class="pre">Expression::constant_object</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1160">#1160</a>)</p></li>
 </ul>
 </li>
 <li><p>Types</p>
@@ -1059,7 +1061,7 @@
 <li><p>Server side functions</p>
 <ul>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">Connection.run</span></code> and <code class="docutils literal notranslate"><span class="pre">Connection.addEvent</span></code>, and a <code class="docutils literal notranslate"><span class="pre">Connection.addStream</span></code> overload taking a server side function (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1129">#1129</a>)</p></li>
-<li><p>Make <code class="docutils literal notranslate"><span class="pre">RemoteObject.id</span></code> public, for passing to <code class="docutils literal notranslate"><span class="pre">Expression.constantObject</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1129">#1129</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">RemoteObject.getObjectId</span></code>, which returns the id of a remote object for <code class="docutils literal notranslate"><span class="pre">Expression.constantObject</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1160">#1160</a>)</p></li>
 </ul>
 </li>
 <li><p>Types and errors</p>
@@ -1091,6 +1093,7 @@
 <li><p>Support structure types, built from their field values in order with named access (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
 <li><p>Skip a service member naming an unknown type with a warning, and connect (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1066">#1066</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code>, the extremes of the numeric types kRPC carries, such as <code class="docutils literal notranslate"><span class="pre">krpc.limits.SINT32_MAX</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1045">#1045</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc.get_object_id</span></code>, which returns the id of a remote object for <code class="docutils literal notranslate"><span class="pre">Expression.constant_object</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1160">#1160</a>)</p></li>
 <li><p>Reduce the cost of a remote procedure call (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1056">#1056</a>)</p></li>
 <li><p>Fix a service failing to load when a default value names an enumeration of a service not yet loaded (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
 <li><p>Fix a type occasionally being built twice, leaving an enumeration or class type unusable (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1068">#1068</a>)</p></li>
@@ -1120,6 +1123,7 @@
 <li><p>Compile a captured <code class="docutils literal notranslate"><span class="pre">nonlocal</span></code> variable to a state variable, which keeps its value between runs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1127">#1127</a>)</p></li>
 <li><p>Raise <code class="docutils literal notranslate"><span class="pre">FunctionCompilationError</span></code> naming an unsupported construct (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1127">#1127</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">Client.run</span></code> and <code class="docutils literal notranslate"><span class="pre">Client.add_event</span></code>, and stream a function with <code class="docutils literal notranslate"><span class="pre">Client.add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">Client.stream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1127">#1127</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc.get_object_id</span></code>, which returns the id of a remote object for <code class="docutils literal notranslate"><span class="pre">Expression.constant_object</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1160">#1160</a>)</p></li>
 </ul>
 </li>
 <li><p>Types and errors</p>

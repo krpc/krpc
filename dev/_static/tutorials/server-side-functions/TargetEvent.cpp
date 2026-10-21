@@ -13,7 +13,7 @@ int main() {
   auto target = sc.target_vessel_call();
   auto expr = Expr::equal(conn,
     Expr::call(conn, target),
-    Expr::constant_object(conn, some_vessel._id));
+    Expr::constant_object(conn, krpc::get_object_id(some_vessel)));
   auto event = krpc::add_event(expr);
   // [/docs]
 }

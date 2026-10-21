@@ -1396,6 +1396,20 @@ expression API’s <code class="docutils literal notranslate"><span class="pre">
 </dd></dl>
 
 <dl class="cs class">
+<dt class="sig sig-object cs" id="class-RemoteObject">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">RemoteObject</span></span><a class="headerlink" href="#class-RemoteObject" title="Link to this definition">#</a></dt>
+<dd><p>The base class for remote objects.</p>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-RemoteObject.GetObjectId">
+<span id="function-RemoteObject.GetObjectId(RemoteObject)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">GetObjectId</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="#class-RemoteObject" title="class: RemoteObject"><span class="pre">RemoteObject</span></a><span class="w"> </span><span class="n"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-RemoteObject.GetObjectId" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of a remote object on the server, e.g. to pass to
+<a class="reference internal" href="api/krpc/expressions.html#function-KRPC.Client.Services.KRPC.Expression.ConstantObject" title="function: KRPC.Client.Services.KRPC.Expression.ConstantObject"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">KRPC.Client.Services.KRPC.Expression.ConstantObject</span></code></a>. Throws an
+<code class="docutils literal notranslate"><span class="pre">ArgumentNullException</span></code> if the object is null.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs class">
 <dt class="sig sig-object cs" id="class-FunctionCompilationException">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">FunctionCompilationException</span></span><a class="headerlink" href="#class-FunctionCompilationException" title="Link to this definition">#</a></dt>
 <dd><p>Thrown when a lambda expression cannot be compiled into a server side function.</p>

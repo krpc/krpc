@@ -1641,14 +1641,14 @@
         <li><a href="lua/api/space-center/vessel.html#SpaceCenter.Vessel.bounding_box">(Vessel method)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.bounding_box">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.BoundingBox">BoundingBox (class in SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.BoundingBox">[1]</a>
 
       <ul>
         <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.BoundingBox">(Java class)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.BoundingBox.BoundingBox(org.javatuples.Triplet, org.javatuples.Triplet)">BoundingBox(org.javatuples.Triplet, org.javatuples.Triplet) (Java constructor)</a>
 </li>
       <li><a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.EditorVessel.boundingBox(ReferenceFrame)">boundingBox(ReferenceFrame) (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.boundingBox(ReferenceFrame)">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.boundingBox(ReferenceFrame)">[2]</a>
@@ -1700,6 +1700,8 @@
         <li><a href="python/client.html#krpc.connect">krpc.connect()</a>
 </li>
         <li><a href="python/client.html#krpc.connect_local">krpc.connect_local()</a>
+</li>
+        <li><a href="python/client.html#krpc.get_object_id">krpc.get_object_id()</a>
 </li>
       </ul></li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.buoyancy_multiplier">buoyancy_multiplier (Part attribute)</a>
@@ -4849,10 +4851,10 @@
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getLineSpacing()">getLineSpacing() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getLineSpacing()">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLocalPosition()">getLocalPosition() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getLocked()">getLocked() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticPiston.getLocked()">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getLocked()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getLocked()">[3]</a>
@@ -5018,6 +5020,8 @@
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.getNullable()">getNullable() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/stage.html#krpc.client.services.SpaceCenter.Stage.getNumber()">getNumber() (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.RemoteObject.getObjectId(RemoteObject)">getObjectId(RemoteObject) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getOceanDensity()">getOceanDensity() (Java method)</a>
 </li>
@@ -5961,8 +5965,6 @@
         <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.id">(Alarm attribute)</a>, <a href="python/api/space-center/alarms.html#SpaceCenter.Alarm.id">[1]</a>
 </li>
         <li><a href="python/api/krpc/krpc.html#KRPC.ClientInfo.id">(ClientInfo attribute)</a>
-</li>
-        <li><a href="java/client.html#krpc.client.RemoteObject.id">(Java field)</a>
 </li>
         <li><a href="python/api/space-center/parts.html#SpaceCenter.ScienceSubject.id">(ScienceSubject attribute)</a>
 </li>
@@ -11430,6 +11432,15 @@
 </li>
       <li><a href="python/client.html#krpc.event.Event">krpc.event.Event (built-in class)</a>
 </li>
+      <li>
+    krpc.get_object_id()
+
+      <ul>
+        <li><a href="python/client.html#krpc.get_object_id">built-in function</a>
+</li>
+      </ul></li>
+      <li><a href="lua/client.html#krpc.krpc.get_object_id">krpc.get_object_id() (in module krpc)</a>
+</li>
       <li><a href="lua/client.html#krpc.krpc.Client.krpc">krpc.krpc.Client.krpc (attribute)</a>
 </li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ClientInfo.address">KRPC.KRPC.ClientInfo.address (attribute)</a>
@@ -11590,9 +11601,13 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc5Event4waitEd">krpc::Event::wait (C++ function)</a>
 </li>
+      <li><a href="cpp/client.html#_CPPv4I0EN4krpc13get_object_idE8uint64_tRK6ObjectI1TE">krpc::get_object_id (C++ function)</a>
+</li>
       <li><a href="cpp/client.html#_CPPv4N4krpc4hashE">krpc::hash (C++ class)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4I0EN4krpc10hash_valueENSt6size_tERK1T">krpc::hash_value (C++ function)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4I0EN4krpc6ObjectE">krpc::Object (C++ class)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc14RecursiveMutexE">krpc::RecursiveMutex (C++ class)</a>
 </li>
@@ -14942,12 +14957,12 @@
 </li>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter8GameMode7sandboxE">krpc::services::SpaceCenter::GameMode::sandbox (C++ enumerator)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter8GameMode8scenarioE">krpc::services::SpaceCenter::GameMode::scenario (C++ enumerator)</a>
 </li>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter8GameMode22scenario_non_resumableE">krpc::services::SpaceCenter::GameMode::scenario_non_resumable (C++ enumerator)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter8GameMode7scienceE">krpc::services::SpaceCenter::GameMode::science (C++ enumerator)</a>
 </li>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter8GameMode15science_sandboxE">krpc::services::SpaceCenter::GameMode::science_sandbox (C++ enumerator)</a>
@@ -25500,7 +25515,13 @@
 </li>
       <li><a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.remainingBurnVector(ReferenceFrame)">remainingBurnVector(ReferenceFrame) (Java method)</a>
 </li>
-      <li><a href="java/client.html#krpc.client.RemoteObject">RemoteObject (Java class)</a>
+      <li><a href="csharp/client.html#class-RemoteObject">RemoteObject (C# class)</a>
+
+      <ul>
+        <li><a href="java/client.html#krpc.client.RemoteObject">(Java class)</a>
+</li>
+      </ul></li>
+      <li><a href="csharp/client.html#function-RemoteObject.GetObjectId">RemoteObject.GetObjectId (C# function)</a>
 </li>
       <li>
     RemoteTech
@@ -25615,10 +25636,10 @@
         <li><a href="lua/api/space-center/waypoints.html#SpaceCenter.Waypoint.remove">(Waypoint method)</a>, <a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.remove">[1]</a>
 </li>
       </ul></li>
-      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.remove(Connection, Expression, Expression)">remove(Connection, Expression, Expression) (Java method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.remove(Connection, Expression, Expression)">remove(Connection, Expression, Expression) (Java method)</a>
+</li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.remove_at">remove_at() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.remove_at">[1]</a>
 </li>
       <li><a href="python/client.html#krpc.event.Event.remove_callback">remove_callback() (krpc.event.Event method)</a>

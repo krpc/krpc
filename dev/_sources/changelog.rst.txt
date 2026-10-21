@@ -361,6 +361,7 @@ C# client
   * Throw ``FunctionCompilationException`` naming a construct a lambda cannot contain, including a call that depends on the current culture (:issue:`1128`)
   * Add ``Connection.Run`` and ``Connection.AddEvent``, and a ``Connection.AddStream<T>`` overload taking a server side function (:issue:`1128`)
   * :breaking:`Breaking` Compile a lambda given to ``AddStream``, so the remote calls in its arguments are evaluated on every update (:issue:`1128`)
+  * :breaking:`Breaking` Replace ``RemoteObject.id`` with ``RemoteObject.GetObjectId``, which returns the id of a remote object for ``Expression.ConstantObject`` (:issue:`1160`)
 
 * Types and errors
 
@@ -403,6 +404,7 @@ C++ client
 
   * Add ``krpc::run``, which runs a server side function within a single physics tick and returns its value (:issue:`1129`)
   * Add ``krpc::add_stream`` and ``krpc::add_event``, which stream a server side function and create an event from one (:issue:`1129`)
+  * Add ``krpc::get_object_id``, which returns the id of a remote object for ``Expression::constant_object`` (:issue:`1160`)
 
 * Types
 
@@ -441,7 +443,7 @@ Java client
 * Server side functions
 
   * Add ``Connection.run`` and ``Connection.addEvent``, and a ``Connection.addStream`` overload taking a server side function (:issue:`1129`)
-  * Make ``RemoteObject.id`` public, for passing to ``Expression.constantObject`` (:issue:`1129`)
+  * Add ``RemoteObject.getObjectId``, which returns the id of a remote object for ``Expression.constantObject`` (:issue:`1160`)
 
 * Types and errors
 
@@ -470,6 +472,7 @@ Lua client
 * Support structure types, built from their field values in order with named access (:issue:`1066`)
 * Skip a service member naming an unknown type with a warning, and connect (:issue:`1066`)
 * Add ``krpc.limits``, the extremes of the numeric types kRPC carries, such as ``krpc.limits.SINT32_MAX`` (:issue:`1045`)
+* Add ``krpc.get_object_id``, which returns the id of a remote object for ``Expression.constant_object`` (:issue:`1160`)
 * Reduce the cost of a remote procedure call (:issue:`1056`)
 * Fix a service failing to load when a default value names an enumeration of a service not yet loaded (:issue:`1044`)
 * Fix a type occasionally being built twice, leaving an enumeration or class type unusable (:issue:`1068`)
@@ -498,6 +501,7 @@ Python client
   * Compile a captured ``nonlocal`` variable to a state variable, which keeps its value between runs (:issue:`1127`)
   * Raise ``FunctionCompilationError`` naming an unsupported construct (:issue:`1127`)
   * Add ``Client.run`` and ``Client.add_event``, and stream a function with ``Client.add_stream`` and ``Client.stream`` (:issue:`1127`)
+  * Add ``krpc.get_object_id``, which returns the id of a remote object for ``Expression.constant_object`` (:issue:`1160`)
 
 * Types and errors
 

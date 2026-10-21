@@ -378,6 +378,16 @@ Client API Reference
    ``krpc::services::KRPC::ArgumentException`` if the function does not evaluate to a boolean
    value or has parameters.
 
+.. class:: template <typename T> Object
+
+   The base class for remote objects.
+
+.. function:: template <typename T> uint64_t get_object_id(const Object<T>& object)
+
+   The identifier of a remote object on the server, e.g. to pass to
+   :func:`krpc::services::KRPC::Expression::constant_object`. Throws ``std::invalid_argument`` for
+   a null object, whose identifier is 0.
+
 .. class:: Client
 
    This class provides the interface for communicating with the server. It is used by service class

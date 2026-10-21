@@ -978,9 +978,10 @@ particular vessel:
          :end-before: [/docs]
          :dedent:
 
-An object is identified by its identifier in the communication protocol, which each client holds
-on its remote objects. In Python it is the internal attribute ``_object_id``. The compilers embed
-a captured remote object this way.
+:meth:`Expression.constant_object` takes the object's identifier in the communication protocol.
+Each client has a function that returns it: ``krpc.get_object_id`` in Python and Lua, ``RemoteObject.GetObjectId`` in
+C#, ``krpc::get_object_id`` in C++ and ``RemoteObject.getObjectId`` in Java. The compilers embed a
+captured remote object this way.
 
 Exceptions in the Expression API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

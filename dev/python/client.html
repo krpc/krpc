@@ -1360,6 +1360,21 @@ support.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="krpc.get_object_id">
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">get_object_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.get_object_id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of a remote object on the server, e.g. to pass to
+<a class="reference internal" href="api/krpc/expressions.html#KRPC.Expression.constant_object" title="KRPC.Expression.constant_object"><code class="xref py py-meth docutils literal notranslate"><span class="pre">KRPC.Expression.constant_object()</span></code></a>. Raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if the object is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – The remote object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="krpc.client.Client">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.client.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><a class="headerlink" href="#krpc.client.Client" title="Link to this definition">#</a></dt>

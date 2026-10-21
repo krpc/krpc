@@ -726,7 +726,7 @@ It requires Java 17 or later.</p>
 </div>
 <p>To compile this program using javac on the command line, save the source as <code class="docutils literal notranslate"><span class="pre">Example.java</span></code> and run
 the following:</p>
-<pre class="literal-block">javac -cp krpc-java-0.7.0-864-4fe8e05.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java</pre>
+<pre class="literal-block">javac -cp krpc-java-0.7.0-872-8e45275.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java</pre>
 <p>Note that you may need to change the paths to the JAR files.</p>
 <section id="connecting-to-the-server">
 <h3>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h3>
@@ -1489,11 +1489,12 @@ the callback was added.</p>
 <dt class="sig sig-object java" id="krpc.client.RemoteObject">
 <span class="pre">abstract</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">RemoteObject</span></span><a class="headerlink" href="#krpc.client.RemoteObject" title="Link to this definition">#</a></dt>
 <dd><p>The abstract base class for all remote objects.</p>
-<dl class="java field">
-<dt class="sig sig-object java" id="krpc.client.RemoteObject.id">
- <span class="pre">long</span> <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#krpc.client.RemoteObject.id" title="Link to this definition">#</a></dt>
-<dd><p>The identifier of the object on the server, e.g. to pass to
-<code class="docutils literal notranslate"><span class="pre">KRPC.Expression.constantObject</span></code>.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.RemoteObject.getObjectId(RemoteObject)">
+<span class="pre">static</span> <span class="pre">long</span> <span class="sig-name descname"><span class="pre">getObjectId</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.RemoteObject" title="krpc.client.RemoteObject"><span class="pre">RemoteObject</span></a><em> <span class="pre">obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.RemoteObject.getObjectId(RemoteObject)" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of a remote object on the server, e.g. to pass to
+<a class="reference internal" href="api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantObject(Connection, long)" title="krpc.client.services.KRPC.Expression.constantObject(Connection, long)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">krpc.client.services.KRPC.Expression.constantObject(Connection,</span> <span class="pre">long)</span></code></a>.
+Throws a <code class="docutils literal notranslate"><span class="pre">NullPointerException</span></code> if the object is null.</p>
 </dd></dl>
 
 </dd></dl>
