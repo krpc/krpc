@@ -26,6 +26,8 @@ typedef struct {
 /* The most room the size a message is prefixed with can need in front of it */
 #define KRPC_SIZE_PREFIX_MAX 5
 
+#define KRPC_PROTOCOL_VERSION 1
+
 /* Where a message is encoded before it is sent, for the common case of one that fits. Written
    to through a callback of its own rather than by pb_ostream_from_buffer, so that a message too
    big for the buffer is told apart from one that failed to encode: only the first is worth
@@ -70,6 +72,7 @@ krpc_error_t krpc_connect(krpc_connection_t connection, const char *client_name)
     krpc_schema_ConnectionRequest *request = &message;
 #endif
     request->type = krpc_schema_ConnectionRequest_Type_RPC;
+    request->protocol_version = KRPC_PROTOCOL_VERSION;
     request->client_name.funcs.encode = &krpc_encode_callback_cstring;
     request->client_name.arg = (void *)client_name;
     if (krpc_send_message(connection, fields, &message) != KRPC_OK) {
@@ -91,6 +94,10 @@ krpc_error_t krpc_connect(krpc_connection_t connection, const char *client_name)
     if (response.status != krpc_schema_ConnectionResponse_Status_OK) {
       krpc_close(connection);
       KRPC_RETURN_ERROR(CONNECTION_FAILED, "connection denied by server");
+    }
+    if (response.protocol_version != KRPC_PROTOCOL_VERSION) {
+      krpc_close(connection);
+      KRPC_RETURN_ERROR(CONNECTION_FAILED, "server does not support the client's protocol version");
     }
   }
   return KRPC_OK;

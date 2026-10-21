@@ -22,6 +22,7 @@ DEFAULT_STREAM_PORT = 50001
 # connection is made
 DEFAULT_RPC_PATH = ""
 DEFAULT_STREAM_PATH = ""
+PROTOCOL_VERSION = 1
 
 
 def _default_path(name: str) -> str:
@@ -106,6 +107,7 @@ def _connect(
     rpc_connection.connect()
     request = ConnectionRequest()
     request.type = ConnectionRequest.RPC
+    request.protocol_version = PROTOCOL_VERSION
     if name is not None:
         request.client_name = name
     rpc_connection.send_message(request)
@@ -114,6 +116,11 @@ def _connect(
     )
     if response.status != ConnectionResponse.OK:
         raise ConnectionError(response.message)
+    if response.protocol_version != PROTOCOL_VERSION:
+        raise ConnectionError(
+            f"The server does not support protocol version {PROTOCOL_VERSION}. Use a "
+            "client from the same kRPC release as the server."
+        )
     client_identifier = response.client_identifier
 
     # Connect to Stream server
@@ -121,6 +128,7 @@ def _connect(
         stream_connection.connect()
         request = ConnectionRequest()
         request.type = ConnectionRequest.STREAM
+        request.protocol_version = PROTOCOL_VERSION
         request.client_identifier = client_identifier
         stream_connection.send_message(request)
         response = cast(

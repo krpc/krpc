@@ -81,6 +81,7 @@ class StandInServer implements AutoCloseable {
       KRPC.ConnectionResponse.newBuilder()
           .setStatus(status)
           .setMessage(message)
+          .setProtocolVersion(1)
           .setClientIdentifier(ByteString.copyFrom(new byte[16]))
           .build()
           .writeDelimitedTo(output);

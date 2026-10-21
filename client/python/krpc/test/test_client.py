@@ -22,6 +22,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         status = self.conn.krpc.get_status()
         self.assertRegex(status.version, r"^[0-9]+\.[0-9]+\.[0-9]+$")
         self.assertGreater(status.bytes_read, 0)
+        self.assertEqual(1, status.protocol_version)
 
     def test_clients(self) -> None:
         client_id = self.conn.krpc.get_client_id()

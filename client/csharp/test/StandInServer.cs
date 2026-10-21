@@ -86,6 +86,7 @@ namespace KRPC.Client.Test
                     var response = new ConnectionResponse ();
                     response.Status = Status;
                     response.Message = Message;
+                    response.ProtocolVersion = 1;
                     response.ClientIdentifier = ByteString.CopyFrom (new byte [16]);
                     Write (stream, response);
                     if (Status != ConnectionResponse.Types.Status.Ok)

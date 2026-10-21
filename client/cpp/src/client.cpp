@@ -16,6 +16,10 @@ namespace krpc {
 
 class StreamImpl;
 
+namespace {
+constexpr unsigned int PROTOCOL_VERSION = 1;
+}  // namespace
+
 Client::Client()
     : lock(new std::mutex),
       listed_returns(std::make_shared<ListedReturns>()),
@@ -38,11 +42,16 @@ Client::Client(const std::string& name, std::shared_ptr<Connection> rpc,
   schema::ConnectionRequest request;
   request.set_type(schema::ConnectionRequest::RPC);
   request.set_client_name(name);
+  request.set_protocol_version(PROTOCOL_VERSION);
   rpc_connection->send(encoder::encode_message_with_size(request));
   schema::ConnectionResponse response;
   rpc_connection->receive_message(response);
   if (response.status() != schema::ConnectionResponse::OK)
     throw ConnectionError(response.message());
+  if (response.protocol_version() != PROTOCOL_VERSION)
+    throw ConnectionError("The server does not support protocol version " +
+                          std::to_string(PROTOCOL_VERSION) +
+                          ". Use a client from the same kRPC release as the server.");
 
   // Connect to Stream server. Only once the rpc connection has been accepted, so that a
   // rejected connection does not leave a second one behind.
@@ -50,6 +59,7 @@ Client::Client(const std::string& name, std::shared_ptr<Connection> rpc,
     stream->connect();
     schema::ConnectionRequest request;
     request.set_type(schema::ConnectionRequest::STREAM);
+    request.set_protocol_version(PROTOCOL_VERSION);
     request.set_client_identifier(response.client_identifier());
     stream->send(encoder::encode_message_with_size(request));
     schema::ConnectionResponse response;
