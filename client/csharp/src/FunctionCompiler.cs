@@ -2245,7 +2245,7 @@ namespace KRPC.Client
             if (type == typeof(byte[]))
                 return ServerExpression.ConstantBytes (connection, (byte[])value);
             if (value is RemoteObject remoteObject)
-                return ServerExpression.ConstantObject (connection, remoteObject.id);
+                return ServerExpression.ConstantObject (connection, RemoteObject.GetObjectId (remoteObject));
             if (type.IsEnum)
                 return ServerExpression.Cast (
                     connection,

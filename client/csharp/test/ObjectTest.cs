@@ -1,3 +1,4 @@
+using System;
 using KRPC.Client.Services.TestService;
 using NUnit.Framework;
 
@@ -34,9 +35,9 @@ namespace KRPC.Client.Test
             var obj1 = Connection.TestService ().CreateTestObject ("jeb");
             var obj2 = Connection.TestService ().CreateTestObject ("jeb");
             var obj3 = Connection.TestService ().CreateTestObject ("bob");
-            Assert.AreEqual (obj1.id.GetHashCode (), obj1.GetHashCode ());
-            Assert.AreEqual (obj2.id.GetHashCode (), obj2.GetHashCode ());
-            Assert.AreNotEqual (obj1.id.GetHashCode (), obj3.GetHashCode ());
+            Assert.AreEqual (RemoteObject.GetObjectId (obj1).GetHashCode (), obj1.GetHashCode ());
+            Assert.AreEqual (RemoteObject.GetObjectId (obj2).GetHashCode (), obj2.GetHashCode ());
+            Assert.AreNotEqual (RemoteObject.GetObjectId (obj1).GetHashCode (), obj3.GetHashCode ());
             Assert.AreEqual (obj1.GetHashCode (), obj2.GetHashCode ());
             Assert.AreNotEqual (obj1.GetHashCode (), obj3.GetHashCode ());
 
@@ -51,8 +52,21 @@ namespace KRPC.Client.Test
             var obj1 = Connection.TestService ().CreateTestObject ("jeb");
             var obj2 = Connection.TestService ().CreateTestObject ("jeb");
             var obj3 = Connection.TestService ().CreateTestObject ("bob");
-            Assert.AreEqual (obj1.id, obj2.id);
-            Assert.AreNotEqual (obj1.id, obj3.id);
+            Assert.AreEqual (RemoteObject.GetObjectId (obj1), RemoteObject.GetObjectId (obj2));
+            Assert.AreNotEqual (RemoteObject.GetObjectId (obj1), RemoteObject.GetObjectId (obj3));
+        }
+
+        [Test]
+        public void GetObjectId ()
+        {
+            var obj = new TestClass (Connection, 42);
+            Assert.AreEqual (42, RemoteObject.GetObjectId (obj));
+        }
+
+        [Test]
+        public void GetObjectIdNull ()
+        {
+            Assert.Throws<ArgumentNullException> (() => RemoteObject.GetObjectId (null));
         }
     }
 }
