@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - An alarm keeps working across a quickload, and raises `KRPC.ObjectDestroyedException` once
   the mod no longer has an alarm with its id (#1051)

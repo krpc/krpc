@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - Streams and events
   - **Breaking:** Start a stream when it is added, removing `Stream.Start` and `Event.Start`

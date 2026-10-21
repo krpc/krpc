@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 - **Breaking:** Support null for any nullable type. A nullable non-class return adds a
   `bool* returnValueIsNull` out-parameter, and a nullable argument is a pointer (#1017)
 - **Breaking:** Renumber the `KRPC` service's procedures, so a program built against an

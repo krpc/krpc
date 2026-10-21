@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 - **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C
   nano service uses, giving the path of its header (#1150)
 - **Breaking:** Generate C# and C++ stubs that mark the calls returning a stream or an event,

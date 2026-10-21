@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 - **Breaking:** Support `Types.none` for any nullable type, including a structure field, list
   element, tuple item and dictionary value (#1017, #1091)
 - **Breaking:** Return messages, such as the server status, as plain tables (#1142)

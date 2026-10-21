@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - A `Camera` whose part is destroyed, or that is no longer a camera, raises
   `KRPC.ObjectDestroyedException` (#1051)

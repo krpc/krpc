@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - Server side functions
   - Extend `KRPC.Expression` to build server side functions, which the server evaluates

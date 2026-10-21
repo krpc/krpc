@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - **Breaking:** Return and set colors as a `StdLib.ColorRGB` structure, in place of a tuple (#1148)
 - **Breaking:** Removing a drawing object another client created, or one the server no longer

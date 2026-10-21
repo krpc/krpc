@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - Initial version. Provides RPCs to modify the state of the simulation directly: teleporting a
   vessel, setting its position, velocity and attitude, applying forces to its parts, filling

@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - Look up a servo and a servo group on every call, so they keep working across a quickload and
   raise `KRPC.ObjectDestroyedException` once their part or vessel is gone (#1051)

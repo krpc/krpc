@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - An `Antenna` whose part is destroyed, or that is no longer an antenna, and a `Comms` whose
   vessel is gone, raise `KRPC.ObjectDestroyedException` (#1051)

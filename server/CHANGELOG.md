@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 - **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum (#1048)
 - Add the local socket protocol to the server window. It opens no network port (#1065)
 - Add the `TickHoldTimeout` setting, which bounds how long a client may hold the game on one

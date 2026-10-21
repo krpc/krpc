@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - Breaking changes
   - **Breaking:** Return and set colors as a `StdLib.ColorRGBA` structure with an alpha

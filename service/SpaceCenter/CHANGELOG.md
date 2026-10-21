@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 
 - Object lifetime
   - Look up the game object behind a vessel, crew member, part, part module, orbit, alarm,
