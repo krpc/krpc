@@ -78,7 +78,7 @@ public class FunctionStreamTest {
       TestClass obj = testService.createTestObject("expr" + i);
       obj.setIntProperty(i + 1);
       objs.add(obj);
-      constants.add(Expression.constantObject(connection, obj.id));
+      constants.add(Expression.constantObject(connection, RemoteObject.getObjectId(obj)));
     }
     Expression objects = Expression.createList(connection, constants);
     Expression param = Expression.parameter(
@@ -162,7 +162,7 @@ public class FunctionStreamTest {
         .setProcedure("TestClass_set_IntProperty")
         .build();
     Map<Integer, Expression> arguments = new HashMap<Integer, Expression>();
-    arguments.put(0, Expression.constantObject(connection, obj.id));
+    arguments.put(0, Expression.constantObject(connection, RemoteObject.getObjectId(obj)));
     arguments.put(1, Expression.constantInt(connection, 42));
     Expression expr = Expression.callWithArguments(connection, call, arguments);
     assertNull(connection.run(expr));
@@ -379,7 +379,8 @@ public class FunctionStreamTest {
     Expression expr = Expression.constantDouble(connection, 1.5);
     assertEquals(TypeCode.DOUBLE, expr.getReturnType().getCode());
     TestClass obj = testService.createTestObject("exprReturnType");
-    Type objType = Expression.constantObject(connection, obj.id).getReturnType();
+    Type objType =
+        Expression.constantObject(connection, RemoteObject.getObjectId(obj)).getReturnType();
     assertEquals(TypeCode.CLASS, objType.getCode());
     assertEquals("TestService", objType.getService());
     assertEquals("TestClass", objType.getName());

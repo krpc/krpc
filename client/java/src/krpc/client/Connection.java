@@ -830,9 +830,10 @@ public class Connection implements AutoCloseable {
 
   private List<KRPC.Type> expressionParameterTypes(krpc.client.services.KRPC.Expression expression)
       throws RPCException {
+    long expressionId = RemoteObject.getObjectId(expression);
     synchronized (expressionParameterTypes) {
-      if (expressionParameterTypes.containsKey(expression.id)) {
-        return expressionParameterTypes.get(expression.id);
+      if (expressionParameterTypes.containsKey(expressionId)) {
+        return expressionParameterTypes.get(expressionId);
       }
     }
     // Introspect outside the lock, as it makes a round trip per property
@@ -841,7 +842,7 @@ public class Connection implements AutoCloseable {
       types.add(buildType(type));
     }
     synchronized (expressionParameterTypes) {
-      expressionParameterTypes.put(expression.id, types);
+      expressionParameterTypes.put(expressionId, types);
     }
     return types;
   }
@@ -851,16 +852,17 @@ public class Connection implements AutoCloseable {
 
   private KRPC.Type expressionReturnType(krpc.client.services.KRPC.Expression expression)
       throws RPCException {
+    long expressionId = RemoteObject.getObjectId(expression);
     synchronized (expressionReturnTypes) {
-      if (expressionReturnTypes.containsKey(expression.id)) {
-        return expressionReturnTypes.get(expression.id);
+      if (expressionReturnTypes.containsKey(expressionId)) {
+        return expressionReturnTypes.get(expressionId);
       }
     }
     // Introspect outside the lock, as it makes a round trip per property
     KRPC.Type returnType =
         expression.getHasReturnType() ? buildType(expression.getReturnType()) : null;
     synchronized (expressionReturnTypes) {
-      expressionReturnTypes.put(expression.id, returnType);
+      expressionReturnTypes.put(expressionId, returnType);
     }
     return returnType;
   }

@@ -390,7 +390,7 @@ public class Encoder {
   }
 
   static ByteString encodeObject(RemoteObject value) throws IOException {
-    return encodeUint64(value.id);
+    return encodeUint64(RemoteObject.getObjectId(value));
   }
 
   static ByteString encodeEnum(RemoteEnum value) throws IOException {
