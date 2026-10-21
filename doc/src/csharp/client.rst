@@ -488,6 +488,16 @@ Client API Reference
 
       Closes the connection and frees the resources associated with it.
 
+.. class:: RemoteObject
+
+   The base class for remote objects.
+
+   .. function:: static ulong GetObjectId(RemoteObject obj)
+
+      The identifier of a remote object on the server, e.g. to pass to
+      :meth:`KRPC.Client.Services.KRPC.Expression.ConstantObject`. Throws an
+      ``ArgumentNullException`` if the object is null.
+
 .. class:: FunctionCompilationException
 
    Thrown when a lambda expression cannot be compiled into a server side function.

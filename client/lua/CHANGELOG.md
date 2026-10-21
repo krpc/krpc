@@ -12,6 +12,8 @@
 - Skip a service member naming an unknown type with a warning, and connect (#1066)
 - Add `krpc.limits`, the extremes of the numeric types kRPC carries, such as
   `krpc.limits.SINT32_MAX` (#1045)
+- Add `krpc.get_object_id`, which returns the id of a remote object for
+  `Expression.constant_object` (#1160)
 - Reduce the cost of a remote procedure call (#1056)
 - Fix a service failing to load when a default value names an enumeration of a service not yet
   loaded (#1044)

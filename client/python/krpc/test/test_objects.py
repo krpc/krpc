@@ -1,5 +1,6 @@
 import unittest
 
+import krpc
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -29,9 +30,9 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj1 = self.conn.test_service.create_test_object("jeb")
         obj2 = self.conn.test_service.create_test_object("jeb")
         obj3 = self.conn.test_service.create_test_object("bob")
-        self.assertEqual(obj1._object_id, hash(obj1))
-        self.assertEqual(obj2._object_id, hash(obj2))
-        self.assertNotEqual(obj1._object_id, hash(obj3))
+        self.assertEqual(krpc.get_object_id(obj1), hash(obj1))
+        self.assertEqual(krpc.get_object_id(obj2), hash(obj2))
+        self.assertNotEqual(krpc.get_object_id(obj1), hash(obj3))
         self.assertEqual(hash(obj1), hash(obj2))
         self.assertNotEqual(hash(obj1), hash(obj3))
 
@@ -76,8 +77,16 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         obj1 = self.conn.test_service.create_test_object("jeb")
         obj2 = self.conn.test_service.create_test_object("jeb")
         obj3 = self.conn.test_service.create_test_object("bob")
-        self.assertEqual(obj1._object_id, obj2._object_id)
-        self.assertNotEqual(obj1._object_id, obj3._object_id)
+        self.assertEqual(krpc.get_object_id(obj1), krpc.get_object_id(obj2))
+        self.assertNotEqual(krpc.get_object_id(obj1), krpc.get_object_id(obj3))
+
+    def test_get_object_id(self) -> None:
+        obj = self.conn.test_service.TestClass(self.conn, 42)
+        self.assertEqual(42, krpc.get_object_id(obj))
+
+    def test_get_object_id_none(self) -> None:
+        with self.assertRaises(ValueError):
+            krpc.get_object_id(None)  # pyright: ignore[reportArgumentType]
 
 
 if __name__ == "__main__":

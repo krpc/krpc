@@ -45,7 +45,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
     def test_function_stream_object(self) -> None:
         expression = self.conn.krpc.Expression
         obj = self.conn.test_service.create_test_object("streamed")
-        expr = expression.constant_object(obj._object_id)
+        expr = expression.constant_object(krpc.get_object_id(obj))
         with self.conn.stream(expr) as stream:
             value = stream()
             self.assertEqual(obj, value)
@@ -58,7 +58,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         for i, obj in enumerate(objs):
             obj.int_property = i + 1
         objects = expression.create_list(
-            [expression.constant_object(x._object_id) for x in objs]
+            [expression.constant_object(krpc.get_object_id(x)) for x in objs]
         )
         param = expression.parameter("x", types.class_type("TestService", "TestClass"))
         get_property = expression.call_with_arguments(
@@ -202,7 +202,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         for i, obj in enumerate(objs):
             obj.int_property = i
         objects = expression.create_list(
-            [expression.constant_object(x._object_id) for x in objs]
+            [expression.constant_object(krpc.get_object_id(x)) for x in objs]
         )
         param = expression.parameter("x", types.class_type("TestService", "TestClass"))
         get_property = expression.call_with_arguments(
@@ -368,7 +368,7 @@ class TestFunction(ServerTestCase, unittest.TestCase):
         return_type = expr.return_type
         self.assertEqual(type_code.double, return_type.code)
         obj = self.conn.test_service.create_test_object("introspect")
-        obj_type = expression.constant_object(obj._object_id).return_type
+        obj_type = expression.constant_object(krpc.get_object_id(obj)).return_type
         self.assertEqual(type_code.class_, obj_type.code)
         self.assertEqual("TestService", obj_type.service)
         self.assertEqual("TestClass", obj_type.name)

@@ -137,7 +137,7 @@ namespace KRPC.Client
             case TypeKind.Bytes:
                 return value => EncodeBytes ((byte[])value);
             case TypeKind.Class:
-                return value => Varint (((RemoteObject)value).id);
+                return value => Varint (RemoteObject.GetObjectId ((RemoteObject)value));
             case TypeKind.Struct:
             case TypeKind.Tuple:
                 return value => EncodeTuple (value, info, spec);

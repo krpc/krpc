@@ -28,6 +28,8 @@
   - Raise `FunctionCompilationError` naming an unsupported construct (#1127)
   - Add `Client.run` and `Client.add_event`, and stream a function with `Client.add_stream` and
     `Client.stream` (#1127)
+  - Add `krpc.get_object_id`, which returns the id of a remote object for
+    `Expression.constant_object` (#1160)
 
 - Types and errors
   - **Breaking:** Raise the matching built-in exception, such as `TypeError`, `KeyError`,

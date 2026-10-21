@@ -456,7 +456,8 @@ Client API Reference
 
    The abstract base class for all remote objects.
 
-   .. field:: long id
+   .. method:: static long getObjectId(RemoteObject obj)
 
-      The identifier of the object on the server, e.g. to pass to
-      ``KRPC.Expression.constantObject``.
+      The identifier of a remote object on the server, e.g. to pass to
+      :meth:`krpc.client.services.KRPC.Expression.constantObject(Connection, long)`.
+      Throws a ``NullPointerException`` if the object is null.

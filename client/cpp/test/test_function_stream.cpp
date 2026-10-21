@@ -110,7 +110,7 @@ TEST_F(test_function_stream, test_per_element_call) {
     auto obj = test_service.create_test_object("expr" + std::to_string(i));
     obj.set_int_property(i + 1);
     objs.push_back(obj);
-    constants.push_back(Expr::constant_object(conn, obj._id));
+    constants.push_back(Expr::constant_object(conn, krpc::get_object_id(obj)));
   }
   auto objects = Expr::create_list(conn, constants);
   auto param = Expr::parameter(conn, "x", KType::class_type(conn, "TestService", "TestClass"));
@@ -341,10 +341,10 @@ TEST_F(test_function_stream, test_run_function_side_effects) {
   krpc::schema::ProcedureCall call;
   call.set_service("TestService");
   call.set_procedure("TestClass_set_IntProperty");
-  auto expr =
-      Expr::call_with_arguments(conn, call,
-                                std::map<int32_t, Expr>({{0, Expr::constant_object(conn, obj._id)},
-                                                         {1, Expr::constant_int(conn, 42)}}));
+  auto expr = Expr::call_with_arguments(
+      conn, call,
+      std::map<int32_t, Expr>({{0, Expr::constant_object(conn, krpc::get_object_id(obj))},
+                               {1, Expr::constant_int(conn, 42)}}));
   krpc::run(expr);
   ASSERT_EQ(42, obj.int_property());
 }
@@ -359,10 +359,10 @@ TEST_F(test_function_stream, test_run_function_checks_the_template_type) {
   krpc::schema::ProcedureCall call;
   call.set_service("TestService");
   call.set_procedure("TestClass_set_IntProperty");
-  auto effect =
-      Expr::call_with_arguments(conn, call,
-                                std::map<int32_t, Expr>({{0, Expr::constant_object(conn, obj._id)},
-                                                         {1, Expr::constant_int(conn, 4)}}));
+  auto effect = Expr::call_with_arguments(
+      conn, call,
+      std::map<int32_t, Expr>({{0, Expr::constant_object(conn, krpc::get_object_id(obj))},
+                               {1, Expr::constant_int(conn, 4)}}));
   ASSERT_THROW(krpc::run<int32_t>(effect), std::invalid_argument);
   ASSERT_THROW(krpc::add_stream<int32_t>(effect), std::invalid_argument);
   ASSERT_EQ(3, obj.int_property());
@@ -394,7 +394,7 @@ TEST_F(test_function_stream, test_return_type) {
   auto expr = Expr::constant_double(conn, 1.5);
   ASSERT_EQ(krpc::services::KRPC::TypeCode::double_, expr.return_type().code());
   auto obj = test_service.create_test_object("expr_return_type");
-  auto obj_type = Expr::constant_object(conn, obj._id).return_type();
+  auto obj_type = Expr::constant_object(conn, krpc::get_object_id(obj)).return_type();
   ASSERT_EQ(krpc::services::KRPC::TypeCode::class_, obj_type.code());
   ASSERT_EQ("TestService", obj_type.service());
   ASSERT_EQ("TestClass", obj_type.name());

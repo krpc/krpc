@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <ostream>
+#include <stdexcept>
 #include <string>
 
 #include "krpc/client.hpp"
@@ -32,9 +33,20 @@ bool operator==(const Object<T>&, const Object<T>&);
 template <typename T>
 std::ostream& operator<<(std::ostream& stream, const Object<T>& object);
 
+// The identifier of a remote object on the server, e.g. to pass to
+// Expression::constant_object. Throws std::invalid_argument for a null object, whose id is 0.
+template <typename T>
+uint64_t get_object_id(const Object<T>& object);
+
 template <typename T>
 inline Object<T>::Object(Client* client, const std::string& name, uint64_t id)
     : _client(client), _id(id), _name(name) {}
+
+template <typename T>
+inline uint64_t get_object_id(const Object<T>& object) {
+  if (object._id == 0) throw std::invalid_argument("The object is null");
+  return object._id;
+}
 
 template <typename T>
 inline std::ostream& operator<<(std::ostream& stream, const Object<T>& object) {

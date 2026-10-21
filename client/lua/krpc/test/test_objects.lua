@@ -1,4 +1,5 @@
 local luaunit = require 'luaunit'
+local krpc = require 'krpc'
 local class = require 'pl.class'
 local ServerTest = require 'krpc.test.servertest'
 local none = require 'krpc.types'.none
@@ -29,8 +30,18 @@ function TestObjects:test_memory_allocation()
   local obj1 = self.conn.test_service.create_test_object('jeb')
   local obj2 = self.conn.test_service.create_test_object('jeb')
   local obj3 = self.conn.test_service.create_test_object('bob')
-  luaunit.assertEquals(obj1._object_id, obj2._object_id)
-  luaunit.assertNotEquals(obj1._object_id, obj3._object_id)
+  luaunit.assertEquals(krpc.get_object_id(obj1), krpc.get_object_id(obj2))
+  luaunit.assertNotEquals(krpc.get_object_id(obj1), krpc.get_object_id(obj3))
+end
+
+function TestObjects:test_get_object_id()
+  local obj = self.conn.test_service.TestClass(42)
+  luaunit.assertEquals(42, krpc.get_object_id(obj))
+end
+
+function TestObjects:test_get_object_id_none()
+  luaunit.assertErrorMsgContains('The object is none', krpc.get_object_id, none)
+  luaunit.assertErrorMsgContains('The object is none', krpc.get_object_id, nil)
 end
 
 return TestObjects

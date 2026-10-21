@@ -12,10 +12,7 @@ namespace KRPC.Client
         /// </summary>
         public IConnection connection { get; private set; }
 
-        /// <summary>
-        /// The unique identifier for the object on the server.
-        /// </summary>
-        public ulong id { get; private set; }
+        readonly ulong id;
 
         /// <summary>
         /// Construct a remote object.
@@ -24,6 +21,19 @@ namespace KRPC.Client
         {
             connection = serverConnection;
             id = objectId;
+        }
+
+        /// <summary>
+        /// The identifier of a remote object on the server. Throws an exception if the object
+        /// is null.
+        /// </summary>
+        /// <param name="obj">The remote object.</param>
+        /// <returns>The identifier, e.g. to pass to <c>Expression.ConstantObject</c>.</returns>
+        public static ulong GetObjectId (RemoteObject obj)
+        {
+            if (ReferenceEquals (obj, null))
+                throw new ArgumentNullException (nameof (obj));
+            return obj.id;
         }
 
         /// <summary>

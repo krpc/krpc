@@ -134,7 +134,7 @@ namespace KRPC.Client.Test
             }
             var objects = Expr.CreateList (
                 Connection,
-                objs.Select (x => Expr.ConstantObject (Connection, x.id)).ToList ());
+                objs.Select (x => Expr.ConstantObject (Connection, RemoteObject.GetObjectId (x))).ToList ());
             var param = Expr.Parameter (
                 Connection, "x", KType.ClassType (Connection, "TestService", "TestClass"));
             var getProperty = Expr.CallWithArguments (
@@ -158,7 +158,7 @@ namespace KRPC.Client.Test
             Assert.AreEqual (KTypeCode.Double, expr.ReturnType.Code);
             var testService = Connection.TestService ();
             var obj = testService.CreateTestObject ("expr-return-type");
-            var objType = Expr.ConstantObject (Connection, obj.id).ReturnType;
+            var objType = Expr.ConstantObject (Connection, RemoteObject.GetObjectId (obj)).ReturnType;
             Assert.AreEqual (KTypeCode.Class, objType.Code);
             Assert.AreEqual ("TestService", objType.Service);
             Assert.AreEqual ("TestClass", objType.Name);

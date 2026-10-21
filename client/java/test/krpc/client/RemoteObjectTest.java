@@ -3,6 +3,7 @@ package krpc.client;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -59,5 +60,18 @@ public class RemoteObjectTest {
     TestService.TestClass obj3 = testService.createTestObject("bob");
     assertEquals(obj1, obj2);
     assertNotEquals(obj1, obj3);
+    assertEquals(RemoteObject.getObjectId(obj1), RemoteObject.getObjectId(obj2));
+    assertNotEquals(RemoteObject.getObjectId(obj1), RemoteObject.getObjectId(obj3));
+  }
+
+  @Test
+  public void testGetObjectId() {
+    TestService.TestClass obj = new TestService.TestClass(connection, 42);
+    assertEquals(42, RemoteObject.getObjectId(obj));
+  }
+
+  @Test
+  public void testGetObjectIdNull() {
+    assertThrows(NullPointerException.class, () -> RemoteObject.getObjectId(null));
   }
 }

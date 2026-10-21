@@ -3,6 +3,7 @@ local Connection = require 'krpc.connection'
 local LocalConnection = require 'krpc.localconnection'
 local limits = require 'krpc.limits'
 local protobuf = require 'krpc.protobuf'
+local Types = require 'krpc.types'
 
 local krpc = {}
 
@@ -67,6 +68,14 @@ end
 function krpc.connect_local(name, rpc_path)
   rpc_path = rpc_path or default_path('rpc')
   return connect_using(LocalConnection(rpc_path), name)
+end
+
+-- The identifier of a remote object on the server, e.g. to pass to Expression.constant_object
+function krpc.get_object_id(obj)
+  if obj == nil or rawequal(obj, Types.none) then
+    error('The object is none')
+  end
+  return obj._object_id
 end
 
 return krpc

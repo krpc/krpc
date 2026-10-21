@@ -1,6 +1,7 @@
 import krpc.client.Connection;
 import krpc.client.Event;
 import krpc.client.RPCException;
+import krpc.client.RemoteObject;
 import krpc.client.StreamException;
 import krpc.client.services.KRPC.Expression;
 import krpc.client.services.KRPC.Type;
@@ -20,7 +21,7 @@ public class TargetEvent {
       ProcedureCall target = connection.getCall(SpaceCenter.class, "getTargetVessel");
       Expression expr = Expression.equal(connection,
           Expression.call(connection, target),
-          Expression.constantObject(connection, someVessel.id));
+          Expression.constantObject(connection, RemoteObject.getObjectId(someVessel)));
       Event event = connection.addEvent(expr);
       // [/docs]
     }

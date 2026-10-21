@@ -12,6 +12,7 @@ from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.error import ConnectionError
 from krpc.schema.KRPC_pb2 import ConnectionRequest, ConnectionResponse
+from krpc.types import ClassBase
 from krpc.version import __version__
 
 DEFAULT_ADDRESS = "127.0.0.1"
@@ -80,6 +81,16 @@ def connect_local(
         else None
     )
     return _connect(name, rpc_connection, stream_connection, use_pregenerated_stubs)
+
+
+def get_object_id(obj: ClassBase) -> int:
+    """
+    The identifier of a remote object on the server, e.g. to pass to
+    Expression.constant_object. Raises ValueError if the object is None.
+    """
+    if obj is None:
+        raise ValueError("The object is None")
+    return obj._object_id
 
 
 def _connect(

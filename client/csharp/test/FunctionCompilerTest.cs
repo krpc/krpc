@@ -1316,7 +1316,7 @@ namespace KRPC.Client.Test
             var expression = Expr.CallWithArguments (
                 Connection, call,
                 new Dictionary<int, Expr> {
-                    { 0, Expr.ConstantObject (Connection, obj.id) },
+                    { 0, Expr.ConstantObject (Connection, RemoteObject.GetObjectId (obj)) },
                     { 1, Expr.ConstantInt (Connection, 42) }
                 });
             Connection.Run (expression);

@@ -107,6 +107,15 @@ Reference
                            the in-game server window. Defaults to the path the
                            server uses unless it was configured with another.
 
+.. function:: krpc.get_object_id(obj)
+
+   The identifier of a remote object on the server, e.g. to pass to
+   :meth:`KRPC.Expression.constant_object`. Raises an error if the object
+   is ``nil`` or ``krpc.types.none``.
+
+   :param obj: The remote object.
+   :rtype: number
+
 .. class:: Client
 
    This class provides the interface for communicating with the server. It is

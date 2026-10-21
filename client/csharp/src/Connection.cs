@@ -537,10 +537,11 @@ namespace KRPC.Client
         {
             if (args == null)
                 args = new object [] { null };
+            var functionId = RemoteObject.GetObjectId (function);
             IList<global::KRPC.Schema.KRPC.Type> types;
-            if (!functionParameterTypes.TryGetValue (function.id, out types)) {
+            if (!functionParameterTypes.TryGetValue (functionId, out types)) {
                 types = function.ParameterTypes.Select (BuildType).ToList ();
-                functionParameterTypes [function.id] = types;
+                functionParameterTypes [functionId] = types;
             }
             // An array of another element type passed as the only argument reaches params as
             // the arguments array itself, by array covariance
@@ -691,10 +692,11 @@ namespace KRPC.Client
         /// </summary>
         global::KRPC.Schema.KRPC.Type FunctionReturnType (Services.KRPC.Expression function)
         {
+            var functionId = RemoteObject.GetObjectId (function);
             global::KRPC.Schema.KRPC.Type type;
-            if (!functionReturnTypes.TryGetValue (function.id, out type)) {
+            if (!functionReturnTypes.TryGetValue (functionId, out type)) {
                 type = IntrospectReturnType (function);
-                functionReturnTypes [function.id] = type;
+                functionReturnTypes [functionId] = type;
             }
             return type;
         }

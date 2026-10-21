@@ -100,7 +100,7 @@ namespace KRPC.Client.Test
             Connection.TestService ().StringPropertyPrivateGet = "foo";
             var obj = Connection.TestService ().CreateTestObject ("bar");
             Connection.TestService ().ObjectProperty = obj;
-            Assert.AreEqual (obj.id, Connection.TestService ().ObjectProperty.id);
+            Assert.AreEqual (RemoteObject.GetObjectId (obj), RemoteObject.GetObjectId (Connection.TestService ().ObjectProperty));
         }
 
         [Test]
@@ -147,7 +147,7 @@ namespace KRPC.Client.Test
             Assert.AreEqual (42, obj.IntProperty);
             var obj2 = Connection.TestService ().CreateTestObject ("kermin");
             obj.ObjectProperty = obj2;
-            Assert.AreEqual (obj2.id, obj.ObjectProperty.id);
+            Assert.AreEqual (RemoteObject.GetObjectId (obj2), RemoteObject.GetObjectId (obj.ObjectProperty));
             obj.StringPropertyPrivateGet = "bob";
             Assert.AreEqual("bob", obj.StringPropertyPrivateSet);
         }

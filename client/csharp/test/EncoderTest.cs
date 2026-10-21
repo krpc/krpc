@@ -38,7 +38,7 @@ namespace KRPC.Client.Test
         {
             var mockClient = new Mock<IConnection> ();
             var obj = new Services.SpaceCenter.Vessel (mockClient.Object, 300);
-            Assert.AreEqual (300, obj.id);
+            Assert.AreEqual (300, RemoteObject.GetObjectId (obj));
             Assert.AreSame (mockClient.Object, obj.connection);
             var data = Encoder.Encode (obj, TypeSpec.For (typeof(Services.SpaceCenter.Vessel)));
             Assert.AreEqual ("ac02", data.ToHexString ());
@@ -94,7 +94,7 @@ namespace KRPC.Client.Test
         {
             var mockClient = new Mock<IConnection> ();
             var value = (Services.SpaceCenter.Vessel)Encoder.Decode ("ac02".ToByteString (), TypeSpec.For (typeof(Services.SpaceCenter.Vessel)), mockClient.Object);
-            Assert.AreEqual (300, value.id);
+            Assert.AreEqual (300, RemoteObject.GetObjectId (value));
             Assert.AreSame (mockClient.Object, value.connection);
         }
 

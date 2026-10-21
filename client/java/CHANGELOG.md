@@ -22,7 +22,8 @@
 - Server side functions
   - Add `Connection.run` and `Connection.addEvent`, and a `Connection.addStream` overload
     taking a server side function (#1129)
-  - Make `RemoteObject.id` public, for passing to `Expression.constantObject` (#1129)
+  - Add `RemoteObject.getObjectId`, which returns the id of a remote object for
+    `Expression.constantObject` (#1160)
 
 - Types and errors
   - **Breaking:** Throw the matching Java exception, such as `NullPointerException`,
