@@ -9,7 +9,7 @@ namespace KRPC.Test.Server.SerialIO
 {
     public static class TestingTools
     {
-        public static byte[] CreateConnectionRequest (Type type, byte[] clientIdentifier = null)
+        public static byte[] CreateConnectionRequest (Type type, byte[] clientIdentifier = null, uint protocolVersion = 0)
         {
             var request = new MultiplexedRequest ();
             request.ConnectionRequest = new ConnectionRequest ();
@@ -17,6 +17,7 @@ namespace KRPC.Test.Server.SerialIO
             request.ConnectionRequest.ClientName = "Jebediah Kerman!!!";
             if (clientIdentifier != null)
                 request.ConnectionRequest.ClientIdentifier = ByteString.CopyFrom (clientIdentifier);
+            request.ConnectionRequest.ProtocolVersion = protocolVersion;
             using (var buffer = new MemoryStream ()) {
                 var stream = new CodedOutputStream (buffer, true);
                 stream.WriteMessage (request);

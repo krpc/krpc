@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -19,6 +20,8 @@ namespace KRPC.Client
     /// </summary>
     public class Connection : IConnection, IDisposable
     {
+        const uint PROTOCOL_VERSION = 1;
+
         object invokeLock = new object ();
         Socket rpcSocket;
         Socket streamSocket;
@@ -151,6 +154,7 @@ namespace KRPC.Client
             var connectionRequest = new ConnectionRequest ();
             connectionRequest.Type = Type.Rpc;
             connectionRequest.ClientName = name;
+            connectionRequest.ProtocolVersion = PROTOCOL_VERSION;
             codedRpcStream.WriteLength (connectionRequest.CalculateSize ());
             connectionRequest.WriteTo (codedRpcStream);
             codedRpcStream.Flush ();
@@ -159,12 +163,18 @@ namespace KRPC.Client
                 rpcReader.Buffer, rpcReader.Offset, rpcReader.Size);
             if (response.Status != ConnectionResponse.Types.Status.Ok)
                 throw new ConnectionException (response.Message);
+            if (response.ProtocolVersion != PROTOCOL_VERSION)
+                throw new ConnectionException (
+                    "The server does not support protocol version " +
+                    PROTOCOL_VERSION.ToString (CultureInfo.InvariantCulture) +
+                    ". Use a client from the same kRPC release as the server.");
 
             if (openStreamSocket != null) {
                 streamSocket = openStreamSocket ();
                 var streamStream = new NetworkStream (streamSocket);
                 connectionRequest = new ConnectionRequest ();
                 connectionRequest.Type = Type.Stream;
+                connectionRequest.ProtocolVersion = PROTOCOL_VERSION;
                 connectionRequest.ClientIdentifier = response.ClientIdentifier;
                 var codedStreamStream = new CodedOutputStream (streamStream, true);
                 codedStreamStream.WriteLength (connectionRequest.CalculateSize ());

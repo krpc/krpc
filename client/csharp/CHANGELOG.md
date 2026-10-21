@@ -51,6 +51,8 @@
     (#1111)
 
 - Connections
+  - **Breaking:** Send protocol version 1 when connecting, and fail to connect to a server from
+    before 0.7 (#1162)
   - Add `Connection.ConnectLocal`, which connects to a server on the same machine over a unix
     domain socket (#1065)
   - Add a `timeout` parameter to the `Connection` constructor, bounding how long a connection is

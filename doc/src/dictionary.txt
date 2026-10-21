@@ -175,6 +175,7 @@ stderr
 stepwise
 str
 streamPort
+subprotocol
 substring
 sudo
 symlink

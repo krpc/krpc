@@ -5,7 +5,7 @@ var protobufjs = require('protobufjs')
 var proto = protobufjs.loadProtoFile('krpc.proto').build();
 
 console.log('Connecting to RPC server')
-let rpcConn = new websocket('ws://127.0.0.1:50000')
+let rpcConn = new websocket('ws://127.0.0.1:50000', 'krpc.1')
 rpcConn.binaryType = 'arraybuffer'
 
 rpcConn.onopen = (evnt) => {
@@ -23,7 +23,7 @@ rpcConn.onmessage = (evnt) => {
   console.log('Client identifier =', client_identifier);
 
   console.log('Connecting to Stream server');
-  let streamConn = new websocket('ws://127.0.0.1:50001?id=' + client_identifier);
+  let streamConn = new websocket('ws://127.0.0.1:50001?id=' + client_identifier, 'krpc.1');
   streamConn.binaryType = 'arraybuffer';
 
   streamConn.onopen = (evnt) => {

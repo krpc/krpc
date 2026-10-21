@@ -74,6 +74,9 @@
   - Add a communication protocol over a unix domain socket, for clients on the same machine as
     the game (#1065)
   - Fix a serial connection freezing the game while it carries an RPC (#1035)
+  - Add a protocol version to the connection handshake, sent over WebSockets as the subprotocol
+    `krpc.N` and reported by `KRPC.GetStatus` (#1162)
+  - Fix an exception on a serial connection request that carries no `ConnectionRequest` (#1162)
   - Encode and decode values without reflection, cutting the server cost of a call that passes
     or returns an object by about three quarters (#1091)
 

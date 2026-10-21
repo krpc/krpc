@@ -70,9 +70,9 @@ do the following:
       :start-at: message ConnectionRequest {
       :end-before: message ConnectionResponse {
 
-   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
-   be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
-   be left blank.
+   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``protocol_version``
+   field to 1. The ``client_name`` field can be set to the name of the client to display on the
+   in-game UI. The ``client_identifier`` should be left blank.
 
 3. Receive a ``ConnectionResponse`` message from the server. This message is defined as:
 
@@ -83,6 +83,9 @@ do the following:
 
    If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was successful.
    If not, the ``message`` field contains a description of what went wrong.
+
+   The ``protocol_version`` field contains the version of the protocol the server accepted. A
+   server from before kRPC 0.7 leaves it as 0. See :ref:`communication-protocol-version`.
 
    The server waits up to 3 seconds for the complete connection request message to arrive after
    its first bytes are received. If it does not arrive in time, the server responds with the

@@ -13,6 +13,7 @@ krpc.limits = limits
 
 local DEFAULT_ADDRESS = '127.0.0.1'
 local DEFAULT_RPC_PORT = 50000
+local PROTOCOL_VERSION = 1
 
 -- A default path for a socket of the given name, matching the server's own default. Windows
 -- has no runtime directory for this, so its per-user application data directory stands in.
@@ -47,11 +48,16 @@ local function connect_using(rpc_connection, name)
   rpc_connection:connect()
   rpc_connection:send_message('ConnectionRequest', {
     type = protobuf.enum('ConnectionRequest.Type', 'RPC'),
-    client_name = name
+    client_name = name,
+    protocol_version = PROTOCOL_VERSION
   })
   local response = rpc_connection:receive_message('ConnectionResponse')
   if response.status ~= protobuf.enum('ConnectionResponse.Status', 'OK') then
     error('Failed to connect: ' .. response.message)
+  end
+  if response.protocol_version ~= PROTOCOL_VERSION then
+    error('Failed to connect: the server does not support protocol version ' .. PROTOCOL_VERSION ..
+          '. Use a client from the same kRPC release as the server.')
   end
 
   return Client(rpc_connection)

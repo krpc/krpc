@@ -51,9 +51,11 @@ class SerialIOTest(unittest.TestCase):
         request = KRPC.MultiplexedRequest()
         request.connection_request.type = KRPC.ConnectionRequest.RPC
         request.connection_request.client_name = "krpcserialio"
+        request.connection_request.protocol_version = 1
         cls.send(cls.rpc_conn, request)
         response = cls.recv(cls.rpc_conn, KRPC.ConnectionResponse)
         assert response.status == KRPC.ConnectionResponse.OK
+        assert response.protocol_version == 1
 
     @staticmethod
     def send(conn, msg):

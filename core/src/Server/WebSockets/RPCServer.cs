@@ -11,7 +11,7 @@ namespace KRPC.Server.WebSockets
     public sealed class RPCServer : Message.RPCServer
     {
         readonly bool shouldEcho;
-        readonly IDictionary<IClient<byte,byte>,string> clientKeys = new Dictionary<IClient<byte, byte>, string> ();
+        readonly IDictionary<IClient<byte,byte>,byte[]> clientResponses = new Dictionary<IClient<byte, byte>, byte[]> ();
 
         /// <summary>
         /// Create a websockets RPC server.
@@ -48,8 +48,11 @@ namespace KRPC.Server.WebSockets
                 // The request has not been fully received yet; retry on a later update.
                 return null;
             var clientName = GetClientName (request);
-            clientKeys [args.Client] = request.Headers ["sec-websocket-key"].Single ();
-            return new RPCClient (clientName, args.Client, shouldEcho);
+            var subprotocol = ConnectionRequest.GetSubprotocol (request);
+            var protocolVersion = ConnectionRequest.GetProtocolVersion (subprotocol);
+            clientResponses [args.Client] = ConnectionRequest.WriteResponse (
+                request.Headers ["sec-websocket-key"].Single (), subprotocol);
+            return new RPCClient (clientName, protocolVersion, args.Client, shouldEcho);
         }
 
         /// <summary>
@@ -59,11 +62,11 @@ namespace KRPC.Server.WebSockets
         {
             base.HandleClientRequestingConnection (sender, args);
             if (args.Request.ShouldAllow) {
-                args.Client.Stream.Write (ConnectionRequest.WriteResponse (clientKeys [args.Client]));
+                args.Client.Stream.Write (clientResponses [args.Client]);
                 Logger.WriteLine ("WebSockets: client connection accepted (" + args.Client.Address + ")");
             }
-            if (args.Request.ShouldDeny && clientKeys.ContainsKey (args.Client))
-                clientKeys.Remove (args.Client);
+            if (args.Request.ShouldDeny && clientResponses.ContainsKey (args.Client))
+                clientResponses.Remove (args.Client);
         }
 
         /// <summary>

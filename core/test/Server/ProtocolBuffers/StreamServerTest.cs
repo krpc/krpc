@@ -41,7 +41,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (1, server.Clients.Count ());
             Assert.AreEqual (clientId, server.Clients.First ().Guid);
 
-            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 19, Status.Ok, string.Empty, 16);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 21, Status.Ok, string.Empty, 16);
         }
 
         [Test]

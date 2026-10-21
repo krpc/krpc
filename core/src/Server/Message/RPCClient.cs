@@ -7,14 +7,20 @@ namespace KRPC.Server.Message
     {
         readonly IClient<byte,byte> client;
 
-        protected RPCClient (string name, IClient<byte,byte> innerClient, IStream<Request,Response> stream)
+        protected RPCClient (string name, uint protocolVersion, IClient<byte,byte> innerClient, IStream<Request,Response> stream)
         {
             Name = name;
+            ProtocolVersion = protocolVersion;
             client = innerClient;
             Stream = stream;
         }
 
         public string Name { get; private set; }
+
+        /// <summary>
+        /// The protocol version sent by the client, or 0 if it sent none.
+        /// </summary>
+        public uint ProtocolVersion { get; private set; }
 
         public Guid Guid {
             get { return client.Guid; }

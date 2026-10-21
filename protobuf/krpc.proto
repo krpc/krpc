@@ -12,6 +12,7 @@ message ConnectionRequest {
   Type type = 1;
   string client_name = 2;
   bytes client_identifier = 3;
+  uint32 protocol_version = 4;
 
   enum Type {
     RPC = 0;
@@ -26,9 +27,11 @@ message ConnectionResponse {
     MALFORMED_MESSAGE = 1;
     TIMEOUT = 2;
     WRONG_TYPE = 3;
+    WRONG_PROTOCOL_VERSION = 4;
   }
   string message = 2;
   bytes client_identifier = 3;
+  uint32 protocol_version = 4;
 }
 
 // Messages for calling remote procedures
@@ -269,6 +272,7 @@ message Status {
   uint64 stream_rpcs_executed = 17;
   float stream_rpc_rate = 18;
   float time_per_stream_update = 19;
+  uint32 protocol_version = 20;
 }
 
 // Multiplexed request messages

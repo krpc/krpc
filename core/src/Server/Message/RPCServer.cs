@@ -161,6 +161,9 @@ namespace KRPC.Server.Message
         {
             // Note: pendingClients and clients dictionaries are updated from HandleClientRequestingConnection
             var client = clients [args.Client];
+            var rpcClient = client as RPCClient;
+            if (rpcClient != null)
+                ProtocolVersion.WarnIfUnversioned (rpcClient.ProtocolVersion, rpcClient.Name, rpcClient.Address);
             EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<Request,Response> (client));
         }
 

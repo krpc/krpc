@@ -43,8 +43,11 @@ namespace KRPC.Server.ProtocolBuffers
                     WriteErrorConnectionResponse (client, Status.WrongType,
                         "Connection request was for the " + name + " server, but this is the rpc server. " +
                         "Did you connect to the wrong port number or socket path?");
+                } else if (!ProtocolVersion.IsSupported (request.ProtocolVersion)) {
+                    WriteErrorConnectionResponse (client, Status.WrongProtocolVersion,
+                        ProtocolVersion.UnsupportedMessage (request.ProtocolVersion));
                 } else {
-                    return new RPCClient (request.ClientName, args.Client);
+                    return new RPCClient (request.ClientName, request.ProtocolVersion, args.Client);
                 }
             } catch (InvalidProtocolBufferException e) {
                 WriteErrorConnectionResponse (client, Status.MalformedMessage, e.Message);

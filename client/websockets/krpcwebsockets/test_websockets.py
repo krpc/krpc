@@ -44,8 +44,9 @@ class WebSocketsTest(unittest.TestCase):
         else:
             name = ""
         cls.rpc_conn = websocket.create_connection(
-            "ws://%s:%d/%s" % (address, rpc_port, name)
+            "ws://%s:%d/%s" % (address, rpc_port, name), subprotocols=["krpc.1"]
         )
+        assert cls.rpc_conn.getsubprotocol() == "krpc.1"
         if stream_port is None:
             cls.stream_conn = None
         else:
@@ -59,7 +60,8 @@ class WebSocketsTest(unittest.TestCase):
             client_identifier = cls.decode_bytes(response.results[0].value)
             client_identifier = base64.b64encode(client_identifier).decode("utf-8")
             cls.stream_conn = websocket.create_connection(
-                "ws://%s:%d/?id=%s" % (address, stream_port, client_identifier)
+                "ws://%s:%d/?id=%s" % (address, stream_port, client_identifier),
+                subprotocols=["krpc.1"],
             )
 
     @staticmethod
@@ -145,6 +147,7 @@ class TestRPCServer(WebSocketsTest):
         msg = KRPC.Status()
         msg.ParseFromString(response.results[0].value)
         self.assertNotEqual("", msg.version)
+        self.assertEqual(1, msg.protocol_version)
 
     def test_procedure_call_with_arg(self):
         call = KRPC.ProcedureCall()

@@ -26,6 +26,8 @@ import krpc.schema.KRPC;
 
 /** A connection to a kRPC server. */
 public class Connection implements AutoCloseable {
+  private static final int PROTOCOL_VERSION = 1;
+
   private final Object connectionLock = new Object();
 
   private SocketChannel rpcChannel;
@@ -323,6 +325,7 @@ public class Connection implements AutoCloseable {
     KRPC.ConnectionRequest request = KRPC.ConnectionRequest.newBuilder()
         .setType(KRPC.ConnectionRequest.Type.RPC)
         .setClientName(name)
+        .setProtocolVersion(PROTOCOL_VERSION)
         .build();
     rpcOutputStream.writeMessageNoTag(request);
     rpcOutputStream.flush();
@@ -332,6 +335,11 @@ public class Connection implements AutoCloseable {
     KRPC.ConnectionResponse response = KRPC.ConnectionResponse.parseFrom(data);
     if (response.getStatus() != KRPC.ConnectionResponse.Status.OK) {
       throw new ConnectionException(response.getMessage());
+    }
+    if (response.getProtocolVersion() != PROTOCOL_VERSION) {
+      throw new ConnectionException(
+          "The server does not support protocol version " + PROTOCOL_VERSION
+          + ". Use a client from the same kRPC release as the server.");
     }
     ByteString clientIdentifier = response.getClientIdentifier();
 
@@ -343,6 +351,7 @@ public class Connection implements AutoCloseable {
 
     request = KRPC.ConnectionRequest.newBuilder()
         .setType(KRPC.ConnectionRequest.Type.STREAM)
+        .setProtocolVersion(PROTOCOL_VERSION)
         .setClientIdentifier(clientIdentifier)
         .build();
     streamOutputStream.writeMessageNoTag(request);

@@ -11,7 +11,7 @@ namespace KRPC.Server.WebSockets
     /// </summary>
     public sealed class StreamServer : Message.StreamServer
     {
-        readonly IDictionary<IClient<byte,byte>,string> clientKeys = new Dictionary<IClient<byte, byte>, string> ();
+        readonly IDictionary<IClient<byte,byte>,byte[]> clientResponses = new Dictionary<IClient<byte, byte>, byte[]> ();
 
         /// <summary>
         /// Construct a stream server from a byte server
@@ -44,7 +44,8 @@ namespace KRPC.Server.WebSockets
                 args.Request.Deny ();
                 return null;
             }
-            clientKeys [args.Client] = request.Headers ["sec-websocket-key"].Single ();
+            clientResponses [args.Client] = ConnectionRequest.WriteResponse (
+                request.Headers ["sec-websocket-key"].Single (), ConnectionRequest.GetSubprotocol (request));
             return new StreamClient (guid, args.Client);
         }
 
@@ -55,9 +56,9 @@ namespace KRPC.Server.WebSockets
         {
             base.HandleClientRequestingConnection (sender, args);
             if (args.Request.ShouldAllow)
-                args.Client.Stream.Write (ConnectionRequest.WriteResponse (clientKeys [args.Client]));
-            if (args.Request.ShouldDeny && clientKeys.ContainsKey (args.Client))
-                clientKeys.Remove (args.Client);
+                args.Client.Stream.Write (clientResponses [args.Client]);
+            if (args.Request.ShouldDeny && clientResponses.ContainsKey (args.Client))
+                clientResponses.Remove (args.Client);
         }
 
         /// <summary>

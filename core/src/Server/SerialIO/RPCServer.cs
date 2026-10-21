@@ -43,15 +43,18 @@ namespace KRPC.Server.SerialIO
                 if (connectionRequest == null) {
                     WriteErrorConnectionResponse (
                         client, Status.MalformedMessage, "Expected a ConnectionRequest message");
-                }
-                if (connectionRequest.Type != Type.Rpc) {
+                } else if (connectionRequest.Type != Type.Rpc) {
                     var name = connectionRequest.Type.ToString().ToLowerInvariant ();
                     WriteErrorConnectionResponse(
                         client, Status.WrongType,
                         "Connection request was for a " + name + " server, " +
                         "but this is an rpc server.");
+                } else if (!ProtocolVersion.IsSupported (connectionRequest.ProtocolVersion)) {
+                    WriteErrorConnectionResponse (client, Status.WrongProtocolVersion,
+                        ProtocolVersion.UnsupportedMessage (connectionRequest.ProtocolVersion));
                 } else {
-                    return new RPCClient(connectionRequest.ClientName, client, Server);
+                    return new RPCClient(
+                        connectionRequest.ClientName, connectionRequest.ProtocolVersion, client, Server);
                 }
             } catch (InvalidProtocolBufferException e) {
                 WriteErrorConnectionResponse(client, Status.MalformedMessage, e.Message);
