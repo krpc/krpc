@@ -108,7 +108,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. function:: static {{ domain.return_type(x.return_type) }} {{ x.name }}(IConnection connection, {{ parameters(x.parameters) }})
+.. function:: static {{ domain.return_type(x.return_type) }} {{ x.name }}(IConnection connection{% if x.parameters %}, {{ parameters(x.parameters) }}{% endif %})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
