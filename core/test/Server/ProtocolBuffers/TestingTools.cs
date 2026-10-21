@@ -9,13 +9,14 @@ namespace KRPC.Test.Server.ProtocolBuffers
 {
     public static class TestingTools
     {
-        public static byte[] CreateConnectionRequest (Type type, byte[] clientIdentifier = null)
+        public static byte[] CreateConnectionRequest (Type type, byte[] clientIdentifier = null, uint protocolVersion = 0)
         {
             var request = new ConnectionRequest ();
             request.Type = type;
             request.ClientName = "Jebediah Kerman!!!";
             if (clientIdentifier != null)
                 request.ClientIdentifier = ByteString.CopyFrom (clientIdentifier);
+            request.ProtocolVersion = protocolVersion;
             using (var buffer = new MemoryStream ()) {
                 var stream = new CodedOutputStream (buffer, true);
                 stream.WriteMessage (request);
@@ -33,6 +34,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (expectedStatus, response.Status);
             Assert.AreEqual (expectedMessage, response.Message);
             Assert.AreEqual (expectedIdLength, response.ClientIdentifier.Length);
+            Assert.AreEqual (expectedStatus == Status.Ok ? 1u : 0u, response.ProtocolVersion);
         }
     }
 }

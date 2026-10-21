@@ -42,6 +42,9 @@ namespace KRPC.Server.ProtocolBuffers
                     WriteErrorConnectionResponse (Status.WrongType,
                         "Connection request was for the " + name + " server, but this is the stream server. " +
                         "Did you connect to the wrong port number or socket path?", stream);
+                } else if (!ProtocolVersion.IsSupported (request.ProtocolVersion)) {
+                    WriteErrorConnectionResponse (Status.WrongProtocolVersion,
+                        ProtocolVersion.UnsupportedMessage (request.ProtocolVersion), stream);
                 } else if (request.ClientIdentifier.Length != 16) {
                     WriteErrorConnectionResponse (Status.MalformedMessage, "Client identifier must be 16 bytes.", stream);
                 } else {
@@ -65,6 +68,7 @@ namespace KRPC.Server.ProtocolBuffers
                 var client = args.Client;
                 var response = new ConnectionResponse ();
                 response.Status = Status.Ok;
+                response.ProtocolVersion = ProtocolVersion.Current;
                 response.ClientIdentifier = ByteString.CopyFrom (client.Guid.ToByteArray ());
                 Utils.WriteMessage (client.Stream, response);
             } else if (args.Request.ShouldDeny)

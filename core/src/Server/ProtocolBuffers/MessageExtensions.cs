@@ -319,6 +319,7 @@ namespace KRPC.Server.ProtocolBuffers
             result.StreamRpcsExecuted = status.StreamRpcsExecuted;
             result.StreamRpcRate = status.StreamRpcRate;
             result.TimePerStreamUpdate = status.TimePerStreamUpdate;
+            result.ProtocolVersion = status.ProtocolVersion;
             return result;
         }
 

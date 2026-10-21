@@ -5,6 +5,8 @@ namespace KRPC.Service.Messages
     {
         public string Version { get; private set; }
 
+        public uint ProtocolVersion { get; set; }
+
         public ulong BytesRead { get; set; }
 
         public ulong BytesWritten { get; set; }

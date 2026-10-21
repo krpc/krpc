@@ -149,6 +149,7 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var response = new ConnectionResponse ();
             response.Status = Status.Ok;
+            response.ProtocolVersion = ProtocolVersion.Current;
             response.ClientIdentifier = ByteString.CopyFrom (client.Guid.ToByteArray ());
             WriteMessage (client.Stream, response);
         }

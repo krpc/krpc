@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,6 +13,7 @@ namespace KRPC.Server.WebSockets
     static class ConnectionRequest
     {
         const string WEB_SOCKETS_KEY = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+        const string SUBPROTOCOL_PREFIX = "krpc.";
         const int BUFFER_SIZE = 4096;
         // Seconds to wait for the rest of a request that arrived split across reads before rejecting it.
         const double TIMEOUT = 3;
@@ -107,13 +109,47 @@ namespace KRPC.Server.WebSockets
             return false;
         }
 
-        public static byte[] WriteResponse (string key)
+        /// <summary>
+        /// The first kRPC subprotocol in the Sec-WebSocket-Protocol field, such as "krpc.1",
+        /// or null if there is none.
+        /// </summary>
+        public static string GetSubprotocol (Request request)
+        {
+            IList<string> protocols;
+            if (!request.Headers.TryGetValue ("sec-websocket-protocol", out protocols))
+                return null;
+            return protocols.FirstOrDefault (x => x.StartsWith (SUBPROTOCOL_PREFIX, StringComparison.Ordinal));
+        }
+
+        /// <summary>
+        /// The protocol version named by a kRPC subprotocol, or 0 if the subprotocol is null.
+        /// Throws a HandshakeException if the version is malformed or not supported.
+        /// </summary>
+        public static uint GetProtocolVersion (string subprotocol)
+        {
+            if (subprotocol == null)
+                return 0;
+            uint version;
+            if (!uint.TryParse (subprotocol.Substring (SUBPROTOCOL_PREFIX.Length), NumberStyles.None,
+                                CultureInfo.InvariantCulture, out version))
+                throw new HandshakeException (Response.CreateBadRequest ("Malformed subprotocol " + subprotocol + "."));
+            if (!ProtocolVersion.IsSupported (version))
+                throw new HandshakeException (Response.CreateBadRequest (ProtocolVersion.UnsupportedMessage (version)));
+            return version;
+        }
+
+        /// <summary>
+        /// The response accepting a connection, which names the subprotocol if the client requested one.
+        /// </summary>
+        public static byte[] WriteResponse (string key, string subprotocol)
         {
             var returnKey = Convert.ToBase64String (sha1.ComputeHash (Encoding.ASCII.GetBytes (key + WEB_SOCKETS_KEY)));
             var response = new Response (101, "Switching Protocols");
             response.AddHeaderField ("Upgrade", "websocket");
             response.AddHeaderField ("Connection", "Upgrade");
             response.AddHeaderField ("Sec-WebSocket-Accept", returnKey);
+            if (subprotocol != null)
+                response.AddHeaderField ("Sec-WebSocket-Protocol", subprotocol);
             return response.ToBytes ();
         }
 
@@ -157,7 +193,9 @@ namespace KRPC.Server.WebSockets
                 throw new HandshakeException (response);
             }
 
-            // Note: Sec-WebSocket-Protocol and Sec-WebSocket-Extensions fields are ignored
+            GetProtocolVersion (GetSubprotocol (request));
+
+            // Note: Sec-WebSocket-Extensions field is ignored
         }
     }
 }

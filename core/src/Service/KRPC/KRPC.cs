@@ -56,6 +56,9 @@ namespace KRPC.Service.KRPC
             status.StreamRpcsExecuted = core.StreamRPCsExecuted;
             status.StreamRpcRate = core.StreamRPCRate;
             status.TimePerStreamUpdate = core.TimePerStreamUpdate;
+            var client = CallContext.Client as Server.Message.RPCClient;
+            if (client != null)
+                status.ProtocolVersion = client.ProtocolVersion;
             return status;
         }
 

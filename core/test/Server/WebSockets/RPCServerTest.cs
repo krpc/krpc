@@ -10,7 +10,7 @@ namespace KRPC.Test.Server.WebSockets
     [TestFixture]
     public class RPCServerTest
     {
-        static void CheckValidConnectionRequest(string request, string name)
+        static void CheckValidConnectionRequest(string request, string name, string subprotocol = null)
         {
             var ascii = Encoding.ASCII;
             var requestBytes = ascii.GetBytes(request);
@@ -43,8 +43,26 @@ namespace KRPC.Test.Server.WebSockets
                 "HTTP/1.1 101 Switching Protocols\r\n" +
                 "Upgrade: websocket\r\n" +
                 "Connection: Upgrade\r\n" +
-                "Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=\r\n\r\n",
+                "Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=\r\n" +
+                (subprotocol == null ? string.Empty : "Sec-WebSocket-Protocol: " + subprotocol + "\r\n") +
+                "\r\n",
                 response
+            );
+        }
+
+        [Test]
+        public void ValidConnectionRequestWithProtocolVersion ()
+        {
+            CheckValidConnectionRequest(
+                "GET / HTTP/1.1\r\n" +
+                "Host: localhost\r\n" +
+                "Upgrade: websocket\r\n" +
+                "Connection: Upgrade\r\n" +
+                "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
+                "Sec-WebSocket-Version: 13\r\n" +
+                "Sec-WebSocket-Protocol: chat, krpc.1\r\n\r\n",
+                string.Empty,
+                "krpc.1"
             );
         }
 
@@ -397,6 +415,23 @@ namespace KRPC.Test.Server.WebSockets
                                "Sec-WebSocket-Version: 12\r\n\r\n"
                            );
             Assert.AreEqual ("HTTP/1.1 426 Upgrade Required\r\nSec-WebSocket-Version: 13\r\n\r\n", response);
+        }
+
+        [Test]
+        public void InvalidConnectionRequestUnsupportedProtocolVersion ()
+        {
+            var response = CheckInvalidConnectionRequest (
+                               "GET / HTTP/1.1\r\n" +
+                               "Host: localhost\r\n" +
+                               "Upgrade: websocket\r\n" +
+                               "Connection: Upgrade\r\n" +
+                               "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
+                               "Sec-WebSocket-Version: 13\r\n" +
+                               "Sec-WebSocket-Protocol: krpc.2\r\n\r\n"
+                           );
+            Assert.AreEqual (
+                "HTTP/1.1 400 Bad Request\r\n\r\n" +
+                "Protocol version 2 is not supported. The server supports protocol versions 0 to 1.", response);
         }
     }
 }

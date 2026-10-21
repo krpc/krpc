@@ -39,7 +39,62 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (1, server.Clients.Count ());
             Assert.AreEqual ("Jebediah Kerman!!!", server.Clients.First ().Name);
 
-            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 19, Status.Ok, string.Empty, 16);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 21, Status.Ok, string.Empty, 16);
+        }
+
+        [Test]
+        public void ValidConnectionMessageWithProtocolVersion ()
+        {
+            var responseStream = new MemoryStream ();
+            var stream = new TestStream (
+                new MemoryStream (TestingTools.CreateConnectionRequest (Type.Rpc, protocolVersion: 1)), responseStream);
+
+            // Create mock byte server and client
+            var mockByteServer = new Mock<IServer<byte,byte>> ();
+            var byteServer = mockByteServer.Object;
+            var byteClient = new TestClient (stream);
+
+            var server = new RPCServer (byteServer);
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
+            server.Start ();
+
+            // Fire a client connection event
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
+
+            Assert.IsTrue (eventArgs.Request.ShouldAllow);
+            Assert.IsFalse (eventArgs.Request.ShouldDeny);
+
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 21, Status.Ok, string.Empty, 16);
+        }
+
+        [Test]
+        public void UnsupportedProtocolVersion ()
+        {
+            var responseStream = new MemoryStream ();
+            var stream = new TestStream (
+                new MemoryStream (TestingTools.CreateConnectionRequest (Type.Rpc, protocolVersion: 2)), responseStream);
+
+            // Create mock byte server and client
+            var mockByteServer = new Mock<IServer<byte,byte>> ();
+            var byteServer = mockByteServer.Object;
+            var mockByteClient = new Mock<IClient<byte,byte>> ();
+            mockByteClient.Setup (x => x.Stream).Returns (stream);
+            var byteClient = mockByteClient.Object;
+
+            var server = new RPCServer (byteServer);
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
+            server.Start ();
+
+            // Fire a client connection event
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
+
+            Assert.IsFalse (eventArgs.Request.ShouldAllow);
+            Assert.IsTrue (eventArgs.Request.ShouldDeny);
+
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 87, Status.WrongProtocolVersion,
+                "Protocol version 2 is not supported. The server supports protocol versions 0 to 1.", 0);
         }
 
         [Test]
@@ -81,7 +136,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             server.Update ();
             Assert.AreEqual (1, server.Clients.Count ());
             Assert.AreEqual ("Jebediah Kerman!!!", server.Clients.First ().Name);
-            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 19, Status.Ok, string.Empty, 16);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 21, Status.Ok, string.Empty, 16);
         }
 
         [Test]

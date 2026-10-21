@@ -67,6 +67,7 @@
     <Compile Include="Server\ProtocolBuffers\StreamServer.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
     <Compile Include="Server\ProtocolBuffers\Utils.cs" />
+    <Compile Include="Server\ProtocolVersion.cs" />
     <Compile Include="Server\SerialIO\BufferedPort.cs" />
     <Compile Include="Server\SerialIO\ByteBuffer.cs" />
     <Compile Include="Server\SerialIO\ByteClient.cs" />
