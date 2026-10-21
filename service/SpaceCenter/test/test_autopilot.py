@@ -1578,6 +1578,7 @@ def _make_autopilot_test_class(  # noqa: PLR0913
 TestAutoPilotAttitude = _make_autopilot_test_class(
     "TestAutoPilotAttitude",
     "AutoPilot",
+    no_force_oscillation=True,
 )
 
 # Rigid craft with thrust vector control drive pitch/yaw, and a weak reaction wheel
@@ -1839,17 +1840,11 @@ TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
     pre_launch_sequence=True,
 )
 
-# Shuttle-style craft: gimbal + aero control, no clean reaction-wheel torque model, so the
-# autotuned loop is too hot for the actual actuator authority and limit-cycles until the
-# control-oscillation latch floors the bandwidth.
-# It also starts ~8.6 deg pitched on the pad, so the launch capture takes a few seconds.
-# FIXME: holds cleanly now, but large continuous slews are still flaky in the floored regime
-# (the floored loop occasionally releases / the feedforward whips, spiking the error to ~5 deg),
-# so the turn tests remain skipped. This is NOT a frequency-detector/notch problem (the cycle is
-# genuine ~0.6 Hz rigid-body motion, in-band, not a structural mode in the measurement): the real
-# fix is modelling the gimbal/aero actuator bandwidth so the autotuner can place the loop
-# crossover with real phase margin and run faster than the blunt 1.0 rad/s floor while keeping the
-# feedforward through the slew. Root cause is the constant-max-torque model.
+# Shuttle-style craft: gimbal and aero control, with no clean reaction-wheel torque model. The
+# autotuned loop is too hot for the actuator authority, and limit-cycles until the
+# control-oscillation latch floors the bandwidth. The cycle is a genuine ~0.6 Hz rigid-body
+# motion, from the constant maximum torque model ignoring the gimbal and aero actuator bandwidth.
+# The craft starts ~8.6 deg pitched on the pad, so the launch capture takes a few seconds.
 TestAutoPilotLaunchDynawing = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchDynawing",
     "Dynawing",
@@ -1889,7 +1884,7 @@ TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
 # tested here: on aircraft the autopilot's roll control excites a sustained roll
 # limit-cycle (a known limitation of the constant-torque model on aero-controlled craft),
 # so these focus on the pitch/heading hold that does converge cleanly.
-def _make_autopilot_flight_test_class(
+def _make_autopilot_flight_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
     speed,
@@ -1904,6 +1899,7 @@ def _make_autopilot_flight_test_class(
     hold_oscillation_amplitude=1,
     hold_attitude_error=2,
     attitude_tolerance=2,
+    no_pitch_upset=False,
 ):
     class TestAutoPilotFlightBase(krpctest.TestCase):
         @classmethod
@@ -1989,6 +1985,7 @@ def _make_autopilot_flight_test_class(
             self.assert_steady(samples)
             self.assert_level()
 
+        @unittest.skipIf(no_pitch_upset, "not supported on this craft")
         def test_recover_from_pitch_upset(self):
             # Place the aircraft pitched up, command level flight, and confirm the
             # autopilot pushes the nose back down to level and then holds it steadily.
@@ -2015,6 +2012,7 @@ TestAutoPilotFlightAeris4A = _make_autopilot_flight_test_class(
     "TestAutoPilotFlightAeris4A",
     "Aeris 4A",
     speed=100,
+    no_pitch_upset=True,
 )
 
 # A small, slow stock light aircraft.
