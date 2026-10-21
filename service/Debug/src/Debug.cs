@@ -131,40 +131,27 @@ namespace KRPC.Debug
                 throw new ArgumentNullException (nameof (body));
             var internalVessel = ActiveVessel ();
             var celestialBody = body.InternalBody;
-
-            // Build the world-space attitude for the requested pitch, heading and roll, using the
-            // same surface-frame convention as the flight telemetry (x = zenith, y = north,
-            // z = east), evaluated at the target location
-            var worldPosition = celestialBody.GetWorldSurfacePosition (latitude, longitude, altitude);
-            var positionFromBody = worldPosition - celestialBody.position;
-            var toNorthPole = (celestialBody.position + (Vector3d)celestialBody.transform.up * celestialBody.Radius) - worldPosition;
-            var northPole = toNorthPole.normalized;
-            var frameUp = Vector3d.Exclude (positionFromBody, northPole);
-            var frameForward = Vector3d.Cross (positionFromBody, northPole);
-            GeometryExtensions.OrthoNormalize2 (ref frameForward, ref frameUp);
-            var frameRotation = GeometryExtensions.LookRotation2 (frameForward, frameUp);
-            var inFrame = GeometryExtensions.QuaternionFromPitchHeadingRoll (
-                new Vector3d (pitch, heading, roll));
-            var worldRotation = frameRotation * inFrame;
-
-            // The airspeed points along the flight path, which sits angleOfAttack degrees below the
-            // nose in the pitch plane (so a positive angle of attack is a nose-up attitude). Build it
-            // the same way as the attitude, from the flight-path pitch.
-            var flightPathInFrame = GeometryExtensions.QuaternionFromPitchHeadingRoll (
-                new Vector3d (pitch - angleOfAttack, heading, roll));
-            var flightPath = frameRotation * (flightPathInFrame * Vector3d.up);
+            Vector3d worldPosition;
+            QuaternionD worldRotation;
+            Vector3d flightPath;
+            FlightState (
+                celestialBody, latitude, longitude, altitude, heading, pitch, roll, angleOfAttack,
+                out worldPosition, out worldRotation, out flightPath);
 
             // Orbital velocity giving the requested airspeed: the co-rotating surface velocity at
             // this point plus the airspeed along the flight path.
+            var positionFromBody = worldPosition - celestialBody.position;
             var surfaceVelocity = Vector3d.Cross (celestialBody.angularVelocity, positionFromBody);
             var worldVelocity = surfaceVelocity + speed * flightPath;
 
-            // Teleport via a state-vector orbit, then set the attitude; physics resumes when the
-            // vessel unpacks.
+            // Teleport via a state-vector orbit, then set the attitude. The vessel falls for the
+            // seconds it spends on rails, so the requested state is applied again once it unpacks.
             SetStateVectors (celestialBody, positionFromBody, worldVelocity);
             internalVessel.SetRotation ((Quaternion)worldRotation);
 
-            throw new YieldException<Action> (() => WaitForTeleport (0));
+            throw new YieldException<Action> (() => WaitForTeleport (0, () => ApplyFlight (
+                internalVessel, celestialBody, latitude, longitude, altitude, speed, heading,
+                pitch, roll, angleOfAttack)));
         }
 
         /// <summary>
@@ -743,16 +730,68 @@ namespace KRPC.Debug
             }
         }
 
+        // The world-space position, attitude and flight-path direction for a vessel in atmospheric
+        // flight. The attitude uses the same surface-frame convention as the flight telemetry
+        // (x = zenith, y = north, z = east), evaluated at the target location. The flight path
+        // sits angleOfAttack degrees below the nose in the pitch plane, so a positive angle of
+        // attack is a nose-up attitude.
+        static void FlightState (
+            global::CelestialBody body, double latitude, double longitude, double altitude,
+            double heading, double pitch, double roll, double angleOfAttack,
+            out Vector3d worldPosition, out QuaternionD worldRotation, out Vector3d flightPath)
+        {
+            worldPosition = body.GetWorldSurfacePosition (latitude, longitude, altitude);
+            var positionFromBody = worldPosition - body.position;
+            var toNorthPole = (body.position + (Vector3d)body.transform.up * body.Radius) - worldPosition;
+            var northPole = toNorthPole.normalized;
+            var frameUp = Vector3d.Exclude (positionFromBody, northPole);
+            var frameForward = Vector3d.Cross (positionFromBody, northPole);
+            GeometryExtensions.OrthoNormalize2 (ref frameForward, ref frameUp);
+            var frameRotation = GeometryExtensions.LookRotation2 (frameForward, frameUp);
+            worldRotation = frameRotation * GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                new Vector3d (pitch, heading, roll));
+            var flightPathInFrame = GeometryExtensions.QuaternionFromPitchHeadingRoll (
+                new Vector3d (pitch - angleOfAttack, heading, roll));
+            flightPath = frameRotation * (flightPathInFrame * Vector3d.up);
+        }
+
+        // Put a loaded vessel in atmospheric flight, with its center of mass at the given point
+        static void ApplyFlight (
+            global::Vessel internalVessel, global::CelestialBody body, double latitude,
+            double longitude, double altitude, double speed, double heading, double pitch,
+            double roll, double angleOfAttack)
+        {
+            Vector3d worldPosition;
+            QuaternionD worldRotation;
+            Vector3d flightPath;
+            FlightState (
+                body, latitude, longitude, altitude, heading, pitch, roll, angleOfAttack,
+                out worldPosition, out worldRotation, out flightPath);
+            internalVessel.SetRotation ((Quaternion)worldRotation);
+            // The game computes the center of mass the same way, once per frame
+            var centerOfMass = (Vector3d)internalVessel.vesselTransform.position +
+                worldRotation * (Vector3d)internalVessel.localCoM;
+            internalVessel.Translate (worldPosition - centerOfMass);
+            ZeroAngularVelocity (internalVessel);
+            internalVessel.ChangeWorldVelocity (speed * flightPath - internalVessel.srf_velocity);
+        }
+
         // A teleported vessel is packed (on rails) until the game settles the scene around its new
         // position. Wait for the active vessel to unpack, then a few more ticks for the physics to
-        // start, so that the RPC returns with the vessel in its new state.
-        static void WaitForTeleport (int tick)
+        // start, so that the RPC returns with the vessel in its new state. The settled action
+        // runs once the physics has started, and the RPC returns a tick later, once the game has
+        // updated the vessel's position and velocity from it.
+        static void WaitForTeleport (int tick, Action settled = null)
         {
             var active = FlightGlobals.ActiveVessel;
             if (active == null || active.packed)
-                throw new YieldException<Action> (() => WaitForTeleport (0));
+                throw new YieldException<Action> (() => WaitForTeleport (0, settled));
             if (tick < 10)
-                throw new YieldException<Action> (() => WaitForTeleport (tick + 1));
+                throw new YieldException<Action> (() => WaitForTeleport (tick + 1, settled));
+            if (settled != null) {
+                settled ();
+                throw new YieldException<Action> (() => WaitForTeleport (tick));
+            }
         }
 
         // The vessel is placed with its lowest point just clear of the terrain, then falls the last

@@ -90,13 +90,13 @@ class TestDebug(krpctest.TestCase):
         vessel = self.vessel
         # Airspeed is measured against the rotating body; the attitude angles come from
         # the vessel's own surface frame, which is what the navball shows.
-        self.assertAlmostEqual(
-            speed, vessel.flight(self.kerbin.reference_frame).speed, delta=5
-        )
+        surface_flight = vessel.flight(self.kerbin.reference_frame)
+        self.assertAlmostEqual(speed, surface_flight.speed, delta=1)
+        self.assertAlmostEqual(0, surface_flight.angle_of_attack, delta=1)
         flight = vessel.flight(vessel.surface_reference_frame)
-        self.assertAlmostEqual(5000, flight.mean_altitude, delta=100)
-        self.assertDegreesAlmostEqual(heading, flight.heading, delta=2)
-        self.assertDegreesAlmostEqual(pitch, flight.pitch, delta=2)
+        self.assertAlmostEqual(5000, flight.mean_altitude, delta=5)
+        self.assertDegreesAlmostEqual(heading, flight.heading, delta=1)
+        self.assertDegreesAlmostEqual(pitch, flight.pitch, delta=1)
 
     def test_set_position(self):
         self.set_circular_orbit("Kerbin", 100000)
