@@ -3,6 +3,8 @@
   element, tuple item and dictionary value (#1017, #1091)
 - **Breaking:** Return messages, such as the server status, as plain tables (#1142)
 - **Breaking:** Rename `conn.li_dar` to `conn.lidar`, for the `LIDAR` service (#1149)
+- **Breaking:** Send protocol version 1 when connecting, and fail to connect to a server from
+  before 0.7 (#1162)
 - Support Lua 5.3 and 5.4, where 64-bit values decode to exact integers (#1142)
 - Depend on `lua-protobuf` in place of `protobuf`, and require luasocket 3.0 or later
   (#1142, #1060)

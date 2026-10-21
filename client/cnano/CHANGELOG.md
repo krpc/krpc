@@ -4,6 +4,8 @@
 - **Breaking:** Renumber the `KRPC` service's procedures, so a program built against an
   earlier version must be rebuilt (#1124)
 - **Breaking:** Rename `dockingcamera.h` to `docking_camera.h` (#1149)
+- **Breaking:** Send protocol version 1 when connecting, and fail to connect to a server from
+  before 0.7 (#1162)
 - Support structure types, as a C struct with a member per field, and nullable structure fields
   and collection elements, as the value beside a `bool` presence flag (#1066, #1091)
 - Add `KRPC_COMMUNICATION_TCP` and `KRPC_COMMUNICATION_LOCALSOCKET`, with `tcp` and
