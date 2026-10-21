@@ -1578,6 +1578,7 @@ def _make_autopilot_test_class(  # noqa: PLR0913
 TestAutoPilotAttitude = _make_autopilot_test_class(
     "TestAutoPilotAttitude",
     "AutoPilot",
+    no_force_oscillation=True,
 )
 
 # Rigid craft with thrust vector control drive pitch/yaw, and a weak reaction wheel
