@@ -1840,17 +1840,11 @@ TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
     pre_launch_sequence=True,
 )
 
-# Shuttle-style craft: gimbal + aero control, no clean reaction-wheel torque model, so the
-# autotuned loop is too hot for the actual actuator authority and limit-cycles until the
-# control-oscillation latch floors the bandwidth.
-# It also starts ~8.6 deg pitched on the pad, so the launch capture takes a few seconds.
-# FIXME: holds cleanly now, but large continuous slews are still flaky in the floored regime
-# (the floored loop occasionally releases / the feedforward whips, spiking the error to ~5 deg),
-# so the turn tests remain skipped. This is NOT a frequency-detector/notch problem (the cycle is
-# genuine ~0.6 Hz rigid-body motion, in-band, not a structural mode in the measurement): the real
-# fix is modelling the gimbal/aero actuator bandwidth so the autotuner can place the loop
-# crossover with real phase margin and run faster than the blunt 1.0 rad/s floor while keeping the
-# feedforward through the slew. Root cause is the constant-max-torque model.
+# Shuttle-style craft: gimbal and aero control, with no clean reaction-wheel torque model. The
+# autotuned loop is too hot for the actuator authority, and limit-cycles until the
+# control-oscillation latch floors the bandwidth. The cycle is a genuine ~0.6 Hz rigid-body
+# motion, from the constant maximum torque model ignoring the gimbal and aero actuator bandwidth.
+# The craft starts ~8.6 deg pitched on the pad, so the launch capture takes a few seconds.
 TestAutoPilotLaunchDynawing = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchDynawing",
     "Dynawing",
