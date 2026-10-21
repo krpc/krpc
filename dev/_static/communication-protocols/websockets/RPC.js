@@ -4,7 +4,7 @@ var ByteBuffer = require('bytebuffer')
 var proto = protobufjs.loadProtoFile('krpc.proto').build();
 
 console.log('Connecting to RPC server')
-let rpcConn = new websocket('ws://127.0.0.1:50000')
+let rpcConn = new websocket('ws://127.0.0.1:50000', 'krpc.1')
 rpcConn.binaryType = 'arraybuffer'
 
 rpcConn.onopen = (e) => {

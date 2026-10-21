@@ -615,8 +615,35 @@ which carries the same messages over a cheaper path than TCP/IP.</p></li>
 </ul>
 <p>In each protocol, clients invoke remote procedure calls by <a class="reference internal" href="communication-protocols/messages.html"><span class="doc">sending and receiving protobuf
 messages</span></a>.</p>
+<section id="protocol-version">
+<span id="communication-protocol-version"></span><h2>Protocol Version<a class="headerlink" href="#protocol-version" title="Link to this heading">#</a></h2>
+<p>Each connection handshake carries the version of the protocol, an integer. The client sends the
+version it uses, and the server replies with the version it accepted:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Protocol version</p></th>
+<th class="head"><p>kRPC release</p></th>
+<th class="head"><p>Server accepts</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Before 0.7</p></td>
+<td><p>Any version, which it ignores</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>0.7</p></td>
+<td><p>0 and 1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A client that sends no version is from before kRPC 0.7. The server serves it as version 1, and logs
+a warning. The server rejects any other version with the status <code class="docutils literal notranslate"><span class="pre">WRONG_PROTOCOL_VERSION</span></code>, or
+over WebSockets with HTTP status 400.</p>
 <div class="toctree-wrapper compound">
 </div>
+</section>
 </section>
 
 
@@ -657,6 +684,18 @@ messages</span></a>.</p>
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#protocol-version">Protocol Version</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

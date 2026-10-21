@@ -274,8 +274,10 @@ returns a Protocol Buffer message with the format:
    :start-at: message Status {
    :end-before: // Multiplexed request messages
 
-The ``version`` field contains the version string of the server. The remaining
-fields contain performance information about the server.
+The ``version`` field contains the version string of the server. The
+``protocol_version`` field contains the protocol version of the connection, which is 0
+for a client that sent none. The remaining fields contain performance information
+about the server.
 
 .. _communication-protocol-get-services:
 

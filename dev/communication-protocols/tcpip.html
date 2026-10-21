@@ -645,6 +645,7 @@ connection, a client must do the following:</p>
 <span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">client_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">client_identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">protocol_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 
 <span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">RPC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -653,9 +654,9 @@ connection, a client must do the following:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">type</span></code> field should be set to <code class="docutils literal notranslate"><span class="pre">ConnectionRequest.RPC</span></code> and the <code class="docutils literal notranslate"><span class="pre">client_name</span></code> field can
-be set to the name of the client to display on the in-game UI. The <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> should
-be left blank.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">type</span></code> field should be set to <code class="docutils literal notranslate"><span class="pre">ConnectionRequest.RPC</span></code> and the <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code>
+field to 1. The <code class="docutils literal notranslate"><span class="pre">client_name</span></code> field can be set to the name of the client to display on the
+in-game UI. The <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> should be left blank.</p>
 </li>
 <li><p>Receive a <cite>ConnectionResponse</cite> message from the server. This message is defined as:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">ConnectionResponse</span><span class="w"> </span><span class="p">{</span>
@@ -665,14 +666,18 @@ be left blank.</p>
 <span class="w">    </span><span class="na">MALFORMED_MESSAGE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">    </span><span class="na">TIMEOUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">    </span><span class="na">WRONG_TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">    </span><span class="na">WRONG_PROTOCOL_VERSION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">client_identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">protocol_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>If the <code class="docutils literal notranslate"><span class="pre">status</span></code> field is set to <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code> then the connection was
 successful. If not, the <code class="docutils literal notranslate"><span class="pre">message</span></code> field contains a description of what went wrong.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field contains the version of the protocol the server accepted. A
+server from before kRPC 0.7 leaves it as 0. See <a class="reference internal" href="../communication-protocols.html#communication-protocol-version"><span class="std std-ref">Protocol Version</span></a>.</p>
 <p>When the connection is successful, the <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> contains a unique 16-byte
 identifier for the client. This is required when connecting to the stream server (described
 below).</p>
@@ -685,9 +690,10 @@ below).</p>
 connection, a client must first connect to the RPC server (as above) then do the following:</p>
 <ol class="arabic simple">
 <li><p>Open a TCP socket to the server on its stream port (which defaults to 50001).</p></li>
-<li><p>Send a <cite>ConnectionRequest</cite> message, with its <cite>type</cite> field set to <cite>ConnectionRequest.STREAM</cite> and
-its <cite>client_identifier</cite> field set to the value received in the <cite>client_identifier</cite> field of the
-<cite>ConnectionResponse</cite> message received when connecting to the RPC server earlier.</p></li>
+<li><p>Send a <cite>ConnectionRequest</cite> message, with its <cite>type</cite> field set to <cite>ConnectionRequest.STREAM</cite>,
+its <cite>protocol_version</cite> field set to 1, and its <cite>client_identifier</cite> field set to the value
+received in the <cite>client_identifier</cite> field of the <cite>ConnectionResponse</cite> message received when
+connecting to the RPC server earlier.</p></li>
 <li><p>Receive a <cite>ConnectionResponse</cite> message, similarly to the RPC server, and check that the value of
 the <cite>status</cite> field is <cite>ConnectionResponse.OK</cite>. If not, then the connection was not successful,
 and the <cite>message</cite> field contains a description of what went wrong.</p></li>
@@ -768,6 +774,7 @@ decodes it.</p></li>
 <span class="c1"># Send an RPC connection request</span>
 <span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="p">()</span>
 <span class="n">request</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="o">.</span><span class="n">RPC</span>
+<span class="n">request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Jeb"</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
 
@@ -777,6 +784,8 @@ decodes it.</p></li>
 <span class="c1"># Check the connection was successful</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionResponse</span><span class="o">.</span><span class="n">OK</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Connection failed: "</span> <span class="o">+</span> <span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"The server does not support protocol version 1"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Connected to RPC server"</span><span class="p">)</span>
 
 <span class="c1"># Invoke the KRPC.GetStatus RPC</span>
@@ -862,6 +871,7 @@ decodes it.</p></li>
 <span class="c1"># Send an RPC connection request</span>
 <span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="p">()</span>
 <span class="n">request</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="o">.</span><span class="n">RPC</span>
+<span class="n">request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Jeb"</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
 
@@ -871,6 +881,8 @@ decodes it.</p></li>
 <span class="c1"># Check the connection was successful</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionResponse</span><span class="o">.</span><span class="n">OK</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Connection failed: "</span> <span class="o">+</span> <span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"The server does not support protocol version 1"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Connected to RPC server"</span><span class="p">)</span>
 
 <span class="c1"># Print out the clients identifier</span>
@@ -886,6 +898,7 @@ decodes it.</p></li>
 <span class="c1"># Send a stream connection request, containing the clients identifier</span>
 <span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="p">()</span>
 <span class="n">request</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="o">.</span><span class="n">STREAM</span>
+<span class="n">request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">request</span><span class="o">.</span><span class="n">client_identifier</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">client_identifier</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">stream_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
 

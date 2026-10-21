@@ -889,11 +889,14 @@ returns a Protocol Buffer message with the format:</p>
 <span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">stream_rpcs_executed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">17</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">stream_rpc_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">time_per_stream_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">19</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">protocol_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">version</span></code> field contains the version string of the server. The remaining
-fields contain performance information about the server.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">version</span></code> field contains the version string of the server. The
+<code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field contains the protocol version of the connection, which is 0
+for a client that sent none. The remaining fields contain performance information
+about the server.</p>
 </section>
 <section id="getservices">
 <span id="communication-protocol-get-services"></span><h3>GetServices<a class="headerlink" href="#getservices" title="Link to this heading">#</a></h3>

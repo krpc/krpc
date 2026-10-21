@@ -31,18 +31,20 @@ The handshake is identical to :doc:`tcpip`, differing only in how the connection
    ``XDG_RUNTIME_DIR`` environment variable, or by ``LOCALAPPDATA`` on Windows. See
    `Default Socket Paths`_ for the whole rule.
 
-2. Send a ``ConnectionRequest`` message with its ``type`` field set to ``ConnectionRequest.RPC``,
-   exactly as for TCP/IP.
+2. Send a ``ConnectionRequest`` message with its ``type`` field set to ``ConnectionRequest.RPC``
+   and its ``protocol_version`` field set to 1, exactly as for TCP/IP.
 
-3. Receive a ``ConnectionResponse`` message, check that ``status`` is ``ConnectionResponse.OK``,
-   and keep the 16-byte ``client_identifier`` for the stream connection.
+3. Receive a ``ConnectionResponse`` message, check that ``status`` is ``ConnectionResponse.OK``
+   and ``protocol_version`` is 1, and keep the 16-byte ``client_identifier`` for the stream
+   connection.
 
 Connecting to the Stream Server
 -------------------------------
 
 As for :doc:`tcpip`, open a second connection, this time to the stream server's socket path
 (``krpc/stream`` by default), and send a ``ConnectionRequest`` with its ``type`` field set to
-``ConnectionRequest.STREAM`` and its ``client_identifier`` field set to the value received above.
+``ConnectionRequest.STREAM``, its ``protocol_version`` field set to 1, and its
+``client_identifier`` field set to the value received above.
 
 Connecting to the stream server is optional. If the client doesn't require stream functionality,
 there is no need to connect.

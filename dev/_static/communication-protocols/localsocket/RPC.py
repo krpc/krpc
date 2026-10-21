@@ -61,6 +61,7 @@ rpc_conn.connect(default_path("rpc"))
 # Send an RPC connection request
 request = KRPC.ConnectionRequest()
 request.type = KRPC.ConnectionRequest.RPC
+request.protocol_version = 1
 request.client_name = "Jeb"
 send_message(rpc_conn, request)
 
@@ -70,6 +71,8 @@ response = recv_message(rpc_conn, KRPC.ConnectionResponse)
 # Check the connection was successful
 if response.status != KRPC.ConnectionResponse.OK:
     raise RuntimeError("Connection failed: " + response.message)
+if response.protocol_version != 1:
+    raise RuntimeError("The server does not support protocol version 1")
 print("Connected to RPC server")
 
 # Invoke the KRPC.GetStatus RPC

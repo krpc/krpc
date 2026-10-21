@@ -636,17 +636,19 @@ prefixed with their size in bytes encoded as a Protocol Buffers varint.</p>
 the path, which by default is <code class="docutils literal notranslate"><span class="pre">krpc/rpc</span></code> inside the directory named by the
 <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> environment variable, or by <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> on Windows. See
 <a class="reference internal" href="#default-socket-paths">Default Socket Paths</a> for the whole rule.</p></li>
-<li><p>Send a <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> message with its <code class="docutils literal notranslate"><span class="pre">type</span></code> field set to <code class="docutils literal notranslate"><span class="pre">ConnectionRequest.RPC</span></code>,
-exactly as for TCP/IP.</p></li>
-<li><p>Receive a <code class="docutils literal notranslate"><span class="pre">ConnectionResponse</span></code> message, check that <code class="docutils literal notranslate"><span class="pre">status</span></code> is <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code>,
-and keep the 16-byte <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> for the stream connection.</p></li>
+<li><p>Send a <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> message with its <code class="docutils literal notranslate"><span class="pre">type</span></code> field set to <code class="docutils literal notranslate"><span class="pre">ConnectionRequest.RPC</span></code>
+and its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field set to 1, exactly as for TCP/IP.</p></li>
+<li><p>Receive a <code class="docutils literal notranslate"><span class="pre">ConnectionResponse</span></code> message, check that <code class="docutils literal notranslate"><span class="pre">status</span></code> is <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code>
+and <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> is 1, and keep the 16-byte <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> for the stream
+connection.</p></li>
 </ol>
 </section>
 <section id="connecting-to-the-stream-server">
 <h2>Connecting to the Stream Server<a class="headerlink" href="#connecting-to-the-stream-server" title="Link to this heading">#</a></h2>
 <p>As for <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>, open a second connection, this time to the stream server’s socket path
 (<code class="docutils literal notranslate"><span class="pre">krpc/stream</span></code> by default), and send a <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> with its <code class="docutils literal notranslate"><span class="pre">type</span></code> field set to
-<code class="docutils literal notranslate"><span class="pre">ConnectionRequest.STREAM</span></code> and its <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> field set to the value received above.</p>
+<code class="docutils literal notranslate"><span class="pre">ConnectionRequest.STREAM</span></code>, its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field set to 1, and its
+<code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> field set to the value received above.</p>
 <p>Connecting to the stream server is optional. If the client doesn’t require stream functionality,
 there is no need to connect.</p>
 </section>
@@ -757,6 +759,7 @@ expose it.</p>
 <span class="c1"># Send an RPC connection request</span>
 <span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="p">()</span>
 <span class="n">request</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="o">.</span><span class="n">RPC</span>
+<span class="n">request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Jeb"</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
 
@@ -766,6 +769,8 @@ expose it.</p>
 <span class="c1"># Check the connection was successful</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionResponse</span><span class="o">.</span><span class="n">OK</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Connection failed: "</span> <span class="o">+</span> <span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"The server does not support protocol version 1"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Connected to RPC server"</span><span class="p">)</span>
 
 <span class="c1"># Invoke the KRPC.GetStatus RPC</span>

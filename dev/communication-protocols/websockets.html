@@ -620,6 +620,13 @@ protocol.</p>
 connection, open a websockets connection to the server on its RPC port (which defaults to
 50000). The connection URI can also contain a <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter with the name of the client to
 display in the on the in-game UI. For example: <code class="docutils literal notranslate"><span class="pre">ws://localhost:50000/?name=Jeb</span></code></p>
+<p>Request the subprotocol <code class="docutils literal notranslate"><span class="pre">krpc.1</span></code>, which names protocol version 1. In Javascript:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s1">'ws://localhost:50000/?name=Jeb'</span><span class="p">,</span><span class="w"> </span><span class="s1">'krpc.1'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The server names the subprotocol in its response. It rejects an unsupported version with HTTP
+status 400 and a message in the body. A server from before kRPC 0.7 names no subprotocol, so a
+client that requests <code class="docutils literal notranslate"><span class="pre">krpc.1</span></code> fails to connect to it. See <a class="reference internal" href="../communication-protocols.html#communication-protocol-version"><span class="std std-ref">Protocol Version</span></a>.</p>
 </section>
 <section id="connecting-to-the-stream-server">
 <h2>Connecting to the Stream Server<a class="headerlink" href="#connecting-to-the-stream-server" title="Link to this heading">#</a></h2>
@@ -628,8 +635,8 @@ connection, a client must first connect to the RPC server (as above) then do the
 <ol class="arabic simple">
 <li><p>Get the identifier of the client by calling the <code class="docutils literal notranslate"><span class="pre">KRPC.GetClientID</span></code> remote procedure.</p></li>
 <li><p>Open a websockets connection to the server on its stream port (which defaults to 50001), with an
-<code class="docutils literal notranslate"><span class="pre">id</span></code> query parameter set to the client identifier encoded in base64. For example:
-<code class="docutils literal notranslate"><span class="pre">ws://localhost:50001/?id=Eeh8Vbj2DkWTcJZTkYlEhQ==</span></code></p></li>
+<code class="docutils literal notranslate"><span class="pre">id</span></code> query parameter set to the client identifier encoded in base64, and requesting the
+subprotocol <code class="docutils literal notranslate"><span class="pre">krpc.1</span></code>. For example: <code class="docutils literal notranslate"><span class="pre">ws://localhost:50001/?id=Eeh8Vbj2DkWTcJZTkYlEhQ==</span></code></p></li>
 </ol>
 <p>Connecting to the stream server is optional. If the client doesn’t require stream functionality,
 there is no need to connect.</p>
@@ -666,7 +673,7 @@ from the response.</p>
 <span class="kd">var</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">protobufjs</span><span class="p">.</span><span class="nx">loadProtoFile</span><span class="p">(</span><span class="s1">'krpc.proto'</span><span class="p">).</span><span class="nx">build</span><span class="p">();</span>
 
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Connecting to RPC server'</span><span class="p">)</span>
-<span class="kd">let</span><span class="w"> </span><span class="nx">rpcConn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">websocket</span><span class="p">(</span><span class="s1">'ws://127.0.0.1:50000'</span><span class="p">)</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">rpcConn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">websocket</span><span class="p">(</span><span class="s1">'ws://127.0.0.1:50000'</span><span class="p">,</span><span class="w"> </span><span class="s1">'krpc.1'</span><span class="p">)</span>
 <span class="nx">rpcConn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'arraybuffer'</span>
 
 <span class="nx">rpcConn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
@@ -691,7 +698,7 @@ from the response.</p>
 <span class="kd">var</span><span class="w"> </span><span class="nx">proto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">protobufjs</span><span class="p">.</span><span class="nx">loadProtoFile</span><span class="p">(</span><span class="s1">'krpc.proto'</span><span class="p">).</span><span class="nx">build</span><span class="p">();</span>
 
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Connecting to RPC server'</span><span class="p">)</span>
-<span class="kd">let</span><span class="w"> </span><span class="nx">rpcConn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">websocket</span><span class="p">(</span><span class="s1">'ws://127.0.0.1:50000'</span><span class="p">)</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">rpcConn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">websocket</span><span class="p">(</span><span class="s1">'ws://127.0.0.1:50000'</span><span class="p">,</span><span class="w"> </span><span class="s1">'krpc.1'</span><span class="p">)</span>
 <span class="nx">rpcConn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'arraybuffer'</span>
 
 <span class="nx">rpcConn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
@@ -709,7 +716,7 @@ from the response.</p>
 <span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Client identifier ='</span><span class="p">,</span><span class="w"> </span><span class="nx">client_identifier</span><span class="p">);</span>
 
 <span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Connecting to Stream server'</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">streamConn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">websocket</span><span class="p">(</span><span class="s1">'ws://127.0.0.1:50001?id='</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">client_identifier</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">streamConn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">websocket</span><span class="p">(</span><span class="s1">'ws://127.0.0.1:50001?id='</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">client_identifier</span><span class="p">,</span><span class="w"> </span><span class="s1">'krpc.1'</span><span class="p">);</span>
 <span class="w">  </span><span class="nx">streamConn</span><span class="p">.</span><span class="nx">binaryType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'arraybuffer'</span><span class="p">;</span>
 
 <span class="w">  </span><span class="nx">streamConn</span><span class="p">.</span><span class="nx">onopen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>

@@ -672,6 +672,7 @@ populated. The <code class="docutils literal notranslate"><span class="pre">Conn
 <span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">client_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">client_identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">protocol_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 
 <span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">RPC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -680,9 +681,9 @@ populated. The <code class="docutils literal notranslate"><span class="pre">Conn
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">type</span></code> field should be set to <code class="docutils literal notranslate"><span class="pre">ConnectionRequest.RPC</span></code> and the <code class="docutils literal notranslate"><span class="pre">client_name</span></code> field can
-be set to the name of the client to display on the in-game UI. The <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> should
-be left blank.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">type</span></code> field should be set to <code class="docutils literal notranslate"><span class="pre">ConnectionRequest.RPC</span></code> and the <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code>
+field to 1. The <code class="docutils literal notranslate"><span class="pre">client_name</span></code> field can be set to the name of the client to display on the
+in-game UI. The <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> should be left blank.</p>
 </li>
 <li><p>Receive a <code class="docutils literal notranslate"><span class="pre">ConnectionResponse</span></code> message from the server. This message is defined as:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">ConnectionResponse</span><span class="w"> </span><span class="p">{</span>
@@ -692,14 +693,18 @@ be left blank.</p>
 <span class="w">    </span><span class="na">MALFORMED_MESSAGE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">    </span><span class="na">TIMEOUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">    </span><span class="na">WRONG_TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">    </span><span class="na">WRONG_PROTOCOL_VERSION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">client_identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">protocol_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>If the <code class="docutils literal notranslate"><span class="pre">status</span></code> field is set to <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code> then the connection was successful.
 If not, the <code class="docutils literal notranslate"><span class="pre">message</span></code> field contains a description of what went wrong.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field contains the version of the protocol the server accepted. A
+server from before kRPC 0.7 leaves it as 0. See <a class="reference internal" href="../communication-protocols.html#communication-protocol-version"><span class="std std-ref">Protocol Version</span></a>.</p>
 <p>The server waits up to 3 seconds for the complete connection request message to arrive after
 its first bytes are received. If it does not arrive in time, the server responds with the
 <code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code> status.</p>
@@ -786,6 +791,7 @@ the server version number from the response.</p>
 <span class="c1"># Send a connection request wrapped in a MultiplexedRequest</span>
 <span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">MultiplexedRequest</span><span class="p">()</span>
 <span class="n">request</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="o">.</span><span class="n">RPC</span>
+<span class="n">request</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">request</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Jeb"</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
 
@@ -795,6 +801,8 @@ the server version number from the response.</p>
 <span class="c1"># Check the connection was successful</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionResponse</span><span class="o">.</span><span class="n">OK</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Connection failed: "</span> <span class="o">+</span> <span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"The server does not support protocol version 1"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Connected to server"</span><span class="p">)</span>
 
 <span class="c1"># Invoke the KRPC.GetStatus RPC, wrapped in a MultiplexedRequest</span>

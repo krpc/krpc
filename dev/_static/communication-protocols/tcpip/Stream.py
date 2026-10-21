@@ -52,6 +52,7 @@ rpc_conn.connect(("127.0.0.1", 50000))
 # Send an RPC connection request
 request = KRPC.ConnectionRequest()
 request.type = KRPC.ConnectionRequest.RPC
+request.protocol_version = 1
 request.client_name = "Jeb"
 send_message(rpc_conn, request)
 
@@ -61,6 +62,8 @@ response = recv_message(rpc_conn, KRPC.ConnectionResponse)
 # Check the connection was successful
 if response.status != KRPC.ConnectionResponse.OK:
     raise RuntimeError("Connection failed: " + response.message)
+if response.protocol_version != 1:
+    raise RuntimeError("The server does not support protocol version 1")
 print("Connected to RPC server")
 
 # Print out the clients identifier
@@ -76,6 +79,7 @@ stream_conn.connect(("127.0.0.1", 50001))
 # Send a stream connection request, containing the clients identifier
 request = KRPC.ConnectionRequest()
 request.type = KRPC.ConnectionRequest.STREAM
+request.protocol_version = 1
 request.client_identifier = response.client_identifier
 send_message(stream_conn, request)
 

@@ -49,6 +49,7 @@ conn = serial.Serial("/dev/ttyUSB0")
 # Send a connection request wrapped in a MultiplexedRequest
 request = KRPC.MultiplexedRequest()
 request.connection_request.type = KRPC.ConnectionRequest.RPC
+request.connection_request.protocol_version = 1
 request.connection_request.client_name = "Jeb"
 send_message(conn, request)
 
@@ -58,6 +59,8 @@ response = recv_message(conn, KRPC.ConnectionResponse)
 # Check the connection was successful
 if response.status != KRPC.ConnectionResponse.OK:
     raise RuntimeError("Connection failed: " + response.message)
+if response.protocol_version != 1:
+    raise RuntimeError("The server does not support protocol version 1")
 print("Connected to server")
 
 # Invoke the KRPC.GetStatus RPC, wrapped in a MultiplexedRequest

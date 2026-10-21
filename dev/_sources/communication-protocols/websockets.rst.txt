@@ -15,6 +15,16 @@ connection, open a websockets connection to the server on its RPC port (which de
 50000). The connection URI can also contain a ``name`` parameter with the name of the client to
 display in the on the in-game UI. For example: ``ws://localhost:50000/?name=Jeb``
 
+Request the subprotocol ``krpc.1``, which names protocol version 1. In Javascript:
+
+.. code-block:: javascript
+
+   new WebSocket('ws://localhost:50000/?name=Jeb', 'krpc.1')
+
+The server names the subprotocol in its response. It rejects an unsupported version with HTTP
+status 400 and a message in the body. A server from before kRPC 0.7 names no subprotocol, so a
+client that requests ``krpc.1`` fails to connect to it. See :ref:`communication-protocol-version`.
+
 Connecting to the Stream Server
 -------------------------------
 
@@ -24,8 +34,8 @@ connection, a client must first connect to the RPC server (as above) then do the
 1. Get the identifier of the client by calling the ``KRPC.GetClientID`` remote procedure.
 
 2. Open a websockets connection to the server on its stream port (which defaults to 50001), with an
-   ``id`` query parameter set to the client identifier encoded in base64. For example:
-   ``ws://localhost:50001/?id=Eeh8Vbj2DkWTcJZTkYlEhQ==``
+   ``id`` query parameter set to the client identifier encoded in base64, and requesting the
+   subprotocol ``krpc.1``. For example: ``ws://localhost:50001/?id=Eeh8Vbj2DkWTcJZTkYlEhQ==``
 
 Connecting to the stream server is optional. If the client doesn't require stream functionality,
 there is no need to connect.

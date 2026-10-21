@@ -61,6 +61,8 @@ Core
   * Add extension members, which a service declares on another service's class as C# extension methods (:issue:`1077`)
   * Add a communication protocol over a unix domain socket, for clients on the same machine as the game (:issue:`1065`)
   * Fix a serial connection freezing the game while it carries an RPC (:issue:`1035`)
+  * Add a protocol version to the connection handshake, sent over WebSockets as the subprotocol ``krpc.N`` and reported by ``KRPC.GetStatus`` (:issue:`1162`)
+  * Fix an exception on a serial connection request that carries no ``ConnectionRequest`` (:issue:`1162`)
   * Encode and decode values without reflection, cutting the server cost of a call that passes or returns an object by about three quarters (:issue:`1091`)
 
 * Game state
@@ -328,6 +330,7 @@ C-nano client
 * :breaking:`Breaking` Support null for any nullable type. A nullable non-class return adds a ``bool* returnValueIsNull`` out-parameter, and a nullable argument is a pointer (:issue:`1017`)
 * :breaking:`Breaking` Renumber the ``KRPC`` service's procedures, so a program built against an earlier version must be rebuilt (:issue:`1124`)
 * :breaking:`Breaking` Rename ``dockingcamera.h`` to ``docking_camera.h`` (:issue:`1149`)
+* :breaking:`Breaking` Send protocol version 1 when connecting, and fail to connect to a server from before 0.7 (:issue:`1162`)
 * Support structure types, as a C struct with a member per field, and nullable structure fields and collection elements, as the value beside a ``bool`` presence flag (:issue:`1066`, :issue:`1091`)
 * Add ``KRPC_COMMUNICATION_TCP`` and ``KRPC_COMMUNICATION_LOCALSOCKET``, with ``tcp`` and ``localsocket`` vcpkg features, to communicate over TCP/IP or a unix domain socket (:issue:`1055`, :issue:`1065`)
 * Add ``KRPC_SINGLE_CONNECTION``, for a ``KRPC_COMMUNICATION_CUSTOM`` mechanism that opens its own connection to each server (:issue:`1055`)
@@ -373,6 +376,7 @@ C# client
 
 * Connections
 
+  * :breaking:`Breaking` Send protocol version 1 when connecting, and fail to connect to a server from before 0.7 (:issue:`1162`)
   * Add ``Connection.ConnectLocal``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
   * Add a ``timeout`` parameter to the ``Connection`` constructor, bounding how long a connection is waited for (:issue:`1065`)
   * Reduce the cost of a remote procedure call, most for one that returns a collection or an object (:issue:`1056`)
@@ -416,6 +420,7 @@ C++ client
 
 * Connections
 
+  * :breaking:`Breaking` Send protocol version 1 when connecting, and fail to connect to a server from before 0.7 (:issue:`1162`)
   * Add ``krpc::connect_local``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
   * Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for (:issue:`1065`)
   * Fix ``krpc::Connection::close`` failing to link (:issue:`1065`)
@@ -453,6 +458,7 @@ Java client
 
 * Connections
 
+  * :breaking:`Breaking` Send protocol version 1 when connecting, and fail to connect to a server from before 0.7 (:issue:`1162`)
   * :breaking:`Breaking` Require Java 17 or later, for unix domain sockets (:issue:`1065`)
   * Add ``Connection.newLocalInstance``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
   * Add ``Connection.newInstance`` overloads taking a ``timeout``, bounding how long a connection is waited for (:issue:`1065`)
@@ -466,6 +472,7 @@ Lua client
 * :breaking:`Breaking` Support ``Types.none`` for any nullable type, including a structure field, list element, tuple item and dictionary value (:issue:`1017`, :issue:`1091`)
 * :breaking:`Breaking` Return messages, such as the server status, as plain tables (:issue:`1142`)
 * :breaking:`Breaking` Rename ``conn.li_dar`` to ``conn.lidar``, for the ``LIDAR`` service (:issue:`1149`)
+* :breaking:`Breaking` Send protocol version 1 when connecting, and fail to connect to a server from before 0.7 (:issue:`1162`)
 * Support Lua 5.3 and 5.4, where 64-bit values decode to exact integers (:issue:`1142`)
 * Depend on ``lua-protobuf`` in place of ``protobuf``, and require luasocket 3.0 or later (:issue:`1142`, :issue:`1060`)
 * Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket, on Linux and macOS (:issue:`1065`)
@@ -518,6 +525,7 @@ Python client
 
 * Connections
 
+  * :breaking:`Breaking` Send protocol version 1 when connecting, and fail to connect to a server from before 0.7 (:issue:`1162`)
   * Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket (:issue:`1065`)
   * Add a ``timeout`` parameter to ``krpc.connect``, bounding how long a connection is waited for (:issue:`1065`)
   * Reduce the cost of a remote procedure call (:issue:`1056`)
