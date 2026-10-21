@@ -1890,7 +1890,7 @@ TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
 # tested here: on aircraft the autopilot's roll control excites a sustained roll
 # limit-cycle (a known limitation of the constant-torque model on aero-controlled craft),
 # so these focus on the pitch/heading hold that does converge cleanly.
-def _make_autopilot_flight_test_class(
+def _make_autopilot_flight_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
     speed,
@@ -1905,6 +1905,7 @@ def _make_autopilot_flight_test_class(
     hold_oscillation_amplitude=1,
     hold_attitude_error=2,
     attitude_tolerance=2,
+    no_pitch_upset=False,
 ):
     class TestAutoPilotFlightBase(krpctest.TestCase):
         @classmethod
@@ -1990,6 +1991,7 @@ def _make_autopilot_flight_test_class(
             self.assert_steady(samples)
             self.assert_level()
 
+        @unittest.skipIf(no_pitch_upset, "not supported on this craft")
         def test_recover_from_pitch_upset(self):
             # Place the aircraft pitched up, command level flight, and confirm the
             # autopilot pushes the nose back down to level and then holds it steadily.
@@ -2016,6 +2018,7 @@ TestAutoPilotFlightAeris4A = _make_autopilot_flight_test_class(
     "TestAutoPilotFlightAeris4A",
     "Aeris 4A",
     speed=100,
+    no_pitch_upset=True,
 )
 
 # A small, slow stock light aircraft.
