@@ -34,6 +34,8 @@
     its value (#1129)
   - Add `krpc::add_stream` and `krpc::add_event`, which stream a server side function and create
     an event from one (#1129)
+  - Add `krpc::get_object_id`, which returns the id of a remote object for
+    `Expression::constant_object` (#1160)
 
 - Types
   - **Breaking:** Support null for any nullable type, held as `std::optional`, including a

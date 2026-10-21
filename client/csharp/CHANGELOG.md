@@ -33,6 +33,8 @@
     taking a server side function (#1128)
   - **Breaking:** Compile a lambda given to `AddStream`, so the remote calls in its arguments
     are evaluated on every update (#1128)
+  - **Breaking:** Replace `RemoteObject.id` with `RemoteObject.GetObjectId`, which returns the
+    id of a remote object for `Expression.ConstantObject` (#1160)
 
 - Types and errors
   - **Breaking:** Throw the matching .NET exception, such as `NullReferenceException`,
