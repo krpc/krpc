@@ -44,7 +44,7 @@ def main():
         "--verify-tag",
         "--draft",
         "--title",
-        lib.TAG,
+        f"kRPC {lib.TAG}",
         "--notes",
         notes,
         *assets,
