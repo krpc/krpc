@@ -802,7 +802,6 @@ requests==2.34.2 \
     #   -r tools/build/python/requirements.in
     #   pydata-sphinx-theme
     #   sphinx
-    #   sphinx-csharp
     #   sphinxcontrib-spelling
 roman-numerals==4.1.0 \
     --hash=sha256:1af8b147eb1405d5839e78aeb93131690495fe9da5c91856cb33ad55a7f1e5b2 \
@@ -856,9 +855,9 @@ sphinx-autobuild==2025.8.25 \
     --hash=sha256:9cf5aab32853c8c31af572e4fecdc09c997e2b8be5a07daf2a389e270e85b213 \
     --hash=sha256:b750ac7d5a18603e4665294323fd20f6dcc0a984117026d1986704fa68f0379a
     # via -r tools/build/python/requirements.in
-sphinx-csharp==1.0.0rc1 \
-    --hash=sha256:53e42168dd91801e50278dfcb35cb0b08cec7ac694fd54a95bebd8ea1db54a48 \
-    --hash=sha256:77b6efdefe8ec3c5fdf1b4b20fdcfdc59b275448c208a5109aa1045b1044a017
+sphinx-csharp==1.0.0 \
+    --hash=sha256:06fa944ea206613fea8d3542c1fea666acb4e8389cfd36c930a9938cca396f79 \
+    --hash=sha256:423c28e45ad9a1e36b770dc04b6e4cbb7d6afae497bd2014a788ffe171e5f2d1
     # via -r tools/build/python/requirements.in
 sphinx-tabs==3.5.0 \
     --hash=sha256:154be49de4d5c8249ea08c5d9bf88ca8f9c31e00a178305a93cbc33e000339e5 \
