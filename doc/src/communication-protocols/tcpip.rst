@@ -43,9 +43,9 @@ connection, a client must do the following:
       :start-at: message ConnectionRequest {
       :end-before: message ConnectionResponse {
 
-   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
-   be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
-   be left blank.
+   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``protocol_version``
+   field to 1. The ``client_name`` field can be set to the name of the client to display on the
+   in-game UI. The ``client_identifier`` should be left blank.
 
 3. Receive a `ConnectionResponse` message from the server. This message is defined as:
 
@@ -56,6 +56,9 @@ connection, a client must do the following:
 
    If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was
    successful. If not, the ``message`` field contains a description of what went wrong.
+
+   The ``protocol_version`` field contains the version of the protocol the server accepted. A
+   server from before kRPC 0.7 leaves it as 0. See :ref:`communication-protocol-version`.
 
    When the connection is successful, the ``client_identifier`` contains a unique 16-byte
    identifier for the client. This is required when connecting to the stream server (described
@@ -69,9 +72,10 @@ connection, a client must first connect to the RPC server (as above) then do the
 
 1. Open a TCP socket to the server on its stream port (which defaults to 50001).
 
-2. Send a `ConnectionRequest` message, with its `type` field set to `ConnectionRequest.STREAM` and
-   its `client_identifier` field set to the value received in the `client_identifier` field of the
-   `ConnectionResponse` message received when connecting to the RPC server earlier.
+2. Send a `ConnectionRequest` message, with its `type` field set to `ConnectionRequest.STREAM`,
+   its `protocol_version` field set to 1, and its `client_identifier` field set to the value
+   received in the `client_identifier` field of the `ConnectionResponse` message received when
+   connecting to the RPC server earlier.
 
 3. Receive a `ConnectionResponse` message, similarly to the RPC server, and check that the value of
    the `status` field is `ConnectionResponse.OK`. If not, then the connection was not successful,
